@@ -10,6 +10,5 @@
 | .editorconfig | （Visual studioを含む多くのエディタがサポートする）エディタの設定ファイル |
 | .gitignore | gitに無視させるファイルとフォルダの設定ファイル |
 | CMakeLists.txt | プロジェクトの設定ファイル |
-| CMakeSettings.json | Visual studio用のcmake環境設定ファイル  
-このファイルでVisual studio固有の環境変数等をセットします。 |
+| CMakeSettings.json | Visual studio用のcmake環境設定ファイル |
 | LICENSE | パブリック・ドメインであることを明示するライセンス・ファイル |
