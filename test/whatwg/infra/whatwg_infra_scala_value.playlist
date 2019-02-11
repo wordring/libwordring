@@ -1,0 +1,52 @@
+﻿<Playlist Version="1.0">
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__construct" />
+  
+  <!-- Arithmetic operators -->
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__basic_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__addition" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__subtraction" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__unary_plus" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__unary_minus" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__multiplication" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__division" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__modulo" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__prefix_increment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__postfix_increment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__prefix_decrement" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__postfix_decrement" />
+  
+  <!-- Comparison operators/relational operators -->
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__equal_to" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__not_equal_to" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__greater_than" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__less_than" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__greater_than_or_equal_to" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__less_than_or_equal_to" />
+  
+  <!-- Logical operators -->
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__logical_not" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__logical_and" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__logical_or" />
+  
+  <!-- Bitwise operators -->
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_not" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_and" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_or" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_xor" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_left_shift" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_right_shift" />
+  
+  <!-- Compound assignment operators -->
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__addition_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__subtraction_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__multiplication_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__division_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__modulo_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_and_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_or_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_xor_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_left_shift_assignment" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bitwise_right_shift_assignment" />
+
+  <!-- Add Test="whatwg_infra_scalar_value_test/" / -->
+</Playlist>

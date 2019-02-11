@@ -13,7 +13,7 @@ add_library (
 		${INCLUDE_DIR}/encoding/encoding.hpp
 #		${INCLUDE_DIR}/encoding/encoding_atom.hpp
 #		${INCLUDE_DIR}/encoding/encoding_enum.hpp
-#		${INCLUDE_DIR}/infra.hpp
+		${INCLUDE_DIR}/infra/infra.hpp
 #		${INCLUDE_DIR}/url.hpp
 #		${INCLUDE_DIR}/url/host.hpp
 #		${INCLUDE_DIR}/url/percent_encode.hpp

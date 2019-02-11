@@ -6,7 +6,7 @@
   <Add Test="whatwg_infra_test/whatwg_infra__to_byte_lowercase" />
   <Add Test="whatwg_infra_test/whatwg_infra__to_byte_uppercase" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_byte_case_insensitive_match" />
-  <Add Test="whatwg_infra_test/whatwg_infra__to_isomorphic_decode" />
+  <Add Test="whatwg_infra_test/whatwg_infra__to_isomorphic_decoded" />
   
   <!-- 4.5. Code points -->
   <Add Test="whatwg_infra_test/whatwg_infra__is_surrogate" />
@@ -27,6 +27,6 @@
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_alphanumeric" />
 
   <!-- 4.6. Strings -->
-  <Add Test="whatwg_infra_test/whatwg_infra__to_isomorphic_encode" />
+  <Add Test="whatwg_infra_test/whatwg_infra__to_isomorphic_encoded" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_string" />
 </Playlist>

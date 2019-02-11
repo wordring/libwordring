@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__is_byte_case_insensitive_match)
 	BOOST_CHECK(wordring::whatwg::infra::is_byte_case_insensitive_match(lower, fail_b) == false);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_infra__to_isomorphic_decode)
+BOOST_AUTO_TEST_CASE(whatwg_infra__to_isomorphic_decoded)
 {
 	char const * lower = "abcdefghijklmnopqrstuvwxyz0123456789";
 	std::string_view lower_a{ lower };
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_isomorphic_decode)
 	
 	std::deque<char32_t> result{};
 
-	wordring::whatwg::infra::to_isomorphic_decode(lower_b.begin(), lower_b.end(), std::back_inserter(result));
+	wordring::whatwg::infra::to_isomorphic_decoded(lower_b.begin(), lower_b.end(), std::back_inserter(result));
 
 	BOOST_CHECK(std::equal(lower_b.begin(), lower_b.end(), result.begin(), result.end()));
 }
@@ -327,18 +327,23 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_alphanumeric)
 
 // 4.6. Strings -----------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(whatwg_infra__to_isomorphic_encode)
+BOOST_AUTO_TEST_CASE(whatwg_infra__to_isomorphic_encoded)
 {
 	std::u32string a1{ U"abcdefg" };
 	std::string b1{ "abcdefg" };
 	std::vector<char> o1;
 
-	wordring::whatwg::infra::to_isomorphic_encode(a1.begin(), a1.end(), std::back_inserter(o1));
+	wordring::whatwg::infra::to_isomorphic_encoded(a1.begin(), a1.end(), std::back_inserter(o1));
 	BOOST_CHECK(std::equal(b1.begin(), b1.end(), o1.begin(), o1.end()) == true);
 
 	o1.clear();
-	wordring::whatwg::infra::to_isomorphic_encode(b1.begin(), b1.end(), std::back_inserter(o1));
+	wordring::whatwg::infra::to_isomorphic_encoded(b1.begin(), b1.end(), std::back_inserter(o1));
 	BOOST_CHECK(std::equal(b1.begin(), b1.end(), o1.begin(), o1.end()) == true);
+
+	o1.clear();
+	wordring::whatwg::infra::to_isomorphic_encoded(a1.begin(), a1.end(), o1);
+	BOOST_CHECK(std::equal(a1.begin(), a1.end(), o1.begin(), o1.end()) == true);
+
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_string)

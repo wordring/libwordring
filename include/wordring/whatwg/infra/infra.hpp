@@ -175,7 +175,7 @@ namespace wordring::whatwg::infra
 	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline typename std::enable_if_t<std::is_same_v<typename InputIterator::value_type, char>, void>
-	to_isomorphic_decode(InputIterator first, InputIterator last, OutputIterator output)
+	to_isomorphic_decoded(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>);
 
@@ -184,14 +184,14 @@ namespace wordring::whatwg::infra
 
 	// 4.5. Code points -------------------------------------------------------
 
-	inline bool is_surrogate(char32_t cp)
+	inline bool is_surrogate(uint32_t cp)
 	{
 		return 0xD800 <= cp && cp <= 0xDFFF;
 	}
 
-	inline bool is_scalar_value(char32_t cp) { return ! is_surrogate(cp); }
+	inline bool is_scalar_value(uint32_t cp) { return ! is_surrogate(cp); }
 
-	inline bool is_noncharacter(char32_t cp)
+	inline bool is_noncharacter(uint32_t cp)
 	{
 		if (0xFDD0 <= cp && cp <= 0xFDEF) return true;
 
@@ -237,72 +237,72 @@ namespace wordring::whatwg::infra
 		return false;
 	}
 
-	inline bool is_ascii_char(char32_t cp)
+	inline bool is_ascii_char(uint32_t cp)
 	{
 		return 0 <= cp && cp <= 0x7F;
 	}
 
-	inline bool is_ascii_tab_or_newline(char32_t cp)
+	inline bool is_ascii_tab_or_newline(uint32_t cp)
 	{
 		return cp == 0x9 || cp == 0xA || cp == 0xD;
 	}
 
-	inline bool is_ascii_white_space(char32_t cp)
+	inline bool is_ascii_white_space(uint32_t cp)
 	{
 		return cp == 0x9 || cp == 0xA || cp == 0xC || cp == 0xD || cp == 0x20;
 	}
 
-	inline bool is_c0_control(char32_t cp)
+	inline bool is_c0_control(uint32_t cp)
 	{
 		return cp <= 0x1F;
 	}
 
-	inline bool is_c0_control_or_space(char32_t cp)
+	inline bool is_c0_control_or_space(uint32_t cp)
 	{
 		return is_c0_control(cp) || cp == 0x20;
 	}
 
-	inline bool is_control(char32_t cp)
+	inline bool is_control(uint32_t cp)
 	{
 		return is_c0_control(cp) || (0x7F <= cp && cp <= 0x9F);
 	}
 
-	inline bool is_ascii_digit(char32_t cp)
+	inline bool is_ascii_digit(uint32_t cp)
 	{
 		return 0x30 <= cp && cp <= 0x39;
 	}
 
-	inline bool is_ascii_upper_hex_digit(char32_t cp)
+	inline bool is_ascii_upper_hex_digit(uint32_t cp)
 	{
 		return is_ascii_digit(cp) || (0x41 <= cp && cp <= 0x46);
 	}
 
-	inline bool is_ascii_lower_hex_digit(char32_t cp)
+	inline bool is_ascii_lower_hex_digit(uint32_t cp)
 	{
 		return is_ascii_digit(cp) || (0x61 <= cp && cp <= 0x66);
 	}
 
-	inline bool is_ascii_hex_digit(char32_t cp)
+	inline bool is_ascii_hex_digit(uint32_t cp)
 	{
 		return is_ascii_upper_hex_digit(cp) || is_ascii_lower_hex_digit(cp);
 	}
 
-	inline bool is_ascii_upper_alpha(char32_t cp)
+	inline bool is_ascii_upper_alpha(uint32_t cp)
 	{
 		return 0x41 <= cp && cp <= 0x5A;
 	}
 
-	inline bool is_ascii_lower_alpha(char32_t cp)
+	inline bool is_ascii_lower_alpha(uint32_t cp)
 	{
 		return 0x61 <= cp && cp <= 0x7A;
 	}
 
-	inline bool is_ascii_alpha(char32_t cp)
+	inline bool is_ascii_alpha(uint32_t cp)
 	{
 		return is_ascii_upper_alpha(cp) || is_ascii_lower_alpha(cp);
 	}
 
-	inline bool is_ascii_alphanumeric(char32_t cp)
+	inline bool is_ascii_alphanumeric(uint32_t cp)
 	{
 		return is_ascii_digit(cp) || is_ascii_alpha(cp);
 	}
@@ -310,19 +310,14 @@ namespace wordring::whatwg::infra
 	// 4.6. Strings -----------------------------------------------------------
 
 	template <typename InputIterator, typename OutputIterator>
-	inline typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>, void>
-	to_isomorphic_encode(InputIterator first, InputIterator last, OutputIterator output)
+	inline auto to_isomorphic_encoded(InputIterator first, InputIterator last, OutputIterator output)
+		-> typename std::enable_if_t<std::conjunction_v<
+			std::is_same<typename std::iterator_traits<InputIterator>::value_type, char32_t>,
+			std::disjunction<
+				std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char>,
+				std::is_same<typename std::iterator_traits<OutputIterator>::value_type, void>>>, void>
 	{
-		static_assert(std::is_same_v<typename std::iterator_traits<OutputIterator>::value_type, char>
-			|| std::is_same_v<typename std::iterator_traits<OutputIterator>::value_type, void>); // std::back_inserter用
-
-		while (first != last) *output++ = static_cast<unsigned char>(*first++);
-	}
-
-	template <typename InputIterator, typename OutputIterator>
-	inline typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>, void>
-	to_isomorphic_encode(InputIterator first, InputIterator last, OutputIterator output)
-	{
+		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>);
 		static_assert(std::is_same_v<typename std::iterator_traits<OutputIterator>::value_type, char>
 			|| std::is_same_v<typename std::iterator_traits<OutputIterator>::value_type, void>); // std::back_inserter用
 
@@ -333,9 +328,56 @@ namespace wordring::whatwg::infra
 		}
 	}
 
+	template <typename InputIterator, typename Container>
+	inline auto to_isomorphic_encoded(InputIterator first, InputIterator last, Container & output)
+		-> typename std::enable_if_t<std::conjunction_v<
+			std::is_same<typename std::iterator_traits<InputIterator>::value_type, char32_t>,
+			std::is_same<typename Container::value_type, char>>, void>
+	{
+		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>);
+		static_assert(std::is_same_v<typename Container::value_type, char>);
+
+		while (first != last)
+		{
+			assert(*first <= 0xFF);
+			output.push_back(static_cast<unsigned char>(*first++));
+		}
+	}
+
+	template <typename InputIterator, typename OutputIterator>
+	inline auto to_isomorphic_encoded(InputIterator first, InputIterator last, OutputIterator output)
+		-> typename std::enable_if_t< std::conjunction_v<
+			std::is_same<typename std::iterator_traits<InputIterator>::value_type, char>,
+			std::disjunction<
+				std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char>,
+				std::is_same<typename std::iterator_traits<OutputIterator>::value_type, void>>>, void>
+	{
+		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>);
+		static_assert(std::is_same_v<typename std::iterator_traits<OutputIterator>::value_type, char>
+			|| std::is_same_v<typename std::iterator_traits<OutputIterator>::value_type, void>); // std::back_inserter用
+
+		while (first != last) *output++ = static_cast<unsigned char>(*first++);
+	}
+
+	template <typename InputIterator, typename Container>
+	inline auto to_isomorphic_encoded(InputIterator first, InputIterator last, Container & output)
+		-> typename std::enable_if_t<std::conjunction_v<
+			std::is_same<typename std::iterator_traits<InputIterator>::value_type, char>,
+			std::is_same<typename Container::value_type, char>>, void>
+	{
+		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>);
+		static_assert(std::is_same_v<typename Container::value_type, char>);
+
+		while (first != last)
+		{
+			assert(*first <= 0xFF);
+			output.push_back(*first++);
+		}
+	}
+
 	template <typename InputIterator>
-	inline typename std::enable_if_t<std::is_same_v<typename InputIterator::value_type, char32_t>, bool>
-	is_ascii_string(InputIterator first, InputIterator last)
+	inline auto	is_ascii_string(InputIterator first, InputIterator last)
+		-> typename std::enable_if_t<std::is_same_v<typename InputIterator::value_type, char32_t>, bool>
 	{
 		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>);
 
@@ -344,8 +386,8 @@ namespace wordring::whatwg::infra
 	}
 
 	template <typename InputIterator>
-	inline typename std::enable_if_t<std::is_same_v<typename InputIterator::value_type, char>, bool>
-	is_ascii_string(InputIterator first, InputIterator last)
+	inline auto is_ascii_string(InputIterator first, InputIterator last)
+		-> typename std::enable_if_t<std::is_same_v<typename InputIterator::value_type, char>, bool>
 	{
 		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>);
 
@@ -353,4 +395,10 @@ namespace wordring::whatwg::infra
 		return true;
 	}
 
+	template <typename InputIterator, typename OutputIterator>
+	inline auto to_ascii_lowercase()
+		-> typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>, void>
+	{
+
+	}
 }
