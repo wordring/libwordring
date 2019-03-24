@@ -1,4 +1,13 @@
 ﻿<Playlist Version="1.0">
+  <!---->
+  <Add Test="whatwg_infra_test/whatwg_infra__isomorphic_cast" />
+
+  <!---->
+  <Add Test="whatwg_infra_test/whatwg_infra__to_codepoint" />
+
+  <!---->
+  <Add Test="whatwg_infra_test/whatwg_infra__to_string" />
+
   <!-- 4.3. Bytes -->
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_byte" />
   
@@ -6,7 +15,7 @@
   <Add Test="whatwg_infra_test/whatwg_infra__to_byte_lowercase" />
   <Add Test="whatwg_infra_test/whatwg_infra__to_byte_uppercase" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_byte_case_insensitive_match" />
-  <Add Test="whatwg_infra_test/whatwg_infra__to_isomorphic_decoded" />
+  <Add Test="whatwg_infra_test/whatwg_infra__isomorphic_decode" />
   
   <!-- 4.5. Code points -->
   <Add Test="whatwg_infra_test/whatwg_infra__is_surrogate" />
@@ -27,6 +36,13 @@
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_alphanumeric" />
 
   <!-- 4.6. Strings -->
-  <Add Test="whatwg_infra_test/whatwg_infra__to_isomorphic_encoded" />
+  <Add Test="whatwg_infra_test/whatwg_infra__isomorphic_encode" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_string" />
+  <Add Test="whatwg_infra_test/whatwg_infra__to_ascii_lowercase" />
+  <Add Test="whatwg_infra_test/whatwg_infra__to_ascii_uppercase" />
+  <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_case_insensitive_match" />
+  <Add Test="whatwg_infra_test/whatwg_infra__ascii_encode" />
+  <Add Test="whatwg_infra_test/whatwg_infra__ascii_decode" />
+  <Add Test="whatwg_infra_test/whatwg_infra__to_strip_newlines" />
+  <Add Test="whatwg_infra_test/whatwg_infra__to_normalize_newlines" />
 </Playlist>

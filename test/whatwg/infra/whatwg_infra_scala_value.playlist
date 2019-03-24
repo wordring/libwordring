@@ -1,5 +1,7 @@
 ﻿<Playlist Version="1.0">
   <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__construct" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__char32_t" />
+  <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__bool" />
   
   <!-- Arithmetic operators -->
   <Add Test="whatwg_infra_scalar_value_test/whatwg_infra_scalar_value__basic_assignment" />
