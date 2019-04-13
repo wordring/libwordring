@@ -43,6 +43,13 @@
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_case_insensitive_match" />
   <Add Test="whatwg_infra_test/whatwg_infra__ascii_encode" />
   <Add Test="whatwg_infra_test/whatwg_infra__ascii_decode" />
-  <Add Test="whatwg_infra_test/whatwg_infra__to_strip_newlines" />
-  <Add Test="whatwg_infra_test/whatwg_infra__to_normalize_newlines" />
+  <Add Test="whatwg_infra_test/whatwg_infra__strip_newlines" />
+  <Add Test="whatwg_infra_test/whatwg_infra__normalize_newlines" />
+  <Add Test="whatwg_infra_test/whatwg_infra__strip_leading_and_trailing_ascii_whitespace" />
+  <Add Test="whatwg_infra_test/whatwg_infra__strip_and_collapse_ascii_whitespace" />
+  <Add Test="whatwg_infra_test/whatwg_infra__collect_a_sequence_of_code_points" />
+  <Add Test="whatwg_infra_test/whatwg_infra__skip_ascii_whitespace" />
+  <Add Test="whatwg_infra_test/whatwg_infra__strictly_split_on_a_particular_delimiter" />
+  <Add Test="whatwg_infra_test/whatwg_infra__split_on_ascii_whitespace" />
+  <Add Test="whatwg_infra_test/whatwg_infra__split_on_commas" />
 </Playlist>

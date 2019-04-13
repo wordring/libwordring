@@ -73,79 +73,101 @@ namespace wordring::whatwg
 
 	@tparam InputIterator 入力イテレータの型
 
-	@param [in,out] first
-		読み取りの開始位置を示すイテレータ。
-		読み取った分だけ前進する。
-	@param [in] last 読み取りの終端を示すイテレータ。
+	@param [in]  first  読み取りの開始位置を示すイテレータ。
+	@param [in]  last   読み取りの終端を示すイテレータ。
+	@param [out] output ユニコード・コードポイント。
 
-	@return ユニコード・コードポイント。
+	@return
+		文字を読み取った分だけ前進させたイテレータを返す。
+		通常、返されたイテレータは、次の読み取り開始位置となる。
+		例として、 utf-8 文字列では、一つのコードポイントを得るために、1～4バイトを必要とする。
+		戻り値はfirstをその分だけ前進したものとなる。
 
 	@details
-		この関数は、必要な分だけ first を前進し、一つのコードポイントを返す。
-		例として、 utf-8 文字列では、一つのコードポイントを得るために、1～4バイトを必要とする。
+
 
 		この関数は、ライブラリ内部で使用するために作成された。
 		入力は、コードポイント列から作成されたクリーンな文字列の必要がある。
 		エラーチェックは行われない。
-
-	@internal
-		読み取った位置を通知する必要があるので、コンテナ・バージョンは用意しない。
 	*/
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char_utf8_type>, std::nullptr_t> = nullptr>
-		inline uint32_t to_codepoint(InputIterator & first, InputIterator last)
+	inline InputIterator to_codepoint(InputIterator first, InputIterator last, uint32_t & output)
 	{
 		assert(first != last);
 		unsigned char ch1 = static_cast<unsigned char>(*first++);
-		if ((ch1 & 0x80u) == 0u) return static_cast<uint32_t>(ch1);
+		if ((ch1 & 0x80u) == 0u)
+		{
+			output = static_cast<uint32_t>(ch1);
+			return first;
+		}
 
 		assert(first != last);
 		unsigned char ch2 = static_cast<unsigned char>(*first++);
 		assert((ch2 & 0xC0u) == 0x80u);
-		if ((ch1 & 0xE0u) == 0xC0u) return static_cast<uint32_t>(((ch1 & 0x1Fu) << 6) + (ch2 & 0x3Fu));
+		if ((ch1 & 0xE0u) == 0xC0u)
+		{
+			output = static_cast<uint32_t>(((ch1 & 0x1Fu) << 6) + (ch2 & 0x3Fu));
+			return first;
+		}
 
 		assert(first != last);
 		unsigned char ch3 = static_cast<unsigned char>(*first++);
 		assert((ch3 & 0xC0u) == 0x80u);
-		if ((ch1 & 0xF0u) == 0xE0u) return static_cast<uint32_t>(((ch1 & 0xFu) << 12) + ((ch2 & 0x3Fu) << 6) + (ch3 & 0x3Fu));
+		if ((ch1 & 0xF0u) == 0xE0u)
+		{
+			output = static_cast<uint32_t>(((ch1 & 0xFu) << 12) + ((ch2 & 0x3Fu) << 6) + (ch3 & 0x3Fu));
+			return first;
+		}
 
 		assert(first != last);
 		unsigned char ch4 = static_cast<unsigned char>(*first++);
 		assert((ch4 & 0xC0u) == 0x80u);
-		if ((ch1 & 0xF8u) == 0xF0u) return static_cast<uint32_t>(((ch1 & 0x7u) << 18) + ((ch2 & 0x3Fu) << 12) + ((ch3 & 0x3Fu) << 6) + (ch4 & 0x3Fu));
+		if ((ch1 & 0xF8u) == 0xF0u)
+		{
+			output = static_cast<uint32_t>(((ch1 & 0x7u) << 18) + ((ch2 & 0x3Fu) << 12) + ((ch3 & 0x3Fu) << 6) + (ch4 & 0x3Fu));
+			return first;
+		}
 
 		assert(false);
-		return 0;
+		return last;
 	}
 
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char16_t>, nullptr_t> = nullptr>
-		inline uint32_t	to_codepoint(InputIterator & first, InputIterator last)
+	inline InputIterator to_codepoint(InputIterator first, InputIterator last, uint32_t & output)
 	{
 		assert(first != last);
 		uint16_t ch1 = *first++;
-		if ((ch1 & 0xFC00u) != 0xD800u) return static_cast<uint32_t>(ch1);
+		if ((ch1 & 0xFC00u) != 0xD800u)
+		{
+			output = static_cast<uint32_t>(ch1);
+			return first;
+		}
 
 		assert(first != last);
 		uint16_t ch2 = *first++;
 		assert((ch2 & 0xFC00u) == 0xDC00u);
-		return 0x10000u + (ch1 - 0xD800u) * 0x400u + (ch2 - 0xDC00u);
+		output = 0x10000u + (ch1 - 0xD800u) * 0x400u + (ch2 - 0xDC00u);
+		return first;
 	}
 
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>, nullptr_t> = nullptr>
-		inline uint32_t to_codepoint(InputIterator & first, InputIterator last)
+	inline InputIterator to_codepoint(InputIterator first, InputIterator last, uint32_t & output)
 	{
 		assert(first != last);
-		return *first++;
+		output = *first++;
+		return first;
 	}
 
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, scalar_value>, nullptr_t> = nullptr>
-		inline uint32_t to_codepoint(InputIterator & first, InputIterator last)
+	inline InputIterator to_codepoint(InputIterator first, InputIterator last, uint32_t & output)
 	{
 		assert(first != last);
-		return static_cast<char32_t>(*first++);
+		output = static_cast<char32_t>(*first++);
+		return first;
 	}
 
 	// ------------------------------------------------------------------------
@@ -176,7 +198,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char_utf8_type>,
 					std::is_same<typename OutputIterator::container_type::value_type, char_utf8_type>>>, nullptr_t> = nullptr>
-		inline void to_string(uint32_t ch, OutputIterator output)
+	inline void to_string(uint32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFFFF80u) == 0) *output++ = static_cast<unsigned char>(ch); // 一バイト文字
 		else if ((ch & 0xFFFFF800u) == 0) // 二バイト文字
@@ -207,7 +229,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char16_t>,
 					std::is_same<typename OutputIterator::container_type::value_type, char16_t>>>, nullptr_t> = nullptr>
-		inline void to_string(uint32_t ch, OutputIterator output)
+	inline void to_string(uint32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFF0000u) == 0) *output++ = static_cast<char16_t>(ch);
 		else if ((ch & 0xFFE00000u) == 0)
@@ -225,7 +247,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char32_t>,
 					std::is_same<typename OutputIterator::container_type::value_type, char32_t>>>, nullptr_t> = nullptr>
-		inline void to_string(uint32_t ch, OutputIterator output) { *output++ = ch; }
+	inline void to_string(uint32_t ch, OutputIterator output) { *output++ = ch; }
 
 	template <typename OutputIterator,
 		typename std::enable_if_t<
@@ -234,7 +256,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, scalar_value>,
 					std::is_same<typename OutputIterator::container_type::value_type, scalar_value>>>, nullptr_t> = nullptr>
-		inline void to_string(uint32_t ch, OutputIterator output) { *output++ = scalar_value{ ch }; }
+	inline void to_string(uint32_t ch, OutputIterator output) { *output++ = scalar_value{ ch }; }
 
 	/*!
 	@brief ユニコード・コードポイントから文字列に変換する。
@@ -259,7 +281,7 @@ namespace wordring::whatwg
 	*/
 	template <typename Container,
 		std::enable_if_t<is_container_v<Container>, nullptr_t> = nullptr>
-		inline void to_string(uint32_t ch, Container & output)
+	inline void to_string(uint32_t ch, Container & output)
 	{
 		to_string(ch, std::back_inserter(output));
 	}
@@ -424,7 +446,7 @@ namespace wordring::whatwg
 	*/
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<is_iterator_v<OutputIterator>, std::nullptr_t> = nullptr>
-		inline void isomorphic_decode(InputIterator first, InputIterator last, OutputIterator output)
+	inline void isomorphic_decode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>);
 
@@ -433,7 +455,7 @@ namespace wordring::whatwg
 
 	template <typename InputIterator, typename Container,
 		typename std::enable_if_t<is_container_v<Container>, std::nullptr_t> = nullptr>
-		inline void isomorphic_decode(InputIterator first, InputIterator last, Container & output)
+	inline void isomorphic_decode(InputIterator first, InputIterator last, Container & output)
 	{
 		static_assert(std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>);
 
@@ -569,7 +591,7 @@ namespace wordring::whatwg
 
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<is_iterator_v<OutputIterator>, std::nullptr_t> = nullptr>
-		inline void isomorphic_encode(InputIterator first, InputIterator last, OutputIterator output)
+	inline void isomorphic_encode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		while (first != last)
 		{
@@ -580,7 +602,7 @@ namespace wordring::whatwg
 
 	template <typename InputIterator, typename Container,
 		typename std::enable_if_t<is_container_v<Container>, std::nullptr_t> = nullptr>
-		inline void isomorphic_encode(InputIterator first, InputIterator last, Container & output)
+	inline void isomorphic_encode(InputIterator first, InputIterator last, Container & output)
 	{
 		while (first != last)
 		{
@@ -591,73 +613,81 @@ namespace wordring::whatwg
 
 	template <typename InputIterator,
 		typename std::enable_if_t<is_iterator_v<InputIterator>, std::nullptr_t> = nullptr>
-		inline bool	is_ascii_string(InputIterator first, InputIterator last)
+	inline bool	is_ascii_string(InputIterator first, InputIterator last)
 	{
-		while (first != last) if (0x7Fu < to_codepoint(first, last)) return false;
+		uint32_t cp{};
+		while (first != last)
+		{
+			first = to_codepoint(first, last, cp);
+			if (0x7Fu < cp) return false;
+		}
 		return true;
 	}
 
 	template <typename Container,
 		typename std::enable_if_t<is_container_v<Container>, std::nullptr_t> = nullptr>
-		inline bool	is_ascii_string(Container const & str)
+	inline bool	is_ascii_string(Container const & str)
 	{
 		return is_ascii_string(str.begin(), str.end());
 	}
 
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<std::conjunction_v<is_iterator<InputIterator>, is_iterator<OutputIterator>>, std::nullptr_t> = nullptr>
-		inline void to_ascii_lowercase(InputIterator first, InputIterator last, OutputIterator output)
+	inline void to_ascii_lowercase(InputIterator first, InputIterator last, OutputIterator output)
 	{
+		uint32_t cp{};
 		while (first != last)
 		{
-			char32_t ch = to_codepoint(first, last);
-			if (is_ascii_upper_alpha(ch)) ch += 0x20u;
-			to_string(ch, output);
+			first = to_codepoint(first, last, cp);
+			if (is_ascii_upper_alpha(cp)) cp += 0x20u;
+			to_string(cp, output);
 		}
 	}
 
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<std::conjunction_v<is_iterator<InputIterator>, is_iterator<OutputIterator>>, std::nullptr_t> = nullptr>
-		inline void to_ascii_uppercase(InputIterator first, InputIterator last, OutputIterator output)
+	inline void to_ascii_uppercase(InputIterator first, InputIterator last, OutputIterator output)
 	{
+		uint32_t cp{};
 		while (first != last)
 		{
-			char32_t ch = to_codepoint(first, last);
-			if (is_ascii_lower_alpha(ch)) ch -= 0x20u;
-			to_string(ch, output);
+			first = to_codepoint(first, last, cp);
+			if (is_ascii_lower_alpha(cp)) cp -= 0x20u;
+			to_string(cp, output);
 		}
 	}
 
 	template <typename InputIterator1, typename InputIterator2,
 		typename std::enable_if_t<std::conjunction_v<is_iterator<InputIterator1>, is_iterator<InputIterator2>>, std::nullptr_t> = nullptr>
-		inline bool is_ascii_case_insensitive_match(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
+	inline bool is_ascii_case_insensitive_match(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
 	{
+		uint32_t cp1{}, cp2{};
 		while (first1 != last1 && first2 != last2)
 		{
-			uint32_t ch1 = to_codepoint(first1, last1);
-			if (is_ascii_upper_alpha(ch1)) ch1 += 0x20u;
+			first1 = to_codepoint(first1, last1, cp1);
+			if (is_ascii_upper_alpha(cp1)) cp1 += 0x20u;
 
-			uint32_t ch2 = to_codepoint(first2, last2);
-			if (is_ascii_upper_alpha(ch2)) ch2 += 0x20u;
+			first2 = to_codepoint(first2, last2, cp2);
+			if (is_ascii_upper_alpha(cp2)) cp2 += 0x20u;
 
-			if (ch1 != ch2) return false;
+			if (cp1 != cp2) return false;
 		}
 
 		return first1 == last1 && first2 == last2;
 	}
 
-	template <typename InputIterator, typename OutputIterator>
-	inline void ascii_encode(InputIterator first, InputIterator last, OutputIterator output,
-		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr)
+	template <typename InputIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline void ascii_encode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		assert(is_ascii_string(first, last));
 
 		isomorphic_encode(first, last, output);
 	}
 
-	template <typename InputIterator, typename OutputIterator>
-	inline void ascii_decode(InputIterator first, InputIterator last, OutputIterator output,
-		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr)
+	template <typename InputIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline void ascii_decode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		assert([](InputIterator it1, InputIterator it2)->bool
 		{
@@ -670,11 +700,12 @@ namespace wordring::whatwg
 
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
-	inline void to_strip_newlines(InputIterator first, InputIterator last, OutputIterator output)
+	inline void strip_newlines(InputIterator first, InputIterator last, OutputIterator output)
 	{
+		uint32_t cp{};
 		while (first != last)
 		{
-			uint32_t cp = to_codepoint(first, last);
+			first = to_codepoint(first, last, cp);
 			if (cp != 0xA && cp != 0xD) to_string(cp, output);
 		}
 	}
@@ -696,39 +727,223 @@ namespace wordring::whatwg
 	*/
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
-	inline void to_normalize_newlines(InputIterator first, InputIterator last, OutputIterator output)
+	inline void normalize_newlines(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		enum class states : uint32_t { Start, Cr };
 
 		states state{ states::Start };
+		uint32_t cp{};
 		while (first != last)
 		{
-			auto ch = *first++;
+			first = to_codepoint(first, last, cp);
 			switch (state)
 			{
 			case states::Start:
-				if (ch == 0xDu) state = states::Cr;
-				else if (ch == 0xAu) goto LineBreak;
+				if (cp == 0xDu) state = states::Cr;
+				else if (cp == 0xAu) goto LineBreak;
 				else goto Output;
 				break;
 			case states::Cr:
-				if (ch == 0xDu) *output++ = static_cast<unsigned char>(0xAu);
-				else if (ch == 0xAu) goto LineBreak;
+				if (cp == 0xDu) *output++ = 0xAu;
+				else if (cp == 0xAu) goto LineBreak;
 				else
 				{
-					*output++ = static_cast<unsigned char>(0xAu);
+					*output++ = 0xAu;
 					goto Output;
 				}
 				break;
 			LineBreak:
-				ch = static_cast<unsigned char>(0xAu);
+				cp = 0xAu;
 			Output:
-				*output++ = ch;
+				*output++ = cp;
 				state = states::Start;
 				break;
 			}
 		}
 	}
 
+	template <typename ForwardIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<ForwardIterator>, nullptr_t> = nullptr>
+	inline void strip_leading_and_trailing_ascii_whitespace(ForwardIterator first, ForwardIterator last, OutputIterator output)
+	{
+		static_assert(std::is_base_of_v<std::forward_iterator_tag, typename std::iterator_traits<ForwardIterator>::iterator_category>);
 
+		std::basic_string<uint32_t> tmp{};
+		uint32_t cp{};
+		while (first != last)
+		{
+			first = to_codepoint(first, last, cp);
+			tmp.push_back(cp);
+		}
+
+		auto left = std::find_if_not(tmp.begin(), tmp.end(), is_ascii_white_space);
+		auto right = std::find_if_not(tmp.crbegin(), tmp.crend(), is_ascii_white_space).base();
+
+		while (left != right) to_string(*left++, output);
+	}
+
+	template <typename ForwardIterator, typename ResultType = std::basic_string<typename ForwardIterator::value_type>>
+	inline ResultType strip_leading_and_trailing_ascii_whitespace(ForwardIterator first, ForwardIterator last)
+	{
+		static_assert(std::is_base_of_v<std::forward_iterator_tag, typename std::iterator_traits<ForwardIterator>::iterator_category>);
+
+		ResultType result{};
+		strip_leading_and_trailing_ascii_whitespace(first, last, std::back_inserter(result));
+		return result;
+	}
+
+	template <typename InputIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline void strip_and_collapse_ascii_whitespace(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		static_assert(std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>);
+
+		enum class states : uint32_t { Start, Leading, Normal, Ws };
+
+		states state{ states::Start };
+		uint32_t cp{};
+		while (first != last)
+		{
+			first = to_codepoint(first, last, cp);
+			switch (state)
+			{
+			case states::Start:
+				if (is_ascii_white_space(cp)) goto Leading;
+				goto Normal;
+			case states::Leading:
+				if (is_ascii_white_space(cp)) break;
+				goto Normal;
+			Leading:
+				state = states::Leading;
+				break;
+			case states::Normal:
+				if (is_ascii_white_space(cp)) goto Ws;
+			Normal:
+				state = states::Normal;
+				to_string(cp, output);
+				break;
+			case states::Ws:
+				if (is_ascii_white_space(cp)) break;
+				to_string(0x20u, output);
+				goto Normal;
+			Ws:
+				state = states::Ws;
+				break;
+			}
+		}
+	}
+
+	template <typename InputIterator, typename OutputIterator, typename Condition,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline InputIterator collect_a_sequence_of_code_points(
+		InputIterator first, InputIterator last, OutputIterator output, Condition condition)
+	{
+		InputIterator result{ first };
+
+		uint32_t cp{};
+		while (first != last)
+		{
+			first = to_codepoint(first, last, cp);
+			if (!condition(cp)) break;
+
+			result = first;
+			to_string(cp, output);
+		}
+
+		return result;
+	}
+
+	template <typename InputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline InputIterator skip_ascii_whitespace(InputIterator first, InputIterator last)
+	{
+		InputIterator result{ first };
+
+		uint32_t cp{};
+		while (first != last)
+		{
+			first = to_codepoint(first, last, cp);
+			if (!is_ascii_white_space(cp)) break;
+
+			result = first;
+		}
+
+		return result;
+	}
+
+	/*
+	特定の区切り文字で厳密に分割する。
+	*/
+	template <typename InputIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline void strictly_split_on_a_particular_delimiter(
+		InputIterator first, InputIterator last, OutputIterator output, uint32_t delimiter)
+	{
+		using char_type = typename std::iterator_traits<InputIterator>::value_type;
+		using string_type = typename std::basic_string<char_type>;
+
+		string_type token{};
+		first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](uint32_t cp)->bool { return cp != delimiter; });
+		*output++ = token;
+		token.clear();
+		while (first != last)
+		{
+			assert([](InputIterator first, InputIterator last, uint32_t delimiter)->bool
+			{
+				uint32_t cp{};
+				to_codepoint(first, last, cp);
+				return cp == delimiter;
+			}(first, last, delimiter));
+
+			++first;
+			token.clear();
+			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](uint32_t cp)->bool { return cp != delimiter; });
+			*output++ = token;
+		}
+	}
+
+	template <typename InputIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline void split_on_ascii_whitespace(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		using char_type = typename std::iterator_traits<InputIterator>::value_type;
+		using string_type = typename std::basic_string<char_type>;
+
+		string_type token{};
+		first = skip_ascii_whitespace(first, last);
+		while (first != last)
+		{
+			token.clear();
+			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [](uint32_t cp)->bool { return !is_ascii_white_space(cp); });
+			*output++ = token;
+			first = skip_ascii_whitespace(first, last);
+		}
+	}
+
+	template <typename InputIterator, typename OutputIterator,
+		typename std::enable_if_t<is_iterator_v<InputIterator>, nullptr_t> = nullptr>
+	inline void split_on_commas(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		using char_type = typename std::iterator_traits<InputIterator>::value_type;
+		using string_type = typename std::basic_string<char_type>;
+
+		string_type token{};
+		while (first != last)
+		{
+			token.clear();
+			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [](uint32_t cp)->bool { return cp != 0x2Cu; });
+			token = strip_leading_and_trailing_ascii_whitespace(token.begin(), token.end());
+			*output++ = token;
+			if (first != last)
+			{
+				assert(*first == 0x2Cu);
+				++first;
+			}
+		}
+	}
+
+	inline void concatenate()
+	{
+
+	}
 }

@@ -28,31 +28,49 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_codepoint)
 	std::u32string const s32_correct{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
 	std::u32string s32_result{};
 
+	uint32_t cp{};
+
 	// utf-8
 	std::u8string const s8{ u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
 	auto it8 = s8.begin();
-	while(it8 != s8.end()) s32_result.push_back(wordring::whatwg::to_codepoint(it8, s8.end()));
+	while (it8 != s8.end())
+	{
+		it8 = wordring::whatwg::to_codepoint(it8, s8.end(), cp);
+		s32_result.push_back(cp);
+	}
 	BOOST_CHECK(s32_result == s32_correct);
 
 	// utf-16
 	std::u16string const s16{ u"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
 	auto it16 = s16.begin();
 	s32_result.clear();
-	while (it16 != s16.end()) s32_result.push_back(wordring::whatwg::to_codepoint(it16, s16.end()));
+	while (it16 != s16.end())
+	{
+		it16 = wordring::whatwg::to_codepoint(it16, s16.end(), cp);
+		s32_result.push_back(cp);
+	}
 	BOOST_CHECK(s32_result == s32_correct);
 
 	// utf-32
 	std::u32string const s32{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
 	auto it32 = s32.begin();
 	s32_result.clear();
-	while (it32 != s32.end()) s32_result.push_back(wordring::whatwg::to_codepoint(it32, s32.end()));
+	while (it32 != s32.end())
+	{
+		it32 = wordring::whatwg::to_codepoint(it32, s32.end(), cp);
+		s32_result.push_back(cp);
+	}
 	BOOST_CHECK(s32_result == s32_correct);
 
 	// scalar_value
 	wordring::whatwg::usv_string const usv{ wordring::whatwg::make_usv_string(U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠") };
 	auto it_usv = usv.begin();
 	s32_result.clear();
-	while (it_usv != usv.end()) s32_result.push_back(wordring::whatwg::to_codepoint(it_usv, usv.end()));
+	while (it_usv != usv.end())
+	{
+		it_usv = wordring::whatwg::to_codepoint(it_usv, usv.end(), cp);
+		s32_result.push_back(cp);
+	}
 	BOOST_CHECK(s32_result == s32_correct);
 }
 
@@ -578,22 +596,147 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__ascii_decode)
 	BOOST_CHECK(std::equal(s_correct.begin(), s_correct.end(), s16_result.begin(), s16_result.end()));
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_infra__to_strip_newlines)
+BOOST_AUTO_TEST_CASE(whatwg_infra__strip_newlines)
 {
 	std::u32string const s32_original{ U"ABCDE\nあいうえ\r\nお𠀋𡈽𡌛\r𡑮𡢽Àⱥ𐊠" };
 	std::u32string const s32_correct{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽Àⱥ𐊠" };
 	std::u32string s32_result{};
-	wordring::whatwg::to_strip_newlines(s32_original.begin(), s32_original.end(), std::back_inserter(s32_result));
+	wordring::whatwg::strip_newlines(s32_original.begin(), s32_original.end(), std::back_inserter(s32_result));
 	BOOST_CHECK(s32_result == s32_correct);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_infra__to_normalize_newlines)
+BOOST_AUTO_TEST_CASE(whatwg_infra__normalize_newlines)
 {
 	std::u32string const s32_original{ U"A\rA\nA\r\n\n\n\r\r\n" };
 	std::u32string const s32_correct{ U"A\nA\nA\n\n\n\n\n" };
 	std::u32string s32_result{};
-	wordring::whatwg::to_normalize_newlines(s32_original.begin(), s32_original.end(), std::back_inserter(s32_result));
+	wordring::whatwg::normalize_newlines(s32_original.begin(), s32_original.end(), std::back_inserter(s32_result));
 	BOOST_CHECK(s32_result == s32_correct);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__strip_leading_and_trailing_ascii_whitespace)
+{
+	std::u32string const s32_original_1{ U"  ABC 123  " };
+	std::u32string const s32_correct_1{ U"ABC 123" };
+	std::u32string s32_result{};
+	wordring::whatwg::strip_leading_and_trailing_ascii_whitespace(s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result));
+	BOOST_CHECK(s32_result == s32_correct_1);
+
+	std::u32string const s32_original_2{ U"ABC 123" };
+	std::u32string const s32_correct_2{ U"ABC 123" };
+	s32_result.clear();
+	wordring::whatwg::strip_leading_and_trailing_ascii_whitespace(s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result));
+	BOOST_CHECK(s32_result == s32_correct_2);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__strip_and_collapse_ascii_whitespace)
+{
+	std::u32string const s32_original_1{ U"  ABC   123  " };
+	std::u32string const s32_correct_1{ U"ABC 123" };
+	std::u32string s32_result{};
+	wordring::whatwg::strip_and_collapse_ascii_whitespace(s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result));
+	BOOST_CHECK(s32_result == s32_correct_1);
+
+	std::u32string const s32_original_2{ U"ABC 123" };
+	std::u32string const s32_correct_2{ U"ABC 123" };
+	s32_result.clear();
+	wordring::whatwg::strip_and_collapse_ascii_whitespace(s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result));
+	BOOST_CHECK(s32_result == s32_correct_2);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__collect_a_sequence_of_code_points)
+{
+	std::u32string const s32_original_1{ U"  ABC   123  " };
+	std::u32string const s32_correct_1{ U"  " };
+	std::u32string s32_result_1{};
+	auto it_result_1 = wordring::whatwg::collect_a_sequence_of_code_points(
+		s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result_1), wordring::whatwg::is_ascii_white_space);
+	BOOST_CHECK(*it_result_1 == U'A');
+	BOOST_CHECK(s32_result_1 == s32_correct_1);
+
+	std::u32string const s32_original_2{ U"ABC   123  " };
+	std::u32string const s32_correct_2{ U"" };
+	std::u32string s32_result_2{};
+	auto it_result_2 = wordring::whatwg::collect_a_sequence_of_code_points(
+		s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result_2), wordring::whatwg::is_ascii_white_space);
+	BOOST_CHECK(*it_result_2 == U'A');
+	BOOST_CHECK(s32_result_2 == s32_correct_2);
+
+	std::u32string const s32_original_3{ U"   " };
+	std::u32string const s32_correct_3{ U"   " };
+	std::u32string s32_result_3{};
+	auto it_result_3 = wordring::whatwg::collect_a_sequence_of_code_points(
+		s32_original_3.begin(), s32_original_3.end(), std::back_inserter(s32_result_3), wordring::whatwg::is_ascii_white_space);
+	BOOST_CHECK(it_result_3 == s32_original_3.end());
+	BOOST_CHECK(s32_result_3 == s32_correct_3);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__skip_ascii_whitespace)
+{
+	std::u32string const s32_original_1{ U"  ABC" };
+	std::u32string const s32_correct_1{ U"ABC" };
+	auto it_result_1 = wordring::whatwg::skip_ascii_whitespace(s32_original_1.begin(), s32_original_1.end());
+	std::u32string s32_result_1{ it_result_1, s32_original_1.end() };
+	BOOST_CHECK(*it_result_1 == U'A');
+	BOOST_CHECK(s32_result_1 == s32_correct_1);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__strictly_split_on_a_particular_delimiter)
+{
+	std::u32string const s32_original_1{ U"ABC,DEF,GHI" };
+	std::vector<std::u32string> const s32_correct_1{ U"ABC", U"DEF", U"GHI" };
+	std::vector<std::u32string> s32_result_1{};
+	wordring::whatwg::strictly_split_on_a_particular_delimiter(
+		s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result_1), U',');
+	BOOST_CHECK(s32_result_1 == s32_correct_1);
+
+	std::u32string const s32_original_2{};
+	std::vector<std::u32string> const s32_correct_2{ std::u32string{} };
+	std::vector<std::u32string> s32_result_2{};
+	wordring::whatwg::strictly_split_on_a_particular_delimiter(
+		s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result_2), U',');
+	BOOST_CHECK(s32_result_2 == s32_correct_2);
+
+	std::u32string const s32_original_3{ U"," };
+	std::vector<std::u32string> const s32_correct_3{ std::u32string{}, std::u32string{} };
+	std::vector<std::u32string> s32_result_3{};
+	wordring::whatwg::strictly_split_on_a_particular_delimiter(
+		s32_original_3.begin(), s32_original_3.end(), std::back_inserter(s32_result_3), U',');
+	BOOST_CHECK(s32_result_3 == s32_correct_3);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__split_on_ascii_whitespace)
+{
+	std::u32string const s32_original_1{ U" ABC DEF GHI " };
+	std::vector<std::u32string> const s32_correct_1{ U"ABC", U"DEF", U"GHI" };
+	std::vector<std::u32string> s32_result_1{};
+	wordring::whatwg::split_on_ascii_whitespace(
+		s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result_1));
+	BOOST_CHECK(s32_result_1 == s32_correct_1);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_infra__split_on_commas)
+{
+	std::u32string const s32_original_1{ U"ABC,DEF,GHI" };
+	std::vector<std::u32string> const s32_correct_1{ U"ABC", U"DEF", U"GHI" };
+	std::vector<std::u32string> s32_result_1{};
+	wordring::whatwg::split_on_commas(
+		s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result_1));
+	BOOST_CHECK(s32_result_1 == s32_correct_1);
+
+	std::u32string const s32_original_2{};
+	std::vector<std::u32string> const s32_correct_2{};
+	std::vector<std::u32string> s32_result_2{};
+	wordring::whatwg::split_on_commas(
+		s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result_2));
+	BOOST_CHECK(s32_result_2 == s32_correct_2);
+
+	std::u32string const s32_original_3{ U"," };
+	std::vector<std::u32string> const s32_correct_3{ std::u32string{} };
+	std::vector<std::u32string> s32_result_3{};
+	wordring::whatwg::split_on_commas(
+		s32_original_3.begin(), s32_original_3.end(), std::back_inserter(s32_result_3));
+	BOOST_CHECK(s32_result_3 == s32_correct_3);
 }
 
 /*
