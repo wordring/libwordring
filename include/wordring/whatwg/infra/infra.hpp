@@ -91,7 +91,7 @@ namespace wordring::whatwg
 		エラーチェックは行われない。
 	*/
 	template <typename InputIterator,
-		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char_utf8_type>, std::nullptr_t> = nullptr>
+		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char8_t>, std::nullptr_t> = nullptr>
 	inline InputIterator to_codepoint(InputIterator first, InputIterator last, uint32_t & output)
 	{
 		assert(first != last);
@@ -196,8 +196,8 @@ namespace wordring::whatwg
 			std::conjunction_v<
 				is_iterator<OutputIterator>,
 				std::disjunction<
-					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char_utf8_type>,
-					std::is_same<typename OutputIterator::container_type::value_type, char_utf8_type>>>, nullptr_t> = nullptr>
+					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char8_t>,
+					std::is_same<typename OutputIterator::container_type::value_type, char8_t>>>, nullptr_t> = nullptr>
 	inline void to_string(uint32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFFFF80u) == 0) *output++ = static_cast<unsigned char>(ch); // 一バイト文字
@@ -281,11 +281,20 @@ namespace wordring::whatwg
 	*/
 	template <typename Container,
 		std::enable_if_t<is_container_v<Container>, nullptr_t> = nullptr>
-	inline void to_string(uint32_t ch, Container & output)
+	inline void to_string(uint32_t cp, Container & output)
 	{
-		to_string(ch, std::back_inserter(output));
+		to_string(cp, std::back_inserter(output));
 	}
 
+	// ------------------------------------------------------------------------
+
+	template <typename String>
+	inline std::u32string to_u32string(String input)
+	{
+		std::u32string result{};
+		for (uint32_t cp : input) to_string(cp, result);
+		return result;
+	}
 
 	// 4.3. Bytes -------------------------------------------------------------
 
@@ -631,6 +640,9 @@ namespace wordring::whatwg
 		return is_ascii_string(str.begin(), str.end());
 	}
 
+	/*!
+	@brief 小文字化する。
+	*/
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<std::conjunction_v<is_iterator<InputIterator>, is_iterator<OutputIterator>>, std::nullptr_t> = nullptr>
 	inline void to_ascii_lowercase(InputIterator first, InputIterator last, OutputIterator output)
@@ -644,6 +656,17 @@ namespace wordring::whatwg
 		}
 	}
 
+	template <typename InputIterator, typename ResultType = std::basic_string<typename std::iterator_traits<InputIterator>::value_type>>
+	inline ResultType to_ascii_lowercase(InputIterator first, InputIterator last)
+	{
+		ResultType result{};
+		to_ascii_lowercase(first, last, std::back_inserter(result));
+		return result;
+	}
+
+	/*!
+	@brief 大文字化する。
+	*/
 	template <typename InputIterator, typename OutputIterator,
 		typename std::enable_if_t<std::conjunction_v<is_iterator<InputIterator>, is_iterator<OutputIterator>>, std::nullptr_t> = nullptr>
 	inline void to_ascii_uppercase(InputIterator first, InputIterator last, OutputIterator output)
@@ -762,6 +785,9 @@ namespace wordring::whatwg
 		}
 	}
 
+	/*!
+	@brief 前後のASCII空白文字を剥ぎ取る。
+	*/
 	template <typename ForwardIterator, typename OutputIterator,
 		typename std::enable_if_t<is_iterator_v<ForwardIterator>, nullptr_t> = nullptr>
 	inline void strip_leading_and_trailing_ascii_whitespace(ForwardIterator first, ForwardIterator last, OutputIterator output)
@@ -782,7 +808,7 @@ namespace wordring::whatwg
 		while (left != right) to_string(*left++, output);
 	}
 
-	template <typename ForwardIterator, typename ResultType = std::basic_string<typename ForwardIterator::value_type>>
+	template <typename ForwardIterator, typename ResultType = std::basic_string<typename std::iterator_traits<ForwardIterator>::value_type>>
 	inline ResultType strip_leading_and_trailing_ascii_whitespace(ForwardIterator first, ForwardIterator last)
 	{
 		static_assert(std::is_base_of_v<std::forward_iterator_tag, typename std::iterator_traits<ForwardIterator>::iterator_category>);
