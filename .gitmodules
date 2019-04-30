@@ -1,0 +1,6 @@
+[submodule "submodules/whatwg/encoding"]
+	path = submodules/whatwg/encoding
+	url = https://github.com/whatwg/encoding.git
+[submodule "submodules/publicsuffix/list"]
+	path = submodules/publicsuffix/list
+	url = https://github.com/publicsuffix/list.git
