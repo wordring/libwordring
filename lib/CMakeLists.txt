@@ -16,22 +16,22 @@ find_package (
 	COMPONENTS
 		system
 		filesystem
-		unit_test_framework
+#		unit_test_framework
 )
 
-find_library (
-	Gumbo_static_LIBRARY
-		NAMES libgumbo.a libgumbo_static.a gumbo.a gumbo_static.a libgumbo.lib libgumbo_static.lib gumbo.lib gumbo_static.lib
-		HINTS ${CMAKE_FIND_ROOT_PATH}
-		PATHS ${CMAKE_FIND_ROOT_PATH}
-		PATH_SUFFIXES "lib" "local/lib"
-)
+#find_library (
+#	Gumbo_static_LIBRARY
+#		NAMES libgumbo.a libgumbo_static.a gumbo.a gumbo_static.a libgumbo.lib libgumbo_static.lib gumbo.lib gumbo_static.lib
+#		HINTS ${CMAKE_FIND_ROOT_PATH}
+#		PATHS ${CMAKE_FIND_ROOT_PATH}
+#		PATH_SUFFIXES "lib" "local/lib"
+#)
 
-find_path (
-	Gumbo_INCLUDE_DIR
-		NAMES gumbo.h
-		PATHS ${CMAKE_FIND_ROOT_PATH}
-)
+#find_path (
+#	Gumbo_INCLUDE_DIR
+#		NAMES gumbo.h
+#		PATHS ${CMAKE_FIND_ROOT_PATH}
+#)
 
 find_package (
 	ICU REQUIRED
@@ -45,7 +45,7 @@ find_package(
 )
 
 include_directories (
-	${Gumbo_INCLUDE_DIR}
+#	${Gumbo_INCLUDE_DIR}
 	${ICU_INCLUDE_DIR}
 	${Wordring_INCLUDE_DIR}
 )
@@ -71,7 +71,7 @@ add_library (
 
 target_link_libraries (
 	${PROJECT_NAME}
-		${Gumbo_static_LIBRARY}
+#		${Gumbo_static_LIBRARY}
 		${ICU_LIBRARIES}
 		sqlite3
 )
