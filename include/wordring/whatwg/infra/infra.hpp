@@ -526,7 +526,7 @@ namespace wordring::whatwg
 		return false;
 	}
 
-	inline bool is_ascii_char(uint32_t cp) noexcept
+	inline bool is_ascii_code_point(uint32_t cp) noexcept
 	{
 		return 0 <= cp && cp <= 0x7F;
 	}

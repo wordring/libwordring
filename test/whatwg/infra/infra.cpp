@@ -275,13 +275,13 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__is_noncharacter)
 	BOOST_CHECK(wordring::whatwg::is_noncharacter(U'\uFDEF') == true);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_char)
+BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_code_point)
 {
-	BOOST_CHECK(wordring::whatwg::is_ascii_char(U'\u0000') == true);
-	BOOST_CHECK(wordring::whatwg::is_ascii_char(U'\u007F') == true);
+	BOOST_CHECK(wordring::whatwg::is_ascii_code_point(U'\u0000') == true);
+	BOOST_CHECK(wordring::whatwg::is_ascii_code_point(U'\u007F') == true);
 
-	BOOST_CHECK(wordring::whatwg::is_ascii_char(U'\u0080') == false);
-	BOOST_CHECK(wordring::whatwg::is_ascii_char(static_cast<char32_t>(0xFFFFFFFF)) == false);
+	BOOST_CHECK(wordring::whatwg::is_ascii_code_point(U'\u0080') == false);
+	BOOST_CHECK(wordring::whatwg::is_ascii_code_point(static_cast<char32_t>(0xFFFFFFFF)) == false);
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_tab_or_newline)

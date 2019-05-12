@@ -21,7 +21,7 @@
   <Add Test="whatwg_infra_test/whatwg_infra__is_surrogate" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_scalar_value" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_noncharacter" />
-  <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_char" />
+  <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_code_point" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_tab_or_newline" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_ascii_white_space" />
   <Add Test="whatwg_infra_test/whatwg_infra__is_c0_control" />

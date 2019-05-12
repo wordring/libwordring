@@ -12,10 +12,11 @@ add_library (
 # encoding --------------------------------------------------------------------
 		${INCLUDE_DIR}/encoding/coder.hpp
 		${INCLUDE_DIR}/encoding/encoding.hpp
-		${INCLUDE_DIR}/encoding/encoding_stream.hpp
+		${INCLUDE_DIR}/encoding/indexes.hpp
+		${INCLUDE_DIR}/encoding/stream.hpp
 		encoding/encoding.cpp
-		encoding/indexes.cpp
-		encoding/indexes.hpp
+		encoding/indexes_code_point.cpp
+		encoding/indexes_pointer.cpp
 # infra -----------------------------------------------------------------------
 		${INCLUDE_DIR}/infra/infra.hpp
 		${INCLUDE_DIR}/infra/scalar_value.hpp

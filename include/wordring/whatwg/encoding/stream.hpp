@@ -2,33 +2,28 @@
 
 #include <deque>
 #include <iterator>
+#include <optional>
 
-namespace wordring::whatwg
+namespace wordring::whatwg::encoding
 {
-	template <typename EncodingStream>
-	class encoding_stream_iterator
-	{
-	public:
-		using container_type = EncodingStream;
-	};
-
 	// 3. Terminology ---------------------------------------------------------
 
 	template <typename InputIterator>
-	class encoding_stream
+	class stream
 	{
 	public:
 		using iterator_type = InputIterator;
 		using value_type = typename std::iterator_traits<iterator_type>::value_type;
+		using result_type = std::optional<value_type>;
 
 	public:
-		encoding_stream(iterator_type first, iterator_type last) : m_first(first), m_last(last) {}
+		stream(iterator_type first, iterator_type last) : m_first(first), m_last(last) {}
 
 		bool operator !() const { return m_front.empty() && m_back.empty() && m_first == m_last; }
 
 		operator bool() const { return !(operator!()); }
 
-		value_type read()
+		result_type read()
 		{
 			if (!m_front.empty())
 			{
@@ -43,8 +38,8 @@ namespace wordring::whatwg
 				m_back.pop_front();
 				return result;
 			}
-			assert(false);
-			return 0;
+
+			return result_type{};
 		}
 
 		void prepend(value_type token) { m_front.push_front(token); }

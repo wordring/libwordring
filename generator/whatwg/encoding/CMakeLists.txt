@@ -28,8 +28,9 @@ add_executable(
 )
 
 add_definitions(-DINDEXES_JSON_PATH=${Wordring_DIR}/submodules/whatwg/encoding/indexes.json)
-add_definitions(-DINDEXES_HPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes.hpp)
-add_definitions(-DINDEXES_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes.cpp)
+add_definitions(-DINDEXES_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/encoding/indexes.hpp)
+add_definitions(-DINDEXES_CODE_POINT_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_code_point.cpp)
+add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_pointer.cpp)
 
 target_link_libraries(
 	${PROJECT_NAME}

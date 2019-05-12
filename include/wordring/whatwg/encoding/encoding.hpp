@@ -11,7 +11,7 @@
 #include <variant>
 
 #include <wordring/compatibility.hpp>
-#include <wordring/whatwg/encoding/encoding_stream.hpp>
+#include <wordring/whatwg/encoding/stream.hpp>
 #include <wordring/whatwg/infra/infra.hpp>
 
 namespace wordring::whatwg::encoding
@@ -22,14 +22,16 @@ namespace wordring::whatwg::encoding
 	class decoder {};
 
 	class result_finished {};
-	
-	using result_code_point = uint32_t;
-	using result_bytes_1 = std::array<std::byte, 1>;
-	using result_bytes_2 = std::array<std::byte, 2>;
-	using result_bytes_3 = std::array<std::byte, 3>;
-	using result_bytes_4 = std::array<std::byte, 4>;
+	class result_continue {};
 
-	
+	using result_code_point = uint32_t;
+	using result_code_points_2 = std::array<uint32_t, 2>;
+
+	using result_byte = uint8_t;
+	using result_bytes_2 = std::array<uint8_t, 2>;
+	using result_bytes_3 = std::array<uint8_t, 3>;
+	using result_bytes_4 = std::array<uint8_t, 4>;
+
 	struct result_error
 	{
 		result_error() : code_point{ 0xFFFFFFFFu } {}
@@ -37,13 +39,12 @@ namespace wordring::whatwg::encoding
 		uint32_t code_point;
 	};
 
-	class result_continue {};
-
 	using result_value = std::variant<
 		result_finished,
 		result_continue,
 		result_code_point,
-		result_bytes_1,
+		result_code_points_2,
+		result_byte,
 		result_bytes_2,
 		result_bytes_3,
 		result_bytes_4,
@@ -60,58 +61,84 @@ namespace wordring::whatwg::encoding
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
 	result_value process_token(
-		Token token, Coder& coder, InputStream input, OutputIterator output, error_mode mode)
+		Token token, Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
 	{
-		struct writer
-		{
-			writer(OutputIterator& out) : output{ out } {}
-
-			void operator()(result_code_point cp) { *output++ = cp; }
-			
-			template <typename Array>
-			void operator()(Array const & array) { output = std::copy(array.begin(), array.end(), output); }
-
-			OutputIterator& output;
-		};
-
-		struct ncr_writer
-		{
-			ncr_writer(OutputIterator& out) : output{ out } {}
-
-			void operator()(result_code_point cp)
-			{
-				std::array<std::byte, 13> array{ 0x26u, 0x23u };
-				auto [p, ec] = std::to_chars(array.data(), array.data() + array.size(), cp);
-				*p++ = 0x3Bu;
-				output = std::copy(array.data(), p, output);
-			}
-
-			OutputIterator& output;
-		};
-
 		result_value result = coder.run(input, token);
 		switch (result.index())
 		{
-		case 0:
-		case 1:
+		case 0: // result_finished
+		case 1: // result_continue
 			return result;
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-			std::visit(writer{ output }, result);
+		case 2: // result_code_point
+		{
+			result_code_point* cp = std::get_if<2>(&result);
+			assert(cp != nullptr);
+			*output++ = *cp;
 			return result_continue{};
-		case 6:
-			if (mode == error_mode::Replacement) writer{ output }(0xFFFDu);
-			else if (mode == error_mode::Html) std::visit(ncr_writer{ output }, result);
-			else if (mode == error_mode::Fatal) return result_error{};
+		}
+		case 3: // result_code_points_2
+		{
+			std::array<uint32_t, 2>* array_2 = std::get_if<3>(&result);
+			assert(array_2 != nullptr);
+			output = std::copy(array_2->begin(), array_2->end(), output);
+			return result_continue{};
+		}
+		case 4: // result_byte
+		{
+			uint8_t* byte = std::get_if<4>(&result);
+			assert(byte != nullptr);
+			*output++ = *byte;
+			return result_continue{};
+		}
+		case 5: // result_bytes_2
+		{
+			std::array<uint8_t, 2>* array_2 = std::get_if<5>(&result);
+			assert(array_2 != nullptr);
+			output = std::copy(array_2->begin(), array_2->end(), output);
+			return result_continue{};
+		}
+		case 6: // result_bytes_3
+		{
+			std::array<uint8_t, 3>* array_3 = std::get_if<6>(&result);
+			assert(array_3 != nullptr);
+			output = std::copy(array_3->begin(), array_3->end(), output);
+			return result_continue{};
+		}
+		case 7: // result_bytes_4
+		{
+			std::array<uint8_t, 4>* array_4 = std::get_if<7>(&result);
+			assert(array_4 != nullptr);
+			output = std::copy(array_4->begin(), array_4->end(), output);
+			return result_continue{};
+		}
+		case 8: // result_error
+		{
+			result_error* error = std::get_if<8>(&result);
+			assert(error != nullptr);
+
+			if (mode == error_mode::Replacement)
+			{
+				if constexpr (std::is_base_of_v<decoder, Coder>)* output++ = 0xFFFDu;
+			}
+			else if (mode == error_mode::Html)
+			{
+				if constexpr (std::is_base_of_v<encoder, Coder>)
+				{
+					std::array<char, 13> array{ 0x26u, 0x23u };
+					auto [p, ec] = std::to_chars(array.data() + 2, array.data() + array.size() + 2, error->code_point);
+					*p++ = 0x3Bu;
+					output = std::copy(array.data(), p, output);
+				}
+			}
+			else if (mode == error_mode::Fatal) return result;
+		}
 		}
 		return result_continue{};
 	}
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
 	result_value process_token(
-		Token token, Coder& coder, InputStream input, OutputIterator output)
+		Token token, Coder& coder, InputStream& input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
 		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
@@ -119,19 +146,19 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run(Coder& coder, InputStream input, OutputIterator output, error_mode mode)
+	result_value run(Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
 	{
 		while (true)
 		{
-			result_code result = process_token(coder, input.read(), input, output, mode);
-			if (result != result_code::Continue) return result;
+			result_value result = process_token(input.read(), coder, input, output, mode);
+			if (result.index() != 1) return result;
 		}
 		assert(false);
 		return result_finished{};
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run(Coder& coder, InputStream input, OutputIterator output)
+	result_value run(Coder& coder, InputStream& input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
 		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
@@ -142,9 +169,7 @@ namespace wordring::whatwg::encoding
 
 	enum class name : uint32_t
 	{
-		//None = 0,
-
-		UTF_8,
+		UTF_8 = 0,
 
 		// Legacy single - byte encodings
 		IBM866,
@@ -198,7 +223,7 @@ namespace wordring::whatwg::encoding
 		x_user_defined,
 	};
 
-	name get_name(std::u32string_view label)
+	inline name get_name(std::u32string_view label)
 	{
 		static std::unordered_map<std::u32string, name> const map = {
 			// The Encoding
@@ -476,11 +501,11 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename String>
-	name get_name(String string) { return get_name(to_u32string(string)); }
+	inline name get_name(String string) { return get_name(to_u32string(string)); }
 
 	// 4.3. Output encodings --------------------------------------------------
 
-	name get_output_encoding(name encoding)
+	inline name get_output_encoding(name encoding)
 	{
 		switch (encoding)
 		{
