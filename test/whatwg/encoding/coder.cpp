@@ -79,12 +79,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__IBM866_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	IBM866_decoder decoder_0{};
 	IBM866_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -99,12 +99,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_2_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_2_decoder decoder_0{};
 	ISO_8859_2_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -133,12 +133,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_3_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_3_decoder decoder_0{};
 	ISO_8859_3_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 121);
 	BOOST_CHECK(in == out);
@@ -153,12 +153,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_4_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_4_decoder decoder_0{};
 	ISO_8859_4_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -173,12 +173,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_5_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_5_decoder decoder_0{};
 	ISO_8859_5_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -203,12 +203,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_6_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_6_decoder decoder_0{};
 	ISO_8859_6_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 83);
 	BOOST_CHECK(in == out);
@@ -229,12 +229,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_7_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_7_decoder decoder_0{};
 	ISO_8859_7_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 125);
 	BOOST_CHECK(in == out);
@@ -257,12 +257,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_8_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_8_decoder decoder_0{};
 	ISO_8859_8_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 92);
 	BOOST_CHECK(in == out);
@@ -277,12 +277,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_10_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_10_decoder decoder_0{};
 	ISO_8859_10_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -297,12 +297,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_13_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_13_decoder decoder_0{};
 	ISO_8859_13_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -317,12 +317,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_14_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_14_decoder decoder_0{};
 	ISO_8859_14_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -337,12 +337,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_15_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_15_decoder decoder_0{};
 	ISO_8859_15_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -357,12 +357,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_16_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	ISO_8859_16_decoder decoder_0{};
 	ISO_8859_16_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -377,12 +377,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_R_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	KOI8_R_decoder decoder_0{};
 	KOI8_R_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -397,12 +397,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_U_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	KOI8_U_decoder decoder_0{};
 	KOI8_U_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -417,12 +417,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__macintosh_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	macintosh_decoder decoder_0{};
 	macintosh_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -442,12 +442,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_874_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_874_decoder decoder_0{};
 	windows_874_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 120);
 	BOOST_CHECK(in == out);
@@ -462,12 +462,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1250_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1250_decoder decoder_0{};
 	windows_1250_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -482,12 +482,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1251_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1251_decoder decoder_0{};
 	windows_1251_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -502,12 +502,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1252_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1252_decoder decoder_0{};
 	windows_1252_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -528,12 +528,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1253_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1253_decoder decoder_0{};
 	windows_1253_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 125);
 	BOOST_CHECK(in == out);
@@ -548,12 +548,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1254_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1254_decoder decoder_0{};
 	windows_1254_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -573,12 +573,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1255_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1255_decoder decoder_0{};
 	windows_1255_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 118);
 	BOOST_CHECK(in == out);
@@ -592,12 +592,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1256_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1256_decoder decoder_0{};
 	windows_1256_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -616,12 +616,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1257_coder)
 		in.push_back(static_cast<uint8_t>(i));
 	}
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1257_decoder decoder_0{};
 	windows_1257_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 128 + 126);
 	BOOST_CHECK(in == out);
@@ -635,12 +635,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1258_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	windows_1258_decoder decoder_0{};
 	windows_1258_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
@@ -654,12 +654,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__x_mac_cyrillic_coder)
 	std::string out{};
 	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	x_mac_cyrillic_decoder decoder_0{};
 	x_mac_cyrillic_encoder encoder_0{};
 
+	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
 	run(decoder_0, stream_8, std::back_inserter(u32));
+	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
 	run(encoder_0, stream_32, std::back_inserter(out));
 	BOOST_CHECK(out.size() == 256);
 	BOOST_CHECK(in == out);
