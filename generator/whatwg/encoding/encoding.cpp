@@ -178,13 +178,13 @@ int main()
 		// index code point部
 		for (auto const& idx : indexes_code_point)
 		{
-			cpp << "static std::vector<uint32_t> const wordring::whatwg::encoding::index_code_point_" << idx.name << " { ";
+			cpp << "std::vector<uint32_t> const wordring::whatwg::encoding::index_code_point_" << idx.name << " { ";
 			for (auto const& n : idx.data) cpp << n << "u, ";
 			cpp << "};" << std::endl;
 		}
 		cpp << std::endl;
 
-		cpp << "static std::multimap<uint32_t, uint32_t> const wordring::whatwg::encoding::index_code_point_" << gb18030_code_point.name << " {{ ";
+		cpp << "std::multimap<uint32_t, uint32_t> const wordring::whatwg::encoding::index_code_point_" << gb18030_code_point.name << " {{ ";
 		for (auto const& pair : gb18030_code_point.data) cpp << "{ " << pair.first << "u, " << pair.second << "u }, ";
 		cpp << " }};" << std::endl;
 		cpp << std::endl;
@@ -204,26 +204,26 @@ int main()
 		// index pointer部
 		for (auto const& idx : indexes_pointer)
 		{
-			cpp << "static std::vector<uint32_t> const wordring::whatwg::encoding::index_pointer_" << idx.name << "_0 { ";
+			cpp << "std::vector<uint32_t> const wordring::whatwg::encoding::index_pointer_" << idx.name << "_0 { ";
 			for (auto const& pair : idx.data) cpp << pair.first << "u, ";
 			cpp << "};" << std::endl;
-			cpp << "static std::vector<uint16_t> const wordring::whatwg::encoding::index_pointer_" << idx.name << "_1 { ";
+			cpp << "std::vector<uint16_t> const wordring::whatwg::encoding::index_pointer_" << idx.name << "_1 { ";
 			for (auto const& pair : idx.data) cpp << pair.second << "u, ";
 			cpp << "};" << std::endl;
 			cpp << std::endl;
 		}
 
-		cpp << "static std::multimap<uint32_t, uint32_t> const wordring::whatwg::encoding::index_pointer_" << gb18030_pointer.name << " {{ ";
+		cpp << "std::multimap<uint32_t, uint32_t> const wordring::whatwg::encoding::index_pointer_" << gb18030_pointer.name << " {{ ";
 		for (auto const& pair : gb18030_pointer.data) cpp << "{ " << pair.first << "u, " << pair.second << "u }, ";
 		cpp << " }};" << std::endl;
 		cpp << std::endl;
 
 		auto it = std::find_if(indexes_pointer.begin(), indexes_pointer.end(), [](pointer const& p) { return p.name == "jis0208"; });
 		assert(it != indexes_pointer.end());
-		cpp << "static std::vector<uint32_t> const wordring::whatwg::encoding::index_pointer_Shift_JIS_0 { ";
+		cpp << "std::vector<uint32_t> const wordring::whatwg::encoding::index_pointer_Shift_JIS_0 { ";
 		for (auto const& pair : it->data) cpp << pair.first << "u, ";
 		cpp << "};" << std::endl;
-		cpp << "static std::vector<uint16_t> const wordring::whatwg::encoding::index_pointer_Shift_JIS_1 { ";
+		cpp << "std::vector<uint16_t> const wordring::whatwg::encoding::index_pointer_Shift_JIS_1 { ";
 		for (auto const& pair : it->data) cpp << pair.second << "u, ";
 		cpp << "};" << std::endl;
 		cpp << std::endl;
