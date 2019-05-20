@@ -13,6 +13,62 @@
 
 namespace wordring::whatwg::encoding
 {
+
+	// 5. Indexes
+
+	template <std::vector<uint32_t> const& index>
+	inline std::optional<uint32_t> get_index_code_point(uint16_t pointer)
+	{
+		uint32_t cp{ index.at(pointer) };
+
+		if (cp == 4294967295u) return std::optional<uint32_t>{};
+		return cp;
+	}
+
+	template <std::vector<uint32_t> const& index_0, std::vector<uint16_t> const& index_1>
+	inline std::optional<uint16_t> get_index_pointer(uint32_t code_point)
+	{
+		std::vector<uint32_t>::const_iterator it = std::lower_bound(index_0.cbegin(), index_0.cend(), code_point);
+
+		if (it != index_0.end() && *it == code_point) return *(index_1.cbegin() + (it - index_0.cbegin()));
+		return std::optional<uint16_t>{};
+	}
+
+	inline std::optional<uint32_t> get_index_gb18030_ranges_code_point(uint32_t pointer)
+	{
+		// 1.
+		if ((39419 < pointer && pointer < 189000) || 1237575 < pointer) return std::optional<uint32_t>{};
+		// 2.
+		if (pointer == 7457) return static_cast<uint32_t>(0xE7C7u);
+		// 3.
+		std::multimap<uint32_t, uint32_t>::const_iterator it = index_code_point_gb18030_ranges.lower_bound(pointer);
+		assert(it != index_code_point_gb18030_ranges.cend());
+		if (it->first != pointer) --it;
+		uint32_t offset{ it->first };
+		uint32_t code_point_offset{ it->second };
+		// 4.
+		return static_cast<uint32_t>(code_point_offset + pointer - offset);
+	}
+
+	inline std::optional<uint32_t> get_index_gb18030_ranges_pointer(uint32_t code_point)
+	{
+		// 1.
+		if (code_point == 0xE7C7u) return 7457;
+
+		// 2.
+		std::multimap<uint32_t, uint32_t>::const_iterator it = index_pointer_gb18030_ranges.lower_bound(code_point);
+		if (it != index_pointer_gb18030_ranges.cend())
+		{
+			assert(false);
+			return std::optional<uint32_t>{};
+		}
+		uint32_t offset{ it->first };
+		uint32_t pointer_offset{ it->second };
+
+		// 3.
+		return static_cast<uint32_t>(pointer_offset + code_point - offset);
+	}
+
 	// 8.1.1. UTF-8 decoder
 	class UTF_8_decoder : public decoder
 	{
