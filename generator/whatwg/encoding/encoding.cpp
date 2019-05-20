@@ -13,10 +13,8 @@
 #define STRING(str) #str
 #define TO_STRING(str) STRING(str)
 
-struct index
+struct index_data
 {
-	index() {}
-
 	std::string name;
 	std::vector<std::string> data;
 };
@@ -36,7 +34,7 @@ struct pointer
 int main()
 {
 	// コードポイント索引表を構築
-	std::vector<index> indexes_code_point{};
+	std::vector<index_data> indexes_code_point{};
 	range gb18030_code_point{};
 	{
 		boost::property_tree::ptree pt;
@@ -67,8 +65,8 @@ int main()
 			}
 			else
 			{
-				indexes_code_point.push_back(index{});
-				index& current = indexes_code_point.back();
+				indexes_code_point.push_back(index_data{});
+				index_data& current = indexes_code_point.back();
 				current.name = cpp_name;
 
 				for (auto& v : pt.get_child(name))
