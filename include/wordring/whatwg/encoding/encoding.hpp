@@ -1,63 +1,28 @@
 ﻿#pragma once
+// whatwg/encoding/encoding.hpp
 
 // https://encoding.spec.whatwg.org/
 // https://triple-underscore.github.io/Encoding-ja.html
 
 #include <cassert>
 #include <charconv>
+#include <cstdint>
 #include <string_view>
 #include <type_traits>
 #include <unordered_map>
 #include <variant>
 
+#include <wordring/algorithm.hpp>
 #include <wordring/compatibility.hpp>
+#include <wordring/whatwg/encoding/coder.hpp>
+#include <wordring/whatwg/encoding/encoding_defs.hpp>
+//#include <wordring/whatwg/encoding/indexes.hpp>
 #include <wordring/whatwg/encoding/stream.hpp>
 #include <wordring/whatwg/infra/infra.hpp>
 
 namespace wordring::whatwg::encoding
 {
 	// 4.1. Encoders and decoders ---------------------------------------------
-
-	class encoder {};
-	class decoder {};
-
-	class result_finished {};
-	class result_continue {};
-
-	using result_code_point = uint32_t;
-	using result_code_points_2 = std::array<uint32_t, 2>;
-
-	using result_byte = uint8_t;
-	using result_bytes_2 = std::array<uint8_t, 2>;
-	using result_bytes_3 = std::array<uint8_t, 3>;
-	using result_bytes_4 = std::array<uint8_t, 4>;
-
-	struct result_error
-	{
-		result_error() : code_point{ 0xFFFFFFFFu } {}
-		result_error(uint32_t cp) : code_point{ cp } {}
-		uint32_t code_point;
-	};
-
-	using result_value = std::variant<
-		result_finished,
-		result_continue,
-		result_code_point,
-		result_code_points_2,
-		result_byte,
-		result_bytes_2,
-		result_bytes_3,
-		result_bytes_4,
-		result_error
-	>;
-
-	enum class error_mode : uint32_t
-	{
-		None        = 0,
-		Replacement = 1,
-		Fatal       = 2,
-		Html        = 3
-	};
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
 	result_value process_token(
@@ -138,7 +103,7 @@ namespace wordring::whatwg::encoding
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
 	result_value process_token(
-		Token token, Coder& coder, InputStream& input, OutputIterator output)
+		Token token, Coder & coder, InputStream & input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
 		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
@@ -146,7 +111,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run(Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
+	result_value run(Coder & coder, InputStream & input, OutputIterator output, error_mode mode)
 	{
 		while (true)
 		{
@@ -158,347 +123,86 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run(Coder& coder, InputStream& input, OutputIterator output)
+	result_value run(Coder & coder, InputStream & input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
 		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
 		return run(coder, input, output, mode);
 	}
 
-	// 4.2. Names and labels --------------------------------------------------
-
-	enum class name : uint32_t
+	template <typename Coder, typename InputStream, typename OutputIterator>
+	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode)
 	{
-		UTF_8 = 0,
+		switch (encoding_name)
+		{
+		case name::UTF_8: return run(UTF_8_decoder{}, input, output, mode);
 
-		// Legacy single - byte encodings
-		IBM866,
-		ISO_8859_2,
-		ISO_8859_3,
-		ISO_8859_4,
-		ISO_8859_5,
-		ISO_8859_6,
-		ISO_8859_7,
-		ISO_8859_8,
-		ISO_8859_8_I,
-		ISO_8859_10,
-		ISO_8859_13,
-		ISO_8859_14,
-		ISO_8859_15,
-		ISO_8859_16,
-		KOI8_R,
-		KOI8_U,
-		macintosh,
-		windows_874,
-		windows_1250,
-		windows_1251,
-		windows_1252,
-		windows_1253,
-		windows_1254,
-		windows_1255,
-		windows_1256,
-		windows_1257,
-		windows_1258,
-		x_mac_cyrillic,
+			// Legacy single - byte encodings
+		case name::IBM866:         return run(IBM866_decoder{}, input, output, mode);
+		case name::ISO_8859_2:     return run(ISO_8859_2_decoder{}, input, output, mode);
+		case name::ISO_8859_3:     return run(ISO_8859_3_decoder{}, input, output, mode);
+		case name::ISO_8859_4:     return run(ISO_8859_4_decoder{}, input, output, mode);
+		case name::ISO_8859_5:     return run(ISO_8859_5_decoder{}, input, output, mode);
+		case name::ISO_8859_6:     return run(ISO_8859_6_decoder{}, input, output, mode);
+		case name::ISO_8859_7:     return run(ISO_8859_7_decoder{}, input, output, mode);
+		case name::ISO_8859_8:     return run(ISO_8859_8_decoder{}, input, output, mode);
+		case name::ISO_8859_8_I:   return run(ISO_8859_8_I_decoder{}, input, output, mode);
+		case name::ISO_8859_10:    return run(ISO_8859_10_decoder{}, input, output, mode);
+		case name::ISO_8859_13:    return run(ISO_8859_13_decoder{}, input, output, mode);
+		case name::ISO_8859_14:    return run(ISO_8859_14_decoder{}, input, output, mode);
+		case name::ISO_8859_15:    return run(ISO_8859_15_decoder{}, input, output, mode);
+		case name::ISO_8859_16:    return run(ISO_8859_16_decoder{}, input, output, mode);
+		case name::KOI8_R:         return run(KOI8_R_decoder{}, input, output, mode);
+		case name::KOI8_U:         return run(KOI8_U_decoder{}, input, output, mode);
+		case name::macintosh:      return run(macintosh_decoder{}, input, output, mode);
+		case name::windows_874:    return run(windows_874_decoder{}, input, output, mode);
+		case name::windows_1250:   return run(windows_1250_decoder{}, input, output, mode);
+		case name::windows_1251:   return run(windows_1251_decoder{}, input, output, mode);
+		case name::windows_1252:   return run(windows_1252_decoder{}, input, output, mode);
+		case name::windows_1253:   return run(windows_1253_decoder{}, input, output, mode);
+		case name::windows_1254:   return run(windows_1254_decoder{}, input, output, mode);
+		case name::windows_1255:   return run(windows_1255_decoder{}, input, output, mode);
+		case name::windows_1256:   return run(windows_1256_decoder{}, input, output, mode);
+		case name::windows_1257:   return run(windows_1257_decoder{}, input, output, mode);
+		case name::windows_1258:   return run(windows_1258_decoder{}, input, output, mode);
+		case name::x_mac_cyrillic: return run(x_mac_cyrillic_decoder{}, input, output, mode);
 
-		// Legacy multi - byte Chinese(simplified) encodings
-		GBK,
-		gb18030,
-		
-		// Legacy multi - byte Chinese(traditional) encodings
-		Big5,
-		
-		// Legacy multi - byte Japanese encodings
-		EUC_JP,
-		ISO_2022_JP,
-		Shift_JIS,
-		
-		// Legacy multi - byte Korean encodings
-		EUC_KR,
-		
-		// Legacy miscellaneous encodings
-		replacement,
-		UTF_16BE,
-		UTF_16LE,
-		x_user_defined,
-	};
+			// Legacy multi - byte Chinese(simplified) encodings
+		case name::GBK:     return run(GBK_decoder{}, input, output, mode);
+		case name::gb18030: return run(gb18030_decoder{}, input, output, mode);
 
-	inline name get_name(std::u32string_view label)
-	{
-		static std::unordered_map<std::u32string, name> const map = {
-			// The Encoding
-			{ U"unicode-1-1-utf-8", name::UTF_8 },
-			{ U"utf-8",             name::UTF_8 },
-			{ U"utf8",              name::UTF_8 },
+			// Legacy multi - byte Chinese(traditional) encodings
+		case name::Big5: return run(Big5_decoder{}, input, output, mode);
 
-			// Legacy single-byte encodings
-			{ U"866",      name::IBM866 },
-			{ U"cp866",    name::IBM866 },
-			{ U"csibm866", name::IBM866 },
-			{ U"ibm866",   name::IBM866 },
+			// Legacy multi - byte Japanese encodings
+		case name::EUC_JP:      return run(EUC_JP_decoder{}, input, output, mode);
+		case name::ISO_2022_JP: return run(ISO_2022_JP_decoder{}, input, output, mode);
+		case name::Shift_JIS:   return run(Shift_JIS_decoder{}, input, output, mode);
 
-			{ U"csisolatin2",     name::ISO_8859_2 },
-			{ U"iso-8859-2",      name::ISO_8859_2 },
-			{ U"iso-ir-101",      name::ISO_8859_2 },
-			{ U"iso8859-2",       name::ISO_8859_2 },
-			{ U"iso88592",        name::ISO_8859_2 },
-			{ U"iso_8859-2",      name::ISO_8859_2 },
-			{ U"iso_8859-2:1987", name::ISO_8859_2 },
-			{ U"l2",              name::ISO_8859_2 },
-			{ U"latin2",          name::ISO_8859_2 },
-
-			{ U"csisolatin3",     name::ISO_8859_3 },
-			{ U"iso-8859-3",      name::ISO_8859_3 },
-			{ U"iso-ir-109",      name::ISO_8859_3 },
-			{ U"iso8859-3",       name::ISO_8859_3 },
-			{ U"iso88593",        name::ISO_8859_3 },
-			{ U"iso_8859-3",      name::ISO_8859_3 },
-			{ U"iso_8859-3:1988", name::ISO_8859_3 },
-			{ U"l3",              name::ISO_8859_3 },
-			{ U"latin3",          name::ISO_8859_3 },
-
-			{ U"csisolatin4",     name::ISO_8859_4 },
-			{ U"iso-8859-4",      name::ISO_8859_4 },
-			{ U"iso-ir-110",      name::ISO_8859_4 },
-			{ U"iso8859-4",       name::ISO_8859_4 },
-			{ U"iso88594",        name::ISO_8859_4 },
-			{ U"iso_8859-4",      name::ISO_8859_4 },
-			{ U"iso_8859-4:1988", name::ISO_8859_4 },
-			{ U"l4",              name::ISO_8859_4 },
-			{ U"latin4",          name::ISO_8859_4 },
-
-			{ U"csisolatincyrillic", name::ISO_8859_5 },
-			{ U"cyrillic",           name::ISO_8859_5 },
-			{ U"iso-8859-5",         name::ISO_8859_5 },
-			{ U"iso-ir-144",         name::ISO_8859_5 },
-			{ U"iso8859-5",          name::ISO_8859_5 },
-			{ U"iso88595",           name::ISO_8859_5 },
-			{ U"iso_8859-5",         name::ISO_8859_5 },
-			{ U"iso_8859-5:1988",    name::ISO_8859_5 },
-
-			{ U"arabic",           name::ISO_8859_6 },
-			{ U"asmo-708",         name::ISO_8859_6 },
-			{ U"csiso88596e",      name::ISO_8859_6 },
-			{ U"csiso88596i",      name::ISO_8859_6 },
-			{ U"csisolatinarabic", name::ISO_8859_6 },
-			{ U"ecma-114",         name::ISO_8859_6 },
-			{ U"iso-8859-6",       name::ISO_8859_6 },
-			{ U"iso-8859-6-e",     name::ISO_8859_6 },
-			{ U"iso-8859-6-i",     name::ISO_8859_6 },
-			{ U"iso-ir-127",       name::ISO_8859_6 },
-			{ U"iso8859-6",        name::ISO_8859_6 },
-			{ U"iso88596",         name::ISO_8859_6 },
-			{ U"iso_8859-6",       name::ISO_8859_6 },
-			{ U"iso_8859-6:1987",  name::ISO_8859_6 },
-
-			{ U"csisolatingreek", name::ISO_8859_7 },
-			{ U"ecma-118",        name::ISO_8859_7 },
-			{ U"elot_928",        name::ISO_8859_7 },
-			{ U"greek",           name::ISO_8859_7 },
-			{ U"greek8",          name::ISO_8859_7 },
-			{ U"iso-8859-7",      name::ISO_8859_7 },
-			{ U"iso-ir-126",      name::ISO_8859_7 },
-			{ U"iso8859-7",       name::ISO_8859_7 },
-			{ U"iso88597",        name::ISO_8859_7 },
-			{ U"iso_8859-7",      name::ISO_8859_7 },
-			{ U"iso_8859-7:1987", name::ISO_8859_7 },
-			{ U"sun_eu_greek",    name::ISO_8859_7 },
-
-			{ U"csiso88598e",      name::ISO_8859_8 },
-			{ U"csisolatinhebrew", name::ISO_8859_8 },
-			{ U"hebrew",           name::ISO_8859_8 },
-			{ U"iso-8859-8",       name::ISO_8859_8 },
-			{ U"iso-8859-8-e",     name::ISO_8859_8 },
-			{ U"iso-ir-138",       name::ISO_8859_8 },
-			{ U"iso8859-8",        name::ISO_8859_8 },
-			{ U"iso88598",         name::ISO_8859_8 },
-			{ U"iso_8859-8",       name::ISO_8859_8 },
-			{ U"iso_8859-8:1988",  name::ISO_8859_8 },
-			{ U"visual",           name::ISO_8859_8 },
-
-			{ U"csiso88598i",  name::ISO_8859_8_I },
-			{ U"iso-8859-8-i", name::ISO_8859_8_I },
-			{ U"logical",      name::ISO_8859_8_I },
-
-			{ U"csisolatin6", name::ISO_8859_10 },
-			{ U"iso-8859-10", name::ISO_8859_10 },
-			{ U"iso-ir-157",  name::ISO_8859_10 },
-			{ U"iso8859-10",  name::ISO_8859_10 },
-			{ U"iso885910",   name::ISO_8859_10 },
-			{ U"l6",          name::ISO_8859_10 },
-			{ U"latin6",      name::ISO_8859_10 },
-
-			{ U"iso-8859-13", name::ISO_8859_13 },
-			{ U"iso8859-13",  name::ISO_8859_13 },
-			{ U"iso885913",   name::ISO_8859_13 },
-
-			{ U"iso-8859-14", name::ISO_8859_14 },
-			{ U"iso8859-14",  name::ISO_8859_14 },
-			{ U"iso885914",   name::ISO_8859_14 },
-
-			{ U"csisolatin9", name::ISO_8859_15 },
-			{ U"iso-8859-15", name::ISO_8859_15 },
-			{ U"iso8859-15",  name::ISO_8859_15 },
-			{ U"iso885915",   name::ISO_8859_15 },
-			{ U"iso_8859-15", name::ISO_8859_15 },
-			{ U"l9",          name::ISO_8859_15 },
-
-			{ U"iso-8859-16", name::ISO_8859_16 },
-
-			{ U"cskoi8r", name::KOI8_R },
-			{ U"koi",     name::KOI8_R },
-			{ U"koi8",    name::KOI8_R },
-			{ U"koi8-r",  name::KOI8_R },
-			{ U"koi8_r",  name::KOI8_R },
-
-			{ U"koi8-ru", name::KOI8_U },
-			{ U"koi8-u",  name::KOI8_U },
-
-			{ U"csmacintosh", name::macintosh },
-			{ U"mac",         name::macintosh },
-			{ U"macintosh",   name::macintosh },
-			{ U"x-mac-roman", name::macintosh },
-
-			{ U"dos-874",     name::windows_874 },
-			{ U"iso-8859-11", name::windows_874 },
-			{ U"iso8859-11",  name::windows_874 },
-			{ U"iso885911",   name::windows_874 },
-			{ U"tis-620",     name::windows_874 },
-			{ U"windows-874", name::windows_874 },
-
-			{ U"cp1250",       name::windows_1250 },
-			{ U"windows-1250", name::windows_1250 },
-			{ U"x-cp1250",     name::windows_1250 },
-
-			{ U"cp1251",       name::windows_1251 },
-			{ U"windows-1251", name::windows_1251 },
-			{ U"x-cp1251",     name::windows_1251 },
-
-			{ U"ansi_x3.4-1968",  name::windows_1252 },
-			{ U"ascii",           name::windows_1252 },
-			{ U"cp1252",          name::windows_1252 },
-			{ U"cp819",           name::windows_1252 },
-			{ U"csisolatin1",     name::windows_1252 },
-			{ U"ibm819",          name::windows_1252 },
-			{ U"iso-8859-1",      name::windows_1252 },
-			{ U"iso-ir-100",      name::windows_1252 },
-			{ U"iso8859-1",       name::windows_1252 },
-			{ U"iso88591",        name::windows_1252 },
-			{ U"iso_8859-1",      name::windows_1252 },
-			{ U"iso_8859-1:1987", name::windows_1252 },
-			{ U"l1",              name::windows_1252 },
-			{ U"latin1",          name::windows_1252 },
-			{ U"us-ascii",        name::windows_1252 },
-			{ U"windows-1252",    name::windows_1252 },
-			{ U"x-cp1252",        name::windows_1252 },
-
-			{ U"cp1253",       name::windows_1253 },
-			{ U"windows-1253", name::windows_1253 },
-			{ U"x-cp1253",     name::windows_1253 },
-
-			{ U"cp1254",          name::windows_1254 },
-			{ U"csisolatin5",     name::windows_1254 },
-			{ U"iso-8859-9",      name::windows_1254 },
-			{ U"iso-ir-148",      name::windows_1254 },
-			{ U"iso8859-9",       name::windows_1254 },
-			{ U"iso88599",        name::windows_1254 },
-			{ U"iso_8859-9",      name::windows_1254 },
-			{ U"iso_8859-9:1989", name::windows_1254 },
-			{ U"l5",              name::windows_1254 },
-			{ U"latin5",          name::windows_1254 },
-			{ U"windows-1254",    name::windows_1254 },
-			{ U"x-cp1254",        name::windows_1254 },
-
-			{ U"cp1255",       name::windows_1255 },
-			{ U"windows-1255", name::windows_1255 },
-			{ U"x-cp1255",     name::windows_1255 },
-
-			{ U"cp1256",       name::windows_1256 },
-			{ U"windows-1256", name::windows_1256 },
-			{ U"x-cp1256",     name::windows_1256 },
-
-			{ U"cp1257",       name::windows_1257 },
-			{ U"windows-1257", name::windows_1257 },
-			{ U"x-cp1257",     name::windows_1257 },
-
-			{ U"cp1258",       name::windows_1258 },
-			{ U"windows-1258", name::windows_1258 },
-			{ U"x-cp1258",     name::windows_1258 },
-
-			{ U"x-mac-cyrillic",  name::x_mac_cyrillic },
-			{ U"x-mac-ukrainian", name::x_mac_cyrillic },
-
-			// Legacy multi-byte Chinese (simplified) encodings
-			{ U"chinese",         name::GBK },
-			{ U"csgb2312",        name::GBK },
-			{ U"csiso58gb231280", name::GBK },
-			{ U"gb2312",          name::GBK },
-			{ U"gb_2312",         name::GBK },
-			{ U"gb_2312-80",      name::GBK },
-			{ U"gbk",             name::GBK },
-			{ U"iso-ir-58",       name::GBK },
-			{ U"x-gbk",           name::GBK },
-
-			{ U"gb18030", name::gb18030 },
-
-			// Legacy multi-byte Chinese (traditional) encodings
-			{ U"big5",       name::Big5 },
-			{ U"big5-hkscs", name::Big5 },
-			{ U"cn-big5",    name::Big5 },
-			{ U"csbig5",     name::Big5 },
-			{ U"x-x-big5",   name::Big5 },
-
-			// Legacy multi-byte Japanese encodings
-			{ U"cseucpkdfmtjapanese", name::EUC_JP },
-			{ U"euc-jp",              name::EUC_JP },
-			{ U"x-euc-jp",            name::EUC_JP },
-
-			{ U"csiso2022jp", name::ISO_2022_JP },
-			{ U"iso-2022-jp", name::ISO_2022_JP },
-
-			{ U"csshiftjis",  name::Shift_JIS },
-			{ U"ms932",       name::Shift_JIS },
-			{ U"ms_kanji",    name::Shift_JIS },
-			{ U"shift-jis",   name::Shift_JIS },
-			{ U"shift_jis",   name::Shift_JIS },
-			{ U"sjis",        name::Shift_JIS },
-			{ U"windows-31j", name::Shift_JIS },
-			{ U"x-sjis",      name::Shift_JIS },
-
-			// Legacy multi-byte Korean encodings
-			{ U"cseuckr",        name::EUC_KR },
-			{ U"csksc56011987",  name::EUC_KR },
-			{ U"euc-kr",         name::EUC_KR },
-			{ U"iso-ir-149",     name::EUC_KR },
-			{ U"korean",         name::EUC_KR },
-			{ U"ks_c_5601-1987", name::EUC_KR },
-			{ U"ks_c_5601-1989", name::EUC_KR },
-			{ U"ksc5601",        name::EUC_KR },
-			{ U"ksc_5601",       name::EUC_KR },
-			{ U"windows-949",    name::EUC_KR },
+			// Legacy multi - byte Korean encodings
+		case name::EUC_KR: return run(EUC_KR_decoder{}, input, output, mode);
 
 			// Legacy miscellaneous encodings
-			{ U"csiso2022kr",     name::replacement },
-			{ U"hz-gb-2312",      name::replacement },
-			{ U"iso-2022-cn",     name::replacement },
-			{ U"iso-2022-cn-ext", name::replacement },
-			{ U"iso-2022-kr",     name::replacement },
-			{ U"replacement",     name::replacement },
+		case name::replacement:    return run(replacement_decoder{}, input, output, mode);
+		case name::UTF_16BE:       return run(UTF_16BE_decoder{}, input, output, mode);
+		case name::UTF_16LE:       return run(UTF_16LE_decoder{}, input, output, mode);
+		case name::x_user_defined: return run(x_user_defined_decoder{}, input, output, mode);
+		}
 
-			{ U"utf-16be", name::UTF_16BE },
-
-			{ U"utf-16",   name::UTF_16LE },
-			{ U"utf-16le", name::UTF_16LE },
-
-			{ U"x-user-defined", name::x_user_defined }
-		};
-		
-		std::u32string label_name{ label };
-		label_name = strip_leading_and_trailing_ascii_whitespace(label_name.begin(), label_name.end());
-		label_name = to_ascii_lowercase(label_name.begin(), label_name.end());
-		auto it = map.find(label_name);
-		return it == map.end() ? name{ 0 } : it->second;
+		return result_error{};
 	}
+
+	template <typename InputStream, typename OutputIterator>
+	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output)
+	{
+		error_mode mode{ error_mode::Replacement };
+		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
+		return run(encoding_name, input, output, mode);
+	}
+
+	// 4.2. Names and labels --------------------------------------------------
+
+	name get_name(std::u32string_view label);
 
 	template <typename String>
 	inline name get_name(String string) { return get_name(to_u32string(string)); }
@@ -519,4 +223,99 @@ namespace wordring::whatwg::encoding
 
 	// 5. Indexes
 
+	template <std::vector<uint32_t> const& index>
+	inline std::optional<uint32_t> get_index_code_point(uint16_t pointer)
+	{
+		uint32_t cp{ index.at(pointer) };
+
+		if (cp == 4294967295u) return std::optional<uint32_t>{};
+		return cp;
+	}
+
+	template <std::vector<uint32_t> const& index_0, std::vector<uint16_t> const& index_1>
+	inline std::optional<uint16_t> get_index_pointer(uint32_t code_point)
+	{
+		std::vector<uint32_t>::const_iterator it = std::lower_bound(index_0.cbegin(), index_0.cend(), code_point);
+
+		if (it != index_0.end() && *it == code_point) return *(index_1.cbegin() + (it - index_0.cbegin()));
+		return std::optional<uint16_t>{};
+	}
+
+	inline std::optional<uint32_t> get_index_gb18030_ranges_code_point(uint32_t pointer)
+	{
+		// 1.
+		if ((39419 < pointer && pointer < 189000) || 1237575 < pointer) return std::optional<uint32_t>{};
+		// 2.
+		if (pointer == 7457) return static_cast<uint32_t>(0xE7C7u);
+		// 3.
+		std::multimap<uint32_t, uint32_t>::const_iterator it = index_code_point_gb18030_ranges.lower_bound(pointer);
+		assert(it != index_code_point_gb18030_ranges.cend());
+		if (it->first != pointer) --it;
+		uint32_t offset{ it->first };
+		uint32_t code_point_offset{ it->second };
+		// 4.
+		return static_cast<uint32_t>(code_point_offset + pointer - offset);
+	}
+
+	inline std::optional<uint32_t> get_index_gb18030_ranges_pointer(uint32_t code_point)
+	{
+		// 1.
+		if (code_point == 0xE7C7u) return 7457;
+
+		// 2.
+		std::multimap<uint32_t, uint32_t>::const_iterator it = index_pointer_gb18030_ranges.lower_bound(code_point);
+		if (it != index_pointer_gb18030_ranges.cend())
+		{
+			assert(false);
+			return std::optional<uint32_t>{};
+		}
+		uint32_t offset{ it->first };
+		uint32_t pointer_offset{ it->second };
+
+		// 3.
+		return static_cast<uint32_t>(pointer_offset + code_point - offset);
+	}
+
+	// 6. Hooks for standards -------------------------------------------------
+
+	extern std::string_view BOM_UTF_8;
+	extern std::string_view BOM_UTF_16BE;
+	extern std::string_view BOM_UTF_16LE;
+
+	template <typename InputStream, typename OutputIterator>
+	inline void decode(InputStream input, name fallback, OutputIterator output)
+	{
+		static_assert(std::is_same_v<std::iterator_traits<OutputIterator>::value_type, uint32_t>);
+
+		name encoding_name = fallback;
+
+		// 1.
+		std::array<uint8_t, 3> buffer{};
+		uint32_t buffer_length{ 0 };
+		// 2.
+		bool BOM_seen_flag{ false };
+		// 3.
+		while (input && buffer_length < 3) buffer[buffer_length++] = input.read().value();
+		// 4.
+		if (std::equal(buffer.data(), buffer.data() + buffer_length, BOM_UTF_8.begin(), BOM_UTF_8.end()))
+		{
+			encoding_name = name::UTF_8;
+			BOM_seen_flag = true;
+		}
+		else if (std::equal(buffer.data(), buffer.data() + buffer_length, BOM_UTF_8.begin(), BOM_UTF_16BE.end()))
+		{
+			encoding_name = name::UTF_16BE;
+			BOM_seen_flag = true;
+		}
+		else if (std::equal(buffer.data(), buffer.data() + buffer_length, BOM_UTF_8.begin(), BOM_UTF_16LE.end()))
+		{
+			encoding_name = name::UTF_16LE;
+			BOM_seen_flag = true;
+		}
+		// 5. 6.
+		if (BOM_seen_flag == false) input.prepend(buffer.data(), buffer.data() + buffer_length);
+		// 7.
+		// 8. 9.
+		run_decoder(encoding_name, input, output);
+	}
 }

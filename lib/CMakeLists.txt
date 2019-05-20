@@ -40,9 +40,9 @@ find_package (
 		data
 )
 
-find_package(
-	Sqlite3 REQUIRED
-)
+#find_package(
+#	Sqlite3 REQUIRED
+#)
 
 include_directories (
 #	${Gumbo_INCLUDE_DIR}
@@ -73,6 +73,6 @@ target_link_libraries (
 	${PROJECT_NAME}
 #		${Gumbo_static_LIBRARY}
 		${ICU_LIBRARIES}
-		sqlite3
+#		sqlite3
 )
 

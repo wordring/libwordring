@@ -22,7 +22,7 @@
 - CMake3.12以降
 
 ## 要求ライブラリ
-- Boost1.68以降
+- Boost1.67以降
 - ICU
 - SQLite3
 

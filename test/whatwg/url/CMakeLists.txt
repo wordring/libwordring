@@ -20,6 +20,7 @@ find_package (
 )
 
 include_directories (
+	${Boost_INCLUDE_DIRS}
 	${Wordring_INCLUDE_DIR}
 )
 
