@@ -12,7 +12,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package (
-	Boost 1.68 REQUIRED
+	Boost 1.67 REQUIRED
 	COMPONENTS
 		system
 		filesystem
@@ -46,6 +46,7 @@ find_package (
 
 include_directories (
 #	${Gumbo_INCLUDE_DIR}
+	${Boost_INCLUDE_DIRS}
 	${ICU_INCLUDE_DIR}
 	${Wordring_INCLUDE_DIR}
 )
