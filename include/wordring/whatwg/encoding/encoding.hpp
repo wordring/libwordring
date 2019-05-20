@@ -196,7 +196,6 @@ namespace wordring::whatwg::encoding
 	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
-		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
 		return run(encoding_name, input, output, mode);
 	}
 

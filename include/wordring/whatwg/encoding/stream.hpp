@@ -8,11 +8,11 @@ namespace wordring::whatwg::encoding
 {
 	// 3. Terminology ---------------------------------------------------------
 
-	template <typename InputIterator>
+	template <typename InputIteratorT>
 	class stream
 	{
 	public:
-		using iterator_type = InputIterator;
+		using iterator_type = InputIteratorT;
 		using value_type = typename std::iterator_traits<iterator_type>::value_type;
 		using result_type = std::optional<value_type>;
 
