@@ -15,6 +15,8 @@
 
 struct index
 {
+	index() {}
+
 	std::string name;
 	std::vector<std::string> data;
 };
