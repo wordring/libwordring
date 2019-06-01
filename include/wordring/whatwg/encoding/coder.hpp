@@ -37,9 +37,9 @@ namespace wordring::whatwg::encoding
 	inline std::optional<uint32_t> get_index_gb18030_ranges_code_point(uint32_t pointer)
 	{
 		// 1.
-		if ((39419 < pointer && pointer < 189000) || 1237575 < pointer) return std::optional<uint32_t>{};
+		if ((39419u < pointer && pointer < 189000u) || 1237575u < pointer) return std::optional<uint32_t>{};
 		// 2.
-		if (pointer == 7457) return static_cast<uint32_t>(0xE7C7u);
+		if (pointer == 7457u) return static_cast<uint32_t>(0xE7C7u);
 		// 3.
 		std::multimap<uint32_t, uint32_t>::const_iterator it = index_code_point_gb18030_ranges.lower_bound(pointer);
 		assert(it != index_code_point_gb18030_ranges.cend());
@@ -53,7 +53,7 @@ namespace wordring::whatwg::encoding
 	inline std::optional<uint32_t> get_index_gb18030_ranges_pointer(uint32_t code_point)
 	{
 		// 1.
-		if (code_point == 0xE7C7u) return 7457;
+		if (code_point == 0xE7C7u) return 7457u;
 
 		// 2.
 		std::multimap<uint32_t, uint32_t>::const_iterator it = index_pointer_gb18030_ranges.lower_bound(code_point);
@@ -77,8 +77,8 @@ namespace wordring::whatwg::encoding
 			: UTF_8_code_point{ 0 }
 			, UTF_8_bytes_seen{ 0 }
 			, UTF_8_bytes_needed{ 0 }
-			, UTF_8_lower_boundary{ 0x80 }
-			, UTF_8_upper_boundary{ 0xBF }
+			, UTF_8_lower_boundary{ 0x80u }
+			, UTF_8_upper_boundary{ 0xBFu }
 		{
 		}
 
@@ -94,25 +94,25 @@ namespace wordring::whatwg::encoding
 			// 3.
 			if (UTF_8_bytes_needed == 0)
 			{
-				if (0 <= byte && byte <= 0x7F) return static_cast<uint32_t>(byte);
-				if (0xC2 <= byte && byte <= 0xDF)
+				if (0 <= byte && byte <= 0x7Fu) return static_cast<uint32_t>(byte);
+				if (0xC2u <= byte && byte <= 0xDFu)
 				{
 					UTF_8_bytes_needed = 1;
-					UTF_8_code_point = byte & 0x1F;
+					UTF_8_code_point = byte & 0x1Fu;
 				}
-				else if (0xE0 <= byte && byte <= 0xEF)
+				else if (0xE0u <= byte && byte <= 0xEFu)
 				{
-					if (byte == 0xE0) UTF_8_lower_boundary = 0xA0;
-					else if (byte == 0xED) UTF_8_upper_boundary = 0x9F;
+					if (byte == 0xE0u) UTF_8_lower_boundary = 0xA0u;
+					else if (byte == 0xEDu) UTF_8_upper_boundary = 0x9Fu;
 					UTF_8_bytes_needed = 2;
-					UTF_8_code_point = byte & 0xF;
+					UTF_8_code_point = byte & 0xFu;
 				}
-				else if (0xF0 <= byte && byte <= 0xF4)
+				else if (0xF0u <= byte && byte <= 0xF4u)
 				{
-					if (byte == 0xF0) UTF_8_lower_boundary = 0x90;
-					else if (byte == 0xF4) UTF_8_upper_boundary = 0x8F;
+					if (byte == 0xF0u) UTF_8_lower_boundary = 0x90u;
+					else if (byte == 0xF4u) UTF_8_upper_boundary = 0x8Fu;
 					UTF_8_bytes_needed = 3;
-					UTF_8_code_point = byte & 0x7;
+					UTF_8_code_point = byte & 0x7u;
 				}
 				else return result_error{};
 
@@ -126,8 +126,8 @@ namespace wordring::whatwg::encoding
 				UTF_8_bytes_seen = 0;
 				UTF_8_bytes_needed = 0;
 
-				UTF_8_lower_boundary = 0x80;
-				UTF_8_upper_boundary = 0xBF;
+				UTF_8_lower_boundary = 0x80u;
+				UTF_8_upper_boundary = 0xBFu;
 
 				input.prepend(byte);
 
@@ -135,11 +135,11 @@ namespace wordring::whatwg::encoding
 			}
 
 			// 5.
-			UTF_8_lower_boundary = 0x80;
-			UTF_8_upper_boundary = 0xBF;
+			UTF_8_lower_boundary = 0x80u;
+			UTF_8_upper_boundary = 0xBFu;
 
 			// 6.
-			UTF_8_code_point = (UTF_8_code_point << 6) | (byte & 0x3F);
+			UTF_8_code_point = (UTF_8_code_point << 6) | (byte & 0x3Fu);
 
 			// 7.
 			++UTF_8_bytes_seen;
@@ -177,9 +177,9 @@ namespace wordring::whatwg::encoding
 			//3.
 			uint32_t count{ result.size() - 1 };
 			uint32_t offset{};
-			if (count == 1) offset = 0xC0;
-			else if (count == 2) offset = 0xE0;
-			else if (count == 3) offset = 0xF0;
+			if (count == 1) offset = 0xC0u;
+			else if (count == 2) offset = 0xE0u;
+			else if (count == 3) offset = 0xF0u;
 
 			// 4.
 			result[0] = (cp >> (6 * count)) + offset;
@@ -189,7 +189,7 @@ namespace wordring::whatwg::encoding
 			while (0 < count)
 			{
 				uint32_t temp{ cp >> (6 * (count - 1)) };
-				result[i] = 0x80 | (temp & 0x3F);
+				result[i] = 0x80u | (temp & 0x3Fu);
 				--count;
 				++i;
 			}
@@ -211,9 +211,9 @@ namespace wordring::whatwg::encoding
 			if (is_ascii_code_point(cp)) return static_cast<uint8_t>(cp);
 
 			// 3.
-			if (0x80 <= cp && cp <= 0x7FF) return run<std::array<uint8_t, 2>>(cp);
-			else if (0x800 <= cp && cp <= 0xFFFF) return run<std::array<uint8_t, 3>>(cp);
-			else if (0x10000 <= cp && cp <= 0x10FFFF) return run<std::array<uint8_t, 4>>(cp);
+			if (0x80u <= cp && cp <= 0x7FFu) return run<std::array<uint8_t, 2>>(cp);
+			else if (0x800u <= cp && cp <= 0xFFFFu) return run<std::array<uint8_t, 3>>(cp);
+			else if (0x10000u <= cp && cp <= 0x10FFFFu) return run<std::array<uint8_t, 4>>(cp);
 
 			assert(false);
 			return result_error{};
@@ -238,7 +238,7 @@ namespace wordring::whatwg::encoding
 			if (is_ascii_byte(byte)) return static_cast<uint32_t>(byte);
 
 			// 3.
-			std::optional<uint32_t> cp{ get_index_code_point<index>(byte - 0x80) };
+			std::optional<uint32_t> cp{ get_index_code_point<index>(byte - 0x80u) };
 
 			// 4.
 			if (!cp) return result_error{};
@@ -270,7 +270,7 @@ namespace wordring::whatwg::encoding
 			if(!byte) return result_error{ cp };
 
 			// 5.
-			return static_cast<uint8_t>(byte.value() + 0x80);
+			return static_cast<uint8_t>(byte.value() + 0x80u);
 		}
 	};
 
@@ -406,25 +406,72 @@ namespace wordring::whatwg::encoding
 			if ((!token.has_value()))
 			{
 				if (gb18030_first == 0 && gb18030_second == 0 && gb18030_third == 0) return result_finished{};
+			// 2.
 				reset();
 				return result_error{};
 			}
 
 			uint8_t byte = token.value();
-			// 2.
+			// 3.
 			if (gb18030_third != 0)
 			{
-				if (!(0x30u <= byte && byte <= 0x39))
+				if (!(0x30u <= byte && byte <= 0x39u))
 				{
-					input.prepend(byte);
-					input.prepend(gb18030_third);
-					input.prepend(gb18030_second);
+					input.prepend({ static_cast<uint8_t>(gb18030_second), static_cast<uint8_t>(gb18030_third), byte });
 					reset();
 					return result_error{};
 				}
 
-				//uint32_t cp = 
+				std::optional<uint32_t> cp = get_index_gb18030_ranges_code_point(
+					((gb18030_first - 0x81u) * 12600) + ((gb18030_second - 0x30u) * 1260) + ((gb18030_third - 0x81u) * 10) + byte - 0x30u);
+				reset();
+				if (!cp) return result_error{};
+				return cp.value();
 			}
+			// 4.
+			if (gb18030_second != 0)
+			{
+				if (0x30u <= byte && byte <= 0x39u)
+				{
+					gb18030_second = byte;
+					return result_continue{};
+				}
+
+				input.prepend({ static_cast<uint8_t>(gb18030_second), byte });
+				gb18030_first = 0;
+				gb18030_second = 0;
+				return result_error{};
+			}
+			// 5.
+			if (gb18030_first != 0)
+			{
+				if (0x30u <= byte && byte <= 0x39u)
+				{
+					gb18030_second = byte;
+					return result_continue{};
+				}
+				uint32_t lead{ gb18030_first };
+				uint32_t offset = (byte < 0x7Fu) ? 0x40u : 0x41u;
+				std::optional<uint32_t> pointer{};
+				if ((0x40u <= byte && byte <= 0x7Eu) || (0x80u <= byte && byte <= 0xFEu)) pointer = (lead - 0x81) * 190 + (byte - offset);
+				std::optional<uint32_t> cp{};
+				if (pointer) cp = get_index_gb18030_ranges_code_point(pointer.value());
+				if (cp) return cp.value();
+				if (is_ascii_byte(byte)) input.prepend(byte);
+				return result_error{};
+			}
+			// 6.
+			if (is_ascii_byte(byte)) return static_cast<uint32_t>(byte);
+			// 7.
+			if (byte == 0x80u) return static_cast<uint32_t>(0x20ACu);
+			// 8.
+			if (0x81u <= byte && byte <= 0xFEu)
+			{
+				gb18030_first = byte;
+				return result_continue{};
+			}
+			// 9.
+			return result_error{};
 		}
 
 	private:
@@ -441,56 +488,228 @@ namespace wordring::whatwg::encoding
 		uint32_t gb18030_third;
 	};
 
-	class gb18030_encoder : public encoder {};
+	template <bool GBK_flag>
+	class basic_gb18030_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint32_t cp{ token.value() };
+			// 2.
+			if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+			// 3.
+			if (cp == 0xE5E5u) return result_error{ cp };
+			// 4.
+			if constexpr (GBK_flag) { if (cp == 0x20ACu) return result_byte{ 0x80u }; };
+			// 5.
+			std::optional<uint32_t> pointer{ get_index_pointer<index_pointer_gb18030_0, index_pointer_gb18030_1>(cp) };
+			// 6.
+			if (pointer.has_value())
+			{
+				uint32_t lead{ pointer.value() / 190 + 0x81u };
+				uint32_t trail{ pointer.value() % 190 };
+				uint32_t offset{ trail < 0x3Fu ? 0x40u : 0x41u };
+				return result_bytes_2{ static_cast<uint8_t>(lead), static_cast<uint8_t>(trail + offset) };
+			}
+			// 7.
+			if constexpr (GBK_flag) return result_error{ cp };
+			// 8.
+			pointer = get_index_gb18030_ranges_pointer(cp);
+			// 9.
+			uint8_t byte1{ static_cast<uint8_t>(pointer.value() / (10 * 126 * 10)) };
+			// 10.
+			pointer = pointer.value() % (10 * 126 * 10);
+			// 11.
+			uint8_t byte2{ static_cast<uint8_t>(pointer.value() / (10 * 126)) };
+			// 12.
+			pointer = pointer.value() % (10 * 126);
+			// 13.
+			uint8_t byte3{ static_cast<uint8_t>(pointer.value() / 10) };
+			// 14.
+			uint8_t byte4{ static_cast<uint8_t>(pointer.value() % 10) };
+			// 15.
+			return result_bytes_4{ byte1 + 0x81u, byte2 + 0x30u, byte3 + 0x81u, byte4 + 0x30u };
+		}
+	};
+
+	using gb18030_encoder = basic_gb18030_encoder<false>;
 
 	// GBK
 	using GBK_decoder = gb18030_decoder;
-	class GBK_encoder : public encoder {};
+	using GBK_encoder = basic_gb18030_encoder<true>;
 
 	// Legacy multi - byte Chinese(traditional) encodings ---------------------
 
 	// Big5
-	class Big5_decoder : public decoder {};
-	class Big5_encoder : public encoder {};
+	class Big5_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
+	class Big5_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// Legacy multi - byte Japanese encodings ---------------------------------
 
 	// EUC_JP
-	class EUC_JP_decoder : public decoder {};
-	class EUC_JP_encoder : public encoder {};
+	class EUC_JP_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
+	class EUC_JP_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// ISO_2022_JP
-	class ISO_2022_JP_decoder : public decoder {};
-	class ISO_2022_JP_encoder : public encoder {};
+	class ISO_2022_JP_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
+	class ISO_2022_JP_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// Shift_JIS
-	class Shift_JIS_decoder : public decoder {};
-	class Shift_JIS_encoder : public encoder {};
+	class Shift_JIS_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
+	class Shift_JIS_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// Legacy multi - byte Korean encodings -----------------------------------
 
 	// EUC_KR
-	class EUC_KR_decoder : public decoder {};
-	class EUC_KR_encoder : public encoder {};
+	class EUC_KR_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
+	class EUC_KR_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// Legacy miscellaneous encodings -----------------------------------------
 
 	// replacement
-	class replacement_decoder : public decoder {};
+	class replacement_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// UTF_16
 	class shared_UTF_16_decoder : public decoder
 	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
 	};
 
 	// UTF_16BE
 	class UTF_16BE_decoder : public shared_UTF_16_decoder
 	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
 	};
 	// UTF_16LE
-	class UTF_16LE_decoder : public shared_UTF_16_decoder {};
+	class UTF_16LE_decoder : public shared_UTF_16_decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 
 	// x_user_defined
-	class x_user_defined_decoder : public decoder {};
-	class x_user_defined_encoder : public encoder {};
+	class x_user_defined_decoder : public decoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
+	class x_user_defined_encoder : public encoder
+	{
+	public:
+		template <typename Stream, typename Token>
+		result_value run(Stream& input, Token token)
+		{
+			return result_error{};
+		}
+	};
 }

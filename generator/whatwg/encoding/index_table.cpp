@@ -1,4 +1,4 @@
-﻿// generator/whatwg/encoding/encoding.cpp
+﻿// generator/whatwg/encoding/index_table.cpp
 
 #include <algorithm>
 #include <cassert>
@@ -192,6 +192,7 @@ int main()
 
 	// indexes_pointer.cpp を作成
 	{
+
 		std::ofstream cpp{};
 		cpp.open(TO_STRING(INDEXES_POINTER_CPP_PATH), std::ios::out);
 

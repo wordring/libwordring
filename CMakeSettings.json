@@ -4,9 +4,7 @@
       "name": "x86-Debug",
       "generator": "Ninja",
       "configurationType": "Debug",
-      "inheritEnvironments": [
-        "msvc_x86"
-      ],
+      "inheritEnvironments": [ "msvc_x86" ],
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
       "cmakeCommandArgs": "",
@@ -15,7 +13,8 @@
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\Users\\Kouichi\\source\\repos\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+          "value": "C:\\Users\\Kouichi\\source\\repos\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "type": "STRING"
         }
       ]
     },
@@ -23,9 +22,7 @@
       "name": "x86-Release",
       "generator": "Ninja",
       "configurationType": "RelWithDebInfo",
-      "inheritEnvironments": [
-        "msvc_x86"
-      ],
+      "inheritEnvironments": [ "msvc_x86" ],
       "buildRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\build\\${name}",
       "installRoot": "${env.USERPROFILE}\\CMakeBuilds\\${workspaceHash}\\install\\${name}",
       "cmakeCommandArgs": "",
@@ -34,9 +31,11 @@
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "C:\\Users\\Kouichi\\source\\repos\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake"
+          "value": "C:\\Users\\Kouichi\\source\\repos\\vcpkg\\scripts\\buildsystems\\vcpkg.cmake",
+          "type": "STRING"
         }
-      ]
+      ],
+      "cmakeToolchain": ""
     },
     {
       "name": "Linux-Debug",
@@ -53,22 +52,18 @@
       "remoteCopySourcesOutputVerbosity": "Normal",
       "remoteCopySourcesConcurrentCopies": "10",
       "remoteCopySourcesMethod": "sftp",
-      "remoteCopySourcesExclusionList": [
-        ".vs",
-        ".git"
-      ],
+      "remoteCopySourcesExclusionList": [ ".vs", ".git" ],
       "rsyncCommandArgs": "-t --delete --delete-excluded",
       "remoteCopyBuildOutput": false,
       "cmakeCommandArgs": "",
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
-      "inheritEnvironments": [
-        "linux_x64"
-      ],
+      "inheritEnvironments": [ "linux_x64" ],
       "variables": [
         {
           "name": "CMAKE_TOOLCHAIN_FILE",
-          "value": "/home/kouichi/vcpkg/scripts/buildsystems/vcpkg.cmake"
+          "value": "/home/kouichi/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "type": "STRING"
         }
       ]
     }

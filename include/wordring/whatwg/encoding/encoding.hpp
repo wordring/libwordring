@@ -16,7 +16,6 @@
 #include <wordring/compatibility.hpp>
 #include <wordring/whatwg/encoding/coder.hpp>
 #include <wordring/whatwg/encoding/encoding_defs.hpp>
-//#include <wordring/whatwg/encoding/indexes.hpp>
 #include <wordring/whatwg/encoding/stream.hpp>
 #include <wordring/whatwg/infra/infra.hpp>
 
@@ -130,73 +129,421 @@ namespace wordring::whatwg::encoding
 		return run(coder, input, output, mode);
 	}
 
-	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode)
+	template <typename InputStream, typename OutputIterator>
+	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Replacement)
 	{
 		switch (encoding_name)
 		{
-		case name::UTF_8: return run(UTF_8_decoder{}, input, output, mode);
-
-			// Legacy single - byte encodings
-		case name::IBM866:         return run(IBM866_decoder{}, input, output, mode);
-		case name::ISO_8859_2:     return run(ISO_8859_2_decoder{}, input, output, mode);
-		case name::ISO_8859_3:     return run(ISO_8859_3_decoder{}, input, output, mode);
-		case name::ISO_8859_4:     return run(ISO_8859_4_decoder{}, input, output, mode);
-		case name::ISO_8859_5:     return run(ISO_8859_5_decoder{}, input, output, mode);
-		case name::ISO_8859_6:     return run(ISO_8859_6_decoder{}, input, output, mode);
-		case name::ISO_8859_7:     return run(ISO_8859_7_decoder{}, input, output, mode);
-		case name::ISO_8859_8:     return run(ISO_8859_8_decoder{}, input, output, mode);
-		case name::ISO_8859_8_I:   return run(ISO_8859_8_I_decoder{}, input, output, mode);
-		case name::ISO_8859_10:    return run(ISO_8859_10_decoder{}, input, output, mode);
-		case name::ISO_8859_13:    return run(ISO_8859_13_decoder{}, input, output, mode);
-		case name::ISO_8859_14:    return run(ISO_8859_14_decoder{}, input, output, mode);
-		case name::ISO_8859_15:    return run(ISO_8859_15_decoder{}, input, output, mode);
-		case name::ISO_8859_16:    return run(ISO_8859_16_decoder{}, input, output, mode);
-		case name::KOI8_R:         return run(KOI8_R_decoder{}, input, output, mode);
-		case name::KOI8_U:         return run(KOI8_U_decoder{}, input, output, mode);
-		case name::macintosh:      return run(macintosh_decoder{}, input, output, mode);
-		case name::windows_874:    return run(windows_874_decoder{}, input, output, mode);
-		case name::windows_1250:   return run(windows_1250_decoder{}, input, output, mode);
-		case name::windows_1251:   return run(windows_1251_decoder{}, input, output, mode);
-		case name::windows_1252:   return run(windows_1252_decoder{}, input, output, mode);
-		case name::windows_1253:   return run(windows_1253_decoder{}, input, output, mode);
-		case name::windows_1254:   return run(windows_1254_decoder{}, input, output, mode);
-		case name::windows_1255:   return run(windows_1255_decoder{}, input, output, mode);
-		case name::windows_1256:   return run(windows_1256_decoder{}, input, output, mode);
-		case name::windows_1257:   return run(windows_1257_decoder{}, input, output, mode);
-		case name::windows_1258:   return run(windows_1258_decoder{}, input, output, mode);
-		case name::x_mac_cyrillic: return run(x_mac_cyrillic_decoder{}, input, output, mode);
-
-			// Legacy multi - byte Chinese(simplified) encodings
-		case name::GBK:     return run(GBK_decoder{}, input, output, mode);
-		case name::gb18030: return run(gb18030_decoder{}, input, output, mode);
-
-			// Legacy multi - byte Chinese(traditional) encodings
-		case name::Big5: return run(Big5_decoder{}, input, output, mode);
-
-			// Legacy multi - byte Japanese encodings
-		case name::EUC_JP:      return run(EUC_JP_decoder{}, input, output, mode);
-		case name::ISO_2022_JP: return run(ISO_2022_JP_decoder{}, input, output, mode);
-		case name::Shift_JIS:   return run(Shift_JIS_decoder{}, input, output, mode);
-
-			// Legacy multi - byte Korean encodings
-		case name::EUC_KR: return run(EUC_KR_decoder{}, input, output, mode);
-
-			// Legacy miscellaneous encodings
-		case name::replacement:    return run(replacement_decoder{}, input, output, mode);
-		case name::UTF_16BE:       return run(UTF_16BE_decoder{}, input, output, mode);
-		case name::UTF_16LE:       return run(UTF_16LE_decoder{}, input, output, mode);
-		case name::x_user_defined: return run(x_user_defined_decoder{}, input, output, mode);
+		case name::UTF_8:
+		{
+			UTF_8_decoder c{};
+			return run(c, input, output, mode);
 		}
-
+		// Legacy single - byte encodings
+		case name::IBM866:
+		{
+			IBM866_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_2:
+		{
+			ISO_8859_2_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_3:
+		{
+			ISO_8859_3_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_4:
+		{
+			ISO_8859_4_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_5:
+		{
+			ISO_8859_5_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_6:
+		{
+			ISO_8859_6_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_7:
+		{
+			ISO_8859_7_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_8:
+		{
+			ISO_8859_8_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_8_I:
+		{
+			ISO_8859_8_I_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_10:
+		{
+			ISO_8859_10_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_13:
+		{
+			ISO_8859_13_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_14:
+		{
+			ISO_8859_14_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_15:
+		{
+			ISO_8859_15_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_16:
+		{
+			ISO_8859_16_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::KOI8_R:
+		{
+			KOI8_R_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::KOI8_U:
+		{
+			KOI8_U_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::macintosh:
+		{
+			macintosh_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_874:
+		{
+			windows_874_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1250:
+		{
+			windows_1250_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1251:
+		{
+			windows_1251_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1252:
+		{
+			windows_1252_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1253:
+		{
+			windows_1253_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1254:
+		{
+			windows_1254_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1255:	
+		{
+			windows_1255_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1256:
+		{
+			windows_1256_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1257:
+		{
+			windows_1257_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1258:
+		{
+			windows_1258_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::x_mac_cyrillic:
+		{
+			x_mac_cyrillic_decoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Chinese(simplified) encodings
+		case name::GBK:
+		{
+			GBK_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::gb18030:
+		{
+			gb18030_decoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Chinese(traditional) encodings
+		case name::Big5:
+		{
+			Big5_decoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Japanese encodings
+		case name::EUC_JP:
+		{
+			EUC_JP_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_2022_JP:
+		{
+			ISO_2022_JP_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::Shift_JIS:
+		{
+			Shift_JIS_decoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Korean encodings
+		case name::EUC_KR:
+		{
+			EUC_KR_decoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy miscellaneous encodings
+		case name::replacement:
+		{
+			replacement_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::UTF_16BE:
+		{
+			UTF_16BE_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::UTF_16LE:
+		{
+			UTF_16LE_decoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::x_user_defined:
+		{
+			x_user_defined_decoder c{};
+			return run(c, input, output, mode);
+		}
+		}
+		assert(false);
 		return result_error{};
 	}
 
 	template <typename InputStream, typename OutputIterator>
-	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output)
+	result_value run_encoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Fatal)
 	{
-		error_mode mode{ error_mode::Replacement };
-		return run(encoding_name, input, output, mode);
+		switch (encoding_name)
+		{
+		case name::UTF_8:
+		{
+			UTF_8_encoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy single - byte encodings
+		case name::IBM866:
+		{
+			IBM866_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_2:
+		{
+			ISO_8859_2_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_3:
+		{
+			ISO_8859_3_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_4:
+		{
+			ISO_8859_4_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_5:
+		{
+			ISO_8859_5_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_6:
+		{
+			ISO_8859_6_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_7:
+		{
+			ISO_8859_7_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_8:
+		{
+			ISO_8859_8_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_8_I:
+		{
+			ISO_8859_8_I_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_10:
+		{
+			ISO_8859_10_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_13:
+		{
+			ISO_8859_13_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_14:
+		{
+			ISO_8859_14_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_15:
+		{
+			ISO_8859_15_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_8859_16:
+		{
+			ISO_8859_16_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::KOI8_R:
+		{
+			KOI8_R_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::KOI8_U:
+		{
+			KOI8_U_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::macintosh:
+		{
+			macintosh_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_874:
+		{
+			windows_874_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1250:
+		{
+			windows_1250_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1251:
+		{
+			windows_1251_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1252:
+		{
+			windows_1252_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1253:
+		{
+			windows_1253_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1254:
+		{
+			windows_1254_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1255:
+		{
+			windows_1255_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1256:
+		{
+			windows_1256_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1257:
+		{
+			windows_1257_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::windows_1258:
+		{
+			windows_1258_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::x_mac_cyrillic:
+		{
+			x_mac_cyrillic_encoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Chinese(simplified) encodings
+		case name::GBK:
+		{
+			GBK_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::gb18030:
+		{
+			gb18030_encoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Chinese(traditional) encodings
+		case name::Big5:
+		{
+			Big5_encoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Japanese encodings
+		case name::EUC_JP:
+		{
+			EUC_JP_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::ISO_2022_JP:
+		{
+			ISO_2022_JP_encoder c{};
+			return run(c, input, output, mode);
+		}
+		case name::Shift_JIS:
+		{
+			Shift_JIS_encoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy multi - byte Korean encodings
+		case name::EUC_KR:
+		{
+			EUC_KR_encoder c{};
+			return run(c, input, output, mode);
+		}
+		// Legacy miscellaneous encodings
+		case name::x_user_defined:
+		{
+			x_user_defined_encoder c{};
+			return run(c, input, output, mode);
+		}
+		}
+		assert(false);
+		return result_error{};
 	}
 
 	// 4.2. Names and labels --------------------------------------------------

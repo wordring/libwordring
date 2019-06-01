@@ -23,8 +23,8 @@ include_directories (
 )
 
 add_executable(
-	${PROJECT_NAME}
-		encoding.cpp
+	index_table
+		index_table.cpp
 )
 
 add_definitions(-DINDEXES_JSON_PATH=${Wordring_DIR}/submodules/whatwg/encoding/indexes.json)
@@ -33,6 +33,21 @@ add_definitions(-DINDEXES_CODE_POINT_CPP_PATH=${Wordring_DIR}/lib/whatwg/encodin
 add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_pointer.cpp)
 
 target_link_libraries(
-	${PROJECT_NAME}
+	index_table
+		${Boost_FILESYSTEM_LIBRARY}
+)
+
+add_executable(
+	gb18030_test_data
+		gb18030_test_data.cpp
+)
+
+add_definitions(-DINDEXES_JSON_PATH=${Wordring_DIR}/submodules/whatwg/encoding/indexes.json)
+add_definitions(-DINDEXES_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/encoding/indexes.hpp)
+add_definitions(-DINDEXES_CODE_POINT_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_code_point.cpp)
+add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_pointer.cpp)
+
+target_link_libraries(
+	gb18030_test_data
 		${Boost_FILESYSTEM_LIBRARY}
 )
