@@ -16,19 +16,19 @@ namespace wordring::whatwg::encoding
 
 	// 5. Indexes
 
-	template <std::vector<uint32_t> const& index>
+	template <auto const& index>
 	inline std::optional<uint32_t> get_index_code_point(uint16_t pointer)
 	{
-		uint32_t cp{ index.at(pointer) };
-
+		if (index.size() <= pointer) return std::optional<uint32_t>{};
+		uint32_t cp{ index[pointer] };
 		if (cp == 4294967295u) return std::optional<uint32_t>{};
 		return cp;
 	}
 
-	template <std::vector<uint32_t> const& index_0, std::vector<uint16_t> const& index_1>
+	template <auto const& index_0, auto const& index_1>
 	inline std::optional<uint16_t> get_index_pointer(uint32_t code_point)
 	{
-		std::vector<uint32_t>::const_iterator it = std::lower_bound(index_0.cbegin(), index_0.cend(), code_point);
+		auto it = std::lower_bound(index_0.cbegin(), index_0.cend(), code_point);
 
 		if (it != index_0.end() && *it == code_point) return *(index_1.cbegin() + (it - index_0.cbegin()));
 		return std::optional<uint16_t>{};
@@ -42,7 +42,13 @@ namespace wordring::whatwg::encoding
 		if (pointer == 7457u) return static_cast<uint32_t>(0xE7C7u);
 		// 3.
 		std::multimap<uint32_t, uint32_t>::const_iterator it = index_code_point_gb18030_ranges.lower_bound(pointer);
-		assert(it != index_code_point_gb18030_ranges.cend());
+		// 表引きできなかった時のための追加コード
+		if (it == index_code_point_gb18030_ranges.cend())
+		{
+			assert(false);
+			return std::optional<uint32_t>{};
+		}
+
 		if (it->first != pointer) --it;
 		uint32_t offset{ it->first };
 		uint32_t code_point_offset{ it->second };
@@ -57,11 +63,13 @@ namespace wordring::whatwg::encoding
 
 		// 2.
 		std::multimap<uint32_t, uint32_t>::const_iterator it = index_pointer_gb18030_ranges.lower_bound(code_point);
-		if (it != index_pointer_gb18030_ranges.cend())
+		// 表引きできなかった時のための追加コード
+		if (it == index_pointer_gb18030_ranges.cend())
 		{
 			assert(false);
 			return std::optional<uint32_t>{};
 		}
+
 		uint32_t offset{ it->first };
 		uint32_t pointer_offset{ it->second };
 
@@ -223,7 +231,7 @@ namespace wordring::whatwg::encoding
 	// Legacy single - byte encodings -----------------------------------------
 
 	// 9.1. single-byte decoder
-	template <std::vector<uint32_t> const& index>
+	template <auto const& index>
 	class single_byte_decoder : public decoder
 	{
 	public:
@@ -249,7 +257,7 @@ namespace wordring::whatwg::encoding
 	};
 
 	// 9.2. single-byte encoder
-	template <std::vector<uint32_t> const& index_0, std::vector<uint16_t> const& index_1>
+	template <auto const& index_0, auto const& index_1>
 	class single_byte_encoder : public encoder
 	{
 	public:
@@ -519,6 +527,10 @@ namespace wordring::whatwg::encoding
 			if constexpr (GBK_flag) return result_error{ cp };
 			// 8.
 			pointer = get_index_gb18030_ranges_pointer(cp);
+
+			// 表引きできなかった時のための追加コード
+			if (!pointer.has_value()) return result_error{};
+
 			// 9.
 			uint8_t byte1{ static_cast<uint8_t>(pointer.value() / (10 * 126 * 10)) };
 			// 10.

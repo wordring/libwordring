@@ -1203,6 +1203,24 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__x_mac_cyrillic_run)
 BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_coder)
 {
 	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{};
+	std::string str{};
+	std::u32string out{};
+
+	for (uint32_t i = 0; i <= 23939; i++) in.push_back(i);
+	in.push_back(0x80u);
+	in.push_back(0xFF5Fu);
+	in.push_back(0x10000u);
+
+	gb18030_encoder encoder_0{};
+	gb18030_decoder decoder_0{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(encoder_0, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(decoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_run)
