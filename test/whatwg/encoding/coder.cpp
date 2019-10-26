@@ -1204,14 +1204,9 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_coder)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::u32string in{};
+	std::u32string in{ U"成我戒戓戔戕或戗战戙戚戛戜戝戞戟abcdefghijklmno㐀㐁㐂㐃㐄㐅㐆㐇㐈㐉㐊㐋㐌㐍㐎㐏€亐亖亗亙亜亝亞⺁⺄⺈⺋⺌⺗⺧⺪⺮⺳⺶⺷⺻⻊㖞㘚㘎⺗㥮㤘㧏㧟㩳㧐㭎㱮㳠郎凉秊裏隣兀嗀﨎﨏ⅠⅡⅢⅣⅤⅰⅱⅲⅳⅴᠠᠡᠢᠣᠤᠥᠦᠧᠨᠩꀇꀈꀉꀊꀋꀌꀍꀎꀏ༐༑༒༓༔༕༖༗༘༙بةتثجحخد狢狣狤狥狦狧狪狫㊣通桐酮瞳同铜彤童﹔﹕﹖﹗" };
 	std::string str{};
 	std::u32string out{};
-
-	for (uint32_t i = 0; i <= 23939; i++) in.push_back(i);
-	in.push_back(0x80u);
-	in.push_back(0xFF5Fu);
-	in.push_back(0x10000u);
 
 	gb18030_encoder encoder_0{};
 	gb18030_decoder decoder_0{};
@@ -1226,6 +1221,16 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_coder)
 BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_run)
 {
 	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"成我戒戓戔戕或戗战戙戚戛戜戝戞戟abcdefghijklmno㐀㐁㐂㐃㐄㐅㐆㐇㐈㐉㐊㐋㐌㐍㐎㐏€亐亖亗亙亜亝亞⺁⺄⺈⺋⺌⺗⺧⺪⺮⺳⺶⺷⺻⻊㖞㘚㘎⺗㥮㤘㧏㧟㩳㧐㭎㱮㳠郎凉秊裏隣兀嗀﨎﨏ⅠⅡⅢⅣⅤⅰⅱⅲⅳⅴᠠᠡᠢᠣᠤᠥᠦᠧᠨᠩꀇꀈꀉꀊꀋꀌꀍꀎꀏ༐༑༒༓༔༕༖༗༘༙بةتثجحخد狢狣狤狥狦狧狪狫㊣通桐酮瞳同铜彤童﹔﹕﹖﹗" };
+	std::string str{};
+	std::u32string out{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_encoder(name::gb18030, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_decoder(name::gb18030, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
 }
 
 /*

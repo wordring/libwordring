@@ -53,7 +53,7 @@ namespace wordring::whatwg::encoding
 		uint32_t offset{ it->first };
 		uint32_t code_point_offset{ it->second };
 		// 4.
-		return static_cast<uint32_t>(code_point_offset + pointer - offset);
+		return static_cast<uint32_t>(code_point_offset + (pointer - offset));
 	}
 
 	inline std::optional<uint32_t> get_index_gb18030_ranges_pointer(uint32_t code_point)
@@ -70,11 +70,12 @@ namespace wordring::whatwg::encoding
 			return std::optional<uint32_t>{};
 		}
 
+		if (it->first != code_point) --it;
 		uint32_t offset{ it->first };
 		uint32_t pointer_offset{ it->second };
 
 		// 3.
-		return static_cast<uint32_t>(pointer_offset + code_point - offset);
+		return static_cast<uint32_t>(pointer_offset + (code_point - offset));
 	}
 
 	// 8.1.1. UTF-8 decoder
@@ -439,9 +440,9 @@ namespace wordring::whatwg::encoding
 			// 4.
 			if (gb18030_second != 0)
 			{
-				if (0x30u <= byte && byte <= 0x39u)
+				if (0x81u <= byte && byte <= 0xFEu)
 				{
-					gb18030_second = byte;
+					gb18030_third = byte;
 					return result_continue{};
 				}
 
@@ -459,11 +460,12 @@ namespace wordring::whatwg::encoding
 					return result_continue{};
 				}
 				uint32_t lead{ gb18030_first };
-				uint32_t offset = (byte < 0x7Fu) ? 0x40u : 0x41u;
 				std::optional<uint32_t> pointer{};
+				gb18030_first = 0;
+				uint32_t offset = (byte < 0x7Fu) ? 0x40u : 0x41u;
 				if ((0x40u <= byte && byte <= 0x7Eu) || (0x80u <= byte && byte <= 0xFEu)) pointer = (lead - 0x81) * 190 + (byte - offset);
 				std::optional<uint32_t> cp{};
-				if (pointer) cp = get_index_gb18030_ranges_code_point(pointer.value());
+				if (pointer) cp = get_index_code_point<index_code_point_gb18030>(pointer.value());
 				if (cp) return cp.value();
 				if (is_ascii_byte(byte)) input.prepend(byte);
 				return result_error{};

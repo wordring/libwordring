@@ -7,7 +7,7 @@
 
 namespace wordring::whatwg::encoding
 {
-	extern std::vector<uint32_t> const index_code_point_big5; // 19782
+	extern std::array<uint32_t, 19782> const index_code_point_big5; // 19782
 	extern std::vector<uint32_t> const index_code_point_euc_kr; // 23940
 	extern std::array<uint32_t, 23940> const index_code_point_gb18030; // 23940
 	extern std::vector<uint32_t> const index_code_point_jis0208; // 11280
