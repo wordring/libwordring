@@ -1098,9 +1098,9 @@ git pull origin master
 				std::optional<uint16_t> pointer{};
 				Shift_JIS_lead = 0;
 				// 3.1.
-				uint8_t offset{ byte < 0x7Fu ? 0x40u : 0x41u };
+				uint8_t offset{ static_cast<uint8_t>(byte < 0x7Fu ? 0x40u : 0x41u) };
 				// 3.2.
-				uint8_t lead_offset{ lead < 0xA0u ? 0x81u : 0xC1u };
+				uint8_t lead_offset{ static_cast<uint8_t>(lead < 0xA0u ? 0x81u : 0xC1u) };
 				// 3.3.
 				if ((0x40u <= byte && byte <= 0x7Eu) || (0x80u <= byte && byte <= 0xFCu))
 					pointer = (lead - lead_offset) * 188 + byte - offset;
@@ -1163,11 +1163,11 @@ git pull origin master
 			// 9.
 			uint8_t lead{ static_cast<uint8_t>(pointer.value() / 188) };
 			// 10.
-			uint8_t lead_offset{ lead < 0x1Fu ? 0x81u : 0xC1u };
+			uint8_t lead_offset{ static_cast<uint8_t>(lead < 0x1Fu ? 0x81u : 0xC1u) };
 			// 11.
 			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 188) };
 			// 12.
-			uint8_t offset{ trail < 0x3Fu ? 0x40u : 0x41u };
+			uint8_t offset{ static_cast<uint8_t>(trail < 0x3Fu ? 0x40u : 0x41u) };
 			// 13.
 			return result_bytes_2{ static_cast<uint8_t>(lead + lead_offset), static_cast<uint8_t>(trail + offset) };
 		}
