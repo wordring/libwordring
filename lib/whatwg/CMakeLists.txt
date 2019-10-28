@@ -19,7 +19,7 @@ add_library (
 		encoding/indexes_pointer.cpp
 # infra -----------------------------------------------------------------------
 		${INCLUDE_DIR}/infra/infra.hpp
-		${INCLUDE_DIR}/infra/scalar_value.hpp
+#		${INCLUDE_DIR}/infra/scalar_value.hpp
 # url -------------------------------------------------------------------------
 		${INCLUDE_DIR}/url/url.hpp
 )

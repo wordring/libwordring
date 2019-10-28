@@ -1,7 +1,7 @@
 ﻿
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/whatwg/infra/scalar_value.hpp>
+//#include <wordring/whatwg/infra/scalar_value.hpp>
 
 BOOST_AUTO_TEST_SUITE(whatwg_infra_scalar_value_test)
 

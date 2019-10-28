@@ -14,7 +14,7 @@
 #include <wordring/algorithm.hpp>
 #include <wordring/compatibility.hpp>
 #include <wordring/constraint.hpp>
-#include <wordring/whatwg/infra/scalar_value.hpp>
+//#include <wordring/whatwg/infra/scalar_value.hpp>
 
 namespace wordring::whatwg
 {
@@ -63,8 +63,10 @@ namespace wordring::whatwg
 
 	@overload
 	*/
+	/*
 	template <typename Result>
 	constexpr Result isomorphic_cast(scalar_value ch) noexcept { return static_cast<Result>(static_cast<char32_t>(ch)); }
+	*/
 
 	// ------------------------------------------------------------------------
 
@@ -161,6 +163,7 @@ namespace wordring::whatwg
 		return first;
 	}
 
+	/*
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, scalar_value>, nullptr_t> = nullptr>
 	inline InputIterator to_codepoint(InputIterator first, InputIterator last, uint32_t & output)
@@ -169,6 +172,7 @@ namespace wordring::whatwg
 		output = static_cast<char32_t>(*first++);
 		return first;
 	}
+	*/
 
 	// ------------------------------------------------------------------------
 
@@ -248,7 +252,7 @@ namespace wordring::whatwg
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char32_t>,
 					std::is_same<typename OutputIterator::container_type::value_type, char32_t>>>, nullptr_t> = nullptr>
 	inline void to_string(uint32_t ch, OutputIterator output) { *output++ = ch; }
-
+/*
 	template <typename OutputIterator,
 		typename std::enable_if_t<
 			std::conjunction_v<
@@ -257,7 +261,7 @@ namespace wordring::whatwg
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, scalar_value>,
 					std::is_same<typename OutputIterator::container_type::value_type, scalar_value>>>, nullptr_t> = nullptr>
 	inline void to_string(uint32_t ch, OutputIterator output) { *output++ = scalar_value{ ch }; }
-
+*/
 	/*!
 	@brief ユニコード・コードポイントから文字列に変換する。
 

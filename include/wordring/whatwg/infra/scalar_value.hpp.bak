@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <string>
 
-namespace wordring::whatwg::infra
+namespace wordring::whatwg
 {
 
 	class scalar_value
@@ -249,7 +249,7 @@ namespace wordring::whatwg::infra
 		}
 
 		/*! 右シフト代入（Bitwise right shift assignment）
-			a >>= b	
+			a >>= b
 		*/
 		scalar_value & operator>>=(char32_t ch) noexcept
 		{
@@ -427,14 +427,8 @@ namespace wordring::whatwg::infra
 
 	inline scalar_value operator>>(char32_t ch, scalar_value const & sv) noexcept { return scalar_value{ ch } >>= sv; }
 
-	// ------------------------------------------------------------------------
+	// --------------------------------------------------------------
 
-	using scalar_value_string = std::basic_string<scalar_value>;
-}
-
-namespace wordring::whatwg
-{
-	using scalar_value = wordring::whatwg::infra::scalar_value;
 	using usv_string = std::basic_string<scalar_value>;
 
 	inline usv_string make_usv_string(std::u32string const & str)

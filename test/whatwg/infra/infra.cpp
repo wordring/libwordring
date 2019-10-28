@@ -63,6 +63,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_codepoint)
 	BOOST_CHECK(s32_result == s32_correct);
 
 	// scalar_value
+	/*
 	wordring::whatwg::usv_string const usv{ wordring::whatwg::make_usv_string(U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠") };
 	auto it_usv = usv.begin();
 	s32_result.clear();
@@ -72,6 +73,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_codepoint)
 		s32_result.push_back(cp);
 	}
 	BOOST_CHECK(s32_result == s32_correct);
+	*/
 }
 
 // ----------------------------------------------------------------------------
@@ -114,6 +116,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_string)
 	BOOST_CHECK(s32 == s32_correct);
 
 	// scalar_value
+	/*
 	wordring::whatwg::usv_string const usv_correct{ wordring::whatwg::make_usv_string(U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠") };
 	wordring::whatwg::usv_string usv{};
 
@@ -123,6 +126,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_string)
 	usv.clear();
 	for (auto ch : s32_original) wordring::whatwg::to_string(ch, usv);
 	BOOST_CHECK(usv == usv_correct);
+	*/
 }
 
 // 4.3. Bytes -----------------------------------------------------------------
@@ -495,6 +499,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_string)
 	BOOST_CHECK(wordring::whatwg::is_ascii_string(s32_false) == false);
 
 	// scalar value
+	/*
 	wordring::whatwg::usv_string const usv_true{ wordring::whatwg::make_usv_string(U"abcdefg") };
 	wordring::whatwg::usv_string const usv_false{ wordring::whatwg::make_usv_string(U"abcdefgあいうえお") };
 	BOOST_CHECK(wordring::whatwg::is_ascii_string(usv_true.begin(), usv_true.end()) == true);
@@ -502,6 +507,7 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_string)
 
 	BOOST_CHECK(wordring::whatwg::is_ascii_string(usv_true) == true);
 	BOOST_CHECK(wordring::whatwg::is_ascii_string(usv_false) == false);
+	*/
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_infra__to_ascii_lowercase)
@@ -528,11 +534,13 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_ascii_lowercase)
 	BOOST_CHECK(s32_correct == s32_result);
 
 	// scalar value
+	/*
 	wordring::whatwg::usv_string const usv_original{ wordring::whatwg::make_usv_string(U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽Àⱥ𐊠") };
 	wordring::whatwg::usv_string const usv_correct{ wordring::whatwg::make_usv_string(U"abcdeあいうえお𠀋𡈽𡌛𡑮𡢽Àⱥ𐊠") };
 	wordring::whatwg::usv_string usv_result{};
 	wordring::whatwg::to_ascii_lowercase(usv_original.begin(), usv_original.end(), std::back_inserter(usv_result));
 	BOOST_CHECK(usv_correct == usv_result);
+	*/
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_infra__to_ascii_uppercase)
@@ -559,11 +567,13 @@ BOOST_AUTO_TEST_CASE(whatwg_infra__to_ascii_uppercase)
 	BOOST_CHECK(s32_correct == s32_result);
 
 	// scalar value
+	/*
 	wordring::whatwg::usv_string const usv_original{ wordring::whatwg::make_usv_string(U"abcdeあいうえお𠀋𡈽𡌛𡑮𡢽Àⱥ𐊠") };
 	wordring::whatwg::usv_string const usv_correct{ wordring::whatwg::make_usv_string(U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽Àⱥ𐊠") };
 	wordring::whatwg::usv_string usv_result{};
 	wordring::whatwg::to_ascii_uppercase(usv_original.begin(), usv_original.end(), std::back_inserter(usv_result));
 	BOOST_CHECK(usv_correct == usv_result);
+	*/
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_infra__is_ascii_case_insensitive_match)
