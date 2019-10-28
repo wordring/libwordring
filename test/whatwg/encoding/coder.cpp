@@ -2,6 +2,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <array>
 #include <iterator>
 #include <string>
 
@@ -1364,6 +1365,141 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_run)
 	run_decoder(name::Shift_JIS, stream_str, std::back_inserter(out));
 	BOOST_CHECK(in == out);
 }
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_KR_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"!、⇒！ㄱⅰ─㎕ÆæぁァА가괌깹끝뇟덧땀래륫묀벙빨샥숯쐴에웩점징찼치큄퉤퐈혤伽匣瞼棨科區鬼朞納丹棹蘿煉遼立蔑汶發碧孚脾傘胥聖戍嵩沈櫻旅簾烏窈運濡議立障煎靜踪咫鏶責椒贅鐸阪品行形禍爻" };
+	std::string str{};
+	std::u32string out{};
+
+	EUC_KR_encoder encoder_0{};
+	EUC_KR_decoder decoder_0{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(encoder_0, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(decoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_KR_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"!、⇒！ㄱⅰ─㎕ÆæぁァА가괌깹끝뇟덧땀래륫묀벙빨샥숯쐴에웩점징찼치큄퉤퐈혤伽匣瞼棨科區鬼朞納丹棹蘿煉遼立蔑汶發碧孚脾傘胥聖戍嵩沈櫻旅簾烏窈運濡議立障煎靜踪咫鏶責椒贅鐸阪品行形禍爻" };
+	std::string str{};
+	std::u32string out{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_encoder(name::EUC_KR, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_decoder(name::EUC_KR, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__replacement_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string in{ "ABCDE" };
+	std::u32string out{};
+
+	replacement_decoder decoder_0{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+	BOOST_CHECK(ret.index() == 0);
+	BOOST_CHECK(out.size() == 1);
+	BOOST_CHECK(out[0] == 0xFFFDu);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__replacement_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string in{ "ABCDE" };
+	std::u32string out{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	result_value ret = run_decoder(name::replacement, stream_in, std::back_inserter(out));
+	BOOST_CHECK(ret.index() == 0);
+	BOOST_CHECK(out.size() == 1);
+	BOOST_CHECK(out[0] == 0xFFFDu);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::array<unsigned int, 96> p32{ 0x00u, 0x21u, 0x10u, 0x00u, 0x20u, 0x10u, 0x30u, 0x01u, 0x40u, 0x00u, 0x50u, 0x00u, 0x60u, 0x00u, 0x70u, 0x00u, 0x80u, 0x00u, 0x90u, 0x00u, 0xa0u, 0x00u, 0xb0u, 0x00u, 0xc0u, 0x00u, 0xd0u, 0x00u, 0xd8u, 0x0cu, 0xdcu, 0x00u, 0xd8u, 0x35u, 0xdcu, 0x00u, 0xd8u, 0x3cu, 0xdcu, 0x00u, 0xd8u, 0x40u, 0xdcu, 0x00u, 0xd8u, 0x44u, 0xdcu, 0x00u, 0xd8u, 0x48u, 0xdcu, 0x00u, 0xd8u, 0x4cu, 0xdcu, 0x00u, 0xd8u, 0x50u, 0xdcu, 0x00u, 0xd8u, 0x54u, 0xdcu, 0x00u, 0xd8u, 0x58u, 0xdcu, 0x00u, 0xd8u, 0x5cu, 0xdcu, 0x00u, 0xd8u, 0x60u, 0xdcu, 0x00u, 0xd8u, 0x64u, 0xdcu, 0x00u, 0xd8u, 0x68u, 0xdcu, 0x00u, 0xd8u, 0x6cu, 0xdcu, 0x00u, 0xd8u, 0x70u, 0xdcu, 0x29u, 0xd8u, 0x42u, 0xdfu, 0xb7u };
+	std::array<uint8_t, 96> p8{};
+	for (size_t i = 0; i < 96; i++) p8[i] = static_cast<uint8_t>(p32[i]);
+
+	std::string in{ p8.begin(), p8.end() };
+	std::u32string out{};
+
+	UTF_16BE_decoder decoder_0{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::array<unsigned int, 96> p32{ 0x00u, 0x21u, 0x10u, 0x00u, 0x20u, 0x10u, 0x30u, 0x01u, 0x40u, 0x00u, 0x50u, 0x00u, 0x60u, 0x00u, 0x70u, 0x00u, 0x80u, 0x00u, 0x90u, 0x00u, 0xa0u, 0x00u, 0xb0u, 0x00u, 0xc0u, 0x00u, 0xd0u, 0x00u, 0xd8u, 0x0cu, 0xdcu, 0x00u, 0xd8u, 0x35u, 0xdcu, 0x00u, 0xd8u, 0x3cu, 0xdcu, 0x00u, 0xd8u, 0x40u, 0xdcu, 0x00u, 0xd8u, 0x44u, 0xdcu, 0x00u, 0xd8u, 0x48u, 0xdcu, 0x00u, 0xd8u, 0x4cu, 0xdcu, 0x00u, 0xd8u, 0x50u, 0xdcu, 0x00u, 0xd8u, 0x54u, 0xdcu, 0x00u, 0xd8u, 0x58u, 0xdcu, 0x00u, 0xd8u, 0x5cu, 0xdcu, 0x00u, 0xd8u, 0x60u, 0xdcu, 0x00u, 0xd8u, 0x64u, 0xdcu, 0x00u, 0xd8u, 0x68u, 0xdcu, 0x00u, 0xd8u, 0x6cu, 0xdcu, 0x00u, 0xd8u, 0x70u, 0xdcu, 0x29u, 0xd8u, 0x42u, 0xdfu, 0xb7u };
+	std::array<uint8_t, 96> p8{};
+	for (size_t i = 0; i < 96; i++) p8[i] = static_cast<uint8_t>(p32[i]);
+
+	std::string in{ p8.begin(), p8.end() };
+	std::u32string out{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	result_value ret = run_decoder(name::UTF_16BE, stream_in, std::back_inserter(out));
+	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+}
+
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
+	char8_t const *p8 = reinterpret_cast<char8_t const*>(p16);
+
+	std::string in{};
+	for (size_t i = 0; i < 96; i++) in.push_back(*(p8 + i));
+	std::u32string out{};
+
+	UTF_16LE_decoder decoder_0{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+
+	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
+	char8_t const* p8 = reinterpret_cast<char8_t const*>(p16);
+
+	std::string in{};
+	for (size_t i = 0; i < 96; i++) in.push_back(*(p8 + i));
+	std::u32string out{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	result_value ret = run_decoder(name::UTF_16LE, stream_in, std::back_inserter(out));
+	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+}
+
+
 
 /*
 BOOST_AUTO_TEST_CASE(whatwg_encoding___coder)

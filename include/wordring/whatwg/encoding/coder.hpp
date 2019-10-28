@@ -1241,7 +1241,7 @@ git pull origin master
 			// 1.
 			if (!token.has_value()) return result_finished{};
 
-			uint32_t cp{ token.has_value() };
+			uint32_t cp{ token.value() };
 
 			// 2.
 			if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
@@ -1264,44 +1264,112 @@ git pull origin master
 	class replacement_decoder : public decoder
 	{
 	public:
+		replacement_decoder()
+			: replacement_error_returned_flag{ false }
+		{
+		}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+			// 2.
+			if (replacement_error_returned_flag == false)
+			{
+				replacement_error_returned_flag = true;
+				return result_error{};
+			}
+			// 3.
+			return result_finished{};
 		}
+
+	private:
+		bool replacement_error_returned_flag;
 	};
 
 	// UTF_16
+	template<bool UTF_16BE_decoder_flag = false>
 	class shared_UTF_16_decoder : public decoder
 	{
 	public:
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value() && (UTF_16_lead_byte.has_value() || UTF_16_lead_surrogate.has_value()))
+			{
+				UTF_16_lead_byte.reset();
+				UTF_16_lead_surrogate.reset();
+				return result_error{};
+			}
+			// 2.
+			if (!token.has_value() && !UTF_16_lead_byte.has_value() && !UTF_16_lead_surrogate.has_value())
+				return result_finished{};
+
+			uint8_t byte{ static_cast<uint8_t>(token.value()) };
+
+			// 3.
+			if (!UTF_16_lead_byte.has_value())
+			{
+				UTF_16_lead_byte = byte;
+				return result_continue{};
+			}
+			// 4.
+			uint16_t code_unit{};
+			if constexpr (UTF_16BE_decoder_flag) code_unit = (UTF_16_lead_byte.value() << 8) + byte;
+			else code_unit = (byte << 8) + UTF_16_lead_byte.value();
+			UTF_16_lead_byte.reset();
+			// 5.
+			if (UTF_16_lead_surrogate.has_value())
+			{
+				uint16_t lead_surrogate{ UTF_16_lead_surrogate.value() };
+				UTF_16_lead_surrogate.reset();
+				// 5.1.
+				if (0xDC00u <= code_unit && code_unit <= 0xDFFFu)
+					return result_code_point{ 0x10000u + ((lead_surrogate - 0xD800u) << 10) + (code_unit - 0xDC00u) };
+				// 5.2.
+				uint8_t byte1{ static_cast<uint8_t>(code_unit > 8) };
+				// 5.3.
+				uint8_t byte2{ static_cast<uint8_t>(code_unit & 0x00FF) };
+				// 5.4.
+				std::array<uint8_t, 2> bytes{};
+				if constexpr (UTF_16BE_decoder_flag)
+				{
+					bytes[0] = byte1;
+					bytes[1] = byte2;
+				}
+				else
+				{
+					bytes[0] = byte2;
+					bytes[1] = byte1;
+				}
+				// 5.5.
+				input.prepend(bytes.begin(), bytes.end());
+				return result_error{};
+			}
+			// 6.
+			if (0xD800u <= code_unit && code_unit <= 0xDBFFu)
+			{
+				UTF_16_lead_surrogate = code_unit;
+				return result_continue{};
+			}
+			// 7.
+			if (0xDC00u <= code_unit && code_unit <= 0xDFFFu) return result_error{};
+			// 8.
+			return result_code_point{ code_unit };
 		}
+
+	private:
+		std::optional<uint8_t> UTF_16_lead_byte;
+		std::optional<uint16_t> UTF_16_lead_surrogate;
 	};
 
 	// UTF_16BE
-	class UTF_16BE_decoder : public shared_UTF_16_decoder
-	{
-	public:
-		template <typename Stream, typename Token>
-		result_value run(Stream& input, Token token)
-		{
-			return result_error{};
-		}
-	};
+	using UTF_16BE_decoder = shared_UTF_16_decoder<true>;
+
 	// UTF_16LE
-	class UTF_16LE_decoder : public shared_UTF_16_decoder
-	{
-	public:
-		template <typename Stream, typename Token>
-		result_value run(Stream& input, Token token)
-		{
-			return result_error{};
-		}
-	};
+	using UTF_16LE_decoder = shared_UTF_16_decoder<>;
 
 	// x_user_defined
 	class x_user_defined_decoder : public decoder
@@ -1313,6 +1381,7 @@ git pull origin master
 			return result_error{};
 		}
 	};
+
 	class x_user_defined_encoder : public encoder
 	{
 	public:
