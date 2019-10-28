@@ -56,6 +56,10 @@ namespace wordring::whatwg::encoding
 		return static_cast<uint32_t>(code_point_offset + (pointer - offset));
 	}
 
+	/*!
+
+	ranges_pointerに限り32ビットの戻り値が必要。
+	*/
 	inline std::optional<uint32_t> get_index_gb18030_ranges_pointer(uint32_t code_point)
 	{
 		// 1.
@@ -76,6 +80,16 @@ namespace wordring::whatwg::encoding
 
 		// 3.
 		return static_cast<uint32_t>(pointer_offset + (code_point - offset));
+	}
+
+	inline std::optional<uint16_t> get_index_shift_jis_pointer(uint32_t code_point)
+	{
+		return get_index_pointer<index_pointer_Shift_JIS_0, index_pointer_Shift_JIS_1>(code_point);
+	}
+
+	inline std::optional<uint16_t> get_index_big5_pointer(uint32_t code_point)
+	{
+		return get_index_pointer<index_pointer_big5_0, index_pointer_big5_1>(code_point);
 	}
 
 	// 8.1.1. UTF-8 decoder
@@ -529,9 +543,12 @@ namespace wordring::whatwg::encoding
 			if constexpr (GBK_flag) return result_error{ cp };
 			// 8.
 			pointer = get_index_gb18030_ranges_pointer(cp);
-
 			// 表引きできなかった時のための追加コード
-			if (!pointer.has_value()) return result_error{};
+			if (!pointer.has_value())
+			{
+				assert(false);
+				return result_error{};
+			}
 
 			// 9.
 			uint8_t byte1{ static_cast<uint8_t>(pointer.value() / (10 * 126 * 10)) };
@@ -562,33 +579,175 @@ namespace wordring::whatwg::encoding
 	class Big5_decoder : public decoder
 	{
 	public:
+		Big5_decoder() : big5_lead{ 0 } {}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
+			if (!token.has_value())
+			{
+			// 1.
+				if (big5_lead != 0)
+				{
+					big5_lead = 0;
+					return result_error{};
+				}
+			// 2.
+				return result_finished{};
+			}
+
+			uint8_t byte = token.value();
+
+			// 3.
+			if (big5_lead != 0)
+			{
+				uint32_t lead{ big5_lead };
+				std::optional<uint16_t> pointer{};
+				big5_lead = 0;
+				// 3.1.
+				uint32_t offset{ byte < 0x7Fu ? 0x40u : 0x62u };
+				// 3.2.
+				if (0x40u <= byte && byte <= 0x7Eu)
+				{
+					pointer = (lead - 0x81u) * 157 + (byte - offset);
+				// 3.3.
+					switch (pointer.value())
+					{
+					case 1133u: return result_code_points_2{ 0xCAu, 0x304u };
+					case 1135u: return result_code_points_2{ 0xCAu, 0x30Cu };
+					case 1164u: return result_code_points_2{ 0xEAu, 0x304u };
+					case 1166u: return result_code_points_2{ 0xEAu, 0x30Cu };
+					}
+				}
+				// 3.4.
+				std::optional<uint32_t> cp{};
+				if (pointer.has_value()) cp = get_index_code_point<index_code_point_big5>(pointer.value());
+				// 3.5.
+				if (cp.has_value()) return result_code_point{ cp.value() };
+				// 3.6.
+				if (is_ascii_byte(byte)) input.prepend(byte);
+				// 3.7.
+				return result_error{};
+			}
+			// 4.
+			if (is_ascii_byte(byte)) return result_code_point{ byte };
+			// 5.
+			if (0x81u <= byte && byte <= 0xFEu)
+			{
+				big5_lead = byte;
+				return result_continue{};
+			}
+			// 6.
 			return result_error{};
 		}
+
+	private:
+		uint32_t big5_lead;
 	};
+
 	class Big5_encoder : public encoder
 	{
 	public:
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint32_t cp{ token.value() };
+			// 2.
+			if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+			// 3.
+			std::optional<uint16_t> pointer{ get_index_big5_pointer(cp) };
+			// 4.
+			if (!pointer.has_value()) return result_error{ cp };
+			// 5.
+			uint8_t lead{ static_cast<uint8_t>(pointer.value() / 157 + 0x81u) };
+			// 6.
+			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 157) };
+			// 7.
+			uint8_t offset{ trail < 0x3Fu ? 0x40u : 0x62u };
+			// 8.
+			return result_bytes_2{ lead, static_cast<uint8_t>(trail + offset) };
 		}
 	};
 
-	// Legacy multi - byte Japanese encodings ---------------------------------
+	// Legacy multi-byte Japanese encodings -----------------------------------
 
 	// EUC_JP
 	class EUC_JP_decoder : public decoder
 	{
 	public:
+		EUC_JP_decoder() : EUC_JP_jis0212_flag{ false }, EUC_JP_lead{ 0 }{}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
+			if (!token.has_value())
+			{
+			// 1.
+				if (EUC_JP_lead != 0)
+				{
+					EUC_JP_lead = 0;
+					return result_error{};
+				}
+			// 2.
+				return result_finished{};
+			}
+
+			uint8_t byte{ static_cast<uint8_t>(token.value()) };
+			
+			// 3.
+			if (EUC_JP_lead == 0x8Eu && (0xA1u <= byte && byte <= 0xDFu))
+			{
+				EUC_JP_lead = 0;
+				return result_code_point{ 0xFF61u - 0xA1u + byte };
+			}
+			// 4.
+			if (EUC_JP_lead == 0x8Fu && (0xA1u <= byte && byte <= 0xFEu))
+			{
+				EUC_JP_jis0212_flag = true;
+				EUC_JP_lead = byte;
+				return result_continue{};
+			}
+			// 5.
+			if (EUC_JP_lead != 0)
+			{
+				uint8_t lead{ EUC_JP_lead };
+				EUC_JP_lead = 0;
+				// 5.1.
+				std::optional<uint32_t> cp{};
+				// 5.2.
+				if ((0xA1u <= lead && lead <= 0xFEu) && (0xA1u <= byte && byte <= 0xFEu))
+				{
+					uint16_t pointer{ (lead - 0xA1u) * 94 + byte - 0xA1u };
+					if (EUC_JP_jis0212_flag) cp = get_index_code_point<index_code_point_jis0212>(pointer);
+					else cp = get_index_code_point<index_code_point_jis0208>(pointer);
+				}
+				// 5.3.
+				EUC_JP_jis0212_flag = false;
+				// 5.4.
+				if (cp.has_value()) return result_code_point{ cp.value() };
+				// 5.5.
+				if (is_ascii_byte(byte)) input.prepend(byte);
+				// 5.6.
+				return result_error{};
+			}
+			// 6.
+			if (is_ascii_byte(byte)) return result_code_point{ byte };
+			// 7.
+			if (byte == 0x8Eu || byte == 0x8Fu || (0xA1u <= byte && byte <= 0xFEu))
+			{
+				EUC_JP_lead = byte;
+				return result_continue{};
+			}
+			// 8.
 			return result_error{};
 		}
+
+	private:
+		bool EUC_JP_jis0212_flag;
+		uint8_t EUC_JP_lead;
 	};
 	class EUC_JP_encoder : public encoder
 	{
@@ -596,7 +755,31 @@ namespace wordring::whatwg::encoding
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint32_t cp{ token.value() };
+
+			// 2.
+			if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+			// 3.
+			if (cp == 0xA5u) return result_byte{ 0x5Cu };
+			// 4.
+			if (cp == 0x203Eu) return result_byte{ 0x7Eu };
+			// 5.
+			if (0xFF61u <= cp && cp <= 0xFF9Fu) return result_bytes_2{ 0x8Eu, static_cast<uint8_t>(cp - 0xFF61u + 0xA1u) };
+			// 6.
+			if (cp == 0x2212u) cp = 0xFF0Du;
+			// 7.
+			std::optional<uint16_t> pointer{ get_index_pointer<index_pointer_jis0208_0, index_pointer_jis0208_1>(cp) };
+			// 8.
+			if (!pointer.has_value()) return result_error{ cp };
+			// 9.
+			uint8_t lead{ static_cast<uint8_t>(pointer.value() / 94 + 0xA1u) };
+			// 10.
+			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 94 + 0xA1u) };
+			// 11.
+			return result_bytes_2{ lead, trail };
 		}
 	};
 

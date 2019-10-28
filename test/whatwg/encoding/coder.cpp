@@ -1233,6 +1233,72 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_run)
 	BOOST_CHECK(in == out);
 }
 
+BOOST_AUTO_TEST_CASE(whatwg_encoding__big5_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ /*U"Ê̄Ê̌ê̄ê̌*/U"·＼ｗ一世共作杓咖昇陂拯耐哦浬虔娼毫莆婷溉詔媳睹辟愿罰劇瑾輥濃錐瞧駿鞭願護讖すЛ乂汌杙坨泒哃柜穾唊毨笄酎崰淐耞釫惲湨罦軹媷毹稛觡凘榠禗裰噚澍膞踔噳澢蕀錋檕蕷鞞璸蹛徿譑嚵鏼蠩糴讌纘" };
+	std::string str{};
+	std::u32string out{};
+
+	Big5_encoder encoder_0{};
+	Big5_decoder decoder_0{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(encoder_0, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(decoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__big5_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ /*U"Ê̄Ê̌ê̄ê̌*/U"·＼ｗ一世共作杓咖昇陂拯耐哦浬虔娼毫莆婷溉詔媳睹辟愿罰劇瑾輥濃錐瞧駿鞭願護讖すЛ乂汌杙坨泒哃柜穾唊毨笄酎崰淐耞釫惲湨罦軹媷毹稛觡凘榠禗裰噚澍膞踔噳澢蕀錋檕蕷鞞璸蹛徿譑嚵鏼蠩糴讌纘" };
+	std::string str{};
+	std::u32string out{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_encoder(name::Big5, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_decoder(name::Big5, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ /*U"¥‾*/U"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ"/*−*/U"0123456789ぁあぃいぅうぇえぉお" };
+	std::string str{};
+	std::u32string out{};
+
+	EUC_JP_encoder encoder_0{};
+	EUC_JP_decoder decoder_0{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(encoder_0, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(decoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ /*U"¥‾*/U"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ"/*−*/U"0123456789ぁあぃいぅうぇえぉお" };
+	std::string str{};
+	std::u32string out{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_encoder(name::EUC_JP, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_decoder(name::EUC_JP, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
 /*
 BOOST_AUTO_TEST_CASE(whatwg_encoding___coder)
 {
