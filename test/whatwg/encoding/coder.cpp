@@ -1299,6 +1299,72 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_run)
 	BOOST_CHECK(in == out);
 }
 
+BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_2022_JP_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"ABCDEｱｲｳｴｵあいうえお" };
+	std::string str{};
+	std::u32string out{};
+
+	ISO_2022_JP_encoder encoder_0{};
+	ISO_2022_JP_decoder decoder_0{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(encoder_0, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(decoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(out == U"ABCDEアイウエオあいうえお");
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_2022_JP_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"ABCDEｱｲｳｴｵあいうえお" };
+	std::string str{};
+	std::u32string out{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_encoder(name::ISO_2022_JP, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_decoder(name::ISO_2022_JP, stream_str, std::back_inserter(out));
+	BOOST_CHECK(out == U"ABCDEアイウエオあいうえお");
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"ABCDEｱｲｳｴｵアイウエオ漾漓滷澆潺纊褜鍈銈蓜" };
+	std::string str{};
+	std::u32string out{};
+
+	Shift_JIS_encoder encoder_0{};
+	Shift_JIS_decoder decoder_0{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(encoder_0, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(decoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::u32string in{ U"ABCDEｱｲｳｴｵアイウエオ漾漓滷澆潺纊褜鍈銈蓜" };
+	std::string str{};
+	std::u32string out{};
+
+	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_encoder(name::Shift_JIS, stream_in, std::back_inserter(str));
+	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_decoder(name::Shift_JIS, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
 /*
 BOOST_AUTO_TEST_CASE(whatwg_encoding___coder)
 {

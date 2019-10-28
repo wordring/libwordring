@@ -564,7 +564,11 @@ git pull origin master
 			// 14.
 			uint8_t byte4{ static_cast<uint8_t>(pointer.value() % 10) };
 			// 15.
-			return result_bytes_4{ static_cast<uint8_t>(byte1 + 0x81u), static_cast<uint8_t>(byte2 + 0x30u), static_cast<uint8_t>(byte3 + 0x81u), static_cast<uint8_t>(byte4 + 0x30u) };
+			return result_bytes_4{
+				static_cast<uint8_t>(byte1 + 0x81u),
+				static_cast<uint8_t>(byte2 + 0x30u),
+				static_cast<uint8_t>(byte3 + 0x81u),
+				static_cast<uint8_t>(byte4 + 0x30u) };
 		}
 	};
 
@@ -787,40 +791,385 @@ git pull origin master
 	// ISO_2022_JP
 	class ISO_2022_JP_decoder : public decoder
 	{
+	private:
+		enum state : uint8_t
+		{
+			ASCII, Roman, katakana, Lead_byte, Trail_byte, Escape_start, Escape
+		};
+
 	public:
+		ISO_2022_JP_decoder()
+			: ISO_2022_JP_decoder_state{ state::ASCII }
+			, ISO_2022_JP_decoder_output_state{ state::ASCII }
+			, ISO_2022_JP_lead{ 0 }
+			, ISO_2022_JP_output_flag{ false }
+		{
+		}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
+			uint8_t byte{};
+
+			switch (ISO_2022_JP_decoder_state)
+			{
+			case ASCII:
+				if (!token.has_value()) return result_finished{};
+				byte = static_cast<uint8_t>(token.value());
+				if (byte == 0x1Bu)
+				{
+					ISO_2022_JP_decoder_state = state::Escape_start;
+					return result_continue{};
+				}
+				else if (byte <= 0x7Fu && byte != 0x0Eu && byte != 0x0Fu && byte != 0x1Bu)
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_code_point{ byte };
+				}
+				ISO_2022_JP_output_flag = false;
+				return result_error{};
+				break;
+
+			case state::Roman:
+				if (!token.has_value()) return result_finished{};
+				byte = static_cast<uint8_t>(token.value());
+				if (byte == 0x1Bu)
+				{
+					ISO_2022_JP_decoder_state = state::Escape_start;
+					return result_continue{};
+				}
+				else if (byte == 0x5Cu)
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_code_point{ 0xA5u };
+				}
+				else if (byte == 0x7Eu)
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_code_point{ 0x203Eu };
+				}
+				else if (byte <= 0x7Fu && byte != 0x0Eu && byte != 0x0Fu && byte != 0x1Bu && byte != 0x5Cu && byte != 0x7Eu)
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_code_point{ byte };
+				}
+				else
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_error{};
+				}
+				break;
+
+			case state::katakana:
+				if (!token.has_value()) return result_finished{};
+				byte = static_cast<uint8_t>(token.value());
+				if (byte == 0x1Bu)
+				{
+					ISO_2022_JP_decoder_state = state::Escape_start;
+					return result_continue{};
+				}
+				else if (0x21u <= byte && byte <= 0x5Fu)
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_code_point{ 0xFF61u - 0x21u + byte };
+				}
+				else
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_error{};
+				}
+				break;
+
+			case state::Lead_byte:
+				if (!token.has_value()) return result_finished{};
+				byte = static_cast<uint8_t>(token.value());
+				if (byte == 0x1Bu)
+				{
+					ISO_2022_JP_decoder_state = state::Escape_start;
+					return result_continue{};
+				}
+				else if (0x21u <= byte && byte <= 0x7Eu)
+				{
+					ISO_2022_JP_output_flag = false;
+					ISO_2022_JP_lead = byte;
+					ISO_2022_JP_decoder_state = state::Trail_byte;
+					return result_continue{};
+				}
+				else
+				{
+					ISO_2022_JP_output_flag = false;
+					return result_error{};
+				}
+				break;
+
+			case state::Trail_byte:
+				if (!token.has_value())
+				{
+					ISO_2022_JP_decoder_state = state::Lead_byte;
+					// input.prepend(byte); 仕様でbyteはEOSのはず。
+					return result_error{};
+				}
+				byte = static_cast<uint8_t>(token.value());
+				if (byte == 0x1Bu)
+				{
+					ISO_2022_JP_decoder_state = state::Escape_start;
+					return result_error{};
+				}
+				else if (0x21u <= byte && byte <= 0x7Eu)
+				{
+					ISO_2022_JP_decoder_state = state::Lead_byte;
+					std::optional<uint16_t> pointer{ static_cast<uint16_t>((ISO_2022_JP_lead - 0x21u) * 94 + byte - 0x21u) };
+					std::optional<uint32_t> cp{ get_index_code_point<index_code_point_jis0208>(pointer.value()) };
+					if (!cp.has_value()) return result_error{};
+					return result_code_point{ cp.value() };
+				}
+				else
+				{
+					ISO_2022_JP_decoder_state = state::Lead_byte;
+					return result_error{};
+				}
+				break;
+
+			case state::Escape_start:
+				if (token.has_value())
+				{
+					byte = static_cast<uint8_t>(token.value());
+					if (byte == 0x24u || byte == 0x28u)
+					{
+						ISO_2022_JP_lead = byte;
+						ISO_2022_JP_decoder_state = state::Escape;
+						return result_continue{};
+					}
+					input.prepend(byte);
+				}
+				ISO_2022_JP_output_flag = false;
+				ISO_2022_JP_decoder_state = ISO_2022_JP_decoder_output_state;
+				return result_error{};
+				break;
+
+			case state::Escape:
+			{
+				// state::Escape になるときは必ずbyteがprependされている。
+				byte = static_cast<uint8_t>(token.value());
+				uint8_t lead{ ISO_2022_JP_lead };
+				ISO_2022_JP_lead = 0;
+				std::optional<state> st{};
+				if (lead == 0x28u && byte == 0x42u) st = state::ASCII;
+				else if (lead == 0x28u && byte == 0x4Au) st = state::Roman;
+				else if (lead == 0x28u && byte == 0x49u) st = state::katakana;
+				else if (lead == 0x24u && (byte == 0x40u || byte == 0x42u)) st = state::Lead_byte;
+				if (st.has_value())
+				{
+					ISO_2022_JP_decoder_state = st.value();
+					ISO_2022_JP_decoder_output_state = st.value();
+					bool output_flag = ISO_2022_JP_output_flag;
+					ISO_2022_JP_output_flag = true;
+					if (output_flag == false) return result_continue{};
+					else return result_error{};
+				}
+				input.prepend_of({ lead, byte });
+				ISO_2022_JP_output_flag = false;
+				ISO_2022_JP_decoder_state = ISO_2022_JP_decoder_output_state;
+				return result_error{};
+			}
+				break;
+			}
+
+			assert(false);
 			return result_error{};
 		}
+
+	private:
+		state   ISO_2022_JP_decoder_state;
+		state   ISO_2022_JP_decoder_output_state;
+		uint8_t ISO_2022_JP_lead;
+		bool    ISO_2022_JP_output_flag;
 	};
+
 	class ISO_2022_JP_encoder : public encoder
 	{
+	private:
+		enum state : uint8_t
+		{
+			ASCII, Roman, jis0208
+		};
+
 	public:
+		ISO_2022_JP_encoder()
+			: ISO_2022_JP_encoder_state{ state::ASCII }
+		{
+		}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value() && ISO_2022_JP_encoder_state != state::ASCII)
+			{
+				ISO_2022_JP_encoder_state = state::ASCII;
+				return result_bytes_3{ static_cast<uint8_t>(0x1Bu), static_cast<uint8_t>(0x28u), static_cast<uint8_t>(0x42u) };
+			}
+			// 2.
+			if (!token.has_value() && ISO_2022_JP_encoder_state == state::ASCII) return result_finished{};
+
+			uint32_t cp{ token.value() };
+
+			// 3.
+			if ((ISO_2022_JP_encoder_state == state::ASCII || ISO_2022_JP_encoder_state == state::Roman)
+				&& (cp == 0xEu || cp == 0xFu || cp == 0x1Bu)) return result_error{ static_cast<uint32_t>(0xFFFDu) };
+			// 4.
+			if (ISO_2022_JP_encoder_state == state::ASCII && is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+			// 5.
+			if(ISO_2022_JP_encoder_state == state::Roman
+				&& ((is_ascii_code_point(cp) && cp != 0x5Cu && cp != 0x7Eu) || (cp == 0xA5u || cp == 0x203Eu)))
+			{
+				if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+				if (cp == 0xA5u) return result_byte{ static_cast<uint8_t>(0x5Cu) };
+				if (cp == 0x203Eu) return result_byte{ static_cast<uint8_t>(0x7Eu) };
+			}
+			// 6.
+			if (is_ascii_code_point(cp) && ISO_2022_JP_encoder_state != state::ASCII)
+			{
+				input.prepend(cp);
+				ISO_2022_JP_encoder_state = state::ASCII;
+				return result_bytes_3{ static_cast<uint8_t>(0x1Bu), static_cast<uint8_t>(0x28u), static_cast<uint8_t>(0x42u) };
+			}
+			// 7.
+			if ((cp == 0xA5u || cp == 0x203Eu) && ISO_2022_JP_encoder_state != state::Roman)
+			{
+				input.prepend(cp);
+				ISO_2022_JP_encoder_state = state::Roman;
+				return result_bytes_3{ static_cast<uint8_t>(0x1Bu), static_cast<uint8_t>(0x28u), static_cast<uint8_t>(0x42u) };
+			}
+			// 8.
+			if (cp == 0x2212u) cp = 0xFF0Du;
+			// 9.
+			if (0xFF61u <= cp && cp <= 0xFF9Fu) cp = get_index_code_point<index_code_point_iso_2022_jp_katakana>(cp - 0xFF61u).value();
+			// 10.
+			std::optional<uint16_t> pointer{ get_index_pointer<index_pointer_jis0208_0, index_pointer_jis0208_1>(cp) };
+			// 11.
+			if (!pointer.has_value()) return result_error{ cp };
+			// 12.
+			if (ISO_2022_JP_encoder_state != state::jis0208)
+			{
+				input.prepend(cp);
+				ISO_2022_JP_encoder_state = state::jis0208;
+				return result_bytes_3{ static_cast<uint8_t>(0x1Bu), static_cast<uint8_t>(0x24u), static_cast<uint8_t>(0x42u) };
+			}
+			// 13.
+			uint8_t lead{ static_cast<uint8_t>(pointer.value() / 94 + 0x21u) };
+			// 14.
+			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 94 + 0x21u) };
+			// 15.
+			return result_bytes_2{ lead, trail };
 		}
+
+	private:
+		state ISO_2022_JP_encoder_state;
 	};
 
 	// Shift_JIS
 	class Shift_JIS_decoder : public decoder
 	{
 	public:
+		Shift_JIS_decoder()
+			: Shift_JIS_lead(0)
+		{
+		}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
+			// 1.
+			if (!token.has_value() && Shift_JIS_lead != 0)
+			{
+				Shift_JIS_lead = 0;
+				return result_error{};
+			}
+			// 2.
+			if (!token.has_value() && Shift_JIS_lead == 0) return result_finished{};
+
+			uint8_t byte{ static_cast<uint8_t>(token.value()) };
+
+			// 3.
+			if (Shift_JIS_lead != 0)
+			{
+				uint8_t lead{ Shift_JIS_lead };
+				std::optional<uint16_t> pointer{};
+				Shift_JIS_lead = 0;
+				// 3.1.
+				uint8_t offset{ byte < 0x7Fu ? 0x40u : 0x41u };
+				// 3.2.
+				uint8_t lead_offset{ lead < 0xA0u ? 0x81u : 0xC1u };
+				// 3.3.
+				if ((0x40u <= byte && byte <= 0x7Eu) || (0x80u <= byte && byte <= 0xFCu))
+					pointer = (lead - lead_offset) * 188 + byte - offset;
+				// 3.4.
+				if (pointer.has_value() && (8836 <= pointer.value() && pointer.value() <= 10715))
+					return result_code_point{ 0xE000u - 8836 + pointer.value() };
+				// 3.5.
+				std::optional<uint32_t> cp{};
+				if (pointer.has_value()) cp = get_index_code_point<index_code_point_jis0208>(pointer.value());
+				// 3.6.
+				if (cp.has_value()) return result_code_point{ cp.value() };
+				// 3.7.
+				if (is_ascii_byte(byte)) input.prepend(byte);
+				// 3.8.
+				return result_error{};
+			}
+			// 4.
+			if (is_ascii_byte(byte) || byte == 0x80u) return result_code_point{ byte };
+			// 5.
+			if (0xA1u <= byte && byte <= 0xDFu) return result_code_point{ 0xFF61u - 0xA1u + byte };
+			// 6.
+			if ((0x81u <= byte && byte <= 0x9Fu) || (0xE0u <= byte && byte <= 0xFCu))
+			{
+				Shift_JIS_lead = byte;
+				return result_continue{};
+			}
+			// 7.
 			return result_error{};
 		}
+
+	private:
+		uint8_t Shift_JIS_lead;
 	};
+
 	class Shift_JIS_encoder : public encoder
 	{
 	public:
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint32_t cp{ token.value() };
+
+			// 2.
+			if (is_ascii_code_point(cp) || cp == 0x80u) return result_byte{ static_cast<uint8_t>(cp) };
+			// 3.
+			if (cp == 0xA5u) return result_byte{ 0x5Cu };
+			// 4.
+			if (cp == 0x203Eu) return result_byte{ 0x7Eu };
+			// 5.
+			if (0xFF61u <= cp && cp <= 0xFF9Fu) return result_byte{ static_cast<uint8_t>(cp - 0xFF61u + 0xA1u) };
+			// 6.
+			if (cp == 0x2212u) cp = 0xFF0Du;
+			// 7.
+			std::optional<uint16_t> pointer = get_index_shift_jis_pointer(cp);
+			// 8.
+			if (!pointer.has_value()) return result_error{ cp };
+			// 9.
+			uint8_t lead{ static_cast<uint8_t>(pointer.value() / 188) };
+			// 10.
+			uint8_t lead_offset{ lead < 0x1Fu ? 0x81u : 0xC1u };
+			// 11.
+			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 188) };
+			// 12.
+			uint8_t offset{ trail < 0x3Fu ? 0x40u : 0x41u };
+			// 13.
+			return result_bytes_2{ static_cast<uint8_t>(lead + lead_offset), static_cast<uint8_t>(trail + offset) };
 		}
 	};
 
@@ -830,19 +1179,82 @@ git pull origin master
 	class EUC_KR_decoder : public decoder
 	{
 	public:
+		EUC_KR_decoder()
+			: EUC_KR_lead{ 0 }
+		{
+		}
+
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
+			// 1.
+			if (!token.has_value() && EUC_KR_lead != 0)
+			{
+				EUC_KR_lead = 0;
+				return result_error{};
+			}
+			// 2.
+			if (!token.has_value() && EUC_KR_lead == 0) return result_finished{};
+
+			uint8_t byte{ static_cast<uint8_t>(token.value()) };
+
+			// 3.
+			if (EUC_KR_lead != 0)
+			{
+				uint8_t lead{ EUC_KR_lead };
+				std::optional<uint16_t> pointer{};
+				EUC_KR_lead = 0;
+				// 3.1.
+				if (0x41u <= byte && byte <= 0xFEu) pointer = (lead - 0x81u) * 190 + (byte - 0x41u);
+				// 3.2.
+				std::optional<uint32_t> cp{};
+				if (pointer.has_value()) cp = get_index_code_point<index_code_point_euc_kr>(pointer.value());
+				// 3.3.
+				if (cp.has_value()) return result_code_point{ cp.value() };
+				// 3.4.
+				if (is_ascii_byte(byte)) input.prepend(byte);
+				// 3.5.
+				return result_error{};
+			}
+			// 4.
+			if (is_ascii_byte(byte)) return result_code_point{ byte };
+			// 5.
+			if (0x81u <= byte && byte <= 0xFEu)
+			{
+				EUC_KR_lead = byte;
+				return result_continue{};
+			}
+			// 6.
 			return result_error{};
 		}
+
+	private:
+		uint8_t EUC_KR_lead;
 	};
+
 	class EUC_KR_encoder : public encoder
 	{
 	public:
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint32_t cp{ token.has_value() };
+
+			// 2.
+			if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+			// 3.
+			std::optional<uint16_t> pointer = get_index_pointer<index_pointer_euc_kr_0, index_pointer_euc_kr_1>(cp);
+			// 4.
+			if (!pointer.has_value()) return result_error{ cp };
+			// 5.
+			uint8_t lead{ static_cast<uint8_t>(pointer.value() / 190 + 0x81u) };
+			// 6.
+			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 190 + 0x41u) };
+			// 7.
+			return result_bytes_2{ lead, trail };
 		}
 	};
 
