@@ -57,6 +57,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	/*!
+git pull origin master
 
 	ranges_pointerに限り32ビットの戻り値が必要。
 	*/
@@ -440,7 +441,7 @@ namespace wordring::whatwg::encoding
 			{
 				if (!(0x30u <= byte && byte <= 0x39u))
 				{
-					input.prepend({ static_cast<uint8_t>(gb18030_second), static_cast<uint8_t>(gb18030_third), byte });
+					input.prepend_of({ static_cast<uint8_t>(gb18030_second), static_cast<uint8_t>(gb18030_third), byte });
 					reset();
 					return result_error{};
 				}
@@ -460,7 +461,7 @@ namespace wordring::whatwg::encoding
 					return result_continue{};
 				}
 
-				input.prepend({ static_cast<uint8_t>(gb18030_second), byte });
+				input.prepend_of({ static_cast<uint8_t>(gb18030_second), byte });
 				gb18030_first = 0;
 				gb18030_second = 0;
 				return result_error{};
@@ -563,7 +564,7 @@ namespace wordring::whatwg::encoding
 			// 14.
 			uint8_t byte4{ static_cast<uint8_t>(pointer.value() % 10) };
 			// 15.
-			return result_bytes_4{ byte1 + 0x81u, byte2 + 0x30u, byte3 + 0x81u, byte4 + 0x30u };
+			return result_bytes_4{ static_cast<uint8_t>(byte1 + 0x81u), static_cast<uint8_t>(byte2 + 0x30u), static_cast<uint8_t>(byte3 + 0x81u), static_cast<uint8_t>(byte4 + 0x30u) };
 		}
 	};
 
@@ -666,7 +667,7 @@ namespace wordring::whatwg::encoding
 			// 6.
 			uint8_t trail{ static_cast<uint8_t>(pointer.value() % 157) };
 			// 7.
-			uint8_t offset{ trail < 0x3Fu ? 0x40u : 0x62u };
+			uint8_t offset{ static_cast<uint8_t>(trail < 0x3Fu ? 0x40u : 0x62u) };
 			// 8.
 			return result_bytes_2{ lead, static_cast<uint8_t>(trail + offset) };
 		}
@@ -720,7 +721,7 @@ namespace wordring::whatwg::encoding
 				// 5.2.
 				if ((0xA1u <= lead && lead <= 0xFEu) && (0xA1u <= byte && byte <= 0xFEu))
 				{
-					uint16_t pointer{ (lead - 0xA1u) * 94 + byte - 0xA1u };
+					uint16_t pointer{ static_cast<uint16_t>((lead - 0xA1u) * 94 + byte - 0xA1u) };
 					if (EUC_JP_jis0212_flag) cp = get_index_code_point<index_code_point_jis0212>(pointer);
 					else cp = get_index_code_point<index_code_point_jis0208>(pointer);
 				}
