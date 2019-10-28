@@ -49,7 +49,7 @@ namespace wordring::whatwg::encoding
 		void prepend(InputIterator first, InputIterator last) { m_front.insert(m_front.begin(), first, last); }
 
 		template <typename Value>
-		void prepend(std::initializer_list<typename Value> tokens) { prepend(tokens.begin(), tokens.end()); }
+		void prepend(std::initializer_list<Value> tokens) { prepend(tokens.begin(), tokens.end()); }
 
 		void push(value_type token) { m_back.push_back(token); }
 
