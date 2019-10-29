@@ -1378,7 +1378,14 @@ git pull origin master
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint8_t byte{ static_cast<uint8_t>(token.value()) };
+			// 2.
+			if (is_ascii_byte(byte)) return result_code_point{ byte };
+			// 3.
+			return result_code_point{ 0xF780u + byte - 0x80u };
 		}
 	};
 
@@ -1388,7 +1395,16 @@ git pull origin master
 		template <typename Stream, typename Token>
 		result_value run(Stream& input, Token token)
 		{
-			return result_error{};
+			// 1.
+			if (!token.has_value()) return result_finished{};
+
+			uint32_t cp{ token.value() };
+			// 2.
+			if (is_ascii_code_point(cp)) return result_byte{ static_cast<uint8_t>(cp) };
+			// 3.
+			if (0xF780u <= cp && cp <= 0xF7FFu) return result_byte{ static_cast<uint8_t>(cp - 0xF780u + 0x80u) };
+			// 4.
+			return result_error{ cp };
 		}
 	};
 }

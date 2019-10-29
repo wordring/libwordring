@@ -1444,7 +1444,10 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_coder)
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
 	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+#pragma warning(push)
+#pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+#pragma warning(pop)
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_run)
@@ -1463,13 +1466,12 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_run)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
 }
 
-
 BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_coder)
 {
 	using namespace wordring::whatwg::encoding;
 
 	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
-	char8_t const *p8 = reinterpret_cast<char8_t const*>(p16);
+	char8_t const* p8 = reinterpret_cast<char8_t const*>(p16);
 
 	std::string in{};
 	for (size_t i = 0; i < 96; i++) in.push_back(*(p8 + i));
@@ -1497,6 +1499,39 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
 	result_value ret = run_decoder(name::UTF_16LE, stream_in, std::back_inserter(out));
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_coder)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string in{ "\x00\xFF" };
+	std::u32string str{};
+	std::string out{};
+
+	x_user_defined_encoder encoder_0{};
+	x_user_defined_decoder decoder_0{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run(decoder_0, stream_in, std::back_inserter(str));
+	stream<std::u32string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run(encoder_0, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
+}
+
+BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_run)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string in{ "\x00\xFF" };
+	std::u32string str{};
+	std::string out{};
+
+	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
+	run_decoder(name::x_user_defined, stream_in, std::back_inserter(str));
+	stream<std::u32string::const_iterator> stream_str{ str.cbegin(), str.cend() };
+	run_encoder(name::x_user_defined, stream_str, std::back_inserter(out));
+	BOOST_CHECK(in == out);
 }
 
 
