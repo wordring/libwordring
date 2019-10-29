@@ -9,15 +9,14 @@
 #include <cstdint>
 #include <string_view>
 #include <type_traits>
-#include <unordered_map>
 #include <variant>
 
-#include <wordring/algorithm.hpp>
-#include <wordring/compatibility.hpp>
+//#include <wordring/algorithm.hpp>
+//#include <wordring/compatibility.hpp>
 #include <wordring/whatwg/encoding/coder.hpp>
 #include <wordring/whatwg/encoding/encoding_defs.hpp>
 #include <wordring/whatwg/encoding/stream.hpp>
-#include <wordring/whatwg/infra/infra.hpp>
+//#include <wordring/whatwg/infra/infra.hpp>
 
 namespace wordring::whatwg::encoding
 {
@@ -569,44 +568,88 @@ namespace wordring::whatwg::encoding
 
 	// 6. Hooks for standards -------------------------------------------------
 
-	extern std::string_view BOM_UTF_8;
-	extern std::string_view BOM_UTF_16BE;
-	extern std::string_view BOM_UTF_16LE;
-
-	template <typename InputStream, typename OutputIterator>
-	inline void decode(InputStream input, name fallback, OutputIterator output)
+	template <typename InputIterator, typename OutputIterator>
+	inline void decode(InputIterator first, InputIterator last, name fallback, OutputIterator output)
 	{
-		static_assert(std::is_same_v<std::iterator_traits<OutputIterator>::value_type, uint32_t>);
+		std::string_view BOM_UTF_8{ "\xEF\xBB\xBF" };
+		std::string_view BOM_UTF_16BE{ "\xFE\xFF" };
+		std::string_view BOM_UTF_16LE{ "\xFF\xFE" };
 
+		stream<InputIterator> input{ first, last };
 		name encoding_name = fallback;
 
 		// 1.
-		std::array<uint8_t, 3> buffer{};
-		uint32_t buffer_length{ 0 };
+		std::string buffer{};
 		// 2.
-		bool BOM_seen_flag{ false };
+		bool BOM_seen_flag{ true };
 		// 3.
-		while (input && buffer_length < 3) buffer[buffer_length++] = input.read().value();
+		for (uint32_t i = 0; i < 3 && input; i++) buffer.push_back(input.read().value());
 		// 4.
-		if (std::equal(buffer.data(), buffer.data() + buffer_length, BOM_UTF_8.begin(), BOM_UTF_8.end()))
-		{
+		if (BOM_UTF_8.size() <= buffer.size() && std::equal(BOM_UTF_8.begin(), BOM_UTF_8.end(), buffer.begin()))
 			encoding_name = name::UTF_8;
-			BOM_seen_flag = true;
-		}
-		else if (std::equal(buffer.data(), buffer.data() + buffer_length, BOM_UTF_8.begin(), BOM_UTF_16BE.end()))
-		{
+		else if (BOM_UTF_16BE.size() <= buffer.size() && std::equal(BOM_UTF_16BE.begin(), BOM_UTF_16BE.end(), buffer.begin()))
 			encoding_name = name::UTF_16BE;
-			BOM_seen_flag = true;
-		}
-		else if (std::equal(buffer.data(), buffer.data() + buffer_length, BOM_UTF_8.begin(), BOM_UTF_16LE.end()))
-		{
+		else if (BOM_UTF_16LE.size() <= buffer.size() && std::equal(BOM_UTF_16LE.begin(), BOM_UTF_16LE.end(), buffer.begin()))
 			encoding_name = name::UTF_16LE;
-			BOM_seen_flag = true;
-		}
+		else BOM_seen_flag = false;
 		// 5. 6.
-		if (BOM_seen_flag == false) input.prepend(buffer.data(), buffer.data() + buffer_length);
+		if (BOM_seen_flag == false) input.prepend(buffer.begin(), buffer.end());
+		else if (encoding_name != name::UTF_8 && buffer.size() == 3) input.prepend(buffer.back());
 		// 7.
 		// 8. 9.
 		run_decoder(encoding_name, input, output);
+	}
+
+	template <typename InputIterator, typename OutputIterator>
+	inline void utf_8_decode(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		std::string_view BOM_UTF_8{ "\xEF\xBB\xBF" };
+		stream<InputIterator> input{ first, last };
+
+		// 1.
+		std::string buffer{};
+		// 2.
+		for (uint32_t i = 0; i < 3 && input; i++) buffer.push_back(input.read().value());
+		// 3.
+		if (!(BOM_UTF_8.size() <= buffer.size()) || !std::equal(BOM_UTF_8.begin(), BOM_UTF_8.end(), buffer.begin()))
+			input.prepend(buffer.begin(), buffer.end());
+		// 5.
+		run_decoder(name::UTF_8, input, output);
+	}
+
+	template <typename InputIterator, typename OutputIterator>
+	inline void utf_8_decode_without_bom(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		stream<InputIterator> input{ first, last };
+		run_decoder(name::UTF_8, input, output);
+	}
+
+	template <typename InputIterator, typename OutputIterator>
+	inline bool utf_8_decode_without_bom_or_fail(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		stream<InputIterator> input{ first, last };
+		std::u32string buffer{};
+		result_value ret = run_decoder(name::UTF_8, input, std::back_inserter(buffer), error_mode::Fatal);
+		if (ret.index() == 0) std::copy(buffer.begin(), buffer.end(), output);
+		return ret.index() == 0;
+	}
+
+	template <typename InputIterator, typename OutputIterator>
+	inline void encode(InputIterator first, InputIterator last, name encoding_name, OutputIterator output)
+	{
+		// 1.
+		assert(encoding_name != name::replacement);
+		assert(encoding_name != name::UTF_16BE);
+		assert(encoding_name != name::UTF_16LE);
+
+		stream<InputIterator> input{ first, last };
+
+		run_encoder(encoding_name, input, output, error_mode::Html);
+	}
+
+	template <typename InputIterator, typename OutputIterator>
+	inline void utf_8_encode(InputIterator first, InputIterator last, OutputIterator output)
+	{
+		encode(first, last, name::UTF_8, output);
 	}
 }

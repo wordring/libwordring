@@ -1463,14 +1463,20 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_run)
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
 	result_value ret = run_decoder(name::UTF_16BE, stream_in, std::back_inserter(out));
+#pragma warning(push)
+#pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+#pragma warning(pop)
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_coder)
 {
 	using namespace wordring::whatwg::encoding;
 
+#pragma warning(push)
+#pragma warning(disable:4566)
 	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
+#pragma warning(pop)
 	char8_t const* p8 = reinterpret_cast<char8_t const*>(p16);
 
 	std::string in{};
@@ -1481,7 +1487,10 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_coder)
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
 	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+#pragma warning(push)
+#pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+#pragma warning(pop)
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
@@ -1489,7 +1498,10 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
 	using namespace wordring::whatwg::encoding;
 
 
+#pragma warning(push)
+#pragma warning(disable:4566)
 	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
+#pragma warning(pop)
 	char8_t const* p8 = reinterpret_cast<char8_t const*>(p16);
 
 	std::string in{};
@@ -1498,7 +1510,10 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
 	result_value ret = run_decoder(name::UTF_16LE, stream_in, std::back_inserter(out));
+#pragma warning(push)
+#pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
+#pragma warning(pop)
 }
 
 BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_coder)
@@ -1533,24 +1548,5 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_run)
 	run_encoder(name::x_user_defined, stream_str, std::back_inserter(out));
 	BOOST_CHECK(in == out);
 }
-
-
-
-/*
-BOOST_AUTO_TEST_CASE(whatwg_encoding___coder)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	run(, stream_8, std::back_inserter(u32));
-	run(, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-*/
 
 BOOST_AUTO_TEST_SUITE_END()

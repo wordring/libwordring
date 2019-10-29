@@ -285,7 +285,3 @@ name wordring::whatwg::encoding::get_name(std::u32string_view label)
 	auto it = encoding_label_map.find(label_name);
 	return it == encoding_label_map.end() ? name{ 0 } : it->second;
 }
-
-std::string_view BOM_UTF_8{ "\xEF\xBB\xBF" };
-std::string_view BOM_UTF_16BE{ "\xFE\xFF" };
-std::string_view BOM_UTF_16LE{ "\xFF\xFE" };
