@@ -51,6 +51,8 @@ include_directories (
 	${Wordring_INCLUDE_DIR}
 )
 
+set(INCLUDE_DIR ${Wordring_INCLUDE_DIR}/wordring)
+
 #add_subdirectory (html)
 #add_subdirectory (lang)
 #add_subdirectory (sqlite)

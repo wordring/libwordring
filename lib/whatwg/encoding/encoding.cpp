@@ -275,13 +275,13 @@ static std::unordered_map<std::u32string, name> const encoding_label_map {
 	{ U"x-user-defined", name::x_user_defined }
 };
 
-name wordring::whatwg::encoding::get_name(std::u32string_view label)
+name wordring::whatwg::encoding::get_name(std::u32string label)
 {
 	using namespace wordring::whatwg;
 
-	std::u32string label_name{ label };
-	label_name = strip_leading_and_trailing_ascii_whitespace(label_name.begin(), label_name.end());
-	label_name = to_ascii_lowercase(label_name.begin(), label_name.end());
-	auto it = encoding_label_map.find(label_name);
+	std::u32string tmp1{}, tmp2{};
+	strip_leading_and_trailing_ascii_whitespace(label.begin(), label.end(), std::back_inserter(tmp1));
+	to_ascii_lowercase(tmp1.begin(), tmp1.end(), std::back_inserter(tmp2));
+	auto it = encoding_label_map.find(tmp2);
 	return it == encoding_label_map.end() ? name{ 0 } : it->second;
 }

@@ -23,7 +23,7 @@ namespace wordring::whatwg::encoding
 	// 4.1. Encoders and decoders ---------------------------------------------
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
-	result_value process_token(
+	inline result_value process_token(
 		Token token, Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
 	{
 		result_value result = coder.run(input, token);
@@ -81,7 +81,7 @@ namespace wordring::whatwg::encoding
 
 			if (mode == error_mode::Replacement)
 			{
-				if constexpr (std::is_base_of_v<decoder, Coder>)* output++ = 0xFFFDu;
+				if constexpr (std::is_base_of_v<decoder, Coder>)*output++ = 0xFFFDu;
 			}
 			else if (mode == error_mode::Html)
 			{
@@ -100,8 +100,8 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
-	result_value process_token(
-		Token token, Coder & coder, InputStream & input, OutputIterator output)
+	inline result_value process_token(
+		Token token, Coder& coder, InputStream& input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
 		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
@@ -109,7 +109,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run(Coder & coder, InputStream & input, OutputIterator output, error_mode mode)
+	inline result_value run(Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
 	{
 		while (true)
 		{
@@ -121,7 +121,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	result_value run(Coder & coder, InputStream & input, OutputIterator output)
+	inline result_value run(Coder& coder, InputStream& input, OutputIterator output)
 	{
 		error_mode mode{ error_mode::Replacement };
 		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
@@ -129,7 +129,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename InputStream, typename OutputIterator>
-	result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Replacement)
+	inline result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Replacement)
 	{
 		switch (encoding_name)
 		{
@@ -254,7 +254,7 @@ namespace wordring::whatwg::encoding
 			windows_1254_decoder c{};
 			return run(c, input, output, mode);
 		}
-		case name::windows_1255:	
+		case name::windows_1255:
 		{
 			windows_1255_decoder c{};
 			return run(c, input, output, mode);
@@ -345,7 +345,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename InputStream, typename OutputIterator>
-	result_value run_encoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Fatal)
+	inline result_value run_encoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Fatal)
 	{
 		switch (encoding_name)
 		{
@@ -547,10 +547,15 @@ namespace wordring::whatwg::encoding
 
 	// 4.2. Names and labels --------------------------------------------------
 
-	name get_name(std::u32string_view label);
+	name get_name(std::u32string label);
 
-	template <typename String>
-	inline name get_name(String string) { return get_name(to_u32string(string)); }
+	template <typename String,
+		typename std::enable_if_t<
+			std::disjunction_v<std::is_same<typename String::value_type, char16_t>, std::is_same<typename String::value_type, char8_t>>, nullptr_t> = nullptr>
+	inline name get_name(String label)
+	{
+		return get_name(encoding_cast<std::u32string>(label));
+	}
 
 	// 4.3. Output encodings --------------------------------------------------
 

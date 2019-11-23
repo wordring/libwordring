@@ -51,7 +51,7 @@ public:
 	}
 };
 
-BOOST_AUTO_TEST_SUITE(whatwg_encoding_test)
+BOOST_AUTO_TEST_SUITE(whatwg_encoding__encoding_test)
 
 // 復号器が result_finished を返した場合
 BOOST_AUTO_TEST_CASE(process_token__decoder__0)
@@ -247,8 +247,19 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__8_2)
 BOOST_AUTO_TEST_CASE(get_name__1)
 {
 	using namespace wordring::whatwg::encoding;
+	BOOST_CHECK(get_name(U"  Unicode-1-1-utf-8  ") == name::UTF_8);
+}
 
-	BOOST_CHECK(get_name(std::u32string_view{ U"  Unicode-1-1-utf-8  " }) == name::UTF_8);
+BOOST_AUTO_TEST_CASE(get_name__2)
+{
+	using namespace wordring::whatwg::encoding;
+	BOOST_CHECK(get_name(std::u8string(u8"  Unicode-1-1-utf-8  ")) == name::UTF_8);
+}
+
+BOOST_AUTO_TEST_CASE(get_name__3)
+{
+	using namespace wordring::whatwg::encoding;
+	BOOST_CHECK(get_name(std::u16string(u"  Unicode-1-1-utf-8  ")) == name::UTF_8);
 }
 
 // BOM UTF-8

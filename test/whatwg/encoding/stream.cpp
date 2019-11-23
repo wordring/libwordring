@@ -7,7 +7,7 @@
 
 BOOST_AUTO_TEST_SUITE(whatwg_encoding__stream_test)
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__stream)
+BOOST_AUTO_TEST_CASE(stream__1)
 {
 	std::u32string s32_original{ U" hello " };
 	wordring::whatwg::encoding::stream<std::u32string::iterator> s32_stream{ s32_original.begin(), s32_original.end() };

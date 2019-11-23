@@ -57,8 +57,6 @@ namespace wordring::whatwg::encoding
 	}
 
 	/*!
-git pull origin master
-
 	ranges_pointerに限り32ビットの戻り値が必要。
 	*/
 	inline std::optional<uint32_t> get_index_gb18030_ranges_pointer(uint32_t code_point)

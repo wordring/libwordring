@@ -1,18 +1,17 @@
-﻿# wordring_cpp/lib/whatwg
+﻿# wordring_cpp/lib/string
 #
-# このファイルはwordring_cppのためにwhatwgオブジェクトを作成します。
+# このファイルはwordring_cppのためにstringオブジェクトを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-set(INCLUDE_DIR ${Wordring_INCLUDE_DIR}/wordring/whatwg)
+set(INCLUDE_DIR ${Wordring_INCLUDE_DIR}/wordring/string)
 
 add_library (
-	whatwg OBJECT
+	string OBJECT
 # encoding --------------------------------------------------------------------
 		${INCLUDE_DIR}/encoding/coder.hpp
 		${INCLUDE_DIR}/encoding/encoding.hpp
-		${INCLUDE_DIR}/encoding/encoding_defs.hpp
 		${INCLUDE_DIR}/encoding/indexes.hpp
 		${INCLUDE_DIR}/encoding/stream.hpp
 		encoding/encoding.cpp
@@ -20,11 +19,8 @@ add_library (
 		encoding/indexes_pointer.cpp
 # infra -----------------------------------------------------------------------
 		${INCLUDE_DIR}/infra/infra.hpp
-		${INCLUDE_DIR}/infra/unicode.hpp
+#		${INCLUDE_DIR}/infra/scalar_value.hpp
 # url -------------------------------------------------------------------------
-		${INCLUDE_DIR}/url/host.hpp
-		${INCLUDE_DIR}/url/infra.hpp
 		${INCLUDE_DIR}/url/url.hpp
-		url/host.cpp
 )
 

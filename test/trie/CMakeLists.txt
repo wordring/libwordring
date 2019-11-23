@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/whatwg/url
+﻿# wordring_cpp/test/trie
 #
-# このプロジェクトはwhatwg/urlのテストを作成します。
+# このプロジェクトはtrieのテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(whatwg_url_test)
+project(trie_test)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,9 +28,8 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		host.cpp
-		infra.cpp
-		url.cpp
+		double_array.cpp
+		triplet.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})

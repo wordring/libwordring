@@ -5,12 +5,8 @@
 #include <string>
 #include <string_view>
 
+#include <wordring/compatibility.hpp>
 #include <wordring/whatwg/url/url.hpp>
-
-#ifndef __cpp_lib_char8_t
-using char8_t = char;
-namespace std { using u8string = string; }
-#endif
 
 BOOST_AUTO_TEST_SUITE(whatwg_url_test)
 

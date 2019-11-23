@@ -10,9 +10,9 @@
 #include <wordring/whatwg/encoding/encoding.hpp>
 #include <wordring/whatwg/encoding/stream.hpp>
 
-BOOST_AUTO_TEST_SUITE(whatwg_encoding__decoder_test)
+BOOST_AUTO_TEST_SUITE(coder_test)
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_8_decoder)
+BOOST_AUTO_TEST_CASE(UTF_8_decoder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_8_decoder)
 	BOOST_CHECK(out == correct);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_8_encoder)
+BOOST_AUTO_TEST_CASE(UTF_8_encoder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_8_encoder)
 	BOOST_CHECK(out == correct);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__single_byte_decoder)
+BOOST_AUTO_TEST_CASE(single_byte_decoder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__single_byte_decoder)
 	BOOST_CHECK(out == correct);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__single_byte_encoder)
+BOOST_AUTO_TEST_CASE(single_byte_encoder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__single_byte_encoder)
 	BOOST_CHECK(out == correct);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__IBM866_coder)
+BOOST_AUTO_TEST_CASE(IBM866_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__IBM866_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__IBM866_run)
+BOOST_AUTO_TEST_CASE(IBM866_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -119,7 +119,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__IBM866_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_2_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_2_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_2_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_2_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_2_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -156,7 +156,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_2_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_3_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_3_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -190,7 +190,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_3_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_3_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_3_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -221,7 +221,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_3_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_4_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_4_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -241,7 +241,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_4_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_4_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_4_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -258,7 +258,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_4_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_5_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_5_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -278,7 +278,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_5_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_5_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_5_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -295,7 +295,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_5_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_6_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_6_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -325,7 +325,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_6_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_6_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_6_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -352,7 +352,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_6_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_7_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_7_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -378,7 +378,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_7_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_7_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_7_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -401,7 +401,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_7_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_8_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_8_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -429,7 +429,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_8_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_8_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_8_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -454,7 +454,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_8_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_10_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_10_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -474,7 +474,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_10_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_10_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_10_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -491,7 +491,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_10_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_13_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_13_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -511,7 +511,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_13_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_13_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_13_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -528,7 +528,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_13_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_14_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_14_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -548,7 +548,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_14_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_14_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_14_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -565,7 +565,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_14_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_15_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_15_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -585,7 +585,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_15_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_15_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_15_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -602,7 +602,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_15_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_16_coder)
+BOOST_AUTO_TEST_CASE(ISO_8859_16_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -622,7 +622,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_16_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_16_run)
+BOOST_AUTO_TEST_CASE(ISO_8859_16_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -639,7 +639,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_8859_16_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_R_coder)
+BOOST_AUTO_TEST_CASE(KOI8_R_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -659,7 +659,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_R_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_R_run)
+BOOST_AUTO_TEST_CASE(KOI8_R_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -676,7 +676,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_R_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_U_coder)
+BOOST_AUTO_TEST_CASE(KOI8_U_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -696,7 +696,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_U_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_U_run)
+BOOST_AUTO_TEST_CASE(KOI8_U_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -713,7 +713,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__KOI8_U_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__macintosh_coder)
+BOOST_AUTO_TEST_CASE(macintosh_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -733,7 +733,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__macintosh_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__macintosh_run)
+BOOST_AUTO_TEST_CASE(macintosh_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -750,7 +750,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__macintosh_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_874_coder)
+BOOST_AUTO_TEST_CASE(windows_874_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -775,7 +775,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_874_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_874_run)
+BOOST_AUTO_TEST_CASE(windows_874_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -797,7 +797,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_874_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1250_coder)
+BOOST_AUTO_TEST_CASE(windows_1250_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -817,7 +817,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1250_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1250_run)
+BOOST_AUTO_TEST_CASE(windows_1250_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -834,7 +834,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1250_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1251_coder)
+BOOST_AUTO_TEST_CASE(windows_1251_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -854,7 +854,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1251_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1251_run)
+BOOST_AUTO_TEST_CASE(windows_1251_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -871,7 +871,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1251_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1252_coder)
+BOOST_AUTO_TEST_CASE(windows_1252_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -891,7 +891,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1252_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1252_run)
+BOOST_AUTO_TEST_CASE(windows_1252_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -908,7 +908,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1252_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1253_coder)
+BOOST_AUTO_TEST_CASE(windows_1253_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -934,7 +934,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1253_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1253_run)
+BOOST_AUTO_TEST_CASE(windows_1253_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -957,7 +957,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1253_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1254_coder)
+BOOST_AUTO_TEST_CASE(windows_1254_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -977,7 +977,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1254_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1254_run)
+BOOST_AUTO_TEST_CASE(windows_1254_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -994,7 +994,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1254_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1255_coder)
+BOOST_AUTO_TEST_CASE(windows_1255_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1020,7 +1020,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1255_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1255_run)
+BOOST_AUTO_TEST_CASE(windows_1255_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1043,7 +1043,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1255_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1256_coder)
+BOOST_AUTO_TEST_CASE(windows_1256_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1063,7 +1063,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1256_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1256_run)
+BOOST_AUTO_TEST_CASE(windows_1256_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1080,7 +1080,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1256_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1257_coder)
+BOOST_AUTO_TEST_CASE(windows_1257_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1105,7 +1105,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1257_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1257_run)
+BOOST_AUTO_TEST_CASE(windows_1257_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1127,7 +1127,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1257_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1258_coder)
+BOOST_AUTO_TEST_CASE(windows_1258_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1147,7 +1147,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1258_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1258_run)
+BOOST_AUTO_TEST_CASE(windows_1258_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1164,7 +1164,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__windows_1258_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__x_mac_cyrillic_coder)
+BOOST_AUTO_TEST_CASE(x_mac_cyrillic_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1184,7 +1184,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__x_mac_cyrillic_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__x_mac_cyrillic_run)
+BOOST_AUTO_TEST_CASE(x_mac_cyrillic_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1201,7 +1201,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__x_mac_cyrillic_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_coder)
+BOOST_AUTO_TEST_CASE(gb18030_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1219,7 +1219,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_run)
+BOOST_AUTO_TEST_CASE(gb18030_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1234,7 +1234,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__gb18030_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__big5_coder)
+BOOST_AUTO_TEST_CASE(big5_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1252,7 +1252,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__big5_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__big5_run)
+BOOST_AUTO_TEST_CASE(big5_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1267,7 +1267,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__big5_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_coder)
+BOOST_AUTO_TEST_CASE(EUC_JP_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1285,7 +1285,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_run)
+BOOST_AUTO_TEST_CASE(EUC_JP_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1300,7 +1300,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_JP_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_2022_JP_coder)
+BOOST_AUTO_TEST_CASE(ISO_2022_JP_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1318,7 +1318,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_2022_JP_coder)
 	BOOST_CHECK(out == U"ABCDEアイウエオあいうえお");
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_2022_JP_run)
+BOOST_AUTO_TEST_CASE(ISO_2022_JP_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1333,7 +1333,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__ISO_2022_JP_run)
 	BOOST_CHECK(out == U"ABCDEアイウエオあいうえお");
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_coder)
+BOOST_AUTO_TEST_CASE(Shift_JIS_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1351,7 +1351,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_run)
+BOOST_AUTO_TEST_CASE(Shift_JIS_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1366,7 +1366,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__Shift_JIS_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_KR_coder)
+BOOST_AUTO_TEST_CASE(EUC_KR_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1384,7 +1384,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_KR_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_KR_run)
+BOOST_AUTO_TEST_CASE(EUC_KR_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1399,7 +1399,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__EUC_KR_run)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__replacement_coder)
+BOOST_AUTO_TEST_CASE(replacement_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1415,7 +1415,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__replacement_coder)
 	BOOST_CHECK(out[0] == 0xFFFDu);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__replacement_run)
+BOOST_AUTO_TEST_CASE(replacement_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1429,7 +1429,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__replacement_run)
 	BOOST_CHECK(out[0] == 0xFFFDu);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_coder)
+BOOST_AUTO_TEST_CASE(UTF_16BE_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1450,7 +1450,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_coder)
 #pragma warning(pop)
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_run)
+BOOST_AUTO_TEST_CASE(UTF_16BE_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1469,7 +1469,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16BE_run)
 #pragma warning(pop)
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_coder)
+BOOST_AUTO_TEST_CASE(UTF_16LE_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1493,7 +1493,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_coder)
 #pragma warning(pop)
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
+BOOST_AUTO_TEST_CASE(UTF_16LE_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1516,7 +1516,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__UTF_16LE_run)
 #pragma warning(pop)
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_coder)
+BOOST_AUTO_TEST_CASE(x_user_defined_coder__1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -1534,7 +1534,7 @@ BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_coder)
 	BOOST_CHECK(in == out);
 }
 
-BOOST_AUTO_TEST_CASE(whatwg_encoding__x_user_defined_run)
+BOOST_AUTO_TEST_CASE(x_user_defined_run__1)
 {
 	using namespace wordring::whatwg::encoding;
 
