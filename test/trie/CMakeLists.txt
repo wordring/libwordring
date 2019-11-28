@@ -28,7 +28,7 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		double_array.cpp
+		trie.cpp
 		triplet.cpp
 )
 

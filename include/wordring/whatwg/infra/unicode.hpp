@@ -3,7 +3,6 @@
 // https://infra.spec.whatwg.org/
 // https://triple-underscore.github.io/infra-ja.html
 
-//#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <iterator>
@@ -11,7 +10,6 @@
 #include <string_view>
 #include <type_traits>
 
-#include <wordring/algorithm.hpp>
 #include <wordring/compatibility.hpp>
 #include <wordring/constraint.hpp>
 

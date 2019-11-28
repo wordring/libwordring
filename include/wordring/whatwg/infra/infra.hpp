@@ -11,7 +11,6 @@
 #include <string_view>
 #include <type_traits>
 
-#include <wordring/algorithm.hpp>
 #include <wordring/compatibility.hpp>
 #include <wordring/constraint.hpp>
 #include <wordring/whatwg/infra/unicode.hpp>
