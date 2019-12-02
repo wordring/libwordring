@@ -1,0 +1,1 @@
+/bin/g++-9  -g   CMakeFiles/public_suffix_list.dir/public_suffix_list.cpp.o  -o public_suffix_list /usr/lib/x86_64-linux-gnu/libboost_filesystem.so /usr/lib/x86_64-linux-gnu/libboost_system.so 

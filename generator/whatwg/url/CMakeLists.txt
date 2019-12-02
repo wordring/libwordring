@@ -34,4 +34,5 @@ add_definitions(-DPSL_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_code_
 target_link_libraries(
 	public_suffix_list
 		${Boost_FILESYSTEM_LIBRARY}
+		${Boost_SYSTEM_LIBRARY}
 )

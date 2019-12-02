@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kouichi/ドキュメント/Project/wordring/wordring_cpp/generator/whatwg/url/public_suffix_list.cpp
+algorithm
+-
+filesystem
+-
+fstream
+-
+map
+-
+set
+-
+string
+-
+string_view
+-
+vector
+-
+boost/algorithm/string.hpp
+-
+boost/filesystem.hpp
+-
+iostream
+-
+

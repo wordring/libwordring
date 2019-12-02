@@ -18,7 +18,7 @@ namespace wordring
 		using value_type        = uint8_t;
 		using pointer           = value_type*;
 		using reference         = value_type&;
-		using iterator_category = typename std::input_iterator_tag;
+		using iterator_category = std::input_iterator_tag;
 
 	public:
 		serialize_iterator()
@@ -46,7 +46,7 @@ namespace wordring
 		{
 			m_base = rhs.m_base;
 			m_position = rhs.m_position;
-			return *this
+			return *this;
 		}
 
 		value_type operator*() const

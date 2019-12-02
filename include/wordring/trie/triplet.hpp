@@ -20,7 +20,7 @@ namespace wordring
 		using value_type        = Node;
 		using pointer           = value_type*;
 		using reference         = value_type&;
-		using iterator_category = typename std::input_iterator_tag;
+		using iterator_category = std::input_iterator_tag;
 
 	public:
 	};
@@ -35,7 +35,7 @@ namespace wordring
 		using value_type = uint8_t;
 		//using pointer = value_type*;
 		//using reference = value_type&;
-		using iterator_category = typename std::input_iterator_tag;
+		using iterator_category = std::input_iterator_tag;
 
 	};
 
@@ -250,7 +250,7 @@ namespace wordring
 		template <typename String>
 		void push_back(String string) { insert(end(), string); }
 
-		node root() const { return node{ *this, 0, m_list.size(), -1 }; }
+		node root() const { return node(*this, 0, static_cast<uint32_t>(m_list.size()), -1 ); }
 
 	private:
 		base_type m_list;
