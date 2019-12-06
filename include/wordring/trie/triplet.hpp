@@ -82,9 +82,12 @@ namespace wordring
 		template <typename Node>
 		class node_iterator
 		{
-			friend bool operator==(node_iterator const&, node_iterator const&);
-			friend bool operator!=(node_iterator const&, node_iterator const&);
-			friend std::ptrdiff_t operator-(node_iterator const&, node_iterator const&);
+			template <typename T>
+			friend bool operator==(node_iterator<T> const&, node_iterator<T> const&);
+			template <typename T>
+			friend bool operator!=(node_iterator<T> const&, node_iterator<T> const&);
+			template <typename T>
+			friend std::ptrdiff_t operator-(node_iterator<T> const&, node_iterator<T> const&);
 
 		public:
 			using difference_type   = std::ptrdiff_t;
@@ -413,18 +416,20 @@ namespace wordring
 
 	// triplet_trie::node_iterator ------------------------------------------- 
 
-	inline bool operator==(triplet_trie::node::const_iterator const& lhs, triplet_trie::node::const_iterator const& rhs)
+	template<typename T>
+	inline bool operator==(triplet_trie::node_iterator<T> const& lhs, triplet_trie::node_iterator<T> const& rhs)
 	{
 		return lhs.m_it1 == rhs.m_it2 && lhs.m_depth == rhs.m_depth;
 	}
 
-	inline bool operator!=(triplet_trie::node::const_iterator const& lhs, triplet_trie::node::const_iterator const& rhs)
+	template<typename T>
+	inline bool operator!=(triplet_trie::node_iterator<T> const& lhs, triplet_trie::node_iterator<T> const& rhs)
 	{
 		return lhs.m_it1 != rhs.m_it2 || lhs.m_depth != rhs.m_depth;
 	}
 
-	inline triplet_trie::node::const_iterator::difference_type
-		operator-(triplet_trie::node::const_iterator const& lhs, triplet_trie::node::const_iterator const& rhs)
+	template<typename T>
+	inline std::ptrdiff_t operator-(triplet_trie::node_iterator<T> const& lhs, triplet_trie::node_iterator<T> const& rhs)
 	{
 		assert(lhs.m_depth == rhs.m_depth);
 		return lhs.m_it1 - rhs.m_it2;
