@@ -14,6 +14,7 @@ namespace wordring
 {
 	class triplet_trie
 	{
+	public:
 		class node;
 
 	public:
