@@ -165,7 +165,7 @@ BOOST_AUTO_TEST_CASE(triplet_trie__symbol_iterator__minus__1)
 BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__construct__1)
 {
 	using namespace wordring;
-	using node_iterator = triplet_trie::node_iterator<triplet_trie::node>;
+	using node_iterator = triplet_trie::node_iterator;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	auto t = triplet_trie(list.begin(), list.end());
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__construct__1)
 BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__reference__1)
 {
 	using namespace wordring;
-	using node_iterator = triplet_trie::node_iterator<triplet_trie::node>;
+	using node_iterator = triplet_trie::node_iterator;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	auto t = triplet_trie(list.begin(), list.end());
@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__reference__1)
 BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__increment__1)
 {
 	using namespace wordring;
-	using node_iterator = triplet_trie::node_iterator<triplet_trie::node>;
+	using node_iterator = triplet_trie::node_iterator;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	auto t = triplet_trie(list.begin(), list.end());
@@ -214,7 +214,7 @@ BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__increment__1)
 BOOST_AUTO_TEST_CASE(triplet_trie__node_iterator__increment__2)
 {
 	using namespace wordring;
-	using node_iterator = triplet_trie::node_iterator<triplet_trie::node>;
+	using node_iterator = triplet_trie::node_iterator;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	auto t = triplet_trie(list.begin(), list.end());

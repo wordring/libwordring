@@ -14,6 +14,8 @@ namespace wordring
 {
 	class triplet_trie
 	{
+		class node;
+
 	public:
 		using base_type = std::deque<std::deque<std::uint8_t>>;
 
@@ -79,19 +81,15 @@ namespace wordring
 
 		/*! 子ノードを巡回するイテレータ
 		*/
-		template <typename Node>
 		class node_iterator
 		{
-			template <typename T>
-			friend bool operator==(node_iterator<T> const&, node_iterator<T> const&);
-			template <typename T>
-			friend bool operator!=(node_iterator<T> const&, node_iterator<T> const&);
-			template <typename T>
-			friend std::ptrdiff_t operator-(node_iterator<T> const&, node_iterator<T> const&);
+			friend bool operator==(node_iterator const&, node_iterator const&);
+			friend bool operator!=(node_iterator const&, node_iterator const&);
+			friend std::ptrdiff_t operator-(node_iterator const&, node_iterator const&);
 
 		public:
 			using difference_type   = std::ptrdiff_t;
-			using value_type        = Node;
+			using value_type        = node;
 			using pointer           = void;
 			using reference         = void;
 			using iterator_category = std::input_iterator_tag;
@@ -202,7 +200,7 @@ namespace wordring
 		class node : public node_base
 		{
 		public:
-			using const_iterator = node_iterator<node const>;
+			using const_iterator = node_iterator;
 
 		public:
 			node() = default;
@@ -416,20 +414,17 @@ namespace wordring
 
 	// triplet_trie::node_iterator ------------------------------------------- 
 
-	template<typename T>
-	inline bool operator==(triplet_trie::node_iterator<T> const& lhs, triplet_trie::node_iterator<T> const& rhs)
+	inline bool operator==(triplet_trie::node_iterator const& lhs, triplet_trie::node_iterator const& rhs)
 	{
 		return lhs.m_it1 == rhs.m_it2 && lhs.m_depth == rhs.m_depth;
 	}
 
-	template<typename T>
-	inline bool operator!=(triplet_trie::node_iterator<T> const& lhs, triplet_trie::node_iterator<T> const& rhs)
+	inline bool operator!=(triplet_trie::node_iterator const& lhs, triplet_trie::node_iterator const& rhs)
 	{
 		return lhs.m_it1 != rhs.m_it2 || lhs.m_depth != rhs.m_depth;
 	}
 
-	template<typename T>
-	inline std::ptrdiff_t operator-(triplet_trie::node_iterator<T> const& lhs, triplet_trie::node_iterator<T> const& rhs)
+	inline std::ptrdiff_t operator-(triplet_trie::node_iterator const& lhs, triplet_trie::node_iterator const& rhs)
 	{
 		assert(lhs.m_depth == rhs.m_depth);
 		return lhs.m_it1 - rhs.m_it2;
