@@ -261,11 +261,12 @@ namespace wordring
 
 				value_type const& operator->() const
 				{
+					return m_node;
 
 				}
 			private:
 				node_iterator const& m_it;
-				//value_type m_node;
+				value_type m_node;
 			};
 
 		public:
