@@ -1443,7 +1443,7 @@ BOOST_AUTO_TEST_CASE(UTF_16BE_coder__1)
 	UTF_16BE_decoder decoder_0{};
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+	run(decoder_0, stream_in, std::back_inserter(out));
 #pragma warning(push)
 #pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
@@ -1462,7 +1462,7 @@ BOOST_AUTO_TEST_CASE(UTF_16BE_run__1)
 	std::u32string out{};
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	result_value ret = run_decoder(name::UTF_16BE, stream_in, std::back_inserter(out));
+	run_decoder(name::UTF_16BE, stream_in, std::back_inserter(out));
 #pragma warning(push)
 #pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
@@ -1486,7 +1486,7 @@ BOOST_AUTO_TEST_CASE(UTF_16LE_coder__1)
 	UTF_16LE_decoder decoder_0{};
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
+	run(decoder_0, stream_in, std::back_inserter(out));
 #pragma warning(push)
 #pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
@@ -1509,7 +1509,7 @@ BOOST_AUTO_TEST_CASE(UTF_16LE_run__1)
 	std::u32string out{};
 
 	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	result_value ret = run_decoder(name::UTF_16LE, stream_in, std::back_inserter(out));
+	run_decoder(name::UTF_16LE, stream_in, std::back_inserter(out));
 #pragma warning(push)
 #pragma warning(disable:4566)
 	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");

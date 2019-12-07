@@ -11,12 +11,9 @@
 #include <type_traits>
 #include <variant>
 
-//#include <wordring/algorithm.hpp>
-//#include <wordring/compatibility.hpp>
 #include <wordring/whatwg/encoding/coder.hpp>
 #include <wordring/whatwg/encoding/encoding_defs.hpp>
 #include <wordring/whatwg/encoding/stream.hpp>
-//#include <wordring/whatwg/infra/infra.hpp>
 
 namespace wordring::whatwg::encoding
 {
@@ -540,6 +537,8 @@ namespace wordring::whatwg::encoding
 			x_user_defined_encoder c{};
 			return run(c, input, output, mode);
 		}
+		default:
+			break;
 		}
 		assert(false);
 		return result_error{};
@@ -567,6 +566,8 @@ namespace wordring::whatwg::encoding
 		case name::UTF_16BE:
 		case name::UTF_16LE:
 			return name::UTF_8;
+		default:
+			return encoding;
 		}
 		return encoding;
 	}

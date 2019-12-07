@@ -19,8 +19,6 @@ namespace wordring
 	public:
 		void reserve(std::size_t n)
 		{
-			int j = m_array.size();
-
 		}
 
 		void free_node(std::uint32_t i)

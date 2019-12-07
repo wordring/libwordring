@@ -32,6 +32,8 @@ namespace wordring
 		using pointer         = typename container::pointer;
 		using const_pointer   = typename container::const_pointer;
 
+		using bitset = std::bitset<256>;
+
 	public:
 		class node_base
 		{
@@ -71,9 +73,6 @@ namespace wordring
 			int32_t  m_depth; // 0から始まる文字列中の位置。（根は-1）。
 		};
 
-		using node_list = std::deque<node_base>;
-		using bitset = std::bitset<256>;
-
 		class node : public node_base
 		{
 		public:
@@ -83,12 +82,12 @@ namespace wordring
 			node() = default;
 
 			node(container::const_iterator const & basis, node_base const& base) noexcept
-				: m_basis(basis)
-				, node_base(base) {}
+				: node_base(base)
+				, m_basis(basis) {}
 
 			node(container::const_iterator const& basis, uint32_t first, uint32_t last, int32_t position) noexcept
-				: m_basis(basis)
-				, node_base(first, last, position) {}
+				: node_base(first, last, position)
+				, m_basis(basis) {}
 
 			node(node const&) = default;
 			
@@ -105,41 +104,6 @@ namespace wordring
 				uint32_t result = 0;
 				auto it1 = begin(), it2 = end();
 				for (; it1 != it2; ++result) ++it1;
-				return result;
-			}
-
-
-			/*! 子のノード集合を返す
-			*/
-			node_list children() const
-			{
-				node_list result{};
-
-				auto it1 = std::next(m_basis, first());
-				auto it2 = std::next(m_basis, last());
-				int32_t pos = depth() + 1;
-				assert(it1 != it2);
-
-				uint16_t ch1{}, ch2{};
-				uint32_t state{ 0 };
-				for (uint32_t i = first(); it1 != it2; ++it1, ++i)
-				{
-					if (it1->size() <= static_cast<std::size_t>(pos)) continue;
-					switch (state)
-					{
-					case 0: // 開始状態
-					Start:
-						ch1 = it1->at(pos);
-						result.push_back(node_base(i, i + 1, pos));
-						state = 1;
-						break;
-					case 1: // 継続状態
-						ch2 = it1->at(pos);
-						if (ch1 != ch2) goto Start;
-						result.back().last(i + 1);
-					}
-				}
-
 				return result;
 			}
 
@@ -199,10 +163,10 @@ namespace wordring
 			friend std::ptrdiff_t operator-(symbol_iterator const&, symbol_iterator const&);
 
 		public:
-			using difference_type = std::ptrdiff_t;
-			using value_type = std::optional<uint32_t>;
-			using pointer = void;
-			using reference = void;
+			using difference_type   = std::ptrdiff_t;
+			using value_type        = std::optional<uint32_t>;
+			using pointer           = void;
+			using reference         = void;
 			using iterator_category = std::input_iterator_tag;
 
 		public:
@@ -247,25 +211,20 @@ namespace wordring
 			friend std::ptrdiff_t operator-(node_iterator const&, node_iterator const&);
 
 		public:
-			using difference_type = std::ptrdiff_t;
-			using value_type = node;
-			//using pointer           = void;
-			using reference = void;
+			using difference_type   = std::ptrdiff_t;
+			using value_type        = node;
+			using reference         = void;
 			using iterator_category = std::input_iterator_tag;
 
 			class pointer
 			{
 			public:
 				pointer() = default;
-				pointer(node_iterator const& it) : m_it(it) {}
+				pointer(value_type const& node) : m_node(node) {}
 
-				value_type const& operator->() const
-				{
-					return m_node;
+				value_type const* operator->() const { return &m_node; }
 
-				}
 			private:
-				node_iterator const& m_it;
 				value_type m_node;
 			};
 
@@ -301,6 +260,8 @@ namespace wordring
 			{
 				return value_type(m_basis, std::distance(m_basis, m_it1), std::distance(m_basis, m_it2), m_depth);
 			}
+
+			pointer const operator->() const { return pointer(operator*()); }
 
 			node_iterator& operator++()
 			{
@@ -370,7 +331,6 @@ namespace wordring
 		iterator insert(const_iterator position, Iterator first, Iterator last)
 		{
 			auto i = std::distance(m_list.cbegin(), position);
-			auto j = i;
 			while(first != last) insert(std::next(m_list.cbegin(), i++), *first++);
 			return std::next(m_list.begin(), i);
 		}
@@ -394,8 +354,7 @@ namespace wordring
 		return lhs.m_current != rhs.m_current || lhs.m_depth != rhs.m_depth;
 	}
 
-	inline typename triplet_trie::symbol_iterator::difference_type
-		operator-(triplet_trie::symbol_iterator const& lhs, triplet_trie::symbol_iterator const& rhs)
+	inline std::ptrdiff_t operator-(triplet_trie::symbol_iterator const& lhs, triplet_trie::symbol_iterator const& rhs)
 	{
 		assert(lhs.m_depth == rhs.m_depth);
 		return lhs.m_current - rhs.m_current;
