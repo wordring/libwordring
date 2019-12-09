@@ -262,4 +262,4 @@ __pycache__/
 
 
 #
-build/
+out/*
