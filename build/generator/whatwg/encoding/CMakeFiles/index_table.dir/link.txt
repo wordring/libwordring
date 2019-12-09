@@ -1,1 +1,0 @@
-/bin/g++-9  -g   CMakeFiles/index_table.dir/index_table.cpp.o  -o index_table /usr/lib/x86_64-linux-gnu/libboost_filesystem.so 

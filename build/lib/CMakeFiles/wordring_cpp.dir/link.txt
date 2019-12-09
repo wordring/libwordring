@@ -1,2 +1,0 @@
-/bin/ar qc libwordring_cpp.a  whatwg/CMakeFiles/whatwg.dir/encoding/encoding.cpp.o whatwg/CMakeFiles/whatwg.dir/encoding/indexes_code_point.cpp.o whatwg/CMakeFiles/whatwg.dir/encoding/indexes_pointer.cpp.o whatwg/CMakeFiles/whatwg.dir/url/host.cpp.o
-/bin/ranlib libwordring_cpp.a
