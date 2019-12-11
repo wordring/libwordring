@@ -30,6 +30,7 @@ add_executable(
 		test_module.cpp
 		tree.cpp
 		tree_iterator.cpp
+		vector_tree.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
