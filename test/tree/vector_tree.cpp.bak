@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(vector_tree__construct__5)
 // basic_tree(basic_tree&&)
 BOOST_AUTO_TEST_CASE(vector_tree__construct__6)
 {
-	BOOST_CHECK(std::is_nothrow_move_constructible_v<wordring::vector_tree<int>> == true);
+	BOOST_WARN(std::is_nothrow_move_constructible_v<wordring::vector_tree<int>> == true);
 
 	wordring::vector_tree<int> t{ wordring::vector_tree<int>{ 1 } };
 	BOOST_CHECK(*t == 1);
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(vector_tree__assign__1)
 // basic_tree& operator=(basic_tree&&)
 BOOST_AUTO_TEST_CASE(vector_tree__assign__2)
 {
-	BOOST_CHECK(std::is_nothrow_move_assignable_v<wordring::vector_tree<int>> == true);
+	BOOST_WARN(std::is_nothrow_move_assignable_v<wordring::vector_tree<int>> == true);
 
 	wordring::vector_tree<int> t1{ 1, { 1, 2, 3, 4 } };
 	wordring::vector_tree<int> t2{};

@@ -249,8 +249,7 @@ namespace wordring
 	template <typename T, typename Allocator, typename Base>
 	inline bool operator==(basic_tree<T, Allocator, Base> const& lhs, basic_tree<T, Allocator, Base> const& rhs)
 	{
-		if (lhs.m_value != rhs.m_value) return false;
-		return lhs.m_children == rhs.m_children;
+		return !(lhs.m_value != rhs.m_value || lhs.m_children != rhs.m_children);
 	}
 
 	template <typename T, typename Allocator, typename Base>
