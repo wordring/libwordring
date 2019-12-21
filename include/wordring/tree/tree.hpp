@@ -617,7 +617,7 @@ namespace wordring
 
 		size_type size() const noexcept { return m_size; }
 
-		size_type max_size() const noexcept { return std::min(null_value - 1, m_heap.max_size()); }
+		size_type max_size() const noexcept { return std::min(static_cast<size_type>(null_value - 1), m_heap.max_size()); }
 
 		// 変更 ---------------------------------------------------------------
 
