@@ -57,6 +57,12 @@ namespace wordring
 		{
 		}
 
+		tree_iterator_queue(Iterator first, Iterator last, Allocator const& alloc = Allocator())
+			: m_queue(alloc)
+		{
+			while (first != last) m_queue.push_back(first++);
+		}
+
 		Iterator& top() const
 		{
 			return const_cast<std::deque<Iterator>&>(m_queue).front(); }
@@ -65,9 +71,9 @@ namespace wordring
 
 		void push(Iterator const& it) { m_queue.push_back(it); }
 
-		void push(Iterator const& first, Iterator const& last)
+		void push(Iterator first, Iterator last)
 		{
-			m_queue.insert(m_queue.end(), first, last);
+			while(first != last) m_queue.push_back(first++);
 		}
 
 		bool empty() const { return m_queue.empty(); }
@@ -141,7 +147,7 @@ namespace wordring
 			operator++();
 			return result;
 		}
-
+		
 	private:
 		container m_container;
 	};

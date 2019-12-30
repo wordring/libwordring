@@ -481,7 +481,7 @@ namespace wordring
 
 			if (!std::equal(first1, last1, first2, last2)) return true; // 値の比較
 
-																		 // 子の比較
+																		// 子の比較
 			while (first1 != last1 && first2 != last2)
 			{
 				if (recursive_not_equal(first1.begin(), first1.end(), first2.begin(), first2.end())) return true;

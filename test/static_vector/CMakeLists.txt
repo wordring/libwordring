@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/trie
+﻿# wordring_cpp/test/static_vector
 #
-# このプロジェクトはtrieのテストを作成します。
+# このプロジェクトはstatic_vectorのテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(trie_test)
+project(static_vector_test)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,8 +28,7 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		list_trie.cpp
-		trie.cpp
+		static_vector.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
