@@ -25,6 +25,8 @@ namespace wordring
 		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
+		using const_iterator = list_trie_iterator<iterator_type const>;
+
 		class result_pair
 		{
 			using iterator_type = typename string_type::const_iterator;

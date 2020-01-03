@@ -60,6 +60,8 @@ namespace wordring
 	// tree_node_proxy
 	// ------------------------------------------------------------------------
 
+	/*! 初期化子リスト挿入時、ツリー階層を解決するために、コンパイラから使用される
+	*/
 	template <typename T>
 	struct tree_node_proxy
 	{
@@ -629,6 +631,8 @@ namespace wordring
 			m_size = 0;
 		}
 
+		/*! posの前にvalueを追加する
+		*/
 		iterator insert(const_iterator pos, value_type const& value)
 		{
 			return allocate(pos, value);

@@ -51,13 +51,22 @@ BOOST_AUTO_TEST_CASE(list_trie__reference__1)
 {
 	using namespace wordring;
 
-	std::vector<std::string> list{ "abc", "abd", "bbc", "bbd" };
+	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	list_trie_iterator it1{ list.begin(), list.end() };
 
-	list_trie_iterator it2 = it1.begin();
-	BOOST_CHECK(*it2 == 'a');
-	BOOST_CHECK(*++it2 == 'b');
-	BOOST_CHECK(++it2 == it1.end());
+	BOOST_CHECK(*it1.begin() == 'a');
+	BOOST_CHECK(*++it1.begin() == 'b');
+	BOOST_CHECK(*++++it1.begin() == 'c');
+}
+
+BOOST_AUTO_TEST_CASE(list_trie__reference__2)
+{
+	using namespace wordring;
+
+	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
+	list_trie_iterator it1{ list.begin(), list.end() };
+
+	BOOST_CHECK(*it1.begin().begin() == 'c');
 }
 
 // list_trie_iterator& operator++()
