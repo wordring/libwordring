@@ -144,7 +144,7 @@ namespace wordring
 
 		index_type modify(index_type base1, index_type base2, label_vector const& labels)
 		{
-
+			return 0;
 		}
 
 		template <typename Range1>

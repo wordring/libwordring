@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <algorithm>
+#include <atomic>
 #include <iterator>
 #include <type_traits>
 
@@ -18,14 +19,17 @@ namespace wordring
 	public:
 		using iterator_type = Iterator;
 		using string_type   = typename std::iterator_traits<iterator_type>::value_type;
+		using char_type     = typename string_type::value_type;
 
 		using difference_type   = typename std::iterator_traits<iterator_type>::difference_type;
-		using value_type        = typename string_type::value_type;
+		using value_type        = std::uint16_t;
 		using pointer           = value_type*;
 		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
 		using const_iterator = list_trie_iterator<iterator_type const>;
+
+		static constexpr std::uint16_t null_value = 256u;
 
 		class result_pair
 		{
@@ -50,17 +54,19 @@ namespace wordring
 	public:
 		list_trie_iterator(iterator_type first, iterator_type last)
 			: m_first(first)
-			, m_next(first)
 			, m_last(last)
 			, m_level(-1)
+			, m_next(0)
 		{
 		}
 
-		list_trie_iterator(list_trie_iterator const&) = default;
-
-		list_trie_iterator(list_trie_iterator&&) = default;
-
-		bool leaf() const { return m_first.size() == m_level; }
+		list_trie_iterator(list_trie_iterator const& other)
+			: m_first(other.m_first)
+			, m_last(other.m_last)
+			, m_level(other.m_level)
+			, m_next(0)
+		{
+		}
 
 		result_pair string() const
 		{
@@ -70,14 +76,17 @@ namespace wordring
 		value_type operator*() const
 		{
 			assert(m_first != m_last);
-			assert(0 <= m_level);
+			assert(0 <= m_level && m_level <= m_first->size());
 
+			if (m_level == m_first->size()) return null_value;
 			return *std::next(m_first->begin(), m_level);
 		}
 
 		list_trie_iterator& operator++()
 		{
 			m_first = next();
+			m_next = 0;
+
 			return *this;
 		}
 
@@ -90,45 +99,51 @@ namespace wordring
 			return result;
 		}
 
-		list_trie_iterator begin()
+		list_trie_iterator begin() const
 		{
-			if (m_level < 0) return list_trie_iterator(m_first, m_last, 0);
+			if (m_level < 0) return list_trie_iterator(m_first, m_last, 0); // 根
+			else if (m_level == m_first->size()) return list_trie_iterator(next(), next(), m_level); // 文字列終端に達している
 			return list_trie_iterator(m_first, next(), m_level + 1);
 		}
 
-		list_trie_iterator end()
+		list_trie_iterator end() const
 		{
+			if(m_level < 0)  return list_trie_iterator(m_last, m_last, 0); // 根
+			else if(m_level == m_first->size()) return list_trie_iterator(next(), next(), m_level); // 文字列終端に達している
 			return list_trie_iterator(next(), next(), m_level + 1);
 		}
 
 	protected:
 		list_trie_iterator(iterator_type first, iterator_type last, int32_t level)
 			: m_first(first)
-			, m_next(first)
 			, m_last(last)
 			, m_level(level)
+			, m_next(0)
 		{
 		}
 
-		iterator_type next()
+		iterator_type next() const
 		{
-			if(m_level < 0) return m_last;
-			if (m_first != m_next) return m_next;
+			if (m_next != 0) return std::next(m_first, m_next); // キャッシュ有効
+			if (m_level < 0) return m_last; // 根
 
 			auto it = m_first;
 			auto ch = operator*();
-			while (it != m_last && *std::next(it->begin(), m_level) == ch) ++it;
+
+			if (ch == null_value) ++it;
+			else while (it != m_last && *std::next(it->begin(), m_level) == ch) ++it;
 			
-			const_cast<iterator_type&>(m_next) = it;
-			
+			m_next = std::distance(m_first, it);
+
 			return it;
 		}
 
 	private:
 		iterator_type m_first;
-		iterator_type m_next;
 		iterator_type m_last;
 		int32_t       m_level;
+
+		std::atomic_uint_least32_t mutable m_next;
 	};
 
 	template <typename Iterator1>
