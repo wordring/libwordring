@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(list_trie_iterator__increment__2)
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	list_trie_iterator it{ list.begin(), list.end() };
 
-	auto it1 = it.begin().begin();
+	auto it1 = it.begin().begin(); // a[], a[c]
 	auto it2 = it.begin().end();
 
 	BOOST_CHECK(*it1 == decltype(it)::null_value);
@@ -144,16 +144,45 @@ BOOST_AUTO_TEST_CASE(list_trie_iterator__increment__5)
 	auto it1 = (++++it.begin()).begin();
 	auto it2 = (++++it.begin()).end();
 
-	BOOST_CHECK(*it1 == 'a');
-	BOOST_CHECK(*++it1 == 'd');
+	BOOST_CHECK(*it1 == 'a');   // c[a]b
+	BOOST_CHECK(*++it1 == 'd'); // c[d]
 	BOOST_CHECK(++it1 == it2);
 }
 
 BOOST_AUTO_TEST_CASE(list_trie_iterator__increment__6)
 {
+	using namespace wordring;
+
+	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
+	list_trie_iterator it{ list.begin(), list.end() };
+
+	auto it1 = (++++it.begin()).begin().begin();
+	auto it2 = (++++it.begin()).begin().end();
+
+	BOOST_CHECK(*it1 == 'b');   // ca[b]
+	BOOST_CHECK(++it1 == it2);
 }
-// list_trie_iterator operator++(int)
+
 BOOST_AUTO_TEST_CASE(list_trie_iterator__increment__7)
+{
+	using namespace wordring;
+
+	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
+	list_trie_iterator it{ list.begin(), list.end() };
+
+	auto it1 = ++(++++it.begin()).begin();
+	auto it2 = (++++it.begin()).end();
+
+	BOOST_CHECK(*it1 == 'd'); // c[d]
+
+	auto it3 = it1.begin();
+	auto it4 = it1.end();
+
+	BOOST_CHECK(it3 == it4); // cd[]
+}
+
+// list_trie_iterator operator++(int)
+BOOST_AUTO_TEST_CASE(list_trie_iterator__increment__8)
 {
 	using namespace wordring;
 
@@ -174,10 +203,12 @@ BOOST_AUTO_TEST_CASE(list_trie_iterator__begin__1)
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	list_trie_iterator it{ list.begin(), list.end() };
 
-	list_trie_iterator it1 = it.begin().begin().begin();
-	list_trie_iterator it2 = it.begin().begin().end();
+	auto it1 = it.begin().begin();
 
-	BOOST_CHECK(it1 == it2);
+	auto it3 = it1.begin();
+	auto it4 = it1.end();
+
+	BOOST_CHECK(it3 == it4);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -101,15 +101,21 @@ namespace wordring
 
 		list_trie_iterator begin() const
 		{
-			if (m_level < 0) return list_trie_iterator(m_first, m_last, 0); // 根
-			else if (m_level == m_first->size()) return list_trie_iterator(next(), next(), m_level); // 文字列終端に達している
+			if (m_level < 0) return list_trie_iterator(m_first, m_last, 0);                                // 根
+			else if (m_level == m_first->size()) return list_trie_iterator(m_first, m_first, m_level + 1); // 併合された終端
+			else if (m_level == m_first->size() - 1 && std::distance(m_first, m_last) == 1)
+				return list_trie_iterator(m_last, m_last, m_level + 1);                                    // 終端
+
 			return list_trie_iterator(m_first, next(), m_level + 1);
 		}
 
 		list_trie_iterator end() const
 		{
-			if(m_level < 0)  return list_trie_iterator(m_last, m_last, 0); // 根
-			else if(m_level == m_first->size()) return list_trie_iterator(next(), next(), m_level); // 文字列終端に達している
+			if(m_level < 0)  return list_trie_iterator(m_last, m_last, 0);                                 // 根
+			else if (m_level == m_first->size()) return list_trie_iterator(m_first, m_first, m_level + 1); // 併合された終端
+			else if (m_level == m_first->size() - 1 && std::distance(m_first, m_last) == 1)
+				return list_trie_iterator(m_last, m_last, m_level + 1);                                    // 終端
+
 			return list_trie_iterator(next(), next(), m_level + 1);
 		}
 
@@ -133,7 +139,7 @@ namespace wordring
 			if (ch == null_value) ++it;
 			else while (it != m_last && *std::next(it->begin(), m_level) == ch) ++it;
 			
-			m_next = std::distance(m_first, it);
+			m_next = std::distance(m_first, it); // キャッシュ
 
 			return it;
 		}

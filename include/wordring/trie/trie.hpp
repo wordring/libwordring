@@ -58,12 +58,13 @@ namespace wordring
 		using index_type = typename trie_node::index_type;
 		using container = std::vector<trie_node>;
 
-		using label_vector = static_vector<std::uint8_t, 257>;
+		using label_vector = static_vector<std::uint16_t, 257>;
 
 	public:
 		trie_base()
 			: m_c({ { 0, 0 }, { 0, 0 } })
 		{
+			reserve(1022);
 		}
 
 	protected:
@@ -80,83 +81,102 @@ namespace wordring
 		}
 
 		/*! indexで指定されるフリー・ノードを使用可能状態にする
-
-		- 引数beforeは検索開始位置のヒント。
-		- 戻り値は、連続検索で検索開始位置として使用できる、ひとつ前の空きノード位置。
 		*/
-		index_type allocate(index_type index, index_type before = 0)
+		void allocate(index_type index)
 		{
 			assert(0 < index);
-			assert(0 <= before);
+			assert(m_c.data()->m_check < 0);
 			assert((m_c.data() + index)->m_check <= 0);
 
 			auto data = m_c.data();
 
-			for (index_type j = before; j < index; j = -(data + before)->m_check) before = j;
+			index_type i = -data->m_check;
+			while ((data + i)->m_check != -index) i = -(data + i)->m_check;
 
-			(data + before)->m_check = (data + index)->m_check;
-			if((data + index)->m_check == 0) data->m_base = -before;
+			(data + i)->m_check = (data + index)->m_check;
+			if((data + index)->m_check == 0) data->m_base = -i;
 
 			(data + index)->m_check = 0; // 使用するノードを初期化
-
-			return before; // ひとつ前の空きノードを返す
 		}
 
-		/*! 引数destsで指定されるすべてのラベル位置を使用出来るbase位置を検索し返す。
+		/*! 引数labelsで指定されるすべてのラベル位置を使用出来るbase位置を検索し返す。
 
 		- 空きがない場合、新たに空きを確保する。
 		- ラベルに対応するすべての使用位置はフリー・リストから削除され、使用状態となる。
 		*/
-		template <typename Range1>
-		index_type allocate(Range1 dests)
+		index_type allocate(label_vector const& labels)
 		{
-			assert(std::distance(dests.begin(), dests.end()) != 0);
+			assert(std::distance(labels.begin(), labels.end()) != 0);
 
 			for (index_type i = -m_c.data()->m_check; i != 0; i = -(m_c.data() + i)->m_check)
 			{
-				index_type base = i - *dests.begin();
-				if (is_free(base, dests))
+				index_type base = i - *labels.begin();
+				if (is_free(base, labels))
 				{
-					index_type before = 0;
-					for (std::uint8_t label : dests) before = allocate(base + label, before);
+					for (std::uint16_t label : labels) allocate(base + label);
 					return base;
 				}
 			}
 
 			reserve();
 
-			return allocate(dests);
+			return allocate(labels);
 		}
 
-		void free(index_type index, index_type before = 0)
+		void free(index_type index)
 		{
 			assert(0 < index);
 
 			auto data = m_c.data();
 
-			if(data->m_check != 0) for (index_type j = before; j < index; j = -(data + before)->m_check) before = j;
+			(data + index)->m_check = 0;
+			(data + index)->m_base = 0;
 
-			(data + index)->m_check = (data + before)->m_check;
-			(data + before)->m_check = -index;
-
-			if ((data + index)->m_check == 0) data->m_base = -index;
+			(data - data->m_base)->m_check = -index;
+			data->m_base = -index;
 		}
 
-		index_type modify(index_type base1, index_type base2, label_vector const& labels)
+		void free(index_type base, label_vector const& labels)
 		{
-			return 0;
 		}
 
-		template <typename Range1>
-		bool is_free(index_type base, Range1 dests) const
+		/*! base1からbase2へノードを移動する
+
+		- 衝突時に使用する。
+		- 
+		*/
+		void move(index_type src, index_type dest, label_vector const& labels)
+		{
+			auto data = m_c.data();
+
+			index_type parent = (data + src)->m_check;
+			(data + parent)->m_base = dest;
+
+			for (auto label : labels) if ((data + src + label)->m_check == parent) free(src + label);
+			for (auto label : labels) (data + dest + label)->m_check = parent;
+		}
+
+		/*! 状態stateからラベルlabelの遷移において、遷移先が空きか調べる
+		*/
+		bool is_free(index_type state, std::uint16_t label)
+		{
+			index_type base = (m_c.data() + state)->m_base;
+
+			if (m_c.size() <= base + label) return false;
+			if (0 < (m_c.data() + base + label)->m_check) return false;
+
+			return true;
+		}
+
+		bool is_free(index_type base, label_vector const& labels) const
 		{
 			if (base <= 0) return false; // マイナスの位置は使用できないため、ここで弾く。
 
 			auto const* d = m_c.data();
-			for (uint8_t label : dests)
+			for (std::uint16_t label : labels)
 			{
 				index_type i = base + label;
-				if ((0 <= (d + i)->m_check && -d->m_base != i) || (m_c.size() <= i)) return false;
+				if ((m_c.size() <= i) || (0 <= (d + i)->m_check && -d->m_base != i)) return false;
 			}
 			
 			return true;
@@ -169,25 +189,34 @@ namespace wordring
 		index_type insert_child(index_type parent, Range1 range)
 		{
 			index_type base = (m_c.data() + parent)->m_base; // 遷移先配置の起点（遷移先が定義されていない場合0）
+			//index_type base_new{};
 
-			static_vector<std::uint8_t, 257> dests{ range.begin(), range.end() }; // 引数で指定される遷移ラベルを追加
+			label_vector labels{}; // 既存のラベル
+			label_vector labels_new{ range.begin(), range.end() }; // 引数で指定される遷移ラベルを追加
 
-			if (base != 0) // 既存の遷移ラベルを追加
+			if (base != 0)
 			{
 				for (index_type label = 0; label < 257 && base + label < m_c.size(); ++label)
-					if ((m_c.data() + base + label)->m_check == parent) dests.push_back(label);
+					if ((m_c.data() + base + label)->m_check == parent) labels.push_back(label);
+			}
+
+			if (is_free(base, labels_new)) for (auto label : labels_new) allocate(base + label);
+			else
+			{
+				if (base == 0);
+				//index_type base_new = allocate(labels_new);
 			}
 
 			// 追加できるか確認
-			if (is_free(base, dests) == false)
+			if (is_free(base, labels_new) == false)
 			{
-				index_type base2 = allocate(dests);
-				if (base != 0) modify(base, base2, dests);
-				base = base2;
+				index_type dest = allocate(labels_new);
+				if (base != 0) move(base, dest, labels_new);
+				base = dest;
 				(m_c.data() + parent)->m_base = base;
 			}
 
-			for (auto label : dests) (m_c.data() + base + label)->m_check = parent;
+			for (auto label : labels_new) (m_c.data() + base + label)->m_check = parent;
 
 			return base;
 		}
