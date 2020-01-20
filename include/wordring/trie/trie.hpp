@@ -59,7 +59,7 @@ namespace wordring
 
 		static constexpr std::uint16_t null_value = 256;
 
-		using result_range = result_range<const_trie_base_iterator>;
+		using result_range_type = result_range<const_trie_base_iterator>;
 
 	public:
 		const_trie_base_iterator()
@@ -121,7 +121,7 @@ namespace wordring
 			return result;
 		}
 
-		result_range parent() const
+		result_range_type parent() const
 		{
 			return result_range(begin(), end());
 		}
