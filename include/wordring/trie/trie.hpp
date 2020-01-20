@@ -3,6 +3,7 @@
 #include <wordring/static_vector/static_vector.hpp>
 #include <wordring/trie/list_trie.hpp>
 #include <wordring/trie/trie_defs.hpp>
+#include <wordring/utility/result_range.hpp>
 
 #include <algorithm>
 #include <bitset>
@@ -34,18 +35,148 @@ namespace wordring
 		}
 	};
 
-	template <typename Trie>
-	class trie_base_iterator
+	template <typename Container>
+	class const_trie_base_iterator
 	{
-	public:
-		using value_type        = std::uint8_t;
-		using difference_type   = std::ptrdiff_t;
-		using reference         = value_type&;
-		using pointer           = value_type*;
-		using iterator_category = std::input_iterator_tag;
+		template <typename Allocator>
+		friend class trie_base;
+
+		template <typename Container1>
+		friend bool operator==(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
+
+		template <typename Container1>
+		friend bool operator!=(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
 
 	public:
+		using difference_type   = std::ptrdiff_t;
+		using value_type        = std::uint8_t;
+		using pointer           = value_type*;
+		using reference         = value_type&;
+		using iterator_category = std::input_iterator_tag;
+
+		using index_type = typename trie_node::index_type;
+		using container  = Container const;
+
+		static constexpr std::uint16_t null_value = 256;
+
+		using result_range = result_range<const_trie_base_iterator>;
+
+	public:
+		const_trie_base_iterator()
+			: m_c(nullptr)
+			, m_index(0)
+		{
+		}
+
+		const_trie_base_iterator(container& c, index_type index)
+			: m_c(std::addressof(c))
+			, m_index(index)
+		{
+		}
+
+		operator bool() const
+		{
+			if (m_index <= 1) return false;
+
+			auto data = m_c->data();
+			index_type i = (data + m_index)->m_base;
+
+			if (i <= 0) return true;
+			if (static_cast<std::uint32_t>(i + null_value) < m_c->size() && (data + i + null_value)->m_check == m_index) return true;
+			
+			return false;
+		}
+
+		value_type operator*() const
+		{
+			assert(base() <= m_index && m_index < base() + null_value);
+
+			return m_index - base();
+		}
+
+		const_trie_base_iterator operator[](value_type label) const
+		{
+			index_type i = (m_c->data() + m_index)->m_base + label;
+			i = static_cast<std::uint32_t>(i) < m_c->size() && (m_c->data() + i)->m_check == m_index ? i : 0;
+
+			return const_trie_base_iterator(*m_c, i);
+		}
+
+		const_trie_base_iterator& operator++()
+		{
+			index_type b = base();
+			index_type i = find(m_index + 1, b + null_value, mother());
+
+			m_index = i < b + null_value ? i : 0;
+
+			return *this;
+		}
+
+		const_trie_base_iterator operator++(int)
+		{
+			auto result = *this;
+
+			operator++();
+
+			return result;
+		}
+
+		result_range parent() const
+		{
+			return result_range(begin(), end());
+		}
+
+		const_trie_base_iterator begin() const
+		{
+			index_type i = (m_c->data() + m_index)->m_base;
+			i = 0 < i ? find(i, i + null_value, m_index) : 0;
+			return const_trie_base_iterator(*m_c, i);
+		}
+
+		const_trie_base_iterator end() const
+		{
+			return const_trie_base_iterator(*m_c, 0);
+		}
+		
+	protected:
+		index_type find(index_type first, index_type last, index_type check) const
+		{
+			index_type limit = std::min(last, static_cast<index_type>(m_c->size()));
+			for (; first < limit; ++first) if ((m_c->data() + first)->m_check == check) break;
+		
+			return first != limit ? first : base() + null_value;
+		}
+
+		index_type mother() const
+		{
+			auto data = m_c->data();
+			return (data + m_index)->m_check;
+		}
+
+		index_type base() const
+		{
+			auto data = m_c->data();
+			index_type parent = mother();
+			return parent == 0 ? (data + m_index)->m_base : (data + parent)->m_base;
+		}
+
+	protected:
+		container* m_c;
+		index_type m_index;
 	};
+
+	template <typename Container1>
+	inline bool operator==(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
+	{
+		assert(lhs.m_c == rhs.m_c);
+		return lhs.m_index == rhs.m_index;
+	}
+
+	template <typename Container1>
+	inline bool operator!=(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
+	{
+		return !(lhs == rhs);
+	}
 
 	// ------------------------------------------------------------------------
 	// trie_base
@@ -56,13 +187,18 @@ namespace wordring
 	{
 	public:
 		using index_type = typename trie_node::index_type;
-		using container = std::vector<trie_node>;
+		using container = std::vector<trie_node, Allocator>;
 
 		using label_vector = static_vector<std::uint16_t, 257>;
+
+		using const_iterator = const_trie_base_iterator<container const>;
+
+		static constexpr std::uint16_t null_value = const_iterator::null_value;
 
 	public:
 		trie_base()
 			: m_c({ { 0, 0 }, { 0, 0 } })
+			, m_size(0)
 		{
 			reserve(1022);
 		}
@@ -103,6 +239,7 @@ namespace wordring
 
 		- 空きがない場合、新たに空きを確保する。
 		- ラベルに対応するすべての使用位置はフリー・リストから削除され、使用状態となる。
+		- 親のBASEに入る値が返る。
 		*/
 		index_type allocate(label_vector const& labels)
 		{
@@ -136,38 +273,6 @@ namespace wordring
 			data->m_base = -index;
 		}
 
-		void free(index_type base, label_vector const& labels)
-		{
-		}
-
-		/*! base1からbase2へノードを移動する
-
-		- 衝突時に使用する。
-		- 
-		*/
-		void move(index_type src, index_type dest, label_vector const& labels)
-		{
-			auto data = m_c.data();
-
-			index_type parent = (data + src)->m_check;
-			(data + parent)->m_base = dest;
-
-			for (auto label : labels) if ((data + src + label)->m_check == parent) free(src + label);
-			for (auto label : labels) (data + dest + label)->m_check = parent;
-		}
-
-		/*! 状態stateからラベルlabelの遷移において、遷移先が空きか調べる
-		*/
-		bool is_free(index_type state, std::uint16_t label)
-		{
-			index_type base = (m_c.data() + state)->m_base;
-
-			if (m_c.size() <= base + label) return false;
-			if (0 < (m_c.data() + base + label)->m_check) return false;
-
-			return true;
-		}
-
 		bool is_free(index_type base, label_vector const& labels) const
 		{
 			if (base <= 0) return false; // マイナスの位置は使用できないため、ここで弾く。
@@ -176,55 +281,109 @@ namespace wordring
 			for (std::uint16_t label : labels)
 			{
 				index_type i = base + label;
-				if ((m_c.size() <= i) || (0 <= (d + i)->m_check && -d->m_base != i)) return false;
+				if (m_c.size() <= static_cast<std::uint32_t>(i)) return false;
+				if (0 <= (d + i)->m_check && -d->m_base != i) return false;
 			}
 			
 			return true;
 		}
 
-		/*!
-		- Range1::const_iteratorの逆参照は遷移labelを返す。
-		*/
-		template <typename Range1>
-		index_type insert_child(index_type parent, Range1 range)
+		index_type modify(const_iterator parent, label_vector& labels)
 		{
-			index_type base = (m_c.data() + parent)->m_base; // 遷移先配置の起点（遷移先が定義されていない場合0）
-			//index_type base_new{};
+			struct child { std::uint16_t m_label;  index_type m_base; };
 
-			label_vector labels{}; // 既存のラベル
-			label_vector labels_new{ range.begin(), range.end() }; // 引数で指定される遷移ラベルを追加
+			static_vector<child, 257> children;
+			index_type from = (m_c.data() + parent.m_index)->m_base;
 
-			if (base != 0)
+			if (parent)
+				children.push_back(child{ static_cast<std::uint16_t>(from + null_value), (m_c.data() + from + null_value)->m_base });
+			for (std::uint16_t label : parent)
+				children.push_back(child{ label, (m_c.data() + from + label)->m_base });
+
+			for (auto const& c : children)
 			{
-				for (index_type label = 0; label < 257 && base + label < m_c.size(); ++label)
-					if ((m_c.data() + base + label)->m_check == parent) labels.push_back(label);
+				labels.push_back(c.m_label);
+				free(from + c.m_label);
 			}
+			index_type to = allocate(labels);
 
-			if (is_free(base, labels_new)) for (auto label : labels_new) allocate(base + label);
-			else
+			auto data = m_c.data();
+			for (auto const& c : children)
 			{
-				if (base == 0);
-				//index_type base_new = allocate(labels_new);
+				(data + to + c.m_label)->m_base = c.m_base; // 子のBASEを置き換え
+				// 孫のCHECKを置き換え
+				if (0 < c.m_base)
+				{
+					for (index_type l = 0; l <= 256; ++l)
+					{
+						index_type& j = (data + c.m_base + l)->m_check;
+						if(0 < j) j = to + c.m_label;
+					}
+				}
 			}
+			(data + parent.m_index)->m_base = to;
 
-			// 追加できるか確認
-			if (is_free(base, labels_new) == false)
-			{
-				index_type dest = allocate(labels_new);
-				if (base != 0) move(base, dest, labels_new);
-				base = dest;
-				(m_c.data() + parent)->m_base = base;
-			}
+			return to;
+		}
 
-			for (auto label : labels_new) (m_c.data() + base + label)->m_check = parent;
+		index_type add(const_iterator parent, std::uint16_t label)
+		{
+			return add(parent, label_vector(1, label));
+		}
+
+		/*! parentの子としてラベル集合labels内の各ラベルによる遷移を挿入する
+		*/
+		index_type add(const_iterator parent, label_vector labels)
+		{
+			index_type base = (m_c.data() + parent.m_index)->m_base; // 遷移先配置の起点（遷移先が定義されていない場合0）
+
+			if (0 < base && is_free(base, labels)) for (auto label : labels) allocate(base + label);
+			else if (base == 0) base = allocate(labels);
+			else base = modify(parent, labels);
+
+			(m_c.data() + parent.m_index)->m_base = base;
+			for (auto label : labels) (m_c.data() + base + label)->m_check = parent.m_index;
 
 			return base;
 		}
 
-		index_type next(index_type index, uint8_t label)
+	public:
+		template <typename Iterator>
+		void assign(const_iterator parent, const_list_trie_iterator<Iterator> root)
 		{
 
 		}
+
+		template <typename String>
+		const_iterator insert(String const& string)
+		{
+			auto it1 = string.begin();
+			auto it2 = string.end();
+
+			const_iterator it3 = cbegin();
+			const_iterator it4 = cend();
+
+			// 登録済み遷移をスキップする
+			for (; it1 != it2; ++it1)
+			{
+				auto it = it3[static_cast<std::uint8_t>(*it1)];
+				if (it == it4) break;
+				it3 = it;
+			}
+
+			// 空遷移
+			if ((it3 && it1 != it2) || (it3.begin() != it3.end() && it1 == it2)) add(it3, null_value);
+
+			// 残りを追加
+			for (; it1 != it2; ++it1)
+			{
+				std::uint16_t label = static_cast<std::uint8_t>(*it1);
+				it3 = const_iterator(m_c, add(it3, label) + label);
+			}
+
+			return it3;
+		}
+
 		void erase(uint32_t index);
 		void find();
 		void insert(uint32_t index, uint8_t label);
@@ -237,9 +396,19 @@ namespace wordring
 			//auto c = t.children(t.root());
 		}
 
+		// イテレータ ----------------------------------------------------------
+
+		const_iterator begin() const noexcept { return const_iterator(m_c, 1); }
+
+		const_iterator cbegin() const noexcept { return const_iterator(m_c, 1); }
+
+		const_iterator end() const noexcept { return const_iterator(m_c, 0); }
+
+		const_iterator cend() const noexcept { return const_iterator(m_c, 0); }
 
 	protected:
-		container m_c;
+		container     m_c;
+		std::uint32_t m_size;
 	};
 
 	template <typename Key, typename Value>

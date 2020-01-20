@@ -122,7 +122,7 @@ namespace wordring
 
 		static_vector_iterator& operator++()
 		{
-			assert(m_position < m_container->size());
+			assert(static_cast<std::make_unsigned_t<decltype(m_position)>>(m_position) < m_container->size());
 			++m_position;
 			return *this;
 		}

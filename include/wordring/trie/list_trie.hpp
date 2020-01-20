@@ -7,14 +7,17 @@
 
 namespace wordring
 {
+	/*!
+	- #による空遷移も状態番号を持つ事に注意。この動作は、ダブルアレイ構築に必要なため設定した。
+	*/
 	template <typename Iterator>
-	class list_trie_iterator
+	class const_list_trie_iterator
 	{
 		template <typename Iterator1>
-		friend bool operator==(list_trie_iterator<Iterator1> const&, list_trie_iterator<Iterator1> const&);
+		friend bool operator==(const_list_trie_iterator<Iterator1> const&, const_list_trie_iterator<Iterator1> const&);
 
 		template <typename Iterator1>
-		friend bool operator!=(list_trie_iterator<Iterator1> const&, list_trie_iterator<Iterator1> const&);
+		friend bool operator!=(const_list_trie_iterator<Iterator1> const&, const_list_trie_iterator<Iterator1> const&);
 
 	public:
 		using iterator_type = Iterator;
@@ -27,7 +30,7 @@ namespace wordring
 		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
-		using const_iterator = list_trie_iterator<iterator_type const>;
+		//using const_iterator = const_list_trie_iterator<iterator_type const>;
 
 		static constexpr std::uint16_t null_value = 256u;
 
@@ -52,7 +55,7 @@ namespace wordring
 		};
 
 	public:
-		list_trie_iterator(iterator_type first, iterator_type last)
+		const_list_trie_iterator(iterator_type first, iterator_type last)
 			: m_first(first)
 			, m_last(last)
 			, m_level(-1)
@@ -60,7 +63,7 @@ namespace wordring
 		{
 		}
 
-		list_trie_iterator(list_trie_iterator const& other)
+		const_list_trie_iterator(const_list_trie_iterator const& other)
 			: m_first(other.m_first)
 			, m_last(other.m_last)
 			, m_level(other.m_level)
@@ -76,13 +79,13 @@ namespace wordring
 		value_type operator*() const
 		{
 			assert(m_first != m_last);
-			assert(0 <= m_level && m_level <= m_first->size());
+			assert(0 <= m_level && static_cast<std::make_unsigned_t<decltype(m_level)>>(m_level) <= m_first->size());
 
 			if (m_level == m_first->size()) return null_value;
 			return *std::next(m_first->begin(), m_level);
 		}
 
-		list_trie_iterator& operator++()
+		const_list_trie_iterator& operator++()
 		{
 			m_first = next();
 			m_next = 0;
@@ -90,37 +93,35 @@ namespace wordring
 			return *this;
 		}
 
-		list_trie_iterator operator++(int)
+		const_list_trie_iterator operator++(int)
 		{
 			auto result = *this;
-
 			operator++();
-
 			return result;
 		}
 
-		list_trie_iterator begin() const
+		const_list_trie_iterator begin() const
 		{
-			if (m_level < 0) return list_trie_iterator(m_first, m_last, 0);                                // 根
-			else if (m_level == m_first->size()) return list_trie_iterator(m_first, m_first, m_level + 1); // 併合された終端
+			if (m_level < 0) return const_list_trie_iterator(m_first, m_last, 0);                                // 根
+			else if (m_level == m_first->size()) return const_list_trie_iterator(m_first, m_first, m_level + 1); // 併合された終端
 			else if (m_level == m_first->size() - 1 && std::distance(m_first, m_last) == 1)
-				return list_trie_iterator(m_last, m_last, m_level + 1);                                    // 終端
+				return const_list_trie_iterator(m_last, m_last, m_level + 1);                                    // 終端
 
-			return list_trie_iterator(m_first, next(), m_level + 1);
+			return const_list_trie_iterator(m_first, next(), m_level + 1);
 		}
 
-		list_trie_iterator end() const
+		const_list_trie_iterator end() const
 		{
-			if(m_level < 0)  return list_trie_iterator(m_last, m_last, 0);                                 // 根
-			else if (m_level == m_first->size()) return list_trie_iterator(m_first, m_first, m_level + 1); // 併合された終端
+			if(m_level < 0)  return const_list_trie_iterator(m_last, m_last, 0);                                 // 根
+			else if (m_level == m_first->size()) return const_list_trie_iterator(m_first, m_first, m_level + 1); // 併合された終端
 			else if (m_level == m_first->size() - 1 && std::distance(m_first, m_last) == 1)
-				return list_trie_iterator(m_last, m_last, m_level + 1);                                    // 終端
+				return const_list_trie_iterator(m_last, m_last, m_level + 1);                                    // 終端
 
-			return list_trie_iterator(next(), next(), m_level + 1);
+			return const_list_trie_iterator(next(), next(), m_level + 1);
 		}
 
 	protected:
-		list_trie_iterator(iterator_type first, iterator_type last, int32_t level)
+		const_list_trie_iterator(iterator_type first, iterator_type last, int32_t level)
 			: m_first(first)
 			, m_last(last)
 			, m_level(level)
@@ -149,17 +150,17 @@ namespace wordring
 		iterator_type m_last;
 		int32_t       m_level;
 
-		std::atomic_uint_least32_t mutable m_next;
+		std::atomic_uint_least32_t mutable m_next; /*!< キャッシュ */
 	};
 
 	template <typename Iterator1>
-	inline bool operator==(list_trie_iterator<Iterator1> const& lhs, list_trie_iterator<Iterator1> const& rhs)
+	inline bool operator==(const_list_trie_iterator<Iterator1> const& lhs, const_list_trie_iterator<Iterator1> const& rhs)
 	{
 		return !(lhs != rhs);
 	}
 
 	template <typename Iterator1>
-	inline bool operator!=(list_trie_iterator<Iterator1> const& lhs, list_trie_iterator<Iterator1> const& rhs)
+	inline bool operator!=(const_list_trie_iterator<Iterator1> const& lhs, const_list_trie_iterator<Iterator1> const& rhs)
 	{
 		return lhs.m_first != rhs.m_first || lhs.m_level != rhs.m_level;
 	}
