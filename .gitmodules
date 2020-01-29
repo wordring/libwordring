@@ -4,3 +4,6 @@
 [submodule "submodules/publicsuffix/list"]
 	path = submodules/publicsuffix/list
 	url = https://github.com/publicsuffix/list.git
+[submodule "submodules/dwyl/english-words"]
+	path = submodules/dwyl/english-words
+	url = https://github.com/dwyl/english-words.git
