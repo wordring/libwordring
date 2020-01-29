@@ -30,9 +30,11 @@ add_executable(
 		test_module.cpp
 		list_trie.cpp
 		trie.cpp
+		trie_base.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
+add_definitions(-DENGLISH_WORDS_PATH=${Wordring_DIR}/submodules/dwyl/english-words/words.txt)
 
 target_link_libraries(
 	${PROJECT_NAME}
