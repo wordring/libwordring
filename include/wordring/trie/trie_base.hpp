@@ -12,6 +12,7 @@
 #include <deque>
 #include <istream>
 #include <iterator>
+#include <memory>
 #include <optional>
 #include <ostream>
 #include <stdexcept>
@@ -318,11 +319,11 @@ namespace wordring
 	template <typename Allocator = std::allocator<trie_node>>
 	class trie_base
 	{
-		template <typename Allocator>
-		friend std::basic_ostream<char>& operator<<(std::basic_ostream<char>&, trie_base<Allocator> const&);
+		template <typename Allocator1>
+		friend std::basic_ostream<char>& operator<<(std::basic_ostream<char>&, trie_base<Allocator1> const&);
 
-		template <typename Allocator>
-		friend std::basic_istream<char>& operator>>(std::basic_istream<char>&, trie_base<Allocator>&);
+		template <typename Allocator1>
+		friend std::basic_istream<char>& operator>>(std::basic_istream<char>&, trie_base<Allocator1>&);
 
 	protected:
 		using index_type = typename trie_node::index_type;
