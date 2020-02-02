@@ -1,11 +1,9 @@
 ﻿#pragma once
 
 #include <wordring/static_vector/static_vector.hpp>
-//#include <wordring/trie/list_trie.hpp>
-//#include <wordring/serialize/serialize.hpp>
-//#include <wordring/serialize/serialize_iterator.hpp>
-//#include <wordring/trie/trie_defs.hpp>
-//#include <wordring/utility/result_range.hpp>
+//#include <wordring/tree/tree_iterator.hpp>
+#include <wordring/trie/list_trie_iterator.hpp>
+#include <wordring/trie/trie_construct_iterator.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -459,6 +457,30 @@ namespace wordring
 			return it3 == cbegin() ? cend() : it3;
 		}
 
+		template <typename InputIterator>
+		void insert(InputIterator first, InputIterator last)
+		{
+			std::sort(first, last);
+			last = std::unique(first, last);
+
+			using list_iterator = const_list_trie_iterator<InputIterator>;
+			using construct_iterator = trie_construct_iterator<list_iterator>;
+
+			auto li = list_iterator(first, last);
+			auto it = construct_iterator(li);
+
+			while (!it.empty())
+			{
+				auto view = it.parent();
+				auto it1 = search(view.begin(), view.end());
+				if (it1.first.m_index == 0) it1.first.m_index = 1; // rootの場合。
+				add(it1.first, it.children());
+				++it;
+			}
+
+			m_size += std::distance(first, last);
+		}
+
 		void erase(const_iterator pos)
 		{
 			if (!pos) return;
@@ -494,7 +516,7 @@ namespace wordring
 		/*! 部分一致検索
 
 		- 引数first, lastは検索文字列のbegin(), end()。
-		- 戻り値は一致した最後の文字と状態を指すイテレータのペア。
+		- 戻り値は一致した最後の状態と文字を指すイテレータのペア。
 		*/
 		template <typename Iterator>
 		auto search(Iterator first, Iterator last) const->std::pair<const_iterator, Iterator>

@@ -28,9 +28,11 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		list_trie.cpp
+		#const_trie_base_iterator.cpp
+		list_trie_iterator.cpp
 		trie.cpp
 		trie_base.cpp
+		trie_construct_iterator.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
