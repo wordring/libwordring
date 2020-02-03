@@ -27,5 +27,8 @@
 - SQLite3
 
 ## 要求サブモジュール
-- https://github.com/publicsuffix/list
-- https://github.com/whatwg/encoding
+| 名前 | 説明 |
+|----:|:----|
+| https://github.com/publicsuffix/list | URLパーサでデータを使用 |
+| https://github.com/whatwg/encoding | HTML5パーサでデータを使用 |
+| https://github.com/dwyl/english-words | TRIE用単体テストでデータを使用 |
