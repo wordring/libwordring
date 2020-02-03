@@ -5,8 +5,8 @@
 
 cmake_minimum_required (VERSION 3.12)
 
-#add_subdirectory(serialize)
-#add_subdirectory(static_vector)
-#add_subdirectory(tree)
+add_subdirectory(serialize)
+add_subdirectory(static_vector)
+add_subdirectory(tree)
 add_subdirectory(trie)
-#add_subdirectory(whatwg)
+add_subdirectory(whatwg)

@@ -44,7 +44,6 @@ namespace wordring
 		{
 		}
 
-	public:
 		void reserve(std::size_t n = 1)
 		{
 			index_type const i = m_c.size(); // reserveする先頭の番号
@@ -57,24 +56,21 @@ namespace wordring
 			m_c.back().m_check = 0;
 		}
 
-	protected:
-		/*! indexで指定されるフリー・ノードを使用可能状態にする
+		/*! indexで指定される空きノードを使用可能状態にする
 		*/
 		void allocate(index_type index)
 		{
-			assert(0 < index);
-			assert(m_c.data()->m_check < 0);
-			assert((m_c.data() + index)->m_check <= 0);
+			trie_node* data = m_c.data();
 
-			assert(index < m_c.size());
+			assert(0 < index && index < m_c.size());
+			assert(data->m_check < 0);
+			assert((data + index)->m_check <= 0);
 
-			auto data = m_c.data();
+			index_type idx = -data->m_check;
+			while ((data + idx)->m_check != -index) idx = -(data + idx)->m_check;
 
-			index_type i = -data->m_check;
-			while ((data + i)->m_check != -index) i = -(data + i)->m_check;
-
-			(data + i)->m_check = (data + index)->m_check;
-			if ((data + index)->m_check == 0) data->m_base = -i;
+			(data + idx)->m_check = (data + index)->m_check;
+			if ((data + index)->m_check == 0) data->m_base = -idx;
 
 			(data + index)->m_check = 0; // 使用するノードを初期化
 		}
