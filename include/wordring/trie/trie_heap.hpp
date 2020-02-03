@@ -75,15 +75,37 @@ namespace wordring
 			(data + index)->m_check = 0; // 使用するノードを初期化
 		}
 
+		void allocate(index_type base, label_vector& labels)
+		{
+			assert(!labels.empty());
+			assert(std::is_sorted(labels.begin(), labels.end()));
+
+			assert(1 <= base && base + labels.back() < m_c.size());
+
+			trie_node* data = m_c.data();
+
+			index_type before = data->m_index;
+			for (auto ch : labels)
+			{
+				index_type idx = base + ch;
+
+			}
+			index_type index = base + labels.front();
+
+			index_type idx = -data->m_check;
+			while ((data + idx)->m_check != -index) idx = -(data + idx)->m_check;
+		}
+
 		/*! 引数labelsで指定されるすべてのラベル位置を使用出来るbase位置を検索し返す。
 
 		- 空きがない場合、新たに空きを確保する。
 		- ラベルに対応するすべての使用位置はフリー・リストから削除され、使用状態となる。
 		- 親のBASEに入る値が返る。
 		*/
-		index_type allocate(label_vector const& labels)
+		index_type allocate(label_vector& labels)
 		{
-			assert(std::distance(labels.begin(), labels.end()) != 0);
+			assert(!labels.empty());
+			assert(std::is_sorted(labels.begin(), labels.end()));
 
 			for (index_type i = -m_c.data()->m_check; i != 0; i = -(m_c.data() + i)->m_check)
 			{
