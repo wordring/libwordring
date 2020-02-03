@@ -45,11 +45,6 @@ namespace wordring
 			assign_children();
 		}
 
-		iterator_type base() const
-		{
-			return m_queue.front();
-		}
-
 		parent_view parent() const
 		{
 			return m_queue.front().string();

@@ -159,9 +159,9 @@ namespace wordring
 		template <typename String>
 		String string() const
 		{
-			std::deque<value_type> tmp;
-			for (auto p = *this; 1 < p.m_index; p = *p.parent()) tmp.push_front(*p);
-			return String(tmp.begin(), tmp.end());
+			std::basic_string<value_type> tmp;
+			for (auto p = *this; 1 < p.m_index; p = *p.parent()) tmp.push_back(*p);
+			return String(tmp.rbegin(), tmp.rend());
 		}
 
 		std::optional<const_trie_base_iterator> parent() const
@@ -325,6 +325,18 @@ namespace wordring
 		template <typename Allocator1>
 		friend std::basic_istream<char>& operator>>(std::basic_istream<char>&, trie_base<Allocator1>&);
 
+		template <typename Allocator1>
+		friend std::vector<std::uint8_t>& operator<<(std::vector<std::uint8_t>&, trie_base<Allocator1> const&);
+
+		template <typename Allocator1>
+		friend std::vector<std::uint8_t>& operator>>(std::vector<std::uint8_t>&, trie_base<Allocator1>&);
+
+		template <typename Allocator1>
+		friend std::vector<std::uint32_t>& operator<<(std::vector<std::uint32_t>&, trie_base<Allocator1> const&);
+
+		template <typename Allocator1>
+		friend std::vector<std::uint32_t>& operator>>(std::vector<std::uint32_t>&, trie_base<Allocator1>&);
+
 	protected:
 		using index_type = typename trie_node::index_type;
 		using container  = std::vector<trie_node, Allocator>;
@@ -348,6 +360,32 @@ namespace wordring
 			, m_size(0)
 		{
 			reserve();
+		}
+
+		template <typename InputIterator>
+		void assign(InputIterator first, InputIterator last)
+		{
+			clear();
+
+			std::sort(first, last);
+			last = std::unique(first, last);
+
+			using list_iterator = const_list_trie_iterator<InputIterator>;
+			using construct_iterator = trie_construct_iterator<list_iterator>;
+
+			auto li = list_iterator(first, last);
+			auto it = construct_iterator(li);
+
+			while (!it.empty() && !it.children().empty())
+			{
+				auto view = it.parent();
+				auto it1 = search(view.begin(), view.end());
+				if (it1.first.m_index == 0) it1.first.m_index = 1; // rootの場合。
+				add(it1.first, it.children());
+				++it;
+			}
+
+			m_size = std::distance(first, last);
 		}
 
 		// 要素アクセス --------------------------------------------------------
@@ -416,6 +454,9 @@ namespace wordring
 		template <typename Key>
 		const_iterator insert(Key const& key)
 		{
+			auto it = find(key);
+			if (it) return it;
+
 			auto it1 = std::begin(key);
 			auto it2 = std::end(key);
 
@@ -461,25 +502,7 @@ namespace wordring
 		template <typename InputIterator>
 		void insert(InputIterator first, InputIterator last)
 		{
-			std::sort(first, last);
-			last = std::unique(first, last);
-
-			using list_iterator = const_list_trie_iterator<InputIterator>;
-			using construct_iterator = trie_construct_iterator<list_iterator>;
-
-			auto li = list_iterator(first, last);
-			auto it = construct_iterator(li);
-
-			while (!it.empty())
-			{
-				auto view = it.parent();
-				auto it1 = search(view.begin(), view.end());
-				if (it1.first.m_index == 0) it1.first.m_index = 1; // rootの場合。
-				add(it1.first, it.children());
-				++it;
-			}
-
-			m_size += std::distance(first, last);
+			while (first != last) insert(*first++);
 		}
 
 		void erase(const_iterator pos)
@@ -705,8 +728,8 @@ namespace wordring
 		size_type m_size;
 	};
 
-	template <typename Allocator>
-	inline std::basic_ostream<char>& operator<<(std::basic_ostream<char>& os, trie_base<Allocator> const& trie)
+	template <typename Allocator1>
+	inline std::basic_ostream<char>& operator<<(std::basic_ostream<char>& os, trie_base<Allocator1> const& trie)
 	{
 		std::uint32_t n = trie.m_size;
 		for (int i = 3; 0 <= i; --i) os.put(static_cast<std::uint8_t>((n >> i * 8) & 0xFFu));
@@ -725,8 +748,8 @@ namespace wordring
 		return os;
 	}
 
-	template <typename Allocator>
-	inline std::basic_istream<char>& operator>>(std::basic_istream<char>& is, trie_base<Allocator>& trie)
+	template <typename Allocator1>
+	inline std::basic_istream<char>& operator>>(std::basic_istream<char>& is, trie_base<Allocator1>& trie)
 	{
 		trie.m_c.clear();
 
@@ -773,8 +796,134 @@ namespace wordring
 		goto End;
 
 	Error:
-		trie = trie_base<Allocator>();
+		trie.clear();
+		throw std::invalid_argument("");
 	End:
 		return is;
+	}
+
+	template <typename Allocator1>
+	inline std::vector<std::uint8_t>&
+		operator<<(std::vector<std::uint8_t>& v, trie_base<Allocator1> const& trie)
+	{
+		v.reserve(trie.size() * 8 + 8);
+
+		std::uint32_t n = trie.m_size;
+		for (int i = 3; 0 <= i; --i) v.push_back(static_cast<std::uint8_t>((n >> i * 8) & 0xFFu));
+
+		n = trie.m_c.size();
+		for (int i = 3; 0 <= i; --i) v.push_back(static_cast<std::uint8_t>((n >> i * 8) & 0xFFu));
+
+		for (auto const& p : trie.m_c)
+		{
+			std::uint32_t base = p.m_base;
+			for (int i = 3; 0 <= i; --i) v.push_back(static_cast<std::uint8_t>((base >> i * 8) & 0xFFu));
+			std::uint32_t check = p.m_check;
+			for (int i = 3; 0 <= i; --i) v.push_back(static_cast<std::uint8_t>((check >> i * 8) & 0xFFu));
+		}
+
+		return v;
+	}
+
+	template <typename Allocator1>
+	inline std::vector<std::uint8_t>&
+		operator>>(std::vector<std::uint8_t>& v, trie_base<Allocator1>& trie)
+	{
+		trie.m_c.clear();
+
+		std::uint32_t n = 0;
+
+		std::uint32_t base = 0;
+		std::uint32_t check = 0;
+
+		std::int32_t i = 0;
+		std::uint32_t j = 0;
+
+		auto it1 = v.begin();
+		auto it2 = v.end();
+
+		for (i = 3; 0 <= i; --i)
+		{
+			if (it1 == it2) goto Error;
+			trie.m_size += *it1 << i * 8;
+			++it1;
+		}
+
+		for (i = 3; 0 <= i; --i)
+		{
+			if (it1 == it2) goto Error;
+			n += *it1 << i * 8;
+			++it1;
+		}
+		n *= 8;
+
+		for (i = 0; i < n; ++i)
+		{
+			if (it1 == it2) goto Error;
+			j = i % 8;
+
+			if (j == 0) base = check = 0;
+
+			if (j < 4) base += *it1 << (3 - j) * 8;
+			else check += *it1 << (7 - j) * 8;
+
+			if (j == 7) trie.m_c.emplace_back(base, check);
+
+			++it1;
+		}
+		goto End;
+
+	Error:
+		trie.clear();
+		throw std::invalid_argument("");
+	End:
+		return v;
+	}
+
+	template <typename Allocator1>
+	inline std::vector<std::uint32_t>&
+		operator<<(std::vector<std::uint32_t>& v, trie_base<Allocator1> const& trie)
+	{
+		v.reserve(trie.size() * 2 + 2);
+		v.push_back(trie.size());
+		v.push_back(trie.m_c.size());
+		for (auto n : trie.m_c)
+		{
+			v.push_back(n.m_base);
+			v.push_back(n.m_check);
+		}
+
+		return v;
+	}
+
+	template <typename Allocator1>
+	inline std::vector<std::uint32_t>&
+		operator>>(std::vector<std::uint32_t>& v, trie_base<Allocator1>& trie)
+	{
+		trie.m_c.clear();
+		trie.m_c.reserve((v.size() - 2) / 2);
+
+		auto it1 = v.begin();
+		auto it2 = v.end();
+
+		std::uint32_t size = 0;
+
+		if (it1 != it2) trie.m_size = *it1++;
+		if (it1 != it2) size = *it1++;
+
+		if (size * 2 + 2 != v.size())
+		{
+			trie.clear();
+			throw std::invalid_argument("");
+		}
+
+		while (it1 != it2)
+		{
+			std::int32_t base = *it1++;
+			std::int32_t check = *it1++;
+			trie.m_c.push_back(trie_node{ base, check });
+		}
+
+		return v;
 	}
 }

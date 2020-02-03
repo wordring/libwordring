@@ -31,6 +31,64 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__1)
 	trie_base trie{};
 }
 
+// void assign(InputIterator first, InputIterator last)
+BOOST_AUTO_TEST_CASE(trie_base__assign__1)
+{
+	test_trie_base trie{};
+
+	std::vector<std::string> words;
+	words.emplace_back("");
+
+	trie.assign(words.begin(), words.end());
+
+	BOOST_CHECK(trie.count() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__assign__2)
+{
+	test_trie_base trie{};
+
+	std::vector<std::string> words;
+	words.emplace_back("a");
+	words.emplace_back("ac");
+	words.emplace_back("b");
+	words.emplace_back("cab");
+	words.emplace_back("cd");
+
+	trie.assign(words.begin(), words.end());
+
+	BOOST_CHECK(trie.count() == 5);
+	BOOST_CHECK(trie.find(std::string("a")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("ac")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("b")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cab")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cd")) != trie.end());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__assign__3)
+{
+	test_trie_base trie{};
+
+	std::vector<std::string> words;
+	words.emplace_back("a");
+	words.emplace_back("cab");
+	words.emplace_back("ac");
+	words.emplace_back("b");
+	words.emplace_back("cab");
+	words.emplace_back("cd");
+	words.emplace_back("");
+	words.emplace_back("");
+
+	trie.assign(words.begin(), words.end());
+
+	BOOST_CHECK(trie.count() == 5);
+	BOOST_CHECK(trie.find(std::string("a")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("ac")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("b")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cab")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cd")) != trie.end());
+}
+
 // 要素アクセス ----------------------------------------------------------------
 
 // value_type at(Key const& key)
@@ -433,7 +491,6 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__9)
 	words.emplace_back("b");
 	words.emplace_back("cab");
 	words.emplace_back("cd");
-	std::sort(words.begin(), words.end());
 
 	trie.insert(words.begin(), words.end());
 
@@ -448,21 +505,27 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__9)
 BOOST_AUTO_TEST_CASE(trie_base__insert__10)
 {
 	test_trie_base trie{};
-}
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__11)
-{
-	test_trie_base trie{};
-}
+	std::vector<std::string> words;
+	words.emplace_back("a");
+	words.emplace_back("ac");
+	words.emplace_back("b");
+	words.emplace_back("cab");
+	words.emplace_back("cd");
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__12)
-{
-	test_trie_base trie{};
-}
+	trie.insert(words.begin(), words.end());
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__13)
-{
-	test_trie_base trie{};
+	words.emplace_back("cb");
+
+	trie.insert(words.begin(), words.end());
+
+	BOOST_CHECK(trie.count() == 6);
+	BOOST_CHECK(trie.find(std::string("a")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("ac")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("b")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cab")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cd")) != trie.end());
+	BOOST_CHECK(trie.find(std::string("cb")) != trie.end());
 }
 
 // void erase(const_iterator pos)
@@ -1618,22 +1681,26 @@ BOOST_AUTO_TEST_CASE(trie_base__stream__3)
 #endif
 	}
 
+	std::cout << "trie_base__stream__3" << std::endl;
+
 	test_trie_base t1{};
-	t1.insert(words.begin(), words.end());
+	t1.assign(words.begin(), words.end());
 
 	std::stringstream s;
-	s << t1;
-
-	test_trie_base t2{};
 
 	auto start = std::chrono::system_clock::now();
-
-	s >> t2;
-
+	s << t1;
 	auto duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "trie_base__stream__3" << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+	std::cout << "output: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+
+	test_trie_base t2{};
+	start = std::chrono::system_clock::now();
+	s >> t2;
+	duration = std::chrono::system_clock::now() - start;
+
+	std::cout << "input: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+
 	std::cout << "node  : " << t2.m_c.size() << std::endl;
 	std::cout << "count : " << t2.count() << std::endl;
 	std::cout << "size  : " << t2.size() << std::endl;
@@ -1653,7 +1720,7 @@ BOOST_AUTO_TEST_CASE(trie_base__stream__4)
 	}
 
 	test_trie_base t1{};
-	t1.insert(words.begin(), words.end());
+	t1.assign(words.begin(), words.end());
 
 	std::stringstream s;
 	s << t1;
@@ -1668,6 +1735,94 @@ BOOST_AUTO_TEST_CASE(trie_base__stream__4)
 
 	std::cout << "trie_base__stream__4" << std::endl;
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+	std::cout << "node  : " << t2.m_c.size() << std::endl;
+	std::cout << "count : " << t2.count() << std::endl;
+	std::cout << "size  : " << t2.size() << std::endl;
+	std::cout << "vector: " << words.size() << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__serialize__1)
+{
+	std::vector<std::string> words{};
+	{
+		std::string buf{};
+		std::ifstream is(english_words_path);
+		BOOST_REQUIRE(is.is_open());
+#ifdef NDEBUG
+		while (std::getline(is, buf)) words.push_back(buf);
+#else
+		for (size_t i = 0; i < 1000 && std::getline(is, buf); ++i) words.push_back(buf);
+		std::mt19937 mt;
+		std::shuffle(words.begin(), words.end(), mt);
+#endif
+	}
+
+	std::cout << "trie_base__serialize__1" << std::endl;
+
+	test_trie_base t1{};
+	t1.assign(words.begin(), words.end());
+
+	std::vector<std::uint8_t> v;
+
+	auto start = std::chrono::system_clock::now();
+	v << t1;
+	auto duration = std::chrono::system_clock::now() - start;
+
+	std::cout << "output: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+	std::cout << "buffer size: " << v.size() << std::endl;
+
+	test_trie_base t2{};
+	start = std::chrono::system_clock::now();
+	v >> t2;
+	duration = std::chrono::system_clock::now() - start;
+
+	std::cout << "input: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+
+	std::cout << "node  : " << t2.m_c.size() << std::endl;
+	std::cout << "count : " << t2.count() << std::endl;
+	std::cout << "size  : " << t2.size() << std::endl;
+	std::cout << "vector: " << words.size() << std::endl;
+}
+
+// inline std::vector<std::uint32_t>& operator<<(std::vector<std::uint32_t>& v, trie_base<Allocator1> const& trie)
+// inline std::vector<std::uint32_t>& operator>>(std::vector<std::uint32_t>& v, trie_base<Allocator1>& trie)
+BOOST_AUTO_TEST_CASE(trie_base__serialize__2)
+{
+	std::vector<std::string> words{};
+	{
+		std::string buf{};
+		std::ifstream is(english_words_path);
+		BOOST_REQUIRE(is.is_open());
+#ifdef NDEBUG
+		while (std::getline(is, buf)) words.push_back(buf);
+#else
+		for (size_t i = 0; i < 1000 && std::getline(is, buf); ++i) words.push_back(buf);
+		std::mt19937 mt;
+		std::shuffle(words.begin(), words.end(), mt);
+#endif
+	}
+
+	std::cout << "trie_base__serialize__2" << std::endl;
+
+	test_trie_base t1{};
+	t1.assign(words.begin(), words.end());
+
+	std::vector<std::uint32_t> v;
+
+	auto start = std::chrono::system_clock::now();
+	v << t1;
+	auto duration = std::chrono::system_clock::now() - start;
+
+	std::cout << "output: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+	std::cout << "buffer size: " << v.size() << std::endl;
+
+	test_trie_base t2{};
+	start = std::chrono::system_clock::now();
+	v >> t2;
+	duration = std::chrono::system_clock::now() - start;
+
+	std::cout << "input: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+
 	std::cout << "node  : " << t2.m_c.size() << std::endl;
 	std::cout << "count : " << t2.count() << std::endl;
 	std::cout << "size  : " << t2.size() << std::endl;
@@ -1731,11 +1886,11 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_txt__2)
 
 	auto start = std::chrono::system_clock::now();
 
-	trie.insert(words.begin(), words.end());
+	trie.assign(words.begin(), words.end());
 
 	auto duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "trie_base__english_words_txt__2 (static_insert.)" << std::endl;
+	std::cout << "trie_base__english_words_txt__2 (static assign.)" << std::endl;
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << "node  : " << trie.m_c.size() << std::endl;
 	std::cout << "count : " << trie.count() << std::endl;
@@ -1793,11 +1948,11 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_txt__4)
 
 	auto start = std::chrono::system_clock::now();
 
-	trie.insert(words.begin(), words.end());
+	trie.assign(words.begin(), words.end());
 
 	auto duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "trie_base__english_words_txt__4 (static_insert.)" << std::endl;
+	std::cout << "trie_base__english_words_txt__4 (static assign.)" << std::endl;
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << "node  : " << trie.m_c.size() << std::endl;
 	std::cout << "count : " << trie.count() << std::endl;
@@ -1855,11 +2010,11 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_txt__6)
 
 	auto start = std::chrono::system_clock::now();
 
-	trie.insert(words.begin(), words.end());
+	trie.assign(words.begin(), words.end());
 
 	auto duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "trie_base__english_words_txt__6 (static_insert.)" << std::endl;
+	std::cout << "trie_base__english_words_txt__6 (static assign.)" << std::endl;
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << "node  : " << trie.m_c.size() << std::endl;
 	std::cout << "count : " << trie.count() << std::endl;
@@ -1886,14 +2041,16 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_benchmark__1)
 #endif
 	}
 
+	std::uint32_t error = 0;
+
 	std::cout << "trie_base__english_words_benchmark__1" << std::endl;
 
 	test_trie_base trie{};
 	auto start = std::chrono::system_clock::now();
-	trie.insert(words.begin(), words.end());
+	trie.assign(words.begin(), words.end());
 	auto duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "trie insert." << std::endl;
+	std::cout << "trie assign." << std::endl;
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << "node  : " << trie.m_c.size() << std::endl;
 	std::cout << "size  : " << trie.size() << std::endl;
@@ -1918,7 +2075,7 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_benchmark__1)
 	std::cout << std::endl;
 
 	start = std::chrono::system_clock::now();
-	for (auto const& s : words) trie.find(s);
+	for (auto const& s : words) if(trie.find(s) == trie.end()) ++error;
 	duration = std::chrono::system_clock::now() - start;
 
 	std::cout << "trie find." << std::endl;
@@ -1926,7 +2083,7 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_benchmark__1)
 	std::cout << std::endl;
 
 	start = std::chrono::system_clock::now();
-	for (auto const& s : words) set.find(s);
+	for (auto const& s : words) if(set.find(s) == set.cend()) ++error;
 	duration = std::chrono::system_clock::now() - start;
 
 	std::cout << "std::set find." << std::endl;
@@ -1934,12 +2091,14 @@ BOOST_AUTO_TEST_CASE(trie_base__english_words_benchmark__1)
 	std::cout << std::endl;
 
 	start = std::chrono::system_clock::now();
-	for (auto const& s : words) uset.find(s);
+	for (auto const& s : words) if(uset.find(s) == uset.cend()) ++error;
 	duration = std::chrono::system_clock::now() - start;
 
 	std::cout << "std::unordered_set find." << std::endl;
 	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << std::endl;
+
+	BOOST_CHECK(error == 0);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

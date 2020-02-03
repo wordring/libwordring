@@ -28,7 +28,7 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		#const_trie_base_iterator.cpp
+		const_trie_base_iterator.cpp
 		list_trie_iterator.cpp
 		trie.cpp
 		trie_base.cpp
