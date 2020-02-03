@@ -2,7 +2,7 @@
 
 ## フォルダとファイル
 | 名前 | 説明 |
-|----:|:----|
+|----|----|
 | doc | 文書を格納するフォルダ |
 | generator | ソース・コード生成プログラムを格納するフォルダ |
 | include | ヘッダ・ファイルを格納するフォルダ |
@@ -28,7 +28,7 @@
 
 ## 要求サブモジュール
 | 名前 | 説明 |
-|----:|:----|
+|----|----|
 | https://github.com/publicsuffix/list | URLパーサでデータを使用 |
 | https://github.com/whatwg/encoding | HTML5パーサでデータを使用 |
 | https://github.com/dwyl/english-words | TRIE用単体テストでデータを使用 |
