@@ -6,6 +6,24 @@
 
 #include <wordring/trie/trie_heap.hpp>
 
+namespace wordring
+{
+	class test_trie_heap : public trie_heap<std::allocator<trie_node>>
+	{
+	public:
+		using base_type = trie_heap<std::allocator<trie_node>>;
+
+		using base_type::trie_heap;
+		using base_type::reserve;
+		using base_type::allocate;
+		using base_type::free;
+		using base_type::locate;
+		using base_type::is_free;
+
+		using base_type::m_c;
+	};
+}
+
 BOOST_AUTO_TEST_SUITE(trie_heap__test)
 
 BOOST_AUTO_TEST_CASE(trie_heap__construct__1)
@@ -14,487 +32,449 @@ BOOST_AUTO_TEST_CASE(trie_heap__construct__1)
 
 // 内部 -----------------------------------------------------------------------
 
-// void reserve(std::size_t n = 1024)
-BOOST_AUTO_TEST_CASE(trie_base__reserve__1)
+// void reserve(std::size_t)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__1)
 {
 	std::vector<int> v(1024, 0);
 	std::size_t i1 = v.size();
 	std::size_t i2 = v.capacity();
 
-	v.clear();
+	v.reserve(1024);
 
 	std::size_t i3 = v.size();
 	std::size_t i4 = v.capacity();
 
-	BOOST_CHECK(i1 != i3);
-	BOOST_CHECK(i2 == i4);
+	BOOST_CHECK(i1 <= i2);
+	BOOST_CHECK(i3 <= i4);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__reserve__2)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);
+	using namespace wordring;
 
-	trie.reserve(0);
+	test_trie_heap heap{};
+	heap.reserve(0);
 
-	BOOST_CHECK(trie.m_c.size() == 1);
-	BOOST_CHECK(trie.m_c.front().m_base == 0);
-	BOOST_CHECK(trie.m_c.front().m_check == 0);
+	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__reserve__3)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__3)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);
+	using namespace wordring;
 
-	trie.reserve(1);
+	test_trie_heap heap{};
+	heap.reserve(1);
 
-	BOOST_CHECK(trie.m_c.size() == 2);
-	BOOST_CHECK(trie.m_c.at(0).m_base == -1);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__reserve__4)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__4)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);
+	using namespace wordring;
 
-	trie.reserve(4);
+	test_trie_heap heap{};
+	heap.reserve(2);
 
-	BOOST_CHECK(trie.m_c.size() == 5);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -4);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -2);
-	BOOST_CHECK(trie.m_c.at(2).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -4);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__reserve__5)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__5)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);
+	using namespace wordring;
 
-	trie.m_c.front() = wordring::trie_node{ -3, -1 };
-	trie.m_c.emplace_back(0, -3);
-	trie.m_c.emplace_back(0, 0);
-	trie.m_c.emplace_back(0, 0);
-	trie.m_c.emplace_back(0, 0);
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	heap.reserve(1);
 
-	trie.reserve(4);
-
-	BOOST_CHECK(trie.m_c.size() == 9);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -8);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == -6);
-	BOOST_CHECK(trie.m_c.at(6).m_check == -7);
-	BOOST_CHECK(trie.m_c.at(7).m_check == -8);
-	BOOST_CHECK(trie.m_c.at(8).m_check == 0);
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c.size() == 5);
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__reserve__6)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__6)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);
+	using namespace wordring;
 
-	trie.m_c.front() = wordring::trie_node{ -2, -1 };
-	trie.m_c.emplace_back(0, -2);
-	trie.m_c.emplace_back(0, 0);
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	heap.reserve(2);
 
-	trie.reserve(3);
-
-	BOOST_CHECK(trie.m_c.size() == 6);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -5);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -2);
-	BOOST_CHECK(trie.m_c.at(2).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -4);
-	BOOST_CHECK(trie.m_c.at(4).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(5).m_check == 0);
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, -5 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c.size() == 6);
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__reserve__7)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__7)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);
+	using namespace wordring;
 
-	trie.m_c.front() = wordring::trie_node{ -1, -1 };
-	trie.m_c.emplace_back(0, 0);
+	test_trie_heap heap{};
+	heap.m_c = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	heap.reserve(1);
 
-	trie.reserve(3);
-
-	BOOST_CHECK(trie.m_c.size() == 5);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -4);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -2);
-	BOOST_CHECK(trie.m_c.at(2).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -4);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
+	std::vector<trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c.size() == 5);
+	BOOST_CHECK(heap.m_c == v);
 }
 
-// void allocate(index_type index)
-BOOST_AUTO_TEST_CASE(trie_base__allocate__1)
+BOOST_AUTO_TEST_CASE(trie_heap__reserve__8)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-8, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, -6);  // 5
-	trie.m_c.emplace_back(0, -7);  // 6
-	trie.m_c.emplace_back(0, -8);  // 7
-	trie.m_c.emplace_back(0, 0);   // 8
+	test_trie_heap heap{};
+	heap.m_c = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	heap.reserve(2);
 
-	trie.allocate(3);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -8);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == -6);
-	BOOST_CHECK(trie.m_c.at(6).m_check == -7);
-	BOOST_CHECK(trie.m_c.at(7).m_check == -8);
-	BOOST_CHECK(trie.m_c.at(8).m_check == 0);
+	std::vector<trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, -5 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c.size() == 6);
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__2)
+// void allocate(index_type id)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-8, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, -6);  // 5
-	trie.m_c.emplace_back(0, -7);  // 6
-	trie.m_c.emplace_back(0, -8);  // 7
-	trie.m_c.emplace_back(0, 0);   // 8
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, 0 } };
 
-	trie.allocate(1);
+	heap.allocate(1);
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == -8);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == -6);
-	BOOST_CHECK(trie.m_c.at(6).m_check == -7);
-	BOOST_CHECK(trie.m_c.at(7).m_check == -8);
-	BOOST_CHECK(trie.m_c.at(8).m_check == 0);
+	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__3)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-8, -2); // 0
-	trie.m_c.emplace_back(0, 0);   // 1
-	trie.m_c.emplace_back(0, -3);  // 2
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, -6);  // 5
-	trie.m_c.emplace_back(0, -7);  // 6
-	trie.m_c.emplace_back(0, -8);  // 7
-	trie.m_c.emplace_back(0, 0);   // 8
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, -3 }, { 0, 0 }, { 0, 0 } };
 
-	trie.allocate(2);
+	heap.allocate(1);
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == -8);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == -6);
-	BOOST_CHECK(trie.m_c.at(6).m_check == -7);
-	BOOST_CHECK(trie.m_c.at(7).m_check == -8);
-	BOOST_CHECK(trie.m_c.at(8).m_check == 0);
+	std::vector<trie_node> v{ { 0, -3 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__4)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__3)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-8, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, -6);  // 5
-	trie.m_c.emplace_back(0, -7);  // 6
-	trie.m_c.emplace_back(0, -8);  // 7
-	trie.m_c.emplace_back(0, 0);   // 8
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 } };
 
-	trie.allocate(8);
+	heap.allocate(2);
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == -7);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == -6);
-	BOOST_CHECK(trie.m_c.at(6).m_check == -7);
-	BOOST_CHECK(trie.m_c.at(7).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(8).m_check == 0);
+	std::vector<trie_node> v{ { 0, -1 }, { 0, -3 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__5)
+// void allocate(index_type base, label_vector const& labels)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__4)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-8, -8); // 0
-	trie.m_c.emplace_back(0, 0);   // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, 0);   // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, 0);   // 5
-	trie.m_c.emplace_back(0, 0);   // 6
-	trie.m_c.emplace_back(0, 0);   // 7
-	trie.m_c.emplace_back(0, 0);   // 8
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, 0 } };
 
-	trie.allocate(8);
+	static_vector<std::uint16_t, 257> sv = { 0 };
+	heap.allocate(1, sv);
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == 0);
-	BOOST_CHECK(trie.m_c.at(0).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(6).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(7).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(8).m_check == 0);
+	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__6)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__5)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-1, -1); // 0
-	trie.m_c.emplace_back(0, 0);   // 1
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, -4 }, { 0, 0 } };
 
-	trie.allocate(1);
+	heap.allocate(1, { 0, 2 });
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == 0);
-	BOOST_CHECK(trie.m_c.at(0).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-// index_type allocate(Range1 dests)
-BOOST_AUTO_TEST_CASE(trie_base__allocate__7)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__6)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-5, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, 0);   // 5
+	test_trie_heap heap{};
+	heap.m_c = { { 0, 0 } };
 
-	wordring::static_vector<std::uint16_t, 257> sv{ 1 };
-	
-	auto i = trie.allocate(sv);
+	static_vector<std::uint16_t, 257> sv = { 0 };
+	heap.allocate(1, sv);
 
-	BOOST_CHECK(i == 2);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base < 0);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -5);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check < 0);
+	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__8)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__7)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-5, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4
-	trie.m_c.emplace_back(0, 0);   // 5
+	test_trie_heap heap{};
+	heap.m_c = { { 0, 0 } };
 
-	wordring::static_vector<std::uint16_t, 257> sv{ 2, 4 };
+	heap.allocate(1, { 0, 2 });
 
-	auto i = trie.allocate(sv);
-
-	BOOST_CHECK(i == 1);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base < 0);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check < 0);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(5).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(6).m_check < 0);
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__allocate__9)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__8)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-
-	trie.m_c.emplace_back(-5, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2 使用済み
-	trie.m_c.emplace_back(0, -5);  // 3
-	trie.m_c.emplace_back(0, 0);   // 4 使用済み
-	trie.m_c.emplace_back(0, 0);   // 5
-
-	wordring::static_vector<std::uint16_t, 257> sv{ 0, 1 };
-
-	auto i = trie.allocate(sv);
-
-	BOOST_CHECK(i == 5);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base <= 0);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-
-	BOOST_CHECK(trie.m_c.at(1).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0); // 2 使用済み
-	BOOST_CHECK(trie.m_c.at(3).m_check <= 0);
-	BOOST_CHECK(trie.m_c.at(4).m_check == 0); // 4 使用済み
-	BOOST_CHECK(trie.m_c.at(5).m_check == 0); // 5 新規確保
-	BOOST_CHECK(trie.m_c.at(6).m_check == 0); // 6 新規確保
 }
 
-// void free(index_type index)
-BOOST_AUTO_TEST_CASE(trie_base__free__1)
+BOOST_AUTO_TEST_CASE(trie_heap__allocate__9)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-
-	trie.m_c.emplace_back(0, 0); // 0
-	trie.m_c.emplace_back(0, 5); // 1
-
-	trie.free(1);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -1);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__free__2)
+BOOST_AUTO_TEST_CASE(trie_heap__free__0)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
+	std::vector<std::string> v{ "1" };
 
-	trie.m_c.emplace_back(-3, -2); // 0
-	trie.m_c.emplace_back(0, 5);   // 1
-	trie.m_c.emplace_back(0, -3);  // 2
-	trie.m_c.emplace_back(0, 0);   // 3
-
-	trie.free(1);
-
-	BOOST_CHECK(trie.m_c.at(0).m_base == -1);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -2);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(2).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -1);
+	BOOST_CHECK(std::is_sorted(v.begin(), v.end()));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__free__3)
+// index_type free(index_type id, index_type before = 0)
+BOOST_AUTO_TEST_CASE(trie_heap__free__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(0, 0); // 0
-	trie.m_c.emplace_back(0, 0); // 1
-	trie.m_c.emplace_back(0, 0); // 2
-	trie.m_c.emplace_back(0, 0); // 3
+	test_trie_heap heap{};
+	heap.m_c = { { 0, 0 }, { 0, 9 } };
 
-	trie.free(3);
+	heap.free(1);
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == -3);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(1).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == 0);
+	std::vector<trie_node> v{ { 0, -1 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__free__4)
+BOOST_AUTO_TEST_CASE(trie_heap__free__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
+	using namespace wordring;
 
-	trie.m_c.emplace_back(-3, -1); // 0
-	trie.m_c.emplace_back(0, -3);  // 1
-	trie.m_c.emplace_back(0, 0);   // 2
-	trie.m_c.emplace_back(0, 0);   // 3
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, -3 }, { 0, 9 }, { 0, 0 } };
 
-	trie.free(2);
+	heap.free(2);
 
-	BOOST_CHECK(trie.m_c.at(0).m_base == -2);
-	BOOST_CHECK(trie.m_c.at(0).m_check == -1);
-	BOOST_CHECK(trie.m_c.at(1).m_check == -3);
-	BOOST_CHECK(trie.m_c.at(2).m_check == 0);
-	BOOST_CHECK(trie.m_c.at(3).m_check == -2);
+	std::vector<trie_node> v{ { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__free__3)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -2 }, { 0, 9 }, { 0, 0 }, { 0, 9 } };
+
+	heap.free(3);
+
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 9 }, { 0, -3 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+}
+
+// void free(index_type base, label_vector const& labels)
+BOOST_AUTO_TEST_CASE(trie_heap__free__4)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, 0 }, { 0, 9 } };
+
+	static_vector<std::uint16_t, 257> labels{ 0 };
+	heap.free(1, labels);
+
+	std::vector<trie_node> v{ { 0, -1 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__free__5)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -3 }, { 0, 9 }, { 0, 9 }, { 0, 0 } };
+
+	heap.free(1, { 0, 1 });
+
+	std::vector<trie_node> v{ { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__free__6)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -2 }, { 0, 9 }, { 0, -4 }, { 0, 9 }, { 0, 0 } };
+
+	heap.free(1, { 0, 2 });
+
+	std::vector<trie_node> v{ { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, -4 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__free__7)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -2 }, { 0, 9 }, { 0, 0 }, { 0, 9 } };
+
+	heap.free(1, { 0, 2 });
+
+	std::vector<trie_node> v{ { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+}
+
+// index_type locate(label_vector const& labels, index_type& before) const
+BOOST_AUTO_TEST_CASE(trie_heap__locate__1)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 0 }, before) == 2);
+	BOOST_CHECK(before == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__2)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 1 }, before) == 1);
+	BOOST_CHECK(before == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__3)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.reserve(1);
+
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 1 }, before) == 1);
+	BOOST_CHECK(before == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__4)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.reserve(2);
+
+	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, 0 } };
+	BOOST_CHECK(heap.m_c == v);
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 1, 2 }, before) == 1);
+	BOOST_CHECK(before == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__5)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -3 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 1 }, before) == 2);
+	BOOST_CHECK(before == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__6)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -3 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 2 }, before) == 1);
+	BOOST_CHECK(before == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__7)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 9 }, { 0, 0 } };
+
+	std::int32_t before;
+	BOOST_CHECK(heap.locate({ 2 }, before) == 2);
+	BOOST_CHECK(before == 2);
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__8)
+{
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__locate__9)
+{
 }
 
 // bool is_free(index_type base, label_vector const& labels) const
-BOOST_AUTO_TEST_CASE(trie_base__is_free__1)
+BOOST_AUTO_TEST_CASE(trie_heap__is_free__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(-1, -1); // 0
-	trie.m_c.emplace_back(0, 0);   // 1
+	using namespace wordring;
 
-	BOOST_CHECK(trie.is_free(1, { 0 }));
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, 0 } };
+
+	BOOST_CHECK(heap.is_free(1, { 0 }));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__is_free__2)
+BOOST_AUTO_TEST_CASE(trie_heap__is_free__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(-1, -1); // 0
-	trie.m_c.emplace_back(0, 0);   // 1
+	using namespace wordring;
 
-	BOOST_CHECK(trie.is_free(1, { 0, 256 }));
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, 1 } };
+
+	BOOST_CHECK(heap.is_free(1, { 1 }));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__is_free__3)
+BOOST_AUTO_TEST_CASE(trie_heap__is_free__3)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(-1, -1); // 0
-	trie.m_c.insert(trie.m_c.end(), 257, { 0, 0 });
+	using namespace wordring;
 
-	BOOST_CHECK(trie.is_free(1, { 256 }) == false);
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -1 }, { 0, 1 } };
+
+	BOOST_CHECK(heap.is_free(1, { 0 }) == false);
+}
+
+// bool is_free(index_type parent, index_type base, label_vector const& labels) const
+BOOST_AUTO_TEST_CASE(trie_heap__is_free__4)
+{
+	using namespace wordring;
+
+	test_trie_heap heap{};
+	heap.m_c = { { 0, -3 }, { 0, 0 }, { 0, 1 }, { 0, 0 } };
+
+	BOOST_CHECK(heap.is_free(1, 1, { 1, 2 }));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

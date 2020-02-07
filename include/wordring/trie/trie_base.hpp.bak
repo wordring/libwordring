@@ -58,15 +58,15 @@ namespace wordring
 		friend bool operator!=(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
 
 	public:
-		using difference_type = std::ptrdiff_t;
-		using value_type = std::uint8_t;
-		using pointer = value_type*;
-		using reference = value_type&;
+		using difference_type   = std::ptrdiff_t;
+		using value_type        = std::uint8_t;
+		using pointer           = value_type*;
+		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
 	protected:
 		using index_type = typename trie_node::index_type;
-		using container = Container const;
+		using container  = Container const;
 
 		static constexpr std::uint16_t null_value = 256;
 
@@ -97,7 +97,7 @@ namespace wordring
 			if (idx <= 0) return true;
 			// 子はあるが、途中で終端もある（文字null_valueによる遷移）場合。
 			if ((idx + null_value) < tail() && (data + idx + null_value)->m_check == m_index) return true;
-
+			
 			return false;
 		}
 
@@ -116,7 +116,7 @@ namespace wordring
 
 			index_type idx = (data + m_index)->m_base + label;
 			idx = (idx < tail() && (data + idx)->m_check == m_index) ? idx
-				: 0;
+				                                                     : 0;
 			return const_trie_base_iterator(*m_c, idx);
 		}
 
@@ -147,7 +147,7 @@ namespace wordring
 		std::optional<const_trie_base_iterator> parent() const
 		{
 			return 1 < m_index ? std::optional<const_trie_base_iterator>(const_trie_base_iterator(*m_c, (m_c->data() + m_index)->m_check))
-				: std::nullopt;
+				               : std::nullopt;
 		}
 
 		/*! 0-255に相当する文字で遷移できる最初の子を指すイテレータを返す
@@ -167,7 +167,7 @@ namespace wordring
 		{
 			return const_trie_base_iterator(*m_c, 0);
 		}
-
+		
 	protected:
 		/*! 引数firstからlastの範囲で、m_checkが引数checkと一致する状態番号を返す
 
@@ -201,13 +201,13 @@ namespace wordring
 		index_type base() const
 		{
 			auto data = m_c->data();
-
+			
 			index_type parent = mother();
 			assert(parent != 0);
 
 			index_type idx = (parent != 0) ? (data + parent)->m_base : 0;
 			assert(1 <= idx); // thisが子である以上、親のBASEが存在する。
-
+			
 			return idx;
 		}
 
@@ -239,7 +239,7 @@ namespace wordring
 			index_type first = base();
 			index_type last = first + null_value;
 
-			while (true)
+			while(true)
 			{
 				first = find(first, last, check);
 				if (first == 0) return false;
@@ -323,34 +323,40 @@ namespace wordring
 
 		using label_vector = typename base_type::label_vector;
 
-		using value_type = trie_base_value_proxy;
-		using size_type = typename container::size_type;
-		using allocator_type = Allocator;
-		using reference = trie_base_value_proxy;
+		using value_type      = trie_base_value_proxy;
+		using size_type       = typename container::size_type;
+		using allocator_type  = Allocator;
+		using reference       = trie_base_value_proxy;
 		using const_reference = trie_base_value_proxy const;
-		using const_iterator = const_trie_base_iterator<container const>;
+		using const_iterator  = const_trie_base_iterator<container const>;
 
 		using index_type = typename trie_node::index_type;
 
 		static constexpr std::uint16_t null_value = base_type::null_value;
 
 	protected:
-		using typename base_type::node_type;
-
 		using base_type::trie_heap;
 		using base_type::reserve;
 		using base_type::allocate;
-		using base_type::relocate;
 		using base_type::free;
-		using base_type::locate;
 		using base_type::is_free;
 
 		using base_type::m_c;
 
 	public:
+		/*
 		trie_base()
-			: base_type()
+			: m_c({ { 0, 0 }, { 0, 0 } })
+			, m_size(0)
 		{
+			reserve();
+		}
+		*/
+
+		trie_base()
+			: m_size(0)
+		{
+			reserve();
 		}
 
 		template <typename InputIterator>
@@ -429,7 +435,7 @@ namespace wordring
 
 		bool empty() const noexcept { return size() == 0; }
 
-		size_type size() const noexcept { return m_c.front().m_base; }
+		size_type size() const noexcept { return m_size; }
 
 		static constexpr size_type max_size() noexcept { return std::numeric_limits<std::int32_t>::max() / 4; }
 
@@ -439,50 +445,55 @@ namespace wordring
 		{
 			m_c.clear();
 			m_c.insert(m_c.begin(), 2, trie_node{ 0, 0 });
+			m_size = 0;
 		}
 
 		template <typename Key>
 		const_iterator insert(Key const& key)
 		{
+			auto it = find(key);
+			if (it) return it;
+
 			auto it1 = std::begin(key);
 			auto it2 = std::end(key);
-			if (it1 == it2) return cend();
 
-			index_type parent = 1;
+			const_iterator it3 = cbegin();
+			const_iterator it4 = cend();
 
 			// 登録済み遷移をスキップする
-			for (index_type idx = at(parent, *it1); idx != 0; idx = at(parent, *it1))
+			for (; it1 != it2; ++it1)
 			{
-				parent = idx;
-				++it1;
-				if (it1 == it2) break;
+				auto it = it3[static_cast<std::uint8_t>(*it1)];
+				if (it == it4) break;
+				it3 = it;
 			}
-			if (it1 != it2) ++m_c.front().m_base;
 
-			// 空遷移の解決
-			if (has_child(parent)) // 既存遷移有り、新規文字列無し
+			if (it1 != it2) ++m_size;
+
+			// 空遷移
+			const_iterator it5 = it3.begin(); // 後続の遷移。
+			const_iterator it6 = it3.end();
+
+			// 既存遷移有り、新規文字列無し
+			if (it5 != it6 && it1 == it2)
 			{
-				if (it1 == it2 && !has_null(parent))
-				{
-					add(parent, null_value);
-					++m_c.front().m_base;
-				}
+				add(it3, null_value);
+				++m_size;
 			}
-			else if (parent != 1 && !has_null(parent) && it1 != it2) // 後続遷移無し、新規文字列有り
-				add(parent, null_value);
+			// 後続遷移無し、新規文字列有り
+			if (it5 == it6 && !it3.has_null() && it1 != it2)
+			{
+				if(it3.m_index != 1) add(it3, null_value);
+			}
 
 			// 新規文字列による遷移を追加
-			while (it1 != it2)
+			for (; it1 != it2; ++it1)
 			{
-				std::uint16_t label = static_cast<std::uint8_t>(*it1++);
-				index_type base = add(parent, label);
-				parent = base + label;
+				std::uint16_t label = static_cast<std::uint8_t>(*it1);
+				it3 = const_iterator(m_c, add(it3, label) + label);
 			}
 
-			assert(parent != 1); // keyが空文字列の場合？
-			//if (parent == 1) parent = 0;
-
-			return const_iterator(m_c, parent);
+			return it3 == cbegin() ? cend() : it3;
 		}
 
 		template <typename InputIterator>
@@ -504,20 +515,18 @@ namespace wordring
 
 					free(idx);
 					if (pos.begin() == pos.end()) (m_c.data() + pos.m_index)->m_base = 0;
-
+					
 					break;
 				}
 
 				std::optional<const_iterator> parent;
-				if (!pos.has_sibling()) parent = pos.parent(); // 兄弟が無い場合
+				if(!pos.has_sibling()) parent = pos.parent(); // 兄弟が無い場合
 
 				free(pos.m_index);
 
 				if (!parent.has_value()) break;
 				pos = parent.value();
 			}
-
-			--m_c.front().m_base;
 		}
 
 		template <typename Key>
@@ -566,114 +575,68 @@ namespace wordring
 			return it ? it : cend();
 		}
 
-		template <typename Key>
-		bool contains(Key const& key) const
-		{
-			auto it1 = std::begin(key);
-			auto it2 = std::end(key);
-
-			index_type parent = 1;
-
-			index_type limit = m_c.size();
-			node_type const* d = m_c.data();
-			while (it1 != it2)
-			{
-				if (parent <= 0) return false;
-
-				index_type base = (d + parent)->m_base;
-				if (base < 1) return false;
-
-				std::uint16_t label = static_cast<std::uint8_t>(*it1++);
-				index_type idx = base + label;
-				if (limit <= idx || (d + idx)->m_check != parent) return false;
-
-				parent = idx;
-				assert(parent < limit);
-			}
-			assert(it1 == it2);
-
-			// 空遷移検出
-			if ((d + parent)->m_base != 0)
-			{
-				index_type base = (d + parent)->m_base;
-				if (base < 1) return false;
-				index_type idx = base + null_value;
-				if (limit <= idx) return false;
-				if ((d + idx)->m_check != parent) return false;
-			}
-
-			return true;
-		}
-
 	protected:
-		bool has_child(index_type parent) const
+
+		index_type modify(const_iterator parent, label_vector& labels)
 		{
-			node_type const* d = m_c.data();
+			index_type from = (m_c.data() + parent.m_index)->m_base; // 旧子の開始
 
-			index_type base = (d + parent)->m_base;
-			index_type limit = std::min(base + null_value, static_cast<index_type>(m_c.size()));
+			static_vector<std::uint16_t, 257> children; // 旧ラベル集合
+			parent.children(children);
 
-			for (index_type idx = base; idx < limit; ++idx) if ((d + idx)->m_check == parent) return true;
+			labels.insert(labels.end(), children.begin(), children.end());
+			std::sort(labels.begin(), labels.end());
+			index_type to = allocate(labels); // 新子の開始
 
-			return false;
+			static_vector<std::uint16_t, 257> gchildren;
+			auto data = m_c.data();
+			for (std::uint16_t label : children)
+			{
+				(data + to + label)->m_base = (data + from + label)->m_base; // 子のBASEを置換
+				(data + to + label)->m_check = (data + from + label)->m_check; // 子のCHECKを置換
+
+				// 孫のCHECKを置き換え
+				index_type base = (data + from + label)->m_base;
+
+				gchildren.clear();
+				const_iterator(m_c, from + label).children(gchildren); // 孫ラベル集合
+
+				for (std::uint16_t glabel : gchildren) (data + base + glabel)->m_check = to + label;
+			}
+
+			(data + parent.m_index)->m_base = to;
+
+			for (auto const& label : children) free(from + label);
+
+			return to;
 		}
 
-		bool has_null(index_type parent) const
-		{
-			node_type const* d = m_c.data();
-
-			index_type base = (d + parent)->m_base;
-			index_type idx = base + null_value;
-			index_type limit = static_cast<index_type>(m_c.size());
-			
-			return idx < limit && (d + idx)->m_check == parent;
-		}
-
-		/*! parentからlabelで遷移したINDEXを返す。
-		- 遷移先が無ければ0を返す。
-		*/
-		index_type at(index_type parent, std::uint16_t label) const
-		{
-			node_type const* d = m_c.data();
-			index_type base = (d + parent)->m_base;
-			index_type idx = base + label;
-			index_type check = (d + idx)->m_check;
-
-			return (check == parent) ? idx : 0;
-		}
-
-		index_type add(index_type parent, std::uint16_t label)
+		index_type add(const_iterator parent, std::uint16_t label)
 		{
 			return add(parent, label_vector(1, label));
 		}
 
 		/*! parentの子としてラベル集合labels内の各ラベルによる遷移を挿入する
 
-		- 配置起点を返す。
+		- この配置起点を返す。
 		*/
-		index_type add(index_type parent, label_vector const& labels)
+		index_type add(const_iterator parent, label_vector labels)
 		{
-			assert(!labels.empty());
-			assert(std::is_sorted(labels.begin(), labels.end()));
+			index_type base = (m_c.data() + parent.m_index)->m_base; // 遷移先配置の起点（遷移先が定義されていない場合0）
 
-			index_type before = 0;
-			index_type base = (m_c.data() + parent)->m_base; // 遷移先配置の起点（遷移先が定義されていない場合0）
+			if (0 < base && is_free(base, labels)) for (auto label : labels) allocate(base + label);
+			else if (base == 0) base = allocate(labels);
+			else base = modify(parent, labels);
 
-			if (base == 0)
-			{
-				base = locate(labels, before);
-				allocate(base, labels, before);
-			}
-			else if (is_free(parent, base, labels)) allocate(base, labels, before);
-			else base = relocate(parent, base, labels);
-
-			node_type* d = m_c.data();
-
-			(d + parent)->m_base = base;
-			for (std::uint16_t label : labels) (d + base + label)->m_check = parent;
+			(m_c.data() + parent.m_index)->m_base = base;
+			for (auto label : labels) (m_c.data() + base + label)->m_check = parent.m_index;
 
 			return base;
 		}
+
+	protected:
+		//container m_c;
+		size_type m_size;
 	};
 
 	template <typename Allocator1>
@@ -704,10 +667,10 @@ namespace wordring
 		char ch;
 		std::uint32_t n = 0;
 
-		std::uint32_t base = 0;
+		std::uint32_t base  = 0;
 		std::uint32_t check = 0;
 
-		std::int32_t i = 0;
+		std::int32_t i  = 0;
 		std::uint32_t j = 0;
 
 		for (i = 3; 0 <= i; --i)
@@ -739,7 +702,7 @@ namespace wordring
 			if (j < 4) base += static_cast<std::uint8_t>(ch) << (3 - j) * 8;
 			else check += static_cast<std::uint8_t>(ch) << (7 - j) * 8;
 
-			if (j == 7) trie.m_c.emplace_back(base, check);
+			if(j == 7) trie.m_c.emplace_back(base, check);
 		}
 		goto End;
 
