@@ -2,6 +2,7 @@
 
 #include <wordring/static_vector/static_vector.hpp>
 #include <wordring/trie/list_trie_iterator.hpp>
+#include <wordring/trie/trie_base_iterator.hpp>
 #include <wordring/trie/trie_construct_iterator.hpp>
 #include <wordring/trie/trie_heap.hpp>
 
@@ -45,249 +46,6 @@ namespace wordring
 		}
 	};
 
-	template <typename Container>
-	class const_trie_base_iterator
-	{
-		template <typename Allocator>
-		friend class trie_base;
-
-		template <typename Container1>
-		friend bool operator==(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
-
-		template <typename Container1>
-		friend bool operator!=(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
-
-	public:
-		using difference_type = std::ptrdiff_t;
-		using value_type = std::uint8_t;
-		using pointer = value_type*;
-		using reference = value_type&;
-		using iterator_category = std::input_iterator_tag;
-
-	protected:
-		using index_type = typename trie_node::index_type;
-		using container = Container const;
-
-		static constexpr std::uint16_t null_value = 256;
-
-	public:
-		const_trie_base_iterator()
-			: m_c(nullptr)
-			, m_index(0)
-		{
-		}
-
-	protected:
-		const_trie_base_iterator(container& c, index_type index)
-			: m_c(std::addressof(c))
-			, m_index(index)
-		{
-		}
-
-	public:
-		/*! 文字列終端の場合trueを返す*/
-		operator bool() const
-		{
-			if (m_index <= 1) return false;
-
-			auto data = m_c->data();
-			index_type idx = (data + m_index)->m_base; // 子のBASEインデックス。
-
-			// 子が無い（BASEが1未満）場合。
-			if (idx <= 0) return true;
-			// 子はあるが、途中で終端もある（文字null_valueによる遷移）場合。
-			if ((idx + null_value) < tail() && (data + idx + null_value)->m_check == m_index) return true;
-
-			return false;
-		}
-
-		bool operator!() const { return operator bool() == false; }
-
-		value_type operator*() const
-		{
-			assert(base() <= m_index && m_index < base() + null_value);
-
-			return m_index - base();
-		}
-
-		const_trie_base_iterator operator[](value_type label) const
-		{
-			auto data = m_c->data();
-
-			index_type idx = (data + m_index)->m_base + label;
-			idx = (idx < tail() && (data + idx)->m_check == m_index) ? idx
-				: 0;
-			return const_trie_base_iterator(*m_c, idx);
-		}
-
-		const_trie_base_iterator& operator++()
-		{
-			m_index = find(m_index + 1, base() + null_value, mother());
-
-			return *this;
-		}
-
-		const_trie_base_iterator operator++(int)
-		{
-			auto result = *this;
-
-			operator++();
-
-			return result;
-		}
-
-		template <typename String>
-		String string() const
-		{
-			std::basic_string<value_type> tmp;
-			for (auto p = *this; 1 < p.m_index; p = *p.parent()) tmp.push_back(*p);
-			return String(tmp.rbegin(), tmp.rend());
-		}
-
-		std::optional<const_trie_base_iterator> parent() const
-		{
-			return 1 < m_index ? std::optional<const_trie_base_iterator>(const_trie_base_iterator(*m_c, (m_c->data() + m_index)->m_check))
-				: std::nullopt;
-		}
-
-		/*! 0-255に相当する文字で遷移できる最初の子を指すイテレータを返す
-		- 256による空遷移は含めない。
-		- 遷移先（子）が無い場合、end()を返す。
-		*/
-		const_trie_base_iterator begin() const
-		{
-			assert(1 <= m_index);
-
-			index_type i = (m_c->data() + m_index)->m_base;
-			i = (0 < i) ? find(i, i + null_value, m_index) : 0;
-			return const_trie_base_iterator(*m_c, i);
-		}
-
-		const_trie_base_iterator end() const
-		{
-			return const_trie_base_iterator(*m_c, 0);
-		}
-
-	protected:
-		/*! 引数firstからlastの範囲で、m_checkが引数checkと一致する状態番号を返す
-
-		- 見つからない場合、0を返す。
-		- 状態番号は1から始まるので0と衝突しない。
-		- 引数lastがコンテナの大きさを超える場合、そこで検索を終了する。
-		*/
-		index_type find(index_type first, index_type last, index_type check) const
-		{
-			index_type limit = std::min(last, static_cast<index_type>(m_c->size()));
-			for (; first < limit; ++first) if ((m_c->data() + first)->m_check == check) break;
-
-			return (first != limit) ? first : 0;
-		}
-
-		/*! 親の状態番号を返す
-		*/
-		index_type mother() const
-		{
-			assert(1 <= m_index && m_index < tail());
-
-			auto data = m_c->data();
-			index_type parent = (data + m_index)->m_check;
-
-			return 1 <= parent ? parent : 0;
-		}
-
-		/*! 親のBASEを返す
-		- つまりコレはm_indexからラベルを差し引いた値にに相当する。
-		*/
-		index_type base() const
-		{
-			auto data = m_c->data();
-
-			index_type parent = mother();
-			assert(parent != 0);
-
-			index_type idx = (parent != 0) ? (data + parent)->m_base : 0;
-			assert(1 <= idx); // thisが子である以上、親のBASEが存在する。
-
-			return idx;
-		}
-
-		/*! コンテナの最終状態番号の次を返す
-		- キャストで行が増えるのを抑制するために用意した。
-		*/
-		index_type tail() const { return m_c->size(); }
-
-		/*! 空遷移がある場合trueを返す
-		*/
-		bool has_null() const
-		{
-			if (m_index == 1) return false;
-
-			auto data = m_c->data();
-			index_type idx = (data + m_index)->m_base + null_value;
-
-			return (idx < tail() && (data + idx)->m_check == m_index);
-		}
-
-		/*! 兄弟にあたる状態がある場合、trueを返す
-		*/
-		bool has_sibling() const
-		{
-			if (m_index == 1) return false;
-
-			index_type check = (m_c->data() + m_index)->m_check;
-
-			index_type first = base();
-			index_type last = first + null_value;
-
-			while (true)
-			{
-				first = find(first, last, check);
-				if (first == 0) return false;
-				if (first != m_index) return true;
-				++first;
-			}
-
-			return false;
-		}
-
-		/*! 遷移可能な子ラベルを列挙する
-
-		- null_value を含む
-		*/
-		void children(static_vector<std::uint16_t, 257>& labels) const
-		{
-			assert(1 <= m_index);
-			assert(labels.empty());
-
-			index_type base = (m_c->data() + m_index)->m_base; // 子の開始
-			if (base <= 0) return; // 0以下は子が無い
-
-			index_type first = base;
-			index_type last = std::min(base + null_value + 1, static_cast<index_type>(m_c->size()));
-			for (; first < last; ++first)
-			{
-				index_type check = (m_c->data() + first)->m_check;
-				if (check == m_index) labels.push_back(static_cast<std::uint16_t>(first - base));
-			}
-		}
-
-	protected:
-		container* m_c;
-		index_type m_index;
-	};
-
-	template <typename Container1>
-	inline bool operator==(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
-	{
-		assert(lhs.m_c == rhs.m_c);
-		return lhs.m_index == rhs.m_index;
-	}
-
-	template <typename Container1>
-	inline bool operator!=(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
-	{
-		return !(lhs == rhs);
-	}
 
 	// ------------------------------------------------------------------------
 	// trie_base
@@ -338,6 +96,7 @@ namespace wordring
 		using typename base_type::node_type;
 
 		using base_type::trie_heap;
+		using base_type::limit;
 		using base_type::reserve;
 		using base_type::allocate;
 		using base_type::relocate;
@@ -353,15 +112,18 @@ namespace wordring
 		{
 		}
 
-		template <typename InputIterator>
-		void assign(InputIterator first, InputIterator last)
+		template <typename ForwardIterator>
+		void assign(ForwardIterator first, ForwardIterator last)
 		{
 			clear();
 
-			std::sort(first, last);
-			last = std::unique(first, last);
+			if (!std::is_sorted(first, last) || std::adjacent_find(first, last) != last)
+			{
+				insert(first, last);
+				return;
+			}
 
-			using list_iterator = const_list_trie_iterator<InputIterator>;
+			using list_iterator = const_list_trie_iterator<ForwardIterator>;
 			using construct_iterator = trie_construct_iterator<list_iterator>;
 
 			auto li = list_iterator(first, last);
@@ -372,11 +134,11 @@ namespace wordring
 				auto view = it.parent();
 				auto it1 = search(view.begin(), view.end());
 				if (it1.first.m_index == 0) it1.first.m_index = 1; // rootの場合。
-				add(it1.first, it.children());
+				add(it1.first.m_index, it.children());
 				++it;
 			}
 
-			m_size = std::distance(first, last);
+			m_c.front().m_base = std::distance(first, last);
 		}
 
 		// 要素アクセス --------------------------------------------------------
@@ -431,7 +193,10 @@ namespace wordring
 
 		size_type size() const noexcept { return m_c.front().m_base; }
 
-		static constexpr size_type max_size() noexcept { return std::numeric_limits<std::int32_t>::max() / 4; }
+		static constexpr size_type max_size() noexcept
+		{
+			return std::numeric_limits<std::int32_t>::max() / sizeof(node_type);
+		}
 
 		// 変更 ---------------------------------------------------------------
 
@@ -479,8 +244,7 @@ namespace wordring
 				parent = base + label;
 			}
 
-			assert(parent != 1); // keyが空文字列の場合？
-			//if (parent == 1) parent = 0;
+			assert(parent != 1);
 
 			return const_iterator(m_c, parent);
 		}
@@ -493,28 +257,32 @@ namespace wordring
 
 		void erase(const_iterator pos)
 		{
-			if (!pos) return;
+			index_type idx = pos.m_index;
+			assert(0 <= idx && idx < limit());
+
+			if (idx <= 1 || !is_tail(idx)) return;
 
 			while (true)
 			{
-				if (pos.has_null())
+				if (has_null(idx))
 				{
-					index_type idx = (m_c.data() + pos.m_index)->m_base + null_value;
-					assert((m_c.data() + idx)->m_check == pos.m_index);
+					index_type i = (m_c.data() + idx)->m_base + null_value;
+					assert((m_c.data() + i)->m_check == idx);
 
-					free(idx);
-					if (pos.begin() == pos.end()) (m_c.data() + pos.m_index)->m_base = 0;
+					free(i);
+					if (!has_child(idx)) (m_c.data() + idx)->m_base = 0;
 
 					break;
 				}
 
-				std::optional<const_iterator> parent;
-				if (!pos.has_sibling()) parent = pos.parent(); // 兄弟が無い場合
+				index_type parent = 0;
+				if (!has_sibling(idx)) parent = (m_c.data() + idx)->m_check; // 兄弟が無い場合
+				assert(0 <= parent && parent < limit());
 
-				free(pos.m_index);
+				if (idx != 1) free(idx);
+				if (parent == 0) break;
 
-				if (!parent.has_value()) break;
-				pos = parent.value();
+				idx = parent;
 			}
 
 			--m_c.front().m_base;
@@ -528,42 +296,63 @@ namespace wordring
 		/*! 部分一致検索
 
 		- 引数first, lastは検索文字列のbegin(), end()。
-		- 戻り値は一致した最後の状態と文字を指すイテレータのペア。
-		*/
-		template <typename Iterator>
-		auto search(Iterator first, Iterator last) const->std::pair<const_iterator, Iterator>
-		{
-			const_iterator it1 = cbegin();
-			const_iterator it2 = cend();
+		- 戻り値は一致した最後の状態と次の文字を指すイテレータのペア。
 
-			for (; first != last; ++first)
+		- 一文字も一致しない場合、cbegin()を返す。
+		*/
+		template <typename InputIterator>
+		auto search(InputIterator first, InputIterator last) const
+			->std::pair<const_iterator, InputIterator>
+		{
+			index_type parent = 1;
+
+			while (first != last)
 			{
-				auto it = it1[static_cast<std::uint8_t>(*first)];
-				if (it == it2) break;
-				it1 = it;
+				std::uint16_t ch = static_cast<std::uint8_t>(*first);
+				index_type idx = at(parent, ch);
+				if (idx == 0) break;
+				++first;
+				parent = idx;
+				assert(1 <= parent && parent < limit());
 			}
 
-			return std::make_pair(it1 == cbegin() ? cend() : it1, first);
+			return std::make_pair(const_iterator(m_c, parent), first);
 		}
 
 		/*! 前方一致検索
+
+		- 空文字列に対してはcbegin()を返す。
+		- この動作は再検討が必要かもしれない。
 		*/
 		template <typename Key>
 		const_iterator search(Key const& key) const
 		{
-			auto pair = search(key.begin(), key.end());
-			return pair.second == key.end() ? pair.first : cend();
+			auto it1 = std::begin(key);
+			auto it2 = std::end(key);
+
+			auto pair = search(it1, it2);
+
+			return (pair.second == it2)
+				? pair.first
+				: cend();
 		}
 
 		/*! 完全一致検索
-
-		- 子遷移があり、文字列終端でもある場合に注意。
 		*/
 		template <typename Key>
 		const_iterator find(Key const& key) const
 		{
-			auto it = search(key);
-			return it ? it : cend();
+			auto it1 = std::begin(key);
+			auto it2 = std::end(key);
+
+			auto pair = search(it1, it2);
+
+			auto it = pair.second;
+			index_type idx = pair.first.m_index;
+
+			return (it == it2 && is_tail(idx))
+				? pair.first
+				: cend();
 		}
 
 		template <typename Key>
@@ -572,72 +361,132 @@ namespace wordring
 			auto it1 = std::begin(key);
 			auto it2 = std::end(key);
 
-			index_type parent = 1;
+			auto pair = search(it1, it2);
 
-			index_type limit = m_c.size();
-			node_type const* d = m_c.data();
-			while (it1 != it2)
-			{
-				if (parent <= 0) return false;
+			auto it = pair.second;
+			index_type idx = pair.first.m_index;
 
-				index_type base = (d + parent)->m_base;
-				if (base < 1) return false;
-
-				std::uint16_t label = static_cast<std::uint8_t>(*it1++);
-				index_type idx = base + label;
-				if (limit <= idx || (d + idx)->m_check != parent) return false;
-
-				parent = idx;
-				assert(parent < limit);
-			}
-			assert(it1 == it2);
-
-			// 空遷移検出
-			if ((d + parent)->m_base != 0)
-			{
-				index_type base = (d + parent)->m_base;
-				if (base < 1) return false;
-				index_type idx = base + null_value;
-				if (limit <= idx) return false;
-				if ((d + idx)->m_check != parent) return false;
-			}
-
-			return true;
+			return (it != it2 || !is_tail(idx))
+				? false
+				: true;
 		}
 
 	protected:
+		/*! idxが遷移終端に達しているか、あるいはnull_valueによる遷移を持つ場合、trueを返す
+		- has_childとhas_nullの組み合わせで表現できるが、検索高速化のため独立して用意した。
+		*/
+		bool is_tail(index_type idx) const
+		{
+			assert(1 <= idx && idx < limit());
+
+			node_type const* d = m_c.data();
+			index_type base = (d + idx)->m_base; // 子のBASEインデックス。
+
+			return ((base <= 0 && idx != 1) || (base + null_value < limit() && (d + base + null_value)->m_check == idx))
+				? true
+				: false;
+		}
+
+		/*! parentからのラベルによる遷移がある場合、trueを返す
+		*/
 		bool has_child(index_type parent) const
 		{
+			assert(1 <= parent && parent < limit());
+
 			node_type const* d = m_c.data();
 
 			index_type base = (d + parent)->m_base;
-			index_type limit = std::min(base + null_value, static_cast<index_type>(m_c.size()));
+			assert(0 <= base && base < limit());
+			index_type last = std::min(base + null_value, limit());
+			assert(1 <= last && last <= limit());
 
-			for (index_type idx = base; idx < limit; ++idx) if ((d + idx)->m_check == parent) return true;
+			for (index_type idx = base; 1 <= idx && idx < last; ++idx)
+			{
+				assert((d + idx)->m_check < limit());
+				if ((d + idx)->m_check == parent) return true;
+			}
 
 			return false;
 		}
 
+		/*! parentからの空遷移がある場合、trueを返す
+		*/
 		bool has_null(index_type parent) const
 		{
+			assert(1 <= parent && parent < limit());
+
 			node_type const* d = m_c.data();
 
 			index_type base = (d + parent)->m_base;
+			assert(0 <= base && base < limit());
 			index_type idx = base + null_value;
-			index_type limit = static_cast<index_type>(m_c.size());
-			
-			return idx < limit && (d + idx)->m_check == parent;
+
+			return idx < limit() && (d + idx)->m_check == parent;
 		}
 
-		/*! parentからlabelで遷移したINDEXを返す。
+		/*! idxにnull_value以外の兄弟がある場合、trueを返す
+		*/
+		bool has_sibling(index_type idx) const
+		{
+			assert(0 <= idx && idx < limit());
+			if (idx <= 1) return false;
+
+			node_type const* d = m_c.data();
+
+			index_type parent = (d + idx)->m_check;
+			assert(1 <= parent && parent < limit());
+			index_type base = (d + parent)->m_base;
+			assert(1 <= base && base < limit());
+
+			index_type last = std::min(base + null_value, limit());
+			assert(1 <= last && last <= limit());
+			for (index_type i = base; i < last; ++i)
+			{
+				assert((d + i)->m_check < limit());
+				index_type check = (d + i)->m_check;
+				if (check == parent && i != idx) return true;
+			}
+
+			return false;
+		}
+
+		/*! idxにnull_value以外の兄弟がある場合、trueを返す
+		*/
+		bool has_sibling(index_type parent, index_type idx) const
+		{
+			assert(1 <= parent && parent < limit());
+			assert(0 <= idx && idx < limit());
+			if (idx <= 1) return false;
+
+			node_type const* d = m_c.data();
+
+			index_type base = (d + parent)->m_base;
+			assert(1 <= base && base < limit());
+
+			index_type last = std::min(base + null_value, limit());
+			assert(1 <= last && last <= limit());
+			for (index_type i = base; i < last; ++i)
+			{
+				assert((d + i)->m_check < limit());
+				index_type check = (d + i)->m_check;
+				if (check == parent && i != idx) return true;
+			}
+
+			return false;
+		}
+
+		/*! parentからlabelで遷移したINDEXを返す
 		- 遷移先が無ければ0を返す。
 		*/
 		index_type at(index_type parent, std::uint16_t label) const
 		{
+			assert(1 <= parent && parent < limit());
+			assert(static_cast<index_type>(label) <= null_value);
+
 			node_type const* d = m_c.data();
-			index_type base = (d + parent)->m_base;
-			index_type idx = base + label;
-			index_type check = (d + idx)->m_check;
+
+			index_type idx = (d + parent)->m_base + label;
+			index_type check = (idx < limit()) ? (d + idx)->m_check : 0;
 
 			return (check == parent) ? idx : 0;
 		}
@@ -653,11 +502,13 @@ namespace wordring
 		*/
 		index_type add(index_type parent, label_vector const& labels)
 		{
+			assert(parent < limit());
 			assert(!labels.empty());
 			assert(std::is_sorted(labels.begin(), labels.end()));
 
 			index_type before = 0;
 			index_type base = (m_c.data() + parent)->m_base; // 遷移先配置の起点（遷移先が定義されていない場合0）
+			assert(base < limit());
 
 			if (base == 0)
 			{
@@ -667,10 +518,13 @@ namespace wordring
 			else if (is_free(parent, base, labels)) allocate(base, labels, before);
 			else base = relocate(parent, base, labels);
 
+			assert(base + static_cast<index_type>(labels.back()) < limit());
 			node_type* d = m_c.data();
 
 			(d + parent)->m_base = base;
 			for (std::uint16_t label : labels) (d + base + label)->m_check = parent;
+
+			assert(1 <= base && base < limit());
 
 			return base;
 		}

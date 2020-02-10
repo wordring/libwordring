@@ -236,7 +236,6 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__2)
 
 	auto it0 = it.begin();  // [a] , [a]c
 	auto it1 = it0.begin(); // a[c]
-	auto it2 = it0.end();
 
 	BOOST_CHECK(*it0 == 'a');
 	BOOST_CHECK(*it1 == 'c');

@@ -28,15 +28,17 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-#		const_trie_base_iterator.cpp
-#		list_trie_iterator.cpp
-#		trie.cpp
+		list_trie_iterator.cpp
+		trie.cpp
 		trie_base.cpp
-#		trie_construct_iterator.cpp
+		trie_base_iterator.cpp
+		trie_base_benchmark.cpp
+		trie_construct_iterator.cpp
 		trie_heap.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
+add_definitions(-DCURRENT_BINARY_PATH=${CMAKE_CURRENT_BINARY_DIR})
 add_definitions(-DENGLISH_WORDS_PATH=${Wordring_DIR}/submodules/dwyl/english-words/words.txt)
 
 target_link_libraries(

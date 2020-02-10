@@ -1,10 +1,10 @@
-﻿// test/trie/const_trie_base_iterator.cpp
+﻿// test/trie/trie_base_iterator.cpp
 
 #include <boost/test/unit_test.hpp>
 
-#include "trie_base.hpp"
-
 #include <wordring/trie/trie_base.hpp>
+#include <wordring/trie/trie_base_iterator.hpp>
+#include <wordring/tree/tree_iterator.hpp>
 
 #include <algorithm>
 #include <fstream>
@@ -14,6 +14,78 @@
 #include <string>
 #include <vector>
 
+namespace wordring
+{
+	inline bool operator==(trie_node const& lhs, trie_node const& rhs)
+	{
+		return lhs.m_base == rhs.m_base && lhs.m_check == rhs.m_check;
+	}
+
+	using base_iterator = const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
+
+	class test_iterator : public base_iterator
+	{
+	public:
+		using base_type = base_iterator;
+
+		using base_type::index_type;
+
+		using base_type::find;
+		using base_type::mother;
+		using base_type::base;
+		using base_type::tail;
+		using base_type::has_null;
+		using base_type::has_sibling;
+
+		using base_type::m_c;
+		using base_type::m_index;
+
+	public:
+		test_iterator() : base_type() {}
+
+		test_iterator(container& c, index_type index)
+			: base_type(c, index) {}
+
+		test_iterator(base_type const& base)
+			: base_type(base) {}
+	};
+
+	class test_trie : public trie_base<>
+	{
+	public:
+		using base_type = trie_base<>;
+
+		using base_type::is_tail;
+		using base_type::has_child;
+		using base_type::has_null;
+		using base_type::has_sibling;
+		using base_type::at;
+		using base_type::add;
+
+		using base_type::m_c;
+
+	public:
+		/*! 保持する文字列の数を数える
+		- size()と同じ数を返せば良好。
+		*/
+		std::size_t count() const
+		{
+			using namespace wordring;
+			std::size_t n = 0;
+
+			auto it1 = tree_iterator<decltype(begin())>(begin());
+			auto it2 = tree_iterator<decltype(begin())>();
+
+			while (it1 != it2)
+			{
+				if (it1.base()) ++n;
+				++it1;
+			}
+
+			return n;
+		}
+	};
+}
 
 BOOST_AUTO_TEST_SUITE(const_trie_base_iterator__test)
 
@@ -24,36 +96,45 @@ BOOST_AUTO_TEST_SUITE(const_trie_base_iterator__test)
 // const_trie_base_iterator()
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__construct__1)
 {
+	using namespace wordring;
+
 	test_iterator it;
 }
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__construct__2)
 {
+	using namespace wordring;
+
 	test_iterator it{};
 }
 
 // const_trie_base_iterator(container& c, index_type index)
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__construct__3)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
 	test_iterator it(trie.m_c, 1);
 }
 
 // operator bool() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(0, 0);  // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ 0,  0 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	// 親状態2に対してnull_valueによる遷移を追加
 	trie.m_c.insert(trie.m_c.end(), 252, { 0, 0 });
@@ -72,7 +153,10 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__1)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__2)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
+
 	trie.insert(std::string("a"));
 	BOOST_CHECK(trie.count() == 1);
 	BOOST_CHECK(trie.find(std::string("a")).operator bool());
@@ -83,7 +167,10 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__2)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__3)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
+
 	trie.insert(std::string("a"));
 	trie.insert(std::string("ab"));
 	BOOST_CHECK(trie.count() == 2);
@@ -97,7 +184,10 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__3)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__4)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
+
 	trie.insert(std::string("ab"));
 	trie.insert(std::string("a"));
 	BOOST_CHECK(trie.count() == 2);
@@ -112,18 +202,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__4)
 // value_type operator*() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__reference__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+	
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	BOOST_CHECK(*test_iterator(trie.m_c, 2) == 1);
 	BOOST_CHECK(*test_iterator(trie.m_c, 3) == 2);
@@ -138,18 +232,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__reference__1)
 // const_trie_base_iterator operator[](std::uint16_t label) const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__at__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	test_iterator it2 = test_iterator(trie.m_c, 1)[1];
 	BOOST_CHECK(it2.m_index == 2);
@@ -178,18 +276,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__at__1)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__at__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	BOOST_CHECK(test_iterator(trie.m_c, 1)[0] == test_iterator(trie.m_c, 1).end());
 	BOOST_CHECK(test_iterator(trie.m_c, 1)[4] == test_iterator(trie.m_c, 1).end());
@@ -221,18 +323,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__at__2)
 // const_trie_base_iterator& operator++()
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	BOOST_CHECK(*++test_iterator(trie.m_c, 2) == 2);
 	BOOST_CHECK(*++test_iterator(trie.m_c, 3) == 3);
@@ -242,18 +348,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__1)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	test_iterator it1 = ++test_iterator(trie.m_c, 4);
 	BOOST_CHECK(it1.m_index == 0);
@@ -268,18 +378,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__2)
 // const_trie_base_iterator operator++(int)
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__3)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	auto it2 = test_iterator(trie.m_c, 2);
 	BOOST_CHECK(*it2++ == 1); // a
@@ -305,18 +419,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__3)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__4)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	auto it4 = test_iterator(trie.m_c, 4);
 	BOOST_CHECK(*it4++ == 3);
@@ -334,7 +452,9 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__increment__4)
 // String string() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__string__1)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
 
 	test_iterator it0{};
 	BOOST_CHECK(it0.string<std::string>() == "");
@@ -358,7 +478,9 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__string__1)
 // std::optional<const_trie_base_iterator> parent() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__parent__1)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
 
 	test_iterator it1 = trie.insert(std::string("\1"));
 	BOOST_CHECK(it1.parent()->parent().has_value() == false);
@@ -382,18 +504,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__parent__1)
 // const_trie_base_iterator begin() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__begin__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	test_iterator it1 = test_iterator(trie.m_c, 1).begin();
 	BOOST_CHECK(it1.m_index == 1 + 1);
@@ -410,18 +536,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__begin__1)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__begin__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	test_iterator it5 = test_iterator(trie.m_c, 5).begin();
 	BOOST_CHECK(it5.m_index == 0);
@@ -442,18 +572,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__begin__2)
 // const_trie_base_iterator end() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__end__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	test_iterator it1 = test_iterator(trie.m_c, 1).end();
 	BOOST_CHECK(it1.m_index == 0);
@@ -470,18 +604,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__end__1)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__end__2)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{  0, 0 }, // 0
+		{  1, 0 }, // 1
+		{  5, 1 }, // 2 
+		{ -3, 1 }, // 3
+		{  5, 1 }, // 4
+		{ -1, 2 }, // 5
+		{  5, 4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	test_iterator it5 = test_iterator(trie.m_c, 5).end();
 	BOOST_CHECK(it5.m_index == 0);
@@ -502,18 +640,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__end__2)
 // index_type find(index_type first, index_type last, index_type check)
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__find__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	auto it1 = test_iterator(trie.m_c, 1);
 
@@ -527,12 +669,16 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__find__1)
 // index_type mother() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__mother__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, -1); // 2
-	trie.m_c.emplace_back(5, 1);  // 3
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0, 0 },  // 0
+		{ 1, 0 },  // 1
+		{ 5, -1 }, // 2
+		{ 5, 1 }   // 3
+	};
 
 	BOOST_CHECK(test_iterator(trie.m_c, 1).mother() == 0);
 	BOOST_CHECK(test_iterator(trie.m_c, 2).mother() == 0);
@@ -542,18 +688,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__mother__1)
 // index_type base() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__base__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	BOOST_CHECK(test_iterator(trie.m_c, 2).base() == 1);
 	BOOST_CHECK(test_iterator(trie.m_c, 3).base() == 1);
@@ -568,18 +718,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__base__1)
 // index_type tail() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__tail__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
-	trie.m_c.emplace_back(-3, 1); // 3
-	trie.m_c.emplace_back(5, 1);  // 4
-	trie.m_c.emplace_back(-1, 2); // 5
-	trie.m_c.emplace_back(5, 4);  // 6
-	trie.m_c.emplace_back(-4, 6); // 7
-	trie.m_c.emplace_back(-2, 2); // 8
-	trie.m_c.emplace_back(-5, 4); // 9
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0,  0 }, // 0
+		{ 1,  0 }, // 1
+		{ 5,  1 }, // 2 
+		{ -3, 1 }, // 3
+		{ 5,  1 }, // 4
+		{ -1, 2 }, // 5
+		{ 5,  4 }, // 6
+		{ -4, 6 }, // 7
+		{ -2, 2 }, // 8
+		{ -5, 4 }  // 9
+	};
 
 	BOOST_CHECK(test_iterator(trie.m_c, 1).tail() == 10);
 	BOOST_CHECK(test_iterator(trie.m_c, 2).tail() == 10);
@@ -595,15 +749,19 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__tail__1)
 // bool has_null() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_null__1)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0); // 0
-	trie.m_c.emplace_back(1, 0); // 1
-	trie.m_c.emplace_back(1, 1); // 2
-	trie.m_c.emplace_back(0, 0); // 3
-	trie.m_c.emplace_back(0, 2); // 4
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0, 0 }, // 0
+		{ 1, 0 }, // 1
+		{ 1, 1 }, // 2
+		{ 0, 0 }, // 3
+		{ 0, 2 }  // 4
+	};
 	trie.m_c.insert(trie.m_c.cend(), 252, { 0, 0 });
-	trie.m_c.emplace_back(0, 2); // 257
+	trie.m_c.push_back({ 0, 2 }); // 257
 	BOOST_CHECK(trie.m_c.size() == 258);
 
 	BOOST_CHECK(test_iterator(trie.m_c, 1).has_null() == false);
@@ -617,13 +775,12 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_null__1)
 // bool has_sibling() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__1)
 {
-	test_trie_base trie{};
+	using namespace wordring;
 
-	trie.insert(std::string("a"));
-	trie.insert(std::string("ac"));
-	trie.insert(std::string("b"));
-	trie.insert(std::string("cab"));
-	trie.insert(std::string("cd"));
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.assign(v.begin(), v.end());
 
 	test_iterator it1 = trie.search(std::string("a"));
 	BOOST_CHECK(it1.has_sibling());
@@ -637,13 +794,12 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__1)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__2)
 {
-	test_trie_base trie{};
+	using namespace wordring;
 
-	trie.insert(std::string("a"));
-	trie.insert(std::string("ac"));
-	trie.insert(std::string("b"));
-	trie.insert(std::string("cab"));
-	trie.insert(std::string("cd"));
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.assign(v.begin(), v.end());
 
 	test_iterator it1 = trie.search(std::string("cab"));
 	BOOST_CHECK(it1.has_sibling() == false);
@@ -651,13 +807,12 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__2)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__3)
 {
-	test_trie_base trie{};
+	using namespace wordring;
 
-	trie.insert(std::string("a"));
-	trie.insert(std::string("ac"));
-	trie.insert(std::string("b"));
-	trie.insert(std::string("cab"));
-	trie.insert(std::string("cd"));
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.assign(v.begin(), v.end());
 
 	test_iterator it1 = trie.search(std::string("ac"));
 	BOOST_CHECK(it1.has_sibling() == false);
@@ -665,7 +820,9 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__3)
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__4)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
 
 	trie.insert(std::string("a"));
 	trie.insert(std::string("ac"));
@@ -680,44 +837,62 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__has_sibling__4)
 // inline bool operator==(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__equal__1)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
 	BOOST_CHECK(test_iterator(trie.m_c, 1) == test_iterator(trie.m_c, 1));
 }
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__equal__2)
 {
+	using namespace wordring;
+
 	BOOST_CHECK(test_iterator() == test_iterator());
 }
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__equal__3)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0, 0 }, // 0
+		{ 1, 0 }, // 1
+		{ 5, 1 }, // 2
+	};
+
 	BOOST_CHECK((test_iterator(trie.m_c, 1) == test_iterator(trie.m_c, 2)) == false);
 }
 
 // inline bool operator!=(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__not_equal__1)
 {
-	test_trie_base trie{};
+	using namespace wordring;
+
+	test_trie trie{};
 	BOOST_CHECK((test_iterator(trie.m_c, 1) != test_iterator(trie.m_c, 1)) == false);
 }
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__not_equal__2)
 {
+	using namespace wordring;
+
 	BOOST_CHECK((test_iterator() != test_iterator()) == false);
 }
 
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__not_equal__3)
 {
-	test_trie_base trie{};
-	trie.m_c.clear();
-	trie.m_c.emplace_back(0, 0);  // 0
-	trie.m_c.emplace_back(1, 0);  // 1
-	trie.m_c.emplace_back(5, 1);  // 2
+	using namespace wordring;
+
+	test_trie trie{};
+
+	trie.m_c = {
+		{ 0, 0 }, // 0
+		{ 1, 0 }, // 1
+		{ 5, 1 }, // 2
+	};
+
 	BOOST_CHECK(test_iterator(trie.m_c, 1) != test_iterator(trie.m_c, 2));
 }
 

@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <wordring/trie/trie_base.hpp>
+#include <wordring/trie/trie_base_iterator.hpp>
 #include <wordring/tree/tree_iterator.hpp>
 
 #include <algorithm>
@@ -21,15 +22,56 @@
 #define TO_STRING(str) STRING(str)
 
 std::string const english_words_path{ TO_STRING(ENGLISH_WORDS_PATH) };
+std::string const current_source_path{ TO_STRING(CURRENT_SOURCE_PATH) };
 
 namespace wordring
 {
+	inline bool operator==(trie_node const& lhs, trie_node const& rhs)
+	{
+		return lhs.m_base == rhs.m_base && lhs.m_check == rhs.m_check;
+	}
+
+	using base_iterator = const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
+
+	class test_iterator : public base_iterator
+	{
+	public:
+		using base_type = base_iterator;
+
+		using base_type::index_type;
+
+		using base_type::find;
+		using base_type::mother;
+		using base_type::base;
+		using base_type::tail;
+		using base_type::has_null;
+		using base_type::has_sibling;
+
+		using base_type::m_c;
+		using base_type::m_index;
+
+	public:
+		test_iterator() : base_type() {}
+
+		test_iterator(container& c, index_type index)
+			: base_type(c, index) {}
+
+		test_iterator(base_type const& base)
+			: base_type(base) {}
+	};
+
 	class test_trie : public trie_base<>
 	{
 	public:
 		using base_type = trie_base<>;
-
+		
+		using base_type::is_tail;
+		using base_type::has_child;
+		using base_type::has_null;
+		using base_type::has_sibling;
+		using base_type::at;
 		using base_type::add;
+
 		using base_type::m_c;
 
 	public:
@@ -53,11 +95,6 @@ namespace wordring
 			return n;
 		}
 	};
-
-	inline bool operator==(wordring::trie_node const& lhs, wordring::trie_node const& rhs)
-	{
-		return lhs.m_base == rhs.m_base && lhs.m_check == rhs.m_check;
-	}
 }
 
 BOOST_AUTO_TEST_SUITE(trie_base__test)
@@ -73,6 +110,35 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__1)
 
 	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(trie.m_c == v);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__assign__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.assign(v.begin(), v.end());
+
+	BOOST_CHECK(trie.size() == 5);
+	BOOST_CHECK(trie.count() == 5);
+	BOOST_CHECK(trie.contains(std::string("a")));
+	BOOST_CHECK(trie.contains(std::string("ac")));
+	BOOST_CHECK(trie.contains(std::string("b")));
+	BOOST_CHECK(trie.contains(std::string("cab")));
+	BOOST_CHECK(trie.contains(std::string("cd")));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__assign__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{};
+	trie.assign(v.begin(), v.end());
+
+	BOOST_CHECK(trie.size() == 0);
+	BOOST_CHECK(trie.count() == 0);
 }
 
 // 要素アクセス ----------------------------------------------------------------
@@ -287,6 +353,56 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__8)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
+BOOST_AUTO_TEST_CASE(trie_base__insert__9)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "2", "1080" };
+	trie.insert(v.begin(), v.end());
+	trie.insert(v.begin(), v.end());
+
+	BOOST_CHECK(trie.size() == 2);
+	BOOST_CHECK(trie.count() == 2);
+	BOOST_CHECK(trie.contains(std::string("2")));
+	BOOST_CHECK(trie.contains(std::string("1080")));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__insert__10)
+{
+	using namespace wordring;
+
+	std::vector<std::string> words{};
+	{
+		std::ifstream is(english_words_path);
+		BOOST_REQUIRE(is.is_open());
+
+		std::vector<std::string> v{};
+		std::string buf{};
+
+		for (size_t i = 0; i < 10000 && std::getline(is, buf); ++i) v.push_back(buf);
+
+		for (std::string const& s : v) words.push_back(s);
+		for (std::string const& s : v) words.push_back(s);
+
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::shuffle(words.begin(), words.end(), mt);
+	}
+
+	test_trie trie{};
+
+	for (std::string const& s : words) trie.insert(s);
+
+	BOOST_CHECK(trie.count() == words.size() / 2);
+	BOOST_CHECK(trie.size() == words.size() / 2);
+
+	int error = 0;
+	for (std::string const& s : words) if (!trie.contains(s)) ++error;
+
+	BOOST_CHECK(error == 0);
+}
+
 // void erase(const_iterator pos)
 BOOST_AUTO_TEST_CASE(trie_base__erase__1)
 {
@@ -295,14 +411,6 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__1)
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
 	trie.insert(v.begin(), v.end());
-
-	BOOST_CHECK(trie.size() == 5);
-	BOOST_CHECK(trie.count() == 5);
-	BOOST_CHECK(trie.contains(std::string("a")));
-	BOOST_CHECK(trie.contains(std::string("ac")));
-	BOOST_CHECK(trie.contains(std::string("b")));
-	BOOST_CHECK(trie.contains(std::string("cab")));
-	BOOST_CHECK(trie.contains(std::string("cd")));
 
 	trie.erase(std::string("a"));
 
@@ -410,7 +518,275 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__6)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
+BOOST_AUTO_TEST_CASE(trie_base__erase__7)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	trie.erase(std::string("a"));
+
+	BOOST_CHECK(trie.size() == 0);
+	BOOST_CHECK(trie.count() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__erase__8)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	trie.erase(std::string(""));
+
+	BOOST_CHECK(trie.size() == 0);
+	BOOST_CHECK(trie.count() == 0);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__erase__9)
+{
+	using namespace wordring;
+
+	test_trie trie{};
+
+	std::vector<std::string> words{};
+	{
+		std::ifstream is(english_words_path);
+		BOOST_REQUIRE(is.is_open());
+
+		std::vector<std::string> v{};
+		std::string buf{};
+
+		for (size_t i = 0; i < 10000 && std::getline(is, buf); ++i) v.push_back(buf);
+		for (std::string const& s : v) words.push_back(s);
+
+		for (std::string const& s : words) trie.insert(s);
+	}
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::shuffle(words.begin(), words.end(), mt);
+
+	for (std::string const& s : words) trie.erase(s);
+
+	BOOST_CHECK(trie.count() == 0);
+	BOOST_CHECK(trie.size() == 0);
+
+	int error = 0;
+	for (std::string const& s : words) if (trie.contains(s)) ++error;
+
+	BOOST_CHECK(error == 0);
+}
+
 // 検索 -----------------------------------------------------------------------
+
+// auto search(InputIterator first, InputIterator last) const
+//		->std::pair<const_iterator, InputIterator>
+BOOST_AUTO_TEST_CASE(trie_base__search__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "ac" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(p.first);
+	BOOST_CHECK(*p.first == 'c');
+	BOOST_CHECK(p.second == s.end());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "a" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(p.first);
+	BOOST_CHECK(*p.first == 'a');
+	BOOST_CHECK(p.second == s.end());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__3)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(p.first == trie.cbegin());
+	BOOST_CHECK(p.second == s.end());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__4)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "ab" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(p.first); // "a"に一致するためtrueを返すことに注意。
+	BOOST_CHECK(*p.first == 'a');
+	BOOST_CHECK(*p.second == 'b');
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__5)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "b" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(p.first);
+	BOOST_CHECK(*p.first == 'b');
+	BOOST_CHECK(p.second == s.end());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__6)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{};
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "ab" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(!p.first);
+	BOOST_CHECK(p.second == s.begin());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__7)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{};
+	trie.insert(v.begin(), v.end());
+
+	std::string s{ "" };
+	auto p = trie.search(s.begin(), s.end());
+
+	BOOST_CHECK(!p.first);
+	BOOST_CHECK(p.second == s.begin());
+}
+
+// const_iterator search(Key const& key) const
+BOOST_AUTO_TEST_CASE(trie_base__search__8)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.search(std::string("a"));
+
+	BOOST_CHECK(it);
+	BOOST_CHECK(*it == 'a');
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__search__9)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.search(std::string(""));
+
+	BOOST_CHECK(!it);
+	BOOST_CHECK(it == trie.cbegin());
+}
+
+// const_iterator find(Key const& key) const
+BOOST_AUTO_TEST_CASE(trie_base__find__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.find(std::string("a"));
+
+	BOOST_CHECK(it);
+	BOOST_CHECK(*it == 'a');
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__find__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.find(std::string("ac"));
+
+	BOOST_CHECK(it);
+	BOOST_CHECK(*it == 'c');
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__find__3)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.find(std::string(""));
+
+	BOOST_CHECK(!it);
+	BOOST_CHECK(it == trie.cend());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__find__4)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{};
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.find(std::string(""));
+
+	BOOST_CHECK(!it);
+	BOOST_CHECK(it == trie.cend());
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__find__5)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	auto it = trie.find(std::string("ab"));
+
+	BOOST_CHECK(!it);
+	BOOST_CHECK(it == trie.cend());
+}
 
 // bool contains(Key const& key) const
 BOOST_AUTO_TEST_CASE(trie_base__contains__1)
@@ -474,8 +850,182 @@ BOOST_AUTO_TEST_CASE(trie_base__contains__5)
 
 // 内部 -----------------------------------------------------------------------
 
-// index_type add(index_type parent, label_vector const& labels)
+// bool is_tail(index_type idx) const
+BOOST_AUTO_TEST_CASE(trie_base__is_tail__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	BOOST_CHECK(trie.is_tail(i));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__is_tail__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	i = trie.at(i, 'c');
+	BOOST_CHECK(trie.is_tail(i));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__is_tail__3)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'c');
+	BOOST_CHECK(trie.is_tail(i) == false);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__is_tail__4)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	BOOST_CHECK(trie.is_tail(1) == false);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__is_tail__5)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	BOOST_CHECK(trie.is_tail(1) == false);
+}
+
+// bool has_child(index_type parent) const
+BOOST_AUTO_TEST_CASE(trie_base__has_child__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	BOOST_CHECK(trie.has_child(i));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__has_child__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'b');
+	BOOST_CHECK(trie.has_child(i) == false);
+}
+
+// bool has_null(index_type parent) const
+BOOST_AUTO_TEST_CASE(trie_base__has_null__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	BOOST_CHECK(trie.has_null(i));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__has_null__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'b');
+	BOOST_CHECK(trie.has_null(i) == false);
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__has_null__3)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'c');
+	i = trie.at(i, 'a');
+	BOOST_CHECK(trie.has_null(i) == false);
+}
+
+// bool has_sibling(index_type idx) const
+BOOST_AUTO_TEST_CASE(trie_base__has_sibling__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	BOOST_CHECK(trie.has_sibling(i));
+}
+
+BOOST_AUTO_TEST_CASE(trie_base__has_sibling__2)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	i = trie.at(i, 'c');
+	BOOST_CHECK(trie.has_sibling(i) == false);
+}
+
+// index_type at(index_type parent, std::uint16_t label) const
+BOOST_AUTO_TEST_CASE(trie_base__at__2_1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	trie.insert(v.begin(), v.end());
+
+	std::int32_t i = trie.at(1, 'a');
+	auto it = test_iterator(trie.m_c, i);
+
+	BOOST_CHECK(it);
+	BOOST_CHECK(*it == 'a');
+}
+
+// index_type add(index_type parent, std::uint16_t label)
 BOOST_AUTO_TEST_CASE(trie_base__add__1)
+{
+	using namespace wordring;
+	test_trie trie{};
+
+	trie.add(1, 0);
+
+	std::vector<trie_node> v{ { 0, 0 }, { 2, 0 }, { 0, 1 } };
+	BOOST_CHECK(trie.m_c == v);
+}
+
+// index_type add(index_type parent, label_vector const& labels)
+BOOST_AUTO_TEST_CASE(trie_base__add__2)
 {
 	using namespace wordring;
 	test_trie trie{};
@@ -486,7 +1036,7 @@ BOOST_AUTO_TEST_CASE(trie_base__add__1)
 	BOOST_CHECK(trie.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__add__2)
+BOOST_AUTO_TEST_CASE(trie_base__add__3)
 {
 	using namespace wordring;
 	test_trie trie{};
@@ -497,159 +1047,7 @@ BOOST_AUTO_TEST_CASE(trie_base__add__2)
 	BOOST_CHECK(trie.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__relocate__1)
-{
-	using namespace wordring;
-
-	std::vector<std::string> words{};
-	{
-		std::string buf{};
-		std::ifstream is(english_words_path);
-		BOOST_REQUIRE(is.is_open());
-
-		for (size_t i = 0; i < 100000 && std::getline(is, buf); ++i) words.push_back(buf);
-	}
-
-	while (true)
-	{
-
-		std::random_device rd;
-		std::mt19937 mt(rd());
-		std::shuffle(words.begin(), words.end(), mt);
-
-		//for(std::string const& )std::cout << 
-
-		test_trie trie{};
-		trie.insert(words.begin(), words.end());
-	}
-}
-
 // ----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(trie_base__english_words_txt__1)
-{
-	using namespace wordring;
-
-	std::vector<std::string> words{};
-	{
-		std::string buf{};
-		std::ifstream is(english_words_path);
-		BOOST_REQUIRE(is.is_open());
-#ifdef NDEBUG
-		while (std::getline(is, buf)) words.push_back(buf);
-#else
-		for (size_t i = 0; i < 1000 && std::getline(is, buf); ++i) words.push_back(buf);
-		std::mt19937 mt;
-		std::shuffle(words.begin(), words.end(), mt);
-#endif
-	}
-
-	test_trie trie{};
-
-	auto start = std::chrono::system_clock::now();
-
-	for (auto const& s : words) trie.insert(s);
-
-	auto duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "trie_base__english_words_txt__1 (dynamic insert.)" << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << "node  : " << trie.m_c.size() << std::endl;
-	std::cout << "count : " << trie.count() << std::endl;
-	std::cout << "size  : " << trie.size() << std::endl;
-	std::cout << "vector: " << words.size() << std::endl;
-
-	BOOST_CHECK(trie.count() == words.size());
-	BOOST_CHECK(trie.size() == words.size());
-}
-
-BOOST_AUTO_TEST_CASE(trie_base__english_words_benchmark__1)
-{
-	using namespace wordring;
-
-	std::vector<std::string> words{};
-	{
-		std::string buf{};
-		std::ifstream is(english_words_path);
-		BOOST_REQUIRE(is.is_open());
-#ifdef NDEBUG
-		while (std::getline(is, buf)) words.push_back(buf);
-#else
-		for (size_t i = 0; i < 50000 && std::getline(is, buf); ++i) words.push_back(buf);
-		std::mt19937 mt;
-		std::shuffle(words.begin(), words.end(), mt);
-#endif
-	}
-
-	std::uint32_t error = 0;
-
-	std::cout << "trie_base__english_words_benchmark__1" << std::endl;
-/*
-	test_trie trie{};
-	auto start = std::chrono::system_clock::now();
-	trie.assign(words.begin(), words.end());
-	auto duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "trie assign." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << "node  : " << trie.m_c.size() << std::endl;
-	std::cout << "size  : " << trie.size() << std::endl;
-	std::cout << std::endl;
-*/
-	test_trie trie{};
-	auto start = std::chrono::system_clock::now();
-	trie.insert(words.begin(), words.end());
-	auto duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "trie insert." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << "node  : " << trie.m_c.size() << std::endl;
-	std::cout << "size  : " << trie.size() << std::endl;
-	std::cout << std::endl;
-
-	std::set<std::string> set{};
-	start = std::chrono::system_clock::now();
-	set.insert(words.begin(), words.end());
-	duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "std::set insert." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << std::endl;
-
-	std::unordered_set<std::string> uset{};
-	start = std::chrono::system_clock::now();
-	uset.insert(words.begin(), words.end());
-	duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "std::unordered_set insert." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << std::endl;
-
-	start = std::chrono::system_clock::now();
-	for (auto const& s : words) if (trie.find(s) == trie.end()) ++error;
-	duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "trie find." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << std::endl;
-
-	start = std::chrono::system_clock::now();
-	for (auto const& s : words) if (set.find(s) == set.cend()) ++error;
-	duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "std::set find." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << std::endl;
-
-	start = std::chrono::system_clock::now();
-	for (auto const& s : words) if (uset.find(s) == uset.cend()) ++error;
-	duration = std::chrono::system_clock::now() - start;
-
-	std::cout << "std::unordered_set find." << std::endl;
-	std::cout << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
-	std::cout << std::endl;
-
-	BOOST_CHECK(error == 0);
-}
 
 BOOST_AUTO_TEST_SUITE_END()
