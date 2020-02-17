@@ -7,7 +7,7 @@ namespace wordring
 {
 
 	template <typename Key, typename Value>
-	class basic_trie : public trie_base<>
+	class basic_trie : public trie_base<Key>
 	{
 	public:
 		using key_type = Key;

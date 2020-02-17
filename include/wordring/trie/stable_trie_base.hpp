@@ -3,8 +3,16 @@
 #include <wordring/trie/stable_trie_base_iterator.hpp>
 #include <wordring/trie/trie_heap.hpp>
 
-//#include <algorithm>
-//#include <cstdint>
+#include <algorithm>
+#include <cassert>
+#include <climits>
+#include <cstdint>
+#include <istream>
+#include <iterator>
+#include <memory>
+#include <ostream>
+#include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 namespace wordring
@@ -298,7 +306,7 @@ namespace wordring
 		- 一文字も一致しない場合、cbegin()を返す。
 		*/
 		template <typename InputIterator>
-		auto search(InputIterator first, InputIterator last) const ->std::pair<const_iterator, InputIterator>
+		auto search(InputIterator first, InputIterator last) const
 		{
 			index_type parent = 1;
 

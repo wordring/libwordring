@@ -37,7 +37,6 @@ namespace wordring
 		using base_type::value;
 		using base_type::at_index;
 		using base_type::advance;
-		using base_type::string;
 		using base_type::parent_index;
 		using base_type::begin_index;
 		using base_type::end_index;
@@ -65,12 +64,13 @@ namespace wordring
 		}
 
 	public:
-		/*! 文字列終端の場合trueを返す*/
+		/*! 文字列終端を指す場合、trueを返す
+		*/
 		operator bool() const { return 1 < m_index && has_null(); }
 
 		bool operator!() const { return operator bool() == false; }
 
-		value_type operator*() const { return m_index - base(); }
+		value_type operator*() const { return value(); }
 
 		const_stable_trie_base_iterator operator[](value_type label) const
 		{
@@ -100,7 +100,7 @@ namespace wordring
 		void string(key_type& result) const
 		{
 			result.clear();
-			for (auto p = *this; 1 < p.m_index; p = *p.parent()) result.push_back(*p);
+			for (auto p = *this; 1 < p.m_index; p = p.parent()) result.push_back(*p);
 			std::reverse(std::begin(result), std::end(result));
 		}
 

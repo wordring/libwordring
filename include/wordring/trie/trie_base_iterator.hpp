@@ -4,17 +4,17 @@
 
 namespace wordring
 {
-	template <typename Container>
+	template <typename Key, typename Container>
 	class const_trie_base_iterator : public const_trie_heap_iterator<Container>
 	{
-		template <typename Allocator>
+		template <typename Key1, typename Allocator1>
 		friend class trie_base;
 
-		template <typename Container1>
-		friend bool operator==(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
+		template <typename Key1, typename Container1>
+		friend bool operator==(const_trie_base_iterator<Key1, Container1> const&, const_trie_base_iterator<Key1, Container1> const&);
 
-		template <typename Container1>
-		friend bool operator!=(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
+		template <typename Key1, typename Container1>
+		friend bool operator!=(const_trie_base_iterator<Key1, Container1> const&, const_trie_base_iterator<Key1, Container1> const&);
 
 	protected:
 		using base_type = const_trie_heap_iterator<Container>;
@@ -24,6 +24,7 @@ namespace wordring
 		using typename base_type::container;
 
 	public:
+		using key_type          = Key;
 		using difference_type   = std::ptrdiff_t;
 		using value_type        = std::uint8_t;
 		using pointer           = value_type*;
@@ -36,7 +37,6 @@ namespace wordring
 		using base_type::value;
 		using base_type::at_index;
 		using base_type::advance;
-		using base_type::string;
 		using base_type::parent_index;
 		using base_type::begin_index;
 		using base_type::end_index;
@@ -102,12 +102,18 @@ namespace wordring
 			return result;
 		}
 
-		template <typename String>
-		String string() const
+		key_type string() const
 		{
-			std::basic_string<value_type> tmp;
-			for (auto p = *this; 1 < p.m_index; p = p.parent()) tmp.push_back(*p);
-			return String(tmp.rbegin(), tmp.rend());
+			key_type result;
+			string(result);
+			return result;
+		}
+
+		void string(key_type& result) const
+		{
+			result.clear();
+			for (auto p = *this; 1 < p.m_index; p = p.parent()) result.push_back(*p);
+			std::reverse(std::begin(result), std::end(result));
 		}
 
 		const_trie_base_iterator parent() const
@@ -130,15 +136,15 @@ namespace wordring
 		}
 	};
 
-	template <typename Container1>
-	inline bool operator==(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
+	template <typename Key1, typename Container1>
+	inline bool operator==(const_trie_base_iterator<Key1, Container1> const& lhs, const_trie_base_iterator<Key1, Container1> const& rhs)
 	{
 		assert(lhs.m_c == rhs.m_c);
 		return lhs.m_index == rhs.m_index;
 	}
 
-	template <typename Container1>
-	inline bool operator!=(const_trie_base_iterator<Container1> const& lhs, const_trie_base_iterator<Container1> const& rhs)
+	template <typename Key1, typename Container1>
+	inline bool operator!=(const_trie_base_iterator<Key1, Container1> const& lhs, const_trie_base_iterator<Key1, Container1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}

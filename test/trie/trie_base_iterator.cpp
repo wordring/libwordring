@@ -17,8 +17,8 @@
 namespace
 {
 	using wordring::trie_node;
-	using base_iterator = wordring::const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
-	using wordring::trie_base;
+	using base_iterator = wordring::const_trie_base_iterator<std::string, std::vector<trie_node, std::allocator<trie_node>> const>;
+	using base_trie     = wordring::trie_base<std::string>;
 
 	class test_iterator : public base_iterator
 	{
@@ -47,10 +47,10 @@ namespace
 			: base_type(base) {}
 	};
 
-	class test_trie : public trie_base<>
+	class test_trie : public base_trie
 	{
 	public:
-		using base_type = trie_base<>;
+		using base_type = base_trie;
 
 		using base_type::is_tail;
 		using base_type::has_child;
@@ -454,22 +454,22 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__string__1)
 	test_trie trie{};
 
 	test_iterator it0{};
-	BOOST_CHECK(it0.string<std::string>() == "");
+	BOOST_CHECK(it0.string() == "");
 
 	test_iterator it1 = trie.insert(std::string("\1"));
-	BOOST_CHECK(it1.string<std::string>() == "\1");
+	BOOST_CHECK(it1.string() == "\1");
 
 	test_iterator it2 = trie.insert(std::string("\1\3"));
-	BOOST_CHECK(it2.string<std::string>() == "\1\3");
+	BOOST_CHECK(it2.string() == "\1\3");
 
 	test_iterator it3 = trie.insert(std::string("\2"));
-	BOOST_CHECK(it3.string<std::string>() == "\2");
+	BOOST_CHECK(it3.string() == "\2");
 
 	test_iterator it4 = trie.insert(std::string("\3\1\2"));
-	BOOST_CHECK(it4.string<std::string>() == "\3\1\2");
+	BOOST_CHECK(it4.string() == "\3\1\2");
 
 	test_iterator it5 = trie.insert(std::string("\3\4"));
-	BOOST_CHECK(it5.string<std::string>() == "\3\4");
+	BOOST_CHECK(it5.string() == "\3\4");
 }
 
 // std::optional<const_trie_base_iterator> parent() const

@@ -45,37 +45,36 @@ namespace wordring
 			return m_index - base();
 		}
 
+		/*! labelで遷移する先のINDEXを返す
+		*/
 		index_type at_index(value_type label) const
 		{
 			node_type const* d = m_c->data();
 
-			index_type idx = (d + m_index)->m_base + label;
-			return (idx < limit() && (d + idx)->m_check == m_index)
-				? idx
-				: 0;
+			index_type base  = (d + m_index)->m_base;
+			index_type idx   = 0;
+
+			if (1 <= base)
+			{
+				index_type i = base + label;
+				if (i < limit() && (d + i)->m_check == m_index) idx = i;
+			}
+
+			return idx;
 		}
 
 		/*! イテレータを前進させる
 		*/
 		void advance() { m_index = find(m_index + 1, base() + null_value, mother()); }
 
-
-		template <typename String>
-		String string() const
-		{
-			std::basic_string<value_type> tmp;
-			for (auto p = *this; 1 < p.m_index; p = *p.parent()) tmp.push_back(*p);
-			return String(tmp.rbegin(), tmp.rend());
-		}
-
 		/*! 親のINDEXを返す
 		- 根で呼び出した場合、0を返す。
 		*/
 		index_type parent_index() const
 		{
-			return (1 < m_index)
-				? (m_c->data() + m_index)->m_check
-				: 0;
+			assert(1 <= m_index);
+
+			return (m_c->data() + m_index)->m_check;
 		}
 
 		/*! 0-255に相当する文字で遷移できる最初の子を指すINDEXを返す

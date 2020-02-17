@@ -28,8 +28,8 @@ std::string const current_source_path{ TO_STRING(CURRENT_SOURCE_PATH) };
 namespace
 {
 	using base_node     = wordring::trie_node;
-	using base_iterator = wordring::const_trie_base_iterator<std::vector<base_node, std::allocator<base_node>> const>;
-	using base_trie     = wordring::trie_base<>;
+	using base_iterator = wordring::const_trie_base_iterator<std::string, std::vector<base_node, std::allocator<base_node>> const>;
+	using base_trie     = wordring::trie_base<std::string>;
 
 	class test_iterator : public base_iterator
 	{
@@ -106,7 +106,7 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__1)
 {
 	using namespace wordring;
 
-	trie_base trie{};
+	trie_base<std::string> trie{};
 }
 
 // explicit trie_base(allocator_type const& alloc)
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__2)
 {
 	using namespace wordring;
 
-	trie_base trie{ std::allocator<trie_node>() };
+	trie_base<std::string> trie{ std::allocator<trie_node>() };
 }
 
 // trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
@@ -123,10 +123,10 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__3)
 	using namespace wordring;
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
-	trie_base t1{ v1.begin(), v1.end() };
+	trie_base<std::string> t1{ v1.begin(), v1.end() };
 
 	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
-	trie_base t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
+	trie_base<std::string> t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
 }
 
 // trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__4)
 	using namespace wordring;
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
-	trie_base trie{ v.begin(), v.end(), std::allocator<trie_node>() };
+	trie_base<std::string> trie{ v.begin(), v.end(), std::allocator<trie_node>() };
 }
 
 // trie_base(std::initializer_list<trie_node> il)
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__5)
 {
 	using namespace wordring;
 
-	trie_base trie{ { { 0, 1 }, { 2, 3 } } };
+	trie_base<std::string> trie{ { { 0, 1 }, { 2, 3 } } };
 }
 
 // void assign(InputIterator first, InputIterator last)
@@ -151,7 +151,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__1)
 {
 	using namespace wordring;
 
-	trie_base<> t1{};
+	trie_base<std::string> t1{};
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v1.begin(), v1.end());
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__2)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	trie_base<std::string> t1{};
 
 	std::vector<std::int32_t> v{};
 	std::copy(t1.ibegin(), t1.iend(), std::back_inserter(v));
@@ -190,7 +190,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__3)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	trie_base<std::string> t1{};
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v1.begin(), v1.end());
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__4)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	trie_base<std::string> t1{};
 
 	auto it1 = serialize_iterator(t1.ibegin());
 	auto it2 = serialize_iterator(t1.iend());
@@ -235,12 +235,12 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__5)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	trie_base<std::string> t1{};
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v.begin(), v.end());
 
-	trie_base t2{};
+	trie_base<std::string> t2{};
 	t2 = t1;
 
 	BOOST_CHECK(t2.size() == 5);
