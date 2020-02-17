@@ -167,8 +167,7 @@ namespace wordring
 			return reference(std::addressof((m_c.data() + idx)->m_base));
 		}
 
-		template <typename Key>
-		const_reference const at(Key const& key) const
+		const_reference const at(key_type const& key) const
 		{
 			return const_cast<stable_trie_base*>(this)->at(key);
 		}
@@ -282,8 +281,7 @@ namespace wordring
 			if (empty()) clear();
 		}
 
-		template <typename Key>
-		void erase(Key const& key) { erase(find(key)); }
+		void erase(key_type const& key) { erase(find(key)); }
 
 		void swap(stable_trie_base& other)
 		{
@@ -351,8 +349,7 @@ namespace wordring
 				: cend();
 		}
 
-		template <typename Key>
-		bool contains(Key const& key) const
+		bool contains(key_type const& key) const
 		{
 			auto it1 = std::begin(key);
 			auto it2 = std::end(key);
