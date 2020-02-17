@@ -28,13 +28,16 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		list_trie_iterator.cpp
-		trie.cpp
+#		list_trie_iterator.cpp
+		stable_trie_base.cpp
+		stable_trie_base_iterator.cpp
+#		trie.cpp
 		trie_base.cpp
 		trie_base_iterator.cpp
-		trie_base_benchmark.cpp
-		trie_construct_iterator.cpp
+#		trie_base_benchmark.cpp
+#		trie_construct_iterator.cpp
 		trie_heap.cpp
+		trie_heap_iterator.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})

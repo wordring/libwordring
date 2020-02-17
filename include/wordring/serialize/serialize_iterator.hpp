@@ -1,97 +1,174 @@
 ﻿#pragma once
 
+#include <algorithm>
 #include <cstddef>
 #include <iterator>
+#include <type_traits>
 
 #include <wordring/serialize/serialize.hpp>
 
 namespace wordring
 {
+	// ------------------------------------------------------------------------
+	// serialize_iterator
+	// ------------------------------------------------------------------------
+
+	/*! 任意ビット幅の整数列に対するイテレータを8ビット整数列に対するイテレータへ変換する
+	- 逆参照はできない。
+	*/
 	template <typename InputIterator>
 	class serialize_iterator
 	{
-	public:
-		using base_iterator   = InputIterator;
-		using base_value_type = typename std::iterator_traits<base_iterator>::value_type;
+		template <typename InputIterator1>
+		friend bool operator==(serialize_iterator<InputIterator1> const&, serialize_iterator<InputIterator1> const&);
 
-		using difference_type   = std::ptrdiff_t;
-		using value_type        = uint8_t;
-		using pointer           = value_type*;
-		using reference         = value_type&;
+		template <typename InputIterator1>
+		friend bool operator!=(serialize_iterator<InputIterator1> const&, serialize_iterator<InputIterator1> const&);
+
+	public:
+		using iterator_type = InputIterator;
+		using unsigned_type = std::make_unsigned_t<typename std::iterator_traits<iterator_type>::value_type>;
+
+		using difference_type = std::ptrdiff_t;
+		using value_type = std::uint8_t;
+		using pointer = value_type*;
+		using reference = value_type&;
 		using iterator_category = std::input_iterator_tag;
+
+		static std::uint32_t constexpr coefficient = sizeof(unsigned_type);
 
 	public:
 		serialize_iterator()
-			: m_position{ 0 }
+			: m_index(0)
 		{
 		}
 
-		serialize_iterator(base_iterator base)
-			: m_base{ base }
-			, m_position{ 0 }
+		serialize_iterator(iterator_type base)
+			: m_it(base)
+			, m_index(0)
 		{
-		}
-
-		serialize_iterator(serialize_iterator const& rhs)
-			: m_base{rhs.m_base }
-			, m_position{ rhs.m_position }
-		{
-		}
-
-		~serialize_iterator() noexcept
-		{
-		}
-
-		serialize_iterator& operator=(serialize_iterator const& rhs)
-		{
-			m_base = rhs.m_base;
-			m_position = rhs.m_position;
-			return *this;
 		}
 
 		value_type operator*() const
 		{
-			return serialize(*m_base, m_position);
+			std::uint32_t n = (coefficient - 1) - (m_index % coefficient);
+
+			return (static_cast<unsigned_type>(*m_it) >> n * 8) & 0xFFu;
 		}
 
-		serialize_iterator<base_iterator>& operator++()
+		serialize_iterator& operator++()
 		{
-			uint32_t constexpr l = sizeof(base_value_type);
-			if (m_position < l - 1) ++m_position;
-			else
-			{
-				m_position = 0;
-				++m_base;
-			}
+			++m_index;
+			if (m_index % coefficient == 0) ++m_it;
 			return *this;
 		}
 
-		serialize_iterator<base_iterator> operator++(int)
+		serialize_iterator operator++(int)
 		{
-			serialize_iterator<base_iterator> result{ *this };
-			++(*this);
+			auto result = *this;
+			operator++();
 			return result;
 		}
 
-		bool equal(serialize_iterator<base_iterator> const& rhs) const
-		{
-			return m_base == rhs.m_base && m_position == rhs.m_position;
-		}
-
 	private:
-		base_iterator m_base;
-		uint32_t m_position;
+		iterator_type m_it;
+		std::uint32_t m_index;
 	};
 
-	template <typename InputIterator>
-	inline bool operator==(serialize_iterator<InputIterator> const& lhs, serialize_iterator<InputIterator> const& rhs)
+	template <typename InputIterator1>
+	inline bool operator==(serialize_iterator<InputIterator1> const& lhs, serialize_iterator<InputIterator1> const& rhs)
 	{
-		return lhs.equal(rhs);
+		return !(lhs != rhs);
 	}
 
-	template <typename InputIterator>
-	inline bool operator!=(serialize_iterator<InputIterator> const& lhs, serialize_iterator<InputIterator> const& rhs)
+	template <typename InputIterator1>
+	inline bool operator!=(serialize_iterator<InputIterator1> const& lhs, serialize_iterator<InputIterator1> const& rhs)
 	{
-		return !lhs.equal(rhs);
+		std::uint32_t constexpr coefficient = serialize_iterator<InputIterator1>::coefficient;
+		return lhs.m_it != rhs.m_it || lhs.m_index % coefficient != rhs.m_index % coefficient;
+	}
+
+	// ------------------------------------------------------------------------
+	// deserialize_iterator
+	// ------------------------------------------------------------------------
+
+	/*! 8ビット整数列に対するイテレータを任意ビット幅の整数列に対するイテレータへ変換する
+	- 逆参照はできない。
+	*/
+	template <typename Value, typename ForwardIterator>
+	class deserialize_iterator
+	{
+		template <typename Value1, typename ForwardIterator1>
+		friend bool operator==(deserialize_iterator<Value1, ForwardIterator1> const&, deserialize_iterator<Value1, ForwardIterator1> const&);
+
+		template <typename Value1, typename ForwardIterator1>
+		friend bool operator!=(deserialize_iterator<Value1, ForwardIterator1> const&, deserialize_iterator<Value1, ForwardIterator1> const&);
+
+	public:
+		using iterator_type     = ForwardIterator;
+		using unsigned_type     = std::make_unsigned_t<Value>;
+
+		using difference_type   = std::ptrdiff_t;
+		using value_type        = Value;
+		using pointer           = value_type*;
+		using reference         = value_type&;
+		using iterator_category = std::input_iterator_tag;
+
+		static std::uint32_t constexpr coefficient = sizeof(unsigned_type);
+
+	public:
+		deserialize_iterator()
+			: m_it()
+		{
+		}
+
+		deserialize_iterator(iterator_type it)
+			: m_it(it)
+		{
+			using category = typename std::iterator_traits<iterator_type>::iterator_category;
+
+			static_assert(
+				   std::is_same_v<category, std::forward_iterator_tag>
+				|| std::is_same_v<category, std::bidirectional_iterator_tag>
+				|| std::is_same_v<category, std::random_access_iterator_tag>);
+		}
+
+		value_type operator*() const
+		{
+			unsigned_type v = 0;
+
+			iterator_type it = m_it;
+			for (std::uint32_t i = 0; i < coefficient; ++i) v = (v << 8) + static_cast<std::uint8_t>(*it++);
+
+			return v;
+		}
+
+		deserialize_iterator& operator++()
+		{
+			std::advance(m_it, coefficient);
+			return *this;
+		}
+
+		deserialize_iterator operator++(int)
+		{
+			auto result = *this;
+			operator++();
+			return result;
+		}
+
+	protected:
+		iterator_type m_it;
+	};
+
+	template <typename Value1, typename ForwardIterator1>
+	inline bool operator==(deserialize_iterator<Value1, ForwardIterator1> const& lhs, deserialize_iterator<Value1, ForwardIterator1> const& rhs)
+	{
+		return lhs.m_it == rhs.m_it;
+	}
+
+	template <typename Value1, typename ForwardIterator1>
+	inline bool operator!=(deserialize_iterator<Value1, ForwardIterator1> const& lhs, deserialize_iterator<Value1, ForwardIterator1> const& rhs)
+	{
+		return lhs.m_it != rhs.m_it;
 	}
 }

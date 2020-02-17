@@ -1,23 +1,12 @@
-﻿// test/trie/trie_base.cpp
+﻿// test/trie/stable_trie_base.cpp
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/serialize/serialize_iterator.hpp>
-#include <wordring/trie/trie_base.hpp>
-#include <wordring/trie/trie_base_iterator.hpp>
+#include <wordring/trie/stable_trie_base.hpp>
 #include <wordring/tree/tree_iterator.hpp>
 
-//#include <algorithm>
-#include <chrono>
 #include <fstream>
-#include <iostream>
-//#include <memory>
 #include <random>
-//#include <set>
-#include <sstream>
-//#include <string>
-//#include <unordered_set>
-//#include <vector>
 
 #define STRING(str) #str
 #define TO_STRING(str) STRING(str)
@@ -27,9 +16,9 @@ std::string const current_source_path{ TO_STRING(CURRENT_SOURCE_PATH) };
 
 namespace
 {
-	using base_node     = wordring::trie_node;
-	using base_iterator = wordring::const_trie_base_iterator<std::vector<base_node, std::allocator<base_node>> const>;
-	using base_trie     = wordring::trie_base<>;
+	using base_node = wordring::trie_node;
+	using base_iterator = wordring::const_stable_trie_base_iterator<std::string, std::vector<base_node, std::allocator<base_node>> const>;
+	using base_trie = wordring::stable_trie_base<std::string>;
 
 	class test_iterator : public base_iterator
 	{
@@ -62,7 +51,7 @@ namespace
 	{
 	public:
 		using base_type = base_trie;
-		
+
 		using base_type::is_tail;
 		using base_type::has_child;
 		using base_type::has_null;
@@ -95,63 +84,63 @@ namespace
 	};
 }
 
-BOOST_AUTO_TEST_SUITE(trie_base__test)
+BOOST_AUTO_TEST_SUITE(stable_trie_base__test)
 
 // ----------------------------------------------------------------------------
-// trie_base
+// stable_trie_base
 // ----------------------------------------------------------------------------
 
-// trie_base()
-BOOST_AUTO_TEST_CASE(trie_base__constrcut__1)
+// stable_trie_base()
+BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__1)
 {
 	using namespace wordring;
 
-	trie_base trie{};
+	stable_trie_base<std::string> trie{};
 }
 
-// explicit trie_base(allocator_type const& alloc)
-BOOST_AUTO_TEST_CASE(trie_base__constrcut__2)
+// explicit stable_trie_base(allocator_type const& alloc)
+BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__2)
 {
 	using namespace wordring;
 
-	trie_base trie{ std::allocator<trie_node>() };
+	stable_trie_base<std::string> trie{ std::allocator<trie_node>() };
 }
 
-// trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
-BOOST_AUTO_TEST_CASE(trie_base__constrcut__3)
+// stable_trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
+BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__3)
 {
 	using namespace wordring;
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
-	trie_base t1{ v1.begin(), v1.end() };
+	stable_trie_base<std::string> t1{ v1.begin(), v1.end() };
 
 	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
-	trie_base t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
+	stable_trie_base<std::string> t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
 }
 
-// trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
-BOOST_AUTO_TEST_CASE(trie_base__constrcut__4)
+// stable_trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
+BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__4)
 {
 	using namespace wordring;
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
-	trie_base trie{ v.begin(), v.end(), std::allocator<trie_node>() };
+	stable_trie_base<std::string> trie{ v.begin(), v.end(), std::allocator<trie_node>() };
 }
 
-// trie_base(std::initializer_list<trie_node> il)
-BOOST_AUTO_TEST_CASE(trie_base__constrcut__5)
+// stable_trie_base(std::initializer_list<trie_node> il)
+BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__5)
 {
 	using namespace wordring;
 
-	trie_base trie{ { { 0, 1 }, { 2, 3 } } };
+	stable_trie_base<std::string> trie{ { { 0, 1 }, { 2, 3 } } };
 }
 
 // void assign(InputIterator first, InputIterator last)
-BOOST_AUTO_TEST_CASE(trie_base__assign__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__1)
 {
 	using namespace wordring;
 
-	trie_base<> t1{};
+	stable_trie_base<std::string> t1{};
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v1.begin(), v1.end());
@@ -170,11 +159,11 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__1)
 	BOOST_CHECK(t2.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__assign__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__2)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	stable_trie_base<std::string> t1{};
 
 	std::vector<std::int32_t> v{};
 	std::copy(t1.ibegin(), t1.iend(), std::back_inserter(v));
@@ -186,11 +175,11 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__2)
 	BOOST_CHECK(t2.size() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__assign__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__3)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	stable_trie_base<std::string> t1{};
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v1.begin(), v1.end());
@@ -212,11 +201,11 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__3)
 	BOOST_CHECK(t2.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__assign__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__4)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	stable_trie_base<std::string> t1{};
 
 	auto it1 = serialize_iterator(t1.ibegin());
 	auto it2 = serialize_iterator(t1.iend());
@@ -231,16 +220,16 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__4)
 }
 
 // void assign(ForwardIterator first, ForwardIterator last)
-BOOST_AUTO_TEST_CASE(trie_base__assign__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__5)
 {
 	using namespace wordring;
 
-	trie_base t1{};
+	stable_trie_base<std::string> t1{};
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v.begin(), v.end());
 
-	trie_base t2{};
+	stable_trie_base<std::string> t2{};
 	t2 = t1;
 
 	BOOST_CHECK(t2.size() == 5);
@@ -251,7 +240,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__5)
 	BOOST_CHECK(t2.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__assign__6)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__6)
 {
 	test_trie trie{};
 
@@ -267,7 +256,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__6)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__assign__7)
+BOOST_AUTO_TEST_CASE(stable_trie_base__assign__7)
 {
 	test_trie trie{};
 
@@ -281,7 +270,7 @@ BOOST_AUTO_TEST_CASE(trie_base__assign__7)
 // 要素アクセス ----------------------------------------------------------------
 
 // reference at(Key const& key)
-BOOST_AUTO_TEST_CASE(trie_base__at__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__1)
 {
 	test_trie trie{};
 
@@ -294,7 +283,7 @@ BOOST_AUTO_TEST_CASE(trie_base__at__1)
 	BOOST_CHECK(trie.at(std::string("a")) == 100);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__at__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__2)
 {
 	test_trie trie{};
 
@@ -306,7 +295,7 @@ BOOST_AUTO_TEST_CASE(trie_base__at__2)
 	BOOST_CHECK(trie.at(std::string("ac")) == 100);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__at__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__3)
 {
 	test_trie trie{};
 
@@ -316,14 +305,14 @@ BOOST_AUTO_TEST_CASE(trie_base__at__3)
 	BOOST_CHECK_THROW(trie.at(std::string("d")), std::out_of_range);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__at__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__4)
 {
 	test_trie trie{};
 
 	BOOST_CHECK_THROW(trie.at(std::string("a")), std::out_of_range);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__at__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__5)
 {
 	test_trie trie{};
 
@@ -340,7 +329,7 @@ BOOST_AUTO_TEST_CASE(trie_base__at__5)
 }
 
 // const_reference const at(Key const& key) const
-BOOST_AUTO_TEST_CASE(trie_base__at__6)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__6)
 {
 	test_trie trie{};
 
@@ -359,7 +348,7 @@ BOOST_AUTO_TEST_CASE(trie_base__at__6)
 }
 
 // reference operator[](Key const& key)
-BOOST_AUTO_TEST_CASE(trie_base__at__7)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__7)
 {
 	test_trie trie{};
 
@@ -375,7 +364,7 @@ BOOST_AUTO_TEST_CASE(trie_base__at__7)
 	BOOST_CHECK(trie.count() == 5);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__at__8)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__8)
 {
 	test_trie trie{};
 
@@ -394,28 +383,28 @@ BOOST_AUTO_TEST_CASE(trie_base__at__8)
 // イテレータ ------------------------------------------------------------------
 
 // const_iterator begin() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__begin__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__begin__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.begin() != trie.end());
 }
 
 // const_iterator cbegin() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__cbegin__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__cbegin__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.cbegin() != trie.cend());
 }
 
 // const_iterator end() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__end__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__end__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.begin() != trie.end());
 }
 
 // const_iterator cend() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__cend__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__cend__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.cbegin() != trie.cend());
@@ -424,13 +413,13 @@ BOOST_AUTO_TEST_CASE(trie_base__cend__1)
 // 容量 -----------------------------------------------------------------------
 
 // bool empty() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__empty__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__empty__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.empty());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__empty__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__empty__2)
 {
 	test_trie trie{};
 	trie.insert(std::string("abc"));
@@ -438,13 +427,13 @@ BOOST_AUTO_TEST_CASE(trie_base__empty__2)
 }
 
 // size_type size() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__size__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__size__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.size() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__size__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__size__2)
 {
 	test_trie trie{};
 	trie.insert(std::string("abc"));
@@ -454,7 +443,7 @@ BOOST_AUTO_TEST_CASE(trie_base__size__2)
 }
 
 // size_type max_size() const noexcept
-BOOST_AUTO_TEST_CASE(trie_base__max_size__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__max_size__1)
 {
 	test_trie trie{};
 	BOOST_CHECK(trie.max_size());
@@ -463,7 +452,7 @@ BOOST_AUTO_TEST_CASE(trie_base__max_size__1)
 // 変更 -----------------------------------------------------------------------
 
 // using base_type::clear;
-BOOST_AUTO_TEST_CASE(trie_base__clear__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__clear__1)
 {
 	test_trie trie{};
 
@@ -479,8 +468,98 @@ BOOST_AUTO_TEST_CASE(trie_base__clear__1)
 	BOOST_CHECK(trie.size() == 0);
 }
 
-// const_iterator insert(Key const& key)
-BOOST_AUTO_TEST_CASE(trie_base__insert__1)
+// const_iterator insert(value_type const& value)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__1)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1"), 100));
+
+	BOOST_CHECK(trie.size() == 1);
+	BOOST_CHECK(trie.count() == 1);
+	BOOST_CHECK(trie.at(std::string("\1")) == 100);
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__2)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1\1"), 100));
+
+	BOOST_CHECK(trie.size() == 1);
+	BOOST_CHECK(trie.count() == 1);
+	BOOST_CHECK(trie.at(std::string("\1\1")) == 100);
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__3)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1"), 100));
+	trie.insert(std::make_pair(std::string("\1\1"), 101));
+
+	BOOST_CHECK(trie.size() == 2);
+	BOOST_CHECK(trie.count() == 2);
+	BOOST_CHECK(trie.at(std::string("\1")) == 100);
+	BOOST_CHECK(trie.at(std::string("\1\1")) == 101);
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__4)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1\1"), 100));
+	trie.insert(std::make_pair(std::string("\1"), 101));
+
+	BOOST_CHECK(trie.size() == 2);
+	BOOST_CHECK(trie.count() == 2);
+	BOOST_CHECK(trie.at(std::string("\1")) == 101);
+	BOOST_CHECK(trie.at(std::string("\1\1")) == 100);
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__5)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1\1"), 100));
+	trie.insert(std::make_pair(std::string("\1"), 101));
+	trie.insert(std::make_pair(std::string("\1\1"), 102));
+
+	BOOST_CHECK(trie.size() == 2);
+	BOOST_CHECK(trie.count() == 2);
+	BOOST_CHECK(trie.at(std::string("\1")) == 101);
+	BOOST_CHECK(trie.at(std::string("\1\1")) == 100);
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__6)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1\1"), 100));
+	trie.insert(std::make_pair(std::string("\1"), 101));
+	trie.insert(std::make_pair(std::string("\1"), 102));
+
+	BOOST_CHECK(trie.size() == 2);
+	BOOST_CHECK(trie.count() == 2);
+	BOOST_CHECK(trie.at(std::string("\1")) == 101);
+	BOOST_CHECK(trie.at(std::string("\1\1")) == 100);
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__7)
+{
+	test_trie trie{};
+
+	trie.insert(std::make_pair(std::string("\1\1"), 100));
+	trie.insert(std::make_pair(std::string("\1"), 101));
+	trie.insert(std::make_pair(std::string(""), 102));
+
+	BOOST_CHECK(trie.size() == 2);
+	BOOST_CHECK(trie.count() == 2);
+	BOOST_CHECK(trie.at(std::string("\1")) == 101);
+	BOOST_CHECK(trie.at(std::string("\1\1")) == 100);
+}
+// const_iterator insert(key_type const& key)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__8)
 {
 	test_trie trie{};
 
@@ -491,7 +570,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__1)
 	BOOST_CHECK(trie.contains(std::string("\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__9)
 {
 	test_trie trie{};
 
@@ -502,7 +581,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__2)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__10)
 {
 	test_trie trie{};
 
@@ -515,7 +594,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__3)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__11)
 {
 	test_trie trie{};
 
@@ -528,7 +607,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__4)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__12)
 {
 	test_trie trie{};
 
@@ -542,7 +621,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__5)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__6)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__13)
 {
 	test_trie trie{};
 
@@ -556,7 +635,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__6)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__7)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__14)
 {
 	test_trie trie{};
 
@@ -571,7 +650,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__7)
 }
 
 // void insert(InputIterator first, InputIterator last)
-BOOST_AUTO_TEST_CASE(trie_base__insert__8)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__15)
 {
 	test_trie trie{};
 
@@ -584,7 +663,7 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__8)
 	BOOST_CHECK(trie.contains(std::string("\1\1")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__9)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__16)
 {
 	test_trie trie{};
 
@@ -598,9 +677,11 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__9)
 	BOOST_CHECK(trie.contains(std::string("1080")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__insert__10)
+BOOST_AUTO_TEST_CASE(stable_trie_base__insert__17)
 {
-	std::vector<std::string> words{};
+	std::vector<std::pair<std::string, std::uint32_t>> w1{};
+	std::vector<std::pair<std::string, std::uint32_t>> w2{};
+
 	{
 		std::ifstream is(english_words_path);
 		BOOST_REQUIRE(is.is_open());
@@ -610,30 +691,61 @@ BOOST_AUTO_TEST_CASE(trie_base__insert__10)
 
 		for (size_t i = 0; i < 10000 && std::getline(is, buf); ++i) v.push_back(buf);
 
-		for (std::string const& s : v) words.push_back(s);
-		for (std::string const& s : v) words.push_back(s);
-
 		std::random_device rd;
 		std::mt19937 mt(rd());
-		std::shuffle(words.begin(), words.end(), mt);
+		std::shuffle(v.begin(), v.end(), mt);
+
+		for (auto const& s : v) w1.push_back(std::make_pair(s, w1.size()));
+		w2 = w1;
+		for (auto const& s : v) w2.push_back(std::make_pair(s, w2.size()));
 	}
 
 	test_trie trie{};
 
-	for (std::string const& s : words) trie.insert(s);
+	for (auto const& p : w2) trie.insert(p);
 
-	BOOST_CHECK(trie.count() == words.size() / 2);
-	BOOST_CHECK(trie.size() == words.size() / 2);
+	BOOST_CHECK(trie.count() == w1.size());
+	BOOST_CHECK(trie.size() == w1.size());
 
 	int error = 0;
-	for (std::string const& s : words) if (!trie.contains(s)) ++error;
+	for (auto const& p : w1) if (trie.at(p.first) != p.second) ++error;
 
 	BOOST_CHECK(error == 0);
 }
 
 // void erase(const_iterator pos)
 // void erase(Key const& key)
-BOOST_AUTO_TEST_CASE(trie_base__erase__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__1)
+{
+	test_trie trie{};
+
+	std::vector<std::string> v{ "\1\1", "\1\1\1" };
+	trie.insert(v.begin(), v.end());
+
+	trie.erase(std::string("\1\1"));
+
+	BOOST_CHECK(trie.size() == 1);
+	BOOST_CHECK(trie.count() == 1);
+	BOOST_CHECK(trie.contains(std::string("\1\1")) == false);
+	BOOST_CHECK(trie.contains(std::string("\1\1\1")));
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__2)
+{
+	test_trie trie{};
+
+	std::vector<std::string> v{ "\1\1", "\1\1\1" };
+	trie.insert(v.begin(), v.end());
+
+	trie.erase(std::string("\1\1\1"));
+
+	BOOST_CHECK(trie.size() == 1);
+	BOOST_CHECK(trie.count() == 1);
+	BOOST_CHECK(trie.contains(std::string("\1\1\1")) == false);
+	BOOST_CHECK(trie.contains(std::string("\1\1")));
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__3)
 {
 	test_trie trie{};
 
@@ -651,7 +763,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__1)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__4)
 {
 	test_trie trie{};
 
@@ -669,7 +781,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__2)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__5)
 {
 	test_trie trie{};
 
@@ -687,7 +799,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__3)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__6)
 {
 	test_trie trie{};
 
@@ -705,7 +817,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__4)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__7)
 {
 	test_trie trie{};
 
@@ -723,7 +835,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__5)
 	BOOST_CHECK(trie.contains(std::string("cd")) == false);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__6)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__8)
 {
 	test_trie trie{};
 
@@ -741,7 +853,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__6)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__7)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__9)
 {
 	test_trie trie{};
 
@@ -751,7 +863,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__7)
 	BOOST_CHECK(trie.count() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__8)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__10)
 {
 	test_trie trie{};
 
@@ -761,7 +873,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__8)
 	BOOST_CHECK(trie.count() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__erase__9)
+BOOST_AUTO_TEST_CASE(stable_trie_base__erase__11)
 {
 	test_trie trie{};
 
@@ -798,7 +910,7 @@ BOOST_AUTO_TEST_CASE(trie_base__erase__9)
 
 // auto search(InputIterator first, InputIterator last) const
 //		->std::pair<const_iterator, InputIterator>
-BOOST_AUTO_TEST_CASE(trie_base__search__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__1)
 {
 	test_trie trie{};
 
@@ -813,7 +925,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__1)
 	BOOST_CHECK(p.second == s.end());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__2)
 {
 	test_trie trie{};
 
@@ -828,7 +940,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__2)
 	BOOST_CHECK(p.second == s.end());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__3)
 {
 	test_trie trie{};
 
@@ -842,7 +954,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__3)
 	BOOST_CHECK(p.second == s.end());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__4)
 {
 	test_trie trie{};
 
@@ -857,7 +969,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__4)
 	BOOST_CHECK(*p.second == 'b');
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__5)
 {
 	test_trie trie{};
 
@@ -872,7 +984,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__5)
 	BOOST_CHECK(p.second == s.end());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__6)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__6)
 {
 	test_trie trie{};
 
@@ -886,7 +998,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__6)
 	BOOST_CHECK(p.second == s.begin());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__7)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__7)
 {
 	test_trie trie{};
 
@@ -901,7 +1013,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__7)
 }
 
 // const_iterator search(Key const& key) const
-BOOST_AUTO_TEST_CASE(trie_base__search__8)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__8)
 {
 	test_trie trie{};
 
@@ -914,7 +1026,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__8)
 	BOOST_CHECK(*it == 'a');
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__search__9)
+BOOST_AUTO_TEST_CASE(stable_trie_base__search__9)
 {
 	test_trie trie{};
 
@@ -928,7 +1040,7 @@ BOOST_AUTO_TEST_CASE(trie_base__search__9)
 }
 
 // const_iterator find(Key const& key) const
-BOOST_AUTO_TEST_CASE(trie_base__find__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__find__1)
 {
 	test_trie trie{};
 
@@ -941,7 +1053,7 @@ BOOST_AUTO_TEST_CASE(trie_base__find__1)
 	BOOST_CHECK(*it == 'a');
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__find__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__find__2)
 {
 	test_trie trie{};
 
@@ -954,7 +1066,7 @@ BOOST_AUTO_TEST_CASE(trie_base__find__2)
 	BOOST_CHECK(*it == 'c');
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__find__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__find__3)
 {
 	test_trie trie{};
 
@@ -967,7 +1079,7 @@ BOOST_AUTO_TEST_CASE(trie_base__find__3)
 	BOOST_CHECK(it == trie.cend());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__find__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__find__4)
 {
 	test_trie trie{};
 
@@ -980,7 +1092,7 @@ BOOST_AUTO_TEST_CASE(trie_base__find__4)
 	BOOST_CHECK(it == trie.cend());
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__find__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__find__5)
 {
 	test_trie trie{};
 
@@ -994,7 +1106,7 @@ BOOST_AUTO_TEST_CASE(trie_base__find__5)
 }
 
 // bool contains(Key const& key) const
-BOOST_AUTO_TEST_CASE(trie_base__contains__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__contains__1)
 {
 	test_trie trie{};
 
@@ -1004,7 +1116,7 @@ BOOST_AUTO_TEST_CASE(trie_base__contains__1)
 	BOOST_CHECK(trie.contains(std::string("a")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__contains__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__contains__2)
 {
 	test_trie trie{};
 
@@ -1014,7 +1126,7 @@ BOOST_AUTO_TEST_CASE(trie_base__contains__2)
 	BOOST_CHECK(trie.contains(std::string("ac")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__contains__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__contains__3)
 {
 	test_trie trie{};
 
@@ -1025,7 +1137,7 @@ BOOST_AUTO_TEST_CASE(trie_base__contains__3)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__contains__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__contains__4)
 {
 	test_trie trie{};
 
@@ -1035,7 +1147,7 @@ BOOST_AUTO_TEST_CASE(trie_base__contains__4)
 	BOOST_CHECK(trie.contains(std::string("")) == false);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__contains__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__contains__5)
 {
 	test_trie trie{};
 
@@ -1051,7 +1163,7 @@ BOOST_AUTO_TEST_CASE(trie_base__contains__5)
 // 内部 -----------------------------------------------------------------------
 
 // bool is_tail(index_type idx) const
-BOOST_AUTO_TEST_CASE(trie_base__is_tail__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__is_tail__1)
 {
 	test_trie trie{};
 
@@ -1062,7 +1174,7 @@ BOOST_AUTO_TEST_CASE(trie_base__is_tail__1)
 	BOOST_CHECK(trie.is_tail(i));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__is_tail__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__is_tail__2)
 {
 	test_trie trie{};
 
@@ -1074,7 +1186,7 @@ BOOST_AUTO_TEST_CASE(trie_base__is_tail__2)
 	BOOST_CHECK(trie.is_tail(i));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__is_tail__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__is_tail__3)
 {
 	test_trie trie{};
 
@@ -1085,7 +1197,7 @@ BOOST_AUTO_TEST_CASE(trie_base__is_tail__3)
 	BOOST_CHECK(trie.is_tail(i) == false);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__is_tail__4)
+BOOST_AUTO_TEST_CASE(stable_trie_base__is_tail__4)
 {
 	test_trie trie{};
 
@@ -1095,7 +1207,7 @@ BOOST_AUTO_TEST_CASE(trie_base__is_tail__4)
 	BOOST_CHECK(trie.is_tail(1) == false);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__is_tail__5)
+BOOST_AUTO_TEST_CASE(stable_trie_base__is_tail__5)
 {
 	test_trie trie{};
 
@@ -1103,7 +1215,7 @@ BOOST_AUTO_TEST_CASE(trie_base__is_tail__5)
 }
 
 // bool has_child(index_type parent) const
-BOOST_AUTO_TEST_CASE(trie_base__has_child__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_child__1)
 {
 	test_trie trie{};
 
@@ -1114,7 +1226,7 @@ BOOST_AUTO_TEST_CASE(trie_base__has_child__1)
 	BOOST_CHECK(trie.has_child(i));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__has_child__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_child__2)
 {
 	test_trie trie{};
 
@@ -1126,7 +1238,7 @@ BOOST_AUTO_TEST_CASE(trie_base__has_child__2)
 }
 
 // bool has_null(index_type parent) const
-BOOST_AUTO_TEST_CASE(trie_base__has_null__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_null__1)
 {
 	test_trie trie{};
 
@@ -1137,7 +1249,7 @@ BOOST_AUTO_TEST_CASE(trie_base__has_null__1)
 	BOOST_CHECK(trie.has_null(i));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__has_null__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_null__2)
 {
 	test_trie trie{};
 
@@ -1145,10 +1257,10 @@ BOOST_AUTO_TEST_CASE(trie_base__has_null__2)
 	trie.insert(v.begin(), v.end());
 
 	std::int32_t i = trie.at(1, 'b');
-	BOOST_CHECK(trie.has_null(i) == false);
+	BOOST_CHECK(trie.has_null(i));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__has_null__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_null__3)
 {
 	test_trie trie{};
 
@@ -1161,7 +1273,7 @@ BOOST_AUTO_TEST_CASE(trie_base__has_null__3)
 }
 
 // bool has_sibling(index_type idx) const
-BOOST_AUTO_TEST_CASE(trie_base__has_sibling__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_sibling__1)
 {
 	test_trie trie{};
 
@@ -1172,7 +1284,7 @@ BOOST_AUTO_TEST_CASE(trie_base__has_sibling__1)
 	BOOST_CHECK(trie.has_sibling(i));
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__has_sibling__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__has_sibling__2)
 {
 	test_trie trie{};
 
@@ -1185,7 +1297,7 @@ BOOST_AUTO_TEST_CASE(trie_base__has_sibling__2)
 }
 
 // index_type at(index_type parent, std::uint16_t label) const
-BOOST_AUTO_TEST_CASE(trie_base__at__2_1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__at__2_1)
 {
 	test_trie trie{};
 
@@ -1200,7 +1312,7 @@ BOOST_AUTO_TEST_CASE(trie_base__at__2_1)
 }
 
 // index_type add(index_type parent, std::uint16_t label)
-BOOST_AUTO_TEST_CASE(trie_base__add__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__add__1)
 {
 	using namespace wordring;
 	test_trie trie{};
@@ -1212,7 +1324,7 @@ BOOST_AUTO_TEST_CASE(trie_base__add__1)
 }
 
 // index_type add(index_type parent, label_vector const& labels)
-BOOST_AUTO_TEST_CASE(trie_base__add__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__add__2)
 {
 	using namespace wordring;
 	test_trie trie{};
@@ -1223,7 +1335,7 @@ BOOST_AUTO_TEST_CASE(trie_base__add__2)
 	BOOST_CHECK(trie.m_c == v);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__add__3)
+BOOST_AUTO_TEST_CASE(stable_trie_base__add__3)
 {
 	using namespace wordring;
 	test_trie trie{};
@@ -1238,7 +1350,7 @@ BOOST_AUTO_TEST_CASE(trie_base__add__3)
 
 // inline std::basic_ostream<char>& operator<<(std::basic_ostream<char>& os, trie_heap<Allocator1> const& heap)
 // inline std::basic_istream<char>& operator>>(std::basic_istream<char>& is, trie_heap<Allocator1>& heap)
-BOOST_AUTO_TEST_CASE(trie_base__stream__1)
+BOOST_AUTO_TEST_CASE(stable_trie_base__stream__1)
 {
 	test_trie t1{}, t2{};
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
@@ -1251,7 +1363,7 @@ BOOST_AUTO_TEST_CASE(trie_base__stream__1)
 	BOOST_CHECK(t1.m_c == t2.m_c);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base__stream__2)
+BOOST_AUTO_TEST_CASE(stable_trie_base__stream__2)
 {
 	test_trie t1{}, t2{};
 

@@ -1,37 +1,25 @@
 ﻿#pragma once
 
-#include <wordring/static_vector/static_vector.hpp>
-#include <wordring/trie/list_trie_iterator.hpp>
-#include <wordring/trie/trie_base_iterator.hpp>
-#include <wordring/trie/trie_construct_iterator.hpp>
+#include <wordring/trie/stable_trie_base_iterator.hpp>
 #include <wordring/trie/trie_heap.hpp>
 
 //#include <algorithm>
-//#include <cassert>
-//#include <climits>
 //#include <cstdint>
-//#include <istream>
-//#include <iterator>
-//#include <memory>
-//#include <optional>
-//#include <ostream>
-//#include <stdexcept>
-//#include <type_traits>
 #include <utility>
 
 namespace wordring
 {
 	// ------------------------------------------------------------------------
-	// trie_base_value_proxy
+	// stable_trie_base_value_proxy
 	// ------------------------------------------------------------------------
 
-	struct trie_base_value_proxy
+	struct stable_trie_base_value_proxy
 	{
 		using index_type = typename trie_node::index_type;
 
 		index_type* m_base;
 
-		trie_base_value_proxy(index_type* base)
+		stable_trie_base_value_proxy(index_type* base)
 			: m_base(base)
 		{
 		}
@@ -44,25 +32,26 @@ namespace wordring
 
 		operator index_type() const
 		{
+			assert(*m_base <= 0);
 			return -*m_base;
 		}
 	};
 
 	// ------------------------------------------------------------------------
-	// trie_base
+	// stable_trie_base
 	// ------------------------------------------------------------------------
 
 	/*!
-	- 挿入や削除によってすべてのイテレータが無効となる。
+	- 挿入や削除によって終端のイテレータが無効とならない安定なTrie木。
 	*/
-	template <typename Allocator = std::allocator<trie_node>>
-	class trie_base : public trie_heap<Allocator>
+	template <typename Key, typename Allocator = std::allocator<trie_node>>
+	class stable_trie_base : public trie_heap<Allocator>
 	{
-		template <typename Allocator1>
-		friend std::ostream& operator<<(std::ostream&, trie_base<Allocator1> const&);
+		template <typename Key1, typename Allocator1>
+		friend std::ostream& operator<<(std::ostream&, stable_trie_base<Key1, Allocator1> const&);
 
-		template <typename Allocator1>
-		friend std::istream& operator>>(std::istream&, trie_base<Allocator1>&);
+		template <typename Key1, typename Allocator1>
+		friend std::istream& operator>>(std::istream&, stable_trie_base<Key1, Allocator1>&);
 
 	protected:
 		using base_type = trie_heap<Allocator>;
@@ -75,12 +64,14 @@ namespace wordring
 		using base_type::null_value;
 
 	public:
-		using value_type      = trie_base_value_proxy;
+		using key_type        = Key;
+		using symbol_type     = std::make_unsigned_t<typename std::iterator_traits<typename key_type::const_iterator>::value_type>;
+		using value_type      = std::pair<key_type const, uint32_t>;
 		using size_type       = typename container::size_type;
 		using allocator_type  = Allocator;
-		using reference       = trie_base_value_proxy;
-		using const_reference = trie_base_value_proxy const;
-		using const_iterator  = const_trie_base_iterator<container const>;
+		using reference       = stable_trie_base_value_proxy;
+		using const_reference = stable_trie_base_value_proxy const;
+		using const_iterator  = const_stable_trie_base_iterator<key_type, container const>;
 
 	public:
 		using typename base_type::serialize_iterator;
@@ -93,28 +84,30 @@ namespace wordring
 	protected:
 		using base_type::assign;
 		using base_type::limit;
-		using base_type::reserve;
-		using base_type::allocate;
-		using base_type::relocate;
+		//using base_type::reserve;
+		//using base_type::allocate;
+		//using base_type::relocate;
 		using base_type::free;
-		using base_type::locate;
-		using base_type::is_free;
-		using base_type::is_tail;
+		//using base_type::locate;
+		//using base_type::is_free;
+		//using base_type::is_tail;
 		using base_type::has_child;
 		using base_type::has_null;
-		using base_type::has_sibling;
+		//using base_type::has_sibling;
 		using base_type::at;
 		using base_type::add;
 
 		using base_type::m_c;
 
+		static_assert(sizeof(symbol_type) == 1);
+
 	public:
-		trie_base()
+		stable_trie_base()
 			: base_type()
 		{
 		}
 
-		explicit trie_base(allocator_type const& alloc)
+		explicit stable_trie_base(allocator_type const& alloc)
 			: base_type(alloc)
 		{
 		}
@@ -122,7 +115,7 @@ namespace wordring
 		/*! 直列化データからの復元
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
-		trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
+		stable_trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
 			: base_type(alloc)
 		{
 			assign(first, last);
@@ -131,7 +124,7 @@ namespace wordring
 		/*! 文字列リストからの構築
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
-		trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
+		stable_trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
 			: base_type(alloc)
 		{
 			assign(first, last);
@@ -139,7 +132,7 @@ namespace wordring
 
 		/*! 初期化子リストからの構築
 		*/
-		trie_base(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
+		stable_trie_base(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
 			: base_type(il, alloc)
 		{
 		}
@@ -157,71 +150,36 @@ namespace wordring
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		void assign(ForwardIterator first, ForwardIterator last)
 		{
-			using iterator_category = typename std::iterator_traits<ForwardIterator>::iterator_category;
-
-			static_assert(
-				   std::is_same_v<iterator_category, std::forward_iterator_tag>
-				|| std::is_same_v<iterator_category, std::bidirectional_iterator_tag>
-				|| std::is_same_v<iterator_category, std::random_access_iterator_tag>);
-
 			clear();
-
-			if (!std::is_sorted(first, last) || std::adjacent_find(first, last) != last)
-			{
-				insert(first, last);
-				return;
-			}
-
-			using list_iterator = const_list_trie_iterator<ForwardIterator>;
-			using construct_iterator = trie_construct_iterator<list_iterator>;
-
-			auto li = list_iterator(first, last);
-			auto it = construct_iterator(li);
-
-			while (!it.empty() && !it.children().empty())
-			{
-				auto view = it.parent();
-				auto it1 = search(view.begin(), view.end());
-				if (it1.first.m_index == 0) it1.first.m_index = 1; // rootの場合。
-				add(it1.first.m_index, it.children());
-				++it;
-			}
-
-			m_c.front().m_base = std::distance(first, last);
+			insert(first, last);
 		}
 
 		// 要素アクセス --------------------------------------------------------
 
-		template <typename Key>
-		reference at(Key const& key)
+		reference at(key_type const& key)
 		{
 			auto it = find(key);
 			if (it == cend()) throw std::out_of_range("");
 
-			// 子遷移が有り、なおかつ文字列終端の場合に対応する。
-			index_type idx = ((m_c.data() + it.m_index)->m_base <= 0)
-				? it.m_index
-				: it.base() + null_value;
-
+			index_type idx = (m_c.data() + it.m_index)->m_base + null_value;
+			assert(1 < idx && idx < limit());
+			
 			return reference(std::addressof((m_c.data() + idx)->m_base));
 		}
 
 		template <typename Key>
 		const_reference const at(Key const& key) const
 		{
-			return const_cast<trie_base*>(this)->at(key);
+			return const_cast<stable_trie_base*>(this)->at(key);
 		}
 
-		template <typename Key>
-		reference operator[](Key const& key)
+		reference operator[](key_type const& key)
 		{
 			auto it = find(key);
 			if (it == cend()) it = insert(key);
 
-			// 子遷移が有り、なおかつ文字列終端の場合に対応する。
-			index_type idx = ((m_c.data() + it.m_index)->m_base <= 0)
-				? it.m_index
-				: it.base() + null_value;
+			index_type idx = (m_c.data() + it.m_index)->m_base + null_value;
+			assert(1 < idx && idx < limit());
 
 			return reference(std::addressof((m_c.data() + idx)->m_base));
 		}
@@ -249,11 +207,10 @@ namespace wordring
 
 		// 変更 ---------------------------------------------------------------
 
-		template <typename Key>
-		const_iterator insert(Key const& key)
+		const_iterator insert(value_type const& value)
 		{
-			auto it1 = std::begin(key);
-			auto it2 = std::end(key);
+			auto it1 = std::begin(value.first);
+			auto it2 = std::end(value.first);
 			if (it1 == it2) return cend();
 
 			index_type parent = 1;
@@ -265,37 +222,41 @@ namespace wordring
 				++it1;
 				if (it1 == it2) break;
 			}
-			if (it1 != it2) ++m_c.front().m_base;
 
-			// 空遷移の解決
-			if (has_child(parent)) // 既存遷移有り、新規文字列無し
+			if (!has_null(parent) || it1 != it2)
 			{
-				if (it1 == it2 && !has_null(parent))
+				// 新規文字列による遷移を追加
+				while (it1 != it2)
 				{
-					add(parent, null_value);
-					++m_c.front().m_base;
+					std::uint16_t label = static_cast<std::uint8_t>(*it1++);
+					index_type base = add(parent, label);
+					parent = base + label;
 				}
-			}
-			else if (parent != 1 && !has_null(parent) && it1 != it2) // 後続遷移無し、新規文字列有り
-				add(parent, null_value);
+				assert(parent != 1);
 
-			// 新規文字列による遷移を追加
-			while (it1 != it2)
-			{
-				std::uint16_t label = static_cast<std::uint8_t>(*it1++);
-				index_type base = add(parent, label);
-				parent = base + label;
-			}
+				// 終端の空遷移を追加
+				index_type idx = add(parent, null_value) + null_value;
+				(m_c.data() + idx)->m_base = -value.second;
 
-			assert(parent != 1);
+				++m_c.front().m_base;
+			}
 
 			return const_iterator(m_c, parent);
+		}
+
+		const_iterator insert(key_type const& key)
+		{
+			return insert(value_type(key, 0));
 		}
 
 		template <typename InputIterator>
 		void insert(InputIterator first, InputIterator last)
 		{
-			while (first != last) insert(*first++);
+			while (first != last)
+			{
+				insert(*first);
+				++first;
+			}
 		}
 
 		void erase(const_iterator pos)
@@ -303,28 +264,17 @@ namespace wordring
 			index_type idx = pos.m_index;
 			assert(0 <= idx && idx < limit());
 
-			if (idx <= 1 || !is_tail(idx)) return;
+			if (idx <= 1 || !has_null(idx)) return;
+			assert(has_null(idx));
 
-			while (true)
+			index_type term = (m_c.data() + idx)->m_base + null_value;
+			assert((m_c.data() + term)->m_check == idx);
+			free(term);
+
+			while (idx != 1 && !has_null(idx) && !has_child(idx))
 			{
-				if (has_null(idx))
-				{
-					index_type i = (m_c.data() + idx)->m_base + null_value;
-					assert((m_c.data() + i)->m_check == idx);
-
-					free(i);
-					if (!has_child(idx)) (m_c.data() + idx)->m_base = 0;
-
-					break;
-				}
-
-				index_type parent = 0;
-				if (!has_sibling(idx)) parent = (m_c.data() + idx)->m_check; // 兄弟が無い場合
-				assert(0 <= parent && parent < limit());
-
-				if (idx != 1) free(idx);
-				if (parent == 0) break;
-
+				index_type parent = (m_c.data() + idx)->m_check;
+				free(idx);
 				idx = parent;
 			}
 
@@ -335,9 +285,8 @@ namespace wordring
 		template <typename Key>
 		void erase(Key const& key) { erase(find(key)); }
 
-		void swap(trie_base& other)
+		void swap(stable_trie_base& other)
 		{
-			base_type& p = static_cast<base_type&>(*this);
 			base_type::swap(other);
 		}
 
@@ -373,8 +322,7 @@ namespace wordring
 		- 空文字列に対してはcbegin()を返す。
 		- この動作は再検討が必要かもしれない。
 		*/
-		template <typename Key>
-		const_iterator search(Key const& key) const
+		const_iterator search(key_type const& key) const
 		{
 			auto it1 = std::begin(key);
 			auto it2 = std::end(key);
@@ -388,8 +336,7 @@ namespace wordring
 
 		/*! 完全一致検索
 		*/
-		template <typename Key>
-		const_iterator find(Key const& key) const
+		const_iterator find(key_type const& key) const
 		{
 			auto it1 = std::begin(key);
 			auto it2 = std::end(key);
@@ -399,7 +346,7 @@ namespace wordring
 			auto it = pair.second;
 			index_type idx = pair.first.m_index;
 
-			return (it == it2 && is_tail(idx))
+			return (it == it2 && has_null(idx))
 				? pair.first
 				: cend();
 		}
@@ -415,21 +362,21 @@ namespace wordring
 			auto it = pair.second;
 			index_type idx = pair.first.m_index;
 
-			return !(it != it2 || !is_tail(idx));
+			return !(it != it2 || !has_null(idx));
 		}
 	};
 
-	template <typename Allocator1>
-	inline std::ostream& operator<<(std::ostream& os, trie_base<Allocator1> const& trie)
+	template <typename Key1, typename Allocator1>
+	inline std::ostream& operator<<(std::ostream& os, stable_trie_base<Key1, Allocator1> const& trie)
 	{
-		typename trie_base<Allocator1>::base_type const& heap = trie;
+		typename stable_trie_base<Key1, Allocator1>::base_type const& heap = trie;
 		return os << heap;
 	}
 
-	template <typename Allocator1>
-	inline std::istream& operator>>(std::istream& is, trie_base<Allocator1>& trie)
+	template <typename Key1, typename Allocator1>
+	inline std::istream& operator>>(std::istream& is, stable_trie_base<Key1, Allocator1>& trie)
 	{
-		typename trie_base<Allocator1>::base_type& heap = trie;
+		typename stable_trie_base<Key1, Allocator1>::base_type& heap = trie;
 		return is >> heap;
 	}
 }

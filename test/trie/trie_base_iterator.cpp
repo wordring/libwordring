@@ -14,14 +14,11 @@
 #include <string>
 #include <vector>
 
-namespace wordring
+namespace
 {
-	inline bool operator==(trie_node const& lhs, trie_node const& rhs)
-	{
-		return lhs.m_base == rhs.m_base && lhs.m_check == rhs.m_check;
-	}
-
-	using base_iterator = const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
+	using wordring::trie_node;
+	using base_iterator = wordring::const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
+	using wordring::trie_base;
 
 	class test_iterator : public base_iterator
 	{
@@ -33,7 +30,7 @@ namespace wordring
 		using base_type::find;
 		using base_type::mother;
 		using base_type::base;
-		using base_type::tail;
+		using base_type::limit;
 		using base_type::has_null;
 		using base_type::has_sibling;
 
@@ -483,21 +480,21 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__parent__1)
 	test_trie trie{};
 
 	test_iterator it1 = trie.insert(std::string("\1"));
-	BOOST_CHECK(it1.parent()->parent().has_value() == false);
+	BOOST_CHECK(it1.parent().parent() == trie.cend());
 
 	test_iterator it2 = trie.insert(std::string("\1\3"));
-	BOOST_CHECK(*it2.parent().value() == 1);
+	BOOST_CHECK(*it2.parent() == 1);
 
 	test_iterator it3 = trie.insert(std::string("\2"));
-	BOOST_CHECK(it3.parent()->parent().has_value() == false);
+	BOOST_CHECK(it3.parent().parent() == trie.cend());
 
 	test_iterator it4 = trie.insert(std::string("\3\1\2"));
-	BOOST_CHECK(*it4.parent().value() == 1);
-	BOOST_CHECK(*it4.parent()->parent().value() == 3);
+	BOOST_CHECK(*it4.parent() == 1);
+	BOOST_CHECK(*it4.parent().parent() == 3);
 
 	test_iterator it5 = trie.insert(std::string("\3\4"));
-	BOOST_CHECK(*it5.parent().value() == 3);
-	BOOST_CHECK(it5.parent()->parent()->parent().has_value() == false);
+	BOOST_CHECK(*it5.parent() == 3);
+	BOOST_CHECK(it5.parent().parent().parent() == trie.cend());
 }
 
 
@@ -715,7 +712,7 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__base__1)
 	BOOST_CHECK(test_iterator(trie.m_c, 9).base() == 5);
 }
 
-// index_type tail() const
+// index_type limit() const
 BOOST_AUTO_TEST_CASE(const_trie_base_iterator__tail__1)
 {
 	using namespace wordring;
@@ -735,15 +732,15 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__tail__1)
 		{ -5, 4 }  // 9
 	};
 
-	BOOST_CHECK(test_iterator(trie.m_c, 1).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 2).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 3).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 4).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 5).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 6).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 7).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 8).tail() == 10);
-	BOOST_CHECK(test_iterator(trie.m_c, 9).tail() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 1).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 2).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 3).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 4).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 5).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 6).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 7).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 8).limit() == 10);
+	BOOST_CHECK(test_iterator(trie.m_c, 9).limit() == 10);
 }
 
 // bool has_null() const

@@ -146,6 +146,64 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__unique_1)
 		<< std::endl;
 }
 
+BOOST_AUTO_TEST_CASE(trie_base_benchmark__assign_1)
+{
+	using namespace wordring;
+
+	setup1();
+	std::vector<std::string> const& words = words1;
+
+	trie_base t1{};
+	t1.assign(words.begin(), words.end());
+
+	std::cout << "trie_base_benchmark__assign_1" << std::endl;
+
+	auto start = std::chrono::system_clock::now();
+	std::vector<std::int32_t> v(t1.ibegin(), t1.iend());
+	auto duration = std::chrono::system_clock::now() - start;
+
+	std::cout
+		<< "serialize: "
+		<< std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms"
+		<< std::endl;
+
+	trie_base t2{};
+	start = std::chrono::system_clock::now();
+	t2.assign(v.begin(), v.end());
+	duration = std::chrono::system_clock::now() - start;
+
+	std::cout
+		<< "deserialize: "
+		<< std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms"
+		<< std::endl;
+
+	std::cout << "size: " << t2.size() << std::endl;
+}
+
+BOOST_AUTO_TEST_CASE(trie_base_benchmark__copy_1)
+{
+	using namespace wordring;
+
+	setup1();
+	std::vector<std::string> const& words = words1;
+
+	trie_base t1{}, t2{};
+	t1.assign(words.begin(), words.end());
+
+	std::cout << "trie_base_benchmark__copy_1" << std::endl;
+
+	auto start = std::chrono::system_clock::now();
+	t2 = t1;
+	auto duration = std::chrono::system_clock::now() - start;
+
+	std::cout
+		<< "copy: "
+		<< std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms"
+		<< std::endl;
+
+	std::cout << "size: " << t2.size() << std::endl;
+}
+
 BOOST_AUTO_TEST_CASE(trie_base_benchmark__raw_words_1)
 {
 	using namespace wordring;

@@ -1,13 +1,11 @@
 ﻿#pragma once
 
-#include <wordring/trie/trie_heap.hpp>
-
-#include <optional>
+#include <wordring/trie/trie_heap_iterator.hpp>
 
 namespace wordring
 {
 	template <typename Container>
-	class const_trie_base_iterator
+	class const_trie_base_iterator : public const_trie_heap_iterator<Container>
 	{
 		template <typename Allocator>
 		friend class trie_base;
@@ -18,6 +16,13 @@ namespace wordring
 		template <typename Container1>
 		friend bool operator!=(const_trie_base_iterator<Container1> const&, const_trie_base_iterator<Container1> const&);
 
+	protected:
+		using base_type = const_trie_heap_iterator<Container>;
+
+		using typename base_type::index_type;
+		using typename base_type::node_type;
+		using typename base_type::container;
+
 	public:
 		using difference_type   = std::ptrdiff_t;
 		using value_type        = std::uint8_t;
@@ -25,24 +30,36 @@ namespace wordring
 		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
-	protected:
-		using index_type = typename trie_node::index_type;
-		using node_type  = trie_node;
-		using container  = Container const;
+		static constexpr std::uint16_t null_value = 256u;
 
-		static constexpr std::uint16_t null_value = 256;
+	protected:
+		using base_type::value;
+		using base_type::at_index;
+		using base_type::advance;
+		using base_type::string;
+		using base_type::parent_index;
+		using base_type::begin_index;
+		using base_type::end_index;
+
+		using base_type::find;
+		using base_type::mother;
+		using base_type::base;
+		using base_type::limit;
+		using base_type::has_null;
+		using base_type::has_sibling;
+
+		using base_type::m_c;
+		using base_type::m_index;
 
 	public:
 		const_trie_base_iterator()
-			: m_c(nullptr)
-			, m_index(0)
+			: base_type()
 		{
 		}
 
 	protected:
 		const_trie_base_iterator(container& c, index_type index)
-			: m_c(std::addressof(c))
-			, m_index(index)
+			: base_type(c, index)
 		{
 		}
 
@@ -58,43 +75,30 @@ namespace wordring
 			// 子が無い（BASEが1未満）場合。
 			if (idx <= 0) return true;
 			// 子はあるが、途中で終端もある（文字null_valueによる遷移）場合。
-			if ((idx + null_value) < tail() && (d + idx + null_value)->m_check == m_index) return true;
+			if ((idx + null_value) < limit() && (d + idx + null_value)->m_check == m_index) return true;
 
 			return false;
 		}
 
 		bool operator!() const { return operator bool() == false; }
 
-		value_type operator*() const
-		{
-			assert(base() <= m_index && m_index < base() + null_value);
-
-			return m_index - base();
-		}
+		value_type operator*() const { return value(); }
 
 		const_trie_base_iterator operator[](value_type label) const
 		{
-			node_type const* d = m_c->data();
-
-			index_type idx = (d + m_index)->m_base + label;
-			idx = (idx < tail() && (d + idx)->m_check == m_index) ? idx
-				: 0;
-			return const_trie_base_iterator(*m_c, idx);
+			return const_trie_base_iterator(*m_c, at_index(label));
 		}
 
 		const_trie_base_iterator& operator++()
 		{
-			m_index = find(m_index + 1, base() + null_value, mother());
-
+			advance();
 			return *this;
 		}
 
 		const_trie_base_iterator operator++(int)
 		{
 			auto result = *this;
-
-			operator++();
-
+			advance();
 			return result;
 		}
 
@@ -102,15 +106,13 @@ namespace wordring
 		String string() const
 		{
 			std::basic_string<value_type> tmp;
-			for (auto p = *this; 1 < p.m_index; p = *p.parent()) tmp.push_back(*p);
+			for (auto p = *this; 1 < p.m_index; p = p.parent()) tmp.push_back(*p);
 			return String(tmp.rbegin(), tmp.rend());
 		}
 
-		std::optional<const_trie_base_iterator> parent() const
+		const_trie_base_iterator parent() const
 		{
-			return (1 < m_index)
-				? std::optional<const_trie_base_iterator>(const_trie_base_iterator(*m_c, (m_c->data() + m_index)->m_check))
-				: std::nullopt;
+			return const_trie_base_iterator(*m_c, parent_index());
 		}
 
 		/*! 0-255に相当する文字で遷移できる最初の子を指すイテレータを返す
@@ -119,105 +121,13 @@ namespace wordring
 		*/
 		const_trie_base_iterator begin() const
 		{
-			assert(1 <= m_index);
-
-			index_type i = (m_c->data() + m_index)->m_base;
-			i = (0 < i) ? find(i, i + null_value, m_index) : 0;
-			return const_trie_base_iterator(*m_c, i);
+			return const_trie_base_iterator(*m_c, begin_index());
 		}
 
 		const_trie_base_iterator end() const
 		{
-			return const_trie_base_iterator(*m_c, 0);
+			return const_trie_base_iterator(*m_c, end_index());
 		}
-
-	protected:
-		/*! 引数firstからlastの範囲で、m_checkが引数checkと一致する状態番号を返す
-
-		- 見つからない場合、0を返す。
-		- 状態番号は1から始まるので0と衝突しない。
-		- 引数lastがコンテナの大きさを超える場合、そこで検索を終了する。
-		*/
-		index_type find(index_type first, index_type last, index_type check) const
-		{
-			index_type limit = std::min(last, static_cast<index_type>(m_c->size()));
-			for (; first < limit; ++first) if ((m_c->data() + first)->m_check == check) break;
-
-			return (first != limit) ? first : 0;
-		}
-
-		/*! 親の状態番号を返す
-		*/
-		index_type mother() const
-		{
-			assert(1 <= m_index && m_index < tail());
-
-			node_type const* d = m_c->data();
-			index_type parent = (d + m_index)->m_check;
-
-			return (1 <= parent)
-				? parent
-				: 0;
-		}
-
-		/*! 親のBASEを返す
-		- つまりコレはm_indexからラベルを差し引いた値にに相当する。
-		*/
-		index_type base() const
-		{
-			node_type const* d = m_c->data();
-
-			index_type parent = mother();
-			assert(parent != 0);
-
-			index_type idx = (parent != 0) ? (d + parent)->m_base : 0;
-			assert(1 <= idx); // thisが子である以上、親のBASEが存在する。
-
-			return idx;
-		}
-
-		/*! コンテナの最終状態番号の次を返す
-		- キャストで行が増えるのを抑制するために用意した。
-		*/
-		index_type tail() const { return m_c->size(); }
-
-		/*! 空遷移がある場合trueを返す
-		*/
-		bool has_null() const
-		{
-			if (m_index == 1) return false;
-
-			node_type const* d = m_c->data();
-			index_type idx = (d + m_index)->m_base + null_value;
-
-			return (idx < tail() && (d + idx)->m_check == m_index);
-		}
-
-		/*! 兄弟にあたる状態がある場合、trueを返す
-		*/
-		bool has_sibling() const
-		{
-			if (m_index == 1) return false;
-
-			index_type check = (m_c->data() + m_index)->m_check;
-
-			index_type first = base();
-			index_type last = first + null_value;
-
-			while (true)
-			{
-				first = find(first, last, check);
-				if (first == 0) return false;
-				if (first != m_index) return true;
-				++first;
-			}
-
-			return false;
-		}
-
-	protected:
-		container* m_c;
-		index_type m_index;
 	};
 
 	template <typename Container1>
