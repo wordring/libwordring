@@ -6,6 +6,7 @@
 #include <wordring/tree/tree_iterator.hpp>
 
 #include <fstream>
+#include <iostream>
 #include <random>
 
 #define STRING(str) #str
