@@ -4,17 +4,17 @@
 
 namespace wordring
 {
-	template <typename Key, typename Container>
+	template <typename Container>
 	class const_stable_trie_base_iterator : public const_trie_heap_iterator<Container>
 	{
-		template <typename Key1, typename Allocator1>
+		template <typename Allocator1>
 		friend class stable_trie_base;
 
-		template <typename Key1, typename Container1>
-		friend bool operator==(const_stable_trie_base_iterator<Key1, Container1> const&, const_stable_trie_base_iterator<Key1, Container1> const&);
+		template <typename Container1>
+		friend bool operator==(const_stable_trie_base_iterator<Container1> const&, const_stable_trie_base_iterator<Container1> const&);
 
 		template <typename Key1, typename Container1>
-		friend bool operator!=(const_stable_trie_base_iterator<Key1, Container1> const&, const_stable_trie_base_iterator<Key1, Container1> const&);
+		friend bool operator!=(const_stable_trie_base_iterator<Container1> const&, const_stable_trie_base_iterator<Container1> const&);
 
 	protected:
 		using base_type = const_trie_heap_iterator<Container>;
@@ -24,7 +24,6 @@ namespace wordring
 		using typename base_type::container;
 
 	public:
-		using key_type          = Key;
 		using difference_type   = std::ptrdiff_t;
 		using value_type        = std::uint8_t;
 		using pointer           = value_type*;
@@ -90,14 +89,8 @@ namespace wordring
 			return result;
 		}
 
-		key_type string() const
-		{
-			key_type result;
-			string(result);
-			return result;
-		}
-
-		void string(key_type& result) const
+		template <typename Key>
+		void string(Key& result) const
 		{
 			result.clear();
 			for (auto p = *this; 1 < p.m_index; p = p.parent()) result.push_back(*p);
@@ -124,15 +117,15 @@ namespace wordring
 		}
 	};
 
-	template <typename Key1, typename Container1>
-	inline bool operator==(const_stable_trie_base_iterator<Key1, Container1> const& lhs, const_stable_trie_base_iterator<Key1, Container1> const& rhs)
+	template <typename Container1>
+	inline bool operator==(const_stable_trie_base_iterator<Container1> const& lhs, const_stable_trie_base_iterator<Container1> const& rhs)
 	{
 		assert(lhs.m_c == rhs.m_c);
 		return lhs.m_index == rhs.m_index;
 	}
 
-	template <typename Key1, typename Container1>
-	inline bool operator!=(const_stable_trie_base_iterator<Key1, Container1> const& lhs, const_stable_trie_base_iterator<Key1, Container1> const& rhs)
+	template <typename Container1>
+	inline bool operator!=(const_stable_trie_base_iterator<Container1> const& lhs, const_stable_trie_base_iterator<Container1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}

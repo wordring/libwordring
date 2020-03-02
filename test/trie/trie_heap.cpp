@@ -530,7 +530,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__is_free__1)
 	test_heap heap{};
 	heap.m_c = { { 0, -1 }, { 0, 0 } };
 
-	BOOST_CHECK(heap.is_free(1, { 0 }));
+	BOOST_CHECK(heap.is_free(1, { 0 }) == false);  // index 1のcheckは常に0なので使用できない
 }
 
 BOOST_AUTO_TEST_CASE(trie_heap__is_free__2)
@@ -556,6 +556,14 @@ BOOST_AUTO_TEST_CASE(trie_heap__is_free__4)
 	heap.m_c = { { 0, -3 }, { 0, 0 }, { 0, 1 }, { 0, 0 } };
 
 	BOOST_CHECK(heap.is_free(1, 1, { 1, 2 }));
+}
+
+BOOST_AUTO_TEST_CASE(trie_heap__is_free__5)
+{
+	test_heap heap{};
+	heap.m_c = { { 0, -3 }, { 0, 0 }, { 0, 1 }, { 0, 0 } };
+
+	BOOST_CHECK(heap.is_free(1, 1, { 0, 1 }) == false);
 }
 
 // 関数 -----------------------------------------------------------------------

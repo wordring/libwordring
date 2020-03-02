@@ -17,8 +17,8 @@
 namespace
 {
 	using wordring::trie_node;
-	using base_iterator = wordring::const_stable_trie_base_iterator<std::string, std::vector<trie_node, std::allocator<trie_node>> const>;
-	using base_trie     = wordring::stable_trie_base<std::string>;
+	using base_trie     = wordring::stable_trie_base<>;
+	using base_iterator = typename base_trie::const_iterator;
 
 	class test_iterator : public base_iterator
 	{
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__bool__1)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("a");
+	auto it = trie.search(std::string("a"));
 
 	BOOST_CHECK(it.operator bool());
 }
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__bool__2)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("ac");
+	auto it = trie.search(std::string("ac"));
 
 	BOOST_CHECK(it.operator bool());
 }
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__bool__3)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("b");
+	auto it = trie.search(std::string("b"));
 
 	BOOST_CHECK(it.operator bool());
 }
@@ -160,7 +160,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__bool__4)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("c");
+	auto it = trie.search(std::string("c"));
 
 	BOOST_CHECK(it.operator bool() == false);
 }
@@ -173,7 +173,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__reference__1)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("a");
+	auto it = trie.search(std::string("a"));
 
 	BOOST_CHECK(*it == 'a');
 }
@@ -185,7 +185,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__reference__2)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("ac");
+	auto it = trie.search(std::string("ac"));
 
 	BOOST_CHECK(*it == 'c');
 }
@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__reference__3)
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	test_trie trie{ v1.begin(), v1.end() };
 
-	auto it = trie.search("ca");
+	auto it = trie.search(std::string("ca"));
 
 	BOOST_CHECK(*it == 'a');
 }
@@ -295,24 +295,31 @@ BOOST_AUTO_TEST_CASE(const_stable_trie_base_iterator__string__1)
 	using namespace wordring;
 
 	test_trie trie{};
+	std::string s;
 
 	test_iterator it0{};
-	BOOST_CHECK(it0.string() == "");
+	it0.string(s);
+	BOOST_CHECK(s == "");
 
 	test_iterator it1 = trie.insert(std::string("\1"));
-	BOOST_CHECK(it1.string() == "\1");
+	it1.string(s);
+	BOOST_CHECK(s == "\1");
 
 	test_iterator it2 = trie.insert(std::string("\1\3"));
-	BOOST_CHECK(it2.string() == "\1\3");
+	it2.string(s);
+	BOOST_CHECK(s == "\1\3");
 
 	test_iterator it3 = trie.insert(std::string("\2"));
-	BOOST_CHECK(it3.string() == "\2");
+	it3.string(s);
+	BOOST_CHECK(s == "\2");
 
 	test_iterator it4 = trie.insert(std::string("\3\1\2"));
-	BOOST_CHECK(it4.string() == "\3\1\2");
+	it4.string(s);
+	BOOST_CHECK(s == "\3\1\2");
 
 	test_iterator it5 = trie.insert(std::string("\3\4"));
-	BOOST_CHECK(it5.string() == "\3\4");
+	it5.string(s);
+	BOOST_CHECK(s == "\3\4");
 }
 
 // std::optional<const_stable_trie_base_iterator> parent() const

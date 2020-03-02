@@ -49,6 +49,11 @@ namespace wordring
 		{
 		}
 
+		iterator_type base() const
+		{
+			return m_it;
+		}
+
 		value_type operator*() const
 		{
 			std::uint32_t n = (coefficient - 1) - (m_index % coefficient);

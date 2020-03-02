@@ -1,0 +1,15 @@
+テスト名:	trie_base__states__1
+テスト成果:	成功
+結果  の標準出力:	
+boost.test framework(244): message in "trie_base__states__1": Test case trie_base__test/trie_base__states__1 did not check any assertions
+index	base	check
+1,	1,	0
+98,	2,	1
+99,	0,	1
+100,	5,	1
+101,	0,	98
+102,	5,	100
+103,	0,	102
+105,	0,	100
+258,	0,	98
+

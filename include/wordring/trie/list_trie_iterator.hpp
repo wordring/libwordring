@@ -81,7 +81,7 @@ namespace wordring
 			auto it = m_first;
 			if (it->size() <= lv) ++it;
 
-			return *std::next(it->begin(), lv);
+			return static_cast<std::uint8_t>(*std::next(it->begin(), lv));
 		}
 
 		const_list_trie_iterator& operator++()
@@ -143,8 +143,8 @@ namespace wordring
 			if (lv + 1 == it->size()) ++it;
 			if (it == m_last) return false;
 
-			auto ch = operator*();
-			auto c = *std::next(it->begin(), lv);
+			std::uint8_t ch = operator*();
+			std::uint8_t c = *std::next(it->begin(), lv);
 			if (ch == c) return true;
 
 			return false;

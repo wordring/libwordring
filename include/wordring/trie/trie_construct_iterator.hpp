@@ -38,6 +38,8 @@ namespace wordring
 
 		static constexpr std::uint16_t null_value = 256u;
 
+		//static_assert(sizeof(std::iterator_traits<iterator_type>::value_type) == 1);
+
 	public:
 		trie_construct_iterator(iterator_type root)
 			: m_queue(1, root)

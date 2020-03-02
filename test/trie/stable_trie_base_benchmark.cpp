@@ -1,8 +1,8 @@
-﻿// test/trie/trie_base_benchmark.cpp
+﻿// test/trie/stable_trie_base_benchmark.cpp
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/trie/trie_base.hpp>
+#include <wordring/trie/stable_trie_base.hpp>
 #include <wordring/tree/tree_iterator.hpp>
 
 #include <algorithm>
@@ -88,9 +88,9 @@ namespace
 	}
 }
 
-BOOST_AUTO_TEST_SUITE(trie_base_benchmark__test)
+BOOST_AUTO_TEST_SUITE(stable_trie_base_benchmark__test)
 
-BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_1)
+BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_1)
 {
 	using namespace wordring;
 
@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_1)
 
 	std::vector<std::string> const& words = words1;
 
-	trie_base<> t1{};
+	stable_trie_base<> t1{};
 	t1.assign(words.begin(), words.end());
 
 	std::vector<std::uint32_t> buf;
@@ -106,8 +106,8 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_1)
 
 	std::cout.imbue(std::locale(""));
 
-	std::cout << "---------- trie_base_benchmark__serialize_1 ----------" << std::endl;
-	std::cout << "trie_base<>" << std::endl;
+	std::cout << "---------- stable_trie_base_benchmark__serialize_1 ----------" << std::endl;
+	std::cout << "stable_trie_base<>" << std::endl;
 	std::cout << "\tsize():\t" << t1.size() << std::endl;
 	std::cout << "\tnodes:\t" << (buf.size() / 2) << std::endl;
 
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_1)
 
 	std::cout << "\tstd::vector<std::int32_t> v{ trie.ibegin(), trie.iend() }:\t" << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 
-	trie_base<> t2{};
+	stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
 	t2.assign(v.begin(), v.end());
 	duration = std::chrono::system_clock::now() - start;
@@ -127,21 +127,21 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_1)
 	std::cout << std::endl;
 }
 
-BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_2)
+BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_2)
 {
 	using namespace wordring;
 
 	setup1();
 
-	trie_base<> t1{};
+	stable_trie_base<> t1{};
 	t1.assign(words1.begin(), words1.end());
 
 	std::vector<std::uint32_t> buf;
 	std::copy(t1.ibegin(), t1.iend(), std::back_inserter(buf));
 
 	std::cout.imbue(std::locale(""));
-	std::cout << "---------- trie_base_benchmark__serialize_2 ----------" << std::endl;
-	std::cout << "trie_base<>" << std::endl;
+	std::cout << "---------- stable_trie_base_benchmark__serialize_2 ----------" << std::endl;
+	std::cout << "stable_trie_base<>" << std::endl;
 	std::cout << "\tsize():\t" << t1.size() << std::endl;
 	std::cout << "\tnodes:\t" << (buf.size() / 2) << std::endl;
 
@@ -153,16 +153,16 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__serialize_2)
 	std::cout << "\tv.size():\t" << v.size() << std::endl;
 
 	start = std::chrono::system_clock::now();
-	trie_base<> t2{ v.begin(), v.end() };
+	stable_trie_base<> t2{ v.begin(), v.end() };
 	duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "trie_base<> t2{ v.begin(), v.end() }: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+	std::cout << "stable_trie_base<> t2{ v.begin(), v.end() }: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << "\tsize():\t" << t2.size() << std::endl;
 
 	std::cout << std::endl;
 }
 
-BOOST_AUTO_TEST_CASE(trie_base_benchmark__copy_assignment_1)
+BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__copy_assignment_1)
 {
 	using namespace wordring;
 
@@ -170,15 +170,15 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__copy_assignment_1)
 
 	std::vector<std::string> const& words = words1;
 
-	trie_base<> t1{};
+	stable_trie_base<> t1{};
 	t1.assign(words.begin(), words.end());
 	std::vector<std::uint32_t> buf;
 	std::copy(t1.ibegin(), t1.iend(), std::back_inserter(buf));
 
 	std::cout.imbue(std::locale(""));
 
-	std::cout << "---------- trie_base_benchmark__copy_assignment_1 ----------" << std::endl;
-	std::cout << "trie_base<>" << std::endl;
+	std::cout << "---------- stable_trie_base_benchmark__copy_assignment_1 ----------" << std::endl;
+	std::cout << "stable_trie_base<>" << std::endl;
 	std::cout << "\tsize():\t" << t1.size() << std::endl;
 	std::cout << "\tnodes:\t" << (buf.size() / 2) << std::endl;
 
@@ -192,7 +192,7 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__copy_assignment_1)
 }
 
 
-BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_raw_1)
+BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_raw_1)
 {
 	using namespace wordring;
 
@@ -203,16 +203,16 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_raw_1)
 
 	std::cout.imbue(std::locale(""));
 
-	std::cout << "---------- trie_base_benchmark__words_raw_1 ----------" << std::endl;
+	std::cout << "---------- stable_trie_base_benchmark__words_raw_1 ----------" << std::endl;
 
 	std::cout << "std::vector<std::string> w{ (raw words...) };" << std::endl;
 	std::cout << "\tsize:\t" << w.size() << std::endl;
 
-	std::cout << "trie_base<>" << std::endl;
+	std::cout << "stable_trie_base<>" << std::endl;
 
 	// trie.assign() ----------------------------------------------------------
 
-	trie_base<> t1{};
+	stable_trie_base<> t1{};
 	auto start = std::chrono::system_clock::now();
 	t1.assign(w.begin(), w.end());
 	auto duration = std::chrono::system_clock::now() - start;
@@ -227,9 +227,9 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_raw_1)
 
 	// trie.insert() ----------------------------------------------------------
 
-	trie_base<> t2{};
+	stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
-	for(std::string const& s : w) t2.insert(s);
+	for (std::string const& s : w) t2.insert(s);
 	duration = std::chrono::system_clock::now() - start;
 
 	std::cout << "\tinsert:\t" << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_raw_1)
 	BOOST_CHECK(error == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_random_1)
+BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_random_1)
 {
 	using namespace wordring;
 
@@ -290,16 +290,16 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_random_1)
 
 	std::cout.imbue(std::locale(""));
 
-	std::cout << "---------- trie_base_benchmark__words_random_1 ----------" << std::endl;
+	std::cout << "---------- stable_trie_base_benchmark__words_random_1 ----------" << std::endl;
 
 	std::cout << "std::vector<std::string> w{ (random words...) };" << std::endl;
 	std::cout << "\tsize:\t" << w.size() << std::endl;
 
-	std::cout << "trie_base<>" << std::endl;
+	std::cout << "stable_trie_base<>" << std::endl;
 
 	// trie.assign() ----------------------------------------------------------
 
-	trie_base<> t1{};
+	stable_trie_base<> t1{};
 	auto start = std::chrono::system_clock::now();
 	t1.assign(w.begin(), w.end());
 	auto duration = std::chrono::system_clock::now() - start;
@@ -314,9 +314,9 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_random_1)
 
 	// trie.insert() ----------------------------------------------------------
 
-	trie_base<> t2{};
+	stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
-	for (auto const& s : w) t2.insert(s);
+	for (std::string const& s : w) t2.insert(s);
 	duration = std::chrono::system_clock::now() - start;
 
 	std::cout << "\tinsert:\t" << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
@@ -366,7 +366,7 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_random_1)
 	BOOST_CHECK(error == 0);
 }
 
-BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_sorted_1)
+BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_sorted_1)
 {
 	using namespace wordring;
 
@@ -377,16 +377,16 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_sorted_1)
 
 	std::cout.imbue(std::locale(""));
 
-	std::cout << "---------- trie_base_benchmark__words_sorted_1 ----------" << std::endl;
+	std::cout << "---------- stable_trie_base_benchmark__words_sorted_1 ----------" << std::endl;
 
 	std::cout << "std::vector<std::string> w{ (sorted words...) };" << std::endl;
 	std::cout << "\tsize:\t" << w.size() << std::endl;
 
-	std::cout << "trie_base<>" << std::endl;
+	std::cout << "stable_trie_base<>" << std::endl;
 
 	// trie.assign() ----------------------------------------------------------
 
-	trie_base<> t1{};
+	stable_trie_base<> t1{};
 	auto start = std::chrono::system_clock::now();
 	t1.assign(w.begin(), w.end());
 	auto duration = std::chrono::system_clock::now() - start;
@@ -401,9 +401,9 @@ BOOST_AUTO_TEST_CASE(trie_base_benchmark__words_sorted_1)
 
 	// trie.insert() ----------------------------------------------------------
 
-	trie_base<> t2{};
+	stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
-	for (auto const& s : w) t2.insert(s);
+	for (std::string const& s : w) t2.insert(s);
 	duration = std::chrono::system_clock::now() - start;
 
 	std::cout << "\tinsert:\t" << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;

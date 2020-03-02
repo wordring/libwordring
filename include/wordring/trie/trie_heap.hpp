@@ -34,6 +34,39 @@ namespace wordring
 	}
 
 	// ------------------------------------------------------------------------
+	// trie_value_proxy
+	// ------------------------------------------------------------------------
+
+	struct trie_value_proxy
+	{
+		using index_type = typename trie_node::index_type;
+
+		index_type* m_base;
+
+		trie_value_proxy()
+			: m_base(nullptr)
+		{
+		}
+
+		trie_value_proxy(index_type* base)
+			: m_base(base)
+		{
+		}
+
+		void operator=(index_type val)
+		{
+			if (val < 0) throw std::invalid_argument("");
+			*m_base = -val;
+		}
+
+		operator index_type() const
+		{
+			assert(*m_base <= 0);
+			return -*m_base;
+		}
+	};
+
+	// ------------------------------------------------------------------------
 	// trie_heap_serialize_iterator
 	// ------------------------------------------------------------------------
 
@@ -138,6 +171,7 @@ namespace wordring
 		static constexpr std::uint16_t null_value = 256u;
 
 	public:
+		using label_type         = std::uint8_t;
 		using allocator_type     = Allocator;
 		using serialize_iterator = trie_heap_serialize_iterator<container const>;
 
@@ -441,6 +475,8 @@ namespace wordring
 			node_type const* d = m_c.data();
 			for (std::uint16_t label : labels)
 			{
+				if (label == 0 && base == 1) return false; // index 1のcheckは常に0のため
+
 				index_type idx = base + label;
 				if (limit() <= idx) break;
 
@@ -461,6 +497,8 @@ namespace wordring
 			node_type const* d = m_c.data();
 			for (std::uint16_t label : labels)
 			{
+				if (label == 0 && base == 1) return false; // index 1のcheckは常に0のため
+
 				index_type idx = base + label;
 				if (limit() <= idx) break;
 
@@ -655,7 +693,7 @@ namespace wordring
 	template <typename Allocator1>
 	inline std::ostream& operator<<(std::ostream& os, trie_heap<Allocator1> const& heap)
 	{
-		std::uint64_t n = heap.m_c.size() * sizeof(trie_node);
+		std::uint64_t n = static_cast<std::uint64_t>(heap.m_c.size()) * sizeof(trie_node);
 		auto length = serialize(n);
 		auto it1 = length.begin();
 		auto it2 = length.end();
