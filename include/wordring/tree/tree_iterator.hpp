@@ -86,6 +86,16 @@ namespace wordring::detail
 
 namespace wordring
 {
+	/*! @brief プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター
+	
+	@tparam Iterator ベースとなる木のイテレータ
+	@tparam Container detail::tree_iterator_stack あるいは detail::tree_iterator_queue
+	@tparam Allocator アロケータ
+
+	プレ・オーダー走査用の tree_iterator とレベル・オーダー走査用の
+	level_order_tree_iterator が事前に定義されている。
+
+	*/
 	template <typename Iterator, typename Container, typename Allocator>
 	class basic_tree_iterator
 	{

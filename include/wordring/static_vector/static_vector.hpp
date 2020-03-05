@@ -246,6 +246,10 @@ namespace wordring
 	// static_vector
 	// ------------------------------------------------------------------------
 
+	/*! @brief 最大長固定の静的vector
+
+	メモリーの動的確保を避ける目的で用意した。
+	*/
 	template <typename T, std::size_t N>
 	class static_vector
 	{

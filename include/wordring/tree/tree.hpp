@@ -274,6 +274,8 @@ namespace wordring
 	// tree
 	// ------------------------------------------------------------------------
 
+	/*! @brief 木コンテナ
+	*/
 	template <typename T, typename Allocator = std::allocator<detail::tree_node<T>>>
 	class tree
 	{
