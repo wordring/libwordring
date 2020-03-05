@@ -276,14 +276,14 @@ class wordring::basic_trie&lt; Label, Base &gt;</h3>
 <dl class="section user"><dt>ラベル</dt><dd></dd></dl>
 <p>一般的にダブル・アレイはラベルとして8ビット整数を使うが、このクラスは直列化によって 任意の整数型をラベルとして利用することが出来る。 根はラベルを持たない。</p>
 <dl class="section user"><dt>値の格納</dt><dd></dd></dl>
-<p>葉に2,147,483,647までの正の整数値を格納できる。 mapのような任意の型の値を格納できるよう拡張する場合、値の配列に対する添字を葉に格納することを想定している。 葉に格納される値の取得・設定にはメンバ関数 <a class="el" href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a" title="葉の値への参照を返す">at()</a> を使う。 イテレータの逆参照によって得られる値は遷移ラベルであり、明確に区別される。</p>
+<p>葉に2,147,483,647までの正の整数値を格納できる。 mapのように任意の型の値を格納できるよう拡張する場合、値の配列に対する添字を葉に格納することを想定している。 葉に格納される値の取得・設定にはメンバ関数 <a class="el" href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a" title="葉の値への参照を返す">at()</a> を使う。 イテレータの逆参照によって得られる値は遷移ラベルであり、葉に格納される値と明確に区別される。</p>
 <ul>
 <li><a class="el" href="classwordring_1_1detail_1_1trie__heap.html">detail::trie_heap</a></li>
 <li><a class="el" href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a">at</a></li>
 </ul>
 <dl class="section user"><dt>イテレータ</dt><dd></dd></dl>
 <p>ノード間の移動には、イテレータを用いる。 イテレータは木に対するイテレータと互換性を保つよう設計した。 イテレータを逆参照すると親から当該ノードへの遷移に使われたラベルを取り出せる。</p>
-<p>イテレータは兄弟ノードへの前進、親、子、子への添字アクセスを提供する。</p>
+<p>イテレータは兄弟ノード、親、子、子への添字アクセスを提供する。</p>
 <ul>
 <li><a class="el" href="classwordring_1_1detail_1_1const__trie__iterator.html">detail::const_trie_iterator</a></li>
 </ul>

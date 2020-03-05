@@ -1,7 +1,11 @@
-﻿
+
 body {
     color: #505050;
     padding: 1em;
+}
+
+h2 {
+    color: #505050;
 }
 
 table {
