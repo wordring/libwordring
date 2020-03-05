@@ -7,10 +7,16 @@
 namespace wordring
 {
 	template <typename Label, typename Base>
+	class basic_trie;
+}
+
+namespace wordring::detail
+{
+	template <typename Label, typename Base>
 	class const_trie_iterator : public Base
 	{
 		template <typename Label1, typename Base1>
-		friend class basic_trie;
+		friend class wordring::basic_trie;
 
 		template <typename Label1, typename Base1>
 		friend bool operator==(const_trie_iterator<Label1, Base1> const&, const_trie_iterator<Label1, Base1> const&);

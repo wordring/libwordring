@@ -13,7 +13,7 @@
 
 BOOST_AUTO_TEST_SUITE(tree__test)
 
-using tree_node = wordring::tree_node<char>;
+using tree_node = wordring::detail::tree_node<char>;
 
 class test_iterator : public wordring::tree<char>::iterator
 {
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(tree_node__construct__2)
 
 BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__1)
 {
-	wordring::tree_node_proxy<char> p{ '0' };
+	wordring::detail::tree_node_proxy<char> p{ '0' };
 
 	BOOST_CHECK(p.m_value == '0');
 	BOOST_CHECK(p.m_children.empty());
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__1)
 
 BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__2)
 {
-	wordring::tree_node_proxy<char> p{ '0', { '1', '2', '3' } };
+	wordring::detail::tree_node_proxy<char> p{ '0', { '1', '2', '3' } };
 
 	BOOST_CHECK(p.m_value == '0');
 	BOOST_CHECK(p.m_children.size() == 3);
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__2)
 
 BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__3)
 {
-	wordring::tree_node_proxy<char> p
+	wordring::detail::tree_node_proxy<char> p
 	{
 		'0',
 		{
@@ -338,43 +338,43 @@ BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__6)
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__1)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(const_test_iterator(t, null_value, 0).parent().begin() == const_test_iterator(t, null_value, null_value));
+	BOOST_CHECK(const_test_iterator(t, null_value, 0).parent() == t.end());
 }
 
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__2)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 0, 1).parent().begin() == '0');
+	BOOST_CHECK(*const_test_iterator(t, 0, 1).parent() == '0');
 }
 
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__3)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 0, 2).parent().begin() == '0');
+	BOOST_CHECK(*const_test_iterator(t, 0, 2).parent() == '0');
 }
 
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__4)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 0, 2).parent().begin() == '0');
+	BOOST_CHECK(*const_test_iterator(t, 0, 2).parent() == '0');
 }
 
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__5)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 1, 4).parent().begin() == '1');
+	BOOST_CHECK(*const_test_iterator(t, 1, 4).parent() == '1');
 }
 
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__6)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 1, 5).parent().begin() == '1');
+	BOOST_CHECK(*const_test_iterator(t, 1, 5).parent() == '1');
 }
 
 BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__7)
 {
 	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 2, 6).parent().begin() == '2');
+	BOOST_CHECK(*const_test_iterator(t, 2, 6).parent() == '2');
 }
 
 // root

@@ -2,15 +2,31 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/trie/trie.hpp>
-#include <wordring/trie/trie_base.hpp>
 #include <wordring/tree/tree_iterator.hpp>
+#include <wordring/trie/trie.hpp>
 
+#include <wordring/whatwg/infra/unicode.hpp>
+
+#include <algorithm>
+#include <chrono>
+#include <cstring>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <memory>
+#include <random>
+#include <sstream>
 #include <string>
+#include <vector>
+
+#define STRING(str) #str
+#define TO_STRING(str) STRING(str)
 
 namespace
 {
-	using wordring::trie_node;
+	using wordring::detail::trie_node;
+
+	std::string const japanese_words_path{ TO_STRING(JAPANESE_WORDS_PATH) };
 
 	template <typename Char>
 	class test_trie : public wordring::trie<Char>
@@ -19,6 +35,8 @@ namespace
 		using base_type = wordring::trie<Char>;
 
 		using base_type::begin;
+
+		using base_type::m_c;
 
 	public:
 		/*! 保持する文字列の数を数える
@@ -45,21 +63,117 @@ namespace
 
 BOOST_AUTO_TEST_SUITE(trie__test)
 
+// basic_trie()
 BOOST_AUTO_TEST_CASE(trie__construct__1)
 {
-	test_trie<char32_t> t1;
+	using namespace wordring;
+	auto t1 = trie<char32_t>();
 }
 
 BOOST_AUTO_TEST_CASE(trie__construct__2)
 {
-	test_trie<char16_t> t1;
+	using namespace wordring;
+	trie<char16_t> t1;
 }
 
 BOOST_AUTO_TEST_CASE(trie__construct__3)
 {
-	test_trie<char> t1;
+	using namespace wordring;
+	trie<char> t1;
 }
 
+// explicit basic_trie(allocator_type const& alloc)
+BOOST_AUTO_TEST_CASE(trie__construct__4)
+{
+	using namespace wordring;
+	auto t = trie<char32_t>(std::allocator<trie_node>());
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__5)
+{
+	using namespace wordring;
+	auto t = trie<char16_t>(std::allocator<trie_node>());
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__6)
+{
+	using namespace wordring;
+	auto t = trie<char>(std::allocator<trie_node>());
+}
+
+// basic_trie(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
+BOOST_AUTO_TEST_CASE(trie__construct__7)
+{
+	using namespace wordring;
+	std::vector<std::u32string> v1{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	trie<char32_t> t1{ v1.begin(), v1.end() };
+
+	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
+	trie<char32_t> t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__8)
+{
+	using namespace wordring;
+	std::vector<std::u16string> v1{ u"あ", u"あう", u"い", u"うあい", u"うえ" };
+	trie<char16_t> t1{ v1.begin(), v1.end() };
+
+	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
+	trie<char16_t> t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__9)
+{
+	using namespace wordring;
+	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+	trie<char> t1{ v1.begin(), v1.end() };
+
+	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
+	trie<char> t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
+}
+
+// basic_trie(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
+BOOST_AUTO_TEST_CASE(trie__construct__10)
+{
+	using namespace wordring;
+	std::vector<std::u32string> v1{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	trie<char32_t> t1{ v1.begin(), v1.end() };
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__11)
+{
+	using namespace wordring;
+	std::vector<std::u16string> v1{ u"あ", u"あう", u"い", u"うあい", u"うえ" };
+	trie<char16_t> t1{ v1.begin(), v1.end() };
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__12)
+{
+	using namespace wordring;
+	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+	trie<char> t1{ v1.begin(), v1.end() };
+}
+
+// basic_trie(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
+BOOST_AUTO_TEST_CASE(trie__construct__13)
+{
+	using namespace wordring;
+	trie<char32_t> trie{ { { 0, 1 }, { 2, 3 } } };
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__14)
+{
+	using namespace wordring;
+	trie<char16_t> trie{ { { 0, 1 }, { 2, 3 } } };
+}
+
+BOOST_AUTO_TEST_CASE(trie__construct__15)
+{
+	using namespace wordring;
+	trie<char> trie{ { { 0, 1 }, { 2, 3 } } };
+}
+
+// void assign(InputIterator first, InputIterator last)
 BOOST_AUTO_TEST_CASE(trie__assign__1)
 {
 	std::vector<std::u32string> v1{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
@@ -1129,7 +1243,7 @@ BOOST_AUTO_TEST_CASE(trie__contains__1)
 BOOST_AUTO_TEST_CASE(trie__contains__2)
 {
 	std::vector<std::u16string> v{ u"あ", u"あう", u"い", u"うあい", u"うえ" };
-	test_trie<char32_t> trie;
+	test_trie<char16_t> trie;
 	trie.assign(v.begin(), v.end());
 
 	BOOST_CHECK(trie.contains(std::u16string(u"あ")));
@@ -1154,6 +1268,127 @@ BOOST_AUTO_TEST_CASE(trie__contains__3)
 	BOOST_CHECK(trie.contains(std::string("cd")));
 	BOOST_CHECK(trie.contains(std::string("d")) == false);
 	BOOST_CHECK(trie.contains(std::string("")) == false);
+}
+
+// 関数 -----------------------------------------------------------------------
+
+// inline std::ostream& operator<<(std::ostream& os, basic_trie<Label1, Base1> const& trie)
+// inline std::istream& operator>>(std::istream& is, basic_trie<Label1, Base1>& trie)
+BOOST_AUTO_TEST_CASE(trie__stream__1)
+{
+	std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	test_trie<char32_t> t1, t2;
+	t1.assign(v.begin(), v.end());
+
+	std::stringstream ss;
+	ss << t1;
+	ss >> t2;
+
+	BOOST_CHECK(t1.m_c == t2.m_c);
+}
+
+BOOST_AUTO_TEST_CASE(trie__stream__2)
+{
+	test_trie<char32_t> t1{}, t2{};
+
+	std::stringstream ss;
+	ss << t1;
+	ss >> t2;
+
+	BOOST_CHECK(t1.m_c == t2.m_c);
+}
+
+// ストレステスト --------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(trie__stress__1)
+{
+	using wordring::whatwg::encoding_cast;
+
+	std::ifstream is(japanese_words_path);
+	BOOST_REQUIRE(is.is_open());
+
+	std::vector<std::u32string> w;
+	std::string buf{};
+#ifdef NDEBUG
+	while (std::getline(is, buf)) w.push_back(encoding_cast<std::u32string>(buf));
+#else
+	for (size_t i = 0; i < 1000 && std::getline(is, buf); ++i) w.push_back(encoding_cast<std::u32string>(buf));
+#endif
+
+	test_trie<char32_t> t;
+	std::uint32_t i = 0;
+	for (auto const& s : w) t.insert(s, i++);
+
+	int e = 0;
+	i = 0;
+	for (auto const& s : w)
+	{
+		auto it = t.find(s);
+		if (it == t.cend() || t.at(it) != i++) ++e;
+	}
+
+	BOOST_CHECK(e == 0);
+	BOOST_CHECK(t.count() == t.size());
+}
+
+BOOST_AUTO_TEST_CASE(trie__stress__2)
+{
+	using wordring::whatwg::encoding_cast;
+
+	std::ifstream is(japanese_words_path);
+	BOOST_REQUIRE(is.is_open());
+
+	std::vector<std::u16string> w;
+	std::string buf{};
+#ifdef NDEBUG
+	while (std::getline(is, buf)) w.push_back(encoding_cast<std::u16string>(buf));
+#else
+	for (size_t i = 0; i < 1000 && std::getline(is, buf); ++i) w.push_back(encoding_cast<std::u16string>(buf));
+#endif
+
+	test_trie<char16_t> t;
+	std::uint32_t i = 0;
+	for (auto const& s : w) t.insert(s, i++);
+
+	int e = 0;
+	i = 0;
+	for (auto const& s : w)
+	{
+		auto it = t.find(s);
+		if (it == t.cend() || t.at(it) != i++) ++e;
+	}
+
+	BOOST_CHECK(e == 0);
+	BOOST_CHECK(t.count() == t.size());
+}
+
+BOOST_AUTO_TEST_CASE(trie__stress__3)
+{
+	std::ifstream is(japanese_words_path);
+	BOOST_REQUIRE(is.is_open());
+
+	std::vector<std::string> w;
+	std::string buf{};
+#ifdef NDEBUG
+	while (std::getline(is, buf)) w.push_back(buf);
+#else
+	for (size_t i = 0; i < 1000 && std::getline(is, buf); ++i) w.push_back(buf);
+#endif
+
+	test_trie<char> t;
+	std::uint32_t i = 0;
+	for (auto const& s : w) t.insert(s, i++);
+
+	int e = 0;
+	i = 0;
+	for (auto const& s : w)
+	{
+		auto it = t.find(s);
+		if (it == t.cend() || t.at(it) != i++) ++e;
+	}
+
+	BOOST_CHECK(e == 0);
+	BOOST_CHECK(t.count() == t.size());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

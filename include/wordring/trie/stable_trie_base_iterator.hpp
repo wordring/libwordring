@@ -2,7 +2,7 @@
 
 #include <wordring/trie/trie_heap_iterator.hpp>
 
-namespace wordring
+namespace wordring::detail
 {
 	template <typename Container>
 	class const_stable_trie_base_iterator : public const_trie_heap_iterator<Container>

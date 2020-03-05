@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::deserialize_iterator&lt; Value, ForwardIterator &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-attribs">静的公開変数類</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="#friends">フレンド</a> &#124;
+<a href="classwordring_1_1deserialize__iterator-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::deserialize_iterator&lt; Value, ForwardIterator &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="serialize__iterator_8hpp_source.html">serialize_iterator.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a2a40243b0394fffbf3f7d4f7b4ce4bb6"><td class="memItemLeft" align="right" valign="top"><a id="a2a40243b0394fffbf3f7d4f7b4ce4bb6"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_type</b> = ForwardIterator</td></tr>
+<tr class="separator:a2a40243b0394fffbf3f7d4f7b4ce4bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2730348d93f6d407436fc87fb8211897"><td class="memItemLeft" align="right" valign="top"><a id="a2730348d93f6d407436fc87fb8211897"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>unsigned_type</b> = std::make_unsigned_t&lt; Value &gt;</td></tr>
+<tr class="separator:a2730348d93f6d407436fc87fb8211897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12de396b1af43e766cd2e73c12537b74"><td class="memItemLeft" align="right" valign="top"><a id="a12de396b1af43e766cd2e73c12537b74"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
+<tr class="separator:a12de396b1af43e766cd2e73c12537b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4712c37a7b89fc7f138b7c984fa8fa51"><td class="memItemLeft" align="right" valign="top"><a id="a4712c37a7b89fc7f138b7c984fa8fa51"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = Value</td></tr>
+<tr class="separator:a4712c37a7b89fc7f138b7c984fa8fa51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed0098f61e87e42d5b70b9c972e101ae"><td class="memItemLeft" align="right" valign="top"><a id="aed0098f61e87e42d5b70b9c972e101ae"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:aed0098f61e87e42d5b70b9c972e101ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac02b69c09c53a48f9617dcda55cb305"><td class="memItemLeft" align="right" valign="top"><a id="aac02b69c09c53a48f9617dcda55cb305"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:aac02b69c09c53a48f9617dcda55cb305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a580023c8a952bf40cc41db301b05e51b"><td class="memItemLeft" align="right" valign="top"><a id="a580023c8a952bf40cc41db301b05e51b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
+<tr class="separator:a580023c8a952bf40cc41db301b05e51b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a2fe508f289f048eee12851ecbe2ab44a"><td class="memItemLeft" align="right" valign="top"><a id="a2fe508f289f048eee12851ecbe2ab44a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>deserialize_iterator</b> (iterator_type it)</td></tr>
+<tr class="separator:a2fe508f289f048eee12851ecbe2ab44a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeeccfe0377747a3f72bd8ad0b4be723"><td class="memItemLeft" align="right" valign="top"><a id="adeeccfe0377747a3f72bd8ad0b4be723"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
+<tr class="separator:adeeccfe0377747a3f72bd8ad0b4be723"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8d216d062c853384d92b842966c44a6"><td class="memItemLeft" align="right" valign="top"><a id="ac8d216d062c853384d92b842966c44a6"></a>
+<a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> ()</td></tr>
+<tr class="separator:ac8d216d062c853384d92b842966c44a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98115c28b2e944029c921dee5e81c78c"><td class="memItemLeft" align="right" valign="top"><a id="a98115c28b2e944029c921dee5e81c78c"></a>
+<a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int)</td></tr>
+<tr class="separator:a98115c28b2e944029c921dee5e81c78c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+静的公開変数類</h2></td></tr>
+<tr class="memitem:ab7abda60883fa8706065b68d89232d49"><td class="memItemLeft" align="right" valign="top"><a id="ab7abda60883fa8706065b68d89232d49"></a>
+static constexpr std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>coefficient</b> = sizeof(unsigned_type)</td></tr>
+<tr class="separator:ab7abda60883fa8706065b68d89232d49"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:a3e2b4d5643db261de75480e2bd5de97d"><td class="memItemLeft" align="right" valign="top"><a id="a3e2b4d5643db261de75480e2bd5de97d"></a>
+iterator_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_it</b></td></tr>
+<tr class="separator:a3e2b4d5643db261de75480e2bd5de97d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:ae2a534adf8c23dc2293cb67ae68e2d17"><td class="memTemplParams" colspan="2"><a id="ae2a534adf8c23dc2293cb67ae68e2d17"></a>
+template&lt;typename Value1 , typename ForwardIterator1 &gt; </td></tr>
+<tr class="memitem:ae2a534adf8c23dc2293cb67ae68e2d17"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a>&lt; Value1, ForwardIterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a>&lt; Value1, ForwardIterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:ae2a534adf8c23dc2293cb67ae68e2d17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8166a93d805b9df45a82601cd95143b5"><td class="memTemplParams" colspan="2"><a id="a8166a93d805b9df45a82601cd95143b5"></a>
+template&lt;typename Value1 , typename ForwardIterator1 &gt; </td></tr>
+<tr class="memitem:a8166a93d805b9df45a82601cd95143b5"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a>&lt; Value1, ForwardIterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1deserialize__iterator.html">deserialize_iterator</a>&lt; Value1, ForwardIterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:a8166a93d805b9df45a82601cd95143b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename Value, typename ForwardIterator&gt;<br />
+class wordring::deserialize_iterator&lt; Value, ForwardIterator &gt;</h3>
+
+<p>8ビット整数列に対するイテレータを任意ビット幅の整数列に対するイテレータへ変換する</p><ul>
+<li>逆参照はできない。 </li>
+</ul>
+</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/serialize/<a class="el" href="serialize__iterator_8hpp_source.html">serialize_iterator.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

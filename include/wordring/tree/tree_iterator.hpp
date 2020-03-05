@@ -3,7 +3,7 @@
 #include <deque>
 #include <iterator>
 
-namespace wordring
+namespace wordring::detail
 {
 	template <typename Iterator, typename Allocator>
 	class tree_iterator_stack
@@ -18,7 +18,7 @@ namespace wordring
 			: m_stack(1, base, alloc)
 		{
 		}
-		
+
 		tree_iterator_stack(Iterator first, Iterator last, Allocator const& alloc = Allocator())
 			: m_stack(alloc)
 		{
@@ -34,7 +34,7 @@ namespace wordring
 		void push(Iterator first, Iterator last)
 		{
 			auto pos = m_stack.begin();
-			while(first != last) pos = ++m_stack.insert(pos, first++);
+			while (first != last) pos = ++m_stack.insert(pos, first++);
 		}
 
 		bool empty() const { return m_stack.empty(); }
@@ -65,7 +65,8 @@ namespace wordring
 
 		Iterator& top() const
 		{
-			return const_cast<std::deque<Iterator>&>(m_queue).front(); }
+			return const_cast<std::deque<Iterator>&>(m_queue).front();
+		}
 
 		void pop() { m_queue.erase(m_queue.begin()); }
 
@@ -73,7 +74,7 @@ namespace wordring
 
 		void push(Iterator first, Iterator last)
 		{
-			while(first != last) m_queue.push_back(first++);
+			while (first != last) m_queue.push_back(first++);
 		}
 
 		bool empty() const { return m_queue.empty(); }
@@ -81,7 +82,10 @@ namespace wordring
 	private:
 		std::deque<Iterator> m_queue;
 	};
+}
 
+namespace wordring
+{
 	template <typename Iterator, typename Container, typename Allocator>
 	class basic_tree_iterator
 	{
@@ -105,17 +109,17 @@ namespace wordring
 
 	public:
 		explicit basic_tree_iterator(allocator_type const& alloc = allocator_type())
-			: m_container(alloc)
+			: m_c(alloc)
 		{
 		}
 
 		explicit basic_tree_iterator(base_type const& it, allocator_type const& alloc = allocator_type())
-			: m_container(it, alloc)
+			: m_c(it, alloc)
 		{
 		}
 		
 		basic_tree_iterator(base_type const& first, base_type const& last, allocator_type const& alloc = allocator_type())
-			: m_container(first, last, alloc)
+			: m_c(first, last, alloc)
 		{
 		}
 
@@ -127,36 +131,36 @@ namespace wordring
 
 		basic_tree_iterator& operator=(basic_tree_iterator&& rhs) = default;
 
-		base_type base() const { return m_container.top(); }
+		base_type base() const { return m_c.top(); }
 
-		reference operator*() const { return *m_container.top(); }
+		reference operator*() const { return *m_c.top(); }
 
-		pointer operator->() const { return m_container.top().operator->(); }
+		pointer operator->() const { return m_c.top().operator->(); }
 
 		basic_tree_iterator& operator++()
 		{
-			base_type it = m_container.top();
-			m_container.pop();
-			m_container.push(it.begin(), it.end());
+			base_type it = m_c.top();
+			m_c.pop();
+			m_c.push(it.begin(), it.end());
 			return *this;
 		}
 
 		base_type operator++(int)
 		{
-			base_type result = m_container.top();
+			base_type result = m_c.top();
 			operator++();
 			return result;
 		}
 		
 	private:
-		container m_container;
+		container m_c;
 	};
 
 	template <typename Iterator1, typename Container1, typename Allocator1>
 	inline bool operator==(basic_tree_iterator<Iterator1, Container1, Allocator1> const& lhs, basic_tree_iterator<Iterator1, Container1, Allocator1> const& rhs)
 	{
-		return (lhs.m_container.empty() && rhs.m_container.empty())
-			|| (!lhs.m_container.empty() && !rhs.m_container.empty() && lhs.base() == rhs.base());
+		return (lhs.m_c.empty() && rhs.m_c.empty())
+			|| (!lhs.m_c.empty() && !rhs.m_c.empty() && lhs.base() == rhs.base());
 	}
 
 	template <typename Iterator1, typename Container1, typename Allocator1>
@@ -166,8 +170,8 @@ namespace wordring
 	}
 
 	template <typename Iterator, typename  Allocator = std::allocator<Iterator>>
-	using tree_iterator = basic_tree_iterator<Iterator, tree_iterator_stack<Iterator, Allocator>, Allocator>;
+	using tree_iterator = basic_tree_iterator<Iterator, detail::tree_iterator_stack<Iterator, Allocator>, Allocator>;
 
 	template <typename Iterator, typename  Allocator = std::allocator<Iterator>>
-	using level_order_tree_iterator = basic_tree_iterator<Iterator, tree_iterator_queue<Iterator, Allocator>, Allocator>;
+	using level_order_tree_iterator = basic_tree_iterator<Iterator, detail::tree_iterator_queue<Iterator, Allocator>, Allocator>;
 }

@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_SUITE(list_trie_iterator__test)
 // const_list_trie_iterator(iterator_type first, iterator_type last)
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__construct__1)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	auto it = const_list_trie_iterator(list.begin(), list.end());
@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__construct__1)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__construct__2)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{};
 	auto it = const_list_trie_iterator(list.begin(), list.end());
@@ -32,23 +32,10 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__construct__2)
 	BOOST_CHECK(it.begin() == it.end());
 }
 
-// parent_view parent() const
-BOOST_AUTO_TEST_CASE(const_list_trie_iterator__parent__1)
-{
-	using namespace wordring;
-
-	std::vector<std::string> list{ "abc", "abd", "bbc", "bbd" };
-	auto it = const_list_trie_iterator(list.begin(), list.end());
-
-	auto pair = (++it.begin().begin().begin()).parent();
-	std::string s{ pair.begin(), pair.end() };
-	BOOST_CHECK(s == "ab");
-}
-
 // value_type operator*() const
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__reference__1)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it1{ list.begin(), list.end() };
@@ -60,7 +47,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__reference__1)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__reference__2)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -75,7 +62,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__reference__2)
 // const_list_trie_iterator& operator++()
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__1)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -91,7 +78,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__1)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__2)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -105,7 +92,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__2)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__3)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -128,7 +115,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__3)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__4)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -143,7 +130,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__4)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__5)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -158,7 +145,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__5)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__6)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -172,7 +159,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__6)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__7)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -190,7 +177,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__7)
 // const_list_trie_iterator operator++(int)
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__8)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "abc", "abd", "bbc", "bbd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -201,10 +188,25 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__increment__8)
 	BOOST_CHECK(it1 == it.end());
 }
 
+// std::pair<string_iterator, string_iterator> string() const
+BOOST_AUTO_TEST_CASE(const_list_trie_iterator__string__1)
+{
+	using namespace wordring::detail;
+
+	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
+	const_list_trie_iterator it{ list.begin(), list.end() };
+
+	auto it1 = it.begin().begin(); // "ac"
+	auto pair = it1.string();
+	auto s = std::string(pair.first, pair.second);
+
+	BOOST_CHECK(s == "ac");
+}
+
 // const_list_trie_iterator begin() const
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__begin__1)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -219,7 +221,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__begin__1)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__1)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -229,7 +231,7 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__1)
 
 BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__2)
 {
-	using namespace wordring;
+	using namespace wordring::detail;
 
 	std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
 	const_list_trie_iterator it{ list.begin(), list.end() };
@@ -242,14 +244,6 @@ BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__2)
 
 	BOOST_CHECK(it0.has_child());
 	BOOST_CHECK(it1.has_child() == false);
-}
-
-BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__3)
-{
-}
-
-BOOST_AUTO_TEST_CASE(const_list_trie_iterator__has_child__4)
-{
 }
 
 BOOST_AUTO_TEST_SUITE_END()

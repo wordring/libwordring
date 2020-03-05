@@ -19,8 +19,8 @@ BOOST_AUTO_TEST_CASE(trie_construct_iterator__construct__1)
 {
 	using namespace wordring;
 
-	using list_iterator = const_list_trie_iterator<std::vector<std::string>::const_iterator>;
-	using construct_iterator = trie_construct_iterator<list_iterator>;
+	using list_iterator = detail::const_list_trie_iterator<std::vector<std::string>::const_iterator>;
+	using construct_iterator = detail::trie_construct_iterator<list_iterator>;
 	
 	std::vector<std::string> words{ "a", "ac", "b", "cab", "cd" };
 	auto li = list_iterator(words.begin(), words.end());
@@ -31,35 +31,35 @@ BOOST_AUTO_TEST_CASE(trie_construct_iterator__construct__1)
 	BOOST_CHECK(it.children()[2] == 'c');
 }
 
-// parent_view parent() const
+// std::pair<string_iterator, string_iterator> parent() const
 BOOST_AUTO_TEST_CASE(trie_construct_iterator__parent__1)
 {
 	using namespace wordring;
 
-	using list_iterator = const_list_trie_iterator<std::vector<std::string>::const_iterator>;
-	using construct_iterator = trie_construct_iterator<list_iterator>;
+	using list_iterator = detail::const_list_trie_iterator<std::vector<std::string>::const_iterator>;
+	using construct_iterator = detail::trie_construct_iterator<list_iterator>;
 
 	std::vector<std::string> words{ "", "a", "ac", "b", "cab", "cd" };
 	auto li = list_iterator(words.begin(), words.end());
 	auto it = construct_iterator(li);
 
 	auto view = it.parent();
-	auto s = std::string(view.begin(), view.end());
+	auto s = std::string(view.first, view.second);
 	BOOST_CHECK(s == "");
 
 	++it;
 	view = it.parent();
-	s = std::string(view.begin(), view.end());
+	s = std::string(view.first, view.second);
 	BOOST_CHECK(s == "a");
 
 	++it;
 	view = it.parent();
-	s = std::string(view.begin(), view.end());
+	s = std::string(view.first, view.second);
 	BOOST_CHECK(s == "c");
 
 	++it;
 	view = it.parent();
-	s = std::string(view.begin(), view.end());
+	s = std::string(view.first, view.second);
 	BOOST_CHECK(s == "ca");
 }
 
@@ -68,8 +68,8 @@ BOOST_AUTO_TEST_CASE(trie_construct_iterator__children__1)
 {
 	using namespace wordring;
 
-	using list_iterator = const_list_trie_iterator<std::vector<std::string>::const_iterator>;
-	using construct_iterator = trie_construct_iterator<list_iterator>;
+	using list_iterator = detail::const_list_trie_iterator<std::vector<std::string>::const_iterator>;
+	using construct_iterator = detail::trie_construct_iterator<list_iterator>;
 
 	std::vector<std::string> words{ "", "a", "ac", "b", "cab", "cd" };
 	auto li = list_iterator(words.begin(), words.end());
@@ -103,8 +103,8 @@ BOOST_AUTO_TEST_CASE(trie_construct_iterator__children__2)
 {
 	using namespace wordring;
 
-	using list_iterator = const_list_trie_iterator<std::vector<std::string>::const_iterator>;
-	using construct_iterator = trie_construct_iterator<list_iterator>;
+	using list_iterator = detail::const_list_trie_iterator<std::vector<std::string>::const_iterator>;
+	using construct_iterator = detail::trie_construct_iterator<list_iterator>;
 
 	std::vector<std::string> words{ "", "a", "ac", "b", "cab", "cd" };
 	auto li = list_iterator(words.begin(), words.end());

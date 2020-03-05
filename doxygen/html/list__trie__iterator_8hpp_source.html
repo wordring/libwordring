@@ -1,0 +1,265 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/list_trie_iterator.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_acd91b5ab9e21cf92b410c51a9cd1c5a.html">trie</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">list_trie_iterator.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1detail.html">wordring::detail</a></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;{</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator&gt;</div>
+<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">   20</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator1&gt;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator1&gt;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keyword">using</span> iterator_type   = Iterator;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">using</span> string_type     = <span class="keyword">typename</span> std::iterator_traits&lt;iterator_type&gt;::value_type;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">using</span> char_type       = <span class="keyword">typename</span> string_type::value_type;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">using</span> string_iterator = <span class="keyword">typename</span> string_type::const_iterator;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">using</span> difference_type   = <span class="keyword">typename</span> std::iterator_traits&lt;iterator_type&gt;::difference_type;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">using</span> value_type        = std::uint16_t;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">using</span> pointer           = value_type*;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">using</span> reference         = value_type&amp;;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">using</span> iterator_category = std::input_iterator_tag;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">static</span> constexpr std::uint16_t null_value = 256u;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">   57</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">const_list_trie_iterator</a>(iterator_type first, iterator_type last)</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            : m_first(first)</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            , m_last(last)</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            , m_next(first)</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            , m_level(-1)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a902338544ae17dbe0378694818fa1f1b">   67</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a902338544ae17dbe0378694818fa1f1b">const_list_trie_iterator</a>(<a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> <span class="keyword">const</span>&amp; other)</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;            : m_first(other.m_first)</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            , m_last(other.m_last)</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            , m_next(other.m_first)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            , m_level(other.m_level)</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a767468de7bc4cb0a35f05c4189d439e5">   77</a></span>&#160;        value_type <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a767468de7bc4cb0a35f05c4189d439e5">operator*</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            std::uint32_t lv = m_level;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            assert(m_first != m_last);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            assert(0 &lt;= m_level &amp;&amp; lv &lt;= m_first-&gt;size());</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keyword">auto</span> it = m_first;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordflow">if</span> (it-&gt;size() &lt;= lv) ++it;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::uint8_t<span class="keyword">&gt;</span>(*std::next(it-&gt;begin(), lv));</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        }</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a682f26a606b835681047da10a9459e69">   95</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&amp; <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a682f26a606b835681047da10a9459e69">operator++</a>()</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        {</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;            m_first = <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">next</a>();</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a5d6c853199c511a63aaa556b30b842bc">  107</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a5d6c853199c511a63aaa556b30b842bc">operator++</a>(<span class="keywordtype">int</span>)</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keyword">auto</span> tmp = *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a682f26a606b835681047da10a9459e69">operator++</a>();</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">return</span> tmp;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a73956f29c4cb224c94682739df8f989e">  129</a></span>&#160;        std::pair&lt;string_iterator, string_iterator&gt; <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a73956f29c4cb224c94682739df8f989e">string</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            std::uint32_t lv = (m_level == -1) ? 0 : m_level + 1;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordflow">return</span> std::make_pair(m_first-&gt;begin(), std::next(m_first-&gt;begin(), lv));</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        }</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a86af2113ea05281089fa85265d9bc4b3">  138</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a86af2113ea05281089fa85265d9bc4b3">begin</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            std::uint32_t lv = m_level;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;            <span class="keyword">auto</span> it1 = m_first;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keyword">auto</span> it2 = m_last;</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;            <span class="keywordflow">if</span> (it1 != it2 &amp;&amp; lv + 1 == it1-&gt;size()) ++it1; <span class="comment">// 空白読み飛ばし</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <span class="keywordflow">if</span> (m_level != -1)</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            {</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                it2 = <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">next</a>();</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;                <span class="keywordflow">if</span> (it1 == it2)</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;                {</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                    it1 = m_first;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                    it2 = m_first;</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;                }</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            }</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">const_list_trie_iterator</a>(it1, it2, m_level + 1);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        }</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#ab97170d0995a00c40986de1503e0fd7c">  162</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#ab97170d0995a00c40986de1503e0fd7c">end</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            <span class="keyword">auto</span> it = <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a86af2113ea05281089fa85265d9bc4b3">begin</a>();</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">const_list_trie_iterator</a>(it.m_last, it.m_last, it.m_level);</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        }</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2285135a38a7209d0a16a2c1eb07a2c6">  171</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2285135a38a7209d0a16a2c1eb07a2c6">has_child</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            <span class="comment">// rootの場合</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;            <span class="keywordflow">if</span> (m_level == -1)</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            {</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                <span class="keywordflow">if</span> (m_first != m_last) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;            }</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160; </div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            <span class="comment">// root 以外の場合</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            std::uint32_t lv = m_level;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            <span class="keyword">auto</span> it = m_first;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keywordflow">if</span> (lv + 1 == it-&gt;size()) ++it;</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="keywordflow">if</span> (it == m_last) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;            std::uint8_t ch = <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a767468de7bc4cb0a35f05c4189d439e5">operator*</a>();</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            std::uint8_t c = *std::next(it-&gt;begin(), lv);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;            <span class="keywordflow">if</span> (ch == c) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        }</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a7d60307edd470909c3ac625554d01b77">  196</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a7d60307edd470909c3ac625554d01b77">has_null</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;            <span class="comment">// rootの場合</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;            <span class="keywordflow">if</span> (m_level == -1) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="comment">// root 以外の場合</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            std::uint32_t lv = m_level;</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordflow">if</span> (lv + 1 == m_first-&gt;size()) <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        }</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">const_list_trie_iterator</a>(iterator_type first, iterator_type last, int32_t level)</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            : m_first(first)</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            , m_last(last)</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            , m_next(first)</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            , m_level(level)</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        {</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        }</div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">  221</a></span>&#160;        iterator_type <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">next</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordflow">if</span> (m_next != m_first) <span class="keywordflow">return</span> m_next;</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            std::uint32_t lv = m_level;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keyword">auto</span> it1 = m_first;</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keyword">auto</span> it2 = m_last;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            <span class="keywordflow">if</span> (it1-&gt;size() &lt;= lv) ++it1; <span class="comment">// 途中終端を飛ばす</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            std::uint8_t ch = *std::next(it1-&gt;begin(), lv);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            <span class="keywordflow">while</span> (it1 != it2)</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            {</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                std::uint8_t c = *std::next(it1-&gt;begin(), lv);</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                <span class="keywordflow">if</span> (ch != c) <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                ++it1;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            }</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            <span class="keywordflow">return</span> m_next = it1;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        iterator_type m_first;</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        iterator_type m_last;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        iterator_type <span class="keyword">mutable</span> m_next; <span class="comment">// キャッシュ</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        int32_t       m_level;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    };</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator1&gt;</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(const_list_trie_iterator&lt;Iterator1&gt; <span class="keyword">const</span>&amp; lhs, const_list_trie_iterator&lt;Iterator1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    {</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        <span class="keywordflow">return</span> !(lhs != rhs);</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    }</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator1&gt;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(const_list_trie_iterator&lt;Iterator1&gt; <span class="keyword">const</span>&amp; lhs, const_list_trie_iterator&lt;Iterator1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    {</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> lhs.m_first != rhs.m_first || lhs.m_level != rhs.m_level;</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    }</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_ab97170d0995a00c40986de1503e0fd7c"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#ab97170d0995a00c40986de1503e0fd7c">wordring::detail::const_list_trie_iterator::end</a></div><div class="ttdeci">const_list_trie_iterator end() const</div><div class="ttdoc">子の終端を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:162</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a86af2113ea05281089fa85265d9bc4b3"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a86af2113ea05281089fa85265d9bc4b3">wordring::detail::const_list_trie_iterator::begin</a></div><div class="ttdeci">const_list_trie_iterator begin() const</div><div class="ttdoc">子の先頭を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:138</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a767468de7bc4cb0a35f05c4189d439e5"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a767468de7bc4cb0a35f05c4189d439e5">wordring::detail::const_list_trie_iterator::operator*</a></div><div class="ttdeci">value_type operator*() const</div><div class="ttdoc">イテレータが指す値を返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:77</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a79611b6a63b8f5a5fa0f3557a835327d"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">wordring::detail::const_list_trie_iterator::next</a></div><div class="ttdeci">iterator_type next() const</div><div class="ttdoc">レベルに応じて次の文字位置を探し、その文字列を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:221</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a7d60307edd470909c3ac625554d01b77"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a7d60307edd470909c3ac625554d01b77">wordring::detail::const_list_trie_iterator::has_null</a></div><div class="ttdeci">bool has_null() const</div><div class="ttdoc">末尾に達した文字列が有る場合、trueを返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:196</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a902338544ae17dbe0378694818fa1f1b"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a902338544ae17dbe0378694818fa1f1b">wordring::detail::const_list_trie_iterator::const_list_trie_iterator</a></div><div class="ttdeci">const_list_trie_iterator(const_list_trie_iterator const &amp;other)</div><div class="ttdoc">コピー構築する</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:67</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a2285135a38a7209d0a16a2c1eb07a2c6"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2285135a38a7209d0a16a2c1eb07a2c6">wordring::detail::const_list_trie_iterator::has_child</a></div><div class="ttdeci">bool has_child() const</div><div class="ttdoc">子を持つ場合、trueを返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:171</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a682f26a606b835681047da10a9459e69"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a682f26a606b835681047da10a9459e69">wordring::detail::const_list_trie_iterator::operator++</a></div><div class="ttdeci">const_list_trie_iterator &amp; operator++()</div><div class="ttdoc">イテレータを進める</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:95</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a></div><div class="ttdoc">文字列の集合をTrie構築に適した形で走査するイテレータ</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:20</div></div>
+<div class="ttc" id="anamespacewordring_1_1detail_html"><div class="ttname"><a href="namespacewordring_1_1detail.html">wordring::detail</a></div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a73956f29c4cb224c94682739df8f989e"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a73956f29c4cb224c94682739df8f989e">wordring::detail::const_list_trie_iterator::string</a></div><div class="ttdeci">std::pair&lt; string_iterator, string_iterator &gt; string() const</div><div class="ttdoc">根からイテレータ迄の文字列を返す</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:129</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a5d6c853199c511a63aaa556b30b842bc"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a5d6c853199c511a63aaa556b30b842bc">wordring::detail::const_list_trie_iterator::operator++</a></div><div class="ttdeci">const_list_trie_iterator operator++(int)</div><div class="ttdoc">イテレータを進める</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:107</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a2a28d519524851d24c5edff9ffcfe950"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">wordring::detail::const_list_trie_iterator::const_list_trie_iterator</a></div><div class="ttdeci">const_list_trie_iterator(iterator_type first, iterator_type last)</div><div class="ttdoc">ベースとなるイテレータから構築する</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:57</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

@@ -17,8 +17,8 @@ std::string const current_source_path{ TO_STRING(CURRENT_SOURCE_PATH) };
 
 namespace
 {
-	using base_node     = wordring::trie_node;
-	using base_trie     = wordring::stable_trie_base<>;
+	using base_node     = wordring::detail::trie_node;
+	using base_trie     = wordring::detail::stable_trie_base<>;
 	using base_iterator = typename base_trie::const_iterator;
 
 	class test_iterator : public base_iterator
@@ -96,7 +96,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__1)
 {
 	using namespace wordring;
 
-	stable_trie_base<> trie{};
+	auto trie = detail::stable_trie_base();
 }
 
 // explicit stable_trie_base(allocator_type const& alloc)
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__2)
 {
 	using namespace wordring;
 
-	stable_trie_base<> trie{ std::allocator<trie_node>() };
+	auto trie = detail::stable_trie_base(std::allocator<detail::trie_node>());
 }
 
 // stable_trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
@@ -113,10 +113,10 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__3)
 	using namespace wordring;
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
-	stable_trie_base<> t1{ v1.begin(), v1.end() };
+	auto t1 = detail::stable_trie_base(v1.begin(), v1.end());
 
 	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
-	stable_trie_base<> t2{ v2.begin(), v2.end(), std::allocator<trie_node>() };
+	auto t2 = detail::stable_trie_base(v2.begin(), v2.end());
 }
 
 // stable_trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
@@ -125,15 +125,16 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__4)
 	using namespace wordring;
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
-	stable_trie_base<> trie{ v.begin(), v.end(), std::allocator<trie_node>() };
+	
+	auto trie = detail::stable_trie_base(v.begin(), v.end());
 }
 
-// stable_trie_base(std::initializer_list<trie_node> il)
+// stable_trie_base(std::initializer_list<detail::trie_node> il)
 BOOST_AUTO_TEST_CASE(stable_trie_base__constrcut__5)
 {
 	using namespace wordring;
 
-	stable_trie_base<> trie{ { { 0, 1 }, { 2, 3 } } };
+	auto trie = detail::stable_trie_base({ { 0, 1 }, { 2, 3 } });
 }
 
 // void assign(InputIterator first, InputIterator last)
@@ -141,14 +142,12 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__assign__1)
 {
 	using namespace wordring;
 
-	stable_trie_base<> t1{};
-
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
-	t1.assign(v1.begin(), v1.end());
+	auto t1 = detail::stable_trie_base(v1.begin(), v1.end());
 
 	auto v2 = std::vector<std::int32_t>(t1.ibegin(), t1.iend());
 
-	test_trie t2{};
+	test_trie t2;
 	t2.assign(v2.begin(), v2.end());
 
 	BOOST_CHECK(t2.count() == 5);
@@ -164,7 +163,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__assign__2)
 {
 	using namespace wordring;
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 
 	std::vector<std::int32_t> v{};
 	std::copy(t1.ibegin(), t1.iend(), std::back_inserter(v));
@@ -180,7 +179,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__assign__3)
 {
 	using namespace wordring;
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 
 	std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v1.begin(), v1.end());
@@ -206,7 +205,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__assign__4)
 {
 	using namespace wordring;
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 
 	auto it1 = serialize_iterator(t1.ibegin());
 	auto it2 = serialize_iterator(t1.iend());
@@ -225,12 +224,12 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__assign__5)
 {
 	using namespace wordring;
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 
 	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
 	t1.assign(v.begin(), v.end());
 
-	stable_trie_base<> t2{};
+	detail::stable_trie_base<> t2{};
 	t2 = t1;
 
 	BOOST_CHECK(t2.size() == 5);
@@ -1320,7 +1319,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__add__1)
 
 	trie.add(1, 0);
 
-	std::vector<trie_node> v{ { 0, 0 }, { 2, 0 }, { 0, 1 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 2, 0 }, { 0, 1 } };
 	BOOST_CHECK(trie.m_c == v);
 }
 
@@ -1332,7 +1331,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__add__2)
 
 	trie.add(1, { 0, 1, 2 });
 
-	std::vector<trie_node> v{ { 0, 0 }, { 2, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 2, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
 	BOOST_CHECK(trie.m_c == v);
 }
 
@@ -1343,7 +1342,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base__add__3)
 
 	trie.add(1, { 1, 2, 3 });
 
-	std::vector<trie_node> v{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 1, 0 }, { 0, 1 }, { 0, 1 }, { 0, 1 } };
 	BOOST_CHECK(trie.m_c == v);
 }
 

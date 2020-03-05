@@ -98,7 +98,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_1)
 
 	std::vector<std::string> const& words = words1;
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 	t1.assign(words.begin(), words.end());
 
 	std::vector<std::uint32_t> buf;
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_1)
 	std::cout.imbue(std::locale(""));
 
 	std::cout << "---------- stable_trie_base_benchmark__serialize_1 ----------" << std::endl;
-	std::cout << "stable_trie_base<>" << std::endl;
+	std::cout << "detail::stable_trie_base<>" << std::endl;
 	std::cout << "\tsize():\t" << t1.size() << std::endl;
 	std::cout << "\tnodes:\t" << (buf.size() / 2) << std::endl;
 
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_1)
 
 	std::cout << "\tstd::vector<std::int32_t> v{ trie.ibegin(), trie.iend() }:\t" << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 
-	stable_trie_base<> t2{};
+	detail::stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
 	t2.assign(v.begin(), v.end());
 	duration = std::chrono::system_clock::now() - start;
@@ -133,7 +133,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_2)
 
 	setup1();
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 	t1.assign(words1.begin(), words1.end());
 
 	std::vector<std::uint32_t> buf;
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_2)
 
 	std::cout.imbue(std::locale(""));
 	std::cout << "---------- stable_trie_base_benchmark__serialize_2 ----------" << std::endl;
-	std::cout << "stable_trie_base<>" << std::endl;
+	std::cout << "detail::stable_trie_base<>" << std::endl;
 	std::cout << "\tsize():\t" << t1.size() << std::endl;
 	std::cout << "\tnodes:\t" << (buf.size() / 2) << std::endl;
 
@@ -153,10 +153,10 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__serialize_2)
 	std::cout << "\tv.size():\t" << v.size() << std::endl;
 
 	start = std::chrono::system_clock::now();
-	stable_trie_base<> t2{ v.begin(), v.end() };
+	detail::stable_trie_base<> t2{ v.begin(), v.end() };
 	duration = std::chrono::system_clock::now() - start;
 
-	std::cout << "stable_trie_base<> t2{ v.begin(), v.end() }: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
+	std::cout << "detail::stable_trie_base<> t2{ v.begin(), v.end() }: " << std::chrono::duration_cast<std::chrono::milliseconds>(duration).count() << "ms" << std::endl;
 	std::cout << "\tsize():\t" << t2.size() << std::endl;
 
 	std::cout << std::endl;
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__copy_assignment_1)
 
 	std::vector<std::string> const& words = words1;
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 	t1.assign(words.begin(), words.end());
 	std::vector<std::uint32_t> buf;
 	std::copy(t1.ibegin(), t1.iend(), std::back_inserter(buf));
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__copy_assignment_1)
 	std::cout.imbue(std::locale(""));
 
 	std::cout << "---------- stable_trie_base_benchmark__copy_assignment_1 ----------" << std::endl;
-	std::cout << "stable_trie_base<>" << std::endl;
+	std::cout << "detail::stable_trie_base<>" << std::endl;
 	std::cout << "\tsize():\t" << t1.size() << std::endl;
 	std::cout << "\tnodes:\t" << (buf.size() / 2) << std::endl;
 
@@ -208,11 +208,11 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_raw_1)
 	std::cout << "std::vector<std::string> w{ (raw words...) };" << std::endl;
 	std::cout << "\tsize:\t" << w.size() << std::endl;
 
-	std::cout << "stable_trie_base<>" << std::endl;
+	std::cout << "detail::stable_trie_base<>" << std::endl;
 
 	// trie.assign() ----------------------------------------------------------
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 	auto start = std::chrono::system_clock::now();
 	t1.assign(w.begin(), w.end());
 	auto duration = std::chrono::system_clock::now() - start;
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_raw_1)
 
 	// trie.insert() ----------------------------------------------------------
 
-	stable_trie_base<> t2{};
+	detail::stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
 	for (std::string const& s : w) t2.insert(s);
 	duration = std::chrono::system_clock::now() - start;
@@ -295,11 +295,11 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_random_1)
 	std::cout << "std::vector<std::string> w{ (random words...) };" << std::endl;
 	std::cout << "\tsize:\t" << w.size() << std::endl;
 
-	std::cout << "stable_trie_base<>" << std::endl;
+	std::cout << "detail::stable_trie_base<>" << std::endl;
 
 	// trie.assign() ----------------------------------------------------------
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 	auto start = std::chrono::system_clock::now();
 	t1.assign(w.begin(), w.end());
 	auto duration = std::chrono::system_clock::now() - start;
@@ -314,7 +314,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_random_1)
 
 	// trie.insert() ----------------------------------------------------------
 
-	stable_trie_base<> t2{};
+	detail::stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
 	for (std::string const& s : w) t2.insert(s);
 	duration = std::chrono::system_clock::now() - start;
@@ -382,11 +382,11 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_sorted_1)
 	std::cout << "std::vector<std::string> w{ (sorted words...) };" << std::endl;
 	std::cout << "\tsize:\t" << w.size() << std::endl;
 
-	std::cout << "stable_trie_base<>" << std::endl;
+	std::cout << "detail::stable_trie_base<>" << std::endl;
 
 	// trie.assign() ----------------------------------------------------------
 
-	stable_trie_base<> t1{};
+	detail::stable_trie_base<> t1{};
 	auto start = std::chrono::system_clock::now();
 	t1.assign(w.begin(), w.end());
 	auto duration = std::chrono::system_clock::now() - start;
@@ -401,7 +401,7 @@ BOOST_AUTO_TEST_CASE(stable_trie_base_benchmark__words_sorted_1)
 
 	// trie.insert() ----------------------------------------------------------
 
-	stable_trie_base<> t2{};
+	detail::stable_trie_base<> t2{};
 	start = std::chrono::system_clock::now();
 	for (std::string const& s : w) t2.insert(s);
 	duration = std::chrono::system_clock::now() - start;

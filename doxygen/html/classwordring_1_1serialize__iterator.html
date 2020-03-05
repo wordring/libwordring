@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::serialize_iterator&lt; InputIterator &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-attribs">静的公開変数類</a> &#124;
+<a href="#friends">フレンド</a> &#124;
+<a href="classwordring_1_1serialize__iterator-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::serialize_iterator&lt; InputIterator &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="serialize__iterator_8hpp_source.html">serialize_iterator.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a20bb67a1c97be51806958aec9230b4f2"><td class="memItemLeft" align="right" valign="top"><a id="a20bb67a1c97be51806958aec9230b4f2"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_type</b> = InputIterator</td></tr>
+<tr class="separator:a20bb67a1c97be51806958aec9230b4f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4cc91c668f47bfe3631afd3fb911bb9"><td class="memItemLeft" align="right" valign="top"><a id="ad4cc91c668f47bfe3631afd3fb911bb9"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>unsigned_type</b> = std::make_unsigned_t&lt; typename std::iterator_traits&lt; iterator_type &gt;::value_type &gt;</td></tr>
+<tr class="separator:ad4cc91c668f47bfe3631afd3fb911bb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a87dcd39ddd1744c6ecb26717d0efed"><td class="memItemLeft" align="right" valign="top"><a id="a6a87dcd39ddd1744c6ecb26717d0efed"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
+<tr class="separator:a6a87dcd39ddd1744c6ecb26717d0efed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aec325877c0deb38e208660b62ca4ad"><td class="memItemLeft" align="right" valign="top"><a id="a3aec325877c0deb38e208660b62ca4ad"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::uint8_t</td></tr>
+<tr class="separator:a3aec325877c0deb38e208660b62ca4ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a014bd54cbb411eaa9aeaaeac55b0fd7c"><td class="memItemLeft" align="right" valign="top"><a id="a014bd54cbb411eaa9aeaaeac55b0fd7c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:a014bd54cbb411eaa9aeaaeac55b0fd7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d914e3b2b9b856bf0d7f5d4cd9e6701"><td class="memItemLeft" align="right" valign="top"><a id="a4d914e3b2b9b856bf0d7f5d4cd9e6701"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:a4d914e3b2b9b856bf0d7f5d4cd9e6701"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5e6a3ccf9a33f44f442eb092da08305"><td class="memItemLeft" align="right" valign="top"><a id="aa5e6a3ccf9a33f44f442eb092da08305"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
+<tr class="separator:aa5e6a3ccf9a33f44f442eb092da08305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a2312c074d4dc085f72408c00f8763f01"><td class="memItemLeft" align="right" valign="top"><a id="a2312c074d4dc085f72408c00f8763f01"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>serialize_iterator</b> (iterator_type base)</td></tr>
+<tr class="separator:a2312c074d4dc085f72408c00f8763f01"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace5a5cbe0d7af839dd55fe06fef47073"><td class="memItemLeft" align="right" valign="top"><a id="ace5a5cbe0d7af839dd55fe06fef47073"></a>
+iterator_type&#160;</td><td class="memItemRight" valign="bottom"><b>base</b> () const</td></tr>
+<tr class="separator:ace5a5cbe0d7af839dd55fe06fef47073"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9db51e4fb5034d97a57aa57517ba609b"><td class="memItemLeft" align="right" valign="top"><a id="a9db51e4fb5034d97a57aa57517ba609b"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
+<tr class="separator:a9db51e4fb5034d97a57aa57517ba609b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5b443234f5f9b6dd8dddafb8d25ea11"><td class="memItemLeft" align="right" valign="top"><a id="aa5b443234f5f9b6dd8dddafb8d25ea11"></a>
+<a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> ()</td></tr>
+<tr class="separator:aa5b443234f5f9b6dd8dddafb8d25ea11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a818abc60e0680977bb5812b8d7f4467a"><td class="memItemLeft" align="right" valign="top"><a id="a818abc60e0680977bb5812b8d7f4467a"></a>
+<a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int)</td></tr>
+<tr class="separator:a818abc60e0680977bb5812b8d7f4467a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+静的公開変数類</h2></td></tr>
+<tr class="memitem:ab99769560c53a8515687ef54a3409840"><td class="memItemLeft" align="right" valign="top"><a id="ab99769560c53a8515687ef54a3409840"></a>
+static constexpr std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>coefficient</b> = sizeof(unsigned_type)</td></tr>
+<tr class="separator:ab99769560c53a8515687ef54a3409840"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:aa4905aa3060c16f014a37cf3dccaa793"><td class="memTemplParams" colspan="2"><a id="aa4905aa3060c16f014a37cf3dccaa793"></a>
+template&lt;typename InputIterator1 &gt; </td></tr>
+<tr class="memitem:aa4905aa3060c16f014a37cf3dccaa793"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a>&lt; InputIterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a>&lt; InputIterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:aa4905aa3060c16f014a37cf3dccaa793"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6685eb7d806e5eff3f3b357a72380dcd"><td class="memTemplParams" colspan="2"><a id="a6685eb7d806e5eff3f3b357a72380dcd"></a>
+template&lt;typename InputIterator1 &gt; </td></tr>
+<tr class="memitem:a6685eb7d806e5eff3f3b357a72380dcd"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a>&lt; InputIterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a>&lt; InputIterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:a6685eb7d806e5eff3f3b357a72380dcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename InputIterator&gt;<br />
+class wordring::serialize_iterator&lt; InputIterator &gt;</h3>
+
+<p>任意ビット幅の整数列に対するイテレータを8ビット整数列に対するイテレータへ変換する</p><ul>
+<li>逆参照はできない。 </li>
+</ul>
+</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/serialize/<a class="el" href="serialize__iterator_8hpp_source.html">serialize_iterator.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

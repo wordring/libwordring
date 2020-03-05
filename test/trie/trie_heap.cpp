@@ -8,9 +8,9 @@
 
 namespace
 {
-	using base_node = wordring::trie_node;
-	using base_iterator = wordring::trie_heap_serialize_iterator<std::vector<base_node, std::allocator<base_node>> const>;
-	using base_heap = wordring::trie_heap< std::allocator<base_node>>;
+	using base_node = wordring::detail::trie_node;
+	using base_iterator = wordring::detail::trie_heap_serialize_iterator<std::vector<base_node, std::allocator<base_node>> const>;
+	using base_heap = wordring::detail::trie_heap< std::allocator<base_node>>;
 
 	class test_iterator : public base_iterator
 	{
@@ -62,13 +62,16 @@ BOOST_AUTO_TEST_CASE(trie_node__construct__1)
 {
 	using namespace wordring;
 
-	static_assert(std::is_pod_v<trie_node>);
+	static_assert(std::is_pod_v<detail::trie_node>);
 }
 
 // ----------------------------------------------------------------------------
 // trie_heap_serialize_iterator
 // ----------------------------------------------------------------------------
 
+/*!
+テストデータを作るため、継承クラスでテストを行う。
+*/
 BOOST_AUTO_TEST_CASE(trie_heap_serialize_iterator__construct__1)
 {
 	test_heap heap{};
@@ -102,7 +105,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__assign__1)
 
 	heap.assign(v1.begin(), v1.end());
 
-	std::vector<trie_node> v2{ { 0x01020304, 0x05060708 } };
+	std::vector<detail::trie_node> v2{ { 0x01020304, 0x05060708 } };
 	BOOST_CHECK(heap.m_c == v2);
 }
 
@@ -115,7 +118,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__assign__2)
 
 	heap.assign(v1.begin(), v1.end());
 
-	std::vector<trie_node> v2{};
+	std::vector<detail::trie_node> v2{};
 	BOOST_CHECK(heap.m_c == v2);
 }
 
@@ -128,7 +131,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__assign__3)
 
 	heap.assign(v1.begin(), v1.end());
 
-	std::vector<trie_node> v2{ { 0x01020304, 0x05060708 } };
+	std::vector<detail::trie_node> v2{ { 0x01020304, 0x05060708 } };
 	BOOST_CHECK(heap.m_c == v2);
 }
 
@@ -141,7 +144,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__assign__4)
 
 	heap.assign(v1.begin(), v1.end());
 
-	std::vector<trie_node> v2{};
+	std::vector<detail::trie_node> v2{};
 	BOOST_CHECK(heap.m_c == v2);
 }
 
@@ -170,7 +173,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__2)
 	test_heap heap{};
 	heap.reserve(0);
 
-	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -181,7 +184,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__3)
 	test_heap heap{};
 	heap.reserve(1);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -192,7 +195,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__4)
 	test_heap heap{};
 	heap.reserve(2);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -204,7 +207,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__5)
 	heap.m_c = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	heap.reserve(1);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c.size() == 5);
 	BOOST_CHECK(heap.m_c == v);
 }
@@ -217,7 +220,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__6)
 	heap.m_c = { { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	heap.reserve(2);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, -5 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, -5 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c.size() == 6);
 	BOOST_CHECK(heap.m_c == v);
 }
@@ -230,7 +233,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__7)
 	heap.m_c = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	heap.reserve(1);
 
-	std::vector<trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c.size() == 5);
 	BOOST_CHECK(heap.m_c == v);
 }
@@ -243,7 +246,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__reserve__8)
 	heap.m_c = { { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	heap.reserve(2);
 
-	std::vector<trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, -5 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, -5 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c.size() == 6);
 	BOOST_CHECK(heap.m_c == v);
 }
@@ -258,7 +261,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__1)
 
 	heap.allocate(2);
 
-	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -271,7 +274,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__2)
 
 	heap.allocate(3);
 
-	std::vector<trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -4 }, { 0, 0 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -284,7 +287,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__3)
 
 	heap.allocate(2);
 
-	std::vector<trie_node> v{ { 0, -1 }, { 0, -3 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -1 }, { 0, -3 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -299,7 +302,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__4)
 	static_vector<std::uint16_t, 257> sv = { 0 };
 	heap.allocate(1, sv);
 
-	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -312,7 +315,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__5)
 
 	heap.allocate(1, { 0, 2 });
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -4 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -326,7 +329,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__6)
 	static_vector<std::uint16_t, 257> sv = { 0 };
 	heap.allocate(1, sv);
 
-	std::vector<trie_node> v{ { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -339,7 +342,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__allocate__7)
 
 	heap.allocate(1, { 0, 2 });
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -361,7 +364,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__1)
 
 	heap.free(2);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -374,7 +377,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__2)
 
 	heap.free(2);
 
-	std::vector<trie_node> v{ { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -1 }, { 0, -2 }, { 0, -3 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -387,7 +390,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__3)
 
 	heap.free(3);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 9 }, { 0, -3 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 9 }, { 0, -3 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -402,7 +405,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__4)
 	static_vector<std::uint16_t, 257> labels{ 0 };
 	heap.free(2, labels);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -415,7 +418,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__5)
 
 	heap.free(2, { 0, 1 });
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, -4 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, -4 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -428,7 +431,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__6)
 
 	heap.free(2, { 0, 2 });
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, -4 }, { 0, -5 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, -4 }, { 0, -5 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -441,7 +444,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__free__7)
 
 	heap.free(2, { 0, 2 });
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, -4 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, -4 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 }
 
@@ -471,7 +474,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__locate__3)
 	test_heap heap{};
 	heap.reserve(1);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 
 	std::int32_t before;
@@ -486,7 +489,7 @@ BOOST_AUTO_TEST_CASE(trie_heap__locate__4)
 	test_heap heap{};
 	heap.reserve(2);
 
-	std::vector<trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, 0 } };
+	std::vector<detail::trie_node> v{ { 0, -2 }, { 0, 0 }, { 0, -3 }, { 0, 0 } };
 	BOOST_CHECK(heap.m_c == v);
 
 	std::int32_t before;

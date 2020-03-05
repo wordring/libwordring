@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::const_list_trie_iterator&lt; Iterator &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>wordring</b></li><li class="navelem"><a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-attribs">静的公開変数類</a> &#124;
+<a href="#pro-methods">限定公開メンバ関数</a> &#124;
+<a href="#friends">フレンド</a> &#124;
+<a href="classwordring_1_1const__list__trie__iterator-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::const_list_trie_iterator&lt; Iterator &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><code>#include &lt;<a class="el" href="list__trie__iterator_8hpp_source.html">list_trie_iterator.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a9e8fe38c23f5bb6dd7a4d3e06419f0cb"><td class="memItemLeft" align="right" valign="top"><a id="a9e8fe38c23f5bb6dd7a4d3e06419f0cb"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_type</b> = Iterator</td></tr>
+<tr class="separator:a9e8fe38c23f5bb6dd7a4d3e06419f0cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aceea6ca550ac88729d069d65d9d9d07e"><td class="memItemLeft" align="right" valign="top"><a id="aceea6ca550ac88729d069d65d9d9d07e"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = typename std::iterator_traits&lt; iterator_type &gt;::value_type</td></tr>
+<tr class="separator:aceea6ca550ac88729d069d65d9d9d07e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9514bf03485f438dc71994c84fcff52"><td class="memItemLeft" align="right" valign="top"><a id="aa9514bf03485f438dc71994c84fcff52"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>char_type</b> = typename string_type::value_type</td></tr>
+<tr class="separator:aa9514bf03485f438dc71994c84fcff52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bd85fbb9da7091c94bd39625c5c05ee"><td class="memItemLeft" align="right" valign="top"><a id="a3bd85fbb9da7091c94bd39625c5c05ee"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_iterator</b> = typename string_type::const_iterator</td></tr>
+<tr class="separator:a3bd85fbb9da7091c94bd39625c5c05ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad27a0ac5fde843bdafa812df102ab5ee"><td class="memItemLeft" align="right" valign="top"><a id="ad27a0ac5fde843bdafa812df102ab5ee"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = typename std::iterator_traits&lt; iterator_type &gt;::difference_type</td></tr>
+<tr class="separator:ad27a0ac5fde843bdafa812df102ab5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d962f1aed28db2b0ffd8ce0e4f6a16b"><td class="memItemLeft" align="right" valign="top"><a id="a6d962f1aed28db2b0ffd8ce0e4f6a16b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::uint16_t</td></tr>
+<tr class="separator:a6d962f1aed28db2b0ffd8ce0e4f6a16b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bb0ed9c50a4177af8c9335770ecad93"><td class="memItemLeft" align="right" valign="top"><a id="a2bb0ed9c50a4177af8c9335770ecad93"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:a2bb0ed9c50a4177af8c9335770ecad93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcfbf46f9383e22565d2b1fc2f463f1b"><td class="memItemLeft" align="right" valign="top"><a id="adcfbf46f9383e22565d2b1fc2f463f1b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:adcfbf46f9383e22565d2b1fc2f463f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a022441c3578f7ada8512c51d5f7d53ec"><td class="memItemLeft" align="right" valign="top"><a id="a022441c3578f7ada8512c51d5f7d53ec"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
+<tr class="separator:a022441c3578f7ada8512c51d5f7d53ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af992f6fa8043aba7cda3ef36ced79a5d"><td class="memItemLeft" align="right" valign="top"><a id="af992f6fa8043aba7cda3ef36ced79a5d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>parent_view</b> = <a class="el" href="classwordring_1_1result__range.html">result_range</a>&lt; string_iterator &gt;</td></tr>
+<tr class="separator:af992f6fa8043aba7cda3ef36ced79a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a69b0d30f1a520382fcc55aa2dc6fdb6d"><td class="memItemLeft" align="right" valign="top"><a id="a69b0d30f1a520382fcc55aa2dc6fdb6d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_view</b> = <a class="el" href="classwordring_1_1result__range.html">result_range</a>&lt; string_iterator &gt;</td></tr>
+<tr class="separator:a69b0d30f1a520382fcc55aa2dc6fdb6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:ae9db1dcaa8858aa63e9c649b4bee1516"><td class="memItemLeft" align="right" valign="top"><a id="ae9db1dcaa8858aa63e9c649b4bee1516"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>const_list_trie_iterator</b> (iterator_type first, iterator_type last)</td></tr>
+<tr class="separator:ae9db1dcaa8858aa63e9c649b4bee1516"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a392ddaed0a25e85bd0c909b8c6239986"><td class="memItemLeft" align="right" valign="top"><a id="a392ddaed0a25e85bd0c909b8c6239986"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>const_list_trie_iterator</b> (<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> const &amp;other)</td></tr>
+<tr class="separator:a392ddaed0a25e85bd0c909b8c6239986"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a820c360e38423068efa6d5317e36878b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1result__range.html">parent_view</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__list__trie__iterator.html#a820c360e38423068efa6d5317e36878b">parent</a> () const</td></tr>
+<tr class="separator:a820c360e38423068efa6d5317e36878b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1356b44081402cd357d1cae6e0da24a0"><td class="memItemLeft" align="right" valign="top"><a id="a1356b44081402cd357d1cae6e0da24a0"></a>
+<a class="el" href="classwordring_1_1result__range.html">string_view</a>&#160;</td><td class="memItemRight" valign="bottom"><b>string</b> () const</td></tr>
+<tr class="separator:a1356b44081402cd357d1cae6e0da24a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf7377634f358a132e21b698a44ab5e7"><td class="memItemLeft" align="right" valign="top"><a id="abf7377634f358a132e21b698a44ab5e7"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
+<tr class="separator:abf7377634f358a132e21b698a44ab5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab65f6c41dafcc5d7adc6e2855fc52a83"><td class="memItemLeft" align="right" valign="top"><a id="ab65f6c41dafcc5d7adc6e2855fc52a83"></a>
+<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> ()</td></tr>
+<tr class="separator:ab65f6c41dafcc5d7adc6e2855fc52a83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a106ee6476111983bba81537e7822f530"><td class="memItemLeft" align="right" valign="top"><a id="a106ee6476111983bba81537e7822f530"></a>
+<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator++</b> (int)</td></tr>
+<tr class="separator:a106ee6476111983bba81537e7822f530"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b13b3148a2595c1624dbde306e3fbcf"><td class="memItemLeft" align="right" valign="top"><a id="a0b13b3148a2595c1624dbde306e3fbcf"></a>
+<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const</td></tr>
+<tr class="separator:a0b13b3148a2595c1624dbde306e3fbcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72c938df97bab0e9a794a2551196c8fa"><td class="memItemLeft" align="right" valign="top"><a id="a72c938df97bab0e9a794a2551196c8fa"></a>
+<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td></tr>
+<tr class="separator:a72c938df97bab0e9a794a2551196c8fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a182ee8d2acaec94efebf203dedc38b20"><td class="memItemLeft" align="right" valign="top"><a id="a182ee8d2acaec94efebf203dedc38b20"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_child</b> () const</td></tr>
+<tr class="separator:a182ee8d2acaec94efebf203dedc38b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7d8a94a8b613116b3b4806c6aff493f"><td class="memItemLeft" align="right" valign="top"><a id="af7d8a94a8b613116b3b4806c6aff493f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_null</b> () const</td></tr>
+<tr class="separator:af7d8a94a8b613116b3b4806c6aff493f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86c3437ac883b9ca929a8084431f2c0b"><td class="memItemLeft" align="right" valign="top">iterator_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__list__trie__iterator.html#a86c3437ac883b9ca929a8084431f2c0b">next</a> () const</td></tr>
+<tr class="separator:a86c3437ac883b9ca929a8084431f2c0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+静的公開変数類</h2></td></tr>
+<tr class="memitem:a8ab3593b87b69f22a4630bf636312aa1"><td class="memItemLeft" align="right" valign="top"><a id="a8ab3593b87b69f22a4630bf636312aa1"></a>
+static constexpr std::uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>null_value</b> = 256u</td></tr>
+<tr class="separator:a8ab3593b87b69f22a4630bf636312aa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+限定公開メンバ関数</h2></td></tr>
+<tr class="memitem:a0794b6ca0f77c3f0c85a09af47c7bf7c"><td class="memItemLeft" align="right" valign="top"><a id="a0794b6ca0f77c3f0c85a09af47c7bf7c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>const_list_trie_iterator</b> (iterator_type first, iterator_type last, int32_t level)</td></tr>
+<tr class="separator:a0794b6ca0f77c3f0c85a09af47c7bf7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:aad59f298a2e33802840dd84e57a0b4c4"><td class="memTemplParams" colspan="2"><a id="aad59f298a2e33802840dd84e57a0b4c4"></a>
+template&lt;typename Iterator1 &gt; </td></tr>
+<tr class="memitem:aad59f298a2e33802840dd84e57a0b4c4"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:aad59f298a2e33802840dd84e57a0b4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cebb22f777cfee4405ee242c4501d85"><td class="memTemplParams" colspan="2"><a id="a2cebb22f777cfee4405ee242c4501d85"></a>
+template&lt;typename Iterator1 &gt; </td></tr>
+<tr class="memitem:a2cebb22f777cfee4405ee242c4501d85"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:a2cebb22f777cfee4405ee242c4501d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename Iterator&gt;<br />
+class wordring::const_list_trie_iterator&lt; Iterator &gt;</h3>
+
+<ul>
+<li>#による空遷移も状態番号を持つ事に注意。この動作は、ダブルアレイ構築に必要なため設定した。 </li>
+</ul>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a86c3437ac883b9ca929a8084431f2c0b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a86c3437ac883b9ca929a8084431f2c0b">&#9670;&nbsp;</a></span>next()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">iterator_type <a class="el" href="classwordring_1_1const__list__trie__iterator.html">wordring::const_list_trie_iterator</a>&lt; Iterator &gt;::next </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<ul>
+<li>スレッド安全性を持たない。 </li>
+</ul>
+
+</div>
+</div>
+<a id="a820c360e38423068efa6d5317e36878b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a820c360e38423068efa6d5317e36878b">&#9670;&nbsp;</a></span>parent()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1result__range.html">parent_view</a> <a class="el" href="classwordring_1_1const__list__trie__iterator.html">wordring::const_list_trie_iterator</a>&lt; Iterator &gt;::parent </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>親に相当する文字列を返す </p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/<a class="el" href="list__trie__iterator_8hpp_source.html">list_trie_iterator.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

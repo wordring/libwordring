@@ -1,0 +1,495 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::const_trie_heap_iterator&lt; Container &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>wordring</b></li><li class="navelem"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html">const_trie_heap_iterator</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pro-types">限定公開型</a> &#124;
+<a href="#pro-methods">限定公開メンバ関数</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="#pro-static-attribs">静的限定公開変数類</a> &#124;
+<a href="classwordring_1_1const__trie__heap__iterator-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::const_trie_heap_iterator&lt; Container &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="dynheader">
+wordring::const_trie_heap_iterator&lt; Container &gt; の継承関係図</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classwordring_1_1const__trie__heap__iterator.png" usemap="#wordring::const_5Ftrie_5Fheap_5Fiterator_3C_20Container_20_3E_map" alt=""/>
+  <map id="wordring::const_5Ftrie_5Fheap_5Fiterator_3C_20Container_20_3E_map" name="wordring::const_5Ftrie_5Fheap_5Fiterator_3C_20Container_20_3E_map">
+<area href="classwordring_1_1const__stable__trie__base__iterator.html" alt="wordring::const_stable_trie_base_iterator&lt; Container &gt;" shape="rect" coords="0,56,323,80"/>
+<area href="classwordring_1_1const__trie__base__iterator.html" alt="wordring::const_trie_base_iterator&lt; Container &gt;" shape="rect" coords="333,56,656,80"/>
+  </map>
+</div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a924b89799ba5a3d1ee5718e1ffe8eead"><td class="memItemLeft" align="right" valign="top"><a id="a924b89799ba5a3d1ee5718e1ffe8eead"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
+<tr class="separator:a924b89799ba5a3d1ee5718e1ffe8eead"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aefca53797da5735097c31c204e69966a"><td class="memItemLeft" align="right" valign="top"><a id="aefca53797da5735097c31c204e69966a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::uint8_t</td></tr>
+<tr class="separator:aefca53797da5735097c31c204e69966a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a485a3b134a7bc28c3c086d2ef3380245"><td class="memItemLeft" align="right" valign="top"><a id="a485a3b134a7bc28c3c086d2ef3380245"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:a485a3b134a7bc28c3c086d2ef3380245"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a325ceb6b1b535794f3684b5404f93934"><td class="memItemLeft" align="right" valign="top"><a id="a325ceb6b1b535794f3684b5404f93934"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:a325ceb6b1b535794f3684b5404f93934"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64d306aca235f96f3f404680a0bdcd38"><td class="memItemLeft" align="right" valign="top"><a id="a64d306aca235f96f3f404680a0bdcd38"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
+<tr class="separator:a64d306aca235f96f3f404680a0bdcd38"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+限定公開型</h2></td></tr>
+<tr class="memitem:aea237eb0cb7f4e759f87db585c98ad77"><td class="memItemLeft" align="right" valign="top"><a id="aea237eb0cb7f4e759f87db585c98ad77"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>index_type</b> = typename trie_node::index_type</td></tr>
+<tr class="separator:aea237eb0cb7f4e759f87db585c98ad77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15b211c2b581195cb585d5ebd16438ce"><td class="memItemLeft" align="right" valign="top"><a id="a15b211c2b581195cb585d5ebd16438ce"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>node_type</b> = <a class="el" href="structwordring_1_1trie__node.html">trie_node</a></td></tr>
+<tr class="separator:a15b211c2b581195cb585d5ebd16438ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af386994ff5d75defd76c766c332e7c58"><td class="memItemLeft" align="right" valign="top"><a id="af386994ff5d75defd76c766c332e7c58"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = Container const</td></tr>
+<tr class="separator:af386994ff5d75defd76c766c332e7c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+限定公開メンバ関数</h2></td></tr>
+<tr class="memitem:aa7d416b5b2d5211bca28b462b8a2fe07"><td class="memItemLeft" align="right" valign="top"><a id="aa7d416b5b2d5211bca28b462b8a2fe07"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>const_trie_heap_iterator</b> (container &amp;c, index_type index)</td></tr>
+<tr class="separator:aa7d416b5b2d5211bca28b462b8a2fe07"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d66833a139d2dc6eff633770c75c883"><td class="memItemLeft" align="right" valign="top">value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a2d66833a139d2dc6eff633770c75c883">value</a> () const</td></tr>
+<tr class="separator:a2d66833a139d2dc6eff633770c75c883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4056a8128cef9026d58d460e0333b9f9"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a4056a8128cef9026d58d460e0333b9f9">at_index</a> (value_type label) const</td></tr>
+<tr class="separator:a4056a8128cef9026d58d460e0333b9f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15f713f942b45922b8f5644e2561c54c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a15f713f942b45922b8f5644e2561c54c">advance</a> ()</td></tr>
+<tr class="separator:a15f713f942b45922b8f5644e2561c54c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d3c690599356d1078abecb9a408d652"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a8d3c690599356d1078abecb9a408d652">parent_index</a> () const</td></tr>
+<tr class="separator:a8d3c690599356d1078abecb9a408d652"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace974a2a18650bee6f41f3ecd88b7fc1"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#ace974a2a18650bee6f41f3ecd88b7fc1">begin_index</a> () const</td></tr>
+<tr class="separator:ace974a2a18650bee6f41f3ecd88b7fc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a10913ca3104f93b221dc42f6572ed109"><td class="memItemLeft" align="right" valign="top"><a id="a10913ca3104f93b221dc42f6572ed109"></a>
+index_type&#160;</td><td class="memItemRight" valign="bottom"><b>end_index</b> () const</td></tr>
+<tr class="separator:a10913ca3104f93b221dc42f6572ed109"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3722030f9973a1574c0633cede83df1"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#ab3722030f9973a1574c0633cede83df1">find</a> (index_type first, index_type last, index_type check) const</td></tr>
+<tr class="separator:ab3722030f9973a1574c0633cede83df1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cb5c537bd8e6b6d6364ed2311061996"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a8cb5c537bd8e6b6d6364ed2311061996">mother</a> () const</td></tr>
+<tr class="separator:a8cb5c537bd8e6b6d6364ed2311061996"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6413008635e783839b15e7f3f8a1b408"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a6413008635e783839b15e7f3f8a1b408">base</a> () const</td></tr>
+<tr class="separator:a6413008635e783839b15e7f3f8a1b408"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c71042b131fa5b1904903bc35995eea"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a5c71042b131fa5b1904903bc35995eea">limit</a> () const</td></tr>
+<tr class="separator:a5c71042b131fa5b1904903bc35995eea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07cbbc299c37c7c022ba14302b61e352"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a07cbbc299c37c7c022ba14302b61e352">has_null</a> () const</td></tr>
+<tr class="separator:a07cbbc299c37c7c022ba14302b61e352"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7809bf2e067925e7c6ec4e223c256990"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1const__trie__heap__iterator.html#a7809bf2e067925e7c6ec4e223c256990">has_sibling</a> () const</td></tr>
+<tr class="separator:a7809bf2e067925e7c6ec4e223c256990"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:adb40196109664205af5e33e5adfddfb4"><td class="memItemLeft" align="right" valign="top"><a id="adb40196109664205af5e33e5adfddfb4"></a>
+container *&#160;</td><td class="memItemRight" valign="bottom"><b>m_c</b></td></tr>
+<tr class="separator:adb40196109664205af5e33e5adfddfb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11a626d35e5962dd5b13aaba1a36c2a6"><td class="memItemLeft" align="right" valign="top"><a id="a11a626d35e5962dd5b13aaba1a36c2a6"></a>
+index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_index</b></td></tr>
+<tr class="separator:a11a626d35e5962dd5b13aaba1a36c2a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+静的限定公開変数類</h2></td></tr>
+<tr class="memitem:aecdf68b91b80fe2b9e9bd9c27ec08039"><td class="memItemLeft" align="right" valign="top"><a id="aecdf68b91b80fe2b9e9bd9c27ec08039"></a>
+static constexpr std::uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>null_value</b> = 256</td></tr>
+<tr class="separator:aecdf68b91b80fe2b9e9bd9c27ec08039"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">関数詳解</h2>
+<a id="a15f713f942b45922b8f5644e2561c54c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15f713f942b45922b8f5644e2561c54c">&#9670;&nbsp;</a></span>advance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::advance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>イテレータを前進させる </p>
+
+</div>
+</div>
+<a id="a4056a8128cef9026d58d460e0333b9f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4056a8128cef9026d58d460e0333b9f9">&#9670;&nbsp;</a></span>at_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::at_index </td>
+          <td>(</td>
+          <td class="paramtype">value_type&#160;</td>
+          <td class="paramname"><em>label</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>labelで遷移する先のINDEXを返す </p>
+
+</div>
+</div>
+<a id="a6413008635e783839b15e7f3f8a1b408"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6413008635e783839b15e7f3f8a1b408">&#9670;&nbsp;</a></span>base()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::base </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>親のBASEを返す</p><ul>
+<li>つまりコレはm_indexからラベルを差し引いた値にに相当する。 </li>
+</ul>
+
+</div>
+</div>
+<a id="ace974a2a18650bee6f41f3ecd88b7fc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace974a2a18650bee6f41f3ecd88b7fc1">&#9670;&nbsp;</a></span>begin_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::begin_index </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>0-255に相当する文字で遷移できる最初の子を指すINDEXを返す</p><ul>
+<li>空遷移は含めない。</li>
+<li>遷移先（子）が無い場合、0を返す。 </li>
+</ul>
+
+</div>
+</div>
+<a id="ab3722030f9973a1574c0633cede83df1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3722030f9973a1574c0633cede83df1">&#9670;&nbsp;</a></span>find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::find </td>
+          <td>(</td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>check</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>引数firstからlastの範囲で、m_checkが引数checkと一致する状態番号を返す</p>
+<ul>
+<li>見つからない場合、0を返す。</li>
+<li>状態番号は1から始まるので0と衝突しない。</li>
+<li>引数lastがコンテナの大きさを超える場合、そこで検索を終了する。 </li>
+</ul>
+
+</div>
+</div>
+<a id="a07cbbc299c37c7c022ba14302b61e352"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a07cbbc299c37c7c022ba14302b61e352">&#9670;&nbsp;</a></span>has_null()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::has_null </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>空遷移がある場合trueを返す </p>
+
+</div>
+</div>
+<a id="a7809bf2e067925e7c6ec4e223c256990"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7809bf2e067925e7c6ec4e223c256990">&#9670;&nbsp;</a></span>has_sibling()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::has_sibling </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>兄弟にあたる状態がある場合、trueを返す </p>
+
+</div>
+</div>
+<a id="a5c71042b131fa5b1904903bc35995eea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c71042b131fa5b1904903bc35995eea">&#9670;&nbsp;</a></span>limit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::limit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>コンテナの最終状態番号の次を返す</p><ul>
+<li>キャストで行が増えるのを抑制するために用意した。 </li>
+</ul>
+
+</div>
+</div>
+<a id="a8cb5c537bd8e6b6d6364ed2311061996"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cb5c537bd8e6b6d6364ed2311061996">&#9670;&nbsp;</a></span>mother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::mother </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>親の状態番号を返す </p>
+
+</div>
+</div>
+<a id="a8d3c690599356d1078abecb9a408d652"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d3c690599356d1078abecb9a408d652">&#9670;&nbsp;</a></span>parent_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::parent_index </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>親のINDEXを返す</p><ul>
+<li>根で呼び出した場合、0を返す。 </li>
+</ul>
+
+</div>
+</div>
+<a id="a2d66833a139d2dc6eff633770c75c883"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d66833a139d2dc6eff633770c75c883">&#9670;&nbsp;</a></span>value()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">value_type <a class="el" href="classwordring_1_1const__trie__heap__iterator.html">wordring::const_trie_heap_iterator</a>&lt; Container &gt;::value </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>イテレータが指す値を返す </p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/<a class="el" href="trie__heap__iterator_8hpp_source.html">trie_heap_iterator.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

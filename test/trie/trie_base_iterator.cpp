@@ -16,9 +16,9 @@
 
 namespace
 {
-	using wordring::trie_node;
-	using base_iterator = wordring::const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
-	using base_trie     = wordring::trie_base<>;
+	using wordring::detail::trie_node;
+	using base_iterator = wordring::detail::const_trie_base_iterator<std::vector<trie_node, std::allocator<trie_node>> const>;
+	using base_trie     = wordring::detail::trie_base<>;
 
 	class test_iterator : public base_iterator
 	{
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(const_trie_base_iterator__bool__1)
 
 	// 親状態2に対してnull_valueによる遷移を追加
 	trie.m_c.insert(trie.m_c.end(), 252, { 0, 0 });
-	trie.m_c[261] = wordring::trie_node{ 0, 2 };
+	trie.m_c[261] = wordring::detail::trie_node{ 0, 2 };
 
 	BOOST_CHECK(test_iterator(trie.m_c, 1) == false);
 	BOOST_CHECK(test_iterator(trie.m_c, 2) == true);

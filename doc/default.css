@@ -1,0 +1,35 @@
+﻿
+body {
+    color: #505050;
+    padding: 1em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-width: 0;
+
+}
+
+    table th {
+        background-color: #fff;
+    }
+
+    table tr:nth-child(odd) {
+        background-color: #f0f5f5;
+    }
+
+    table th, table td {
+        padding: 0.5em 0.5em;
+        border-color: #cfcdcc;
+    }
+
+    .cpp .kw {
+        color: blue;
+    }
+
+    .cpp .tn {
+        color: cadetblue;
+    }
+

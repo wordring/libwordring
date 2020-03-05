@@ -15,14 +15,29 @@
 #include <type_traits>
 #include <utility>
 
-namespace wordring
+namespace wordring::detail
 {
 	// ------------------------------------------------------------------------
 	// stable_trie_base
 	// ------------------------------------------------------------------------
 
-	/*!
-	- 挿入や削除によって終端のイテレータが無効とならない安定なTrie木。
+	/*! @brief 挿入や削除によって葉を指すイテレータが無効とならない安定なTrie木
+
+	@tparam Allocator
+		アロケータ
+
+	@details
+		ダブルアレイの制約により、labelの型は8ビット固定。\n
+		葉を指すイテレータ以外は、衝突した場合、無効となる。
+
+		このクラスは、文字列末尾の次に葉を表現するnull値を挿入することで安定性を保つ。\n
+		null値に子は無いため、挿入や削除によって衝突が起きることが無い。\n
+		末尾にnull値が挿入される分、わずかながらメモリー使用量が増える。
+
+		このクラスは、葉のINDEXが変わらない必要のある文字列アトム等の用途を想定している。\n
+
+	@image html stable_trie_base_state.svg
+
 	*/
 	template <typename Allocator = std::allocator<trie_node>>
 	class stable_trie_base : public trie_heap<Allocator>
@@ -61,7 +76,7 @@ namespace wordring
 		using base_type::clear;
 
 	protected:
-		using base_type::assign;
+		//using base_type::assign;
 		using base_type::limit;
 		using base_type::free;
 		using base_type::has_child;
@@ -72,17 +87,52 @@ namespace wordring
 		using base_type::m_c;
 
 	public:
+		/*! @brief 空のコンテナを構築する
+
+		@par 例
+		@code
+			auto trie = stable_trie_base();
+		@endcode
+		*/
 		stable_trie_base()
 			: base_type()
 		{
 		}
 
+		/*! @brief アロケータを指定して空のコンテナを構築する
+
+		@param [in] alloc アロケータ
+
+		@par 例
+		@code
+			auto trie = stable_trie_base(std::allocator<detail::trie_node>());
+		@endcode
+		*/
 		explicit stable_trie_base(allocator_type const& alloc)
 			: base_type(alloc)
 		{
 		}
 
-		/*! 直列化データからの復元
+		/*! @brief 直列化データからの構築
+		
+		@param [in]
+			first 直列化データの先頭を指すイテレータ
+		@param [in]
+			last 直列化データの終端を指すイテレータ
+		@param [in]
+			alloc アロケータ
+
+		@sa assign(InputIterator first, InputIterator last)
+		
+		@par 例
+		@code
+			std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+			auto t1 = stable_trie_base(v1.begin(), v1.end());
+
+			std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
+			
+			auto t2 = stable_trie_base(v2.begin(), v2.end());
+		@endcode
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
 		stable_trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
@@ -91,7 +141,21 @@ namespace wordring
 			assign(first, last);
 		}
 
-		/*! 文字列リストからの構築
+		/*! @brief 文字列集合からの構築
+
+		@param [in]
+			first 文字列リストの先頭を指すイテレータ
+		@param [in]
+			last 文字列リストの終端を指すイテレータ
+		@param [in]
+			alloc アロケータ
+			
+		@par 例
+		@code
+			std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	
+			auto trie = stable_trie_base(v.begin(), v.end());
+		@endcode
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		stable_trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
@@ -100,14 +164,45 @@ namespace wordring
 			assign(first, last);
 		}
 
-		/*! 初期化子リストからの構築
+		/*! @brief 初期化子リストからの構築
+
+		@param [in]
+			il ノード・データの初期化子リスト
+		@param [in]
+			alloc アロケータ
+
+		@par 例
+		@code
+			auto trie = stable_trie_base({ { 0, 1 }, { 2, 3 } });
+		@endcode
 		*/
 		stable_trie_base(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
 			: base_type(il, alloc)
 		{
 		}
 
-		/*! 直列化データからの復元
+		/*! @brief 直列化データからの復元
+
+		@param [in]
+			first 直列化データの先頭を指すイテレータ
+		@param [in]
+			last 直列化データの終端を指すイテレータ
+
+		@sa
+			trie_heap::assign(InputIterator first, InputIterator last)\n
+			trie_heap::ibegin() const\n
+			trie_heap::iend() const
+
+		@par 例
+		@code
+			std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+			auto t1 = stable_trie_base(v1.begin(), v1.end());
+
+			auto v2 = std::vector<std::int32_t>(t1.ibegin(), t1.iend());
+
+			stable_trie_base<> t2;
+			t2.assign(v2.begin(), v2.end());
+		@endcode
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
 		void assign(InputIterator first, InputIterator last)
@@ -115,7 +210,21 @@ namespace wordring
 			base_type::assign(first, last);
 		}
 
-		/*! 文字列リストからの構築
+		/*! @brief 文字列集合からの割り当て
+
+		@param [in]
+			first 文字列集合の先頭を指すイテレータ
+		@param [in]
+			last 文字列集合の終端を指すイテレータ
+
+		@par 例
+		@code
+			std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+			stable_trie_base<> trie;
+			trie.assign(v.begin(), v.end());
+		@endcode
+
+		- 葉の値は全て0に初期化される。
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		void assign(ForwardIterator first, ForwardIterator last)
@@ -130,8 +239,30 @@ namespace wordring
 
 		// 要素アクセス --------------------------------------------------------
 
+		/*! @brief 文字列に対応する値を指す逆参照プロキシを返す
+
+		@param [in] pos 葉を指すイテレータ
+
+		@return 葉の値に対する逆参照プロキシ
+		*/
+		reference at(const_iterator pos)
+		{
+			node_type* d = m_c.data();
+
+			index_type idx = (d + pos.m_index)->m_base + null_value;
+			assert(1 < idx && idx < limit());
+
+			return reference(std::addressof((d + idx)->m_base));
+		}
+
+		const_reference at(const_iterator pos) const
+		{
+			return const_cast<stable_trie_base*>(this)->at(pos);
+		}
+
 		/*! 文字列に対応する値を指す逆参照プロキシを返す
 
+		@param [in] pos 葉を指すイテレータ
 		- [first, last)は、文字を参照するイテレータ。
 		*/
 		template <typename InputIterator>
@@ -140,10 +271,7 @@ namespace wordring
 			auto it = find(first, last);
 			if (it == cend()) throw std::out_of_range("");
 
-			index_type idx = (m_c.data() + it.m_index)->m_base + null_value;
-			assert(1 < idx && idx < limit());
-
-			return reference(std::addressof((m_c.data() + idx)->m_base));
+			return at(it);
 		}
 
 		template <typename InputIterator>
@@ -219,7 +347,7 @@ namespace wordring
 			index_type parent = 1;
 
 			// 登録済み遷移をスキップする
-			for (index_type idx = at(parent, *first); idx != 0; idx = at(parent, *first))
+			for (index_type idx = at(parent, static_cast<std::uint8_t>(*first)); idx != 0; idx = at(parent, static_cast<std::uint8_t>(*first)))
 			{
 				parent = idx;
 				++first;

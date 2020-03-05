@@ -11,7 +11,6 @@
 #include <type_traits>
 
 #include <wordring/compatibility.hpp>
-#include <wordring/constraint.hpp>
 
 namespace wordring::whatwg
 {
@@ -131,11 +130,11 @@ namespace wordring::whatwg
 	*/
 	template <typename OutputIterator,
 		typename std::enable_if_t<
-		std::conjunction_v<
-		is_iterator<OutputIterator>,
-		std::disjunction<
-		std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char8_t>,
-		std::is_same<typename OutputIterator::container_type::value_type, char8_t>>>, nullptr_t> = nullptr>
+			std::conjunction_v<
+				std::is_same<typename std::iterator_traits<OutputIterator>::iterator_category, std::output_iterator_tag>,
+				std::disjunction<
+					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char8_t>,
+					std::is_same<typename OutputIterator::container_type::value_type, char8_t>>>, nullptr_t> = nullptr>
 	inline void to_string(uint32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFFFF80u) == 0) *output++ = static_cast<unsigned char>(ch); // 一バイト文字
@@ -162,11 +161,11 @@ namespace wordring::whatwg
 
 	template <typename OutputIterator,
 		typename std::enable_if_t<
-		std::conjunction_v<
-		is_iterator<OutputIterator>,
-		std::disjunction<
-		std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char16_t>,
-		std::is_same<typename OutputIterator::container_type::value_type, char16_t>>>, nullptr_t> = nullptr>
+			std::conjunction_v<
+				std::is_same<typename std::iterator_traits<OutputIterator>::iterator_category, std::output_iterator_tag>,
+				std::disjunction<
+					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char16_t>,
+					std::is_same<typename OutputIterator::container_type::value_type, char16_t>>>, nullptr_t> = nullptr>
 	inline void to_string(uint32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFF0000u) == 0) *output++ = static_cast<char16_t>(ch);
@@ -180,11 +179,11 @@ namespace wordring::whatwg
 
 	template <typename OutputIterator,
 		typename std::enable_if_t<
-		std::conjunction_v<
-		is_iterator<OutputIterator>,
-		std::disjunction<
-		std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char32_t>,
-		std::is_same<typename OutputIterator::container_type::value_type, char32_t>>>, nullptr_t> = nullptr>
+			std::conjunction_v<
+				std::is_same<typename std::iterator_traits<OutputIterator>::iterator_category, std::output_iterator_tag>,
+				std::disjunction<
+					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char32_t>,
+					std::is_same<typename OutputIterator::container_type::value_type, char32_t>>>, nullptr_t> = nullptr>
 	inline void to_string(uint32_t ch, OutputIterator output) { *output++ = ch; }
 
 	// ------------------------------------------------------------------------

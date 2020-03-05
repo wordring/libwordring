@@ -32,3 +32,4 @@
 | https://github.com/publicsuffix/list | URLパーサでデータを使用 |
 | https://github.com/whatwg/encoding | HTML5パーサでデータを使用 |
 | https://github.com/dwyl/english-words | TRIE用単体テストでデータを使用 |
+| https://github.com/hingston/japanese | TRIE用単体テストでデータを使用 |

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <wordring/static_vector/static_vector.hpp>
-#include <wordring/utility/result_range.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -9,7 +8,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace wordring
+namespace wordring::detail
 {
 	/*!
 	*/
@@ -34,11 +33,8 @@ namespace wordring
 		using string_iterator = typename iterator_type::string_iterator;
 
 		using label_vector = static_vector<std::uint16_t, 257>;
-		using parent_view  = result_range<string_iterator>;
 
 		static constexpr std::uint16_t null_value = 256u;
-
-		//static_assert(sizeof(std::iterator_traits<iterator_type>::value_type) == 1);
 
 	public:
 		trie_construct_iterator(iterator_type root)
@@ -47,11 +43,11 @@ namespace wordring
 			assign_children();
 		}
 
-		parent_view parent() const
+		std::pair<string_iterator, string_iterator> parent() const
 		{
 			return m_queue.front().string();
 		}
-
+		
 		label_vector const& children() const
 		{
 			return m_labels;

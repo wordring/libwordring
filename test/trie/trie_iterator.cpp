@@ -10,7 +10,7 @@
 
 namespace
 {
-	using wordring::trie_node;
+	using wordring::detail::trie_node;
 
 	template <typename Label>
 	using test_iterator = typename wordring::trie<Label>::const_iterator;

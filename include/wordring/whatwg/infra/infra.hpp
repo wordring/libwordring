@@ -12,7 +12,6 @@
 #include <type_traits>
 
 #include <wordring/compatibility.hpp>
-#include <wordring/constraint.hpp>
 #include <wordring/whatwg/infra/unicode.hpp>
 
 namespace wordring::whatwg
@@ -24,7 +23,7 @@ namespace wordring::whatwg
 
 	// 4.4. Byte sequences ----------------------------------------------------
 
-	/*! 小文字化
+	/*! @brief 小文字化する
 
 	@tparam InputIterator  value_typeがcharである入力イテレータ。
 	@tparam OutputIterator 出力イテレータ。
@@ -50,7 +49,7 @@ namespace wordring::whatwg
 		}
 	}
 
-	/*! 大文字化
+	/*! @brief 大文字化する
 
 	@tparam InputIterator  value_typeがcharである入力イテレータ。
 	@tparam OutputIterator 出力イテレータ。
@@ -76,7 +75,7 @@ namespace wordring::whatwg
 		}
 	}
 
-	/*! 大文字と小文字を区別しない比較。
+	/*! @brief 大文字と小文字を区別しないで比較する
 	*/
 	template <typename InputIterator1, typename InputIterator2>
 	inline bool is_byte_case_insensitive_match(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
@@ -89,7 +88,7 @@ namespace wordring::whatwg
 		return lower1 == lower2;
 	}
 
-	/*! 同型にデコード。
+	/*! @brief 同型にデコードする
 
 	出力の範囲チェックは行わないため、十分な容量が確保されているか、あるいは動的に確保される必要がある。
 	*/
@@ -248,8 +247,7 @@ namespace wordring::whatwg
 		return true;
 	}
 
-	/*!
-	@brief 小文字化する。
+	/*! @brief 小文字化する
 	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline void to_ascii_lowercase(InputIterator first, InputIterator last, OutputIterator output)
@@ -263,8 +261,7 @@ namespace wordring::whatwg
 		}
 	}
 
-	/*!
-	@brief 大文字化する。
+	/*! @brief 大文字化する
 	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline void to_ascii_uppercase(InputIterator first, InputIterator last, OutputIterator output)
@@ -278,6 +275,8 @@ namespace wordring::whatwg
 		}
 	}
 
+	/*! @brief 大文字と小文字を区別しないで比較する
+	*/
 	template <typename InputIterator1, typename InputIterator2>
 	inline bool is_ascii_case_insensitive_match(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
 	{
@@ -327,7 +326,8 @@ namespace wordring::whatwg
 		}
 	}
 
-	/*!
+	/*! @brief 改行を正規化する
+
 	- CR(0xD), LF(0xA)
 	- CRLF -> LF
 	- LF -> LF
@@ -369,8 +369,7 @@ namespace wordring::whatwg
 		}
 	}
 
-	/*!
-	@brief 前後のASCII空白文字を剥ぎ取る。
+	/*! @brief 前後のASCII空白文字を剥ぎ取る
 	*/
 	template <typename ForwardIterator, typename OutputIterator>
 	inline void strip_leading_and_trailing_ascii_whitespace(ForwardIterator first, ForwardIterator last, OutputIterator output)
@@ -467,8 +466,7 @@ namespace wordring::whatwg
 		return result;
 	}
 
-	/*
-	特定の区切り文字で厳密に分割する。
+	/*! @brief 特定の区切り文字で厳密に分割する
 	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline void strictly_split_on_a_particular_delimiter(

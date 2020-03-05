@@ -4,7 +4,7 @@
 
 #include <optional>
 
-namespace wordring
+namespace wordring::detail
 {
 	template <typename Container>
 	class const_trie_heap_iterator

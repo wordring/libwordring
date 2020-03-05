@@ -1,0 +1,365 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::detail::const_list_trie_iterator&lt; Iterator &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1detail.html">detail</a></li><li class="navelem"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pub-static-attribs">静的公開変数類</a> &#124;
+<a href="#pro-methods">限定公開メンバ関数</a> &#124;
+<a href="#friends">フレンド</a> &#124;
+<a href="classwordring_1_1detail_1_1const__list__trie__iterator-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::detail::const_list_trie_iterator&lt; Iterator &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>文字列の集合をTrie構築に適した形で走査するイテレータ  
+ <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="list__trie__iterator_8hpp_source.html">list_trie_iterator.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:aaca3851dfe0752917b4f911a1f3a8f54"><td class="memItemLeft" align="right" valign="top"><a id="aaca3851dfe0752917b4f911a1f3a8f54"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_type</b> = Iterator</td></tr>
+<tr class="separator:aaca3851dfe0752917b4f911a1f3a8f54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9e98a896d37b5e1b60048eff2512f3b"><td class="memItemLeft" align="right" valign="top"><a id="ae9e98a896d37b5e1b60048eff2512f3b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = typename std::iterator_traits&lt; iterator_type &gt;::value_type</td></tr>
+<tr class="separator:ae9e98a896d37b5e1b60048eff2512f3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a710efe8955f9cd89123baef35196218a"><td class="memItemLeft" align="right" valign="top"><a id="a710efe8955f9cd89123baef35196218a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>char_type</b> = typename string_type::value_type</td></tr>
+<tr class="separator:a710efe8955f9cd89123baef35196218a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4ed3d53121f8b29bc2836c9e1c746fa"><td class="memItemLeft" align="right" valign="top"><a id="aa4ed3d53121f8b29bc2836c9e1c746fa"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_iterator</b> = typename string_type::const_iterator</td></tr>
+<tr class="separator:aa4ed3d53121f8b29bc2836c9e1c746fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58c5e9d88fec9669bd935e2d49f42dd0"><td class="memItemLeft" align="right" valign="top"><a id="a58c5e9d88fec9669bd935e2d49f42dd0"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = typename std::iterator_traits&lt; iterator_type &gt;::difference_type</td></tr>
+<tr class="separator:a58c5e9d88fec9669bd935e2d49f42dd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0731e392645ce4c5b9010d12133d4149"><td class="memItemLeft" align="right" valign="top"><a id="a0731e392645ce4c5b9010d12133d4149"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::uint16_t</td></tr>
+<tr class="separator:a0731e392645ce4c5b9010d12133d4149"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf17513c0ff8093ec3ef744cfdf3aee8"><td class="memItemLeft" align="right" valign="top"><a id="aaf17513c0ff8093ec3ef744cfdf3aee8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:aaf17513c0ff8093ec3ef744cfdf3aee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f855654c67e149e9e54f259ae28749d"><td class="memItemLeft" align="right" valign="top"><a id="a4f855654c67e149e9e54f259ae28749d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:a4f855654c67e149e9e54f259ae28749d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41ec80b8ee472578da9adc8de8e1fb4a"><td class="memItemLeft" align="right" valign="top"><a id="a41ec80b8ee472578da9adc8de8e1fb4a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
+<tr class="separator:a41ec80b8ee472578da9adc8de8e1fb4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a2a28d519524851d24c5edff9ffcfe950"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">const_list_trie_iterator</a> (iterator_type first, iterator_type last)</td></tr>
+<tr class="memdesc:a2a28d519524851d24c5edff9ffcfe950"><td class="mdescLeft">&#160;</td><td class="mdescRight">ベースとなるイテレータから構築する  <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">[詳解]</a><br /></td></tr>
+<tr class="separator:a2a28d519524851d24c5edff9ffcfe950"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a902338544ae17dbe0378694818fa1f1b"><td class="memItemLeft" align="right" valign="top"><a id="a902338544ae17dbe0378694818fa1f1b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a902338544ae17dbe0378694818fa1f1b">const_list_trie_iterator</a> (<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> const &amp;other)</td></tr>
+<tr class="memdesc:a902338544ae17dbe0378694818fa1f1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">コピー構築する <br /></td></tr>
+<tr class="separator:a902338544ae17dbe0378694818fa1f1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a767468de7bc4cb0a35f05c4189d439e5"><td class="memItemLeft" align="right" valign="top"><a id="a767468de7bc4cb0a35f05c4189d439e5"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a767468de7bc4cb0a35f05c4189d439e5">operator*</a> () const</td></tr>
+<tr class="memdesc:a767468de7bc4cb0a35f05c4189d439e5"><td class="mdescLeft">&#160;</td><td class="mdescRight">イテレータが指す値を返す <br /></td></tr>
+<tr class="separator:a767468de7bc4cb0a35f05c4189d439e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682f26a606b835681047da10a9459e69"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a682f26a606b835681047da10a9459e69">operator++</a> ()</td></tr>
+<tr class="memdesc:a682f26a606b835681047da10a9459e69"><td class="mdescLeft">&#160;</td><td class="mdescRight">イテレータを進める  <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a682f26a606b835681047da10a9459e69">[詳解]</a><br /></td></tr>
+<tr class="separator:a682f26a606b835681047da10a9459e69"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d6c853199c511a63aaa556b30b842bc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a5d6c853199c511a63aaa556b30b842bc">operator++</a> (int)</td></tr>
+<tr class="memdesc:a5d6c853199c511a63aaa556b30b842bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">イテレータを進める  <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a5d6c853199c511a63aaa556b30b842bc">[詳解]</a><br /></td></tr>
+<tr class="separator:a5d6c853199c511a63aaa556b30b842bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73956f29c4cb224c94682739df8f989e"><td class="memItemLeft" align="right" valign="top">std::pair&lt; string_iterator, string_iterator &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a73956f29c4cb224c94682739df8f989e">string</a> () const</td></tr>
+<tr class="memdesc:a73956f29c4cb224c94682739df8f989e"><td class="mdescLeft">&#160;</td><td class="mdescRight">根からイテレータ迄の文字列を返す  <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a73956f29c4cb224c94682739df8f989e">[詳解]</a><br /></td></tr>
+<tr class="separator:a73956f29c4cb224c94682739df8f989e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a86af2113ea05281089fa85265d9bc4b3"><td class="memItemLeft" align="right" valign="top"><a id="a86af2113ea05281089fa85265d9bc4b3"></a>
+<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a86af2113ea05281089fa85265d9bc4b3">begin</a> () const</td></tr>
+<tr class="memdesc:a86af2113ea05281089fa85265d9bc4b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">子の先頭を指すイテレータを返す <br /></td></tr>
+<tr class="separator:a86af2113ea05281089fa85265d9bc4b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab97170d0995a00c40986de1503e0fd7c"><td class="memItemLeft" align="right" valign="top"><a id="ab97170d0995a00c40986de1503e0fd7c"></a>
+<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#ab97170d0995a00c40986de1503e0fd7c">end</a> () const</td></tr>
+<tr class="memdesc:ab97170d0995a00c40986de1503e0fd7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">子の終端を指すイテレータを返す <br /></td></tr>
+<tr class="separator:ab97170d0995a00c40986de1503e0fd7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2285135a38a7209d0a16a2c1eb07a2c6"><td class="memItemLeft" align="right" valign="top"><a id="a2285135a38a7209d0a16a2c1eb07a2c6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2285135a38a7209d0a16a2c1eb07a2c6">has_child</a> () const</td></tr>
+<tr class="memdesc:a2285135a38a7209d0a16a2c1eb07a2c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">子を持つ場合、trueを返す <br /></td></tr>
+<tr class="separator:a2285135a38a7209d0a16a2c1eb07a2c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d60307edd470909c3ac625554d01b77"><td class="memItemLeft" align="right" valign="top"><a id="a7d60307edd470909c3ac625554d01b77"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a7d60307edd470909c3ac625554d01b77">has_null</a> () const</td></tr>
+<tr class="memdesc:a7d60307edd470909c3ac625554d01b77"><td class="mdescLeft">&#160;</td><td class="mdescRight">末尾に達した文字列が有る場合、trueを返す <br /></td></tr>
+<tr class="separator:a7d60307edd470909c3ac625554d01b77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
+静的公開変数類</h2></td></tr>
+<tr class="memitem:a6a19563b9fb6cc869211a49fa2dc408f"><td class="memItemLeft" align="right" valign="top"><a id="a6a19563b9fb6cc869211a49fa2dc408f"></a>
+static constexpr std::uint16_t&#160;</td><td class="memItemRight" valign="bottom"><b>null_value</b> = 256u</td></tr>
+<tr class="separator:a6a19563b9fb6cc869211a49fa2dc408f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+限定公開メンバ関数</h2></td></tr>
+<tr class="memitem:ac87ae861c36e8e7df3f3b97648a50edd"><td class="memItemLeft" align="right" valign="top"><a id="ac87ae861c36e8e7df3f3b97648a50edd"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>const_list_trie_iterator</b> (iterator_type first, iterator_type last, int32_t level)</td></tr>
+<tr class="separator:ac87ae861c36e8e7df3f3b97648a50edd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79611b6a63b8f5a5fa0f3557a835327d"><td class="memItemLeft" align="right" valign="top">iterator_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">next</a> () const</td></tr>
+<tr class="memdesc:a79611b6a63b8f5a5fa0f3557a835327d"><td class="mdescLeft">&#160;</td><td class="mdescRight">レベルに応じて次の文字位置を探し、その文字列を指すイテレータを返す  <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a79611b6a63b8f5a5fa0f3557a835327d">[詳解]</a><br /></td></tr>
+<tr class="separator:a79611b6a63b8f5a5fa0f3557a835327d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:aad59f298a2e33802840dd84e57a0b4c4"><td class="memTemplParams" colspan="2"><a id="aad59f298a2e33802840dd84e57a0b4c4"></a>
+template&lt;typename Iterator1 &gt; </td></tr>
+<tr class="memitem:aad59f298a2e33802840dd84e57a0b4c4"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:aad59f298a2e33802840dd84e57a0b4c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cebb22f777cfee4405ee242c4501d85"><td class="memTemplParams" colspan="2"><a id="a2cebb22f777cfee4405ee242c4501d85"></a>
+template&lt;typename Iterator1 &gt; </td></tr>
+<tr class="memitem:a2cebb22f777cfee4405ee242c4501d85"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;, <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;)</td></tr>
+<tr class="separator:a2cebb22f777cfee4405ee242c4501d85"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename Iterator&gt;<br />
+class wordring::detail::const_list_trie_iterator&lt; Iterator &gt;</h3>
+
+<p>文字列の集合をTrie構築に適した形で走査するイテレータ </p>
+<p>書籍「形態素解析の理論と実装」で紹介されている三つ組みによる走査の実装。</p>
+<dl class="tparams"><dt>テンプレート引数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Iterator</td><td>ベースとなる std::vector&lt;std::string&gt;::const_iterator のような文字列の集合に対するイテレータ<br  />
+ 文字列を値とするSTLコンテナを指すイテレータを想定している。</td></tr>
+  </table>
+  </dd>
+</dl>
+<ul>
+<li>#による空遷移も状態番号を持つ事に注意。この動作は、ダブルアレイ構築に必要なため設定した。 </li>
+</ul>
+</div><h2 class="groupheader">構築子と解体子</h2>
+<a id="a2a28d519524851d24c5edff9ffcfe950"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a28d519524851d24c5edff9ffcfe950">&#9670;&nbsp;</a></span>const_list_trie_iterator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> </td>
+          <td>(</td>
+          <td class="paramtype">iterator_type&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">iterator_type&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ベースとなるイテレータから構築する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">first</td><td>文字列集合の先頭を指すイテレータ</td></tr>
+    <tr><td class="paramname">last</td><td>文字列集合の終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">std::vector&lt;std::string&gt; list{ <span class="stringliteral">&quot;a&quot;</span>, <span class="stringliteral">&quot;ac&quot;</span>, <span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;cab&quot;</span>, <span class="stringliteral">&quot;cd&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> it = <a class="code" href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">const_list_trie_iterator</a>(list.begin(), list.end());</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">関数詳解</h2>
+<a id="a79611b6a63b8f5a5fa0f3557a835327d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79611b6a63b8f5a5fa0f3557a835327d">&#9670;&nbsp;</a></span>next()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">iterator_type <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::next </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>レベルに応じて次の文字位置を探し、その文字列を指すイテレータを返す </p>
+<p>この関数は、高速化目的でキャッシュを行うため、スレッド安全性を持たない。。 </p>
+
+</div>
+</div>
+<a id="a682f26a606b835681047da10a9459e69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a682f26a606b835681047da10a9459e69">&#9670;&nbsp;</a></span>operator++() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&amp; <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::operator++ </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>イテレータを進める </p>
+<dl class="section return"><dt>戻り値</dt><dd>this </dd></dl>
+
+</div>
+</div>
+<a id="a5d6c853199c511a63aaa556b30b842bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d6c853199c511a63aaa556b30b842bc">&#9670;&nbsp;</a></span>operator++() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a> <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::operator++ </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>イテレータを進める </p>
+<dl class="section return"><dt>戻り値</dt><dd>変更前の位置を保持するconst_list_trie_iterator </dd></dl>
+
+</div>
+</div>
+<a id="a73956f29c4cb224c94682739df8f989e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73956f29c4cb224c94682739df8f989e">&#9670;&nbsp;</a></span>string()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::pair&lt;string_iterator, string_iterator&gt; <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::string </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>根からイテレータ迄の文字列を返す </p>
+<dl class="section return"><dt>戻り値</dt><dd>文字列の先頭を指すイテレータと終端を指すイテレータの組</dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="keyword">auto</span> it1 = it.begin().begin(); <span class="comment">// &quot;ac&quot;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> pair = it1.string();</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> s = std::string(pair.first, pair.second);</div>
+<div class="line">assert(s == <span class="stringliteral">&quot;ac&quot;</span>);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/<a class="el" href="list__trie__iterator_8hpp_source.html">list_trie_iterator.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a2a28d519524851d24c5edff9ffcfe950"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">wordring::detail::const_list_trie_iterator::const_list_trie_iterator</a></div><div class="ttdeci">const_list_trie_iterator(iterator_type first, iterator_type last)</div><div class="ttdoc">ベースとなるイテレータから構築する</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:57</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

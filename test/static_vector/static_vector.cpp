@@ -18,8 +18,8 @@ BOOST_AUTO_TEST_SUITE(static_vector__test)
 BOOST_AUTO_TEST_CASE(static_vector_iterator__construct__1)
 {
 	using namespace wordring;
-	auto it1 = static_vector_iterator<std::array<char, 16>>();
-	auto it2 = static_vector_iterator<std::array<char, 16> const>();
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>();
+	auto it2 = detail::static_vector_iterator<std::array<char, 16> const>();
 
 	BOOST_CHECK(it1 == it2);
 }
@@ -31,8 +31,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__construct__2)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16>>(sv, 5);
-	auto it2 = static_vector_iterator<std::array<char, 16> const>(sv, 5);
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it2 = detail::static_vector_iterator<std::array<char, 16> const>(sv, 5);
 
 	BOOST_CHECK(it1 == it2);
 }
@@ -44,8 +44,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__construct__3)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<char, 16> const>(it1);
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<char, 16> const>(it1);
 
 	BOOST_CHECK(it1 == it2);
 }
@@ -57,13 +57,13 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__construct__4)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16>>(sv, 5);
-	auto it2 = static_vector_iterator<std::array<char, 16>>(it1);
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it2 = detail::static_vector_iterator<std::array<char, 16>>(it1);
 
 	BOOST_CHECK(it1 == it2);
 
-	auto it3 = static_vector_iterator<std::array<char, 16> const>(sv, 5);
-	auto it4 = static_vector_iterator<std::array<char, 16> const>(it3);
+	auto it3 = detail::static_vector_iterator<std::array<char, 16> const>(sv, 5);
+	auto it4 = detail::static_vector_iterator<std::array<char, 16> const>(it3);
 
 	BOOST_CHECK(it3 == it4);
 }
@@ -75,9 +75,9 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__construct__5)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16>>(sv, 5);
-	auto it2 = static_vector_iterator<std::array<char, 16>>(std::move(it1));
-	auto it3 = static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it2 = detail::static_vector_iterator<std::array<char, 16>>(std::move(it1));
+	auto it3 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
 
 	BOOST_CHECK(it2 == it3);
 }
@@ -89,8 +89,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__assign__1)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16> const>();
-	auto it2 = static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it1 = detail::static_vector_iterator<std::array<char, 16> const>();
+	auto it2 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
 	it1 = it2;
 
 	BOOST_CHECK(it1 == it2);
@@ -103,17 +103,17 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__assign__2)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16>>(sv, 5);
-	auto it2 = static_vector_iterator<std::array<char, 16>>();
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it2 = detail::static_vector_iterator<std::array<char, 16>>();
 	it2 = it1;
-	auto it3 = static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it3 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
 
 	BOOST_CHECK(it2 == it3);
 
-	auto it4 = static_vector_iterator<std::array<char, 16> const>(sv, 5);
-	auto it5 = static_vector_iterator<std::array<char, 16> const>();
+	auto it4 = detail::static_vector_iterator<std::array<char, 16> const>(sv, 5);
+	auto it5 = detail::static_vector_iterator<std::array<char, 16> const>();
 	it5 = it4;
-	auto it6 = static_vector_iterator<std::array<char, 16> const>(sv, 5);
+	auto it6 = detail::static_vector_iterator<std::array<char, 16> const>(sv, 5);
 
 	BOOST_CHECK(it5 == it6);
 }
@@ -125,17 +125,17 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__assign__3)
 
 	std::array<char, 16> sv;
 
-	auto it1 = static_vector_iterator<std::array<char, 16>>(sv, 5);
-	auto it2 = static_vector_iterator<std::array<char, 16>>();
+	auto it1 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it2 = detail::static_vector_iterator<std::array<char, 16>>();
 	it2 = std::move(it1);
-	auto it3 = static_vector_iterator<std::array<char, 16>>(sv, 5);
+	auto it3 = detail::static_vector_iterator<std::array<char, 16>>(sv, 5);
 
 	BOOST_CHECK(it2 == it3);
 
-	auto it4 = static_vector_iterator<std::array<char, 16> const>(sv, 5);
-	auto it5 = static_vector_iterator<std::array<char, 16> const>();
+	auto it4 = detail::static_vector_iterator<std::array<char, 16> const>(sv, 5);
+	auto it5 = detail::static_vector_iterator<std::array<char, 16> const>();
 	it5 = std::move(it4);
-	auto it6 = static_vector_iterator<std::array<char, 16> const>(sv, 5);
+	auto it6 = detail::static_vector_iterator<std::array<char, 16> const>(sv, 5);
 
 	BOOST_CHECK(it5 == it6);
 }
@@ -147,7 +147,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__reference__1)
 
 	std::array<char, 16> sv{ 1, 2, 3 };
 
-	auto it = static_vector_iterator<std::array<char, 16>>(sv, 1);
+	auto it = detail::static_vector_iterator<std::array<char, 16>>(sv, 1);
 	*it = 5;
 	BOOST_CHECK(*it == 5);
 }
@@ -159,7 +159,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__reference__2)
 
 	std::array<char, 16> const sv{ 1, 2, 3 };
 
-	auto const it = static_vector_iterator<std::array<char, 16> const>(sv, 1);
+	auto const it = detail::static_vector_iterator<std::array<char, 16> const>(sv, 1);
 	BOOST_CHECK(*it == 2);
 }
 
@@ -170,7 +170,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__reference__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 1);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 1);
 	it->assign("5");
 	BOOST_CHECK(it->at(0) == '5');
 }
@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__reference__4)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto const it = static_vector_iterator<std::array<std::string, 16> const>(sv, 1);
+	auto const it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 1);
 	BOOST_CHECK(it->at(0) == '2');
 }
 
@@ -193,7 +193,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__reference__5)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 1);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 1);
 	it[1] = "5";
 	BOOST_CHECK(it[1] == "5");
 }
@@ -205,7 +205,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__reference__6)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto const it = static_vector_iterator<std::array<std::string, 16> const>(sv, 1);
+	auto const it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 1);
 	BOOST_CHECK(it[1] == "3");
 }
 
@@ -216,8 +216,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__increment__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 2);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 2);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 	BOOST_CHECK(++it1 == it2);
 }
 
@@ -227,8 +227,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__increment__2)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 	BOOST_CHECK(++it1 == it2);
 }
 
@@ -239,7 +239,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__increment__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 1);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 1);
 	BOOST_CHECK(*it++ == "2");
 	BOOST_CHECK(*it++ == "3");
 }
@@ -250,7 +250,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__increment__4)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 1);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 1);
 	BOOST_CHECK(*it++ == "2");
 	BOOST_CHECK(*it++ == "3");
 }
@@ -262,8 +262,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__decrement__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 2);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 2);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 	BOOST_CHECK(it1 == --it2);
 }
 
@@ -273,8 +273,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__decrement__2)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 	BOOST_CHECK(it1 == --it2);
 }
 
@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__decrement__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 2);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 2);
 	BOOST_CHECK(*it-- == "3");
 	BOOST_CHECK(*it-- == "2");
 	BOOST_CHECK(*it == "1");
@@ -297,7 +297,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__decrement__4)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
 	BOOST_CHECK(*it-- == "3");
 	BOOST_CHECK(*it-- == "2");
 	BOOST_CHECK(*it == "1");
@@ -310,7 +310,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add_assign__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 	it += 2;
 	BOOST_CHECK(*it == "3");
 }
@@ -321,7 +321,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add_assign__2)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 	it += 2;
 	BOOST_CHECK(*it == "3");
 }
@@ -333,7 +333,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__sub_assign__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 	it -= 2;
 	BOOST_CHECK(*it == "2");
 }
@@ -344,7 +344,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__sub_assign__2)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 	it -= 2;
 	BOOST_CHECK(*it == "2");
 }
@@ -356,8 +356,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 1);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 1);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
 
 	BOOST_CHECK(it1 + it2 == 3);
 }
@@ -369,7 +369,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(*(it + 1) == "2");
 }
@@ -380,7 +380,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add__3)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK(*(it + 1) == "2");
 }
@@ -392,7 +392,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add__4)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(*(1 + it) == "2");
 }
@@ -403,7 +403,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__add__5)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK(*(1 + it) == "2");
 }
@@ -415,8 +415,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__sub__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 1);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 1);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 2);
 
 	BOOST_CHECK(it1 - it2 == -1);
 }
@@ -428,7 +428,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__sub__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK(*(it - 2) == "2");
 }
@@ -439,7 +439,7 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__sub__3)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK(*(it - 2) == "2");
 }
@@ -451,8 +451,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__equal__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(it1 == it2);
 }
@@ -463,8 +463,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__equal__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK((it1 == it2) == false);
 }
@@ -475,8 +475,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__equal__3)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK(it1 == it2);
 }
@@ -487,8 +487,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__equal__4)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK((it1 == it2) == false);
 }
@@ -500,8 +500,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__equal__5)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK(it1 == it2);
 }
@@ -512,8 +512,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__equal__6)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK((it1 == it2) == false);
 }
@@ -525,8 +525,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__not_equal__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK(it1 != it2);
 }
@@ -537,8 +537,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__not_equal__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK((it1 != it2) == false);
 }
@@ -549,8 +549,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__not_equal__3)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK(it1 != it2);
 }
@@ -561,8 +561,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__not_equal__4)
 
 	std::array<std::string, 16> const sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK((it1 != it2) == false);
 }
@@ -574,8 +574,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__not_equal__5)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK(it1 != it2);
 }
@@ -586,8 +586,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__not_equal__6)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK((it1 != it2) == false);
 }
@@ -599,8 +599,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(it1 > it2);
 }
@@ -611,8 +611,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK(it1 > it2);
 }
@@ -623,8 +623,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK((it1 > it2) == false);
 }
@@ -635,8 +635,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than__4)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK((it1 > it2) == false);
 }
@@ -648,8 +648,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK(it1 < it2);
 }
@@ -660,8 +660,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK(it1 < it2);
 }
@@ -672,8 +672,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK((it1 < it2) == false);
 }
@@ -684,8 +684,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than__4)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK((it1 < it2) == false);
 }
@@ -697,8 +697,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than_or_equal__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(it1 >= it2);
 }
@@ -709,8 +709,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than_or_equal__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK(it1 >= it2);
 }
@@ -721,8 +721,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than_or_equal__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(it1 >= it2);
 }
@@ -733,8 +733,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__more_than_or_equal__4)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK((it1 >= it2) == false);
 }
@@ -746,8 +746,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than_or_equal__1)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
 
 	BOOST_CHECK(it1 <= it2);
 }
@@ -758,8 +758,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than_or_equal__2)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 3);
 
 	BOOST_CHECK(it1 <= it2);
 }
@@ -770,8 +770,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than_or_equal__3)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
-	auto it2 = static_vector_iterator<std::array<std::string, 16>>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 0);
 
 	BOOST_CHECK(it1 <= it2);
 }
@@ -782,8 +782,8 @@ BOOST_AUTO_TEST_CASE(static_vector_iterator__less_than_or_equal__4)
 
 	std::array<std::string, 16> sv{ "1", "2", "3" };
 
-	auto it1 = static_vector_iterator<std::array<std::string, 16>>(sv, 3);
-	auto it2 = static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
+	auto it1 = detail::static_vector_iterator<std::array<std::string, 16>>(sv, 3);
+	auto it2 = detail::static_vector_iterator<std::array<std::string, 16> const>(sv, 0);
 
 	BOOST_CHECK((it1 <= it2) == false);
 }

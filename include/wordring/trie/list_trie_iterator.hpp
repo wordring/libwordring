@@ -1,15 +1,19 @@
 ﻿#pragma once
 
-#include <wordring/utility/result_range.hpp>
-
 #include <algorithm>
-#include <atomic>
 #include <iterator>
 #include <type_traits>
 
-namespace wordring
+namespace wordring::detail
 {
-	/*!
+	/*! @brief 文字列の集合をTrie構築に適した形で走査するイテレータ
+
+	書籍「形態素解析の理論と実装」で紹介されている三つ組みによる走査の実装。
+
+	@tparam Iterator
+		ベースとなる std::vector<std::string>::const_iterator のような文字列の集合に対するイテレータ\n
+		文字列を値とするSTLコンテナを指すイテレータを想定している。
+
 	- #による空遷移も状態番号を持つ事に注意。この動作は、ダブルアレイ構築に必要なため設定した。
 	*/
 	template <typename Iterator>
@@ -22,9 +26,9 @@ namespace wordring
 		friend bool operator!=(const_list_trie_iterator<Iterator1> const&, const_list_trie_iterator<Iterator1> const&);
 
 	public:
-		using iterator_type = Iterator;
-		using string_type   = typename std::iterator_traits<iterator_type>::value_type;
-		using char_type     = typename string_type::value_type;
+		using iterator_type   = Iterator;
+		using string_type     = typename std::iterator_traits<iterator_type>::value_type;
+		using char_type       = typename string_type::value_type;
 		using string_iterator = typename string_type::const_iterator;
 
 		using difference_type   = typename std::iterator_traits<iterator_type>::difference_type;
@@ -33,12 +37,23 @@ namespace wordring
 		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
-		using parent_view = result_range<string_iterator>;
-		using string_view = result_range<string_iterator>;
-
 		static constexpr std::uint16_t null_value = 256u;
 
 	public:
+		/*! @brief ベースとなるイテレータから構築する
+
+		@param first 
+			文字列集合の先頭を指すイテレータ
+
+		@param last
+			文字列集合の終端を指すイテレータ
+
+		@par 例
+		@code
+			std::vector<std::string> list{ "a", "ac", "b", "cab", "cd" };
+			auto it = const_list_trie_iterator(list.begin(), list.end());
+		@endcode
+		*/
 		const_list_trie_iterator(iterator_type first, iterator_type last)
 			: m_first(first)
 			, m_last(last)
@@ -47,6 +62,8 @@ namespace wordring
 		{
 		}
 
+		/*! @brief コピー構築する
+		*/
 		const_list_trie_iterator(const_list_trie_iterator const& other)
 			: m_first(other.m_first)
 			, m_last(other.m_last)
@@ -55,22 +72,8 @@ namespace wordring
 		{
 		}
 
-		/*! 親に相当する文字列を返す
+		/*! @brief イテレータが指す値を返す
 		*/
-		parent_view parent() const
-		{
-			std::uint32_t lv = (m_level == -1) ? 0 : m_level;
-
-			return parent_view(m_first->cbegin(), std::next(m_first->cbegin(), lv));
-		}
-
-		string_view string() const
-		{
-			std::uint32_t lv = (m_level == -1) ? 0 : m_level + 1;
-
-			return parent_view(m_first->cbegin(), std::next(m_first->cbegin(), lv));
-		}
-
 		value_type operator*() const
 		{
 			std::uint32_t lv = m_level;
@@ -84,6 +87,11 @@ namespace wordring
 			return static_cast<std::uint8_t>(*std::next(it->begin(), lv));
 		}
 
+		/*! @brief イテレータを進める
+
+			@return
+				*this
+		*/
 		const_list_trie_iterator& operator++()
 		{
 			m_first = next();
@@ -91,6 +99,11 @@ namespace wordring
 			return *this;
 		}
 
+		/*! @brief イテレータを進める
+
+			@return
+				変更前の位置を保持するconst_list_trie_iterator
+		*/
 		const_list_trie_iterator operator++(int)
 		{
 			auto tmp = *this;
@@ -98,6 +111,30 @@ namespace wordring
 			return tmp;
 		}
 
+		/*! @brief 根からイテレータ迄の文字列を返す
+
+			@return
+				文字列の先頭を指すイテレータと終端を指すイテレータの組
+
+		@par 例
+		@code
+			auto it1 = it.begin().begin(); // "ac"
+
+			auto pair = it1.string();
+			
+			auto s = std::string(pair.first, pair.second);
+			assert(s == "ac");
+		@endcode
+		*/
+		std::pair<string_iterator, string_iterator> string() const
+		{
+			std::uint32_t lv = (m_level == -1) ? 0 : m_level + 1;
+
+			return std::make_pair(m_first->begin(), std::next(m_first->begin(), lv));
+		}
+
+		/*! @brief 子の先頭を指すイテレータを返す
+		*/
 		const_list_trie_iterator begin() const
 		{
 			std::uint32_t lv = m_level;
@@ -120,6 +157,8 @@ namespace wordring
 			return const_list_trie_iterator(it1, it2, m_level + 1);
 		}
 
+		/*! @brief 子の終端を指すイテレータを返す
+		*/
 		const_list_trie_iterator end() const
 		{
 			auto it = begin();
@@ -127,6 +166,8 @@ namespace wordring
 			return const_list_trie_iterator(it.m_last, it.m_last, it.m_level);
 		}
 
+		/*! @brief 子を持つ場合、trueを返す
+		*/
 		bool has_child() const
 		{
 			// rootの場合
@@ -150,6 +191,8 @@ namespace wordring
 			return false;
 		}
 
+		/*! @brief 末尾に達した文字列が有る場合、trueを返す
+		*/
 		bool has_null() const
 		{
 			// rootの場合
@@ -171,9 +214,9 @@ namespace wordring
 		{
 		}
 
-		public:
-		/*!
-		- スレッド安全性を持たない。
+		/*! @brief レベルに応じて次の文字位置を探し、その文字列を指すイテレータを返す
+
+		この関数は、高速化目的でキャッシュを行うため、スレッド安全性を持たない。。
 		*/
 		iterator_type next() const
 		{

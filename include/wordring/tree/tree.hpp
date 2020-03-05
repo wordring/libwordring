@@ -10,6 +10,12 @@
 
 namespace wordring
 {
+	template <typename T, typename Allocator>
+	class tree;
+}
+
+namespace wordring::detail
+{
 	// ------------------------------------------------------------------------
 	// tree_node
 	// ------------------------------------------------------------------------
@@ -95,7 +101,7 @@ namespace wordring
 	class basic_tree_node_iterator
 	{
 		template <typename T1, typename Allocator1>
-		friend class tree;
+		friend class wordring::tree;
 
 		friend class basic_tree_node_iterator<std::remove_const_t<T>, std::remove_const_t<Tree>>;
 		friend class basic_tree_node_iterator<std::add_const_t<T>, std::add_const_t<Tree>>;
@@ -112,29 +118,11 @@ namespace wordring
 		using reference         = value_type&;
 		using pointer           = value_type*;
 		using iterator_category = std::bidirectional_iterator_tag;
-
-		class result_range
-		{
-		public:
-			result_range(basic_tree_node_iterator&& first, basic_tree_node_iterator&& last)
-				: m_begin(std::move(first))
-				, m_end(std::move(last))
-			{
-			}
-
-			basic_tree_node_iterator begin() noexcept { return m_begin; }
-
-			basic_tree_node_iterator end() noexcept { return m_end; }
-
-		private:
-			basic_tree_node_iterator m_begin;
-			basic_tree_node_iterator m_end;
-		};
-
+		
 	protected:
-		using node_type  = tree_node<T>;
+		using node_type = tree_node<T>;
 		using index_type = typename node_type::index_type;
-		using tree_type  = Tree;
+		using tree_type = Tree;
 
 		static constexpr index_type null_value = node_type::null_value;
 
@@ -161,9 +149,9 @@ namespace wordring
 		template <typename Iterator>
 		basic_tree_node_iterator& operator=(Iterator const& other) noexcept
 		{
-			m_tree   = other.m_tree;
+			m_tree = other.m_tree;
 			m_parent = other.m_parent;
-			m_index  = other.m_index;
+			m_index = other.m_index;
 
 			return *this;
 		}
@@ -242,7 +230,7 @@ namespace wordring
 			return basic_tree_node_iterator(*m_tree, m_index, null_value);
 		}
 
-		result_range parent() const
+		basic_tree_node_iterator parent() const
 		{
 			assert(m_index != null_value);
 
@@ -250,14 +238,14 @@ namespace wordring
 
 			index_type p = (h + m_index)->m_parent;                             // 親
 			index_type pp = (p == null_value) ? null_value : (h + p)->m_parent; // 親の親
-			
-			return result_range{ basic_tree_node_iterator(*m_tree, pp, p), basic_tree_node_iterator(*m_tree, pp, null_value) };
+
+			return basic_tree_node_iterator(*m_tree, pp, p);
 		}
 
-		protected:
-			auto heap() { return m_tree->m_heap; }
+	protected:
+		auto heap() { return m_tree->m_heap; }
 
-			auto heap() const { return m_tree->m_heap; }
+		auto heap() const { return m_tree->m_heap; }
 
 	protected:
 		tree_type* m_tree;
@@ -278,16 +266,19 @@ namespace wordring
 		assert(const_cast<Tree1 const*>(lhs.m_tree) == const_cast<Tree2 const*>(rhs.m_tree));
 		return lhs.m_index != rhs.m_index || lhs.m_parent != rhs.m_parent;
 	}
+}
 
+namespace wordring
+{
 	// ------------------------------------------------------------------------
 	// tree
 	// ------------------------------------------------------------------------
 
-	template <typename T, typename Allocator = std::allocator<tree_node<T>>>
+	template <typename T, typename Allocator = std::allocator<detail::tree_node<T>>>
 	class tree
 	{
 		template <typename T1, typename Tree1>
-		friend class basic_tree_node_iterator;
+		friend class detail::basic_tree_node_iterator;
 
 		template <typename T1, typename Allocator1>
 		friend bool operator==(tree<T1, Allocator1> const&, tree<T1, Allocator1> const&);
@@ -297,10 +288,10 @@ namespace wordring
 
 	protected:
 		using tree_type  = tree<T, Allocator>;
-		using node_type  = tree_node<T>;
+		using node_type  = detail::tree_node<T>;
 		using index_type = typename node_type::index_type; 
-		using node_proxy = tree_node_proxy<T>;
-		using container  = std::vector<tree_node<T>, Allocator>;
+		using node_proxy = detail::tree_node_proxy<T>;
+		using container  = std::vector<node_type, Allocator>;
 
 		static constexpr index_type null_value = node_type::null_value;
 
@@ -314,8 +305,8 @@ namespace wordring
 		using const_reference = value_type const&;
 		using pointer         = value_type*;
 		using const_pointer   = value_type const*;
-		using iterator        = basic_tree_node_iterator<value_type, tree_type>;
-		using const_iterator  = basic_tree_node_iterator<value_type const, tree_type const>;
+		using iterator        = detail::basic_tree_node_iterator<value_type, tree_type>;
+		using const_iterator  = detail::basic_tree_node_iterator<value_type const, tree_type const>;
 
 	protected:
 		index_type allocate()
@@ -664,7 +655,7 @@ namespace wordring
 			return result;
 		}
 
-		iterator insert(const_iterator pos, tree_node_proxy<T> proxy)
+		iterator insert(const_iterator pos, detail::tree_node_proxy<T> proxy)
 		{
 			iterator result = insert(pos, proxy.m_value);
 			

@@ -10,11 +10,17 @@
 
 namespace wordring
 {
+	template <typename T, std::size_t N>
+	class static_vector;
+}
+
+namespace wordring::detail
+{
 	template <typename Container>
 	class static_vector_iterator
 	{
 		template <typename T, std::size_t N>
-		friend class static_vector;
+		friend class wordring::static_vector;
 
 		friend class static_vector_iterator<Container const>;
 		friend class static_vector_iterator<std::remove_const_t<Container>>;
@@ -55,13 +61,13 @@ namespace wordring
 	public:
 		using container = Container;
 
-		using value_type             = typename container::value_type;
-		using size_type              = typename container::size_type;
-		using difference_type        = typename container::difference_type;
-		using reference              = std::conditional_t<std::is_const_v<container>, value_type const&, value_type&>;
-		using const_reference        = typename container::const_reference;
-		using pointer                = std::conditional_t<std::is_const_v<container>, value_type const*, value_type*>;
-		using const_pointer          = typename container::const_pointer;
+		using value_type = typename container::value_type;
+		using size_type = typename container::size_type;
+		using difference_type = typename container::difference_type;
+		using reference = std::conditional_t<std::is_const_v<container>, value_type const&, value_type&>;
+		using const_reference = typename container::const_reference;
+		using pointer = std::conditional_t<std::is_const_v<container>, value_type const*, value_type*>;
+		using const_pointer = typename container::const_pointer;
 
 		using iterator_category = std::random_access_iterator_tag;
 
@@ -163,7 +169,7 @@ namespace wordring
 		}
 
 	protected:
-		container*       m_container;
+		container* m_container;
 		difference_type  m_position;
 	};
 
@@ -232,7 +238,10 @@ namespace wordring
 	{
 		return !(lhs > rhs);
 	}
+}
 
+namespace wordring
+{
 	// ------------------------------------------------------------------------
 	// static_vector
 	// ------------------------------------------------------------------------
@@ -271,8 +280,8 @@ namespace wordring
 		using const_reference        = typename container::const_reference;
 		using pointer                = typename container::pointer;
 		using const_pointer          = typename container::const_pointer;
-		using iterator               = static_vector_iterator<container>;
-		using const_iterator         = static_vector_iterator<container const>;
+		using iterator               = detail::static_vector_iterator<container>;
+		using const_iterator         = detail::static_vector_iterator<container const>;
 		using reverse_iterator       = std::reverse_iterator<iterator>;
 		using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 

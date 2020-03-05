@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_SUITE(tree_iterator__test)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__construct__1)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	stack_type stack;
 
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__construct__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__construct__2)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	stack_type stack{ t.begin() };
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__construct__2)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__construct__3)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	stack_type stack{ t.begin().begin(), t.begin().end() };
@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__construct__3)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__top__1)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	stack_type stack{ t.begin().begin(), t.begin().end() };
@@ -66,7 +66,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__top__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__pop__1)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	stack_type stack{ t.begin().begin(), t.begin().end() };
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__pop__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__push__1)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	stack_type stack{ t.begin().begin(), t.begin().end() };
@@ -104,7 +104,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__push__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__push__2)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	stack_type stack{ t.begin() };
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__push__2)
 BOOST_AUTO_TEST_CASE(tree_iterator_stack__empty__1)
 {
 	using namespace wordring;
-	using stack_type = tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using stack_type = detail::tree_iterator_stack<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 
@@ -144,7 +144,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_stack__empty__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__construct__1)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	queue_type queue;
 
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__construct__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__construct__2)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	queue_type queue{ t.begin() };
@@ -167,7 +167,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__construct__2)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__construct__3)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	queue_type queue{ t.begin().begin(), t.begin().end() };
@@ -179,7 +179,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__construct__3)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__top__1)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	queue_type queue{ t.begin().begin(), t.begin().end() };
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__top__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__pop__1)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	queue_type queue{ t.begin().begin(), t.begin().end() };
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__pop__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__push__1)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	queue_type queue{ t.begin().begin(), t.begin().end() };
@@ -229,7 +229,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__push__1)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__push__2)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 	queue_type queue{ t.begin() };
@@ -249,7 +249,7 @@ BOOST_AUTO_TEST_CASE(tree_iterator_queue__push__2)
 BOOST_AUTO_TEST_CASE(tree_iterator_queue__empty__1)
 {
 	using namespace wordring;
-	using queue_type = tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
+	using queue_type = detail::tree_iterator_queue<tree<char>::iterator, std::allocator<tree<char>::iterator>>;
 
 	tree<char> t{ { '0', { { '1', { '4', '5' } }, { '2', { '6' } }, { '3' } } } };
 

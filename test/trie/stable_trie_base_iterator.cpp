@@ -16,8 +16,8 @@
 
 namespace
 {
-	using wordring::trie_node;
-	using base_trie     = wordring::stable_trie_base<>;
+	using wordring::detail::trie_node;
+	using base_trie     = wordring::detail::stable_trie_base<>;
 	using base_iterator = typename base_trie::const_iterator;
 
 	class test_iterator : public base_iterator

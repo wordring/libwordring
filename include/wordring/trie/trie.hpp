@@ -15,9 +15,94 @@ namespace wordring
 	// basic_trie
 	// ------------------------------------------------------------------------
 
+	/*! @brief 任意の整数型をラベルとして用いることが出来る汎用Trie
+
+	@tparam Label ラベルとして使用する任意の整数型
+	@tparam Base 基本クラスとして使用するTrie実装クラス
+
+	メモリー使用量削減を目標とする <b>trie</b> と葉のINDEXが衝突によって変更されない
+	<b>stable_trie</b> が事前に定義されている。
+
+	@code
+		template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
+		using trie = basic_trie<Label, detail::trie_base<Allocator>>;
+
+		template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
+		using stable_trie = basic_trie<Label, detail::stable_trie_base<Allocator>>;
+	@endcode
+
+	- @ref detail::trie_base
+	- @ref detail::stable_trie_base
+
+	@par trieのコンセプト
+
+	trie木の一般的な説明は、以下のページが詳しい。\n
+	https://ja.wikipedia.org/wiki/%E3%83%88%E3%83%A9%E3%82%A4%E6%9C%A8
+
+	このクラスは、木に一般化するため、遷移ラベルをノードの値と見做せるよう設計した。
+	そのため、木に対するアルゴリズムを適用できる。
+
+	このクラスは任意の整数列を格納できるが、文書内では、キーとして使う整数列のことを文字列と表記する。
+
+	利用者からは、以下の図のように見える。
+
+	@image html trie_concept.svg
+
+	- @ref detail::const_trie_iterator
+	- @ref wordring::tree
+
+	@par ラベル
+
+	一般的にダブル・アレイはラベルとして8ビット整数を使うが、このクラスは直列化によって
+	任意の整数型をラベルとして利用することが出来る。
+	根はラベルを持たない。
+
+	@par 値の格納
+
+	葉に2,147,483,647までの正の整数値を格納できる。
+	mapのように任意の型の値を格納できるよう拡張する場合、値の配列に対する添字を葉に格納することを想定している。
+	葉に格納される値の取得・設定にはメンバ関数 at() を使う。
+	イテレータの逆参照によって得られる値は遷移ラベルであり、葉に格納される値と明確に区別される。
+
+	- @ref detail::trie_heap
+	- @ref at
+	
+	@par イテレータ
+
+	ノード間の移動には、イテレータを用いる。
+	イテレータは木に対するイテレータと互換性を保つよう設計した。
+	イテレータを逆参照すると親から当該ノードへの遷移に使われたラベルを取り出せる。
+
+	イテレータは兄弟ノード、親、子、子への添字アクセスを提供する。
+
+	- @ref detail::const_trie_iterator
+
+	木と同様の走査に以下のイテレータ・アダプタを使用できる。
+
+	- @ref wordring::basic_tree_iterator
+
+	@par 直列化
+
+	trieは辞書や文字列アトムに使われるため、直列化が必要な場合がある。
+	直列化には ibegin(), iend() を使う。
+
+	- @ref detail::trie_heap::ibegin() const
+	- @ref detail::trie_heap::iend() const
+
+	ibegin() の逆参照は32ビット整数値を返す。
+	ファイルへ保存するためにバイト列を必要とする場合、直列化イテレータを使う。
+
+	- @ref wordring::serialize_iterator
+	*/
 	template <typename Label, typename Base>
 	class basic_trie : public Base
 	{
+		template <typename Label1, typename Base1>
+		friend std::ostream& operator<<(std::ostream&, basic_trie<Label1, Base1> const&);
+
+		template <typename Label1, typename Base1>
+		friend std::istream& operator>>(std::istream&, basic_trie<Label1, Base1>&);
+
 	protected:
 		using base_type = Base;
 
@@ -33,9 +118,9 @@ namespace wordring
 		using value_type      = std::uint32_t;
 		using size_type       = typename container::size_type;
 		using allocator_type  = typename base_type::allocator_type;
-		using reference       = trie_value_proxy;
-		using const_reference = trie_value_proxy const;
-		using const_iterator  = const_trie_iterator<label_type, typename base_type::const_iterator>;
+		using reference       = detail::trie_value_proxy;
+		using const_reference = detail::trie_value_proxy const;
+		using const_iterator  = detail::const_trie_iterator<label_type, typename base_type::const_iterator>;
 
 	public:
 		using typename base_type::serialize_iterator;
@@ -56,17 +141,55 @@ namespace wordring
 		static_assert(1 <= coefficient);
 
 	public:
+		/*! @brief 空のコンテナを構築する
+
+		@par 例
+		@code
+			auto t = trie<char32_t>();
+		@endcode
+		*/
 		basic_trie()
 			: base_type()
 		{
 		}
 
+		/*! @brief アロケータを指定して空のコンテナを構築する
+
+		@param [in] alloc アロケータ
+
+		@par 例
+		@code
+			auto t = trie<char32_t>(std::allocator<detail::trie_node>());
+		@endcode
+		*/
 		explicit basic_trie(allocator_type const& alloc)
 			: base_type(alloc)
 		{
 		}
 
-		/*! 直列化データからの復元
+		/*! @brief 直列化データから構築する
+
+		@param [in]
+			first 直列化データの先頭を指すイテレータ
+		@param [in]
+			last 直列化データの終端を指すイテレータ
+		@param [in]
+			alloc アロケータ
+
+		@sa assign(InputIterator first, InputIterator last)\n
+		@sa detail::trie_heap::ibegin() const\n
+		@sa detail::trie_heap::iend() const
+
+		@par 例
+		@code
+			// 直列化データを作成
+			std::vector<std::u32string> v1{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t1 = trie<char32_t>(v1.begin(), v1.end());
+			std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
+
+			// 直列化データから構築
+			auto t2 = trie<char32_t>(v2.begin(), v2.end());
+		@endcode
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
 		basic_trie(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
@@ -75,7 +198,25 @@ namespace wordring
 			assign(first, last);
 		}
 
-		/*! 文字列リストからの構築
+		/*! @brief 文字列のリストから構築する
+
+		@param [in]
+			first 文字列リストの先頭を指すイテレータ
+		@param [in]
+			last 文字列リストの終端を指すイテレータ
+		@param [in]
+			alloc アロケータ
+
+		@sa assign(ForwardIterator first, ForwardIterator last)
+
+		@par 例
+		@code
+			// 文字列のリスト
+			std::vector<std::u32string> v1{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+
+			// 文字列のリストから構築
+			auto t1 = trie<char32_t>(v1.begin(), v1.end());
+		@endcode
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		basic_trie(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
@@ -84,14 +225,21 @@ namespace wordring
 			assign(first, last);
 		}
 
-		/*! 初期化子リストからの構築
+		/*! @brief 初期化子リストから構築する
+
+		@param [in]
+			il ノード・データの初期化子リスト
+		@param [in]
+			alloc アロケータ
+
+		@sa detail::trie_heap::trie_heap(std::initializer_list<trie_node>, allocator_type const&)
 		*/
-		basic_trie(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
+		basic_trie(std::initializer_list<detail::trie_node> il, allocator_type const& alloc = allocator_type())
 			: base_type(il, alloc)
 		{
 		}
 
-		/*! 直列化データからの復元
+		/*! @brief 直列化データから割り当てる
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
 		void assign(InputIterator first, InputIterator last)
@@ -99,11 +247,16 @@ namespace wordring
 			base_type::assign(first, last);
 		}
 
-		/*! 文字列リストからの構築
+		/*! @brief 文字列リストから割り当てる
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		void assign(ForwardIterator first, ForwardIterator last)
 		{
+			using string_type    = typename std::iterator_traits<ForwardIterator>::value_type;
+			using character_type = typename string_type::value_type;
+
+			static_assert(coefficient == sizeof(character_type));
+
 			if constexpr (coefficient == 1) base_type::assign(first, last);
 			else
 			{
@@ -117,6 +270,10 @@ namespace wordring
 
 		// 要素アクセス --------------------------------------------------------
 
+		/*! @brief 葉の値への参照を返す
+
+		葉に2,147,483,647までの正の整数値を格納できる。
+		*/
 		reference at(const_iterator pos)
 		{
 			return base_type::at(static_cast<typename base_type::const_iterator>(pos));
@@ -130,6 +287,8 @@ namespace wordring
 		template <typename InputIterator>
 		reference at(InputIterator first, InputIterator last)
 		{
+			static_assert(coefficient == sizeof(decltype(*first)));
+
 			reference result;
 
 			if constexpr (coefficient == 1) result = base_type::at(first, last);
@@ -341,9 +500,29 @@ namespace wordring
 		}
 	};
 
-	template <typename Label, typename Allocator = std::allocator<trie_node>>
-	using trie = basic_trie<Label, trie_base<Allocator>>;
+	template <typename Label1, typename Base1>
+	inline std::ostream& operator<<(std::ostream& os, basic_trie<Label1, Base1> const& trie)
+	{
+		typename basic_trie<Label1, Base1>::base_type const& base = trie;
+		return os << base;
+	}
 
-	template <typename Label, typename Allocator = std::allocator<trie_node>>
-	using stable_trie = basic_trie<Label, stable_trie_base<Allocator>>;
+	template <typename Label1, typename Base1>
+	inline std::istream& operator>>(std::istream& is, basic_trie<Label1, Base1>& trie)
+	{
+		typename basic_trie<Label1, Base1>::base_type& base = trie;
+		return is >> base;
+	}
+
+	/* @define trie
+
+	@brief Trie
+
+	- 葉のINDEXは、挿入時の衝突によって変更される場合がある。
+	*/
+	template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
+	using trie = basic_trie<Label, detail::trie_base<Allocator>>;
+
+	template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
+	using stable_trie = basic_trie<Label, detail::stable_trie_base<Allocator>>;
 }

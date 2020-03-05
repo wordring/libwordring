@@ -17,7 +17,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace wordring
+namespace wordring::detail
 {
 	// ------------------------------------------------------------------------
 	// trie_base
@@ -154,7 +154,7 @@ namespace wordring
 			while (!it.empty() && !it.children().empty())
 			{
 				auto view = it.parent();
-				auto it1 = lookup(view.begin(), view.end());
+				auto it1 = lookup(view.first, view.second);
 				if (it1.first.m_index == 0) it1.first.m_index = 1; // rootの場合。
 				add(it1.first.m_index, it.children());
 				++it;
@@ -165,6 +165,8 @@ namespace wordring
 
 		// 要素アクセス --------------------------------------------------------
 
+		/*! 文字列に対応する値を指す逆参照プロキシを返す
+		*/
 		reference at(const_iterator pos)
 		{
 			node_type* d = m_c.data();

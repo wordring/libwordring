@@ -14,7 +14,7 @@
 #include <type_traits>
 #include <vector>
 
-namespace wordring
+namespace wordring::detail
 {
 	// ------------------------------------------------------------------------
 	// trie_node
@@ -153,6 +153,48 @@ namespace wordring
 	// trie_heap
 	// ------------------------------------------------------------------------
 
+	/*! @brief ダブル・アレイによるTrie実装のメモリー管理を行う
+
+	根は常にINDEX1となる。
+	INDEX0は使用されないため、0は末尾を示す値としても使用される。
+
+	@par 配列の利用法
+
+	ダブル・アレイの添字は1から始まるため、INDEX0は使用されない。
+	そのため、以下の用途で使う。
+
+	- INDEX0のBASEに葉の数を記録し、size()の戻り値として使う（葉は格納するキーの数と同義）。
+	- INDEX0のCHECKに符号を反転させて未使用ノードの先頭INDEXを記録する（未使用ノードが無い場合、0）。
+
+	ダブル・アレイのBASEは子の配置基準INDEXを示すため、1未満の値は格納されない。
+	および、葉は子を持たないため、BASEを使用しない。
+	そのため、以下の用途で使う。
+
+	- 1未満の値が格納されている場合、そのノードは葉である（デフォルト値は0）。
+	- オプションとして葉に正の整数値を格納可能とする。
+	- 葉に正の整数値を格納する場合、符号を反転させて格納し、葉であることを示す。
+	- 値を取り出す場合、符号を反転させて、正の整数値として返す。
+
+	ダブル・アレイのCHECKは親のINDEXを示すため、1未満の値は格納されない。
+	そのため、以下の用途に使う。
+
+	- 1未満の値が格納されている場合、そのノードは未使用である（ただし、根のCHECKは常に使用状態且つ値は0）。
+	- 未使用ノードのINDEXの符号を反転させてつなげ、一方向リンクリストとする。
+	- 未使用ノードの末尾は、値を0として示す。
+	- 未使用ノードのリンクリストは、解放のたびに、INDEX順に並ぶよう整列させる。
+	- 整列によってキーの挿入・検索速度が30％～40％向上する。
+	- 検索速度の向上は、キー挿入時にINDEXが散らばらず、キャッシュに乗りやすく配置されるためと
+	  考えられる。
+
+	@par 配列のイメージ
+
+	@image html trie_heap_double_array.svg
+
+	- 上図で未使用ノードは2と4。
+	- 格納される文字列は「2」一つ。
+	- 根である1からラベル「2」で3へ遷移。
+	- 葉3の値として100を保持。
+	*/
 	template <typename Allocator>
 	class trie_heap
 	{
@@ -176,9 +218,42 @@ namespace wordring
 		using serialize_iterator = trie_heap_serialize_iterator<container const>;
 
 	public:
+		/*! @brief コンテナに関連付けられているアロケータを返す
+		
+		@return コンテナに関連付けられているアロケータ
+		*/
 		allocator_type get_allocator() const { return m_c.get_allocator(); }
 
-		/*! 直列化データからの復元
+		/*! @brief 直列化データから割り当てる
+
+		@param [in]
+			first 直列化データの先頭を指すイテレータ
+		@param [in]
+			last 直列化データの終端を指すイテレータ
+
+		直列化データは[ibegin(), iend())から作成された整数値のリストを想定する。
+		整数の型（ビットの大きさ）は指定されず、適切に処理される。
+		[ibegin(), iend())から返される32ビット整数のコンテナでも、ファイルから読み込まれた8ビット整数のコンテナでも構わない。
+
+		@sa
+			ibegin() const\n
+			iend() const
+
+		@par 例
+
+		※trie_heapは単独で構築できないため、サンプルはtrieを使用。
+		@code
+			// 元となるTrieを作成
+			std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+			auto t1 = trie<char>(v1.begin(), v1.end());
+
+			// 直列化データを作成
+			std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
+
+			// 直列化データから割り当て
+			trie<char> t2;
+			t2.assign(v2.begin(), v2.end());
+		@endcode
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
 		void assign(InputIterator first, InputIterator last)
@@ -215,14 +290,64 @@ namespace wordring
 			}
 		}
 
-		/*! 直列化用のイテレータを返す
+		/*! @brief 直列化用のイテレータを返す
+
+		@return 直列化データの先頭を示すイテレータ
+
+		@sa assign(InputIterator first, InputIterator last)
+		@sa iend() const
+
+		@sa wordring::serialize_iterator
+
+		このイテレータは逆参照すると32ビット整数値を返すが、 wordring::serialize_iterator を使用してバイト値を返すイテレータに変換できる。
+		一般に、ファイルへ保存する場合にバイトへ直列化する。
+		いずれの場合も、逆参照時に最小限の計算によって値を返すため、軽量である。
+
+		@par バイト直列化イテレータを使用する例
+
+		※trie_heapは単独で構築できないため、サンプルはtrieを使用。
+		@code
+			// 元となるTrieを作成
+			std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+			auto t1 = trie<char>(v1.begin(), v1.end());
+
+			// バイト直列化イテレータを作成
+			auto it1 = serialize_iterator(t1.ibegin());
+			auto it2 = serialize_iterator(t1.iend());
+
+			// バイト直列化イテレータから構築
+			auto t2 = trie<char>(it1, it2);
+		@endcode
+
+		@par バイト列に保存する例
+
+		※trie_heapは単独で構築できないため、サンプルはtrieを使用。
+		@code
+			// 元となるTrieを作成
+			std::vector<std::string> v1{ "a", "ac", "b", "cab", "cd" };
+			auto t1 = trie<char>(v1.begin(), v1.end());
+
+			// バイト直列化イテレータを作成
+			auto it1 = serialize_iterator(t1.ibegin());
+			auto it2 = serialize_iterator(t1.iend());
+
+			// バイト列に保存
+			auto v2 = std::vector<char>(it1, it2);
+
+			// バイト列から構築
+			auto t2 = trie<char>(v2.begin(), v2.end());
+		@endcode
 		*/
 		serialize_iterator ibegin() const
 		{
 			return serialize_iterator(m_c, 0);
 		}
 
-		/*! 直列化用のイテレータを返す
+		/*! @brief 直列化用のイテレータを返す
+
+		@return 直列化データの終端を示すイテレータ
+
+		@sa ibegin() const
 		*/
 		serialize_iterator iend() const
 		{
@@ -231,6 +356,10 @@ namespace wordring
 
 		// 変更 ---------------------------------------------------------------
 
+		/*! @brief すべての要素を削除する
+		
+		ただし、根は削除されない。
+		*/
 		void clear() noexcept
 		{
 			m_c.clear();
@@ -250,6 +379,13 @@ namespace wordring
 		{
 		}
 
+		/*! @brief 初期化子リストから構築する
+
+		@param [in]
+			il ノード・データの初期化子リスト
+		@param [in]
+			alloc アロケータ
+		*/
 		trie_heap(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
 			: m_c(2, { 0, 0 }, alloc)
 		{

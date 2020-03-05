@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Trie</title>
+    <link type="text/css" rel="stylesheet" href="../default.css">
+  </head>
+  <body>
+    <h1>Trie</h1>
+    <p>Trie木の実装。</p>
+    <h2>Class</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>class</th>
+          <th><br>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="basic_trie.html">basic_trie</a></td>
+          <td>任意の整数型をラベルとして用いるTrie木。<br>
+          </td>
+        </tr>
+        <tr>
+          <td>const_trie_iterator</td>
+          <td>basic_trieを走査するイテレータ。<br>
+          </td>
+        </tr>
+        <tr>
+          <td>a</td>
+          <td>a</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <h2>Function</h2>
+    <table border="1">
+      <thead>
+        <tr>
+          <th>function<br>
+          </th>
+          <th><br>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>bool operator==<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+  </body>
+</html>
