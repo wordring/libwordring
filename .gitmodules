@@ -7,3 +7,6 @@
 [submodule "submodules/dwyl/english-words"]
 	path = submodules/dwyl/english-words
 	url = https://github.com/dwyl/english-words.git
+[submodule "submodules/hingston/japanese"]
+	path = submodules/hingston/japanese
+	url = https://github.com/hingston/japanese.git
