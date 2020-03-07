@@ -1,5 +1,8 @@
 ﻿# wordring_cpp
 
+## 文書
+- https://wordring.github.io/wordring_cpp/
+
 ## フォルダとファイル
 | 名前 | 説明 |
 |----|----|
