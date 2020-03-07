@@ -141,8 +141,8 @@ static constexpr std::uint16_t&#160;</td><td class="memItemRight" valign="bottom
 <tr class="separator:a13448ad3444888886a332f8353d52728"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">関数詳解</h2>
-<a id="a46c4195bd6d36ea793ee5bb514f0b14f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46c4195bd6d36ea793ee5bb514f0b14f">&#9670;&nbsp;</a></span>advance()</h2>
+<a id="a4bd51dc064e5ba46a6512c355a233cb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bd51dc064e5ba46a6512c355a233cb6">&#9670;&nbsp;</a></span>value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -153,10 +153,10 @@ template&lt;typename Container &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::advance </td>
+          <td class="memname">value_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::value </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -165,7 +165,7 @@ template&lt;typename Container &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>イテレータを前進させる </p>
+<p>イテレータが指す値を返す </p>
 
 </div>
 </div>
@@ -198,8 +198,8 @@ template&lt;typename Container &gt; </div>
 
 </div>
 </div>
-<a id="a4be6e3691c0d8bc66a21626857f823cc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4be6e3691c0d8bc66a21626857f823cc">&#9670;&nbsp;</a></span>base()</h2>
+<a id="a46c4195bd6d36ea793ee5bb514f0b14f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46c4195bd6d36ea793ee5bb514f0b14f">&#9670;&nbsp;</a></span>advance()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -210,7 +210,35 @@ template&lt;typename Container &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::base </td>
+          <td class="memname">void <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::advance </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>イテレータを前進させる </p>
+
+</div>
+</div>
+<a id="a2e5cc482e80fcb26be42dad6f51c4e3b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e5cc482e80fcb26be42dad6f51c4e3b">&#9670;&nbsp;</a></span>parent_index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::parent_index </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -222,8 +250,8 @@ template&lt;typename Container &gt; </div>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>親のBASEを返す</p><ul>
-<li>つまりコレはm_indexからラベルを差し引いた値にに相当する。 </li>
+<p>親のINDEXを返す</p><ul>
+<li>根で呼び出した場合、0を返す。 </li>
 </ul>
 
 </div>
@@ -309,6 +337,94 @@ template&lt;typename Container &gt; </div>
 
 </div>
 </div>
+<a id="aa9545a71905054ae5a7046d882335106"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9545a71905054ae5a7046d882335106">&#9670;&nbsp;</a></span>mother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::mother </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>親の状態番号を返す </p>
+
+</div>
+</div>
+<a id="a4be6e3691c0d8bc66a21626857f823cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4be6e3691c0d8bc66a21626857f823cc">&#9670;&nbsp;</a></span>base()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::base </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>親のBASEを返す</p><ul>
+<li>つまりコレはm_indexからラベルを差し引いた値にに相当する。 </li>
+</ul>
+
+</div>
+</div>
+<a id="af2108fb88ade4a43af5c8df60d218456"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2108fb88ade4a43af5c8df60d218456">&#9670;&nbsp;</a></span>limit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::limit </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>コンテナの最終状態番号の次を返す</p><ul>
+<li>キャストで行が増えるのを抑制するために用意した。 </li>
+</ul>
+
+</div>
+</div>
 <a id="a1ccac5341dad0ccd4286c38dbe8d8993"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ccac5341dad0ccd4286c38dbe8d8993">&#9670;&nbsp;</a></span>has_null()</h2>
 
@@ -365,124 +481,8 @@ template&lt;typename Container &gt; </div>
 
 </div>
 </div>
-<a id="af2108fb88ade4a43af5c8df60d218456"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af2108fb88ade4a43af5c8df60d218456">&#9670;&nbsp;</a></span>limit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Container &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::limit </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>コンテナの最終状態番号の次を返す</p><ul>
-<li>キャストで行が増えるのを抑制するために用意した。 </li>
-</ul>
-
-</div>
-</div>
-<a id="aa9545a71905054ae5a7046d882335106"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9545a71905054ae5a7046d882335106">&#9670;&nbsp;</a></span>mother()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Container &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::mother </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>親の状態番号を返す </p>
-
-</div>
-</div>
-<a id="a2e5cc482e80fcb26be42dad6f51c4e3b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e5cc482e80fcb26be42dad6f51c4e3b">&#9670;&nbsp;</a></span>parent_index()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Container &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">index_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::parent_index </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>親のINDEXを返す</p><ul>
-<li>根で呼び出した場合、0を返す。 </li>
-</ul>
-
-</div>
-</div>
-<a id="a4bd51dc064e5ba46a6512c355a233cb6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bd51dc064e5ba46a6512c355a233cb6">&#9670;&nbsp;</a></span>value()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Container &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">value_type <a class="el" href="classwordring_1_1detail_1_1const__trie__heap__iterator.html">wordring::detail::const_trie_heap_iterator</a>&lt; Container &gt;::value </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>イテレータが指す値を返す </p>
-
-</div>
-</div>
 <hr/>このクラス詳解は次のファイルから抽出されました:<ul>
-<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/<a class="el" href="trie__heap__iterator_8hpp_source.html">trie_heap_iterator.hpp</a></li>
+<li><a class="el" href="trie__heap__iterator_8hpp_source.html">trie_heap_iterator.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

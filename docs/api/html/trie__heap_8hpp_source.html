@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>wordring_cpp: C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/trie_heap.hpp ソースファイル</title>
+<title>wordring_cpp: trie_heap.hpp ソースファイル</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -689,7 +689,7 @@ $(function() {
 <div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;    };</div>
 <div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160; </div>
 <div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Allocator1&gt;</div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;    <span class="keyword">inline</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, trie_heap&lt;Allocator1&gt; <span class="keyword">const</span>&amp; heap)</div>
+<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;    <span class="keyword">inline</span> std::ostream&amp; <a class="code" href="namespacewordring_1_1detail.html#a53e5268b246981ac3a6a478b769fb536">operator&lt;&lt;</a>(std::ostream&amp; os, trie_heap&lt;Allocator1&gt; <span class="keyword">const</span>&amp; heap)</div>
 <div class="line"><a name="l00831"></a><span class="lineno">  831</span>&#160;    {</div>
 <div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;        std::uint64_t n = <span class="keyword">static_cast&lt;</span>std::uint64_t<span class="keyword">&gt;</span>(heap.m_c.size()) * <span class="keyword">sizeof</span>(trie_node);</div>
 <div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;        <span class="keyword">auto</span> length = serialize(n);</div>
@@ -705,7 +705,7 @@ $(function() {
 <div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;    }</div>
 <div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160; </div>
 <div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Allocator1&gt;</div>
-<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;    <span class="keyword">inline</span> std::istream&amp; operator&gt;&gt;(std::istream&amp; is, trie_heap&lt;Allocator1&gt;&amp; heap)</div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;    <span class="keyword">inline</span> std::istream&amp; <a class="code" href="namespacewordring_1_1detail.html#a0d303efc17742674a98205dd5e4d76fb">operator&gt;&gt;</a>(std::istream&amp; is, trie_heap&lt;Allocator1&gt;&amp; heap)</div>
 <div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;    {</div>
 <div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;        heap.m_c.clear();</div>
 <div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160; </div>
@@ -734,6 +734,7 @@ $(function() {
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_ad951914e749c8291de7eefe5a89ee0b2"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#ad951914e749c8291de7eefe5a89ee0b2">wordring::detail::trie_heap::has_child</a></div><div class="ttdeci">bool has_child(index_type parent) const</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:664</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_a1d868c98c8f28a8931a0e82730f46ac3"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#a1d868c98c8f28a8931a0e82730f46ac3">wordring::detail::trie_heap::is_free</a></div><div class="ttdeci">bool is_free(index_type base, label_vector const &amp;labels) const</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:606</div></div>
 <div class="ttc" id="aclasswordring_1_1static__vector_html"><div class="ttname"><a href="classwordring_1_1static__vector.html">wordring::static_vector&lt; std::uint16_t, 257 &gt;</a></div></div>
+<div class="ttc" id="anamespacewordring_1_1detail_html_a53e5268b246981ac3a6a478b769fb536"><div class="ttname"><a href="namespacewordring_1_1detail.html#a53e5268b246981ac3a6a478b769fb536">wordring::detail::operator&lt;&lt;</a></div><div class="ttdeci">std::ostream &amp; operator&lt;&lt;(std::ostream &amp;os, stable_trie_base&lt; Allocator1 &gt; const &amp;trie)</div><div class="ttdoc">ストリームへ出力する</div><div class="ttdef"><b>Definition:</b> stable_trie_base.hpp:725</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_a564f294c01c4fde30c3645f34d7410cb"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#a564f294c01c4fde30c3645f34d7410cb">wordring::detail::trie_heap::assign</a></div><div class="ttdeci">void assign(InputIterator first, InputIterator last)</div><div class="ttdoc">直列化データから割り当てる</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:259</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_a37e5a61e9293320c7efc27f3d24d5a51"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#a37e5a61e9293320c7efc27f3d24d5a51">wordring::detail::trie_heap::clear</a></div><div class="ttdeci">void clear() noexcept</div><div class="ttdoc">すべての要素を削除する</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:363</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_ab8d4ff16ff1c28cfc3a12b9338aa1748"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#ab8d4ff16ff1c28cfc3a12b9338aa1748">wordring::detail::trie_heap::allocate</a></div><div class="ttdeci">void allocate(index_type idx, index_type before=0)</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:421</div></div>
@@ -753,6 +754,7 @@ $(function() {
 <div class="ttc" id="astructwordring_1_1detail_1_1trie__value__proxy_html"><div class="ttname"><a href="structwordring_1_1detail_1_1trie__value__proxy.html">wordring::detail::trie_value_proxy</a></div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:40</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_a6aefb68867f968d93335b6a2d9dd419d"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#a6aefb68867f968d93335b6a2d9dd419d">wordring::detail::trie_heap::iend</a></div><div class="ttdeci">serialize_iterator iend() const</div><div class="ttdoc">直列化用のイテレータを返す</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:352</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_a1703cdef492d94fef04a9f360f9b16ad"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#a1703cdef492d94fef04a9f360f9b16ad">wordring::detail::trie_heap::locate</a></div><div class="ttdeci">index_type locate(label_vector const &amp;labels, index_type &amp;before) const</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:572</div></div>
+<div class="ttc" id="anamespacewordring_1_1detail_html_a0d303efc17742674a98205dd5e4d76fb"><div class="ttname"><a href="namespacewordring_1_1detail.html#a0d303efc17742674a98205dd5e4d76fb">wordring::detail::operator&gt;&gt;</a></div><div class="ttdeci">std::istream &amp; operator&gt;&gt;(std::istream &amp;is, stable_trie_base&lt; Allocator1 &gt; &amp;trie)</div><div class="ttdoc">ストリームから入力する</div><div class="ttdef"><b>Definition:</b> stable_trie_base.hpp:736</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap_html_a44b22b4578008c3433426fae922a66e0"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap.html#a44b22b4578008c3433426fae922a66e0">wordring::detail::trie_heap::free</a></div><div class="ttdeci">void free(index_type base, label_vector const &amp;labels, index_type before=0)</div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:548</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1trie__heap__serialize__iterator_html"><div class="ttname"><a href="classwordring_1_1detail_1_1trie__heap__serialize__iterator.html">wordring::detail::trie_heap_serialize_iterator</a></div><div class="ttdef"><b>Definition:</b> trie_heap.hpp:77</div></div>
 <!-- start footer part -->

@@ -188,7 +188,7 @@ namespace wordring::detail
 
 	@par 配列のイメージ
 
-	@image html trie_heap_double_array.svg
+	@image html trie_heap_concept.svg
 
 	- 上図で未使用ノードは2と4。
 	- 格納される文字列は「2」一つ。
@@ -295,7 +295,7 @@ namespace wordring::detail
 		@return 直列化データの先頭を示すイテレータ
 
 		@sa assign(InputIterator first, InputIterator last)
-		@sa iend() const
+		@sa trie_heap::iend() const
 
 		@sa wordring::serialize_iterator
 
@@ -347,7 +347,7 @@ namespace wordring::detail
 
 		@return 直列化データの終端を示すイテレータ
 
-		@sa ibegin() const
+		@sa trie_heap::ibegin() const
 		*/
 		serialize_iterator iend() const
 		{

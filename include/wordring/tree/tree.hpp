@@ -275,6 +275,28 @@ namespace wordring
 	// ------------------------------------------------------------------------
 
 	/*! @brief 木コンテナ
+
+
+	@par 木
+
+	根以外のノードは一つの親を持つ。
+	ノードは0あるいはそれ以上の子を持つ。
+	子を持たないノードを葉と呼ぶ。
+	ノードは0以上の兄弟を持つ。
+
+	@image html tree_concept.svg
+
+	@par イテレータ
+
+	<b>tree</b> において要素間の移動はイテレータを使う。
+	<b>tree</b> のメンバ関数 <b>begin()</b> で根を指すイテレータを取得する。
+
+	イテレータのメンバ関数 <b>parent()</b> で親を取得する。
+	イテレータのメンバ関数 <b>begin()</b> で先頭の子を取得する。
+	イテレータのメンバ関数 <b>end()</b> で子の終端を取得する。
+	イテレータのメンバ関数 <b>operator++()</b> で次の兄弟を取得する。
+
+	@image html tree_node_iterator_concept.svg
 	*/
 	template <typename T, typename Allocator = std::allocator<detail::tree_node<T>>>
 	class tree

@@ -35,7 +35,7 @@ add_executable(
 #		stable_trie_base_benchmark.cpp
 #		stable_trie_base_iterator.cpp
 		trie.cpp
-#		trie_base.cpp
+		trie_base.cpp
 #		trie_base_iterator.cpp
 #		trie_construct_iterator.cpp
 		trie_heap.cpp

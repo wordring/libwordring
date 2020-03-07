@@ -286,312 +286,6 @@ template&lt;typename Integer , typename OutputIterator &gt; </td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>非公開の名前空間。 </p>
 </div><h2 class="groupheader">関数詳解</h2>
-<a id="aedd534da5674bf96c78ceb0e5082471f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aedd534da5674bf96c78ceb0e5082471f">&#9670;&nbsp;</a></span>is_percent_encoded_byte()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename InputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool wordring::whatwg::is_percent_encoded_byte </td>
-          <td>(</td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>last</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>[first, last)が完全にパーセント・エンコード・バイトの場合、trueを返す </p>
-
-</div>
-</div>
-<a id="abfe6199fee02b37013341b6687bdd8ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfe6199fee02b37013341b6687bdd8ce">&#9670;&nbsp;</a></span>isomorphic_decode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename InputIterator , typename OutputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void wordring::whatwg::isomorphic_decode </td>
-          <td>(</td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>last</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OutputIterator&#160;</td>
-          <td class="paramname"><em>output</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>同型にデコードする </p>
-<p>出力の範囲チェックは行わないため、十分な容量が確保されているか、あるいは動的に確保される必要がある。 </p>
-
-</div>
-</div>
-<a id="ae85acd3ee50f37265a50f668490bc83f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae85acd3ee50f37265a50f668490bc83f">&#9670;&nbsp;</a></span>normalize_newlines()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename InputIterator , typename OutputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void wordring::whatwg::normalize_newlines </td>
-          <td>(</td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>last</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OutputIterator&#160;</td>
-          <td class="paramname"><em>output</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>改行を正規化する </p>
-<ul>
-<li>CR(0xD), LF(0xA)</li>
-<li>CRLF -&gt; LF</li>
-<li>LF -&gt; LF</li>
-<li>CR -&gt; LF </li>
-</ul>
-
-</div>
-</div>
-<a id="ac285ec629850476c28b2fbb88ed62dd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac285ec629850476c28b2fbb88ed62dd0">&#9670;&nbsp;</a></span>percent_decode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename InputIterator , typename OutputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void wordring::whatwg::percent_decode </td>
-          <td>(</td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>last</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OutputIterator&#160;</td>
-          <td class="paramname"><em>output</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>バイト列をバイト列にパーセント・デーコードする </p>
-
-</div>
-</div>
-<a id="ae9fcfd397b3639aee13e3531e6ce08f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae9fcfd397b3639aee13e3531e6ce08f1">&#9670;&nbsp;</a></span>percent_encode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename OutputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void wordring::whatwg::percent_encode </td>
-          <td>(</td>
-          <td class="paramtype">uint8_t&#160;</td>
-          <td class="paramname"><em>byte</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OutputIterator&#160;</td>
-          <td class="paramname"><em>output</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>一つのバイトをパーセント・エンコードする </p>
-
-</div>
-</div>
-<a id="af879a3ac41ed2a205a7040c7469647c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af879a3ac41ed2a205a7040c7469647c2">&#9670;&nbsp;</a></span>starts_with_percent_encoded_byte()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename InputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool wordring::whatwg::starts_with_percent_encoded_byte </td>
-          <td>(</td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>last</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>[first, last)がパーセント・エンコード・バイトから始まる場合、trueを返す </p>
-
-</div>
-</div>
-<a id="ae91f558a964ae8f6d6c5fcce8e6b0699"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae91f558a964ae8f6d6c5fcce8e6b0699">&#9670;&nbsp;</a></span>string_percent_decode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename InputIterator , typename OutputIterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void wordring::whatwg::string_percent_decode </td>
-          <td>(</td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>first</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">InputIterator&#160;</td>
-          <td class="paramname"><em>last</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OutputIterator&#160;</td>
-          <td class="paramname"><em>output</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>文字列をバイト列にパーセント・デーコードする </p>
-
-</div>
-</div>
 <a id="a8dc2453cb4b4fab3418a67f601a2df0d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8dc2453cb4b4fab3418a67f601a2df0d">&#9670;&nbsp;</a></span>to_byte_lowercase()</h2>
 
@@ -722,6 +416,105 @@ template&lt;typename InputIterator , typename OutputIterator &gt; </div>
 
 </div>
 </div>
+<a id="abfe6199fee02b37013341b6687bdd8ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfe6199fee02b37013341b6687bdd8ce">&#9670;&nbsp;</a></span>isomorphic_decode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::whatwg::isomorphic_decode </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIterator&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>同型にデコードする </p>
+<p>出力の範囲チェックは行わないため、十分な容量が確保されているか、あるいは動的に確保される必要がある。 </p>
+
+</div>
+</div>
+<a id="ae85acd3ee50f37265a50f668490bc83f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae85acd3ee50f37265a50f668490bc83f">&#9670;&nbsp;</a></span>normalize_newlines()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::whatwg::normalize_newlines </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIterator&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>改行を正規化する </p>
+<ul>
+<li>CR(0xD), LF(0xA)</li>
+<li>CRLF -&gt; LF</li>
+<li>LF -&gt; LF</li>
+<li>CR -&gt; LF </li>
+</ul>
+
+</div>
+</div>
 <a id="a99e0ebb269f62b7ae74cbe389004b0ad"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a99e0ebb269f62b7ae74cbe389004b0ad">&#9670;&nbsp;</a></span>to_code_point()</h2>
 
@@ -841,6 +634,213 @@ template&lt;typename OutputIterator , typename std::enable_if_t&lt; std::conjunc
 <li>char32_t/scalar_valueの場合、utf-32。</li>
 </ul>
 <p>utf-8文字符号化は、処理系がchar8_tをサポートする場合char8_t、しない場合charで有効化される。 </p>
+
+</div>
+</div>
+<a id="af879a3ac41ed2a205a7040c7469647c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af879a3ac41ed2a205a7040c7469647c2">&#9670;&nbsp;</a></span>starts_with_percent_encoded_byte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wordring::whatwg::starts_with_percent_encoded_byte </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>[first, last)がパーセント・エンコード・バイトから始まる場合、trueを返す </p>
+
+</div>
+</div>
+<a id="aedd534da5674bf96c78ceb0e5082471f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedd534da5674bf96c78ceb0e5082471f">&#9670;&nbsp;</a></span>is_percent_encoded_byte()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wordring::whatwg::is_percent_encoded_byte </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>[first, last)が完全にパーセント・エンコード・バイトの場合、trueを返す </p>
+
+</div>
+</div>
+<a id="ae9fcfd397b3639aee13e3531e6ce08f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9fcfd397b3639aee13e3531e6ce08f1">&#9670;&nbsp;</a></span>percent_encode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::whatwg::percent_encode </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>byte</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIterator&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>一つのバイトをパーセント・エンコードする </p>
+
+</div>
+</div>
+<a id="ac285ec629850476c28b2fbb88ed62dd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac285ec629850476c28b2fbb88ed62dd0">&#9670;&nbsp;</a></span>percent_decode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::whatwg::percent_decode </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIterator&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>バイト列をバイト列にパーセント・デーコードする </p>
+
+</div>
+</div>
+<a id="ae91f558a964ae8f6d6c5fcce8e6b0699"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae91f558a964ae8f6d6c5fcce8e6b0699">&#9670;&nbsp;</a></span>string_percent_decode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::whatwg::string_percent_decode </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIterator&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>文字列をバイト列にパーセント・デーコードする </p>
 
 </div>
 </div>

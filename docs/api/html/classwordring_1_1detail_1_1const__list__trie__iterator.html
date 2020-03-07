@@ -222,36 +222,6 @@ template&lt;typename Iterator &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">関数詳解</h2>
-<a id="a79611b6a63b8f5a5fa0f3557a835327d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79611b6a63b8f5a5fa0f3557a835327d">&#9670;&nbsp;</a></span>next()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Iterator &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">iterator_type <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::next </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>レベルに応じて次の文字位置を探し、その文字列を指すイテレータを返す </p>
-<p>この関数は、高速化目的でキャッシュを行うため、スレッド安全性を持たない。。 </p>
-
-</div>
-</div>
 <a id="a682f26a606b835681047da10a9459e69"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a682f26a606b835681047da10a9459e69">&#9670;&nbsp;</a></span>operator++() <span class="overload">[1/2]</span></h2>
 
@@ -350,8 +320,38 @@ template&lt;typename Iterator &gt; </div>
 
 </div>
 </div>
+<a id="a79611b6a63b8f5a5fa0f3557a835327d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79611b6a63b8f5a5fa0f3557a835327d">&#9670;&nbsp;</a></span>next()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Iterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">iterator_type <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">wordring::detail::const_list_trie_iterator</a>&lt; Iterator &gt;::next </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>レベルに応じて次の文字位置を探し、その文字列を指すイテレータを返す </p>
+<p>この関数は、高速化目的でキャッシュを行うため、スレッド安全性を持たない。。 </p>
+
+</div>
+</div>
 <hr/>このクラス詳解は次のファイルから抽出されました:<ul>
-<li>C:/Users/Kouichi/source/repos/wordring_cpp/include/wordring/trie/<a class="el" href="list__trie__iterator_8hpp_source.html">list_trie_iterator.hpp</a></li>
+<li><a class="el" href="list__trie__iterator_8hpp_source.html">list_trie_iterator.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <div class="ttc" id="aclasswordring_1_1detail_1_1const__list__trie__iterator_html_a2a28d519524851d24c5edff9ffcfe950"><div class="ttname"><a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#a2a28d519524851d24c5edff9ffcfe950">wordring::detail::const_list_trie_iterator::const_list_trie_iterator</a></div><div class="ttdeci">const_list_trie_iterator(iterator_type first, iterator_type last)</div><div class="ttdoc">ベースとなるイテレータから構築する</div><div class="ttdef"><b>Definition:</b> list_trie_iterator.hpp:57</div></div>

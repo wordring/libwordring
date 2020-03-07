@@ -70,6 +70,7 @@ var menudata={children:[
 {text:"s",url:"functions_func.html#index_s"},
 {text:"t",url:"functions_func.html#index_t"},
 {text:"v",url:"functions_func.html#index_v"},
-{text:"~",url:"functions_func.html#index__7E"}]}]}]},
+{text:"~",url:"functions_func.html#index__7E"}]},
+{text:"関連関数",url:"functions_rela.html"}]}]},
 {text:"ファイル",url:"files.html",children:[
 {text:"ファイル一覧",url:"files.html"}]}]}

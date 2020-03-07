@@ -21,23 +21,24 @@ namespace wordring::detail
 	// stable_trie_base
 	// ------------------------------------------------------------------------
 
-	/*! @brief 挿入や削除によって葉を指すイテレータが無効とならない安定なTrie木
+	/*! @brief 挿入や削除によって葉を指すイテレータが無効とならない安定なTrie木の実装
 
 	@tparam Allocator
 		アロケータ
 
 	@details
-		ダブルアレイの制約により、labelの型は8ビット固定。\n
+		ダブルアレイの制約により、labelの型は8ビット固定。
 		葉を指すイテレータ以外は、衝突した場合、無効となる。
 
-		このクラスは、文字列末尾の次に葉を表現するnull値を挿入することで安定性を保つ。\n
-		null値に子は無いため、挿入や削除によって衝突が起きることが無い。\n
+		このクラスは、文字列末尾の次に葉を表現するnull値を挿入することで葉の安定性を保つ。
+		null値に子は無いため、挿入や削除によって衝突が起きることが無い。
 		末尾にnull値が挿入される分、わずかながらメモリー使用量が増える。
 
-		このクラスは、葉のINDEXが変わらない必要のある文字列アトム等の用途を想定している。\n
+		このクラスは、葉のINDEXが変わらない必要のある文字列アトム等の用途を想定している。
 
 	@image html stable_trie_base_state.svg
 
+	@sa wordring::basic_trie
 	*/
 	template <typename Allocator = std::allocator<trie_node>>
 	class stable_trie_base : public trie_heap<Allocator>
@@ -141,7 +142,7 @@ namespace wordring::detail
 			assign(first, last);
 		}
 
-		/*! @brief 文字列集合からの構築
+		/*! @brief 文字列リストからの構築
 
 		@param [in]
 			first 文字列リストの先頭を指すイテレータ
@@ -181,7 +182,7 @@ namespace wordring::detail
 		{
 		}
 
-		/*! @brief 直列化データからの復元
+		/*! @brief 直列化データからの割り当て
 
 		@param [in]
 			first 直列化データの先頭を指すイテレータ
@@ -210,7 +211,7 @@ namespace wordring::detail
 			base_type::assign(first, last);
 		}
 
-		/*! @brief 文字列集合からの割り当て
+		/*! @brief 文字列リストからの割り当て
 
 		@param [in]
 			first 文字列集合の先頭を指すイテレータ
@@ -224,7 +225,7 @@ namespace wordring::detail
 			trie.assign(v.begin(), v.end());
 		@endcode
 
-		- 葉の値は全て0に初期化される。
+		葉の値は全て0に初期化される。
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		void assign(ForwardIterator first, ForwardIterator last)
@@ -239,11 +240,18 @@ namespace wordring::detail
 
 		// 要素アクセス --------------------------------------------------------
 
-		/*! @brief 文字列に対応する値を指す逆参照プロキシを返す
+		/*! @brief 葉の値への参照を返す
 
 		@param [in] pos 葉を指すイテレータ
 
-		@return 葉の値に対する逆参照プロキシ
+		@return 葉の値に対するプロキシ
+
+		葉に2,147,483,647までの正の整数値を格納できる。
+		実際に返される値は軽量プロキシである。
+
+		入力の正当性はチェックされない。
+
+		このメンバは、継承するクラスから呼び出される目的で用意した。
 		*/
 		reference at(const_iterator pos)
 		{
@@ -255,15 +263,31 @@ namespace wordring::detail
 			return reference(std::addressof((d + idx)->m_base));
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] pos 葉を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
+		@sa at(const_iterator pos)
+		*/
 		const_reference at(const_iterator pos) const
 		{
 			return const_cast<stable_trie_base*>(this)->at(pos);
 		}
 
-		/*! 文字列に対応する値を指す逆参照プロキシを返す
+		/*! @brief 葉の値への参照を返す
 
-		@param [in] pos 葉を指すイテレータ
-		- [first, last)は、文字を参照するイテレータ。
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last キー文字列の終端を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
+		@throw std::out_of_range キーが格納されていない場合
+
+		@sa at(const_iterator pos)
+
+		入力の正当性はチェックされる。
 		*/
 		template <typename InputIterator>
 		reference at(InputIterator first, InputIterator last)
@@ -274,28 +298,65 @@ namespace wordring::detail
 			return at(it);
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last キー文字列の終端を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
+		@sa at(InputIterator first, InputIterator last)
+		*/
 		template <typename InputIterator>
 		const_reference at(InputIterator first, InputIterator last) const
 		{
 			return const_cast<stable_trie_base*>(this)->at(first, last);
 		}
 
-		/*!
-		 key は、文字列を想定する。
-		*/
+		/*! @brief 葉の値への参照を返す
 
+		@param [in] key キー文字列（ラベル列）
+
+		@return 葉の値に対するプロキシ
+
+		@throw std::out_of_range キーが格納されていない場合
+
+		@sa at(const_iterator pos)
+
+		入力の正当性はチェックされる。
+		*/
 		template <typename Key>
 		reference at(Key const& key)
 		{
 			return at(std::begin(key), std::end(key));
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] key キー文字列（ラベル列）
+
+		@return 葉の値に対するプロキシ
+
+		@throw std::out_of_range キーが格納されていない場合
+
+		@sa at(Key const& key)
+		*/
 		template <typename Key>
 		const_reference at(Key const& key) const
 		{
 			return at(std::begin(key), std::end(key));
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] key キー文字列（ラベル列）
+
+		@return 葉の値に対するプロキシ
+
+		@sa at(const_iterator pos)
+
+		キー文字列が格納されていない場合、新たに挿入し、その葉の値への参照を返す。
+		*/
 		template <typename Key>
 		reference operator[](Key const& key)
 		{
@@ -310,20 +371,58 @@ namespace wordring::detail
 
 		// イテレータ ----------------------------------------------------------
 
+		/*! @brief 根を指すイテレータを返す
+
+		@return 根を指すイテレータ
+
+		空のTrieも根を持つ。
+		*/
 		const_iterator begin() const noexcept { return const_iterator(m_c, 1); }
 
+		/*! @brief 根を指すイテレータを返す
+
+		@return 根を指すイテレータ
+
+		空のTrieも根を持つ。
+		*/
 		const_iterator cbegin() const noexcept { return const_iterator(m_c, 1); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+
+		end() と cend() はシグネチャ以外同一である。
+		stable_trie_base::end() と <b>const_iterator::end()</b> は同一である。
+		*/
 		const_iterator end() const noexcept { return const_iterator(m_c, 0); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+
+		end() と cend() はシグネチャ以外同一である。
+		stable_trie_base::end() と <b>const_iterator::end()</b> は同一である。
+		*/
 		const_iterator cend() const noexcept { return const_iterator(m_c, 0); }
 
 		// 容量 ---------------------------------------------------------------
 
+		/*! @brief キー文字列を格納していないことを調べる
+		
+		@return 格納している文字列が無い場合 true 、それ以外は false を返す。
+		*/
 		bool empty() const noexcept { return size() == 0; }
 
+		/*! @brief 格納しているキー文字列数を調べる
+		
+		@return コンテナに格納されているキー文字列の数
+		*/
 		size_type size() const noexcept { return m_c.front().m_base; }
 
+		/*! @brief キー文字列の格納可能な最大数を調べる
+		
+		@return キー文字列の格納可能な最大数
+		*/
 		static constexpr size_type max_size() noexcept
 		{
 			return std::numeric_limits<std::int32_t>::max() / sizeof(node_type);
@@ -331,11 +430,19 @@ namespace wordring::detail
 
 		// 変更 ---------------------------------------------------------------
 
-		/*! 文字列を挿入する
+		/*! @brief キー文字列を挿入する
 
-		- first、lastは文字列を示すイテレータ。
-		- 戻り値は、挿入された最後の文字を指すイテレータ。
-		- 空遷移で終わるとしても、空遷移先ではなく最後の文字を指すイテレータを返す。
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last  キー文字列の終端を指すイテレータ
+		@param [in] value 葉へ格納する値（省略時は0）
+
+		@return 挿入された最後の文字に対応するノードを指すイテレータ
+
+		キー文字列「ab」を挿入した場合の戻り値は以下の図の通り。
+
+		<b>%stable_trie_base</b> の葉は必ず空遷移で終わるが、空遷移ではなく最後の文字に対応するノードを指すイテレータを返す。
+
+		@image html stable_trie_base_insert.svg
 		*/
 		template <typename InputIterator>
 		const_iterator insert(InputIterator first, InputIterator last, value_type value = 0)
@@ -375,12 +482,29 @@ namespace wordring::detail
 			return const_iterator(m_c, parent);
 		}
 
+		/*! @brief キー文字列を挿入する
+
+		@param [in] key キー文字列
+		@param [in] value 葉へ格納する値（省略時は0）
+
+		@return 挿入された最後の文字に対応するノードを指すイテレータ
+
+		@sa insert(InputIterator, InputIterator, value_type)
+
+		<b>%stable_trie_base</b> の葉は必ず空遷移で終わるが、空遷移ではなく最後の文字に対応するノードを指すイテレータを返す。
+		*/
 		template <typename Key>
 		const_iterator insert(Key const& key, value_type value = 0)
 		{
 			return insert(std::begin(key), std::end(key), value);
 		}
 
+		/*! @brief キー文字列を削除する
+		
+		@param [in] pos 削除するキー文字列の末尾に対応するノードへのイテレータ
+
+		このメンバは、継承するクラスから呼び出される目的で用意した。
+		*/
 		void erase(const_iterator pos)
 		{
 			index_type idx = pos.m_index;
@@ -404,12 +528,25 @@ namespace wordring::detail
 			if (empty()) clear();
 		}
 
+		/*! @brief キー文字列を削除する
+
+		@param [in] first 削除するキー文字列の先頭を指すイテレータ
+		@param [in] last  削除するキー文字列の終端を指すイテレータ
+
+		@sa erase(const_iterator pos)
+		*/
 		template <typename InputIterator>
 		void erase(InputIterator first, InputIterator last)
 		{
 			erase(find(first, last));
 		}
 
+		/*! @brief キー文字列を削除する
+
+		@param [in] key 削除するキー文字列
+
+		@sa erase(const_iterator pos)
+		*/
 		template <typename Key>
 		void erase(Key const& key)
 		{
@@ -423,16 +560,59 @@ namespace wordring::detail
 
 		// 検索 ---------------------------------------------------------------
 
-		/*! 部分一致検索
+	protected:
+		/*! @brief 部分一致検索
 
-		- 引数first, lastは検索文字列のbegin(), end()。
-		- 戻り値は一致した最後の状態と次の文字を指すイテレータのペア。
+		@param [in]  first 検索するキー文字列の先頭を指すイテレータ
+		@param [in]  last  検索するキー文字列の終端を指すイテレータ
+		@param [out] i     遷移した数（0で初期化されている必要がある）
 
-		- 一文字も一致しない場合、cbegin()を返す。
+		@return 一致した最後のノードと次の文字を指すイテレータのペア
+
+		一文字も一致しない場合、cbegin()を返す。
+
+		このメンバは、 wordring::basic_trie::lookup() から使用される意図で用意された。
+		仮にラベルが4バイトの場合、3バイト目でマッチしなくなった時、3バイト戻る要求があるため、
+		引数 <b>i<b/> を通して遷移した数を返すようにした。
+		*/
+		template <typename InputIterator>
+		auto lookup(InputIterator first, InputIterator last, std::uint32_t& i) const
+		{
+			assert(i == 0);
+
+			index_type parent = 1;
+
+			while (first != last)
+			{
+				std::uint16_t ch = static_cast<std::uint8_t>(*first);
+				index_type idx = at(parent, ch);
+				if (idx == 0) break;
+				++first;
+				++i;
+				parent = idx;
+				assert(1 <= parent && parent < limit());
+			}
+
+			return std::make_pair(const_iterator(m_c, parent), first);
+		}
+
+	public:
+		/*! @brief 部分一致検索
+
+		@param [in] first 検索するキー文字列の先頭を指すイテレータ
+		@param [in] last  検索するキー文字列の終端を指すイテレータ
+
+		@return 一致した最後のノードと次の文字を指すイテレータのペア
+
+		一文字も一致しない場合、cbegin()を返す。
 		*/
 		template <typename InputIterator>
 		auto lookup(InputIterator first, InputIterator last) const
 		{
+			std::uint32_t i = 0;
+			return lookup(first, last, i);
+
+			/*
 			index_type parent = 1;
 
 			while (first != last)
@@ -446,12 +626,16 @@ namespace wordring::detail
 			}
 
 			return std::make_pair(const_iterator(m_c, parent), first);
+			*/
 		}
 
-		/*! 前方一致検索
+		/*! @brief 前方一致検索
 
-		- 空文字列に対してはcbegin()を返す。
-		- この動作は再検討が必要かもしれない。
+		@param [in] key  検索するキー文字列
+
+		@return 一致した最後のノード
+
+		一文字も一致しない場合、cbegin()を返す。
 		*/
 		template <typename Key>
 		const_iterator search(Key const& key) const
@@ -466,7 +650,14 @@ namespace wordring::detail
 				: cend();
 		}
 
-		/*! 完全一致検索
+		/*! @brief 完全一致検索
+
+		@param [in] first 検索するキー文字列の先頭を指すイテレータ
+		@param [in] last  検索するキー文字列の終端を指すイテレータ
+
+		@return
+			入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。
+			それ以外の場合、 cend() 。
 		*/
 		template <typename InputIterator>
 		const_iterator find(InputIterator first, InputIterator last) const
@@ -481,13 +672,27 @@ namespace wordring::detail
 				: cend();
 		}
 
+		/*! @brief 完全一致検索
+
+		@param [in] key 検索するキー文字列
+
+		@return
+			入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。
+			それ以外の場合、 cend() 。
+		*/
 		template <typename Key>
 		const_iterator find(Key const& key) const
 		{
 			return find(std::begin(key), std::end(key));
 		}
 
+		/*! @brief キー文字列が格納されているか調べる
+		
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last  キー文字列の終端を指すイテレータ
 
+		@return 格納されている場合 true 、それ以外の場合 false
+		*/
 		template <typename InputIterator>
 		bool contains(InputIterator first, InputIterator last) const
 		{
@@ -499,6 +704,12 @@ namespace wordring::detail
 			return !(it != last || !has_null(idx));
 		}
 
+		/*! @brief キー文字列が格納されているか調べる
+
+		@param [in] key  キー文字列
+
+		@return 格納されている場合 true 、それ以外の場合 false
+		*/
 		template <typename Key>
 		bool contains(Key const& key) const
 		{
@@ -506,6 +717,10 @@ namespace wordring::detail
 		}
 	};
 
+	/*! @brief ストリームへ出力する
+	
+	速度を必要とする場合、使用を推奨しない。
+	*/
 	template <typename Allocator1>
 	inline std::ostream& operator<<(std::ostream& os, stable_trie_base<Allocator1> const& trie)
 	{
@@ -513,6 +728,10 @@ namespace wordring::detail
 		return os << heap;
 	}
 
+	/*! @brief ストリームから入力する
+
+	速度を必要とする場合、使用を推奨しない。
+	*/
 	template <typename Allocator1>
 	inline std::istream& operator>>(std::istream& is, stable_trie_base<Allocator1>& trie)
 	{

@@ -1122,6 +1122,73 @@ BOOST_AUTO_TEST_CASE(stable_trie__lookup__9)
 	BOOST_CHECK(p.second == s.begin());
 }
 
+/*
+【バグ対応】
+
+U"うあい"をU"うい"で検索する。
+{ U'う', U'い' }が返るはずだが失敗する。
+
+【原因】
+4バイト目と一致するノードが返ってほしいが、7バイト目まで一致するため、7バイト目が返る。
+
+【対策】
+trie_bese と stable_trie_base の lookup メンバ関数を遷移回数を返すよう変更し、
+ラベルのバイト数との剰余分を巻き戻すようにした。
+*/
+BOOST_AUTO_TEST_CASE(stable_trie__lookup__10)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	auto t = stable_trie<char32_t>(v.begin(), v.end());
+
+	// キー文字列を部分一致検索する
+	std::u32string s{ U"うい" };
+	auto pair = t.lookup(s.begin(), s.end());
+
+	// 一致した最後のノードと
+	BOOST_CHECK(*pair.first == U'う');
+	// 一致した最後のキー文字の次を返す
+	BOOST_CHECK(*pair.second == U'い');
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie__lookup__11)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::u16string> v{ u"あ", u"あう", u"い", u"うあい", u"うえ" };
+	auto t = stable_trie<char16_t>(v.begin(), v.end());
+
+	// キー文字列を部分一致検索する
+	std::u16string s{ u"うい" };
+	auto pair = t.lookup(s.begin(), s.end());
+
+	// 一致した最後のノードと
+	BOOST_CHECK(*pair.first == u'う');
+	// 一致した最後のキー文字の次を返す
+	BOOST_CHECK(*pair.second == u'い');
+}
+
+BOOST_AUTO_TEST_CASE(stable_trie__lookup__12)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::string> v{ "a", "ac", "b", "cab", "cd" };
+	auto t = stable_trie<char>(v.begin(), v.end());
+
+	// キー文字列を部分一致検索する
+	std::string s{ "cb" };
+	auto pair = t.lookup(s.begin(), s.end());
+
+	// 一致した最後のノードと
+	BOOST_CHECK(*pair.first == 'c');
+	// 一致した最後のキー文字の次を返す
+	BOOST_CHECK(*pair.second == 'b');
+}
+
 // const_iterator search(InputIterator first, InputIterator last) const
 // const_iterator search(Key const& key) const
 BOOST_AUTO_TEST_CASE(stable_trie__search__1)

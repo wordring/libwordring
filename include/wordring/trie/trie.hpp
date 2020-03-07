@@ -34,9 +34,9 @@ namespace wordring
 	- @ref detail::trie_base
 	- @ref detail::stable_trie_base
 
-	@par trieのコンセプト
+	@par Trie木のコンセプト
 
-	trie木の一般的な説明は、以下のページが詳しい。\n
+	Trie木の一般的な説明は、以下のページが詳しい。\n
 	https://ja.wikipedia.org/wiki/%E3%83%88%E3%83%A9%E3%82%A4%E6%9C%A8
 
 	このクラスは、木に一般化するため、遷移ラベルをノードの値と見做せるよう設計した。
@@ -48,7 +48,6 @@ namespace wordring
 
 	@image html trie_concept.svg
 
-	- @ref detail::const_trie_iterator
 	- @ref wordring::tree
 
 	@par ラベル
@@ -65,7 +64,7 @@ namespace wordring
 	イテレータの逆参照によって得られる値は遷移ラベルであり、葉に格納される値と明確に区別される。
 
 	- @ref detail::trie_heap
-	- @ref at
+	- @ref at()
 	
 	@par イテレータ
 
@@ -73,23 +72,29 @@ namespace wordring
 	イテレータは木に対するイテレータと互換性を保つよう設計した。
 	イテレータを逆参照すると親から当該ノードへの遷移に使われたラベルを取り出せる。
 
-	イテレータは兄弟ノード、親、子、子への添字アクセスを提供する。
+	親を得るには <b>parent()</b> を使う。
+	子を得るには、<b>%begin()</b> 、 <b>%end()</b> 、 <b>%operator[]()</b> を使う。
+	次の兄弟を得るには、 <b>%operator++()</b> を使う。
+	葉を指しているか調べるには、<b>%operator bool()</b> あるいは <b>%operator!()</b> を使う。
+
+	@image html tree_node_iterator_concept.svg
 
 	- @ref detail::const_trie_iterator
 
 	木と同様の走査に以下のイテレータ・アダプタを使用できる。
+	search() と wordring::basic_tree_iterator を組み合わせることで、予測入力などに使える。
 
 	- @ref wordring::basic_tree_iterator
 
 	@par 直列化
 
-	trieは辞書や文字列アトムに使われるため、直列化が必要な場合がある。
-	直列化には ibegin(), iend() を使う。
+	Trie木は辞書や文字列アトムに使われるため、直列化が必要な場合がある。
+	直列化には <b>ibegin()</b>, <b>iend()</b> を使う。
 
 	- @ref detail::trie_heap::ibegin() const
 	- @ref detail::trie_heap::iend() const
 
-	ibegin() の逆参照は32ビット整数値を返す。
+	<b>ibegin()</b> の逆参照は32ビット整数値を返す。
 	ファイルへ保存するためにバイト列を必要とする場合、直列化イテレータを使う。
 
 	- @ref wordring::serialize_iterator
@@ -233,6 +238,12 @@ namespace wordring
 			alloc アロケータ
 
 		@sa detail::trie_heap::trie_heap(std::initializer_list<trie_node>, allocator_type const&)
+
+		@par 例
+		@code
+			// 初期化子リストから構築
+			auto t1 = trie<char32_t>({ { 1, 2 }, { 3, 4 }, { 5, 6 } });
+		@endcode
 		*/
 		basic_trie(std::initializer_list<detail::trie_node> il, allocator_type const& alloc = allocator_type())
 			: base_type(il, alloc)
@@ -240,6 +251,29 @@ namespace wordring
 		}
 
 		/*! @brief 直列化データから割り当てる
+
+		@param [in]
+			first 直列化データの先頭を指すイテレータ
+		@param [in]
+			last 直列化データの終端を指すイテレータ
+
+		バイト直列化の例は以下を参照。
+
+		@sa detail::trie_heap::ibegin() const
+
+		@par 例
+		@code
+			// 元となるtrieを作成
+			std::vector<std::u32string> v1{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t1 = trie<char32_t>(v1.begin(), v1.end());
+
+			// 直列化データを作成
+			auto v2 = std::vector<std::int32_t>(t1.ibegin(), t1.iend());
+
+			// 直列化データから割り当てる
+			trie<char32_t> t2;
+			t2.assign(v2.begin(), v2.end());
+		@endcode
 		*/
 		template <typename InputIterator, typename std::enable_if_t<std::is_integral_v<typename std::iterator_traits<InputIterator>::value_type>, std::nullptr_t> = nullptr>
 		void assign(InputIterator first, InputIterator last)
@@ -248,6 +282,24 @@ namespace wordring
 		}
 
 		/*! @brief 文字列リストから割り当てる
+
+
+		@param [in]
+			first 文字列リストの先頭を指すイテレータ
+		@param [in]
+			last 文字列リストの終端を指すイテレータ
+
+		@sa trie_heap::assign(InputIterator first, InputIterator last)
+
+		@par 例
+		@code
+			// 文字列リスト
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+
+			// 文字列リストから割り当てる
+			trie<char32_t> t;
+			t.assign(v.begin(), v.end());
+		@endcode
 		*/
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		void assign(ForwardIterator first, ForwardIterator last)
@@ -255,7 +307,7 @@ namespace wordring
 			using string_type    = typename std::iterator_traits<ForwardIterator>::value_type;
 			using character_type = typename string_type::value_type;
 
-			static_assert(coefficient == sizeof(character_type));
+			assert(coefficient == sizeof(character_type));
 
 			if constexpr (coefficient == 1) base_type::assign(first, last);
 			else
@@ -272,22 +324,84 @@ namespace wordring
 
 		/*! @brief 葉の値への参照を返す
 
+		@param [in] pos 葉を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
 		葉に2,147,483,647までの正の整数値を格納できる。
+		実際に返される値は軽量プロキシである。
+
+		入力の正当性はチェックされない。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// 検索
+			auto pos = t.find(std::u32string(U"あう"));
+
+			// 値への参照を取得
+			auto val = t.at(pos);
+			// 値を設定
+			val = 100;
+
+			// 検証
+			assert(t.at(std::u32string(U"あう")) == 100);
+		@endcode
 		*/
 		reference at(const_iterator pos)
 		{
 			return base_type::at(static_cast<typename base_type::const_iterator>(pos));
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] pos 葉を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
+		@sa at(const_iterator pos)
+		*/
 		const_reference at(const_iterator pos) const
 		{
 			return const_cast<basic_trie<Label, Base>*>(this)->at(pos);
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last キー文字列の終端を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
+		@throw std::out_of_range キー文字列が格納されていない場合
+
+		@sa at(const_iterator pos)
+
+		入力の正当性はチェックされる。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// 値への参照を取得
+			std::u32string key{ U"あう" };
+			auto val = t.at(key.begin(), key.end());
+			// 値を設定
+			val = 100;
+
+			// 検証
+			assert(t.at(std::u32string(U"あう")) == 100);
+		@endcode
+		*/
 		template <typename InputIterator>
 		reference at(InputIterator first, InputIterator last)
 		{
-			static_assert(coefficient == sizeof(decltype(*first)));
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
 
 			reference result;
 
@@ -303,14 +417,47 @@ namespace wordring
 			return result;
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last キー文字列の終端を指すイテレータ
+
+		@return 葉の値に対するプロキシ
+
+		@sa at(InputIterator first, InputIterator last)
+		*/
 		template <typename InputIterator>
 		const_reference at(InputIterator first, InputIterator last) const
 		{
 			return const_cast<basic_trie<Label, Base>*>(this)->at(first, last);
 		}
 
-		/*!
-		 key は、文字列を想定する。
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] key キー文字列（ラベル列）
+
+		@return 葉の値に対するプロキシ
+
+		@throw std::out_of_range キーが格納されていない場合
+
+		@sa at(const_iterator pos)
+
+		入力の正当性はチェックされる。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// 値への参照を取得
+			auto val = t.at(std::u32string(U"あう"));
+			// 値を設定
+			val = 100;
+
+			// 検証
+			assert(t.at(std::u32string(U"あう")) == 100);
+		@endcode
 		*/
 		template <typename Key>
 		reference at(Key const& key)
@@ -318,12 +465,45 @@ namespace wordring
 			return at(std::begin(key), std::end(key));
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] key キー文字列（ラベル列）
+
+		@return 葉の値に対するプロキシ
+
+		@throw std::out_of_range キーが格納されていない場合
+
+		@sa at(Key const& key)
+		*/
 		template <typename Key>
 		const_reference const at(Key const& key) const
 		{
 			return at(std::begin(key), std::end(key));
 		}
 
+		/*! @brief 葉の値への参照を返す
+
+		@param [in] key キー文字列（ラベル列）
+
+		@return 葉の値に対するプロキシ
+
+		@sa at(const_iterator pos)
+
+		キー文字列が格納されていない場合、新たに挿入し、その葉の値への参照を返す。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// 値への参照を取得して、値を設定
+			t[std::u32string(U"あう")] = 100;
+
+			// 検証
+			assert(t.at(std::u32string(U"あう")) == 100);
+		@endcode
+		*/
 		template <typename Key>
 		reference operator[](Key const& key)
 		{
@@ -335,23 +515,55 @@ namespace wordring
 
 		// イテレータ ----------------------------------------------------------
 
+		/*! @brief 根を指すイテレータを返す
+
+		@return 根を指すイテレータ
+
+		空のTrieも根を持つ。
+		*/
 		const_iterator begin() const noexcept { return const_iterator(m_c, 1); }
 
+		/*! @brief 根を指すイテレータを返す
+
+		@return 根を指すイテレータ
+
+		空のTrieも根を持つ。
+		*/
 		const_iterator cbegin() const noexcept { return const_iterator(m_c, 1); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+		*/
 		const_iterator end() const noexcept { return const_iterator(m_c, 0); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+		*/
 		const_iterator cend() const noexcept { return const_iterator(m_c, 0); }
 
 		// 容量 ---------------------------------------------------------------
 
+		/*! @brief キー文字列を格納していないことを調べる
+
+		@return 格納している文字列が0の場合 true 、それ以外は false を返す。
+		*/
 		bool empty() const noexcept { return size() == 0; }
 
+		/*! @brief 格納しているキー文字列数を調べる
+
+		@return コンテナに格納されているキー文字列の数
+		*/
 		size_type size() const noexcept
 		{
 			return base_type::size();
 		}
 
+		/*! @brief キー文字列の格納可能な最大数を調べる
+
+		@return キー文字列の格納可能な最大数
+		*/
 		static constexpr size_type max_size() noexcept
 		{
 			return base_type::max_size() / coefficient;
@@ -359,9 +571,37 @@ namespace wordring
 
 		// 変更 ---------------------------------------------------------------
 
+		/*! @brief キー文字列を挿入する
+
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last  キー文字列の終端を指すイテレータ
+		@param [in] value 葉へ格納する値（省略時は0）
+
+		@return 挿入された最後の文字に対応するノードを指すイテレータ
+
+		空遷移で終わるとしても、空遷移ではなく最後の文字に対応するノードを指すイテレータを返す。
+
+		@par 例
+		@code
+			trie<char32_t> t;
+
+			// キー文字列と値100を挿入する
+			auto key = std::u32string(U"あう");
+			auto it = t.insert(key.begin(), key.end(), 100);
+
+			// 挿入された最後の文字に対応するイテレータが返されている
+			assert(*it == U'う');
+			// 値100が設定されている
+			assert(t.at(it) == 100);
+			// 挿入したキー文字列が格納されている
+			assert(t.contains(std::u32string(U"あう")));
+		@endcode
+		*/
 		template <typename InputIterator>
 		const_iterator insert(InputIterator first, InputIterator last, value_type value = 0)
 		{
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
+
 			const_iterator result;
 
 			if constexpr (coefficient == 1) result = base_type::insert(first, last, value);
@@ -376,25 +616,109 @@ namespace wordring
 			return result;
 		}
 
+		/*! @brief キー文字列を挿入する
+
+		@param [in] key キー文字列
+		@param [in] value 葉へ格納する値（省略時は0）
+
+		@return 挿入された最後の文字に対応するノードを指すイテレータ
+
+		空遷移で終わるとしても、空遷移ではなく最後の文字に対応するノードを指すイテレータを返す。
+
+		@par 例
+		@code
+			trie<char32_t> t;
+
+			// キー文字列と値100を挿入する
+			auto it = t.insert(std::u32string(U"あう"), 100);
+
+			// 挿入された最後の文字に対応するイテレータが返されている
+			assert(*it == U'う');
+			// 値100が設定されている
+			assert(t.at(it) == 100);
+			// 挿入したキー文字列が格納されている
+			assert(t.contains(std::u32string(U"あう")));
+		@endcode
+		*/
 		template <typename Key>
 		const_iterator insert(Key const& key, value_type value = 0)
 		{
 			return insert(std::begin(key), std::end(key), value);
 		}
 
-		/*! 文字列を削除する
+		/*! @brief キー文字列を削除する
+
+		@param [in] pos 削除するキー文字列の末尾に対応するノードへのイテレータ
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列を検索する
+			auto it = t.find(std::u32string(U"あう"));
+
+			// キーを削除する
+			t.erase(it);
+
+			// 検証
+			assert(! t.contains(std::u32string(U"あう")));
+		@endcode
 		*/
 		void erase(const_iterator pos)
 		{
 			base_type::erase(static_cast<typename base_type::const_iterator>(pos));
 		}
 
+		/*! @brief キー文字列を削除する
+
+		@param [in] first 削除するキー文字列の先頭を指すイテレータ
+		@param [in] last  削除するキー文字列の終端を指すイテレータ
+
+		@sa erase(const_iterator pos)
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列を削除する
+			auto key = std::u32string(U"あう");
+			t.erase(key.begin(), key.end());
+
+			// 検証
+			assert(! t.contains(std::u32string(U"あう")));
+		@endcode
+		*/
 		template <typename InputIterator>
 		void erase(InputIterator first, InputIterator last)
 		{
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
+
 			erase(find(first, last));
 		}
 
+		/*! @brief キー文字列を削除する
+
+		@param [in] key 削除するキー文字列
+
+		@sa erase(const_iterator pos)
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列を削除する
+			t.erase(std::u32string(U"あう"));
+
+			// 検証
+			assert(! t.contains(std::u32string(U"あう")));
+		@endcode
+		*/
 		template <typename Key>
 		void erase(Key const& key)
 		{
@@ -408,16 +732,36 @@ namespace wordring
 
 		// 検索 ---------------------------------------------------------------
 
-		/*! 部分一致検索
+		/*! @brief 部分一致検索
 
-		- 引数first, lastは検索文字列のbegin(), end()。
-		- 戻り値は一致した最後の状態と次の文字を指すイテレータのペア。
+		@param [in] first 検索するキー文字列の先頭を指すイテレータ
+		@param [in] last  検索するキー文字列の終端を指すイテレータ
 
-		- 一文字も一致しない場合、cbegin()を返す。
+		@return 一致した最後のノードと次の文字を指すイテレータのペア
+
+		一文字も一致しない場合、cbegin()を返す。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列を部分一致検索する
+			std::u32string s{ U"うい" };
+			auto pair = t.lookup(s.begin(), s.end());
+
+			// 一致した最後のノードと
+			assert(*pair.first == U'う');
+			// 一致した最後のキー文字の次を返す
+			assert(*pair.second == U'い');
+		@endcode
 		*/
 		template <typename InputIterator>
 		auto lookup(InputIterator first, InputIterator last) const
 		{
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
+
 			std::pair<const_iterator, InputIterator> result;
 
 			if constexpr (coefficient == 1)
@@ -431,7 +775,11 @@ namespace wordring
 				auto it1 = wordring::serialize_iterator(first);
 				auto it2 = wordring::serialize_iterator(last);
 
-				auto ret = base_type::lookup(it1, it2);
+				std::uint32_t i = 0;
+				auto ret = base_type::lookup(it1, it2, i);
+				
+				i = i % coefficient;
+				if (i != 0) for (; i != 0; --i) ret.first = ret.first.parent();
 
 				result.first = ret.first;
 				result.second = ret.second.base();
@@ -440,14 +788,23 @@ namespace wordring
 			return result;
 		}
 
-		/*! 前方一致検索
+		/*! @brief 前方一致検索
 
-		- 空文字列に対してはcbegin()を返す。
-		- この動作は再検討が必要かもしれない。
+		@param [in] key  検索するキー文字列
+
+		@return 一致した最後のノード
+
+		一文字も一致しない場合、cbegin()を返す。
+
+		@par 例
+		@code
+		@endcode
 		*/
 		template <typename InputIterator>
 		const_iterator search(InputIterator first, InputIterator last) const
 		{
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
+
 			auto pair = lookup(first, last);
 
 			return (pair.second == last)
@@ -455,17 +812,38 @@ namespace wordring
 				: cend();
 		}
 
+		/*! @brief 前方一致検索
+
+		@param [in] key  検索するキー文字列
+
+		@return 一致した最後のノード
+
+		一文字も一致しない場合、cbegin()を返す。
+		*/
 		template <typename Key>
 		const_iterator search(Key const& key) const
 		{
 			return search(std::begin(key), std::end(key));
 		}
 
-		/*! 完全一致検索
+		/*! @brief 完全一致検索
+
+		@param [in] first 検索するキー文字列の先頭を指すイテレータ
+		@param [in] last  検索するキー文字列の終端を指すイテレータ
+
+		@return
+			入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。
+			それ以外の場合、 cend() 。
+
+		@par 例
+		@code
+		@endcode
 		*/
 		template <typename InputIterator>
 		const_iterator find(InputIterator first, InputIterator last) const
 		{
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
+
 			auto pair = lookup(first, last);
 
 			auto it = pair.second;
@@ -476,15 +854,32 @@ namespace wordring
 				: cend();
 		}
 
+		/*! @brief 完全一致検索
+
+		@param [in] key 検索するキー文字列
+
+		@return
+			入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。
+			それ以外の場合、 cend() 。
+		*/
 		template <typename Key>
 		const_iterator find(Key const& key) const
 		{
 			return find(std::begin(key), std::end(key));
 		}
 
+		/*! @brief キー文字列が格納されているか調べる
+
+		@param [in] first キー文字列の先頭を指すイテレータ
+		@param [in] last  キー文字列の終端を指すイテレータ
+
+		@return 格納されている場合 true 、それ以外の場合 false
+		*/
 		template <typename InputIterator>
 		bool contains(InputIterator first, InputIterator last) const
 		{
+			assert(coefficient == sizeof(typename std::iterator_traits<InputIterator>::value_type));
+
 			auto pair = lookup(first, last);
 
 			auto it = pair.second;
@@ -493,6 +888,16 @@ namespace wordring
 			return !(it != last || !is_tail(idx));
 		}
 
+		/*! @brief キー文字列が格納されているか調べる
+
+		@param [in] key  キー文字列
+
+		@return 格納されている場合 true 、それ以外の場合 false
+
+		@par 例
+		@code
+		@endcode
+		*/
 		template <typename Key>
 		bool contains(Key const& key) const
 		{
@@ -500,6 +905,10 @@ namespace wordring
 		}
 	};
 
+	/*! @brief ストリームへ出力する
+
+	速度を必要とする場合、使用を推奨しない。
+	*/
 	template <typename Label1, typename Base1>
 	inline std::ostream& operator<<(std::ostream& os, basic_trie<Label1, Base1> const& trie)
 	{
@@ -507,6 +916,10 @@ namespace wordring
 		return os << base;
 	}
 
+	/*! @brief ストリームから入力する
+
+	速度を必要とする場合、使用を推奨しない。
+	*/
 	template <typename Label1, typename Base1>
 	inline std::istream& operator>>(std::istream& is, basic_trie<Label1, Base1>& trie)
 	{
@@ -514,12 +927,6 @@ namespace wordring
 		return is >> base;
 	}
 
-	/* @define trie
-
-	@brief Trie
-
-	- 葉のINDEXは、挿入時の衝突によって変更される場合がある。
-	*/
 	template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
 	using trie = basic_trie<Label, detail::trie_base<Allocator>>;
 

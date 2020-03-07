@@ -68,23 +68,6 @@ static constexpr test_tree::index_type null_value = test_tree::null_value;
 
 using container = test_tree::container;
 
-/*
-container make_test_container()
-{
-	container h{};
-	//             parent      child       prev        next        value
-	h.emplace_back(null_value, 1,          null_value, null_value, '0'); // 0
-	h.emplace_back(0,          4,          3,          2,          '1'); // 1
-	h.emplace_back(0,          6,          1,          3,          '2'); // 2
-	h.emplace_back(0,          null_value, 2,          null_value, '3'); // 3
-	h.emplace_back(1,          null_value, 5,          5,          '4'); // 4
-	h.emplace_back(1,          null_value, 4,          null_value, '5'); // 5
-	h.emplace_back(2,          null_value, 6,          null_value, '6'); // 6
-
-	return h;
-}
-*/
-
 test_tree make_test_tree()
 {
 	test_tree t{};
