@@ -33,12 +33,12 @@ find_package (
 #		PATHS ${CMAKE_FIND_ROOT_PATH}
 #)
 
-find_package (
-	ICU REQUIRED
-	COMPONENTS
-		uc
-		data
-)
+#find_package (
+#	ICU REQUIRED
+#	COMPONENTS
+#		uc
+#		data
+#)
 
 #find_package(
 #	Sqlite3 REQUIRED
@@ -47,7 +47,7 @@ find_package (
 include_directories (
 #	${Gumbo_INCLUDE_DIR}
 	${Boost_INCLUDE_DIRS}
-	${ICU_INCLUDE_DIR}
+#	${ICU_INCLUDE_DIR}
 	${Wordring_INCLUDE_DIR}
 )
 
@@ -75,7 +75,7 @@ add_library (
 target_link_libraries (
 	${PROJECT_NAME}
 #		${Gumbo_static_LIBRARY}
-		${ICU_LIBRARIES}
+#		${ICU_LIBRARIES}
 #		sqlite3
 )
 

@@ -95,7 +95,7 @@ namespace wordring::detail
 					index_type base = (d + parent)->m_base;
 					assert(1 <= base && base < limit());
 
-					result += idx - base << i * 8;
+					result += (idx - base) << (i * 8);
 
 					idx = parent;
 				}

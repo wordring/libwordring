@@ -53,6 +53,9 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
+<p>任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する  
+ <a href="classwordring_1_1serialize__iterator.html#details">[詳解]</a></p>
+
 <p><code>#include &lt;<a class="el" href="serialize__iterator_8hpp_source.html">serialize_iterator.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
@@ -81,11 +84,16 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
-<tr class="memitem:a2312c074d4dc085f72408c00f8763f01"><td class="memItemLeft" align="right" valign="top"><a id="a2312c074d4dc085f72408c00f8763f01"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>serialize_iterator</b> (iterator_type base)</td></tr>
+<tr class="memitem:a03e1371401838e7b58f98c949151c46d"><td class="memItemLeft" align="right" valign="top"><a id="a03e1371401838e7b58f98c949151c46d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1serialize__iterator.html#a03e1371401838e7b58f98c949151c46d">serialize_iterator</a> ()</td></tr>
+<tr class="memdesc:a03e1371401838e7b58f98c949151c46d"><td class="mdescLeft">&#160;</td><td class="mdescRight">空のイテレータを構築する <br /></td></tr>
+<tr class="separator:a03e1371401838e7b58f98c949151c46d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2312c074d4dc085f72408c00f8763f01"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1serialize__iterator.html#a2312c074d4dc085f72408c00f8763f01">serialize_iterator</a> (iterator_type <a class="el" href="classwordring_1_1serialize__iterator.html#ace5a5cbe0d7af839dd55fe06fef47073">base</a>)</td></tr>
+<tr class="memdesc:a2312c074d4dc085f72408c00f8763f01"><td class="mdescLeft">&#160;</td><td class="mdescRight">元となるイテレータから直列化イテレータを構築する  <a href="classwordring_1_1serialize__iterator.html#a2312c074d4dc085f72408c00f8763f01">[詳解]</a><br /></td></tr>
 <tr class="separator:a2312c074d4dc085f72408c00f8763f01"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ace5a5cbe0d7af839dd55fe06fef47073"><td class="memItemLeft" align="right" valign="top"><a id="ace5a5cbe0d7af839dd55fe06fef47073"></a>
-iterator_type&#160;</td><td class="memItemRight" valign="bottom"><b>base</b> () const</td></tr>
+iterator_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1serialize__iterator.html#ace5a5cbe0d7af839dd55fe06fef47073">base</a> () const</td></tr>
+<tr class="memdesc:ace5a5cbe0d7af839dd55fe06fef47073"><td class="mdescLeft">&#160;</td><td class="mdescRight">元となるイテレータを返す <br /></td></tr>
 <tr class="separator:ace5a5cbe0d7af839dd55fe06fef47073"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9db51e4fb5034d97a57aa57517ba609b"><td class="memItemLeft" align="right" valign="top"><a id="a9db51e4fb5034d97a57aa57517ba609b"></a>
 value_type&#160;</td><td class="memItemRight" valign="bottom"><b>operator*</b> () const</td></tr>
@@ -118,13 +126,75 @@ template&lt;typename InputIterator1 &gt; </td></tr>
 <div class="textblock"><h3>template&lt;typename InputIterator&gt;<br />
 class wordring::serialize_iterator&lt; InputIterator &gt;</h3>
 
-<p>任意ビット幅の整数列に対するイテレータを8ビット整数列に対するイテレータへ変換する</p><ul>
-<li>逆参照はできない。 </li>
-</ul>
-</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<p>任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する </p>
+<dl class="tparams"><dt>テンプレート引数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">InputIterator</td><td>整数列に対する入力イテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<div class="image">
+<object type="image/svg+xml" data="serialize_iterator_concept.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">std::vector&lt;std::uint32_t&gt; v{ 0x1234567u, 0x89ABCDEFu };</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> it1 = <a class="code" href="classwordring_1_1serialize__iterator.html#a03e1371401838e7b58f98c949151c46d">serialize_iterator</a>(v.begin());</div>
+<div class="line"><span class="keyword">auto</span> it2 = <a class="code" href="classwordring_1_1serialize__iterator.html#a03e1371401838e7b58f98c949151c46d">serialize_iterator</a>(v.end());</div>
+<div class="line"> </div>
+<div class="line">std::cout &lt;&lt; std::hex;</div>
+<div class="line"><span class="keywordflow">while</span> (it1 != it2) std::cout &lt;&lt; static_cast&lt;int&gt;(*it1++) &lt;&lt; std::endl;</div>
+</div><!-- fragment --> 出力 <div class="fragment"><div class="line">1</div>
+<div class="line">23</div>
+<div class="line">45</div>
+<div class="line">67</div>
+<div class="line">89</div>
+<div class="line">ab</div>
+<div class="line">cd</div>
+<div class="line">ef</div>
+</div><!-- fragment --></dd></dl>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1deserialize__iterator.html" title="バイト列に対するイテレータを任意型の整数列に対するイテレータへ変換する">wordring::deserialize_iterator</a> </dd></dl>
+</div><h2 class="groupheader">構築子と解体子</h2>
+<a id="a2312c074d4dc085f72408c00f8763f01"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2312c074d4dc085f72408c00f8763f01">&#9670;&nbsp;</a></span>serialize_iterator()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1serialize__iterator.html">wordring::serialize_iterator</a>&lt; InputIterator &gt;::<a class="el" href="classwordring_1_1serialize__iterator.html">serialize_iterator</a> </td>
+          <td>(</td>
+          <td class="paramtype">iterator_type&#160;</td>
+          <td class="paramname"><em>base</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>元となるイテレータから直列化イテレータを構築する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">base</td><td>元となるイテレータ </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
 <li><a class="el" href="serialize__iterator_8hpp_source.html">serialize_iterator.hpp</a></li>
 </ul>
 </div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1serialize__iterator_html_a03e1371401838e7b58f98c949151c46d"><div class="ttname"><a href="classwordring_1_1serialize__iterator.html#a03e1371401838e7b58f98c949151c46d">wordring::serialize_iterator::serialize_iterator</a></div><div class="ttdeci">serialize_iterator()</div><div class="ttdoc">空のイテレータを構築する</div><div class="ttdef"><b>Definition:</b> serialize_iterator.hpp:73</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

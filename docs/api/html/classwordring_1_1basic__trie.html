@@ -253,18 +253,20 @@ class wordring::basic_trie&lt; Label, Base &gt;</h3>
   </table>
   </dd>
 </dl>
-<p>メモリー使用量削減を目標とする <b>trie</b> と葉のINDEXが衝突によって変更されない <b>stable_trie</b> が事前に定義されている。</p>
+<p>メモリー使用量削減を目標とする <b>trie</b> と葉からの空遷移先INDEXが衝突によって変更されない <b>stable_trie</b> が事前に定義されている。</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Label, <span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
-<div class="line"><span class="keyword">using</span> trie = basic_trie&lt;Label, detail::trie_base&lt;Allocator&gt;&gt;;</div>
+<div class="line"><span class="keyword">using</span> <a class="code" href="namespacewordring.html#a73f93ed17f5df2e945e085133d6b74e9">trie</a> = basic_trie&lt;Label, detail::trie_base&lt;Allocator&gt;&gt;;</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Label, <span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
-<div class="line"><span class="keyword">using</span> stable_trie = basic_trie&lt;Label, detail::stable_trie_base&lt;Allocator&gt;&gt;;</div>
+<div class="line"><span class="keyword">using</span> <a class="code" href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">stable_trie</a> = basic_trie&lt;Label, detail::stable_trie_base&lt;Allocator&gt;&gt;;</div>
 </div><!-- fragment --><ul>
+<li><a class="el" href="namespacewordring.html#a73f93ed17f5df2e945e085133d6b74e9">wordring::trie</a></li>
+<li><a class="el" href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">wordring::stable_trie</a></li>
 <li><a class="el" href="classwordring_1_1detail_1_1trie__base.html">detail::trie_base</a></li>
 <li><a class="el" href="classwordring_1_1detail_1_1stable__trie__base.html">detail::stable_trie_base</a></li>
 </ul>
-<dl class="section user"><dt>trieのコンセプト</dt><dd></dd></dl>
-<p>trie木の一般的な説明は、以下のページが詳しい。<br  />
+<dl class="section user"><dt>Trie木のコンセプト</dt><dd></dd></dl>
+<p>Trie木の一般的な説明は、以下のページが詳しい。<br  />
 <a href="https://ja.wikipedia.org/wiki/%E3%83%88%E3%83%A9%E3%82%A4%E6%9C%A8">https://ja.wikipedia.org/wiki/%E3%83%88%E3%83%A9%E3%82%A4%E6%9C%A8</a></p>
 <p>このクラスは、木に一般化するため、遷移ラベルをノードの値と見做せるよう設計した。 そのため、木に対するアルゴリズムを適用できる。</p>
 <p>このクラスは任意の整数列を格納できるが、文書内では、キーとして使う整数列のことを文字列と表記する。</p>
@@ -292,12 +294,14 @@ class wordring::basic_trie&lt; Label, Base &gt;</h3>
 <ul>
 <li><a class="el" href="classwordring_1_1detail_1_1const__trie__iterator.html">detail::const_trie_iterator</a></li>
 </ul>
-<p>木と同様の走査に以下のイテレータ・アダプタを使用できる。 <a class="el" href="classwordring_1_1basic__trie.html#ae1633dc8a77815d2cd594f62e802075b" title="前方一致検索">search()</a> と <a class="el" href="classwordring_1_1basic__tree__iterator.html" title="プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター">wordring::basic_tree_iterator</a> を組み合わせることで、予測入力などに使える。</p>
+<dl class="section user"><dt>予測入力への適用</dt><dd></dd></dl>
+<p>部分木全体の走査にイテレータ・アダプタを使用できる。 <a class="el" href="classwordring_1_1basic__trie.html#ae1633dc8a77815d2cd594f62e802075b" title="前方一致検索">search()</a> と <a class="el" href="classwordring_1_1basic__tree__iterator.html" title="プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター">wordring::basic_tree_iterator</a> を組み合わせることで、予測入力などに使える。</p>
+<p><a class="el" href="classwordring_1_1basic__trie.html#ae1633dc8a77815d2cd594f62e802075b" title="前方一致検索">search()</a> で前方一致検索を行い、戻り値のイテレータを親として <a class="el" href="classwordring_1_1basic__tree__iterator.html" title="プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター">wordring::basic_tree_iterator</a> によって全走査を行う。 <b>operator bool()</b> で葉を確認し、葉を発見するたびに <b>parent()</b> で親をたどると、後続の文字列を容易に列挙できる。 候補数を制限したい場合、数に達した時点で走査を止めると良い。</p>
 <ul>
 <li><a class="el" href="classwordring_1_1basic__tree__iterator.html">wordring::basic_tree_iterator</a></li>
 </ul>
 <dl class="section user"><dt>直列化</dt><dd></dd></dl>
-<p>trieは辞書や文字列アトムに使われるため、直列化が必要な場合がある。 直列化には <b>ibegin()</b>, <b>iend()</b> を使う。</p>
+<p>Trie木は辞書や文字列アトムに使われるため、直列化が必要な場合がある。 直列化には <b>ibegin()</b>, <b>iend()</b> を使う。</p>
 <ul>
 <li><a class="el" href="classwordring_1_1detail_1_1trie__heap.html#a8b346c266736a65d8b84252efe783ad7">detail::trie_heap::ibegin() const</a></li>
 <li><a class="el" href="classwordring_1_1detail_1_1trie__heap.html#a6aefb68867f968d93335b6a2d9dd419d">detail::trie_heap::iend() const</a></li>
@@ -1609,13 +1613,13 @@ template&lt;typename InputIterator &gt; </div>
 <div class="line"><span class="keyword">auto</span> t = trie&lt;char32_t&gt;(v.begin(), v.end());</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// キー文字列を部分一致検索する</span></div>
-<div class="line">std::u32string s{ U<span class="stringliteral">&quot;うあ&quot;</span> };</div>
+<div class="line">std::u32string s{ U<span class="stringliteral">&quot;うい&quot;</span> };</div>
 <div class="line"><span class="keyword">auto</span> pair = t.lookup(s.begin(), s.end());</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// 一致した最後のノードと</span></div>
-<div class="line">assert(*pair.first == U<span class="stringliteral">&#39;あ&#39;</span>);</div>
+<div class="line">assert(*pair.first == U<span class="stringliteral">&#39;う&#39;</span>);</div>
 <div class="line"><span class="comment">// 一致した最後のキー文字の次を返す</span></div>
-<div class="line">assert(pair.second == s.end());</div>
+<div class="line">assert(*pair.second == U<span class="stringliteral">&#39;い&#39;</span>);</div>
 </div><!-- fragment --> </dd></dl>
 
 </div>
@@ -1666,8 +1670,7 @@ template&lt;typename InputIterator &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>一致した最後のノード</dd></dl>
-<p>一文字も一致しない場合、cbegin()を返す。</p>
-<dl class="section user"><dt>例</dt><dd><div class="fragment"></div><!-- fragment --> </dd></dl>
+<p>一文字も一致しない場合、cbegin()を返す。 </p>
 
 </div>
 </div>
@@ -1707,7 +1710,19 @@ template&lt;typename Key &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>一致した最後のノード</dd></dl>
-<p>一文字も一致しない場合、cbegin()を返す。 </p>
+<p>一文字も一致しない場合、cbegin()を返す。</p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// Trie木を作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> t = trie&lt;char32_t&gt;(v.begin(), v.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// キー文字列を前方一致検索する</span></div>
+<div class="line"><span class="keyword">auto</span> it = t.search(std::u32string(U<span class="stringliteral">&quot;うあ&quot;</span>));</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 葉以外のノードにも一致する</span></div>
+<div class="line">assert(!it);</div>
+<div class="line"><span class="comment">// 検索文字列全体のみに一致する</span></div>
+<div class="line">assert(*it == U<span class="stringliteral">&#39;あ&#39;</span>);</div>
+</div><!-- fragment --> </dd></dl>
 
 </div>
 </div>
@@ -1757,8 +1772,7 @@ template&lt;typename InputIterator &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。 それ以外の場合、 <a class="el" href="classwordring_1_1basic__trie.html#abcf7f3d98569b217ea5c198093c65fca" title="根の終端を指すイテレータを返す">cend()</a> 。</dd></dl>
-<dl class="section user"><dt>例</dt><dd><div class="fragment"></div><!-- fragment --> </dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。 それ以外の場合、 <a class="el" href="classwordring_1_1basic__trie.html#abcf7f3d98569b217ea5c198093c65fca" title="根の終端を指すイテレータを返す">cend()</a> 。 </dd></dl>
 
 </div>
 </div>
@@ -1797,7 +1811,19 @@ template&lt;typename Key &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。 それ以外の場合、 <a class="el" href="classwordring_1_1basic__trie.html#abcf7f3d98569b217ea5c198093c65fca" title="根の終端を指すイテレータを返す">cend()</a> 。 </dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。 それ以外の場合、 <a class="el" href="classwordring_1_1basic__trie.html#abcf7f3d98569b217ea5c198093c65fca" title="根の終端を指すイテレータを返す">cend()</a> 。</dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// Trie木を作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> t = trie&lt;char32_t&gt;(v.begin(), v.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// キー文字列を完全一致検索する</span></div>
+<div class="line"><span class="keyword">auto</span> it = t.find(std::u32string(U<span class="stringliteral">&quot;あ&quot;</span>));</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 葉のみに一致する</span></div>
+<div class="line">BOOST_CHECK(it);</div>
+<div class="line"><span class="comment">// 検索文字列全体のみに一致する</span></div>
+<div class="line">BOOST_CHECK(*it == U<span class="stringliteral">&#39;あ&#39;</span>);</div>
+</div><!-- fragment --> </dd></dl>
 
 </div>
 </div>
@@ -1887,7 +1913,15 @@ template&lt;typename Key &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>格納されている場合 true 、それ以外の場合 false</dd></dl>
-<dl class="section user"><dt>例</dt><dd><div class="fragment"></div><!-- fragment --> </dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// Trie木を作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> t = trie&lt;char32_t&gt;(v.begin(), v.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// キー文字列「うあい」は格納されている</span></div>
+<div class="line">assert(t.contains(std::u32string(U<span class="stringliteral">&quot;うあい&quot;</span>)));</div>
+<div class="line"><span class="comment">// キー文字列「え」は格納されていない</span></div>
+<div class="line">assert(t.contains(std::u32string(U<span class="stringliteral">&quot;え&quot;</span>)) == <span class="keyword">false</span>);</div>
+</div><!-- fragment --> </dd></dl>
 
 </div>
 </div>
@@ -1931,7 +1965,22 @@ template&lt;typename Label1 , typename Base1 &gt; </div>
 </div><div class="memdoc">
 
 <p>ストリームへ出力する </p>
-<p>速度を必要とする場合、使用を推奨しない。 </p>
+<p>速度を必要とする場合、使用を推奨しない。</p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// Trie木を作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> t1 = trie&lt;char32_t&gt;(v.begin(), v.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// ストリームへ出力</span></div>
+<div class="line">std::stringstream ss;</div>
+<div class="line">ss &lt;&lt; t1;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// ストリームから入力</span></div>
+<div class="line">trie&lt;char32_t&gt; t2;</div>
+<div class="line">ss &gt;&gt; t2;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(t1.size() == t2.size());</div>
+</div><!-- fragment --> </dd></dl>
 
 </div>
 </div>
@@ -1982,6 +2031,8 @@ template&lt;typename Label1 , typename Base1 &gt; </div>
 <li><a class="el" href="trie_8hpp_source.html">trie.hpp</a></li>
 </ul>
 </div><!-- contents -->
+<div class="ttc" id="anamespacewordring_html_a591fd8973766b04b6e4149db6dfff618"><div class="ttname"><a href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">wordring::stable_trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::stable_trie_base&lt; Allocator &gt; &gt; stable_trie</div><div class="ttdoc">葉からの空遷移先INDEXが衝突によって変更されない汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:999</div></div>
+<div class="ttc" id="anamespacewordring_html_a73f93ed17f5df2e945e085133d6b74e9"><div class="ttname"><a href="namespacewordring.html#a73f93ed17f5df2e945e085133d6b74e9">wordring::trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::trie_base&lt; Allocator &gt; &gt; trie</div><div class="ttdoc">メモリー使用量削減を目標とする汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:991</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

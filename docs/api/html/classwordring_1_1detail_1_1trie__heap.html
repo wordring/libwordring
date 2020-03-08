@@ -392,8 +392,8 @@ template&lt;typename Allocator &gt; </div>
 <dd>
 <a class="el" href="classwordring_1_1detail_1_1trie__heap.html#a6aefb68867f968d93335b6a2d9dd419d" title="直列化用のイテレータを返す">trie_heap::iend() const</a></dd>
 <dd>
-<a class="el" href="classwordring_1_1serialize__iterator.html">wordring::serialize_iterator</a></dd></dl>
-<p>このイテレータは逆参照すると32ビット整数値を返すが、 <a class="el" href="classwordring_1_1serialize__iterator.html">wordring::serialize_iterator</a> を使用してバイト値を返すイテレータに変換できる。 一般に、ファイルへ保存する場合にバイトへ直列化する。 いずれの場合も、逆参照時に最小限の計算によって値を返すため、軽量である。</p>
+<a class="el" href="classwordring_1_1serialize__iterator.html" title="任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する">wordring::serialize_iterator</a></dd></dl>
+<p>このイテレータは逆参照すると32ビット整数値を返すが、 <a class="el" href="classwordring_1_1serialize__iterator.html" title="任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する">wordring::serialize_iterator</a> を使用してバイト値を返すイテレータに変換できる。 一般に、ファイルへ保存する場合にバイトへ直列化する。 いずれの場合も、逆参照時に最小限の計算によって値を返すため、軽量である。</p>
 <dl class="section user"><dt>バイト直列化イテレータを使用する例</dt><dd></dd></dl>
 <p>※trie_heapは単独で構築できないため、サンプルはtrieを使用。 </p><div class="fragment"><div class="line"><span class="comment">// 元となるTrieを作成</span></div>
 <div class="line">std::vector&lt;std::string&gt; v1{ <span class="stringliteral">&quot;a&quot;</span>, <span class="stringliteral">&quot;ac&quot;</span>, <span class="stringliteral">&quot;b&quot;</span>, <span class="stringliteral">&quot;cab&quot;</span>, <span class="stringliteral">&quot;cd&quot;</span> };</div>

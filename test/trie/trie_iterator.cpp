@@ -97,11 +97,11 @@ BOOST_AUTO_TEST_CASE(const_trie_iterator__reference__3)
 	auto it4 = trie.find(std::string(u8"うあい"));
 	auto it5 = trie.find(std::string(u8"うえ"));
 
-	BOOST_CHECK(static_cast<std::uint8_t>(*it1) == 0x82);
-	BOOST_CHECK(static_cast<std::uint8_t>(*it2) == 0x86);
-	BOOST_CHECK(static_cast<std::uint8_t>(*it3) == 0x84);
-	BOOST_CHECK(static_cast<std::uint8_t>(*it4) == 0x84);
-	BOOST_CHECK(static_cast<std::uint8_t>(*it5) == 0x88);
+	BOOST_CHECK(*it1 == '\x82');
+	BOOST_CHECK(*it2 == '\x86');
+	BOOST_CHECK(*it3 == '\x84');
+	BOOST_CHECK(*it4 == '\x84');
+	BOOST_CHECK(*it5 == '\x88');
 }
 
 // const_trie_iterator operator[](value_type label) const
@@ -165,19 +165,19 @@ BOOST_AUTO_TEST_CASE(const_trie_iterator__at__3)
 
 	auto it = trie.begin();
 
-	auto it1 = it[0xE3];
-	BOOST_CHECK(static_cast<std::uint8_t>(*it1) == 0xE3);
-	auto it2 = it1[0x81];
-	BOOST_CHECK(static_cast<std::uint8_t>(*it2) == 0x81);
-	auto it3 = it2[0x82];
-	BOOST_CHECK(static_cast<std::uint8_t>(*it3) == 0x82); // あ
+	auto it1 = it['\xE3'];
+	BOOST_CHECK(*it1 == '\xE3');
+	auto it2 = it1['\x81'];
+	BOOST_CHECK(*it2 == '\x81');
+	auto it3 = it2['\x82'];
+	BOOST_CHECK(*it3 == '\x82'); // あ
 
-	auto it4 = it3[0xE3];
-	BOOST_CHECK(static_cast<std::uint8_t>(*it4) == 0xE3);
-	auto it5 = it4[0x81];
-	BOOST_CHECK(static_cast<std::uint8_t>(*it5) == 0x81);
-	auto it6 = it5[0x86];
-	BOOST_CHECK(static_cast<std::uint8_t>(*it6) == 0x86); // あう
+	auto it4 = it3['\xE3'];
+	BOOST_CHECK(*it4 == '\xE3');
+	auto it5 = it4['\x81'];
+	BOOST_CHECK(*it5 == '\x81');
+	auto it6 = it5['\x86'];
+	BOOST_CHECK(*it6 == '\x86'); // あう
 
 	BOOST_CHECK(it6[0] == it.end());
 }

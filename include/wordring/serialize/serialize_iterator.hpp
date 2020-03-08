@@ -13,8 +13,36 @@ namespace wordring
 	// serialize_iterator
 	// ------------------------------------------------------------------------
 
-	/*! 任意ビット幅の整数列に対するイテレータを8ビット整数列に対するイテレータへ変換する
-	- 逆参照はできない。
+	/*! @brief 任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する
+
+	@tparam InputIterator
+		整数列に対する入力イテレータ
+
+	@image html serialize_iterator_concept.svg
+
+	@par 例
+	@code
+		std::vector<std::uint32_t> v{ 0x1234567u, 0x89ABCDEFu };
+
+		auto it1 = serialize_iterator(v.begin());
+		auto it2 = serialize_iterator(v.end());
+
+		std::cout << std::hex;
+		while (it1 != it2) std::cout << static_cast<int>(*it1++) << std::endl;
+	@endcode
+		出力
+	@code
+		1
+		23
+		45
+		67
+		89
+		ab
+		cd
+		ef
+	@endcode
+
+	@sa wordring::deserialize_iterator
 	*/
 	template <typename InputIterator>
 	class serialize_iterator
@@ -29,26 +57,36 @@ namespace wordring
 		using iterator_type = InputIterator;
 		using unsigned_type = std::make_unsigned_t<typename std::iterator_traits<iterator_type>::value_type>;
 
-		using difference_type = std::ptrdiff_t;
-		using value_type = std::uint8_t;
-		using pointer = value_type*;
-		using reference = value_type&;
+		using difference_type   = std::ptrdiff_t;
+		using value_type        = std::uint8_t;
+		using pointer           = value_type*;
+		using reference         = value_type&;
 		using iterator_category = std::input_iterator_tag;
 
 		static std::uint32_t constexpr coefficient = sizeof(unsigned_type);
 
+		static_assert(std::is_integral_v<typename std::iterator_traits<iterator_type>::value_type>);
+
 	public:
+		/*! @brief 空のイテレータを構築する
+		*/
 		serialize_iterator()
 			: m_index(0)
 		{
 		}
 
+		/*! @brief 元となるイテレータから直列化イテレータを構築する
+		
+		@param base 元となるイテレータ
+		*/
 		serialize_iterator(iterator_type base)
 			: m_it(base)
 			, m_index(0)
 		{
 		}
 
+		/*! @brief 元となるイテレータを返す
+		*/
 		iterator_type base() const
 		{
 			return m_it;
@@ -97,8 +135,30 @@ namespace wordring
 	// deserialize_iterator
 	// ------------------------------------------------------------------------
 
-	/*! 8ビット整数列に対するイテレータを任意ビット幅の整数列に対するイテレータへ変換する
-	- 逆参照はできない。
+	/*! @brief バイト列に対するイテレータを任意型の整数を返すイテレータへ変換する
+
+	@tparam Value         返す値の型
+	@tparam InputIterator 整数列に対する入力イテレータ
+
+	@image html deserialize_iterator_concept.svg
+
+	@par 例
+	@code
+		std::string s{ '\x1', '\x23', '\x45', '\x67', '\x89', '\xAB','\xCD', '\xEF' };
+
+		auto it1 = deserialize_iterator<std::uint32_t, decltype(s.begin())>(s.begin());
+		auto it2 = deserialize_iterator<std::uint32_t, decltype(s.begin())>(s.end());
+
+		std::cout << std::hex;
+		while (it1 != it2) std::cout << *it1++ << std::endl;
+	@endcode
+		出力
+	@code
+		1234567
+		89abcdef
+	@endcode
+
+	@sa wordring::serialize_iterator
 	*/
 	template <typename Value, typename ForwardIterator>
 	class deserialize_iterator

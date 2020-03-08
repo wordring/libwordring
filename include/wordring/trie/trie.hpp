@@ -20,7 +20,7 @@ namespace wordring
 	@tparam Label ラベルとして使用する任意の整数型
 	@tparam Base 基本クラスとして使用するTrie実装クラス
 
-	メモリー使用量削減を目標とする <b>trie</b> と葉のINDEXが衝突によって変更されない
+	メモリー使用量削減を目標とする <b>trie</b> と葉からの空遷移先INDEXが衝突によって変更されない
 	<b>stable_trie</b> が事前に定義されている。
 
 	@code
@@ -31,6 +31,8 @@ namespace wordring
 		using stable_trie = basic_trie<Label, detail::stable_trie_base<Allocator>>;
 	@endcode
 
+	- @ref wordring::trie
+	- @ref wordring::stable_trie
 	- @ref detail::trie_base
 	- @ref detail::stable_trie_base
 
@@ -81,8 +83,14 @@ namespace wordring
 
 	- @ref detail::const_trie_iterator
 
-	木と同様の走査に以下のイテレータ・アダプタを使用できる。
+	@par 予測入力への適用
+
+	部分木全体の走査にイテレータ・アダプタを使用できる。
 	search() と wordring::basic_tree_iterator を組み合わせることで、予測入力などに使える。
+
+	search() で前方一致検索を行い、戻り値のイテレータを親として wordring::basic_tree_iterator によって全走査を行う。
+	<b>%operator bool()</b> で葉を確認し、葉を発見するたびに <b>parent()</b> で親をたどると、後続の文字列を容易に列挙できる。
+	候補数を制限したい場合、数に達した時点で走査を止めると良い。
 
 	- @ref wordring::basic_tree_iterator
 
@@ -795,10 +803,6 @@ namespace wordring
 		@return 一致した最後のノード
 
 		一文字も一致しない場合、cbegin()を返す。
-
-		@par 例
-		@code
-		@endcode
 		*/
 		template <typename InputIterator>
 		const_iterator search(InputIterator first, InputIterator last) const
@@ -819,6 +823,21 @@ namespace wordring
 		@return 一致した最後のノード
 
 		一文字も一致しない場合、cbegin()を返す。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列を前方一致検索する
+			auto it = t.search(std::u32string(U"うあ"));
+
+			// 葉以外のノードにも一致する
+			assert(!it);
+			// 検索文字列全体のみに一致する
+			assert(*it == U'あ');
+		@endcode
 		*/
 		template <typename Key>
 		const_iterator search(Key const& key) const
@@ -834,10 +853,6 @@ namespace wordring
 		@return
 			入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。
 			それ以外の場合、 cend() 。
-
-		@par 例
-		@code
-		@endcode
 		*/
 		template <typename InputIterator>
 		const_iterator find(InputIterator first, InputIterator last) const
@@ -861,6 +876,21 @@ namespace wordring
 		@return
 			入力されたキー文字列と完全に一致する葉がある場合、そのノードを指すイテレータ。
 			それ以外の場合、 cend() 。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列を完全一致検索する
+			auto it = t.find(std::u32string(U"あ"));
+
+			// 葉のみに一致する
+			BOOST_CHECK(it);
+			// 検索文字列全体のみに一致する
+			BOOST_CHECK(*it == U'あ');
+		@endcode
 		*/
 		template <typename Key>
 		const_iterator find(Key const& key) const
@@ -896,6 +926,14 @@ namespace wordring
 
 		@par 例
 		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// キー文字列「うあい」は格納されている
+			assert(t.contains(std::u32string(U"うあい")));
+			// キー文字列「え」は格納されていない
+			assert(t.contains(std::u32string(U"え")) == false);
 		@endcode
 		*/
 		template <typename Key>
@@ -908,6 +946,24 @@ namespace wordring
 	/*! @brief ストリームへ出力する
 
 	速度を必要とする場合、使用を推奨しない。
+
+	@par 例
+	@code
+		// Trie木を作成
+		std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+		auto t1 = trie<char32_t>(v.begin(), v.end());
+
+		// ストリームへ出力
+		std::stringstream ss;
+		ss << t1;
+
+		// ストリームから入力
+		trie<char32_t> t2;
+		ss >> t2;
+
+		// 検証
+		assert(t1.size() == t2.size());
+	@endcode
 	*/
 	template <typename Label1, typename Base1>
 	inline std::ostream& operator<<(std::ostream& os, basic_trie<Label1, Base1> const& trie)
@@ -927,9 +983,18 @@ namespace wordring
 		return is >> base;
 	}
 
+	/*! @brief メモリー使用量削減を目標とする汎用Trie
+
+	辞書を用途として想定する。
+	*/
 	template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
 	using trie = basic_trie<Label, detail::trie_base<Allocator>>;
 
+	/*! @brief 葉からの空遷移先INDEXが衝突によって変更されない汎用Trie
+
+	文字列ATOMを用途として想定する。
+	葉から空遷移した先のINDEXが挿入によって変更されないため、そのINDEXから文字列を復元できる。
+	*/
 	template <typename Label, typename Allocator = std::allocator<detail::trie_node>>
 	using stable_trie = basic_trie<Label, detail::stable_trie_base<Allocator>>;
 }

@@ -77,7 +77,6 @@ namespace wordring::detail
 		using base_type::clear;
 
 	protected:
-		//using base_type::assign;
 		using base_type::limit;
 		using base_type::free;
 		using base_type::has_child;
@@ -447,7 +446,7 @@ namespace wordring::detail
 		template <typename InputIterator>
 		const_iterator insert(InputIterator first, InputIterator last, value_type value = 0)
 		{
-			assert(value <= std::numeric_limits<int32_t>::max());
+			assert(value <= static_cast<value_type>(std::numeric_limits<int32_t>::max()));
 
 			if (first == last) return cend();
 
@@ -474,7 +473,7 @@ namespace wordring::detail
 
 				// 終端の空遷移を追加
 				index_type idx = add(parent, null_value) + null_value;
-				(m_c.data() + idx)->m_base = -value;
+				(m_c.data() + idx)->m_base = -static_cast<index_type>(value);
 
 				++m_c.front().m_base;
 			}
@@ -611,22 +610,6 @@ namespace wordring::detail
 		{
 			std::uint32_t i = 0;
 			return lookup(first, last, i);
-
-			/*
-			index_type parent = 1;
-
-			while (first != last)
-			{
-				std::uint16_t ch = static_cast<std::uint8_t>(*first);
-				index_type idx = at(parent, ch);
-				if (idx == 0) break;
-				++first;
-				parent = idx;
-				assert(1 <= parent && parent < limit());
-			}
-
-			return std::make_pair(const_iterator(m_c, parent), first);
-			*/
 		}
 
 		/*! @brief 前方一致検索

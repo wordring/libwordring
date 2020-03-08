@@ -6,6 +6,8 @@
 #include <wordring/trie/trie.hpp>
 
 #include <cassert>
+#include <sstream>
+#include <string>
 
 BOOST_AUTO_TEST_SUITE(trie__sample)
 
@@ -338,6 +340,95 @@ BOOST_AUTO_TEST_CASE(trie__lookup__1)
 	assert(*pair.first == U'う');
 	// 一致した最後のキー文字の次を返す
 	assert(*pair.second == U'い');
+}
+
+/*
+前方一致検索
+
+const_iterator search(Key const& key) const
+*/
+BOOST_AUTO_TEST_CASE(trie__search__1)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	auto t = trie<char32_t>(v.begin(), v.end());
+
+	// キー文字列を前方一致検索する
+	auto it = t.search(std::u32string(U"うあ"));
+
+	// 葉以外のノードにも一致する
+	assert(!it);
+	// 検索文字列全体のみに一致する
+	assert(*it == U'あ');
+}
+
+/*
+完全一致検索
+
+const_iterator find(Key const& key) const
+*/
+BOOST_AUTO_TEST_CASE(trie__find__1)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	auto t = trie<char32_t>(v.begin(), v.end());
+
+	// キー文字列を完全一致検索する
+	auto it = t.find(std::u32string(U"あ"));
+
+	// 葉のみに一致する
+	BOOST_CHECK(it);
+	// 検索文字列全体のみに一致する
+	BOOST_CHECK(*it == U'あ');
+}
+
+/*
+キー文字列が格納されているか調べる
+
+bool contains(Key const& key) const
+*/
+BOOST_AUTO_TEST_CASE(trie__contains__1)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	auto t = trie<char32_t>(v.begin(), v.end());
+
+	// キー文字列「うあい」は格納されている
+	assert(t.contains(std::u32string(U"うあい")));
+	// キー文字列「え」は格納されていない
+	assert(t.contains(std::u32string(U"え")) == false);
+}
+
+/*!
+ストリーム入出力
+
+inline std::ostream& operator<<(std::ostream& os, basic_trie<Label1, Base1> const& trie)
+inline std::istream& operator>>(std::istream& is, basic_trie<Label1, Base1>& trie)
+*/
+BOOST_AUTO_TEST_CASE(trie__stream__1)
+{
+	using namespace wordring;
+
+	// Trie木を作成
+	std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+	auto t1 = trie<char32_t>(v.begin(), v.end());
+
+	// ストリームへ出力
+	std::stringstream ss;
+	ss << t1;
+
+	// ストリームから入力
+	trie<char32_t> t2;
+	ss >> t2;
+
+	// 検証
+	assert(t1.size() == t2.size());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

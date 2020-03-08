@@ -184,7 +184,7 @@ namespace wordring::detail
 			if (lv + 1 == it->size()) ++it;
 			if (it == m_last) return false;
 
-			std::uint8_t ch = operator*();
+			std::uint8_t ch = static_cast<std::uint8_t>(operator*());
 			std::uint8_t c = *std::next(it->begin(), lv);
 			if (ch == c) return true;
 
