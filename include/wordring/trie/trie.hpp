@@ -15,7 +15,9 @@ namespace wordring
 	// basic_trie
 	// ------------------------------------------------------------------------
 
-	/*! @brief 任意の整数型をラベルとして用いることが出来る汎用Trie
+	/*! @class basic_trie trie.hpp wordring/trie.hpp
+	
+	@brief 任意の整数型をラベルとして用いることが出来る汎用Trie
 
 	@tparam Label ラベルとして使用する任意の整数型
 	@tparam Base 基本クラスとして使用するTrie実装クラス

@@ -246,7 +246,9 @@ namespace wordring
 	// static_vector
 	// ------------------------------------------------------------------------
 
-	/*! @brief 最大長固定の静的vector
+	/*! @class static_vector static_vector.hpp wordring/static_vector.hpp
+	
+	@brief 最大長固定の静的vector
 
 	メモリーの動的確保を避ける目的で用意した。
 	*/

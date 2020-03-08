@@ -13,7 +13,9 @@ namespace wordring
 	// serialize_iterator
 	// ------------------------------------------------------------------------
 
-	/*! @brief 任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する
+	/*! @class serialize_iterator serialize_iterator.hpp wordring/serialize_iterator.hpp
+	
+	@brief 任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する
 
 	@tparam InputIterator
 		整数列に対する入力イテレータ
@@ -135,7 +137,9 @@ namespace wordring
 	// deserialize_iterator
 	// ------------------------------------------------------------------------
 
-	/*! @brief バイト列に対するイテレータを任意型の整数を返すイテレータへ変換する
+	/*! @class deserialize_iterator serialize_iterator.hpp wordring/serialize_iterator.hpp
+	
+	@brief バイト列に対するイテレータを任意型の整数を返すイテレータへ変換する
 
 	@tparam Value         返す値の型
 	@tparam InputIterator 整数列に対する入力イテレータ
