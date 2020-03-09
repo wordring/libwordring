@@ -12,6 +12,15 @@ namespace wordring
 
 namespace wordring::detail
 {
+	/*! @brief basic_trie のイテレータ
+
+	@tparam Label ラベルとして使用する任意の整数型
+	@tparam Base  元となる trie_base::const_iterator あるいは stable_trie_base::const_iterator
+
+	ダブル・アレイのイテレータを任意の整数型に拡張する。
+
+	バイト単位の遷移から複数バイト単位の遷移にするために、いくつかのアルゴリズムを実装する。
+	*/
 	template <typename Label, typename Base>
 	class const_trie_iterator : public Base
 	{
@@ -104,6 +113,31 @@ namespace wordring::detail
 			return result;
 		}
 
+		/*! @brief ラベルで遷移できる子を返す
+
+		@param [in] label 遷移ラベル
+
+		@return 遷移先のノードを指すイテレータ
+
+		イテレータを使ってノード間を移動する場合、この関数と parent() が最速。
+		operator++() は若干の探索が発生する。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// 根を指すイテレータを取得する
+			auto it = t.begin();
+
+			// ラベル「う」で遷移する子を取得する
+			auto it1 = it[U'う'];
+
+			// 検証
+			assert(*it1 == U'う');
+		@endcode
+		*/
 		const_trie_iterator operator[](value_type label) const
 		{
 			index_type idx = 0;
@@ -184,6 +218,30 @@ namespace wordring::detail
 			return result;
 		}
 
+		/*! @brief 根からイテレータが指すノードまでのラベル列を返す
+		
+		@param [out] result ラベル列を出力する先のコンテナ
+
+		出力先を使いまわすために引数でコンテナへの参照を受け取るよう設計した。
+		コンテナはBidirectionalIteratorを持つ必要がある。
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// ラベル列「うあ」で遷移したノードを指すイテレータを取得する
+			auto it = t.search(std::u32string(U"うあ"));
+
+			// 根からイテレータ「it」迄のラベル列を取得する
+			std::u32string s;
+			it.string(s);
+
+			// 検証
+			assert(s == U"うあ");
+		@endcode
+		*/
 		template <typename String>
 		void string(String& result) const
 		{
@@ -192,6 +250,26 @@ namespace wordring::detail
 			std::reverse(std::begin(result), std::end(result));
 		}
 
+		/*! @brief 親を取得する
+		
+		@return 親ノードを指すイテレータ
+
+		@par 例
+		@code
+			// Trie木を作成
+			std::vector<std::u32string> v{ U"あ", U"あう", U"い", U"うあい", U"うえ" };
+			auto t = trie<char32_t>(v.begin(), v.end());
+
+			// ラベル列「うあ」で遷移したノードを指すイテレータを取得する
+			auto it = t.search(std::u32string(U"うあ"));
+
+			// イテレータ「it」の親を取得する
+			auto it1 = it.parent();
+
+			// 検証
+			assert(*it1 == U'う');
+		@endcode
+		*/
 		const_trie_iterator parent() const
 		{
 			index_type idx = m_index;

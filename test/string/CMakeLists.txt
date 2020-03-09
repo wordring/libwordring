@@ -1,11 +1,11 @@
-﻿# wordring_cpp/sample/trie
+﻿# wordring_cpp/test/string
 #
-# このプロジェクトはtrieのサンプルを作成します。
+# このプロジェクトはstringのテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(trie_sample)
+project(string_test)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,20 +28,10 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-#		list_trie_iterator.cpp
-#		stable_trie.cpp
-#		stable_trie_iterator.cpp
-#		stable_trie_base.cpp
-#		stable_trie_base_benchmark.cpp
-#		stable_trie_base_iterator.cpp
-		trie.cpp
-		trie_base.cpp
-#		trie_base_iterator.cpp
-#		trie_construct_iterator.cpp
-		trie_heap.cpp
-#		trie_heap_iterator.cpp
-		trie_iterator.cpp
+		atom.cpp
 )
+
+add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}
@@ -51,3 +41,4 @@ target_link_libraries(
 )
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
+

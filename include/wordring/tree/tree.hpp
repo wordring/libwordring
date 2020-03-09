@@ -274,7 +274,7 @@ namespace wordring
 	// tree
 	// ------------------------------------------------------------------------
 
-	/*! @class tree tree.hpp wordring/tree.hpp
+	/*! @class tree tree.hpp wordring/tree/tree.hpp
 	
 	@brief 木コンテナ
 

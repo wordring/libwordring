@@ -13,7 +13,7 @@ namespace wordring
 	// serialize_iterator
 	// ------------------------------------------------------------------------
 
-	/*! @class serialize_iterator serialize_iterator.hpp wordring/serialize_iterator.hpp
+	/*! @class serialize_iterator serialize_iterator.hpp wordring/serialize/serialize_iterator.hpp
 	
 	@brief 任意型の整数列に対するイテレータをバイトを返すイテレータへ変換する
 
@@ -137,7 +137,7 @@ namespace wordring
 	// deserialize_iterator
 	// ------------------------------------------------------------------------
 
-	/*! @class deserialize_iterator serialize_iterator.hpp wordring/serialize_iterator.hpp
+	/*! @class deserialize_iterator serialize_iterator.hpp wordring/serialize/serialize_iterator.hpp
 	
 	@brief バイト列に対するイテレータを任意型の整数を返すイテレータへ変換する
 

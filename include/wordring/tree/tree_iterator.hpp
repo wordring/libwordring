@@ -94,7 +94,7 @@ namespace wordring::detail
 
 namespace wordring
 {
-	/*! @class basic_tree_iterator tree_iterator.hpp wordring/tree_iterator.hpp
+	/*! @class basic_tree_iterator tree_iterator.hpp wordring/tree/tree_iterator.hpp
 	
 	@brief プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター
 	

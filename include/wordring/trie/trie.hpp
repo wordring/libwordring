@@ -15,7 +15,7 @@ namespace wordring
 	// basic_trie
 	// ------------------------------------------------------------------------
 
-	/*! @class basic_trie trie.hpp wordring/trie.hpp
+	/*! @class basic_trie trie.hpp wordring/trie/trie.hpp
 	
 	@brief 任意の整数型をラベルとして用いることが出来る汎用Trie
 
@@ -314,10 +314,7 @@ namespace wordring
 		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
 		void assign(ForwardIterator first, ForwardIterator last)
 		{
-			using string_type    = typename std::iterator_traits<ForwardIterator>::value_type;
-			using character_type = typename string_type::value_type;
-
-			assert(coefficient == sizeof(character_type));
+			assert(coefficient == sizeof(typename std::iterator_traits<ForwardIterator>::value_type::value_type));
 
 			if constexpr (coefficient == 1) base_type::assign(first, last);
 			else

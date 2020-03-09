@@ -231,6 +231,9 @@ BOOST_AUTO_TEST_CASE(trie__insert__1)
 	assert(t.at(it) == 100);
 	// 挿入したキー文字列が格納されている
 	assert(t.contains(std::u32string(U"あう")));
+
+	// warning 回避用
+	*it;
 }
 
 /*
@@ -253,6 +256,9 @@ BOOST_AUTO_TEST_CASE(trie__insert__2)
 	assert(t.at(it) == 100);
 	// 挿入したキー文字列が格納されている
 	assert(t.contains(std::u32string(U"あう")));
+
+	// warning 回避用
+	*it;
 }
 
 /*
@@ -340,6 +346,9 @@ BOOST_AUTO_TEST_CASE(trie__lookup__1)
 	assert(*pair.first == U'う');
 	// 一致した最後のキー文字の次を返す
 	assert(*pair.second == U'い');
+
+	// warning 回避用
+	*pair.first;
 }
 
 /*
@@ -362,6 +371,9 @@ BOOST_AUTO_TEST_CASE(trie__search__1)
 	assert(!it);
 	// 検索文字列全体のみに一致する
 	assert(*it == U'あ');
+
+	// warning 回避用
+	*it;
 }
 
 /*

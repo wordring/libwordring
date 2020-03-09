@@ -142,7 +142,7 @@ namespace wordring::detail
 
 		static_vector_iterator& operator--()
 		{
-			assert(m_position <= m_container->size());
+			assert(static_cast<std::make_unsigned_t<difference_type>>(m_position) <= m_container->size());
 			--m_position;
 			return *this;
 		}
@@ -157,7 +157,7 @@ namespace wordring::detail
 		static_vector_iterator& operator+=(size_t n)
 		{
 			m_position += n;
-			assert(m_position < m_container->size());
+			assert(static_cast<std::make_unsigned_t<difference_type>>(m_position) < m_container->size());
 			return *this;
 		}
 
@@ -246,7 +246,7 @@ namespace wordring
 	// static_vector
 	// ------------------------------------------------------------------------
 
-	/*! @class static_vector static_vector.hpp wordring/static_vector.hpp
+	/*! @class static_vector static_vector.hpp wordring/static_vector/static_vector.hpp
 	
 	@brief 最大長固定の静的vector
 
