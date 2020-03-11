@@ -1,0 +1,1062 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::basic_atom_set クラス</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="classwordring_1_1basic__atom__set.html">basic_atom_set</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pro-types">限定公開型</a> &#124;
+<a href="classwordring_1_1basic__atom__set-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::basic_atom_set クラス</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>文字列アトムのコンテナ  
+ <a href="classwordring_1_1basic__atom__set.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="atom_8hpp_source.html">wordring/string/atom.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a555a060a4d8e40c770d9a1a7eaf87c41"><td class="memItemLeft" align="right" valign="top"><a id="a555a060a4d8e40c770d9a1a7eaf87c41"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>allocator_type</b> = Allocator</td></tr>
+<tr class="separator:a555a060a4d8e40c770d9a1a7eaf87c41"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af721f24852c6d35799a435a2403dbf3f"><td class="memItemLeft" align="right" valign="top"><a id="af721f24852c6d35799a435a2403dbf3f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>key_type</b> = String</td></tr>
+<tr class="separator:af721f24852c6d35799a435a2403dbf3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4e0a925d2e2fa807233e57fda7b9b497"><td class="memItemLeft" align="right" valign="top"><a id="a4e0a925d2e2fa807233e57fda7b9b497"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = <a class="el" href="classwordring_1_1detail_1_1basic__atom.html">detail::basic_atom</a>&lt; key_type &gt;</td></tr>
+<tr class="separator:a4e0a925d2e2fa807233e57fda7b9b497"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ffa20419573c95c1125331186c3ea37"><td class="memItemLeft" align="right" valign="top"><a id="a0ffa20419573c95c1125331186c3ea37"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>label_type</b> = typename String::value_type</td></tr>
+<tr class="separator:a0ffa20419573c95c1125331186c3ea37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:ad10ef05a016eadcdd89c8f28ab5a60f7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#ad10ef05a016eadcdd89c8f28ab5a60f7">basic_atom_set</a> ()</td></tr>
+<tr class="memdesc:ad10ef05a016eadcdd89c8f28ab5a60f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">空のコンテナを構築する  <a href="classwordring_1_1basic__atom__set.html#ad10ef05a016eadcdd89c8f28ab5a60f7">[詳解]</a><br /></td></tr>
+<tr class="separator:ad10ef05a016eadcdd89c8f28ab5a60f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc1f8594495e706a90986ac92ecd44c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#adc1f8594495e706a90986ac92ecd44c1">basic_atom_set</a> (allocator_type const &amp;alloc)</td></tr>
+<tr class="memdesc:adc1f8594495e706a90986ac92ecd44c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">アロケータを指定して空のコンテナを構築する  <a href="classwordring_1_1basic__atom__set.html#adc1f8594495e706a90986ac92ecd44c1">[詳解]</a><br /></td></tr>
+<tr class="separator:adc1f8594495e706a90986ac92ecd44c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab515a2cd69b49312f2ea49f98e5db548"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_integral_v&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:ab515a2cd69b49312f2ea49f98e5db548"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">basic_atom_set</a> (InputIterator first, InputIterator last, allocator_type const &amp;alloc=allocator_type())</td></tr>
+<tr class="memdesc:ab515a2cd69b49312f2ea49f98e5db548"><td class="mdescLeft">&#160;</td><td class="mdescRight">直列化データからの構築  <a href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">[詳解]</a><br /></td></tr>
+<tr class="separator:ab515a2cd69b49312f2ea49f98e5db548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab515a2cd69b49312f2ea49f98e5db548"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename std::enable_if_t&lt; std::negation_v&lt; std::is_integral&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;&gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:ab515a2cd69b49312f2ea49f98e5db548"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">basic_atom_set</a> (InputIterator first, InputIterator last, allocator_type const &amp;alloc=allocator_type())</td></tr>
+<tr class="memdesc:ab515a2cd69b49312f2ea49f98e5db548"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列リストからの構築  <a href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">[詳解]</a><br /></td></tr>
+<tr class="separator:ab515a2cd69b49312f2ea49f98e5db548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_integral_v&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">assign</a> (InputIterator first, InputIterator last)</td></tr>
+<tr class="memdesc:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="mdescLeft">&#160;</td><td class="mdescRight">直列化データからの割り当て  <a href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">[詳解]</a><br /></td></tr>
+<tr class="separator:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename std::enable_if_t&lt; std::negation_v&lt; std::is_integral&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;&gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">assign</a> (InputIterator first, InputIterator last)</td></tr>
+<tr class="memdesc:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列リストからの割り当て  <a href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">[詳解]</a><br /></td></tr>
+<tr class="separator:a7acf42a9b8b45cfade7bb1348ff2237a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cceb4a95742f35d0fa1f3f4a3ba87ed"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">at</a> (std::uint32_t id) const</td></tr>
+<tr class="memdesc:a7cceb4a95742f35d0fa1f3f4a3ba87ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">IDからアトムを返す  <a href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">[詳解]</a><br /></td></tr>
+<tr class="separator:a7cceb4a95742f35d0fa1f3f4a3ba87ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3bdda2104cd1c90079bd58a59b39a4f"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator &gt; </td></tr>
+<tr class="memitem:aa3bdda2104cd1c90079bd58a59b39a4f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#aa3bdda2104cd1c90079bd58a59b39a4f">at</a> (InputIterator first, InputIterator last) const</td></tr>
+<tr class="memdesc:aa3bdda2104cd1c90079bd58a59b39a4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列からアトムを返す  <a href="classwordring_1_1basic__atom__set.html#aa3bdda2104cd1c90079bd58a59b39a4f">[詳解]</a><br /></td></tr>
+<tr class="separator:aa3bdda2104cd1c90079bd58a59b39a4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b71e85dfe173d720cd32435e3e88739"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a7b71e85dfe173d720cd32435e3e88739">at</a> (std::basic_string_view&lt; label_type &gt; sv) const</td></tr>
+<tr class="memdesc:a7b71e85dfe173d720cd32435e3e88739"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列からアトムを返す  <a href="classwordring_1_1basic__atom__set.html#a7b71e85dfe173d720cd32435e3e88739">[詳解]</a><br /></td></tr>
+<tr class="separator:a7b71e85dfe173d720cd32435e3e88739"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bdd429d68e76d54a8063b2c4db1e9fe"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a0bdd429d68e76d54a8063b2c4db1e9fe">operator[]</a> (std::basic_string_view&lt; label_type &gt; sv)</td></tr>
+<tr class="memdesc:a0bdd429d68e76d54a8063b2c4db1e9fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列からアトムを返す  <a href="classwordring_1_1basic__atom__set.html#a0bdd429d68e76d54a8063b2c4db1e9fe">[詳解]</a><br /></td></tr>
+<tr class="separator:a0bdd429d68e76d54a8063b2c4db1e9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0185fb64fc64f0be31c096567e9205ad"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator &gt; </td></tr>
+<tr class="memitem:a0185fb64fc64f0be31c096567e9205ad"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">insert</a> (InputIterator first, InputIterator last)</td></tr>
+<tr class="memdesc:a0185fb64fc64f0be31c096567e9205ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列を挿入する  <a href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">[詳解]</a><br /></td></tr>
+<tr class="separator:a0185fb64fc64f0be31c096567e9205ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7df7192308531a2832be3303cb97c8ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a7df7192308531a2832be3303cb97c8ee">insert</a> (std::basic_string_view&lt; label_type &gt; sv)</td></tr>
+<tr class="memdesc:a7df7192308531a2832be3303cb97c8ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列を挿入する  <a href="classwordring_1_1basic__atom__set.html#a7df7192308531a2832be3303cb97c8ee">[詳解]</a><br /></td></tr>
+<tr class="separator:a7df7192308531a2832be3303cb97c8ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af77ee1d5b088cf5de9ab052b5ec372c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#af77ee1d5b088cf5de9ab052b5ec372c2">erase</a> (std::uint32_t id)</td></tr>
+<tr class="memdesc:af77ee1d5b088cf5de9ab052b5ec372c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">アトムを削除する  <a href="classwordring_1_1basic__atom__set.html#af77ee1d5b088cf5de9ab052b5ec372c2">[詳解]</a><br /></td></tr>
+<tr class="separator:af77ee1d5b088cf5de9ab052b5ec372c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb513d6e6c88a8f35feef797c0739f25"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator &gt; </td></tr>
+<tr class="memitem:afb513d6e6c88a8f35feef797c0739f25"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#afb513d6e6c88a8f35feef797c0739f25">erase</a> (InputIterator first, InputIterator last)</td></tr>
+<tr class="memdesc:afb513d6e6c88a8f35feef797c0739f25"><td class="mdescLeft">&#160;</td><td class="mdescRight">アトムを削除する  <a href="classwordring_1_1basic__atom__set.html#afb513d6e6c88a8f35feef797c0739f25">[詳解]</a><br /></td></tr>
+<tr class="separator:afb513d6e6c88a8f35feef797c0739f25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7eb610b11ca26326b2628885a4cc6671"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a7eb610b11ca26326b2628885a4cc6671">erase</a> (std::basic_string_view&lt; label_type &gt; sv)</td></tr>
+<tr class="memdesc:a7eb610b11ca26326b2628885a4cc6671"><td class="mdescLeft">&#160;</td><td class="mdescRight">アトムを削除する  <a href="classwordring_1_1basic__atom__set.html#a7eb610b11ca26326b2628885a4cc6671">[詳解]</a><br /></td></tr>
+<tr class="separator:a7eb610b11ca26326b2628885a4cc6671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a487c4dc03d1ff7065d986db22803e3cc"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator &gt; </td></tr>
+<tr class="memitem:a487c4dc03d1ff7065d986db22803e3cc"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#a487c4dc03d1ff7065d986db22803e3cc">contains</a> (InputIterator first, InputIterator last) const</td></tr>
+<tr class="memdesc:a487c4dc03d1ff7065d986db22803e3cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列が格納されているか調べる  <a href="classwordring_1_1basic__atom__set.html#a487c4dc03d1ff7065d986db22803e3cc">[詳解]</a><br /></td></tr>
+<tr class="separator:a487c4dc03d1ff7065d986db22803e3cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5adf78fb2eb2efe98f5fa9c8f76a9be"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#ac5adf78fb2eb2efe98f5fa9c8f76a9be">contains</a> (std::basic_string_view&lt; label_type &gt; sv) const</td></tr>
+<tr class="memdesc:ac5adf78fb2eb2efe98f5fa9c8f76a9be"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列が格納されているか調べる  <a href="classwordring_1_1basic__atom__set.html#ac5adf78fb2eb2efe98f5fa9c8f76a9be">[詳解]</a><br /></td></tr>
+<tr class="separator:ac5adf78fb2eb2efe98f5fa9c8f76a9be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afac2a2fa717602f2bbefce0432b4c1c2"><td class="memItemLeft" align="right" valign="top">size_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__atom__set.html#afac2a2fa717602f2bbefce0432b4c1c2">size</a> () const noexcept</td></tr>
+<tr class="memdesc:afac2a2fa717602f2bbefce0432b4c1c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">格納しているキー文字列数を調べる  <a href="classwordring_1_1basic__atom__set.html#afac2a2fa717602f2bbefce0432b4c1c2">[詳解]</a><br /></td></tr>
+<tr class="separator:afac2a2fa717602f2bbefce0432b4c1c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+限定公開型</h2></td></tr>
+<tr class="memitem:a71af7710925a2397289bad8de320980f"><td class="memItemLeft" align="right" valign="top"><a id="a71af7710925a2397289bad8de320980f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">stable_trie</a>&lt; typename String::value_type &gt;</td></tr>
+<tr class="separator:a71af7710925a2397289bad8de320980f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>文字列アトムのコンテナ </p>
+<p>単語に番号を割り当てる辞書のようなクラス。</p>
+<p>文字列から整数値への変換、整数値から文字列の変換が出来る。 整数値は、文字列に対して自動的に割り当てられるため、変更できない。</p>
+<dl class="section user"><dt>直列化</dt><dd></dd></dl>
+<p>直列化には ibegin(), iend() を使う。</p>
+<ul>
+<li><a class="el" href="classwordring_1_1detail_1_1trie__heap.html#a8b346c266736a65d8b84252efe783ad7">detail::trie_heap::ibegin() const</a></li>
+<li><a class="el" href="classwordring_1_1detail_1_1trie__heap.html#a6aefb68867f968d93335b6a2d9dd419d">detail::trie_heap::iend() const</a></li>
+</ul>
+<p>ibegin() の逆参照は32ビット整数値を返す。 ファイルへ保存するためにバイト列を必要とする場合、直列化イテレータを使う。</p>
+<ul>
+<li><a class="el" href="classwordring_1_1serialize__iterator.html">wordring::serialize_iterator</a> </li>
+</ul>
+</div><h2 class="groupheader">構築子と解体子</h2>
+<a id="ad10ef05a016eadcdd89c8f28ab5a60f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad10ef05a016eadcdd89c8f28ab5a60f7">&#9670;&nbsp;</a></span>basic_atom_set() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wordring::basic_atom_set::basic_atom_set </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>空のコンテナを構築する </p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 空のコンテナを構築する</span></div>
+<div class="line">basic_atom_set&lt;std::string&gt; as;</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="adc1f8594495e706a90986ac92ecd44c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adc1f8594495e706a90986ac92ecd44c1">&#9670;&nbsp;</a></span>basic_atom_set() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wordring::basic_atom_set::basic_atom_set </td>
+          <td>(</td>
+          <td class="paramtype">allocator_type const &amp;&#160;</td>
+          <td class="paramname"><em>alloc</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>アロケータを指定して空のコンテナを構築する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">alloc</td><td>アロケータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// アロケータを指定して空のコンテナを構築する</span></div>
+<div class="line">basic_atom_set&lt;std::string&gt; as(std::allocator&lt;detail::trie_node&gt;{});</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="ab515a2cd69b49312f2ea49f98e5db548"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab515a2cd69b49312f2ea49f98e5db548">&#9670;&nbsp;</a></span>basic_atom_set() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_integral_v&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;, std::nullptr_t &gt;  = nullptr&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wordring::basic_atom_set::basic_atom_set </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">allocator_type const &amp;&#160;</td>
+          <td class="paramname"><em>alloc</em> = <code>allocator_type()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>直列化データからの構築 </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>直列化データの先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>直列化データの終端を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alloc</td><td>アロケータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a" title="直列化データからの割り当て">assign(InputIterator first, InputIterator last)</a></dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 元となるコンテナを作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line">basic_atom_set&lt;std::u32string&gt; as1(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">//直列化データを作成</span></div>
+<div class="line"><span class="keyword">auto</span> v2 = std::vector&lt;std::uint32_t&gt;(as1.ibegin(), as1.iend());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 直列化データから構築</span></div>
+<div class="line"><span class="keyword">auto</span> as2 = basic_atom_set&lt;std::u32string&gt;(v2.begin(), v2.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as2.size() == 5);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="ab515a2cd69b49312f2ea49f98e5db548"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab515a2cd69b49312f2ea49f98e5db548">&#9670;&nbsp;</a></span>basic_atom_set() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename std::enable_if_t&lt; std::negation_v&lt; std::is_integral&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;&gt;, std::nullptr_t &gt;  = nullptr&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">wordring::basic_atom_set::basic_atom_set </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">allocator_type const &amp;&#160;</td>
+          <td class="paramname"><em>alloc</em> = <code>allocator_type()</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列リストからの構築 </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>文字列リストの先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>文字列リストの終端を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">alloc</td><td>アロケータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 文字列リスト</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 文字列リストから構築</span></div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v.begin(), v.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as.size() == 5);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">関数詳解</h2>
+<a id="a7acf42a9b8b45cfade7bb1348ff2237a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7acf42a9b8b45cfade7bb1348ff2237a">&#9670;&nbsp;</a></span>assign() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_integral_v&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;, std::nullptr_t &gt;  = nullptr&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::basic_atom_set::assign </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>直列化データからの割り当て </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>直列化データの先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>直列化データの終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 元となるコンテナを作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line">basic_atom_set&lt;std::u32string&gt; as1(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">//直列化データを作成</span></div>
+<div class="line"><span class="keyword">auto</span> v2 = std::vector&lt;std::uint32_t&gt;(as1.ibegin(), as1.iend());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 直列化データから割り当て</span></div>
+<div class="line"><span class="keyword">auto</span> as2 = basic_atom_set&lt;std::u32string&gt;(v2.begin(), v2.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as2.size() == 5);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a7acf42a9b8b45cfade7bb1348ff2237a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7acf42a9b8b45cfade7bb1348ff2237a">&#9670;&nbsp;</a></span>assign() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename std::enable_if_t&lt; std::negation_v&lt; std::is_integral&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type &gt;&gt;, std::nullptr_t &gt;  = nullptr&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::basic_atom_set::assign </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列リストからの割り当て </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>文字列リストの先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>文字列リストの終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 文字列リスト</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"> </div>
+<div class="line">basic_atom_set&lt;std::u32string&gt; as;</div>
+<div class="line"><span class="comment">// 文字列リストから割り当て</span></div>
+<div class="line">as.assign(v.begin(), v.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as.size() == 5);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a7cceb4a95742f35d0fa1f3f4a3ba87ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cceb4a95742f35d0fa1f3f4a3ba87ed">&#9670;&nbsp;</a></span>at() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> wordring::basic_atom_set::at </td>
+          <td>(</td>
+          <td class="paramtype">std::uint32_t&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>IDからアトムを返す </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>アトムID</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列アトム</dd></dl>
+<p>id と対応するアトムが格納されていない場合、空のアトムを返す</p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// コンテナを作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// アトムIDを取得</span></div>
+<div class="line">std::uint32_t <span class="keywordtype">id</span> = as.at(std::u32string(U<span class="stringliteral">&quot;あう&quot;</span>));</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// IDからアトムを取得する</span></div>
+<div class="line"><span class="keyword">auto</span> a = as.at(<span class="keywordtype">id</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(<span class="keyword">static_cast&lt;</span>std::u32string<span class="keyword">&gt;</span>(a) == U<span class="stringliteral">&quot;あう&quot;</span>);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="aa3bdda2104cd1c90079bd58a59b39a4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3bdda2104cd1c90079bd58a59b39a4f">&#9670;&nbsp;</a></span>at() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> wordring::basic_atom_set::at </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列からアトムを返す </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>文字列の先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>文字列の終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列アトム</dd></dl>
+<p>文字列と対応するアトムが格納されていない場合、空のアトムを返す</p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// コンテナを作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> s = std::u32string(U<span class="stringliteral">&quot;あう&quot;</span>);</div>
+<div class="line"><span class="comment">// 文字列からアトムを取得する</span></div>
+<div class="line"><span class="keyword">auto</span> a = as.at(s.begin(), s.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(<span class="keyword">static_cast&lt;</span>std::u32string<span class="keyword">&gt;</span>(a) == U<span class="stringliteral">&quot;あう&quot;</span>);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a7b71e85dfe173d720cd32435e3e88739"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b71e85dfe173d720cd32435e3e88739">&#9670;&nbsp;</a></span>at() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> wordring::basic_atom_set::at </td>
+          <td>(</td>
+          <td class="paramtype">std::basic_string_view&lt; label_type &gt;&#160;</td>
+          <td class="paramname"><em>sv</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列からアトムを返す </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sv</td><td>文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列アトム</dd></dl>
+<p>文字列と対応するアトムが格納されていない場合、空のアトムを返す</p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// コンテナを作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 文字列からアトムを取得する</span></div>
+<div class="line"><span class="keyword">auto</span> a = as.at(U<span class="stringliteral">&quot;あう&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(<span class="keyword">static_cast&lt;</span>std::u32string<span class="keyword">&gt;</span>(a) == U<span class="stringliteral">&quot;あう&quot;</span>);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a0bdd429d68e76d54a8063b2c4db1e9fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bdd429d68e76d54a8063b2c4db1e9fe">&#9670;&nbsp;</a></span>operator[]()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> wordring::basic_atom_set::operator[] </td>
+          <td>(</td>
+          <td class="paramtype">std::basic_string_view&lt; label_type &gt;&#160;</td>
+          <td class="paramname"><em>sv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列からアトムを返す </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sv</td><td>文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列アトム</dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// コンテナを作成</span></div>
+<div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 文字列からアトムを取得する</span></div>
+<div class="line"><span class="keyword">auto</span> a = as[U<span class="stringliteral">&quot;え&quot;</span>];</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(<span class="keyword">static_cast&lt;</span>std::u32string<span class="keyword">&gt;</span>(a) == U<span class="stringliteral">&quot;え&quot;</span>);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a0185fb64fc64f0be31c096567e9205ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0185fb64fc64f0be31c096567e9205ad">&#9670;&nbsp;</a></span>insert() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> wordring::basic_atom_set::insert </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列を挿入する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>文字列の先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>文字列の終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列アトム</dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 空のコンテナを作成</span></div>
+<div class="line">basic_atom_set&lt;std::u32string&gt; as;</div>
+<div class="line"> </div>
+<div class="line">std::u32string s(U<span class="stringliteral">&quot;あ&quot;</span>);</div>
+<div class="line"><span class="comment">// 文字列を挿入する</span></div>
+<div class="line"><span class="keyword">auto</span> a = as.insert(s.begin(), s.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(<span class="keyword">static_cast&lt;</span>std::u32string<span class="keyword">&gt;</span>(a) == U<span class="stringliteral">&quot;あ&quot;</span>);</div>
+<div class="line">assert(as.size() == 1);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a7df7192308531a2832be3303cb97c8ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7df7192308531a2832be3303cb97c8ee">&#9670;&nbsp;</a></span>insert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> wordring::basic_atom_set::insert </td>
+          <td>(</td>
+          <td class="paramtype">std::basic_string_view&lt; label_type &gt;&#160;</td>
+          <td class="paramname"><em>sv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列を挿入する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sv</td><td>文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>文字列アトム</dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line"><span class="comment">// 空のコンテナを作成</span></div>
+<div class="line">basic_atom_set&lt;std::u32string&gt; as;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 文字列を挿入する</span></div>
+<div class="line"><span class="keyword">auto</span> a = as.insert(U<span class="stringliteral">&quot;あ&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(<span class="keyword">static_cast&lt;</span>std::u32string<span class="keyword">&gt;</span>(a) == U<span class="stringliteral">&quot;あ&quot;</span>);</div>
+<div class="line">assert(as.size() == 1);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="af77ee1d5b088cf5de9ab052b5ec372c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af77ee1d5b088cf5de9ab052b5ec372c2">&#9670;&nbsp;</a></span>erase() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::basic_atom_set::erase </td>
+          <td>(</td>
+          <td class="paramtype">std::uint32_t&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>アトムを削除する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">id</td><td>削除するアトムID</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="comment">// コンテナを構築する</span></div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// IDを取得する</span></div>
+<div class="line">std::uint32_t <span class="keywordtype">id</span> = as.at(U<span class="stringliteral">&quot;い&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// アトムを削除する</span></div>
+<div class="line">as.erase(<span class="keywordtype">id</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as.contains(U<span class="stringliteral">&quot;い&quot;</span>) == <span class="keyword">false</span>);</div>
+<div class="line">assert(as.size() == 4);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="afb513d6e6c88a8f35feef797c0739f25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb513d6e6c88a8f35feef797c0739f25">&#9670;&nbsp;</a></span>erase() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::basic_atom_set::erase </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>アトムを削除する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>文字列の先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>文字列の終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="comment">// コンテナを構築する</span></div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">auto</span> s = std::u32string(U<span class="stringliteral">&quot;うあい&quot;</span>);</div>
+<div class="line"><span class="comment">// アトムを削除する</span></div>
+<div class="line">as.erase(s.begin(), s.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as.contains(U<span class="stringliteral">&quot;うあい&quot;</span>) == <span class="keyword">false</span>);</div>
+<div class="line">assert(as.size() == 4);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a7eb610b11ca26326b2628885a4cc6671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb610b11ca26326b2628885a4cc6671">&#9670;&nbsp;</a></span>erase() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::basic_atom_set::erase </td>
+          <td>(</td>
+          <td class="paramtype">std::basic_string_view&lt; label_type &gt;&#160;</td>
+          <td class="paramname"><em>sv</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>アトムを削除する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sv</td><td>文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="comment">// コンテナを構築する</span></div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// アトムを削除する</span></div>
+<div class="line">as.erase(U<span class="stringliteral">&quot;うあい&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(as.contains(U<span class="stringliteral">&quot;うあい&quot;</span>) == <span class="keyword">false</span>);</div>
+<div class="line">assert(as.size() == 4);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="a487c4dc03d1ff7065d986db22803e3cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a487c4dc03d1ff7065d986db22803e3cc">&#9670;&nbsp;</a></span>contains() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wordring::basic_atom_set::contains </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列が格納されているか調べる </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>文字列の先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>文字列の終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>格納されている場合 true 、それ以外の場合 false </dd></dl>
+
+</div>
+</div>
+<a id="ac5adf78fb2eb2efe98f5fa9c8f76a9be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5adf78fb2eb2efe98f5fa9c8f76a9be">&#9670;&nbsp;</a></span>contains() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool wordring::basic_atom_set::contains </td>
+          <td>(</td>
+          <td class="paramtype">std::basic_string_view&lt; label_type &gt;&#160;</td>
+          <td class="paramname"><em>sv</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字列が格納されているか調べる </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">sv</td><td>文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>格納されている場合 true 、それ以外の場合 false</dd></dl>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">std::vector&lt;std::u32string&gt; v1{ U<span class="stringliteral">&quot;あ&quot;</span>, U<span class="stringliteral">&quot;あう&quot;</span>, U<span class="stringliteral">&quot;い&quot;</span>, U<span class="stringliteral">&quot;うあい&quot;</span>, U<span class="stringliteral">&quot;うえ&quot;</span> };</div>
+<div class="line"><span class="comment">// コンテナを構築する</span></div>
+<div class="line"><span class="keyword">auto</span> as = basic_atom_set&lt;std::u32string&gt;(v1.begin(), v1.end());</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 文字列が格納されているか調べる</span></div>
+<div class="line"><span class="keywordtype">bool</span> b = as.contains(U<span class="stringliteral">&quot;あ&quot;</span>);</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">// 検証</span></div>
+<div class="line">assert(b == <span class="keyword">true</span>);</div>
+</div><!-- fragment --> </dd></dl>
+
+</div>
+</div>
+<a id="afac2a2fa717602f2bbefce0432b4c1c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afac2a2fa717602f2bbefce0432b4c1c2">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_type <a class="el" href="classwordring_1_1basic__trie.html">wordring::basic_trie</a>&lt; Label, Base &gt;::size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>格納しているキー文字列数を調べる </p>
+<dl class="section return"><dt>戻り値</dt><dd>コンテナに格納されているキー文字列の数 </dd></dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="atom_8hpp_source.html">atom.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

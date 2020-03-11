@@ -117,6 +117,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> =
 <tr class="memitem:a6dfcb792322cc969058c43a93d823bba"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__trie.html#a6dfcb792322cc969058c43a93d823bba">assign</a> (ForwardIterator first, ForwardIterator last)</td></tr>
 <tr class="memdesc:a6dfcb792322cc969058c43a93d823bba"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列リストから割り当てる  <a href="classwordring_1_1basic__trie.html#a6dfcb792322cc969058c43a93d823bba">[詳解]</a><br /></td></tr>
 <tr class="separator:a6dfcb792322cc969058c43a93d823bba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d0c7269cfb5bee9148efc4dda56df4e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structwordring_1_1detail_1_1trie__value__proxy.html">reference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__trie.html#a6d0c7269cfb5bee9148efc4dda56df4e">at</a> (<a class="el" href="classwordring_1_1detail_1_1const__trie__iterator.html">const_iterator</a> pos, index_type &amp;idx)</td></tr>
+<tr class="memdesc:a6d0c7269cfb5bee9148efc4dda56df4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">葉の値への参照を返す  <a href="classwordring_1_1basic__trie.html#a6d0c7269cfb5bee9148efc4dda56df4e">[詳解]</a><br /></td></tr>
+<tr class="separator:a6d0c7269cfb5bee9148efc4dda56df4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09a6bb8fbeb67cd79c5c72aeb849657a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structwordring_1_1detail_1_1trie__value__proxy.html">reference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a">at</a> (<a class="el" href="classwordring_1_1detail_1_1const__trie__iterator.html">const_iterator</a> pos)</td></tr>
 <tr class="memdesc:a09a6bb8fbeb67cd79c5c72aeb849657a"><td class="mdescLeft">&#160;</td><td class="mdescRight">葉の値への参照を返す  <a href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a">[詳解]</a><br /></td></tr>
 <tr class="separator:a09a6bb8fbeb67cd79c5c72aeb849657a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -280,10 +283,10 @@ class wordring::basic_trie&lt; Label, Base &gt;</h3>
 <dl class="section user"><dt>ラベル</dt><dd></dd></dl>
 <p>一般的にダブル・アレイはラベルとして8ビット整数を使うが、このクラスは直列化によって 任意の整数型をラベルとして利用することが出来る。 根はラベルを持たない。</p>
 <dl class="section user"><dt>値の格納</dt><dd></dd></dl>
-<p>葉に2,147,483,647までの正の整数値を格納できる。 mapのように任意の型の値を格納できるよう拡張する場合、値の配列に対する添字を葉に格納することを想定している。 葉に格納される値の取得・設定にはメンバ関数 <a class="el" href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a" title="葉の値への参照を返す">at()</a> を使う。 イテレータの逆参照によって得られる値は遷移ラベルであり、葉に格納される値と明確に区別される。</p>
+<p>葉に2,147,483,647までの正の整数値を格納できる。 mapのように任意の型の値を格納できるよう拡張する場合、値の配列に対する添字を葉に格納することを想定している。 葉に格納される値の取得・設定にはメンバ関数 <a class="el" href="classwordring_1_1basic__trie.html#a6d0c7269cfb5bee9148efc4dda56df4e" title="葉の値への参照を返す">at()</a> を使う。 イテレータの逆参照によって得られる値は遷移ラベルであり、葉に格納される値と明確に区別される。</p>
 <ul>
 <li><a class="el" href="classwordring_1_1detail_1_1trie__heap.html">detail::trie_heap</a></li>
-<li><a class="el" href="classwordring_1_1basic__trie.html#a09a6bb8fbeb67cd79c5c72aeb849657a">at()</a></li>
+<li><a class="el" href="classwordring_1_1basic__trie.html#a6d0c7269cfb5bee9148efc4dda56df4e">at()</a></li>
 </ul>
 <dl class="section user"><dt>イテレータ</dt><dd></dd></dl>
 <p>ノード間の移動には、イテレータを用いる。 イテレータは木に対するイテレータと互換性を保つよう設計した。 イテレータを逆参照すると親から当該ノードへの遷移に使われたラベルを取り出せる。</p>
@@ -308,8 +311,17 @@ class wordring::basic_trie&lt; Label, Base &gt;</h3>
 </ul>
 <p><b>ibegin()</b> の逆参照は32ビット整数値を返す。 ファイルへ保存するためにバイト列を必要とする場合、直列化イテレータを使う。</p>
 <ul>
-<li><a class="el" href="classwordring_1_1serialize__iterator.html">wordring::serialize_iterator</a> </li>
+<li><a class="el" href="classwordring_1_1serialize__iterator.html">wordring::serialize_iterator</a></li>
 </ul>
+<dl class="section user"><dt>速度</dt><dd></dd></dl>
+<ul>
+<li>テンプレート・パラメータ Label の大きさが1バイト</li>
+<li>文字列リストがソートされている</li>
+<li>文字列リストに重複が無い</li>
+</ul>
+<p>以上の条件を満たした時、 <a class="el" href="classwordring_1_1basic__trie.html#a8e3d28cb8a8d679c278e9781aa4cade4" title="直列化データから割り当てる">assign()</a> は最速となる。</p>
+<p>挿入される文字列リストが事前にソートされている場合、挿入速度、検索速度共に高速化される。 ソートにかかる時間と挿入にかかる時間を足しても、ソートせずに挿入する時間に満たない。 したがって、文字列リストを事前にソートしておくことが望ましい。 検索速度に顕著な影響を与えることを考慮して事前のソートを推奨する。 挿入順による影響は <b>std::set</b> と同様の特性を示す。</p>
+<p>ごく少量の文字列しか格納していない場合を除き、大部分が辞書順に挿入された条件下で、検索速度はどのSTLコンテナよりも速い。 一方、挿入速度はどのSTLコンテナよりも遅い。 </p>
 </div><h2 class="groupheader">構築子と解体子</h2>
 <a id="a37c092796c02f5be21c4c2b71edfd417"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a37c092796c02f5be21c4c2b71edfd417">&#9670;&nbsp;</a></span>basic_trie() <span class="overload">[1/5]</span></h2>
@@ -685,8 +697,59 @@ template&lt;typename ForwardIterator , typename std::enable_if_t&lt; std::negati
 
 </div>
 </div>
+<a id="a6d0c7269cfb5bee9148efc4dda56df4e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d0c7269cfb5bee9148efc4dda56df4e">&#9670;&nbsp;</a></span>at() <span class="overload">[1/7]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Label , typename Base &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structwordring_1_1detail_1_1trie__value__proxy.html">reference</a> <a class="el" href="classwordring_1_1basic__trie.html">wordring::basic_trie</a>&lt; Label, Base &gt;::at </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1const__trie__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_type &amp;&#160;</td>
+          <td class="paramname"><em>idx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>葉の値への参照を返す </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>葉を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">idx</td><td>葉の値のインデックス</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>葉の値に対するプロキシ</dd></dl>
+<p>葉に2,147,483,647までの正の整数値を格納できる。 実際に返される値は軽量プロキシである。</p>
+<p>入力の正当性はチェックされない。</p>
+<p>このメンバは、継承するクラスから呼び出される目的で用意した。 </p>
+
+</div>
+</div>
 <a id="a09a6bb8fbeb67cd79c5c72aeb849657a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09a6bb8fbeb67cd79c5c72aeb849657a">&#9670;&nbsp;</a></span>at() <span class="overload">[1/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a09a6bb8fbeb67cd79c5c72aeb849657a">&#9670;&nbsp;</a></span>at() <span class="overload">[2/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -740,7 +803,7 @@ template&lt;typename Label , typename Base &gt; </div>
 </div>
 </div>
 <a id="a976aec040c95fb21d94ac5c3a50d4a03"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a976aec040c95fb21d94ac5c3a50d4a03">&#9670;&nbsp;</a></span>at() <span class="overload">[2/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a976aec040c95fb21d94ac5c3a50d4a03">&#9670;&nbsp;</a></span>at() <span class="overload">[3/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -778,7 +841,7 @@ template&lt;typename Label , typename Base &gt; </div>
 </div>
 </div>
 <a id="ac7c48d98e821f8749003bd320630feeb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac7c48d98e821f8749003bd320630feeb">&#9670;&nbsp;</a></span>at() <span class="overload">[3/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7c48d98e821f8749003bd320630feeb">&#9670;&nbsp;</a></span>at() <span class="overload">[4/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -849,7 +912,7 @@ template&lt;typename InputIterator &gt; </div>
 </div>
 </div>
 <a id="a1144ec75e5732fb9bfdf5a83a568cd7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1144ec75e5732fb9bfdf5a83a568cd7a">&#9670;&nbsp;</a></span>at() <span class="overload">[4/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a1144ec75e5732fb9bfdf5a83a568cd7a">&#9670;&nbsp;</a></span>at() <span class="overload">[5/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -900,7 +963,7 @@ template&lt;typename InputIterator &gt; </div>
 </div>
 </div>
 <a id="a2369a27002b5c0cedfa94fdc9bf424e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2369a27002b5c0cedfa94fdc9bf424e8">&#9670;&nbsp;</a></span>at() <span class="overload">[5/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2369a27002b5c0cedfa94fdc9bf424e8">&#9670;&nbsp;</a></span>at() <span class="overload">[6/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -959,7 +1022,7 @@ template&lt;typename Key &gt; </div>
 </div>
 </div>
 <a id="ae292b71ef965f232a6a42eb0fc198fde"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae292b71ef965f232a6a42eb0fc198fde">&#9670;&nbsp;</a></span>at() <span class="overload">[6/6]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae292b71ef965f232a6a42eb0fc198fde">&#9670;&nbsp;</a></span>at() <span class="overload">[7/7]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2031,8 +2094,8 @@ template&lt;typename Label1 , typename Base1 &gt; </div>
 <li><a class="el" href="trie_8hpp_source.html">trie.hpp</a></li>
 </ul>
 </div><!-- contents -->
-<div class="ttc" id="anamespacewordring_html_a591fd8973766b04b6e4149db6dfff618"><div class="ttname"><a href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">wordring::stable_trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::stable_trie_base&lt; Allocator &gt; &gt; stable_trie</div><div class="ttdoc">葉からの空遷移先INDEXが衝突によって変更されない汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:998</div></div>
-<div class="ttc" id="anamespacewordring_html_a73f93ed17f5df2e945e085133d6b74e9"><div class="ttname"><a href="namespacewordring.html#a73f93ed17f5df2e945e085133d6b74e9">wordring::trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::trie_base&lt; Allocator &gt; &gt; trie</div><div class="ttdoc">メモリー使用量削減を目標とする汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:990</div></div>
+<div class="ttc" id="anamespacewordring_html_a591fd8973766b04b6e4149db6dfff618"><div class="ttname"><a href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">wordring::stable_trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::stable_trie_base&lt; Allocator &gt; &gt; stable_trie</div><div class="ttdoc">葉からの空遷移先INDEXが衝突によって変更されない汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:1034</div></div>
+<div class="ttc" id="anamespacewordring_html_a73f93ed17f5df2e945e085133d6b74e9"><div class="ttname"><a href="namespacewordring.html#a73f93ed17f5df2e945e085133d6b74e9">wordring::trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::trie_base&lt; Allocator &gt; &gt; trie</div><div class="ttdoc">メモリー使用量削減を目標とする汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:1026</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

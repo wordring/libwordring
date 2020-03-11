@@ -1,11 +1,11 @@
-﻿# wordring_cpp/sample/serialize
+﻿# wordring_cpp/sample/string
 #
-# このプロジェクトはtrieのサンプルを作成します。
+# このプロジェクトはstringのサンプルを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(serialize_sample)
+project(string_sample)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -28,7 +28,7 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		serialize_iterator.cpp
+		atom.cpp
 )
 
 target_link_libraries(

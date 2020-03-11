@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: atom.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_d8e9f752e2e058fc8e4e8fc0eca5ef2a.html">string</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">atom.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/compatibility.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;wordring/trie/trie.hpp&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring.html">wordring</a></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String, <span class="keyword">typename</span> Allocator&gt;</div>
+<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html">   13</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1basic__atom__set.html">basic_atom_set</a>;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;}</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1detail.html">wordring::detail</a></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String, <span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html">   28</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom</a> : <span class="keyword">public</span> <a class="code" href="classwordring_1_1basic__trie.html">wordring::stable_trie</a>&lt;typename String::value_type&gt;::const_iterator</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1, <span class="keyword">typename</span> Allocator1&gt;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classwordring_1_1basic__atom__set.html">wordring::basic_atom_set</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1, <span class="keyword">typename</span> Allocator1&gt;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom&lt;String1, Allocator1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom&lt;String1, Allocator1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1, <span class="keyword">typename</span> Allocator1&gt;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom&lt;String1, Allocator1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom&lt;String1, Allocator1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">using</span> base_type = <span class="keyword">typename</span> <a class="code" href="classwordring_1_1detail_1_1const__trie__iterator.html">stable_trie&lt;typename String::value_type&gt;::const_iterator</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">using</span> <span class="keyword">typename</span> base_type::container;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">using</span> <span class="keyword">typename</span> base_type::index_type;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">using</span> <span class="keyword">typename</span> base_type::node_type;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">using</span> string_type = String;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">using</span> label_type  = <span class="keyword">typename</span> string_type::value_type;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">using</span> base_type::operator bool;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">using</span> base_type::operator !;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">using</span> base_type::string;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keyword">using</span> base_type::m_c;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">using</span> base_type::m_index;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html#ab16490f7e72102c6edc1412c06576b5c">   63</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html#ab16490f7e72102c6edc1412c06576b5c">basic_atom</a>(base_type it)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            : base_type(it)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html#a0e6697f43993b5d94aed89823e7326b7">   73</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html#a0e6697f43993b5d94aed89823e7326b7">basic_atom</a>(container <span class="keyword">const</span>&amp; c, index_type idx)</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            : base_type(c, idx)</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        {</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html#ab4d4c60d08ac2ada9fefbc6cbf634b9d">   87</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html#ab4d4c60d08ac2ada9fefbc6cbf634b9d">basic_atom</a>()</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            : base_type()</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html#a4444e886bbd4ef4cb4d839633b0553db">  114</a></span>&#160;        <span class="keyword">operator</span> std::uint32_t()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keyword">typename</span> base_type::index_type idx = 0;</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keywordflow">if</span> (m_index != 0)</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            {</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                node_type <span class="keyword">const</span>* d = m_c-&gt;data();</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                idx = (d + m_index)-&gt;m_base + base_type::null_value;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                assert(1 &lt; idx &amp;&amp; idx &lt; base_type::limit());</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                assert((d + idx)-&gt;m_check == m_index);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            }</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            <span class="keywordflow">return</span> idx;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        }</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html#a7f58379770917553ef2c26b8dcb4c5ae">  150</a></span>&#160;        <span class="keyword">operator</span> string_type()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;            string_type result;</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;            base_type::string(result);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        }</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1basic__atom.html#a4df4e02741d7c31398eb7c57e4c2e8c3">  182</a></span>&#160;        string_type&amp; <a class="code" href="classwordring_1_1detail_1_1basic__atom.html#a4df4e02741d7c31398eb7c57e4c2e8c3">string</a>(string_type&amp; result)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            <span class="keywordflow">if</span>(m_index != 0) base_type::string(result);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        }</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    };</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="comment">/* @brief 二つのアトムが等しいか調べる</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;<span class="comment">        @par 例</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;<span class="comment">        @code</span></div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;<span class="comment">            // アトム・コンテナを構築する</span></div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;<span class="comment">            std::vector&lt;std::u32string&gt; v{ U&quot;あ&quot;, U&quot;あう&quot;, U&quot;い&quot;, U&quot;うあい&quot;, U&quot;うえ&quot; };</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="comment">            auto as = basic_atom_set&lt;std::u32string&gt;(v.begin(), v.end());</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="comment">            // コンテナからアトムを取得する</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="comment">            auto a1 = as.at(U&quot;あ&quot;);</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="comment">            auto a2 = as.at(U&quot;あ&quot;);</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;<span class="comment">            // 二つのアトムが等しいか調べる</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;<span class="comment">            assert(a1 == a2);</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;<span class="comment">        @endcode</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="comment">    */</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1, <span class="keyword">typename</span> Allocator1&gt;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(basic_atom&lt;String1, Allocator1&gt; <span class="keyword">const</span>&amp; lhs, basic_atom&lt;String1, Allocator1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    {</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;        assert(lhs.m_c == rhs.m_c);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keywordflow">return</span> lhs.m_index == rhs.m_index;</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="comment">/* @brief 二つのアトムが等しくないか調べる</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="comment">        @par 例</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="comment">        @code</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="comment">            // アトム・コンテナを構築する</span></div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;<span class="comment">            std::vector&lt;std::u32string&gt; v{ U&quot;あ&quot;, U&quot;あう&quot;, U&quot;い&quot;, U&quot;うあい&quot;, U&quot;うえ&quot; };</span></div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="comment">            auto as = basic_atom_set&lt;std::u32string&gt;(v.begin(), v.end());</span></div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="comment">            // コンテナからアトムを取得する</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="comment">            auto a1 = as.at(U&quot;あ&quot;);</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="comment">            auto a2 = as.at(U&quot;あう&quot;);</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="comment">            // 二つのアトムが等しくないか調べる</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="comment">            assert(a1 != a2);</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="comment">        @endcode</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="comment">    */</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1, <span class="keyword">typename</span> Allocator1&gt;</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(basic_atom&lt;String1, Allocator1&gt; <span class="keyword">const</span>&amp; lhs, basic_atom&lt;String1, Allocator1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    {</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        assert(lhs.m_c == rhs.m_c);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">return</span> lhs.m_index != rhs.m_index;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    }</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;}</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring.html">wordring</a></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;{</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String, <span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keyword">class </span>basic_atom_set : <span class="keyword">public</span> <a class="code" href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">stable_trie</a>&lt;typename String::value_type&gt;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    {</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keyword">using</span> base_type = stable_trie&lt;typename String::value_type&gt;;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="keyword">using</span> allocator_type = Allocator;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keyword">using</span> key_type   = String;</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        <span class="keyword">using</span> value_type = detail::basic_atom&lt;key_type&gt;;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keyword">using</span> label_type = <span class="keyword">typename</span> String::value_type;</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keyword">using</span> <span class="keyword">typename</span> base_type::serialize_iterator;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keyword">using</span> base_type::get_allocator;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1basic__trie.html#afac2a2fa717602f2bbefce0432b4c1c2">base_type::size</a>;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keyword">using</span> base_type::ibegin;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keyword">using</span> base_type::iend;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="keyword">using</span> base_type::clear;</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="keyword">using</span> base_type::null_value;</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00295"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#ad10ef05a016eadcdd89c8f28ab5a60f7">  295</a></span>&#160;        <a class="code" href="classwordring_1_1basic__atom__set.html#ad10ef05a016eadcdd89c8f28ab5a60f7">basic_atom_set</a>()</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            : <a class="code" href="classwordring_1_1basic__trie.html">base_type</a>()</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        {</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        }</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#adc1f8594495e706a90986ac92ecd44c1">  310</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classwordring_1_1basic__atom__set.html#adc1f8594495e706a90986ac92ecd44c1">basic_atom_set</a>(allocator_type <span class="keyword">const</span>&amp; alloc)</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;            : <a class="code" href="classwordring_1_1basic__trie.html">base_type</a>(alloc)</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;        {</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        }</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160; </div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        template &lt;typename InputIterator, typename std::enable_if_t&lt;std::is_integral_v&lt;typename std::iterator_traits&lt;InputIterator&gt;::value_type&gt;, std::nullptr_t&gt; = <span class="keyword">nullptr</span>&gt;</div>
+<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">  343</a></span>&#160;        <a class="code" href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">basic_atom_set</a>(InputIterator first, InputIterator last, allocator_type <span class="keyword">const</span>&amp; alloc = allocator_type())</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            : <a class="code" href="classwordring_1_1basic__trie.html">base_type</a>(alloc)</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            <a class="code" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">assign</a>(first, last);</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        }</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;        template &lt;typename InputIterator, typename std::enable_if_t&lt;std::negation_v&lt;std::is_integral&lt;typename std::iterator_traits&lt;InputIterator&gt;::value_type&gt;&gt;, std::nullptr_t&gt; = <span class="keyword">nullptr</span>&gt;</div>
+<div class="line"><a name="l00371"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">  371</a></span>&#160;        <a class="code" href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">basic_atom_set</a>(InputIterator first, InputIterator last, allocator_type <span class="keyword">const</span>&amp; alloc = allocator_type())</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;            : <a class="code" href="classwordring_1_1basic__trie.html">base_type</a>(alloc)</div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;        {</div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;            <a class="code" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">assign</a>(first, last);</div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;        }</div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160; </div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        template &lt;typename InputIterator, typename std::enable_if_t&lt;std::is_integral_v&lt;typename std::iterator_traits&lt;InputIterator&gt;::value_type&gt;, std::nullptr_t&gt; = <span class="keyword">nullptr</span>&gt;</div>
+<div class="line"><a name="l00401"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">  401</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">assign</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        {</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            <a class="code" href="classwordring_1_1basic__trie.html#a8e3d28cb8a8d679c278e9781aa4cade4">base_type::assign</a>(first, last);</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;        }</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        template &lt;typename InputIterator, typename std::enable_if_t&lt;std::negation_v&lt;std::is_integral&lt;typename std::iterator_traits&lt;InputIterator&gt;::value_type&gt;&gt;, std::nullptr_t&gt; = <span class="keyword">nullptr</span>&gt;</div>
+<div class="line"><a name="l00427"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">  427</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">assign</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;        {</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            <span class="keywordflow">while</span> (first != last) <a class="code" href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">insert</a>(*first++);</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        }</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        <span class="comment">// 要素アクセス --------------------------------------------------------</span></div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160; </div>
+<div class="line"><a name="l00458"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">  458</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> <a class="code" href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">at</a>(std::uint32_t <span class="keywordtype">id</span>)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;            <span class="keyword">typename</span> base_type::node_type <span class="keyword">const</span>* d = base_type::m_c.data();</div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;            <span class="keyword">typename</span> base_type::index_type idx = (d + id)-&gt;m_check;</div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;            assert(1 &lt; idx &amp;&amp; idx &lt; base_type::m_c.size());</div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;            assert((d + idx)-&gt;m_base + base_type::null_value == <span class="keywordtype">id</span>);</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160; </div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a>(base_type::m_c, idx);</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        }</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;              </div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00493"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#aa3bdda2104cd1c90079bd58a59b39a4f">  493</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> <a class="code" href="classwordring_1_1basic__atom__set.html#aa3bdda2104cd1c90079bd58a59b39a4f">at</a>(InputIterator first, InputIterator last)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1basic__trie.html#aecfacfe022bddeb689d312848c158aa1">base_type::find</a>(first, last);</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;        }</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160; </div>
+<div class="line"><a name="l00519"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a7b71e85dfe173d720cd32435e3e88739">  519</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> <a class="code" href="classwordring_1_1basic__atom__set.html#a7b71e85dfe173d720cd32435e3e88739">at</a>(std::basic_string_view&lt;label_type&gt; sv)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">at</a>(sv.begin(), sv.end());</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        }</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160; </div>
+<div class="line"><a name="l00543"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a0bdd429d68e76d54a8063b2c4db1e9fe">  543</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> <a class="code" href="classwordring_1_1basic__atom__set.html#a0bdd429d68e76d54a8063b2c4db1e9fe">operator[]</a>(std::basic_string_view&lt;label_type&gt; sv)</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;        {</div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;            <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> it = <a class="code" href="classwordring_1_1basic__trie.html#aecfacfe022bddeb689d312848c158aa1">base_type::find</a>(sv.begin(), sv.end());</div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;            <span class="keywordflow">if</span> (!it) it = <a class="code" href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">insert</a>(sv.begin(), sv.end());</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;            <span class="keywordflow">return</span> it;</div>
+<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        }</div>
+<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;        </div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        <span class="comment">// 変更 ---------------------------------------------------------------</span></div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160; </div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00574"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">  574</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> <a class="code" href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">insert</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;        {</div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;            <span class="keyword">auto</span> it = <a class="code" href="classwordring_1_1basic__trie.html#a4ffdba36a97111cc61b787dccddbb655">base_type::insert</a>(first, last);</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160; </div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;            <span class="keyword">typename</span> base_type::index_type idx;</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;            </div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;            <span class="keywordflow">if</span> (it)</div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;            {</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                <span class="keyword">auto</span> proxy = <a class="code" href="classwordring_1_1basic__trie.html#a6d0c7269cfb5bee9148efc4dda56df4e">base_type::at</a>(it, idx);</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160;                proxy = idx;</div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;            }</div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160; </div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;            <span class="keywordflow">return</span> it;</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;        }</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160; </div>
+<div class="line"><a name="l00608"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a7df7192308531a2832be3303cb97c8ee">  608</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1basic__atom.html">value_type</a> <a class="code" href="classwordring_1_1basic__atom__set.html#a7df7192308531a2832be3303cb97c8ee">insert</a>(std::basic_string_view&lt;label_type&gt; sv)</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;        {</div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">insert</a>(sv.begin(), sv.end());</div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;        }</div>
+<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160; </div>
+<div class="line"><a name="l00634"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#af77ee1d5b088cf5de9ab052b5ec372c2">  634</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1basic__atom__set.html#af77ee1d5b088cf5de9ab052b5ec372c2">erase</a>(std::uint32_t <span class="keywordtype">id</span>)</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;        {</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;            <span class="keywordflow">if</span>(<span class="keywordtype">id</span> != 0) <a class="code" href="classwordring_1_1basic__trie.html#a2d00ba583306805718b8a320ee2b5300">base_type::erase</a>(<span class="keyword">static_cast&lt;</span>typename <a class="code" href="classwordring_1_1detail_1_1const__trie__iterator.html">base_type::const_iterator</a><span class="keyword">&gt;</span>(<a class="code" href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">at</a>(<span class="keywordtype">id</span>)));</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;        }</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160; </div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00660"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#afb513d6e6c88a8f35feef797c0739f25">  660</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1basic__atom__set.html#afb513d6e6c88a8f35feef797c0739f25">erase</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;        {</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;            <a class="code" href="classwordring_1_1basic__trie.html#a2d00ba583306805718b8a320ee2b5300">base_type::erase</a>(<a class="code" href="classwordring_1_1basic__trie.html#aecfacfe022bddeb689d312848c158aa1">base_type::find</a>(first, last));</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        }</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160; </div>
+<div class="line"><a name="l00683"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a7eb610b11ca26326b2628885a4cc6671">  683</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a7eb610b11ca26326b2628885a4cc6671">erase</a>(std::basic_string_view&lt;label_type&gt; sv)</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;        {</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            <a class="code" href="classwordring_1_1basic__atom__set.html#af77ee1d5b088cf5de9ab052b5ec372c2">erase</a>(sv.begin(), sv.end());</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;        }</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160; </div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;        <span class="comment">// 検索 ---------------------------------------------------------------</span></div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160; </div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00698"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#a487c4dc03d1ff7065d986db22803e3cc">  698</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a487c4dc03d1ff7065d986db22803e3cc">contains</a>(InputIterator first, InputIterator last)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1basic__trie.html#a35dd91c5d31a0e15683d3296d38b0733">base_type::contains</a>(first, last);</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;        }</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160; </div>
+<div class="line"><a name="l00722"></a><span class="lineno"><a class="line" href="classwordring_1_1basic__atom__set.html#ac5adf78fb2eb2efe98f5fa9c8f76a9be">  722</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1basic__atom__set.html#ac5adf78fb2eb2efe98f5fa9c8f76a9be">contains</a>(std::basic_string_view&lt;label_type&gt; sv)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1basic__atom__set.html#a487c4dc03d1ff7065d986db22803e3cc">contains</a>(sv.begin(), sv.end());</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        }</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;    };</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;    <span class="keyword">using</span> u8atom_set = basic_atom_set&lt;std::u8string, Allocator&gt;;</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160; </div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;    <span class="keyword">using</span> u16atom_set = basic_atom_set&lt;std::u16string, Allocator&gt;;</div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160; </div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Allocator = std::allocator&lt;detail::trie_node&gt;&gt;</div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;    <span class="keyword">using</span> u32atom_set = basic_atom_set&lt;std::u32string, Allocator&gt;;</div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html">wordring::basic_atom_set</a></div><div class="ttdoc">文字列アトムのコンテナ</div><div class="ttdef"><b>Definition:</b> atom.hpp:13</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a7cceb4a95742f35d0fa1f3f4a3ba87ed"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a7cceb4a95742f35d0fa1f3f4a3ba87ed">wordring::basic_atom_set::at</a></div><div class="ttdeci">value_type at(std::uint32_t id) const</div><div class="ttdoc">IDからアトムを返す</div><div class="ttdef"><b>Definition:</b> atom.hpp:458</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_a8e3d28cb8a8d679c278e9781aa4cade4"><div class="ttname"><a href="classwordring_1_1basic__trie.html#a8e3d28cb8a8d679c278e9781aa4cade4">wordring::basic_trie::assign</a></div><div class="ttdeci">void assign(InputIterator first, InputIterator last)</div><div class="ttdoc">直列化データから割り当てる</div><div class="ttdef"><b>Definition:</b> trie.hpp:306</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1basic__atom_html"><div class="ttname"><a href="classwordring_1_1detail_1_1basic__atom.html">wordring::detail::basic_atom</a></div><div class="ttdoc">文字列アトム</div><div class="ttdef"><b>Definition:</b> atom.hpp:28</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_af77ee1d5b088cf5de9ab052b5ec372c2"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#af77ee1d5b088cf5de9ab052b5ec372c2">wordring::basic_atom_set::erase</a></div><div class="ttdeci">void erase(std::uint32_t id)</div><div class="ttdoc">アトムを削除する</div><div class="ttdef"><b>Definition:</b> atom.hpp:634</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1basic__atom_html_a0e6697f43993b5d94aed89823e7326b7"><div class="ttname"><a href="classwordring_1_1detail_1_1basic__atom.html#a0e6697f43993b5d94aed89823e7326b7">wordring::detail::basic_atom::basic_atom</a></div><div class="ttdeci">basic_atom(container const &amp;c, index_type idx)</div><div class="ttdoc">アトムを構築する</div><div class="ttdef"><b>Definition:</b> atom.hpp:73</div></div>
+<div class="ttc" id="anamespacewordring_html_a591fd8973766b04b6e4149db6dfff618"><div class="ttname"><a href="namespacewordring.html#a591fd8973766b04b6e4149db6dfff618">wordring::stable_trie</a></div><div class="ttdeci">basic_trie&lt; Label, detail::stable_trie_base&lt; Allocator &gt; &gt; stable_trie</div><div class="ttdoc">葉からの空遷移先INDEXが衝突によって変更されない汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:1034</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_adc1f8594495e706a90986ac92ecd44c1"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#adc1f8594495e706a90986ac92ecd44c1">wordring::basic_atom_set::basic_atom_set</a></div><div class="ttdeci">basic_atom_set(allocator_type const &amp;alloc)</div><div class="ttdoc">アロケータを指定して空のコンテナを構築する</div><div class="ttdef"><b>Definition:</b> atom.hpp:310</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_aecfacfe022bddeb689d312848c158aa1"><div class="ttname"><a href="classwordring_1_1basic__trie.html#aecfacfe022bddeb689d312848c158aa1">wordring::basic_trie::find</a></div><div class="ttdeci">const_iterator find(InputIterator first, InputIterator last) const</div><div class="ttdoc">完全一致検索</div><div class="ttdef"><b>Definition:</b> trie.hpp:893</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1const__trie__iterator_html"><div class="ttname"><a href="classwordring_1_1detail_1_1const__trie__iterator.html">wordring::detail::const_trie_iterator</a></div><div class="ttdoc">basic_trie のイテレータ</div><div class="ttdef"><b>Definition:</b> trie_iterator.hpp:25</div></div>
+<div class="ttc" id="anamespacewordring_html"><div class="ttname"><a href="namespacewordring.html">wordring</a></div><div class="ttdef"><b>Definition:</b> algorithm_.hpp:10</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_a6d0c7269cfb5bee9148efc4dda56df4e"><div class="ttname"><a href="classwordring_1_1basic__trie.html#a6d0c7269cfb5bee9148efc4dda56df4e">wordring::basic_trie::at</a></div><div class="ttdeci">reference at(const_iterator pos, index_type &amp;idx)</div><div class="ttdoc">葉の値への参照を返す</div><div class="ttdef"><b>Definition:</b> trie.hpp:363</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a0185fb64fc64f0be31c096567e9205ad"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a0185fb64fc64f0be31c096567e9205ad">wordring::basic_atom_set::insert</a></div><div class="ttdeci">value_type insert(InputIterator first, InputIterator last)</div><div class="ttdoc">文字列を挿入する</div><div class="ttdef"><b>Definition:</b> atom.hpp:574</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_afac2a2fa717602f2bbefce0432b4c1c2"><div class="ttname"><a href="classwordring_1_1basic__trie.html#afac2a2fa717602f2bbefce0432b4c1c2">wordring::basic_trie::size</a></div><div class="ttdeci">size_type size() const noexcept</div><div class="ttdoc">格納しているキー文字列数を調べる</div><div class="ttdef"><b>Definition:</b> trie.hpp:601</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_a35dd91c5d31a0e15683d3296d38b0733"><div class="ttname"><a href="classwordring_1_1basic__trie.html#a35dd91c5d31a0e15683d3296d38b0733">wordring::basic_trie::contains</a></div><div class="ttdeci">bool contains(InputIterator first, InputIterator last) const</div><div class="ttdoc">キー文字列が格納されているか調べる</div><div class="ttdef"><b>Definition:</b> trie.hpp:944</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html"><div class="ttname"><a href="classwordring_1_1basic__trie.html">wordring::basic_trie</a></div><div class="ttdoc">任意の整数型をラベルとして用いることが出来る汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:130</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_aa3bdda2104cd1c90079bd58a59b39a4f"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#aa3bdda2104cd1c90079bd58a59b39a4f">wordring::basic_atom_set::at</a></div><div class="ttdeci">value_type at(InputIterator first, InputIterator last) const</div><div class="ttdoc">文字列からアトムを返す</div><div class="ttdef"><b>Definition:</b> atom.hpp:493</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a7df7192308531a2832be3303cb97c8ee"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a7df7192308531a2832be3303cb97c8ee">wordring::basic_atom_set::insert</a></div><div class="ttdeci">value_type insert(std::basic_string_view&lt; label_type &gt; sv)</div><div class="ttdoc">文字列を挿入する</div><div class="ttdef"><b>Definition:</b> atom.hpp:608</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_ab515a2cd69b49312f2ea49f98e5db548"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#ab515a2cd69b49312f2ea49f98e5db548">wordring::basic_atom_set::basic_atom_set</a></div><div class="ttdeci">basic_atom_set(InputIterator first, InputIterator last, allocator_type const &amp;alloc=allocator_type())</div><div class="ttdoc">直列化データからの構築</div><div class="ttdef"><b>Definition:</b> atom.hpp:343</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1basic__atom_html_a4df4e02741d7c31398eb7c57e4c2e8c3"><div class="ttname"><a href="classwordring_1_1detail_1_1basic__atom.html#a4df4e02741d7c31398eb7c57e4c2e8c3">wordring::detail::basic_atom::string</a></div><div class="ttdeci">string_type &amp; string(string_type &amp;result) const</div><div class="ttdoc">アトムを文字列に変換する</div><div class="ttdef"><b>Definition:</b> atom.hpp:182</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_ad10ef05a016eadcdd89c8f28ab5a60f7"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#ad10ef05a016eadcdd89c8f28ab5a60f7">wordring::basic_atom_set::basic_atom_set</a></div><div class="ttdeci">basic_atom_set()</div><div class="ttdoc">空のコンテナを構築する</div><div class="ttdef"><b>Definition:</b> atom.hpp:295</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1basic__atom_html_ab4d4c60d08ac2ada9fefbc6cbf634b9d"><div class="ttname"><a href="classwordring_1_1detail_1_1basic__atom.html#ab4d4c60d08ac2ada9fefbc6cbf634b9d">wordring::detail::basic_atom::basic_atom</a></div><div class="ttdeci">basic_atom()</div><div class="ttdoc">空のアトムを構築する</div><div class="ttdef"><b>Definition:</b> atom.hpp:87</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a487c4dc03d1ff7065d986db22803e3cc"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a487c4dc03d1ff7065d986db22803e3cc">wordring::basic_atom_set::contains</a></div><div class="ttdeci">bool contains(InputIterator first, InputIterator last) const</div><div class="ttdoc">文字列が格納されているか調べる</div><div class="ttdef"><b>Definition:</b> atom.hpp:698</div></div>
+<div class="ttc" id="anamespacewordring_1_1detail_html"><div class="ttname"><a href="namespacewordring_1_1detail.html">wordring::detail</a></div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a7eb610b11ca26326b2628885a4cc6671"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a7eb610b11ca26326b2628885a4cc6671">wordring::basic_atom_set::erase</a></div><div class="ttdeci">void erase(std::basic_string_view&lt; label_type &gt; sv)</div><div class="ttdoc">アトムを削除する</div><div class="ttdef"><b>Definition:</b> atom.hpp:683</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a7b71e85dfe173d720cd32435e3e88739"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a7b71e85dfe173d720cd32435e3e88739">wordring::basic_atom_set::at</a></div><div class="ttdeci">value_type at(std::basic_string_view&lt; label_type &gt; sv) const</div><div class="ttdoc">文字列からアトムを返す</div><div class="ttdef"><b>Definition:</b> atom.hpp:519</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_afb513d6e6c88a8f35feef797c0739f25"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#afb513d6e6c88a8f35feef797c0739f25">wordring::basic_atom_set::erase</a></div><div class="ttdeci">void erase(InputIterator first, InputIterator last)</div><div class="ttdoc">アトムを削除する</div><div class="ttdef"><b>Definition:</b> atom.hpp:660</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_a4ffdba36a97111cc61b787dccddbb655"><div class="ttname"><a href="classwordring_1_1basic__trie.html#a4ffdba36a97111cc61b787dccddbb655">wordring::basic_trie::insert</a></div><div class="ttdeci">const_iterator insert(InputIterator first, InputIterator last, value_type value=0)</div><div class="ttdoc">キー文字列を挿入する</div><div class="ttdef"><b>Definition:</b> trie.hpp:644</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1basic__atom_html_ab16490f7e72102c6edc1412c06576b5c"><div class="ttname"><a href="classwordring_1_1detail_1_1basic__atom.html#ab16490f7e72102c6edc1412c06576b5c">wordring::detail::basic_atom::basic_atom</a></div><div class="ttdeci">basic_atom(base_type it)</div><div class="ttdoc">アトムを構築する</div><div class="ttdef"><b>Definition:</b> atom.hpp:63</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html_a2d00ba583306805718b8a320ee2b5300"><div class="ttname"><a href="classwordring_1_1basic__trie.html#a2d00ba583306805718b8a320ee2b5300">wordring::basic_trie::erase</a></div><div class="ttdeci">void erase(const_iterator pos)</div><div class="ttdoc">キー文字列を削除する</div><div class="ttdef"><b>Definition:</b> trie.hpp:712</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_ac5adf78fb2eb2efe98f5fa9c8f76a9be"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#ac5adf78fb2eb2efe98f5fa9c8f76a9be">wordring::basic_atom_set::contains</a></div><div class="ttdeci">bool contains(std::basic_string_view&lt; label_type &gt; sv) const</div><div class="ttdoc">文字列が格納されているか調べる</div><div class="ttdef"><b>Definition:</b> atom.hpp:722</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a7acf42a9b8b45cfade7bb1348ff2237a"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a7acf42a9b8b45cfade7bb1348ff2237a">wordring::basic_atom_set::assign</a></div><div class="ttdeci">void assign(InputIterator first, InputIterator last)</div><div class="ttdoc">直列化データからの割り当て</div><div class="ttdef"><b>Definition:</b> atom.hpp:401</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__atom__set_html_a0bdd429d68e76d54a8063b2c4db1e9fe"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html#a0bdd429d68e76d54a8063b2c4db1e9fe">wordring::basic_atom_set::operator[]</a></div><div class="ttdeci">value_type operator[](std::basic_string_view&lt; label_type &gt; sv)</div><div class="ttdoc">文字列からアトムを返す</div><div class="ttdef"><b>Definition:</b> atom.hpp:543</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

@@ -40,29 +40,30 @@ namespace wordring::detail
 	struct trie_value_proxy
 	{
 		using index_type = typename trie_node::index_type;
+		using node_type = trie_node;
 
-		index_type* m_base;
+		node_type* m_node;
 
 		trie_value_proxy()
-			: m_base(nullptr)
+			: m_node(nullptr)
 		{
 		}
 
-		trie_value_proxy(index_type* base)
-			: m_base(base)
+		trie_value_proxy(node_type* node)
+			: m_node(node)
 		{
 		}
 
 		void operator=(index_type val)
 		{
 			if (val < 0) throw std::invalid_argument("");
-			*m_base = -val;
+			m_node->m_base = -val;
 		}
 
 		operator index_type() const
 		{
-			assert(*m_base <= 0);
-			return -*m_base;
+			assert(m_node->m_base <= 0);
+			return -m_node->m_base;
 		}
 	};
 

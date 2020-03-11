@@ -423,9 +423,29 @@ class wordring::detail::trie_base&lt; Allocator &gt;</h3>
   </dd>
 </dl>
 <p>ダブルアレイの制約により、labelの型は8ビット固定。 挿入や削除による衝突によってすべてのイテレータが無効となる。</p>
+<dl class="section user"><dt>内部構造</dt><dd></dd></dl>
+<p>下図には実際の木構造とダブル・アレイのデータ配置が含まれる。</p>
 <div class="image">
 <object type="image/svg+xml" data="trie_base_state.svg" style="pointer-events: none;"></object>
 </div>
+<p>BASEが0以下の場合、子が無い、つまり葉であることを示す。 値を反転させ負の値とすることで、葉に数値を格納できる（省略時は0）。</p>
+<p>検索によって返されるイテレータは文字列の末尾を指す。 上図で、文字列「ac」の遷移途中のノードに文字列「a」の葉がある。 こういう場合は、nullによる遷移を追加して葉を表現する。</p>
+<p>イテレータが文字列末尾を指しているか確認するには、イテレータの <b>operator bool()</b> あるいは <b>operator !()</b> を使う。 値にアクセスするにはコンテナの <b>at()</b> あるいは <b>operator[]()</b> を使う。</p>
+<p>以下の表に位置を示す。</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">格納されている文字列 </th><th class="markdownTableHeadNone">find() が返す位置 </th><th class="markdownTableHeadNone">値の格納位置  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">a </td><td class="markdownTableBodyNone">98 </td><td class="markdownTableBodyNone">258  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">ac </td><td class="markdownTableBodyNone">101 </td><td class="markdownTableBodyNone">101  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">b </td><td class="markdownTableBodyNone">99 </td><td class="markdownTableBodyNone">99  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">cab </td><td class="markdownTableBodyNone">103 </td><td class="markdownTableBodyNone">103  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">cd </td><td class="markdownTableBodyNone">105 </td><td class="markdownTableBodyNone">105  </td></tr>
+</table>
 <dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1basic__trie.html" title="任意の整数型をラベルとして用いることが出来る汎用Trie">wordring::basic_trie</a> </dd></dl>
 </div><h2 class="groupheader">構築子と解体子</h2>
 <a id="afbb8839c11385e7cc8d896f0a87dd23c"></a>

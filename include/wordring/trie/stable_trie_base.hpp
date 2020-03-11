@@ -36,7 +36,27 @@ namespace wordring::detail
 
 		このクラスは、葉のINDEXが変わらない必要のある文字列アトム等の用途を想定している。
 
+	@par 内部構造
+
+	下図には実際の木構造とダブル・アレイのデータ配置が含まれる。
+
 	@image html stable_trie_base_state.svg
+
+	trie_base との互換性のため、文字列の末尾と値の格納位置は異なる。
+	検索によって返されるイテレータは文字列の末尾を指す。
+	一方、値はさらにnull値で遷移したノードに格納される。
+	イテレータが文字列末尾を指しているか確認するには、イテレータの <b>%operator bool()</b> あるいは <b>%operator !()</b> を使う。
+	値にアクセスするにはコンテナの <b>%at()</b> あるいは <b>%operator[]()</b> を使う。
+
+	以下の表に位置を示す。
+
+	| 格納されている文字列 | %find() が返す位置 | 値の格納位置 |
+	| ----| ---- | ---- |
+	| a | 101 | 257 |
+	| ac | 100 | 258 |
+	| b | 102 | 259 |
+	| cab | 99 | 260 |
+	| cd | 107 | 261 |
 
 	@sa wordring::basic_trie
 	*/
@@ -157,8 +177,8 @@ namespace wordring::detail
 			auto trie = stable_trie_base(v.begin(), v.end());
 		@endcode
 		*/
-		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
-		stable_trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())
+		template <typename InputIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<InputIterator>::value_type>>, std::nullptr_t> = nullptr>
+		stable_trie_base(InputIterator first, InputIterator last, allocator_type const& alloc = allocator_type())
 			: base_type(alloc)
 		{
 			assign(first, last);
@@ -213,9 +233,9 @@ namespace wordring::detail
 		/*! @brief 文字列リストからの割り当て
 
 		@param [in]
-			first 文字列集合の先頭を指すイテレータ
+			first 文字列リストの先頭を指すイテレータ
 		@param [in]
-			last 文字列集合の終端を指すイテレータ
+			last  文字列リストの終端を指すイテレータ
 
 		@par 例
 		@code
@@ -226,8 +246,8 @@ namespace wordring::detail
 
 		葉の値は全て0に初期化される。
 		*/
-		template <typename ForwardIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<ForwardIterator>::value_type>>, std::nullptr_t> = nullptr>
-		void assign(ForwardIterator first, ForwardIterator last)
+		template <typename InputIterator, typename std::enable_if_t<std::negation_v<std::is_integral<typename std::iterator_traits<InputIterator>::value_type>>, std::nullptr_t> = nullptr>
+		void assign(InputIterator first, InputIterator last)
 		{
 			clear();
 			while (first != last)
@@ -241,7 +261,34 @@ namespace wordring::detail
 
 		/*! @brief 葉の値への参照を返す
 
-		@param [in] pos 葉を指すイテレータ
+		@param [in]  pos 葉を指すイテレータ
+		@param [out] idx 葉の値のインデックス
+
+		@return 葉の値に対するプロキシ
+
+		葉からnullで遷移したノードに値が格納される。
+		葉と葉の値のインデックスは明確に異なる。
+
+		葉に2,147,483,647までの正の整数値を格納できる。
+		実際に返される値は軽量プロキシである。
+
+		入力の正当性はチェックされない。
+
+		このメンバは、継承するクラスから呼び出される目的で用意した。
+		*/
+		reference at(const_iterator pos, index_type& idx)
+		{
+			node_type* d = m_c.data();
+
+			idx = (d + pos.m_index)->m_base + null_value;
+			assert(1 < idx && idx < limit());
+
+			return reference(d + idx);
+		}
+
+		/*! @brief 葉の値への参照を返す
+
+		@param [in]  pos 葉を指すイテレータ
 
 		@return 葉の値に対するプロキシ
 
@@ -254,12 +301,8 @@ namespace wordring::detail
 		*/
 		reference at(const_iterator pos)
 		{
-			node_type* d = m_c.data();
-
-			index_type idx = (d + pos.m_index)->m_base + null_value;
-			assert(1 < idx && idx < limit());
-
-			return reference(std::addressof((d + idx)->m_base));
+			index_type idx = 0;
+			return at(pos, idx);
 		}
 
 		/*! @brief 葉の値への参照を返す
@@ -362,10 +405,11 @@ namespace wordring::detail
 			auto it = find(key);
 			if (it == cend()) it = insert(key);
 
-			index_type idx = (m_c.data() + it.m_index)->m_base + null_value;
+			node_type* d = m_c.data();
+			index_type idx = (d + it.m_index)->m_base + null_value;
 			assert(1 < idx && idx < limit());
 
-			return reference(std::addressof((m_c.data() + idx)->m_base));
+			return reference(d + idx);
 		}
 
 		// イテレータ ----------------------------------------------------------

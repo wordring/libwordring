@@ -32,7 +32,31 @@ namespace wordring::detail
 		ダブルアレイの制約により、labelの型は8ビット固定。
 		挿入や削除による衝突によってすべてのイテレータが無効となる。
 
+	@par 内部構造
+
+	下図には実際の木構造とダブル・アレイのデータ配置が含まれる。
+
 	@image html trie_base_state.svg
+
+	BASEが0以下の場合、子が無い、つまり葉であることを示す。
+	値を反転させ負の値とすることで、葉に数値を格納できる（省略時は0）。
+
+	検索によって返されるイテレータは文字列の末尾を指す。
+	上図で、文字列「ac」の遷移途中のノードに文字列「a」の葉がある。
+	こういう場合は、nullによる遷移を追加して葉を表現する。
+
+	イテレータが文字列末尾を指しているか確認するには、イテレータの <b>%operator bool()</b> あるいは <b>%operator !()</b> を使う。
+	値にアクセスするにはコンテナの <b>%at()</b> あるいは <b>%operator[]()</b> を使う。
+
+	以下の表に位置を示す。
+
+	| 格納されている文字列 | %find() が返す位置 | 値の格納位置 |
+	| ----| ---- | ---- |
+	| a | 98 | 258 |
+	| ac | 101 | 101 |
+	| b | 99 | 99 |
+	| cab | 103 | 103 |
+	| cd | 105 | 105 |
 
 	@sa wordring::basic_trie
 	*/
@@ -239,7 +263,7 @@ namespace wordring::detail
 				? pos.m_index
 				: base + null_value;
 
-			return reference(std::addressof((d + idx)->m_base));
+			return reference(d + idx);
 		}
 
 		/*! @brief 葉の値への参照を返す
@@ -281,7 +305,7 @@ namespace wordring::detail
 				? it.m_index
 				: base + null_value;
 
-			return reference(std::addressof((d + idx)->m_base));
+			return reference(d + idx);
 		}
 
 		/*! @brief 葉の値への参照を返す
@@ -356,7 +380,7 @@ namespace wordring::detail
 				? it.m_index
 				: base + null_value;
 
-			return reference(std::addressof((d + idx)->m_base));
+			return reference(d + idx);
 		}
 
 		// イテレータ ----------------------------------------------------------

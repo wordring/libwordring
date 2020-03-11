@@ -30,6 +30,7 @@ add_executable(
 		test_module.cpp
 		host.cpp
 		infra.cpp
+		public_suffix_list.cpp
 		url.cpp
 )
 
