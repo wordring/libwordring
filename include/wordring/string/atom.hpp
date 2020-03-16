@@ -250,7 +250,7 @@ namespace wordring
 
 	@par 直列化
 
-	直列化には ibegin(), iend() を使う。
+	直列化には <b>ibegin()</b>, <b>iend()</b> を使う。
 
 	- @ref detail::trie_heap::ibegin() const
 	- @ref detail::trie_heap::iend() const

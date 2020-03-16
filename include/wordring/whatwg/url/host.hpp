@@ -3,6 +3,8 @@
 // https://url.spec.whatwg.org/
 // https://triple-underscore.github.io/URL-ja.html
 
+#include <wordring/whatwg/html/parser_defs.hpp>
+
 #include <array>
 #include <cassert>
 #include <cstdint>
@@ -12,57 +14,24 @@
 
 namespace wordring::whatwg
 {
-	enum class host_type : uint32_t
-	{
-		domain       = 0,
-		ipv4_address = 1,
-		ipv6_address = 2,
-		opaque_host  = 3,
-		empty_host   = 4,
-	};
+	struct domain { std::string v; };
 
-	class domain
-	{
-	private:
-		std::u32string m_value;
-	};
+	struct ipv4_address { std::uint32_t v; };
 
-	class ipv4_address
-	{
-	private:
-		uint32_t m_value;
-	};
+	struct ipv6_address { std::array<std::uint16_t, 8> v; };
 
-	class ipv6_address
-	{
-	private:
-		std::array<uint16_t, 8> m_value;
-	};
+	struct opaque_host { std::string v; };
 
-	class opaque_host
-	{
-	private:
-		std::u32string m_value;
-	};
+	struct empty_host { std::nullptr_t v; };
 
-	class empty_host
-	{
-	private:
-		std::u32string m_value;
-	};
+	using host = std::variant<
+		domain,
+		ipv4_address,
+		ipv6_address,
+		opaque_host,
+		empty_host>;
 
-	class host
-	{
-	public:
-		std::optional<host> get_public_suffix() const;
-
-		host_type type() const noexcept;
-
-	private:
-		std::variant<domain, ipv4_address, ipv6_address, opaque_host, empty_host> m_value;
-	};
-
-	inline bool is_forbidden_host_code_point(uint32_t cp)
+	inline bool is_forbidden_host_code_point(std::uint32_t cp)
 	{
 		switch (cp)
 		{
@@ -84,6 +53,4 @@ namespace wordring::whatwg
 		}
 		return false;
 	}
-
-	std::optional<host> get_public_suffix();
 }

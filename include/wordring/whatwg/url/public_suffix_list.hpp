@@ -6,6 +6,10 @@
 #include <wordring/string/atom.hpp>
 #include <wordring/trie/trie.hpp>
 
+#include <wordring/whatwg/url/host.hpp>
+
+#include <string>
+
 namespace wordring::whatwg
 {
 	class public_suffix_list

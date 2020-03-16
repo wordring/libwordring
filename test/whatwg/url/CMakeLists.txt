@@ -32,6 +32,7 @@ add_executable(
 		infra.cpp
 		public_suffix_list.cpp
 		url.cpp
+		url_record.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})

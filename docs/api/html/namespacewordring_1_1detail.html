@@ -55,8 +55,6 @@ $(function() {
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列アトム  <a href="classwordring_1_1detail_1_1basic__atom.html#details">[詳解]</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">basic_tree_node_iterator</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列の集合をTrie構築に適した形で走査するイテレータ  <a href="classwordring_1_1detail_1_1const__list__trie__iterator.html#details">[詳解]</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -79,6 +77,8 @@ $(function() {
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1tree__iterator__stack.html">tree_iterator_stack</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1detail_1_1tree__node.html">tree_node</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">tree_node_iterator</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1detail_1_1tree__node__proxy.html">tree_node_proxy</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -151,14 +151,14 @@ template&lt;typename String1 , typename Allocator1 &gt; </td></tr>
 template&lt;typename String1 , typename Allocator1 &gt; </td></tr>
 <tr class="memitem:a25839a58fe6ddffe4fe9bb3e4f8a57f9"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom</a>&lt; String1, Allocator1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1detail_1_1basic__atom.html">basic_atom</a>&lt; String1, Allocator1 &gt; const &amp;rhs)</td></tr>
 <tr class="separator:a25839a58fe6ddffe4fe9bb3e4f8a57f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a884f2c650abe456ed6bb5248aee06fa3"><td class="memTemplParams" colspan="2"><a id="a884f2c650abe456ed6bb5248aee06fa3"></a>
-template&lt;typename T1 , typename Tree1 , typename T2 , typename Tree2 &gt; </td></tr>
-<tr class="memitem:a884f2c650abe456ed6bb5248aee06fa3"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">basic_tree_node_iterator</a>&lt; T1, Tree1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">basic_tree_node_iterator</a>&lt; T2, Tree2 &gt; const &amp;rhs)</td></tr>
-<tr class="separator:a884f2c650abe456ed6bb5248aee06fa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa25f87cfd550335de8e609a9e286d648"><td class="memTemplParams" colspan="2"><a id="aa25f87cfd550335de8e609a9e286d648"></a>
-template&lt;typename T1 , typename Tree1 , typename T2 , typename Tree2 &gt; </td></tr>
-<tr class="memitem:aa25f87cfd550335de8e609a9e286d648"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">basic_tree_node_iterator</a>&lt; T1, Tree1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">basic_tree_node_iterator</a>&lt; T2, Tree2 &gt; const &amp;rhs)</td></tr>
-<tr class="separator:aa25f87cfd550335de8e609a9e286d648"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a930d32b5153a1f9c2289e7b0c047cb6a"><td class="memTemplParams" colspan="2"><a id="a930d32b5153a1f9c2289e7b0c047cb6a"></a>
+template&lt;typename T1 , typename Container1 , typename T2 , typename Container2 &gt; </td></tr>
+<tr class="memitem:a930d32b5153a1f9c2289e7b0c047cb6a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">tree_node_iterator</a>&lt; T1, Container1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">tree_node_iterator</a>&lt; T2, Container2 &gt; const &amp;rhs)</td></tr>
+<tr class="separator:a930d32b5153a1f9c2289e7b0c047cb6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b15120cae0f6a2ea1b7bf8903f53dc6"><td class="memTemplParams" colspan="2"><a id="a1b15120cae0f6a2ea1b7bf8903f53dc6"></a>
+template&lt;typename T1 , typename Container1 , typename T2 , typename Container2 &gt; </td></tr>
+<tr class="memitem:a1b15120cae0f6a2ea1b7bf8903f53dc6"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">tree_node_iterator</a>&lt; T1, Container1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">tree_node_iterator</a>&lt; T2, Container2 &gt; const &amp;rhs)</td></tr>
+<tr class="separator:a1b15120cae0f6a2ea1b7bf8903f53dc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebbb6aacf7dfcf4c0cb332019af82797"><td class="memTemplParams" colspan="2"><a id="aebbb6aacf7dfcf4c0cb332019af82797"></a>
 template&lt;typename Iterator1 &gt; </td></tr>
 <tr class="memitem:aebbb6aacf7dfcf4c0cb332019af82797"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1detail_1_1const__list__trie__iterator.html">const_list_trie_iterator</a>&lt; Iterator1 &gt; const &amp;rhs)</td></tr>

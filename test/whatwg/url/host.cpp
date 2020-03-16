@@ -7,12 +7,16 @@
 #include <wordring/compatibility.hpp>
 #include <wordring/whatwg/url/host.hpp>
 
+#include <wordring/whatwg/url/url_record.hpp>
+
 BOOST_AUTO_TEST_SUITE(whatwg_url_host_test)
 
 
 BOOST_AUTO_TEST_CASE(host__1)
 {
 	using namespace wordring::whatwg;
+
+	url_record ur;
 }
 
 BOOST_AUTO_TEST_CASE(is_forbidden_host_code_point__1)

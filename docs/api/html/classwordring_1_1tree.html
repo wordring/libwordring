@@ -47,7 +47,6 @@ $(function() {
 <a href="#pub-methods">公開メンバ関数</a> &#124;
 <a href="#pro-types">限定公開型</a> &#124;
 <a href="#pro-methods">限定公開メンバ関数</a> &#124;
-<a href="#pro-static-methods">静的限定公開メンバ関数</a> &#124;
 <a href="#pro-attribs">限定公開変数類</a> &#124;
 <a href="#pro-static-attribs">静的限定公開変数類</a> &#124;
 <a href="#friends">フレンド</a> &#124;
@@ -88,12 +87,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_
 <tr class="memitem:a235ade446225d07f3a498bd976307f90"><td class="memItemLeft" align="right" valign="top"><a id="a235ade446225d07f3a498bd976307f90"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b> = value_type const  *</td></tr>
 <tr class="separator:a235ade446225d07f3a498bd976307f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fc62fbe9d8f5b0b6ca705119b56f198"><td class="memItemLeft" align="right" valign="top"><a id="a2fc62fbe9d8f5b0b6ca705119b56f198"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">detail::basic_tree_node_iterator</a>&lt; value_type, <a class="el" href="classwordring_1_1tree.html">tree_type</a> &gt;</td></tr>
-<tr class="separator:a2fc62fbe9d8f5b0b6ca705119b56f198"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f9cbc9a70e220173f01dccbf0357f58"><td class="memItemLeft" align="right" valign="top"><a id="a7f9cbc9a70e220173f01dccbf0357f58"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">detail::basic_tree_node_iterator</a>&lt; value_type const, <a class="el" href="classwordring_1_1tree.html">tree_type</a> const  &gt;</td></tr>
-<tr class="separator:a7f9cbc9a70e220173f01dccbf0357f58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c15cad0d35546aa89fedfbfc3d85894"><td class="memItemLeft" align="right" valign="top"><a id="a7c15cad0d35546aa89fedfbfc3d85894"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a>&lt; value_type, container &gt;</td></tr>
+<tr class="separator:a7c15cad0d35546aa89fedfbfc3d85894"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f12987ffc59228b90ff2300fe73f01f"><td class="memItemLeft" align="right" valign="top"><a id="a1f12987ffc59228b90ff2300fe73f01f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a>&lt; value_type const, container const  &gt;</td></tr>
+<tr class="separator:a1f12987ffc59228b90ff2300fe73f01f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
@@ -104,23 +103,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> =
 <tr class="separator:a135bcb3bf868b5d3fc741e2411630c23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a61c409d4dc46962d774894b130b8c66f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a61c409d4dc46962d774894b130b8c66f">tree</a> (value_type &amp;&amp;value, allocator_type const &amp;alloc=allocator_type())</td></tr>
 <tr class="separator:a61c409d4dc46962d774894b130b8c66f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc2b1c5c68cd20f715efcbc7df974cad"><td class="memItemLeft" align="right" valign="top"><a id="abc2b1c5c68cd20f715efcbc7df974cad"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>tree</b> (<a class="el" href="classwordring_1_1tree.html">tree</a> const &amp;)=default</td></tr>
-<tr class="separator:abc2b1c5c68cd20f715efcbc7df974cad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23c7577bbb4dcfe2950fe08a428d29a9"><td class="memItemLeft" align="right" valign="top"><a id="a23c7577bbb4dcfe2950fe08a428d29a9"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>tree</b> (<a class="el" href="classwordring_1_1tree.html">tree</a> &amp;&amp;) noexcept=default</td></tr>
-<tr class="separator:a23c7577bbb4dcfe2950fe08a428d29a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16f85b64e603112a75b29e502584ef7f"><td class="memItemLeft" align="right" valign="top"><a id="a16f85b64e603112a75b29e502584ef7f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>tree</b> (<a class="el" href="structwordring_1_1detail_1_1tree__node__proxy.html">node_proxy</a> proxy, allocator_type const &amp;alloc=allocator_type())</td></tr>
 <tr class="separator:a16f85b64e603112a75b29e502584ef7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71643c309cecea71d6fe643ee72308b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a71643c309cecea71d6fe643ee72308b4">~tree</a> ()=default</td></tr>
-<tr class="separator:a71643c309cecea71d6fe643ee72308b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad36a8f366fa8797074d3f4768ca7e4ae"><td class="memItemLeft" align="right" valign="top"><a id="ad36a8f366fa8797074d3f4768ca7e4ae"></a>
-<a class="el" href="classwordring_1_1tree.html">tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1tree.html">tree</a> const &amp;)=default</td></tr>
-<tr class="separator:ad36a8f366fa8797074d3f4768ca7e4ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad98cfc561b669149d7499f7e5283d8c"><td class="memItemLeft" align="right" valign="top"><a id="aad98cfc561b669149d7499f7e5283d8c"></a>
-<a class="el" href="classwordring_1_1tree.html">tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1tree.html">tree</a> &amp;&amp;) noexcept=default</td></tr>
-<tr class="separator:aad98cfc561b669149d7499f7e5283d8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16ed3c4a809b51ec28e8d2281931a01c"><td class="memItemLeft" align="right" valign="top"><a id="a16ed3c4a809b51ec28e8d2281931a01c"></a>
 <a class="el" href="classwordring_1_1tree.html">tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="structwordring_1_1detail_1_1tree__node__proxy.html">node_proxy</a> proxy)</td></tr>
 <tr class="separator:a16ed3c4a809b51ec28e8d2281931a01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -149,22 +134,22 @@ reference&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> ()</td>
 const_reference&#160;</td><td class="memItemRight" valign="bottom"><b>back</b> () const</td></tr>
 <tr class="separator:a89c2daa2fdb63af9677a505fcc4fdcdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a084de3cd92f0d8350d0849f9ec03420f"><td class="memItemLeft" align="right" valign="top"><a id="a084de3cd92f0d8350d0849f9ec03420f"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () noexcept</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () noexcept</td></tr>
 <tr class="separator:a084de3cd92f0d8350d0849f9ec03420f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0bd1a913daafd5002fef271e2e63f700"><td class="memItemLeft" align="right" valign="top"><a id="a0bd1a913daafd5002fef271e2e63f700"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const noexcept</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const noexcept</td></tr>
 <tr class="separator:a0bd1a913daafd5002fef271e2e63f700"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97207e7ebd5e84da97174b84109be9fe"><td class="memItemLeft" align="right" valign="top"><a id="a97207e7ebd5e84da97174b84109be9fe"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cbegin</b> () const noexcept</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cbegin</b> () const noexcept</td></tr>
 <tr class="separator:a97207e7ebd5e84da97174b84109be9fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a918dc89c668cf65da211e8f8b1596ada"><td class="memItemLeft" align="right" valign="top"><a id="a918dc89c668cf65da211e8f8b1596ada"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () noexcept</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () noexcept</td></tr>
 <tr class="separator:a918dc89c668cf65da211e8f8b1596ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeac50b4ba415e57df484200fac9f9c1a"><td class="memItemLeft" align="right" valign="top"><a id="aeac50b4ba415e57df484200fac9f9c1a"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const noexcept</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const noexcept</td></tr>
 <tr class="separator:aeac50b4ba415e57df484200fac9f9c1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a27673c8c32afaff4c9557916a90692f5"><td class="memItemLeft" align="right" valign="top"><a id="a27673c8c32afaff4c9557916a90692f5"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cend</b> () const noexcept</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cend</b> () const noexcept</td></tr>
 <tr class="separator:a27673c8c32afaff4c9557916a90692f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3e8fa94280be89759e11b06e7750209"><td class="memItemLeft" align="right" valign="top"><a id="ab3e8fa94280be89759e11b06e7750209"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const noexcept</td></tr>
@@ -178,33 +163,34 @@ size_type&#160;</td><td class="memItemRight" valign="bottom"><b>max_size</b> () 
 <tr class="memitem:a146a8728c7a937494e61496cbbc19f3a"><td class="memItemLeft" align="right" valign="top"><a id="a146a8728c7a937494e61496cbbc19f3a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> () noexcept</td></tr>
 <tr class="separator:a146a8728c7a937494e61496cbbc19f3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb99557d9d6694d0d4aaf7e04fb1077d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, value_type const &amp;value)</td></tr>
+<tr class="memitem:adb99557d9d6694d0d4aaf7e04fb1077d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, value_type const &amp;value)</td></tr>
+<tr class="memdesc:adb99557d9d6694d0d4aaf7e04fb1077d"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを挿入する  <a href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">[詳解]</a><br /></td></tr>
 <tr class="separator:adb99557d9d6694d0d4aaf7e04fb1077d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50c9d91ff90e176fd7f2078456a67aa7"><td class="memItemLeft" align="right" valign="top"><a id="a50c9d91ff90e176fd7f2078456a67aa7"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, value_type &amp;&amp;value)</td></tr>
+<tr class="memitem:a50c9d91ff90e176fd7f2078456a67aa7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">insert</a> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, value_type &amp;&amp;value)</td></tr>
+<tr class="memdesc:a50c9d91ff90e176fd7f2078456a67aa7"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを挿入する  <a href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">[詳解]</a><br /></td></tr>
 <tr class="separator:a50c9d91ff90e176fd7f2078456a67aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a46318560841ba82375112f29b6b57606"><td class="memItemLeft" align="right" valign="top"><a id="a46318560841ba82375112f29b6b57606"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, size_type count, value_type const &amp;value)</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, size_type count, value_type const &amp;value)</td></tr>
 <tr class="separator:a46318560841ba82375112f29b6b57606"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a966ffb2ace2fd61bd8c4af065f606259"><td class="memTemplParams" colspan="2"><a id="a966ffb2ace2fd61bd8c4af065f606259"></a>
 template&lt;typename InputIterator &gt; </td></tr>
-<tr class="memitem:a966ffb2ace2fd61bd8c4af065f606259"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, InputIterator first, InputIterator last)</td></tr>
+<tr class="memitem:a966ffb2ace2fd61bd8c4af065f606259"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, InputIterator first, InputIterator last)</td></tr>
 <tr class="separator:a966ffb2ace2fd61bd8c4af065f606259"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a6b635635c767eadcf683a813bee301"><td class="memItemLeft" align="right" valign="top"><a id="a9a6b635635c767eadcf683a813bee301"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, <a class="el" href="structwordring_1_1detail_1_1tree__node__proxy.html">detail::tree_node_proxy</a>&lt; T &gt; proxy)</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, <a class="el" href="structwordring_1_1detail_1_1tree__node__proxy.html">detail::tree_node_proxy</a>&lt; T &gt; proxy)</td></tr>
 <tr class="separator:a9a6b635635c767eadcf683a813bee301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af1ed6a7ac6fb89f71339007cf85cff27"><td class="memItemLeft" align="right" valign="top"><a id="af1ed6a7ac6fb89f71339007cf85cff27"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, std::initializer_list&lt; value_type &gt; ilist)</td></tr>
+<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, std::initializer_list&lt; value_type &gt; ilist)</td></tr>
 <tr class="separator:af1ed6a7ac6fb89f71339007cf85cff27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4226bbaf850e5743be1f33cf8117f57"><td class="memTemplParams" colspan="2"><a id="aa4226bbaf850e5743be1f33cf8117f57"></a>
 template&lt;typename... Args&gt; </td></tr>
-<tr class="memitem:aa4226bbaf850e5743be1f33cf8117f57"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, Args &amp;&amp;... args)</td></tr>
+<tr class="memitem:aa4226bbaf850e5743be1f33cf8117f57"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, Args &amp;&amp;... args)</td></tr>
 <tr class="separator:aa4226bbaf850e5743be1f33cf8117f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d448b620515e1df7b3783e174559cb9"><td class="memItemLeft" align="right" valign="top"><a id="a5d448b620515e1df7b3783e174559cb9"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos)</td></tr>
+<tr class="memitem:a5d448b620515e1df7b3783e174559cb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">erase</a> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos)</td></tr>
+<tr class="memdesc:a5d448b620515e1df7b3783e174559cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素を削除する  <a href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">[詳解]</a><br /></td></tr>
 <tr class="separator:a5d448b620515e1df7b3783e174559cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb9a0ac797fee5d8f14f9b9d1b9729d9"><td class="memItemLeft" align="right" valign="top"><a id="adb9a0ac797fee5d8f14f9b9d1b9729d9"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> first, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> last)</td></tr>
+<tr class="memitem:adb9a0ac797fee5d8f14f9b9d1b9729d9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#adb9a0ac797fee5d8f14f9b9d1b9729d9">erase</a> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> first, <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> last)</td></tr>
+<tr class="memdesc:adb9a0ac797fee5d8f14f9b9d1b9729d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素を削除する  <a href="classwordring_1_1tree.html#adb9a0ac797fee5d8f14f9b9d1b9729d9">[詳解]</a><br /></td></tr>
 <tr class="separator:adb9a0ac797fee5d8f14f9b9d1b9729d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
@@ -227,43 +213,21 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = std:
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 限定公開メンバ関数</h2></td></tr>
-<tr class="memitem:afb605f2781ee566c6670d86e03507fa2"><td class="memItemLeft" align="right" valign="top"><a id="afb605f2781ee566c6670d86e03507fa2"></a>
-index_type&#160;</td><td class="memItemRight" valign="bottom"><b>allocate</b> ()</td></tr>
-<tr class="separator:afb605f2781ee566c6670d86e03507fa2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a138953e46e56687c9f7b6f3191abd7e1"><td class="memTemplParams" colspan="2"><a id="a138953e46e56687c9f7b6f3191abd7e1"></a>
-template&lt;typename Value &gt; </td></tr>
-<tr class="memitem:a138953e46e56687c9f7b6f3191abd7e1"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>allocate</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos, Value value)</td></tr>
-<tr class="separator:a138953e46e56687c9f7b6f3191abd7e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a396a2a165f0cbe9b8ec47155ea169d6b"><td class="memItemLeft" align="right" valign="top"><a id="a396a2a165f0cbe9b8ec47155ea169d6b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> (index_type i, bool free_next=false)</td></tr>
-<tr class="separator:a396a2a165f0cbe9b8ec47155ea169d6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac713112938f42c58d44e437d099f8293"><td class="memItemLeft" align="right" valign="top"><a id="ac713112938f42c58d44e437d099f8293"></a>
-<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> pos)</td></tr>
-<tr class="separator:ac713112938f42c58d44e437d099f8293"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
-静的限定公開メンバ関数</h2></td></tr>
-<tr class="memitem:a59e1fcb689d09ce02ad61a343c53d2d1"><td class="memItemLeft" align="right" valign="top"><a id="a59e1fcb689d09ce02ad61a343c53d2d1"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>recursive_equal</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> first1, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> last1, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> first2, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> last2)</td></tr>
-<tr class="separator:a59e1fcb689d09ce02ad61a343c53d2d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8cee4b606118225e1a9f54e52cef4665"><td class="memItemLeft" align="right" valign="top"><a id="a8cee4b606118225e1a9f54e52cef4665"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><b>recursive_not_equal</b> (<a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> first1, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> last1, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> first2, <a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a> last2)</td></tr>
-<tr class="separator:a8cee4b606118225e1a9f54e52cef4665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1581dc09050f1d79ac3f5a8519eaa305"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a1581dc09050f1d79ac3f5a8519eaa305">allocate</a> (value_type const &amp;val=value_type())</td></tr>
+<tr class="memdesc:a1581dc09050f1d79ac3f5a8519eaa305"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを確保する  <a href="classwordring_1_1tree.html#a1581dc09050f1d79ac3f5a8519eaa305">[詳解]</a><br /></td></tr>
+<tr class="separator:a1581dc09050f1d79ac3f5a8519eaa305"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a107028da2204d20b07bf198aa35bb852"><td class="memItemLeft" align="right" valign="top">index_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">allocate</a> (value_type &amp;&amp;val)</td></tr>
+<tr class="memdesc:a107028da2204d20b07bf198aa35bb852"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを確保する  <a href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">[詳解]</a><br /></td></tr>
+<tr class="separator:a107028da2204d20b07bf198aa35bb852"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a218d362072b005500e1b6e80ebc9c375"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">free</a> (index_type idx)</td></tr>
+<tr class="memdesc:a218d362072b005500e1b6e80ebc9c375"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを開放する  <a href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">[詳解]</a><br /></td></tr>
+<tr class="separator:a218d362072b005500e1b6e80ebc9c375"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 限定公開変数類</h2></td></tr>
-<tr class="memitem:a3208ef142d951c888da53b4946f5b71b"><td class="memItemLeft" align="right" valign="top"><a id="a3208ef142d951c888da53b4946f5b71b"></a>
-container&#160;</td><td class="memItemRight" valign="bottom"><b>m_heap</b></td></tr>
-<tr class="separator:a3208ef142d951c888da53b4946f5b71b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6050dbb01a0db11578a709d0fcd6053"><td class="memItemLeft" align="right" valign="top"><a id="ab6050dbb01a0db11578a709d0fcd6053"></a>
-index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_root</b></td></tr>
-<tr class="separator:ab6050dbb01a0db11578a709d0fcd6053"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acff0fad32b1712f2b95435fbeb7da31a"><td class="memItemLeft" align="right" valign="top"><a id="acff0fad32b1712f2b95435fbeb7da31a"></a>
-index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_free</b></td></tr>
-<tr class="separator:acff0fad32b1712f2b95435fbeb7da31a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a88740e4c2fc7a19e64b5bb01e02c6d0c"><td class="memItemLeft" align="right" valign="top"><a id="a88740e4c2fc7a19e64b5bb01e02c6d0c"></a>
-index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_size</b></td></tr>
-<tr class="separator:a88740e4c2fc7a19e64b5bb01e02c6d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62a2757a01dc84cad3ca71b701d7c768"><td class="memItemLeft" align="right" valign="top"><a id="a62a2757a01dc84cad3ca71b701d7c768"></a>
+container&#160;</td><td class="memItemRight" valign="bottom"><b>m_c</b></td></tr>
+<tr class="separator:a62a2757a01dc84cad3ca71b701d7c768"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
 静的限定公開変数類</h2></td></tr>
@@ -273,18 +237,10 @@ static constexpr index_type&#160;</td><td class="memItemRight" valign="bottom"><
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 フレンド</h2></td></tr>
-<tr class="memitem:aa61ef51e0a331d57034508d0ec33ae42"><td class="memTemplParams" colspan="2"><a id="aa61ef51e0a331d57034508d0ec33ae42"></a>
-template&lt;typename T1 , typename Tree1 &gt; </td></tr>
-<tr class="memitem:aa61ef51e0a331d57034508d0ec33ae42"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>detail::basic_tree_node_iterator</b></td></tr>
-<tr class="separator:aa61ef51e0a331d57034508d0ec33ae42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32eeaea00c4de78b1d103e8915d49dab"><td class="memTemplParams" colspan="2"><a id="a32eeaea00c4de78b1d103e8915d49dab"></a>
-template&lt;typename T1 , typename Allocator1 &gt; </td></tr>
-<tr class="memitem:a32eeaea00c4de78b1d103e8915d49dab"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1tree.html">tree</a>&lt; T1, Allocator1 &gt; const &amp;, <a class="el" href="classwordring_1_1tree.html">tree</a>&lt; T1, Allocator1 &gt; const &amp;)</td></tr>
-<tr class="separator:a32eeaea00c4de78b1d103e8915d49dab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b343a71dda0ba150d3477ea04267354"><td class="memTemplParams" colspan="2"><a id="a9b343a71dda0ba150d3477ea04267354"></a>
-template&lt;typename T1 , typename Allocator1 &gt; </td></tr>
-<tr class="memitem:a9b343a71dda0ba150d3477ea04267354"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1tree.html">tree</a>&lt; T1, Allocator1 &gt; const &amp;, <a class="el" href="classwordring_1_1tree.html">tree</a>&lt; T1, Allocator1 &gt; const &amp;)</td></tr>
-<tr class="separator:a9b343a71dda0ba150d3477ea04267354"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aabb7744323cc65440c6baa563d11a856"><td class="memTemplParams" colspan="2"><a id="aabb7744323cc65440c6baa563d11a856"></a>
+template&lt;typename T1 , typename Container1 &gt; </td></tr>
+<tr class="memitem:aabb7744323cc65440c6baa563d11a856"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>detail::tree_node_iterator</b></td></tr>
+<tr class="separator:aabb7744323cc65440c6baa563d11a856"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>木コンテナ </p>
@@ -298,6 +254,27 @@ template&lt;typename T1 , typename Allocator1 &gt; </td></tr>
 <p>イテレータのメンバ関数 <b>parent()</b> で親を取得する。 イテレータのメンバ関数 <b>begin()</b> で先頭の子を取得する。 イテレータのメンバ関数 <b>end()</b> で子の終端を取得する。 イテレータのメンバ関数 <b>operator++()</b> で次の兄弟を取得する。</p>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_iterator_concept.svg" style="pointer-events: none;"></object>
+</div>
+<hr  />
+ <dl class="section user"><dt>木ノード</dt><dd></dd></dl>
+<p><b>tree</b> の内部は、一つの配列にすべてのノードが収まっている。 各ノードは、親、子の先頭、前の兄弟、次の兄弟の各インデックスを持つ。 配列のインデックスは <b>1</b> から始まる。 （もしあるなら）根のインデックスは <b>1</b> 。</p>
+<p>子の先頭の <b>m_prev</b> には最後の兄弟のインデックスを格納する。 先頭の子であることを確認するには、親の <b>m_child</b> と自身が一致するか調べる。</p>
+<p>イテレータは、指すノードのインデックスと親のインデックスを保持する。 終端を指すイテレータは、インデックスを <b>0</b> として示す。 終端を指すイテレータも（デクリメントで必要となるため）親のインデックスを保持する。 根の親は <b>0</b> である。 終端を指すイテレータをデクリメントする場合、親の <b>m_child</b> の <b>m_prev</b> へ 移動する。</p>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_concept.svg" style="pointer-events: none;"></object>
+</div>
+<ul>
+<li><a class="el" href="structwordring_1_1detail_1_1tree__node.html">detail::tree_node</a></li>
+<li><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a></li>
+</ul>
+<dl class="section user"><dt>インデックス 0</dt><dd></dd></dl>
+<p>配列のインデックス <b>0</b> は、ノードとして使用されない。 そのため、未使用ノードの先頭、格納するノード数を保持するのに使う。</p>
+<dl class="section user"><dt>未使用ノード</dt><dd></dd></dl>
+<p>未使用ノードは、 <b>m_prev</b> に前の未使用ノード、 <b>m_next</b> に次の未使用ノードの 各インデックスを格納して双方向リンクリストとする。</p>
+<p>未使用ノード末尾は、 <b>m_next</b> に <b>0</b> を格納して示す。 未使用ノードが一つも無い場合、インデックス <b>0</b> の <b>m_next</b> に <b>0</b> を格納して示す。</p>
+<p>現在の実装は、インデックス順に未使用ノードのリンクが並ぶよう、解放時に整列させる。 この動作によって検索性能が向上するが、解放時間が増える。</p>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_free.svg" style="pointer-events: none;"></object>
 </div>
  </div><h2 class="groupheader">構築子と解体子</h2>
 <a id="a135bcb3bf868b5d3fc741e2411630c23"></a>
@@ -374,35 +351,9 @@ template&lt;typename T1 , typename Allocator1 &gt; </td></tr>
 
 </div>
 </div>
-<a id="a71643c309cecea71d6fe643ee72308b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a71643c309cecea71d6fe643ee72308b4">&#9670;&nbsp;</a></span>~tree()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">wordring::tree::~tree </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>デストラクタ </p>
-
-</div>
-</div>
 <h2 class="groupheader">関数詳解</h2>
 <a id="adb99557d9d6694d0d4aaf7e04fb1077d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb99557d9d6694d0d4aaf7e04fb1077d">&#9670;&nbsp;</a></span>insert()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#adb99557d9d6694d0d4aaf7e04fb1077d">&#9670;&nbsp;</a></span>insert() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -411,9 +362,9 @@ template&lt;typename T1 , typename Allocator1 &gt; </td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">iterator</a> wordring::tree::insert </td>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::insert </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1basic__tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
           <td class="paramname"><em>pos</em>, </td>
         </tr>
         <tr>
@@ -434,7 +385,458 @@ template&lt;typename T1 , typename Allocator1 &gt; </td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>posの前にvalueを追加する </p>
+
+<p>ノードを挿入する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>挿入位置を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>挿入する値</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>挿入されたノードを指すイテレータ</dd></dl>
+<dl class="section see"><dt>参照</dt><dd>iterator <a class="el" href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7" title="ノードを挿入する">insert(const_iterator pos, value_type&amp;&amp; value)</a> </dd></dl>
+
+</div>
+</div>
+<a id="a50c9d91ff90e176fd7f2078456a67aa7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50c9d91ff90e176fd7f2078456a67aa7">&#9670;&nbsp;</a></span>insert() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::insert </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">value_type &amp;&amp;&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを挿入する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>挿入位置を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">value</td><td>挿入する値</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>挿入されたノードを指すイテレータ</dd></dl>
+<p>既存のノードが有る状態で根を挿入しようとした場合、何もせず end() を返す。 この場合、debug実行ではアサーションで失敗する。</p>
+<hr  />
+<p><b>idx</b> は、allocate() で取得した新規ノードのインデックス。</p>
+<p><b>parent</b> は、引数 <b>pos</b> から取得する。</p>
+<p><b>child</b> は、 <b>parent</b> の <b>m_child</b> 。</p>
+<p><b>after</b> は、（挿入後にAfterとなるので）挿入位置のインデックス。 end() に挿入する場合、 <b>0</b> 。</p>
+<p><b>before</b> は</p><ul>
+<li><b>after</b> が有り<ul>
+<li>且つ <b>parent</b> の <b>m_child</b> が <b>after</b> でない場合、<b>after</b> の <b>m_prev</b></li>
+<li>それ以外の場合、 <b>0</b></li>
+</ul>
+</li>
+<li><b>after</b> が無く<ul>
+<li><b>child</b> が有る場合、 <b>child</b> の <b>m_prev</b></li>
+<li>それ以外の場合、 <b>0</b></li>
+</ul>
+</li>
+</ul>
+<dl class="section user"><dt>根を挿入する場合</dt><dd></dd></dl>
+<p>インデックス <b>0</b> の前に挿入。</p>
+<ul>
+<li>idx == 1</li>
+<li>before == 無し</li>
+<li>after == 無し</li>
+</ul>
+<p>根は一つしか無い。 挿入前に格納数は <b>0</b> でなければならない。</p>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_1.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>ノードの間に挿入する場合</dt><dd></dd></dl>
+<p>インデックス <b>3</b> の前に挿入。</p><ul>
+<li>idx == 4</li>
+<li>before == 2</li>
+<li>after == 3</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_2.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>子が無い場合の挿入</dt><dd></dd></dl>
+<p>インデックス <b>0</b> の前に挿入。</p><ul>
+<li>idx == 2</li>
+<li>before == 無し</li>
+<li>after == 無し</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_3.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>先頭の前に挿入</dt><dd></dd></dl>
+<p>インデックス <b>2</b> の前に挿入。</p><ul>
+<li>idx == 4</li>
+<li>before == 無し</li>
+<li>after == 2</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_4.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>単独の子の先頭の前に挿入</dt><dd></dd></dl>
+<p>インデックス <b>2</b> の前に挿入。</p><ul>
+<li>idx == 3</li>
+<li>before == 無し</li>
+<li>after == 2</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_5.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>終端の前に挿入</dt><dd></dd></dl>
+<p>インデックス <b>0</b> の前に挿入。</p><ul>
+<li>idx == 4</li>
+<li>before == 3</li>
+<li>after == 無し</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_6.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>単独の子の終端の前に挿入</dt><dd></dd></dl>
+<p>インデックス <b>0</b> の前に挿入。</p><ul>
+<li>idx == 3</li>
+<li>before == 2</li>
+<li>after == 無し</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_7.svg" style="pointer-events: none;"></object>
+</div>
+<hr  />
+<dl class="section user"><dt>before が無い場合</dt><dd></dd></dl>
+<ul>
+<li>親の <b>m_child</b> を新規挿入されるノードとする。</li>
+<li><b>after</b> が有る場合<ul>
+<li><b>after</b> の <b>m_prev</b> には <b>tail</b> のインデックスが入っている。</li>
+</ul>
+</li>
+<li><b>after</b> が無い場合<ul>
+<li><b>tail</b> は新規挿入されるノード自身である。</li>
+</ul>
+</li>
+<li>新規挿入されるノードの <b>m_prev</b> を <b>tail</b> とする。</li>
+</ul>
+<dl class="section user"><dt>before が有る場合</dt><dd></dd></dl>
+<ul>
+<li><b>before</b> の <b>m_next</b> を新規挿入されるノードとする。</li>
+</ul>
+<dl class="section user"><dt>after が無い場合</dt><dd></dd></dl>
+<ul>
+<li>新規挿入されるノードの <b>m_next</b> を <b>0</b> とする。</li>
+<li><b>before</b> が有る場合<ul>
+<li>親の <b>m_child</b> には先頭のインデックスが入っている。</li>
+<li>先頭の <b>m_prev</b> を新規挿入されるノードとする。</li>
+</ul>
+</li>
+</ul>
+<dl class="section user"><dt>after が有る場合</dt><dd></dd></dl>
+<ul>
+<li><b>after</b> の <b>m_prev</b> を新規挿入されるノードとする。 </li>
+</ul>
+
+</div>
+</div>
+<a id="a5d448b620515e1df7b3783e174559cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d448b620515e1df7b3783e174559cb9">&#9670;&nbsp;</a></span>erase() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::erase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>要素を削除する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>削除する要素を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>削除された要素の次を指すイテレータ</dd></dl>
+<hr  />
+<dl class="section user"><dt>根を削除</dt><dd></dd></dl>
+<ul>
+<li>idx == 1</li>
+<li>before == 0</li>
+<li>after == 0</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_erase_1.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>ノードの間を削除</dt><dd></dd></dl>
+<ul>
+<li>idx == 4</li>
+<li>before == 2</li>
+<li>after == 3</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_erase_2.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>先頭の前を削除</dt><dd></dd></dl>
+<ul>
+<li>idx == 4</li>
+<li>before == 0</li>
+<li>after == 2</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_erase_4.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>削除で単独になる子の前を削除</dt><dd></dd></dl>
+<ul>
+<li>idx == 4</li>
+<li>before == 0</li>
+<li>after == 2</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_erase_5.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>終端の前を削除</dt><dd></dd></dl>
+<ul>
+<li>idx == 4</li>
+<li>before == 3</li>
+<li>after == 0</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_erase_6.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>削除で単独になる子の終端の前を削除</dt><dd></dd></dl>
+<ul>
+<li>idx == 3</li>
+<li>before == 2</li>
+<li>after == 0</li>
+</ul>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_erase_7.svg" style="pointer-events: none;"></object>
+</div>
+<hr  />
+<ul>
+<li><b>parent</b> 、 <b>idx</b> は、 <b>pos</b> から取得する。</li>
+<li><b>child</b> は、 <b>parent</b> の <b>m_child</b> 。</li>
+<li><b>beore</b> は、 <b>idx</b> の <b>m_prev</b> 。</li>
+<li><b>child</b> が <b>idx</b> と一致する場合、<b>before</b> は無い。</li>
+<li><b>after</b> は、 <b>idx</b> の <b>m_next</b> 。</li>
+<li><b>lead</b> は、<b>idx</b> の <b>m_child</b> とする。 これは、子孫を解放するために使われる。 子孫の解放は、リンクの付け替えが発生しないので、単に開放するのみである。</li>
+</ul>
+<hr  />
+<ul>
+<li><b>before</b> が無い場合<ul>
+<li>削除後、 <b>after</b> が <b>先頭</b> になる<ul>
+<li><b>after</b> が有る場合<ul>
+<li><b>parent</b> の <b>m_child</b> に <b>after</b> を設定する。</li>
+<li><b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b> （ココには今、末尾のインデックスが入っている）を設定する。</li>
+</ul>
+</li>
+<li><b>after</b> が無い場合、 <b>parent</b> の <b>m_child</b> に <b>0</b> を設定する。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><b>before</b> が有る場合<ul>
+<li><b>before</b> の <b>m_next</b> に <b>after</b> を設定する。 <b>after</b> が無い場合、末尾を表す <b>0</b> なので、そのまま設定できる。</li>
+</ul>
+</li>
+<li><b>after</b> が無い場合<ul>
+<li>削除後、 <b>before</b> が <b>末尾</b> になる<ul>
+<li><b>before</b> が有る（つまり兄弟がある）場合、 <b>parent</b> の <b>m_child</b> （つまり <b>child</b> ）に <b>before</b> を設定する。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><b>after</b> が有る場合<ul>
+<li><b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b> を設定する。 </li>
+</ul>
+</li>
+</ul>
+
+</div>
+</div>
+<a id="adb9a0ac797fee5d8f14f9b9d1b9729d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb9a0ac797fee5d8f14f9b9d1b9729d9">&#9670;&nbsp;</a></span>erase() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::erase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>last</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>要素を削除する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">first</td><td>削除する要素範囲の先頭を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">last</td><td>削除する要素範囲の終端を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>削除された要素の次を指すイテレータ</dd></dl>
+<dl class="section see"><dt>参照</dt><dd>iterator <a class="el" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9" title="要素を削除する">erase(const_iterator pos)</a> </dd></dl>
+
+</div>
+</div>
+<a id="a1581dc09050f1d79ac3f5a8519eaa305"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1581dc09050f1d79ac3f5a8519eaa305">&#9670;&nbsp;</a></span>allocate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type wordring::tree::allocate </td>
+          <td>(</td>
+          <td class="paramtype">value_type const &amp;&#160;</td>
+          <td class="paramname"><em>val</em> = <code>value_type()</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを確保する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>格納する値</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>確保されたノードのインデックス値</dd></dl>
+<dl class="section see"><dt>参照</dt><dd>index_type <a class="el" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852" title="ノードを確保する">allocate(value_type&amp;&amp; val)</a> </dd></dl>
+
+</div>
+</div>
+<a id="a107028da2204d20b07bf198aa35bb852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107028da2204d20b07bf198aa35bb852">&#9670;&nbsp;</a></span>allocate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type wordring::tree::allocate </td>
+          <td>(</td>
+          <td class="paramtype">value_type &amp;&amp;&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを確保する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>格納する値</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>確保されたノードのインデックス値 </dd></dl>
+
+</div>
+</div>
+<a id="a218d362072b005500e1b6e80ebc9c375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a218d362072b005500e1b6e80ebc9c375">&#9670;&nbsp;</a></span>free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::tree::free </td>
+          <td>(</td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを開放する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">idx</td><td>解放するノードのインデックス </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

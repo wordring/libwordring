@@ -44,7 +44,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-types">公開型</a> &#124;
-<a href="#pub-methods">公開メンバ関数</a> &#124;
 <a href="#pub-attribs">公開変数類</a> &#124;
 <a href="#pub-static-attribs">静的公開変数類</a> &#124;
 <a href="structwordring_1_1detail_1_1tree__node-members.html">全メンバ一覧</a>  </div>
@@ -55,36 +54,27 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 公開型</h2></td></tr>
-<tr class="memitem:a3e1130f365d6c3324924732ff7dea846"><td class="memItemLeft" align="right" valign="top"><a id="a3e1130f365d6c3324924732ff7dea846"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>index_type</b> = uint32_t</td></tr>
-<tr class="separator:a3e1130f365d6c3324924732ff7dea846"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a376571affec3cec667bfdbe7b0d92a7d"><td class="memItemLeft" align="right" valign="top"><a id="a376571affec3cec667bfdbe7b0d92a7d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>index_type</b> = std::uint32_t</td></tr>
+<tr class="separator:a376571affec3cec667bfdbe7b0d92a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4871605eb8bc5dd89f919bcd9b8ce855"><td class="memItemLeft" align="right" valign="top"><a id="a4871605eb8bc5dd89f919bcd9b8ce855"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = T</td></tr>
 <tr class="separator:a4871605eb8bc5dd89f919bcd9b8ce855"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-公開メンバ関数</h2></td></tr>
-<tr class="memitem:a190730675a6a48157f6ebd4df1550729"><td class="memItemLeft" align="right" valign="top"><a id="a190730675a6a48157f6ebd4df1550729"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>tree_node</b> (value_type &amp;&amp;value)</td></tr>
-<tr class="separator:a190730675a6a48157f6ebd4df1550729"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a580b25995e334bb60806014245ee88fd"><td class="memItemLeft" align="right" valign="top"><a id="a580b25995e334bb60806014245ee88fd"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>tree_node</b> (index_type parent, index_type child, index_type prev, index_type next, value_type const &amp;value=value_type())</td></tr>
-<tr class="separator:a580b25995e334bb60806014245ee88fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 公開変数類</h2></td></tr>
 <tr class="memitem:a7d6c21a365af16658b965ee40f94d248"><td class="memItemLeft" align="right" valign="top"><a id="a7d6c21a365af16658b965ee40f94d248"></a>
 index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_parent</b></td></tr>
 <tr class="separator:a7d6c21a365af16658b965ee40f94d248"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a909e78b117d8be1eed922ce0d187f64e"><td class="memItemLeft" align="right" valign="top"><a id="a909e78b117d8be1eed922ce0d187f64e"></a>
-index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_child</b></td></tr>
-<tr class="separator:a909e78b117d8be1eed922ce0d187f64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a384dbbe077b13ffade74deaa9373dc6a"><td class="memItemLeft" align="right" valign="top"><a id="a384dbbe077b13ffade74deaa9373dc6a"></a>
 index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_prev</b></td></tr>
 <tr class="separator:a384dbbe077b13ffade74deaa9373dc6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a57ddcfc31cb543ff96243a95ded2fbd5"><td class="memItemLeft" align="right" valign="top"><a id="a57ddcfc31cb543ff96243a95ded2fbd5"></a>
 index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_next</b></td></tr>
 <tr class="separator:a57ddcfc31cb543ff96243a95ded2fbd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a909e78b117d8be1eed922ce0d187f64e"><td class="memItemLeft" align="right" valign="top"><a id="a909e78b117d8be1eed922ce0d187f64e"></a>
+index_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_child</b></td></tr>
+<tr class="separator:a909e78b117d8be1eed922ce0d187f64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30cbcfc63acafa79a84a85d8a72559a3"><td class="memItemLeft" align="right" valign="top"><a id="a30cbcfc63acafa79a84a85d8a72559a3"></a>
 value_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_value</b></td></tr>
 <tr class="separator:a30cbcfc63acafa79a84a85d8a72559a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -92,7 +82,7 @@ value_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_value</b></td
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 静的公開変数類</h2></td></tr>
 <tr class="memitem:a3440df4af8de40764ec7d245baa3401e"><td class="memItemLeft" align="right" valign="top"><a id="a3440df4af8de40764ec7d245baa3401e"></a>
-static constexpr index_type&#160;</td><td class="memItemRight" valign="bottom"><b>null_value</b> = std::numeric_limits&lt;index_type&gt;::max()</td></tr>
+static constexpr index_type&#160;</td><td class="memItemRight" valign="bottom"><b>null_value</b> = 0</td></tr>
 <tr class="separator:a3440df4af8de40764ec7d245baa3401e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <hr/>この構造体詳解は次のファイルから抽出されました:<ul>

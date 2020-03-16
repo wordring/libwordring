@@ -29,7 +29,7 @@ add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
 		tree.cpp
-		tree_iterator.cpp
+#		tree_iterator.cpp
 #		vector_tree.cpp
 )
 

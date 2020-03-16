@@ -54,19 +54,25 @@ $(function() {
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;wordring/string/atom.hpp&gt;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;wordring/trie/trie.hpp&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1public__suffix__list.html">   11</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1public__suffix__list.html">public_suffix_list</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <a class="code" href="classwordring_1_1basic__atom__set.html">u8atom_set</a> m_path_name;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    };</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;wordring/whatwg/url/host.hpp&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
+<div class="line"><a name="l00015"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1public__suffix__list.html">   15</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1public__suffix__list.html">public_suffix_list</a></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    {</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <a class="code" href="classwordring_1_1basic__atom__set.html">u8atom_set</a>         m_entries;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <a class="code" href="classwordring_1_1basic__trie.html">trie&lt;std::int32_t&gt;</a> m_trie;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    };</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasswordring_1_1basic__atom__set_html"><div class="ttname"><a href="classwordring_1_1basic__atom__set.html">wordring::basic_atom_set&lt; std::u8string, Allocator &gt;</a></div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html"><div class="ttname"><a href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div></div>
-<div class="ttc" id="aclasswordring_1_1whatwg_1_1public__suffix__list_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1public__suffix__list.html">wordring::whatwg::public_suffix_list</a></div><div class="ttdef"><b>Definition:</b> public_suffix_list.hpp:11</div></div>
+<div class="ttc" id="aclasswordring_1_1basic__trie_html"><div class="ttname"><a href="classwordring_1_1basic__trie.html">wordring::basic_trie</a></div><div class="ttdoc">任意の整数型をラベルとして用いることが出来る汎用Trie</div><div class="ttdef"><b>Definition:</b> trie.hpp:130</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1public__suffix__list_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1public__suffix__list.html">wordring::whatwg::public_suffix_list</a></div><div class="ttdef"><b>Definition:</b> public_suffix_list.hpp:15</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

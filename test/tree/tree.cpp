@@ -11,77 +11,47 @@
 #include <type_traits>
 #include <vector>
 
-BOOST_AUTO_TEST_SUITE(tree__test)
-
-using tree_node = wordring::detail::tree_node<char>;
-
-class test_iterator : public wordring::tree<char>::iterator
+namespace
 {
-public:
-	using wordring::tree<char>::iterator::index_type;
-	using wordring::tree<char>::iterator::tree_type;
-	using wordring::tree<char>::iterator::iterator;
-	using wordring::tree<char>::iterator::m_tree;
-	using wordring::tree<char>::iterator::m_parent;
-	using wordring::tree<char>::iterator::m_index;
-
-	test_iterator(wordring::tree<char>::iterator&& it) : wordring::tree<char>::iterator(it) {}
-
-	test_iterator(tree_type& tree, index_type parent, index_type index)
-		: wordring::tree<char>::iterator(tree, parent, index)
+	struct test_tree : public wordring::tree<int>
 	{
-	}
+		using base_type = wordring::tree<int>;
+		using typename base_type::container;
 
-	index_type i_parent() const { return (heap().data() + m_index)->m_parent; }
+		using base_type::allocate;
+		using base_type::free;
 
-	index_type i_child() const { return (heap().data() + m_index)->m_child; }
+		using base_type::m_c;
+	};
 
-	index_type i_prev() const { return (heap().data() + m_index)->m_prev; }
+	struct test_iterator : public test_tree::iterator
+	{
+		using base_type = test_tree::iterator;
 
-	index_type i_next() const { return (heap().data() + m_index)->m_next; }
-};
+		using base_type::m_index;
+		using base_type::m_parent;
 
-using const_test_iterator = wordring::tree<char>::const_iterator;
+		test_iterator(base_type const& it) : base_type(it) {}
+	};
 
-class test_tree : public wordring::tree<char>
-{
-public:
-	using wordring::tree<char>::null_value;
+	struct const_test_iterator : public test_tree::const_iterator
+	{
+		using base_type = test_tree::const_iterator;
+		using typename base_type::index_type;
 
-	using wordring::tree<char>::index_type;
-	using wordring::tree<char>::container;
+		using base_type::m_index;
+		using base_type::m_parent;
 
-	using wordring::tree<char>::allocate;
-	using wordring::tree<char>::free;
-	using wordring::tree<char>::recursive_not_equal;
+		const_test_iterator(base_type const& it) : base_type(it) {}
 
-	using wordring::tree<char>::m_heap;
-	using wordring::tree<char>::m_root;
-	using wordring::tree<char>::m_free;
-
-	test_iterator at(index_type i) { return test_iterator(*this, (m_heap.data() + i)->m_parent, i); }
-
-	auto& heap() { return m_heap; }
-};
-
-static constexpr test_tree::index_type null_value = test_tree::null_value;
-
-using container = test_tree::container;
-
-test_tree make_test_tree()
-{
-	test_tree t{};
-
-	auto it0 = t.insert(t.cbegin(), '0');
-	auto it1 = t.insert(it0.end(), '1');
-	auto it2 = t.insert(it0.end(), '2');
-	t.insert(it0.end(), '3');
-	t.insert(it1.end(), '4');
-	t.insert(it1.end(), '5');
-	t.insert(it2.end(), '6');
-
-	return t;
+		const_test_iterator(typename test_tree::container const& c, index_type parent, index_type idx)
+			: base_type(c, parent, idx)
+		{
+		}
+	};
 }
+
+BOOST_AUTO_TEST_SUITE(tree__test)
 
 // ----------------------------------------------------------------------------
 // tree_node
@@ -89,14 +59,13 @@ test_tree make_test_tree()
 
 BOOST_AUTO_TEST_CASE(tree_node__construct__1)
 {
-	tree_node n{};
-	BOOST_CHECK(n.m_value == 0);
-}
+	using namespace wordring::detail;
 
-BOOST_AUTO_TEST_CASE(tree_node__construct__2)
-{
-	tree_node n(1, 2, 3, 4, 5);
-	BOOST_CHECK(n.m_value == 5);
+	static_assert(std::is_pod_v<tree_node<int>>);
+
+	tree_node<int> n{};
+
+	BOOST_CHECK(n.m_value == 0);
 }
 
 // ------------------------------------------------------------------------
@@ -140,1411 +109,614 @@ BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__3)
 }
 
 // ----------------------------------------------------------------------------
-// basic_tree_node_iterator
+// tree_node_iterator
 // ----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__construct__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator__construct__1)
 {
-	test_tree t{};
-	BOOST_CHECK(test_iterator(t, null_value, null_value) == test_iterator(t, null_value, null_value));
-	BOOST_CHECK(const_test_iterator(t, null_value, null_value) == const_test_iterator(t, null_value, null_value));
+	using namespace wordring;
+
+	tree<int> t;
 }
 
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__assign__1)
-{
-	test_tree t{};
-	test_iterator it1(t, null_value, null_value);
-	test_iterator it2(t, null_value, null_value);
-	const_test_iterator it3(t, null_value, null_value);
-	const_test_iterator it4(t, null_value, null_value);
-
-	it1 = it2;
-	BOOST_CHECK(it1 == it2);
-	it3 = it4;
-	BOOST_CHECK(it3 == it4);
-	// const_iteratorへiteratorを代入する。
-	it3 = it1;
-	BOOST_CHECK(it3 == it1);
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__reference__1)
-{
-	test_tree t{};
-	auto& h = t.m_heap;
-	//             parent      child       prev        next        value
-	h.emplace_back(null_value, null_value, null_value, null_value, '0'); // 0
-	test_iterator it1(t, null_value, 0);
-	const_test_iterator it2(t, null_value, 0);
-
-	BOOST_CHECK(*it1 == '0');
-	*it1 = '1';
-	BOOST_CHECK(*it2 == '1');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__reference__2)
-{
-	wordring::tree<std::string> t{};
-	t.insert(t.begin(), "ABCDE");
-
-	BOOST_CHECK(t.begin()->back() == 'E');
-	t.begin()->back() = '1';
-	BOOST_CHECK(t.begin()->back() == '1');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__increment__1)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	auto it1 = const_test_iterator(t, null_value, null_value);
-	auto it2 = const_test_iterator(t, null_value, null_value);
-
-	std::copy(it1, it2, std::back_inserter(result));
-	BOOST_CHECK(result == "");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__increment__2)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	const_test_iterator it1(t, null_value, 0);
-	const_test_iterator it2(t, null_value, null_value);
-	while (it1 != it2) result.push_back(*it1++);
-	BOOST_CHECK(result == "0");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__increment__3)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	const_test_iterator it1(t, 0, 1);
-	const_test_iterator it2(t, 0, null_value);
-	while (it1 != it2) result.push_back(*it1++);
-	BOOST_CHECK(result == "123");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__increment__4)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	const_test_iterator it1(t, 1, 4);
-	const_test_iterator it2(t, 1, null_value);
-	while (it1 != it2) result.push_back(*it1++);
-	BOOST_CHECK(result == "45");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__increment__5)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	const_test_iterator it1(t, 2, 6);
-	const_test_iterator it2(t, 2, null_value);
-	while (it1 != it2) result.push_back(*it1++);
-	BOOST_CHECK(result == "6");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__1)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	auto it1 = std::make_reverse_iterator(const_test_iterator(t, null_value, null_value));
-	auto it2 = std::make_reverse_iterator(const_test_iterator(t, null_value, null_value));
-
-	std::copy(it1, it2, std::back_inserter(result));
-	BOOST_CHECK(result == "");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__2)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	auto it1 = std::make_reverse_iterator(const_test_iterator(t, null_value, null_value));
-	auto it2 = std::make_reverse_iterator(const_test_iterator(t, null_value, 0));
-
-	std::copy(it1, it2, std::back_inserter(result));
-	BOOST_CHECK(result == "0");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__3)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	auto it1 = std::make_reverse_iterator(const_test_iterator(t, 0, null_value));
-	auto it2 = std::make_reverse_iterator(const_test_iterator(t, 0, 1));
-
-	std::copy(it1, it2, std::back_inserter(result));
-	BOOST_CHECK(result == "321");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__4)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	auto it1 = std::make_reverse_iterator(const_test_iterator(t, 1, null_value));
-	auto it2 = std::make_reverse_iterator(const_test_iterator(t, 1, 4));
-
-	std::copy(it1, it2, std::back_inserter(result));
-	BOOST_CHECK(result == "54");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__5)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-
-	auto it1 = std::make_reverse_iterator(const_test_iterator(t, 2, null_value));
-	auto it2 = std::make_reverse_iterator(const_test_iterator(t, 2, 6));
-
-	std::copy(it1, it2, std::back_inserter(result));
-	BOOST_CHECK(result == "6");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__decrement__6)
-{
-	test_tree t = make_test_tree();
-
-	auto it1 = std::make_reverse_iterator(const_test_iterator(t, null_value, null_value));
-	auto it2 = std::make_reverse_iterator(const_test_iterator(t, null_value, 0));
-
-	BOOST_CHECK(it1 == --it2);
-}
-
-// root
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__1)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(const_test_iterator(t, null_value, 0).parent() == t.end());
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__2)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 0, 1).parent() == '0');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__3)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 0, 2).parent() == '0');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__4)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 0, 2).parent() == '0');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__5)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 1, 4).parent() == '1');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__6)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 1, 5).parent() == '1');
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__parent__7)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(*const_test_iterator(t, 2, 6).parent() == '2');
-}
-
-// root
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__1)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, null_value, 0)) result.push_back(c);
-	BOOST_CHECK(result == "123");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__2)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, 0, 1)) result.push_back(c);
-	BOOST_CHECK(result == "45");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__3)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, 0, 2)) result.push_back(c);
-	BOOST_CHECK(result == "6");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__4)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, 0, 3)) result.push_back(c);
-	BOOST_CHECK(result == "");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__5)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, 1, 4)) result.push_back(c);
-	BOOST_CHECK(result == "");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__6)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, 1, 5)) result.push_back(c);
-	BOOST_CHECK(result == "");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__children__7)
-{
-	test_tree t = make_test_tree();
-	std::string result;
-	for(auto const c : const_test_iterator(t, 2, 6)) result.push_back(c);
-	BOOST_CHECK(result == "");
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__equal__1)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(test_iterator(t, 2, 6) == test_iterator(t, 2, 6));
-	BOOST_CHECK(const_test_iterator(t, 2, 6) == const_test_iterator(t, 2, 6));
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__equal__2)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(const_test_iterator(t, 2, 6) == test_iterator(t, 2, 6));
-	BOOST_CHECK(test_iterator(t, 2, 6) == const_test_iterator(t, 2, 6));
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__equal__3)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(test_iterator(t, null_value, null_value) == test_iterator(t, null_value, null_value));
-	BOOST_CHECK(const_test_iterator(t, null_value, null_value) == const_test_iterator(t, null_value, null_value));
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__equal__4)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK((test_iterator(t, 0, 6) == test_iterator(t, 2, 6)) == false);
-	BOOST_CHECK((test_iterator(t, 0, 6) == test_iterator(t, 0, 5)) == false);
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__not_equal__1)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(test_iterator(t, 0, 6) != test_iterator(t, 2, 6));
-	BOOST_CHECK(const_test_iterator(t, 0, 0) != const_test_iterator(t, 0, 1));
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__not_equal__2)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(const_test_iterator(t, 0, 6) != test_iterator(t, 2, 6));
-	BOOST_CHECK(test_iterator(t, 0, 6) != const_test_iterator(t, 2, 6));
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__not_equal__3)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK(test_iterator(t, 0, null_value) != test_iterator(t, null_value, null_value));
-	BOOST_CHECK(const_test_iterator(t, 0, null_value) != const_test_iterator(t, null_value, null_value));
-}
-
-BOOST_AUTO_TEST_CASE(basic_tree_node_iterator__not_equal__4)
-{
-	test_tree t = make_test_tree();
-	BOOST_CHECK((test_iterator(t, 0, 6) != test_iterator(t, 0, 6)) == false);
-	BOOST_CHECK((test_iterator(t, 0, 6) != test_iterator(t, 0, 6)) == false);
-}
 
 // ----------------------------------------------------------------------------
 // tree
 // ----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree__allocate__1)
-{
-	test_tree t{};
-	BOOST_CHECK(t.allocate() == 0);
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 2);
-	BOOST_CHECK(t.m_heap.size() == 3);
-	BOOST_CHECK(t.m_free == null_value);
-}
-
-BOOST_AUTO_TEST_CASE(tree__allocate__2)
-{
-	test_tree t{};
-	BOOST_CHECK(t.allocate() == 0);
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 2);
-	BOOST_CHECK(t.m_heap.size() == 3);
-	BOOST_CHECK(t.m_free == null_value);
-}
-
-BOOST_AUTO_TEST_CASE(tree__free__1)
-{
-	test_tree t{};
-	BOOST_CHECK(t.allocate() == 0);
-	t.free(0);
-	BOOST_CHECK(t.allocate() == 0);
-	t.free(0);
-	BOOST_CHECK(t.allocate() == 0);
-	BOOST_CHECK(t.allocate() == 1);
-	t.free(1);
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 2);
-	BOOST_CHECK(t.allocate() == 3);
-}
-
-BOOST_AUTO_TEST_CASE(tree__free__2)
-{
-	test_tree t{};
-	auto& h = t.m_heap;
-
-	//             parent      child       prev        next
-	h.emplace_back(null_value, 1,          null_value, null_value); // 0
-	h.emplace_back(0,          null_value, null_value, 2         ); // 1
-	h.emplace_back(0,          null_value, 1,          3         ); // 2
-	h.emplace_back(0,          null_value, 2,          null_value); // 3
-
-	t.free(0);
-
-	BOOST_CHECK(t.allocate() == 0);
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 2);
-	BOOST_CHECK(t.allocate() == 3);
-	BOOST_CHECK(t.m_free == null_value);
-	BOOST_CHECK(t.allocate() == 4);
-}
-
-BOOST_AUTO_TEST_CASE(tree__free__3)
-{
-	test_tree t{};
-	auto& h = t.m_heap;
-
-	t.m_free = 4;
-	//             parent      child       prev        next
-	h.emplace_back(null_value, 1,          null_value, null_value); // 0
-	h.emplace_back(0,          null_value, null_value, 2         ); // 1
-	h.emplace_back(0,          null_value, 1,          3         ); // 2
-	h.emplace_back(0,          null_value, 2,          null_value); // 3
-	h.emplace_back(null_value, null_value, null_value, 5         ); // 4
-	h.emplace_back(null_value, null_value, null_value, 6         ); // 5
-	h.emplace_back(null_value, null_value, null_value, 7         ); // 6
-	h.emplace_back(null_value, null_value, null_value, null_value); // 7
-
-	t.free(0);
-
-	BOOST_CHECK(t.allocate() == 0);
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 2);
-	BOOST_CHECK(t.allocate() == 3);
-	BOOST_CHECK(t.allocate() == 4);
-	BOOST_CHECK(t.allocate() == 5);
-	BOOST_CHECK(t.allocate() == 6);
-	BOOST_CHECK(t.allocate() == 7);
-	BOOST_CHECK(t.m_free == null_value);
-	BOOST_CHECK(t.allocate() == 8);
-}
-
-BOOST_AUTO_TEST_CASE(tree__free__4)
-{
-	test_tree t{};
-	auto& h = t.m_heap;
-
-	//             parent      child       prev        next
-	h.emplace_back(null_value, 1,          null_value, null_value); // 0
-	h.emplace_back(0,          4,          null_value, 2         ); // 1
-	h.emplace_back(0,          6,          1,          3         ); // 2
-	h.emplace_back(0,          null_value, 2,          null_value); // 3
-	h.emplace_back(1,          null_value, null_value, 5         ); // 4
-	h.emplace_back(1,          null_value, 4,          null_value); // 5
-	h.emplace_back(2,          null_value, null_value, null_value); // 6
-
-	t.free(0);
-
-	BOOST_CHECK(t.allocate() == 0);
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 2);
-	BOOST_CHECK(t.allocate() == 3);
-	BOOST_CHECK(t.allocate() == 6);
-	BOOST_CHECK(t.allocate() == 4);
-	BOOST_CHECK(t.allocate() == 5);
-	BOOST_CHECK(t.m_free == null_value);
-	BOOST_CHECK(t.allocate() == 7);
-}
-
-BOOST_AUTO_TEST_CASE(tree__free__5)
-{
-	test_tree t{};
-	auto& h = t.m_heap;
-
-	//             parent      child       prev        next
-	h.emplace_back(null_value, 1,          null_value, null_value); // 0
-	h.emplace_back(0,          4,          null_value, 2         ); // 1
-	h.emplace_back(0,          6,          1,          3         ); // 2
-	h.emplace_back(0,          null_value, 2,          null_value); // 3
-	h.emplace_back(1,          null_value, null_value, 5         ); // 4
-	h.emplace_back(1,          null_value, 4,          null_value); // 5
-	h.emplace_back(2,          null_value, null_value, null_value); // 6
-
-	t.free(1);
-
-	BOOST_CHECK(t.allocate() == 1);
-	BOOST_CHECK(t.allocate() == 4);
-	BOOST_CHECK(t.allocate() == 5);
-	BOOST_CHECK(t.m_free == null_value);
-	BOOST_CHECK(t.allocate() == 7);
-}
-
-// 根のallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__3)
-{
-	test_tree t{};
-	test_iterator it0(t.allocate(t.begin(), '0'));
-	BOOST_CHECK(it0.i_parent() == null_value);
-	BOOST_CHECK(it0.i_prev() == 0);
-	BOOST_CHECK(*it0 == '0');
-	BOOST_CHECK(t.size() == 1);
-}
-
-// 単独の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__4)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.begin(), '0');
-	BOOST_CHECK(it0.i_child() == null_value);
-	// 単独の子
-	test_iterator it1 = t.allocate(it0.begin(), '1');
-	BOOST_CHECK(it0.i_child() == 1);
-	BOOST_CHECK(it1.i_parent() == 0);
-	BOOST_CHECK(it1.i_prev() == 1);
-	BOOST_CHECK(it1.i_next() == null_value);
-	BOOST_CHECK(*it1 == '1');
-	BOOST_CHECK(t.size() == 2);
-}
-
-// 最後の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__5)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.begin(), '0');
-	// 単独の子
-	test_iterator it2 = t.allocate(it0.begin(), '2');
-	BOOST_CHECK(it0.i_child() == it2.m_index);
-	BOOST_CHECK(it2.i_parent() == 0);
-	BOOST_CHECK(it2.i_prev() == it2.m_index);
-	BOOST_CHECK(it2.i_next() == null_value);
-	// 最後の子
-	test_iterator it3 = t.allocate(it0.end(), '3');
-	BOOST_CHECK(it0.i_child() == it2.m_index);
-	BOOST_CHECK(it2.i_prev() == it3.m_index);
-	BOOST_CHECK(it2.i_next() == it3.m_index);
-	BOOST_CHECK(it3.i_parent() == 0);
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it3.i_next() == null_value);
-
-	std::string s("23");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), it0.begin(), it0.end()));
-	BOOST_CHECK(t.size() == 3);
-}
-
-// 先頭の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__6)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.begin(), '0');
-	// 単独の子
-	test_iterator it2 = t.allocate(it0.begin(), '2');
-	BOOST_CHECK(it0.i_child() == it2.m_index);
-	// 最後の子
-	test_iterator it3 = t.allocate(it0.end(), '3');
-	BOOST_CHECK(it0.i_child() == it2.m_index);
-	BOOST_CHECK(it3.i_parent() == 0);
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it3.i_next() == null_value);
-	// 先頭の子
-	test_iterator it1 = t.allocate(it2, '1');
-	BOOST_CHECK(it0.i_child() == it1.m_index);
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it3.i_next() == null_value);
-	BOOST_CHECK(it1.i_parent() == it0.m_index);
-	BOOST_CHECK(it1.i_prev() == it3.m_index);
-	BOOST_CHECK(it1.i_next() == it2.m_index);
-
-	std::string s("123");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), it0.begin(), it0.end()));
-	BOOST_CHECK(t.size() == 4);
-}
-
-// 中間の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__7)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.begin(), '0');
-	// 単独の子
-	test_iterator it2 = t.allocate(it0.begin(), '2');
-	// 最後の子
-	test_iterator it4 = t.allocate(it0.end(), '4');
-	// 先頭の子
-	test_iterator it1 = t.allocate(it2, '1');
-	// 中間の子
-	test_iterator it3 = t.allocate(it4, '3');
-
-	BOOST_CHECK(it0.i_child() == it1.m_index);
-	
-	BOOST_CHECK(it1.i_next() == it2.m_index);
-	BOOST_CHECK(it2.i_next() == it3.m_index);
-	BOOST_CHECK(it3.i_next() == it4.m_index);
-	BOOST_CHECK(it4.i_next() == null_value);
-
-	BOOST_CHECK(it4.i_prev() == it3.m_index);
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it2.i_prev() == it1.m_index);
-	BOOST_CHECK(it1.i_prev() == it4.m_index);
-
-	BOOST_CHECK(it1.i_parent() == it0.m_index);
-	BOOST_CHECK(it2.i_parent() == it0.m_index);
-	BOOST_CHECK(it3.i_parent() == it0.m_index);
-	BOOST_CHECK(it4.i_parent() == it0.m_index);
-
-	std::string s("1234");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), it0.begin(), it0.end()));
-	BOOST_CHECK(t.size() == 5);
-}
-
-// 最後の子をallocate -> 最後の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__8)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.end(), '0');
-	// 単独の子
-	test_iterator it1 = t.allocate(it0.end(), '1');
-	// 最後の子
-	test_iterator it2 = t.allocate(it0.end(), '2');
-	// 最後の子
-	test_iterator it3 = t.allocate(it0.end(), '3');
-
-	BOOST_CHECK(it0.i_child() == it1.m_index);
-
-	BOOST_CHECK(it1.i_next() == it2.m_index);
-	BOOST_CHECK(it2.i_next() == it3.m_index);
-	BOOST_CHECK(it3.i_next() == null_value);
-
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it2.i_prev() == it1.m_index);
-	BOOST_CHECK(it1.i_prev() == it3.m_index);
-
-	BOOST_CHECK(it1.i_parent() == it0.m_index);
-	BOOST_CHECK(it2.i_parent() == it0.m_index);
-	BOOST_CHECK(it3.i_parent() == it0.m_index);
-
-	std::string s("123");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), it0.begin(), it0.end()));
-	BOOST_CHECK(t.size() == 4);
-}
-
-// 最初の子をallocate -> 最初の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__9)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.end(), '0');
-	// 単独の子
-	test_iterator it3 = t.allocate(it0.begin(), '3');
-	// 最初の子
-	test_iterator it2 = t.allocate(it0.begin(), '2');
-	// 最初の子
-	test_iterator it1 = t.allocate(it0.begin(), '1');
-
-	BOOST_CHECK(it0.i_child() == it1.m_index);
-
-	BOOST_CHECK(it1.i_next() == it2.m_index);
-	BOOST_CHECK(it2.i_next() == it3.m_index);
-	BOOST_CHECK(it3.i_next() == null_value);
-
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it2.i_prev() == it1.m_index);
-	BOOST_CHECK(it1.i_prev() == it3.m_index);
-
-	BOOST_CHECK(it1.i_parent() == it0.m_index);
-	BOOST_CHECK(it2.i_parent() == it0.m_index);
-	BOOST_CHECK(it3.i_parent() == it0.m_index);
-
-	std::string s("123");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), it0.begin(), it0.end()));
-	BOOST_CHECK(t.size() == 4);
-}
-
-// 中間の子をallocate -> 中間の子をallocate
-BOOST_AUTO_TEST_CASE(tree__allocate__10)
-{
-	test_tree t{};
-	// 根
-	test_iterator it0 = t.allocate(t.begin(), '0');
-	// 単独の子
-	test_iterator it1 = t.allocate(it0.begin(), '1');
-	// 最後の子
-	test_iterator it4 = t.allocate(it0.end(), '4');
-	// 中間の子
-	test_iterator it2 = t.allocate(it4, '2');
-	// 中間の子
-	test_iterator it3 = t.allocate(it4, '3');
-
-	BOOST_CHECK(it0.i_child() == it1.m_index);
-
-	BOOST_CHECK(it1.i_next() == it2.m_index);
-	BOOST_CHECK(it2.i_next() == it3.m_index);
-	BOOST_CHECK(it3.i_next() == it4.m_index);
-	BOOST_CHECK(it4.i_next() == null_value);
-
-	BOOST_CHECK(it4.i_prev() == it3.m_index);
-	BOOST_CHECK(it3.i_prev() == it2.m_index);
-	BOOST_CHECK(it2.i_prev() == it1.m_index);
-	BOOST_CHECK(it1.i_prev() == it4.m_index);
-
-	BOOST_CHECK(it1.i_parent() == it0.m_index);
-	BOOST_CHECK(it2.i_parent() == it0.m_index);
-	BOOST_CHECK(it3.i_parent() == it0.m_index);
-	BOOST_CHECK(it4.i_parent() == it0.m_index);
-
-	std::string s("1234");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), it0.begin(), it0.end()));
-	BOOST_CHECK(t.size() == 5);
-}
-
-// フルチェック
-BOOST_AUTO_TEST_CASE(tree__allocate__11)
-{
-	test_tree t = make_test_tree();
-
-	BOOST_CHECK(t.at(0).i_parent() == null_value);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(0).i_prev() == 0);
-	BOOST_CHECK(t.at(0).i_next() == null_value);
-
-	BOOST_CHECK(t.at(1).i_parent() == 0);
-	BOOST_CHECK(t.at(1).i_child() == 4);
-	BOOST_CHECK(t.at(1).i_prev() == 3);
-	BOOST_CHECK(t.at(1).i_next() == 2);
-
-	BOOST_CHECK(t.at(2).i_parent() == 0);
-	BOOST_CHECK(t.at(2).i_child() == 6);
-	BOOST_CHECK(t.at(2).i_prev() == 1);
-	BOOST_CHECK(t.at(2).i_next() == 3);
-
-	BOOST_CHECK(t.at(3).i_parent() == 0);
-	BOOST_CHECK(t.at(3).i_child() == null_value);
-	BOOST_CHECK(t.at(3).i_prev() == 2);
-	BOOST_CHECK(t.at(3).i_next() == null_value);
-
-	BOOST_CHECK(t.at(4).i_parent() == 1);
-	BOOST_CHECK(t.at(4).i_child() == null_value);
-	BOOST_CHECK(t.at(4).i_prev() == 5);
-	BOOST_CHECK(t.at(4).i_next() == 5);
-
-	BOOST_CHECK(t.at(5).i_parent() == 1);
-	BOOST_CHECK(t.at(5).i_child() == null_value);
-	BOOST_CHECK(t.at(5).i_prev() == 4);
-	BOOST_CHECK(t.at(5).i_next() == null_value);
-
-	BOOST_CHECK(t.at(6).i_parent() == 2);
-	BOOST_CHECK(t.at(6).i_child() == null_value);
-	BOOST_CHECK(t.at(6).i_prev() == 6);
-	BOOST_CHECK(t.at(6).i_next() == null_value);
-}
-
-// 根の削除
-BOOST_AUTO_TEST_CASE(tree__free__6)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.begin());
-
-	BOOST_CHECK(it == t.end());
-	BOOST_CHECK(t.size() == 0);
-	BOOST_CHECK(t.m_root == null_value);
-}
-
-// 単独要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__7)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.at(6));
-
-	BOOST_CHECK(it == t.at(2).end());
-	BOOST_CHECK(t.size() == 6);
-
-	BOOST_CHECK(t.at(2).i_child() == null_value);
-}
-
-// 最終要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__8)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.at(5));
-	BOOST_CHECK(it == t.at(1).end());
-	BOOST_CHECK(t.size() == 6);
-	BOOST_CHECK(t.at(1).i_child() == 4);
-	BOOST_CHECK(t.at(4).i_prev() == 4);
-	BOOST_CHECK(t.at(4).i_next() == null_value);
-	
-	it = t.free(t.at(3));
-	BOOST_CHECK(it == t.at(0).end());
-	BOOST_CHECK(t.size() == 5);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(2).i_prev() == 1);
-	BOOST_CHECK(t.at(2).i_next() == null_value);
-}
-
-// 先頭要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__9)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.at(4));
-	BOOST_CHECK(it == t.at(5));
-	BOOST_CHECK(t.size() == 6);
-	BOOST_CHECK(t.at(1).i_child() == 5);
-	BOOST_CHECK(t.at(5).i_prev() == 5);
-	BOOST_CHECK(t.at(5).i_next() == null_value);
-
-	it = t.free(t.at(1));
-	BOOST_CHECK(it == t.at(2));
-	BOOST_CHECK(t.size() == 4);
-	BOOST_CHECK(t.at(0).i_child() == 2);
-	BOOST_CHECK(t.at(2).i_prev() == 3);
-	BOOST_CHECK(t.at(2).i_next() == 3);
-	BOOST_CHECK(t.at(3).i_prev() == 2);
-	BOOST_CHECK(t.at(3).i_next() == null_value);
-}
-
-// 中間要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__10)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.at(2));
-	BOOST_CHECK(it == t.at(3));
-	BOOST_CHECK(t.size() == 5);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(1).i_prev() == 3);
-	BOOST_CHECK(t.at(1).i_next() == 3);
-	BOOST_CHECK(t.at(3).i_prev() == 1);
-	BOOST_CHECK(t.at(3).i_next() == null_value);
-}
-
-// 最終要素の削除 -> 最終要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__11)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.at(3));
-	BOOST_CHECK(it == t.at(0).end());
-	BOOST_CHECK(t.size() == 6);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(1).i_prev() == 2);
-	BOOST_CHECK(t.at(1).i_next() == 2);
-	BOOST_CHECK(t.at(2).i_prev() == 1);
-	BOOST_CHECK(t.at(2).i_next() == null_value);
-
-	it = t.free(t.at(2));
-	BOOST_CHECK(it == t.at(0).end());
-	BOOST_CHECK(t.size() == 4);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(1).i_prev() == 1);
-	BOOST_CHECK(t.at(1).i_next() == null_value);
-}
-
-// 先頭要素の削除 -> 先頭要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__12)
-{
-	test_tree t = make_test_tree();
-
-	test_iterator it = t.free(t.at(1));
-	BOOST_CHECK(it == t.at(2));
-	BOOST_CHECK(t.size() == 4);
-	BOOST_CHECK(t.at(0).i_child() == 2);
-	BOOST_CHECK(t.at(2).i_prev() == 3);
-	BOOST_CHECK(t.at(2).i_next() == 3);
-	BOOST_CHECK(t.at(3).i_prev() == 2);
-	BOOST_CHECK(t.at(3).i_next() == null_value);
-
-	it = t.free(t.at(2));
-	BOOST_CHECK(it == t.at(3));
-	BOOST_CHECK(t.size() == 2);
-	BOOST_CHECK(t.at(0).i_child() == 3);
-	BOOST_CHECK(t.at(3).i_prev() == 3);
-	BOOST_CHECK(t.at(3).i_next() == null_value);
-}
-
-// 中間要素の削除 -> 中間要素の削除
-BOOST_AUTO_TEST_CASE(tree__free__13)
-{
-	test_tree t{};
-
-	test_iterator it = t.allocate(t.end(), '0');
-	t.allocate(it.end(), '1');
-	t.allocate(it.end(), '2');
-	t.allocate(it.end(), '3');
-	t.allocate(it.end(), '4');
-
-	it = t.free(t.at(2));
-	BOOST_CHECK(it == t.at(3));
-	BOOST_CHECK(t.size() == 4);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(1).i_prev() == 4);
-	BOOST_CHECK(t.at(1).i_next() == 3);
-	BOOST_CHECK(t.at(3).i_prev() == 1);
-	BOOST_CHECK(t.at(3).i_next() == 4);
-	BOOST_CHECK(t.at(4).i_prev() == 3);
-	BOOST_CHECK(t.at(4).i_next() == null_value);
-
-	it = t.free(t.at(3));
-	BOOST_CHECK(it == t.at(4));
-	BOOST_CHECK(t.size() == 3);
-	BOOST_CHECK(t.at(0).i_child() == 1);
-	BOOST_CHECK(t.at(1).i_prev() == 4);
-	BOOST_CHECK(t.at(1).i_next() == 4);
-	BOOST_CHECK(t.at(4).i_prev() == 1);
-	BOOST_CHECK(t.at(4).i_next() == null_value);
-
-	std::string s("14");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), t.at(0).begin(), t.at(0).end()));
-	BOOST_CHECK(t.size() == 3);
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__1)
-{
-	test_tree t1 = make_test_tree();
-	test_tree t2 = make_test_tree();
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin(), t1.end(), t2.begin(), t2.end()) == false);
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__2)
-{
-	test_tree t1 = make_test_tree();
-	test_tree t2;
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin(), t1.end(), t2.begin(), t2.end()));
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__3)
-{
-	test_tree t1 = make_test_tree();
-	test_tree t2;
-	t2.insert(t2.end(), { '0', { 1, 2 } });
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin(), t1.end(), t2.begin(), t2.end()));
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__4)
-{
-	test_tree t1;
-	test_tree t2 = make_test_tree();
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin(), t1.end(), t2.begin(), t2.end()));
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__5)
-{
-	test_tree t1;
-	t1.insert(t1.end(), { '0', { 1, 2 } });
-	test_tree t2 = make_test_tree();
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin(), t1.end(), t2.begin(), t2.end()));
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__6)
-{
-	test_tree t1;
-	t1.insert(t1.end(), { '0', { 1, 2 } });
-	test_tree t2;
-	t2.insert(t2.end(), { '0', { 1, 2 } });
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin(), t1.end(), t2.begin(), t2.end()) == false);
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__7)
-{
-	test_tree t1 = make_test_tree();
-	test_tree t2 = make_test_tree();
-	BOOST_CHECK(test_tree::recursive_not_equal(t1.begin().begin(), t1.begin().end(), t2.begin().begin(), t2.begin().end()) == false);
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__8)
-{
-	test_tree t1 = make_test_tree();
-	test_tree t2 = make_test_tree();
-	BOOST_CHECK(test_tree::recursive_not_equal(++t1.begin().begin(), t1.begin().end(), ++t2.begin().begin(), t2.begin().end()) == false);
-}
-
-BOOST_AUTO_TEST_CASE(tree__recursive_not_equal__9)
-{
-	test_tree t1 = make_test_tree();
-	test_tree t2 = make_test_tree();
-	BOOST_CHECK(test_tree::recursive_not_equal(++t1.begin().begin(), t1.begin().end(), t2.begin().begin(), t2.begin().end()));
-}
-
-// tree()
 BOOST_AUTO_TEST_CASE(tree__construct__1)
 {
-	wordring::tree<char> t;
-	BOOST_CHECK(t.begin() == t.end());
+	using namespace wordring;
+
+	tree<int> t;
 }
 
-// explicit tree(allocator_type const& alloc)
-BOOST_AUTO_TEST_CASE(tree__construct__2)
-{
-	wordring::tree<char> t{ wordring::tree<char>::allocator_type() };
-	BOOST_CHECK(t.begin() == t.end());
-}
+// 変更 -----------------------------------------------------------------------
 
-// explicit tree(value_type const& value, allocator_type const& alloc = allocator_type())
-BOOST_AUTO_TEST_CASE(tree__construct__3)
-{
-	char const c = '0';
-	wordring::tree<char> t{ c };
-	BOOST_CHECK(*t.begin() == '0');
-}
 
-// explicit tree(value_type&& value, allocator_type const& alloc = allocator_type())
-BOOST_AUTO_TEST_CASE(tree__construct__4)
-{
-	std::string s{ "0" };
-	wordring::tree<std::string> t{ std::move(s) };
-	BOOST_CHECK(*t.begin() == "0");
-}
-
-// tree(tree const&)
-BOOST_AUTO_TEST_CASE(tree__construct__5)
-{
-	wordring::tree<char> t1{ '0' };
-	wordring::tree<char> t2{ t1 };
-	BOOST_CHECK(*t2.begin() == '0');
-}
-
-// tree(tree&&)
-BOOST_AUTO_TEST_CASE(tree__construct__6)
-{
-	wordring::tree<char> t1{ '0' };
-	wordring::tree<char> t2{ std::move(t1) };
-	BOOST_CHECK(*t2.begin() == '0');
-}
-
-// explicit tree(node_proxy proxy, allocator_type const& alloc = allocator_type())
-BOOST_AUTO_TEST_CASE(tree__construct__7)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-
-	BOOST_CHECK(*t.begin() == '0');
-	BOOST_CHECK(*t.begin().begin() == '1');
-	BOOST_CHECK(*(++t.begin().begin()) == '2');
-	BOOST_CHECK(++t.begin().begin() == --t.begin().end());
-}
-
-// tree& operator=(tree const&)
-BOOST_AUTO_TEST_CASE(tree__assign__1)
-{
-	wordring::tree<char> t1{ '0' };
-	wordring::tree<char> t2;
-	t2 = t1;
-	BOOST_CHECK(*t2.begin() == '0');
-}
-
-// tree& operator=(tree&&)
-BOOST_AUTO_TEST_CASE(tree__assign__2)
-{
-	wordring::tree<char> t1{ '0' };
-	wordring::tree<char> t2;
-	t2 = std::move(t1);
-	BOOST_CHECK(*t2.begin() == '0');
-}
-
-// tree& operator=(node_proxy proxy)
-BOOST_AUTO_TEST_CASE(tree__assign__3)
-{
-	wordring::tree<char> t{ { '9', { '8', '7' } } };
-	t = { '0', { '1', '2' } };
-	BOOST_CHECK(*t.begin() == '0');
-	BOOST_CHECK(*t.begin().begin() == '1');
-}
-
-// void assign(value_type const& value)
-BOOST_AUTO_TEST_CASE(tree__assign__4)
-{
-	wordring::tree<char> t{ '0' };
-	char const c = '1';
-	t.assign(c);
-	BOOST_CHECK(*t.begin() == '1');
-}
-
-// void assign(value_type&& value)
-BOOST_AUTO_TEST_CASE(tree__assign__5)
-{
-	wordring::tree<char> t{ '0' };
-	char const c = '1';
-	t.assign(std::move(c));
-	BOOST_CHECK(*t.begin() == '1');
-}
-
-// void assign(node_proxy proxy)
-BOOST_AUTO_TEST_CASE(tree__assign__6)
-{
-	wordring::tree<char> t{ { '9', { '8', '7' } } };
-	t.assign({ '0', { '1', '2' } });
-	BOOST_CHECK(*t.begin() == '0');
-	BOOST_CHECK(*t.begin().begin() == '1');
-}
-
-// reference front()
-BOOST_AUTO_TEST_CASE(tree__front__1)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	t.front() = '9';
-	BOOST_CHECK(t.front() == '9');
-}
-
-// const_reference front() const
-BOOST_AUTO_TEST_CASE(tree__front__2)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(t.front() == '0');
-}
-
-// reference back()
-BOOST_AUTO_TEST_CASE(tree__back__1)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	t.back() = '9';
-	BOOST_CHECK(t.back() == '9');
-}
-
-// const_reference back() const
-BOOST_AUTO_TEST_CASE(tree__back__2)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(t.back() == '0');
-}
-
-// iterator begin()
-BOOST_AUTO_TEST_CASE(tree__begin__1)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	*t.begin() = '9';
-	BOOST_CHECK(*t.begin() == '9');
-}
-
-// const_iterator begin() const
-BOOST_AUTO_TEST_CASE(tree__begin__2)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(*t.begin() == '0');
-}
-
-// const_iterator cbegin() const
-BOOST_AUTO_TEST_CASE(tree__cbegin__1)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(*t.cbegin() == '0');
-}
-
-// 
-BOOST_AUTO_TEST_CASE(tree__cbegin__2)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(*t.cbegin() == '0');
-}
-
-// iterator end()
-BOOST_AUTO_TEST_CASE(tree__end__1)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	*--t.end() = '9';
-	BOOST_CHECK(*--t.end() == '9');
-}
-
-// const_iterator end() const
-BOOST_AUTO_TEST_CASE(tree__end__2)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(*--t.end() == '0');
-}
-
-// const_iterator cend() const
-BOOST_AUTO_TEST_CASE(tree__cend__1)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(*--t.cend() == '0');
-}
-
-// 
-BOOST_AUTO_TEST_CASE(tree__cend__2)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(*--t.cend() == '0');
-}
-
-// bool empty() const
-BOOST_AUTO_TEST_CASE(tree__empty__1)
-{
-	wordring::tree<char> const t;
-	BOOST_CHECK(t.empty());
-}
-
-// 
-BOOST_AUTO_TEST_CASE(tree__empty__2)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(t.empty() == false);
-}
-
-// size_type size() const
-BOOST_AUTO_TEST_CASE(tree__size__1)
-{
-	wordring::tree<char> const t{ { '0', { '1', '2' } } };
-	BOOST_CHECK(t.size() == 3);
-}
-
-BOOST_AUTO_TEST_CASE(tree__size__2)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	t.erase(t.begin());
-	BOOST_CHECK(t.size() == 0);
-}
-
-BOOST_AUTO_TEST_CASE(tree__size__3)
-{
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	t.erase(t.begin().begin());
-	t.insert(t.begin().end(), '3');
-	BOOST_CHECK(t.size() == 3);
-}
-
-// size_type max_size() const
-BOOST_AUTO_TEST_CASE(tree__max_size__1)
-{
-	wordring::tree<char> const t;
-	BOOST_CHECK(t.max_size() != 0);
-}
-
-// void clear()
 BOOST_AUTO_TEST_CASE(tree__clear__1)
 {
-	wordring::tree<char> t{ { '0', { '1', '2' } } };
-	t.clear();
-	BOOST_CHECK(t.size() == 0);
-	BOOST_CHECK(t.begin() == t.end());
+	using namespace wordring;
+
+	test_tree t;
 }
 
-// iterator insert(const_iterator pos, value_type const& value)
+/*
+根を挿入する
+
+iterator insert(const_iterator pos, value_type&& value)
+*/
 BOOST_AUTO_TEST_CASE(tree__insert__1)
 {
-	test_tree t{};
+	using namespace wordring;
 
-	char const s = '0';
-	auto it = t.insert(t.begin(), s);
+	test_tree t;
+	test_iterator it = t.insert(t.begin(), 100);
 
-	BOOST_CHECK(*it == '0');
+	BOOST_CHECK(it.m_parent == 0);
+	BOOST_CHECK(it.m_index == 1);
+
 	BOOST_CHECK(t.size() == 1);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_prev == 1);
+	BOOST_CHECK(t.m_c[1].m_next == 0);
 }
 
-// iterator insert(const_iterator pos, value_type&& value)
+/*
+ノードの間に挿入する
+*/
 BOOST_AUTO_TEST_CASE(tree__insert__2)
 {
-	test_tree t{};
+	using namespace wordring;
 
-	char const s = '0';
-	auto it = t.insert(t.begin(), std::move(s));
+	test_tree t;
+	t.m_c.assign(4, { 0, 0, 0, 0 });
+	t.m_c[0] = { 3, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 3, 0 };
+	t.m_c[3] = { 1, 2, 0, 0 };
 
-	BOOST_CHECK(*it == '0');
-	BOOST_CHECK(t.size() == 1);
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 3), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 4);
+
+	BOOST_CHECK(t.size() == 4);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 3);
+	BOOST_CHECK(t.m_c[2].m_next == 4);
+
+	BOOST_CHECK(t.m_c[4].m_prev == 2);
+	BOOST_CHECK(t.m_c[4].m_next == 3);
+	
+	BOOST_CHECK(t.m_c[3].m_prev == 4);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
 
-// iterator insert(const_iterator pos, size_type count, value_type const& value)
+/*
+子が無い場合の挿入
+*/
 BOOST_AUTO_TEST_CASE(tree__insert__3)
 {
-	test_tree t{};
-	t.insert(t.end(), '0');
+	using namespace wordring;
 
-	auto it = t.insert(t.begin().end(), 5, '1');
-	BOOST_CHECK(it == t.begin().begin());
-	std::string s("11111");
-	BOOST_CHECK(std::equal(s.begin(), s.end(), t.begin().begin(), t.begin().end()));
+	test_tree t;
+	t.m_c.assign(2, { 0, 0, 0, 0 });
+	t.m_c[0] = { 1, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 0 };
+
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 0), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 2);
+
+	BOOST_CHECK(t.size() == 2);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 2);
+	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-// iterator insert(const_iterator pos, InputIterator first, InputIterator last)
+/*
+先頭の前に挿入
+*/
 BOOST_AUTO_TEST_CASE(tree__insert__4)
 {
-	test_tree t{};
-	t.insert(t.end(), '0');
+	using namespace wordring;
 
-	std::string s{ "12345" };
-	auto it = t.insert(t.begin().end(), s.begin(), s.end());
-	BOOST_CHECK(it == t.begin().begin());
-	BOOST_CHECK(std::equal(s.begin(), s.end(), t.begin().begin(), t.begin().end()));
+	test_tree t;
+	t.m_c.assign(4, { 0, 0, 0, 0 });
+	t.m_c[0] = { 3, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 3, 0 };
+	t.m_c[3] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 2), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 4);
+
+	BOOST_CHECK(t.size() == 4);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 4);
+
+	BOOST_CHECK(t.m_c[4].m_prev == 3);
+	BOOST_CHECK(t.m_c[4].m_next == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 4);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
 
-// iterator insert(const_iterator pos, tree_node_proxy<T> proxy)
+/*
+単独の子の前に挿入
+*/
 BOOST_AUTO_TEST_CASE(tree__insert__5)
 {
-	test_tree t{};
-	auto it = t.insert(t.end(), { '0', { '1','2' } });
-	BOOST_CHECK(it == t.begin());
-	BOOST_CHECK(*t.begin().begin() == '1');
+	using namespace wordring;
+
+	test_tree t;
+	t.m_c.assign(3, { 0, 0, 0, 0 });
+	t.m_c[0] = { 2, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 2), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 3);
+
+	BOOST_CHECK(t.size() == 3);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 3);
+	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-// iterator insert(const_iterator pos, std::initializer_list<value_type> ilist)
+/*
+終端の前に挿入
+*/
 BOOST_AUTO_TEST_CASE(tree__insert__6)
 {
-	test_tree t{};
-	t.insert(t.end(), '0');
+	using namespace wordring;
 
-	auto it = t.insert(t.begin().end(), { '1', '2', '3', '4', '5' });
-	BOOST_CHECK(it == t.begin().begin());
-	std::string s{ "12345" };
-	BOOST_CHECK(std::equal(s.begin(), s.end(), t.begin().begin(), t.begin().end()));
+	test_tree t;
+	t.m_c.assign(4, { 0, 0, 0, 0 });
+	t.m_c[0] = { 3, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 3, 0 };
+	t.m_c[3] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 0), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 4);
+
+	BOOST_CHECK(t.size() == 4);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 4);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 4);
+
+	BOOST_CHECK(t.m_c[4].m_prev == 3);
+	BOOST_CHECK(t.m_c[4].m_next == 0);
 }
 
-// iterator emplace(const_iterator pos, Args&&... args)
-BOOST_AUTO_TEST_CASE(tree__emplace__1)
+/*
+単独の子の後に挿入
+*/
+BOOST_AUTO_TEST_CASE(tree__insert__7)
 {
-	test_tree t{};
-	auto it = t.emplace(t.end(), '0');
-	BOOST_CHECK(it == t.begin());
-	BOOST_CHECK(*t.begin() == '0');
+	using namespace wordring;
+
+	test_tree t;
+	t.m_c.assign(3, { 0, 0, 0, 0 });
+	t.m_c[0] = { 2, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 0), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 3);
+
+	BOOST_CHECK(t.size() == 3);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 3);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
 
-// iterator erase(const_iterator pos)
+/*
+根を削除
+
+iterator erase(const_iterator pos)
+*/
 BOOST_AUTO_TEST_CASE(tree__erase__1)
 {
-	test_tree t = make_test_tree();
-	auto it = t.erase(t.at(1));
-	BOOST_CHECK(it == t.at(2));
-	BOOST_CHECK(t.size() == 4);
+	using namespace wordring;
+
+	test_tree t;
+	t.m_c.assign(2, { 0, 0, 0, 0 });
+	t.m_c[0] = { 1, 0, 0, 1 };
+	t.m_c[1] = { 0, 1, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 0, 1));
+
+	BOOST_CHECK(it.m_parent == 0);
+	BOOST_CHECK(it.m_index == 0);
+
+	BOOST_CHECK(t.size() == 0);
+
+	BOOST_CHECK(t.m_c[0].m_child == 0);
 }
 
+/*
+ノードの間を削除
+*/
 BOOST_AUTO_TEST_CASE(tree__erase__2)
 {
-	test_tree t = make_test_tree();
-	auto it = t.erase(t.at(0));
-	BOOST_CHECK(it == t.end());
-	BOOST_CHECK(t.empty());
+	using namespace wordring;
+
+	test_tree t;
+	t.m_c.assign(5, { 0, 0, 0, 0 });
+	t.m_c[0] = { 4, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 4, 0 };
+	t.m_c[4] = { 1, 2, 3, 0 };
+	t.m_c[3] = { 1, 4, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 1, 4));
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 3);
+
+	BOOST_CHECK(t.size() == 3);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 3);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
 
-// iterator erase(const_iterator first, const_iterator last)
+/*
+先頭の前を削除
+*/
 BOOST_AUTO_TEST_CASE(tree__erase__3)
 {
-	test_tree t = make_test_tree();
-	auto it = t.erase(t.at(1), t.at(3));
-	BOOST_CHECK(it == t.at(3));
-	BOOST_CHECK(t.size() == 2);
+	using namespace wordring;
+
+	test_tree t;
+	t.m_c.assign(5, { 0, 0, 0, 0 });
+	t.m_c[0] = { 4, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 4 };
+	t.m_c[4] = { 1, 3, 2, 0 };
+	t.m_c[2] = { 1, 4, 3, 0 };
+	t.m_c[3] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 1, 4));
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 2);
+
+	BOOST_CHECK(t.size() == 3);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 3);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
 
+/*
+削除で単独になる子の前を削除
+*/
 BOOST_AUTO_TEST_CASE(tree__erase__4)
 {
-	test_tree t = make_test_tree();
-	auto it = t.erase(t.begin(), t.end());
-	BOOST_CHECK(it == t.end());
-	BOOST_CHECK(t.empty());
+	using namespace wordring;
+
+	test_tree t;
+	t.m_c.assign(4, { 0, 0, 0, 0 });
+	t.m_c[0] = { 3, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 3 };
+	t.m_c[3] = { 1, 2, 2, 0 };
+	t.m_c[2] = { 1, 3, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 1, 3));
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 2);
+
+	BOOST_CHECK(t.size() == 2);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 2);
+	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-BOOST_AUTO_TEST_CASE(tree__equal__1)
+
+/*
+終端の前を削除
+*/
+BOOST_AUTO_TEST_CASE(tree__erase__5)
 {
-	wordring::tree<char> t1{{ '0', { '1', '2' } }};
-	wordring::tree<char> t2{{ '0', { '1', '2' } }};
+	using namespace wordring;
 
-	BOOST_CHECK(t1 == t2);
+	test_tree t;
+	t.m_c.assign(5, { 0, 0, 0, 0 });
+	t.m_c[0] = { 4, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 4, 3, 0 };
+	t.m_c[3] = { 1, 2, 4, 0 };
+	t.m_c[4] = { 1, 3, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 1, 4));
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 0);
+
+	BOOST_CHECK(t.size() == 3);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 3);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
 
-BOOST_AUTO_TEST_CASE(tree__equal__2)
+/*
+削除で単独になる子の終端の前を削除
+*/
+BOOST_AUTO_TEST_CASE(tree__erase__6)
 {
-	wordring::tree<char> t1{{ '0', { '1', '2' } }};
-	wordring::tree<char> t2{{ '0', { '1', '3' } }};
+	using namespace wordring;
 
-	BOOST_CHECK((t1 == t2) == false);
+	test_tree t;
+	t.m_c.assign(4, { 0, 0, 0, 0 });
+	t.m_c[0] = { 3, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 3, 0 };
+	t.m_c[3] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 1, 3));
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 0);
+
+	BOOST_CHECK(t.size() == 2);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_child == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 2);
+	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-BOOST_AUTO_TEST_CASE(tree__equal__3)
+/*
+子孫削除
+*/
+BOOST_AUTO_TEST_CASE(tree__erase__7)
 {
-	wordring::tree<char> t1;
-	wordring::tree<char> t2;
+	using namespace wordring;
 
-	BOOST_CHECK(t1 == t2);
+	test_tree t;
+	t.m_c.assign(6, { 0, 0, 0, 0 });
+	t.m_c[0] = { 5, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 4, 0 };
+	t.m_c[4] = { 1, 2, 3, 5 };
+	t.m_c[3] = { 1, 4, 0, 0 };
+	t.m_c[5] = { 4, 0, 0, 0 };
+
+	test_iterator it = t.erase(const_test_iterator(t.m_c, 0, 1));
+
+	BOOST_CHECK(it.m_parent == 0);
+	BOOST_CHECK(it.m_index == 0);
+
+	BOOST_CHECK(t.size() == 0);
 }
 
-BOOST_AUTO_TEST_CASE(tree__equal__4)
+// 内部 -----------------------------------------------------------------------
+
+/*
+index_type allocate()
+
+未使用ノードが無い状態から、ノードを確保する
+*/
+BOOST_AUTO_TEST_CASE(tree__allocate__1)
 {
-	wordring::tree<char> t1;
-	wordring::tree<char> t2{{ '0', { '1', '3' } }};
+	using namespace wordring;
 
-	BOOST_CHECK((t1 == t2) == false);
+	test_tree t;
+	t.m_c.assign({ { 0, 0, 0, 0 } });
+
+	auto idx = t.allocate();
+
+	BOOST_CHECK(idx == 1);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 0);
+	BOOST_CHECK(t.m_c[0].m_next == 0);
+
+	BOOST_CHECK(t.m_c.size() == 2);
 }
 
-BOOST_AUTO_TEST_CASE(tree__equal__5)
+/*
+[0]に関連するよう、ノードを確保する
+*/
+BOOST_AUTO_TEST_CASE(tree__allocate__2)
 {
-	wordring::tree<char> t1{{ '0', { '1', '2' } }};
-	wordring::tree<char> t2;
+	using namespace wordring;
 
-	BOOST_CHECK((t1 == t2) == false);
+	test_tree t;
+	t.m_c.assign({ { 0, 1, 1, 0 }, { 0, 0, 0, 0 } });
+
+	auto idx = t.allocate();
+
+	BOOST_CHECK(idx == 1);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 0);
+	BOOST_CHECK(t.m_c[0].m_next == 0);
+
+	BOOST_CHECK(t.m_c.size() == 2);
 }
 
-BOOST_AUTO_TEST_CASE(tree__not_equal__1)
+/*
+後ろに未使用ノードが有る状態から、ノードを確保する
+*/
+BOOST_AUTO_TEST_CASE(tree__allocate__3)
 {
-	wordring::tree<char> t1{{ '0', { '1', '2' } }};
-	wordring::tree<char> t2{{ '0', { '1', '2' } }};
+	using namespace wordring;
 
-	BOOST_CHECK((t1 != t2) == false);
+	test_tree t;
+	t.m_c.assign({ { 0, 3, 2, 0 }, { 0, 0, 0, 0 }, { 0, 0, 3, 0 }, { 0, 2, 0, 0 } });
+
+	auto idx = t.allocate();
+
+	BOOST_CHECK(idx == 2);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 3);
+	BOOST_CHECK(t.m_c[0].m_next == 3);
+
+	BOOST_CHECK(t.m_c[1].m_prev == 0);
+	BOOST_CHECK(t.m_c[1].m_next == 0);
+
+	BOOST_CHECK(t.m_c.size() == 4);
 }
 
-BOOST_AUTO_TEST_CASE(tree__not_equal__2)
+/*
+void free(index_type idx)
+
+未使用ノードが無い状態から、使用済みノードを開放する
+*/
+BOOST_AUTO_TEST_CASE(tree__free__1)
 {
-	wordring::tree<char> t1{{ '0', { '1', '2' } }};
-	wordring::tree<char> t2{{ '0', { '1', '3' } }};
+	using namespace wordring;
 
-	BOOST_CHECK(t1 != t2);
+	test_tree t;
+	t.m_c.assign({ { 0, 0, 0, 0 }, { 0, 0, 0, 0 } });
+
+	t.free(1);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 1);
+	BOOST_CHECK(t.m_c[0].m_next == 1);
 }
 
-BOOST_AUTO_TEST_CASE(tree__not_equal__3)
+/*
+前に未使用ノードが有り、後ろに未使用ノードが無い状態から、使用済みノードを開放する
+*/
+BOOST_AUTO_TEST_CASE(tree__free__2)
 {
-		wordring::tree<char> t1;
-		wordring::tree<char> t2;
+	using namespace wordring;
 
-		BOOST_CHECK((t1 != t2) == false);
+	test_tree t;
+	t.m_c.assign({ { 0, 1, 1, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } });
+
+	t.free(2);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 2);
+	BOOST_CHECK(t.m_c[0].m_next == 1);
+
+	BOOST_CHECK(t.m_c[1].m_prev == 0);
+	BOOST_CHECK(t.m_c[1].m_next == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 1);
+	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-BOOST_AUTO_TEST_CASE(tree__not_equal__4)
+/*
+前に未使用ノードが無く、後ろに未使用ノードが有る状態から、使用済みノードを開放する
+*/
+BOOST_AUTO_TEST_CASE(tree__free__3)
 {
-	wordring::tree<char> t1;
-	wordring::tree<char> t2{{ '0', { '1', '3' } }};
+	using namespace wordring;
 
-	BOOST_CHECK(t1 != t2);
+	test_tree t;
+	t.m_c.assign({ { 0, 2, 2, 0 }, { 0, 0, 0, 0 }, { 0, 0, 0, 0 } });
+
+	t.free(1);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 2);
+	BOOST_CHECK(t.m_c[0].m_next == 1);
+
+	BOOST_CHECK(t.m_c[1].m_prev == 0);
+	BOOST_CHECK(t.m_c[1].m_next == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 1);
+	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-BOOST_AUTO_TEST_CASE(tree__not_equal__5)
+/*
+前後に未使用ノードが有る状態から、使用済みノードを開放する
+*/
+BOOST_AUTO_TEST_CASE(tree__free__4)
 {
-	wordring::tree<char> t1{{ '0', { '1', '2' } }};
-	wordring::tree<char> t2;
+	using namespace wordring;
 
-	BOOST_CHECK(t1 != t2);
+	test_tree t;
+	t.m_c.assign({ { 0, 3, 1, 0 }, { 0, 0, 3, 0 }, { 0, 0, 0, 0 }, { 0, 1, 0, 0 } });
+
+	t.free(2);
+
+	BOOST_CHECK(t.m_c[0].m_prev == 3);
+	BOOST_CHECK(t.m_c[0].m_next == 1);
+
+	BOOST_CHECK(t.m_c[1].m_prev == 0);
+	BOOST_CHECK(t.m_c[1].m_next == 2);
+
+	BOOST_CHECK(t.m_c[2].m_prev == 1);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
 }
+
 
 BOOST_AUTO_TEST_SUITE_END()
