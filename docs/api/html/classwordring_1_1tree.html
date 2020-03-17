@@ -87,12 +87,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_
 <tr class="memitem:a235ade446225d07f3a498bd976307f90"><td class="memItemLeft" align="right" valign="top"><a id="a235ade446225d07f3a498bd976307f90"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b> = value_type const  *</td></tr>
 <tr class="separator:a235ade446225d07f3a498bd976307f90"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c15cad0d35546aa89fedfbfc3d85894"><td class="memItemLeft" align="right" valign="top"><a id="a7c15cad0d35546aa89fedfbfc3d85894"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a>&lt; value_type, container &gt;</td></tr>
-<tr class="separator:a7c15cad0d35546aa89fedfbfc3d85894"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f12987ffc59228b90ff2300fe73f01f"><td class="memItemLeft" align="right" valign="top"><a id="a1f12987ffc59228b90ff2300fe73f01f"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a>&lt; value_type const, container const  &gt;</td></tr>
-<tr class="separator:a1f12987ffc59228b90ff2300fe73f01f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a478cb643b9bddcd81352a1691d224607"><td class="memItemLeft" align="right" valign="top"><a id="a478cb643b9bddcd81352a1691d224607"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a>&lt; container &gt;</td></tr>
+<tr class="separator:a478cb643b9bddcd81352a1691d224607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a5240b331e1ea4a345ea5e2d50a7f43"><td class="memItemLeft" align="right" valign="top"><a id="a5a5240b331e1ea4a345ea5e2d50a7f43"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">detail::tree_node_iterator</a>&lt; container const  &gt;</td></tr>
+<tr class="separator:a5a5240b331e1ea4a345ea5e2d50a7f43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
@@ -216,10 +216,10 @@ static constexpr index_type&#160;</td><td class="memItemRight" valign="bottom"><
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 フレンド</h2></td></tr>
-<tr class="memitem:aabb7744323cc65440c6baa563d11a856"><td class="memTemplParams" colspan="2"><a id="aabb7744323cc65440c6baa563d11a856"></a>
-template&lt;typename T1 , typename Container1 &gt; </td></tr>
-<tr class="memitem:aabb7744323cc65440c6baa563d11a856"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>detail::tree_node_iterator</b></td></tr>
-<tr class="separator:aabb7744323cc65440c6baa563d11a856"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accde9e1a295bf31534f61c254d1e9366"><td class="memTemplParams" colspan="2"><a id="accde9e1a295bf31534f61c254d1e9366"></a>
+template&lt;typename Container1 &gt; </td></tr>
+<tr class="memitem:accde9e1a295bf31534f61c254d1e9366"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>detail::tree_node_iterator</b></td></tr>
+<tr class="separator:accde9e1a295bf31534f61c254d1e9366"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>木コンテナ </p>
@@ -723,6 +723,7 @@ template&lt;typename T1 , typename Container1 &gt; </td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>挿入されたノードを指すイテレータ</dd></dl>
+<p>挿入位置は、引数 <b>pos</b> の前。 子として追加されるのではないことに注意。</p>
 <p>既存のノードが有る状態で根を挿入しようとした場合、何もせず <a class="el" href="classwordring_1_1tree.html#a918dc89c668cf65da211e8f8b1596ada" title="根の終端を指すイテレータを返す">end()</a> を返す。 この場合、debug実行ではアサーションで失敗する。</p>
 <hr  />
 <p><b>idx</b> は、allocate() で取得した新規ノードのインデックス。</p>

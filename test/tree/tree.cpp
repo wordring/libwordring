@@ -32,6 +32,11 @@ namespace
 		using base_type::m_parent;
 
 		test_iterator(base_type const& it) : base_type(it) {}
+
+		test_iterator(typename test_tree::container& c, index_type parent, index_type idx)
+			: base_type(c, parent, idx)
+		{
+		}
 	};
 
 	struct const_test_iterator : public test_tree::const_iterator
@@ -72,11 +77,182 @@ BOOST_AUTO_TEST_CASE(tree_node__construct__1)
 // tree_node_iterator
 // ----------------------------------------------------------------------------
 
+/*
+空のイテレータを作成する
+
+tree_node_iterator() noexcept
+*/
 BOOST_AUTO_TEST_CASE(tree_node_iterator__construct__1)
+{
+	using namespace wordring::detail;
+
+	tree_node_iterator<test_tree::container> it;
+}
+
+BOOST_AUTO_TEST_CASE(tree_node_iterator__construct__2)
+{
+	using namespace wordring::detail;
+
+	test_tree::container v;
+	auto it = test_iterator(v, 0, 0);
+}
+
+/*
+const_iterator を取得する
+
+operator tree_node_iterator<container const>() const
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__cast__1)
+{
+	using namespace wordring;
+	using namespace wordring::detail;
+
+	test_tree::container v;
+	auto it = test_iterator(v, 0, 0);
+	tree_node_iterator<test_tree::container> it1 = it;
+	tree_node_iterator<test_tree::container const> it2 = it;
+
+	BOOST_CHECK(it1 == it2);
+}
+
+/*
+イテレータが指す要素の参照を取得する
+
+auto& operator*() const
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__reference__1)
+{
+	test_tree t;
+	t.insert(t.end(), 100);
+
+	auto it1 = t.begin();
+	BOOST_CHECK(*it1 == 100);
+	*it1 = 90;
+	BOOST_CHECK(*it1 == 90);
+
+	// const_iterator の返す参照の値が const 修飾されているか確認
+	static_assert(std::is_const_v<std::remove_reference_t<decltype(*t.cbegin())>>);
+}
+
+/*
+イテレータが指す要素のポインタを取得する
+
+auto operator->() const
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__reference__2)
 {
 	using namespace wordring;
 
-	tree<int> t;
+	tree<std::string> t;
+	t.insert(t.end(), "100");
+
+	auto it1 = t.begin();
+	BOOST_CHECK(it1->at(0) == '1');
+	it1->at(0) = '2';
+	BOOST_CHECK(it1->at(0) == '2');
+
+	// const_iterator の返すポインタの値が const 修飾されているか確認
+	static_assert(std::is_const_v<std::remove_reference_t<decltype(t.cbegin()->at(0))>>);
+}
+
+/*
+インクリメントする
+
+tree_node_iterator& operator++()
+tree_node_iterator operator++(int)
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__increment__1)
+{
+	test_tree t;
+	auto it1 = t.insert(t.begin(), 1);
+	auto it2 = t.insert(it1.end(), 2);
+	auto it3 = t.insert(it1.end(), 3);
+	auto it4 = t.insert(it1.end(), 4);
+
+	BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(++it1 == t.end());
+
+	BOOST_CHECK(*it2++ == 2);
+	BOOST_CHECK(it2++ == it3);
+	BOOST_CHECK(it2++ == it4);
+	BOOST_CHECK(it2 == t.begin().end());
+}
+
+/*
+デクリメントする
+
+tree_node_iterator& operator--()
+tree_node_iterator operator--(int)
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__decrement__1)
+{
+	test_tree t;
+	auto it1 = t.insert(t.begin(), 1);
+	t.insert(it1.end(), 2);
+	t.insert(it1.end(), 3);
+	t.insert(it1.end(), 4);
+
+	BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(--t.end() == t.begin());
+
+	std::vector<int> v;
+	auto it5 = std::make_reverse_iterator(it1.end());
+	auto it6 = std::make_reverse_iterator(it1.begin());
+	std::copy(it5, it6, std::back_inserter(v));
+
+	BOOST_CHECK(v == std::vector<int>({ 4, 3, 2 }));
+}
+
+/*
+子の先頭を指すイテレータを取得する
+子の終端を指すイテレータを取得する
+
+tree_node_iterator begin() const
+tree_node_iterator end() const
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__begin__1)
+{
+	test_tree t;
+	auto it1 = t.insert(t.begin(), 1);
+	t.insert(it1.end(), 2);
+	t.insert(it1.end(), 3);
+	t.insert(it1.end(), 4);
+
+	BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(--t.end() == t.begin());
+
+	std::vector<int> v;
+	auto it5 = std::make_reverse_iterator(it1.end());
+	auto it6 = std::make_reverse_iterator(it1.begin());
+	std::copy(it5, it6, std::back_inserter(v));
+
+	BOOST_CHECK(v == std::vector<int>({ 4, 3, 2 }));
+}
+
+/*
+子の末尾を指す逆走イテレータを取得する
+子の先頭の前を指す逆走イテレータを取得する
+
+reverse_iterator rbegin() const
+reverse_iterator rend() const
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator__rbegin__1)
+{
+	test_tree t;
+	auto it1 = t.insert(t.begin(), 1);
+	t.insert(it1.end(), 2);
+	t.insert(it1.end(), 3);
+	t.insert(it1.end(), 4);
+
+	BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(--t.end() == t.begin());
+
+	std::vector<int> v;
+	auto it5 = it1.rbegin();
+	auto it6 = it1.rend();
+	std::copy(it5, it6, std::back_inserter(v));
+
+	BOOST_CHECK(v == std::vector<int>({ 4, 3, 2 }));
 }
 
 
@@ -449,7 +625,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__9)
 	t2.insert(t2.cend(), t1.cbegin());
 
 	BOOST_CHECK(t2.size() == t1.size());
-
+	
 	auto p1 = t2.begin();
 	BOOST_CHECK(*p1 == 1);
 
@@ -467,6 +643,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__9)
 	BOOST_CHECK(*p6 == 6);
 	auto p7 = ++p3.begin();
 	BOOST_CHECK(*p7 == 7);
+	
 }
 
 /*

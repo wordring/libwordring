@@ -41,36 +41,54 @@ namespace wordring::detail
 	// tree_node_iterator
 	// ------------------------------------------------------------------------
 
-	template <typename T, typename Container>
+	template <typename Container>
 	class tree_node_iterator
 	{
 		template <typename T1, typename Allocator1>
 		friend class wordring::tree;
 
-		friend class tree_node_iterator<std::remove_const_t<T>, std::remove_const_t<Container>>;
-		friend class tree_node_iterator<std::add_const_t<T>, std::add_const_t<Container>>;
+		template <typename Container1>
+		friend class tree_node_iterator;
 
-		template <typename T1, typename Container1, typename T2, typename Container2>
-		friend bool operator==(tree_node_iterator<T1, Container1> const&, tree_node_iterator<T2, Container2> const&);
+		template <typename Container1, typename Container2>
+		friend bool operator==(tree_node_iterator<Container1> const&, tree_node_iterator<Container2> const&);
 
-		template <typename T1, typename Container1, typename T2, typename Container2>
-		friend bool operator!=(tree_node_iterator<T1, Container1> const&, tree_node_iterator<T2, Container2> const&);
-
-	public:
-		using value_type = T;
-		using difference_type = std::ptrdiff_t;
-		using reference = value_type&;
-		using pointer = value_type*;
-		using iterator_category = std::bidirectional_iterator_tag;
+		template <typename Container1, typename Container2>
+		friend bool operator!=(tree_node_iterator<Container1> const&, tree_node_iterator<Container2> const&);
 
 	protected:
-		using node_type  = tree_node<T>;
-		using index_type = typename node_type::index_type;
 		using container  = Container;
+		using node_type  = typename container::value_type;
+		using index_type = typename node_type::index_type;
 
 		static constexpr index_type null_value = node_type::null_value;
 
 	public:
+		using value_type        = typename node_type::value_type;
+		using difference_type   = std::ptrdiff_t;
+		using reference         = value_type&;
+		using const_reference   = value_type const&;
+		using pointer           = value_type*;
+		using const_pointer     = value_type const*;
+		using iterator_category = std::bidirectional_iterator_tag;
+
+		using reverse_iterator = std::reverse_iterator<tree_node_iterator<container>>;
+
+	public:
+		/*! @brief 空のイテレータを作成する
+		*/
+		tree_node_iterator() noexcept
+			: m_c(nullptr)
+			, m_parent(0)
+			, m_index(0)
+		{
+		}
+
+	protected:
+		/*! @brief イテレータを作成する
+		
+		wordring::tree から使用される。
+		*/
 		tree_node_iterator(container& c, index_type parent, index_type idx) noexcept
 			: m_c(std::addressof(c))
 			, m_parent(parent)
@@ -78,35 +96,38 @@ namespace wordring::detail
 		{
 		}
 
-		/* iteratorからconst_iteratorを作成する
+	public:
+		/*! @brief const_iterator を取得する
 		*/
-		template <typename Iterator>
-		tree_node_iterator(Iterator const& other) noexcept
-			: m_c(other.m_c)
-			, m_parent(other.m_parent)
-			, m_index(other.m_index)
+		operator tree_node_iterator<container const>() const
 		{
+			tree_node_iterator<container const> result;
+			result.m_c = m_c;
+			result.m_parent = m_parent;
+			result.m_index = m_index;
+			return result;
 		}
 
-		template <typename Iterator>
-		tree_node_iterator& operator=(Iterator const& other) noexcept
-		{
-			m_c = other.m_c;
-			m_parent = other.m_parent;
-			m_index = other.m_index;
-
-			return *this;
-		}
-
-		reference operator*() const
+		/*! @brief イテレータが指す要素の参照を取得する
+		*/
+		auto& operator*() const
 		{
 			assert(m_index != null_value);
 
 			return (m_c->data() + m_index)->m_value;
 		}
 
-		pointer operator->() const { return std::addressof(operator*()); }
+		/*! @brief イテレータが指す要素のポインタを取得する
+		*/
+		auto operator->() const
+		{
+			assert(m_index != null_value);
 
+			return std::addressof((m_c->data() + m_index)->m_value);
+		}
+
+		/*! @brief インクリメントする
+		*/
 		tree_node_iterator& operator++()
 		{
 			assert(m_index != null_value);
@@ -116,6 +137,8 @@ namespace wordring::detail
 			return *this;
 		}
 
+		/*! @brief インクリメントする
+		*/
 		tree_node_iterator operator++(int)
 		{
 			assert(m_index != null_value);
@@ -125,7 +148,9 @@ namespace wordring::detail
 
 			return result;
 		}
-
+		
+		/* @brief デクリメントする
+		*/
 		tree_node_iterator& operator--()
 		{
 			auto const* d = m_c->data();
@@ -149,6 +174,8 @@ namespace wordring::detail
 			return *this;
 		}
 
+		/* @brief デクリメントする
+		*/
 		tree_node_iterator operator--(int)
 		{
 			auto result = *this;
@@ -156,16 +183,34 @@ namespace wordring::detail
 			return result;
 		}
 
+		/*! @brief 子の先頭を指すイテレータを取得する
+		*/
 		tree_node_iterator begin() const
 		{
 			assert(m_index != null_value);
 			return tree_node_iterator(*m_c, m_index, (m_c->data() + m_index)->m_child);
 		}
 
+		/*! @brief 子の終端を指すイテレータを取得する
+		*/
 		tree_node_iterator end() const
 		{
 			assert(m_index != null_value);
 			return tree_node_iterator(*m_c, m_index, null_value);
+		}
+
+		/*! @brief 子の末尾を指す逆走イテレータを取得する
+		*/
+		reverse_iterator rbegin() const
+		{
+			return std::make_reverse_iterator(end());
+		}
+
+		/*! @brief 子の先頭の前を指す逆走イテレータを取得する
+		*/
+		reverse_iterator rend() const
+		{
+			return std::make_reverse_iterator(begin());
 		}
 
 		tree_node_iterator parent() const
@@ -186,15 +231,15 @@ namespace wordring::detail
 		index_type m_index;
 	};
 
-	template <typename T1, typename Container1, typename T2, typename Container2>
-	inline bool operator==(tree_node_iterator<T1, Container1> const& lhs, tree_node_iterator<T2, Container2> const& rhs)
+	template <typename Container1, typename Container2>
+	inline bool operator==(tree_node_iterator<Container1> const& lhs, tree_node_iterator<Container2> const& rhs)
 	{
 		assert(const_cast<Container1 const*>(lhs.m_c) == const_cast<Container2 const*>(rhs.m_c));
 		return !(lhs != rhs);
 	}
 
-	template <typename T1, typename Container1, typename T2, typename Container2>
-	inline bool operator!=(tree_node_iterator<T1, Container1> const& lhs, tree_node_iterator<T2, Container2> const& rhs)
+	template <typename Container1, typename Container2>
+	inline bool operator!=(tree_node_iterator<Container1> const& lhs, tree_node_iterator<Container2> const& rhs)
 	{
 		assert(const_cast<Container1 const*>(lhs.m_c) == const_cast<Container2 const*>(rhs.m_c));
 		return lhs.m_index != rhs.m_index || lhs.m_parent != rhs.m_parent;
@@ -278,7 +323,7 @@ namespace wordring
 	template <typename T, typename Allocator = std::allocator<detail::tree_node<T>>>
 	class tree
 	{
-		template <typename T1, typename Container1>
+		template <typename Container1>
 		friend class detail::tree_node_iterator;
 
 	protected:
@@ -298,8 +343,8 @@ namespace wordring
 		using const_reference = value_type const&;
 		using pointer         = value_type*;
 		using const_pointer   = value_type const*;
-		using iterator        = detail::tree_node_iterator<value_type, container>;
-		using const_iterator  = detail::tree_node_iterator<value_type const, container const>;
+		using iterator        = detail::tree_node_iterator<container>;
+		using const_iterator  = detail::tree_node_iterator<container const>;
 
 	public:
 		/*! @brief 空のコンテナを構築する
@@ -463,6 +508,9 @@ namespace wordring
 
 		@return 挿入されたノードを指すイテレータ
 
+		挿入位置は、引数 <b>pos</b> の前。
+		子として追加されるのではないことに注意。
+
 		既存のノードが有る状態で根を挿入しようとした場合、何もせず end() を返す。
 		この場合、debug実行ではアサーションで失敗する。
 
@@ -586,7 +634,7 @@ namespace wordring
 		{
 			index_type parent = pos.m_parent;
 
-			assert(!(parent == 0 && m_c.size() != 1));
+			assert(!(parent == 0 && m_c.size() != 1)); // 根に複数の要素を追加しようとしている。
 			if (parent == 0 && m_c.size() != 1) return end();
 
 			index_type idx = allocate(std::move(value));
@@ -669,15 +717,15 @@ namespace wordring
 		iterator insert(const_iterator pos, const_iterator sub)
 		{
 			std::vector<std::array<const_iterator, 2>> x; // 親スタック [pos, sub]
-			std::vector<const_iterator> v;            // 探索スタック
+			std::vector<const_iterator> v;                // 探索スタック
 
 			// 根を特別扱い
 			{
 				iterator it = insert(pos, *sub);
 				x.push_back({ it, sub });
-				const_iterator it1 = sub.begin();
-				const_iterator it2 = sub.end();
-				while (it1 != it2) v.push_back(it1++);
+				auto it1 = sub.rbegin();
+				auto it2 = sub.rend();
+				while (it1 != it2) v.push_back((++it1).base());
 			}
 
 			// 根以外
@@ -685,20 +733,16 @@ namespace wordring
 			{
 				const_iterator it = v.back();
 				v.pop_back();
+
+				if (it.parent() != x.back()[1]) x.pop_back();
 				const_iterator p = insert(x.back()[0].end(), *it);
 
 				if (it.begin() != it.end()) // 子がある
 				{
-					//auto it1 = std::make_reverse_iterator(it.begin());
-					//auto it2 = std::make_reverse_iterator(it.end());
-					auto it1 = it.begin();
-					auto it2 = it.end();
+					auto it1 = it.rbegin();
+					auto it2 = it.rend();
+					while(it1 != it2)  v.push_back((++it1).base());
 
-					while(it1 != it2)  v.push_back(it1++);
-
-					auto i = it.parent();
-					auto j = x.back()[1];
-					if (it.parent() != x.back()[1]) x.pop_back();
 					x.push_back({ p, it });
 				}
 			}
