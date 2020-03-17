@@ -68,46 +68,6 @@ BOOST_AUTO_TEST_CASE(tree_node__construct__1)
 	BOOST_CHECK(n.m_value == 0);
 }
 
-// ------------------------------------------------------------------------
-// tree_node_proxy
-// ------------------------------------------------------------------------
-
-BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__1)
-{
-	wordring::detail::tree_node_proxy<char> p{ '0' };
-
-	BOOST_CHECK(p.m_value == '0');
-	BOOST_CHECK(p.m_children.empty());
-}
-
-BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__2)
-{
-	wordring::detail::tree_node_proxy<char> p{ '0', { '1', '2', '3' } };
-
-	BOOST_CHECK(p.m_value == '0');
-	BOOST_CHECK(p.m_children.size() == 3);
-}
-
-BOOST_AUTO_TEST_CASE(tree_node_proxy__construct__3)
-{
-	wordring::detail::tree_node_proxy<char> p
-	{
-		'0',
-		{
-			{ '1', { '4', '5' } },
-			{ '2', { '6' } },
-			{ '3' }
-		}
-	};
-
-	BOOST_CHECK(p.m_children.size() == 3);
-	BOOST_CHECK(p.m_children[0].m_children.size() == 2);
-	BOOST_CHECK(p.m_children[1].m_children.size() == 1);
-	BOOST_CHECK(p.m_children[2].m_children.empty());
-
-	BOOST_CHECK(p.m_value == '0');
-}
-
 // ----------------------------------------------------------------------------
 // tree_node_iterator
 // ----------------------------------------------------------------------------
@@ -124,11 +84,60 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__construct__1)
 // tree
 // ----------------------------------------------------------------------------
 
+/*
+空のコンテナを構築する
+
+tree()
+*/
 BOOST_AUTO_TEST_CASE(tree__construct__1)
 {
 	using namespace wordring;
 
 	tree<int> t;
+	BOOST_CHECK(t.size() == 0);
+}
+
+/*
+アロケータを指定して空のコンテナを構築する
+
+explicit tree(allocator_type const& alloc)
+*/
+BOOST_AUTO_TEST_CASE(tree__construct__2)
+{
+	using namespace wordring;
+
+	auto t = tree<int>(std::allocator<int>());
+
+	BOOST_CHECK(t.size() == 0);
+}
+
+/*
+要素からコンテナを構築する
+
+explicit tree(value_type const& value, allocator_type const& alloc = allocator_type())
+*/
+BOOST_AUTO_TEST_CASE(tree__construct__3)
+{
+	using namespace wordring;
+
+	int i = 100;
+	auto t = tree<int>(i);
+
+	BOOST_CHECK(t.size() == 1);
+}
+
+/*
+要素からコンテナを構築する
+
+explicit tree(value_type&& value, allocator_type const& alloc = allocator_type())
+*/
+BOOST_AUTO_TEST_CASE(tree__construct__4)
+{
+	using namespace wordring;
+
+	tree<int> t(1);
+
+	BOOST_CHECK(t.size() == 1);
 }
 
 // 変更 -----------------------------------------------------------------------
@@ -142,16 +151,17 @@ BOOST_AUTO_TEST_CASE(tree__clear__1)
 }
 
 /*
-根を挿入する
+要素を挿入する
 
-iterator insert(const_iterator pos, value_type&& value)
+iterator insert(const_iterator pos, value_type const& value)
 */
 BOOST_AUTO_TEST_CASE(tree__insert__1)
 {
 	using namespace wordring;
 
 	test_tree t;
-	test_iterator it = t.insert(t.begin(), 100);
+	int i = 100;
+	test_iterator it = t.insert(t.begin(), i);
 
 	BOOST_CHECK(it.m_parent == 0);
 	BOOST_CHECK(it.m_index == 1);
@@ -165,9 +175,34 @@ BOOST_AUTO_TEST_CASE(tree__insert__1)
 }
 
 /*
-ノードの間に挿入する
+根を挿入する
+
+iterator insert(const_iterator pos, value_type&& value)
 */
 BOOST_AUTO_TEST_CASE(tree__insert__2)
+{
+	using namespace wordring;
+
+	test_tree t;
+	test_iterator it = t.insert(t.begin(), 100);
+
+	BOOST_CHECK(it.m_parent == 0);
+	BOOST_CHECK(it.m_index == 1);
+
+	BOOST_CHECK(t.size() == 1);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
+	BOOST_CHECK(t.m_c[1].m_prev == 1);
+	BOOST_CHECK(t.m_c[1].m_next == 0);
+	BOOST_CHECK(t.m_c[1].m_child == 0);
+}
+
+/*
+ノードの間に挿入する
+*/
+BOOST_AUTO_TEST_CASE(tree__insert__3)
 {
 	using namespace wordring;
 
@@ -187,22 +222,29 @@ BOOST_AUTO_TEST_CASE(tree__insert__2)
 
 	BOOST_CHECK(t.m_c[0].m_child == 1);
 
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
 	BOOST_CHECK(t.m_c[1].m_child == 2);
 
+	BOOST_CHECK(t.m_c[2].m_parent == 1);
 	BOOST_CHECK(t.m_c[2].m_prev == 3);
 	BOOST_CHECK(t.m_c[2].m_next == 4);
+	BOOST_CHECK(t.m_c[2].m_child == 0);
 
+	BOOST_CHECK(t.m_c[4].m_parent == 1);
 	BOOST_CHECK(t.m_c[4].m_prev == 2);
 	BOOST_CHECK(t.m_c[4].m_next == 3);
-	
+	BOOST_CHECK(t.m_c[4].m_child == 0);
+
+	BOOST_CHECK(t.m_c[3].m_parent == 1);
 	BOOST_CHECK(t.m_c[3].m_prev == 4);
 	BOOST_CHECK(t.m_c[3].m_next == 0);
+	BOOST_CHECK(t.m_c[3].m_child == 0);
 }
 
 /*
 子が無い場合の挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__3)
+BOOST_AUTO_TEST_CASE(tree__insert__4)
 {
 	using namespace wordring;
 
@@ -220,55 +262,65 @@ BOOST_AUTO_TEST_CASE(tree__insert__3)
 
 	BOOST_CHECK(t.m_c[0].m_child == 1);
 
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
 	BOOST_CHECK(t.m_c[1].m_child == 2);
 
+	BOOST_CHECK(t.m_c[2].m_parent == 1);
 	BOOST_CHECK(t.m_c[2].m_prev == 2);
 	BOOST_CHECK(t.m_c[2].m_next == 0);
+	BOOST_CHECK(t.m_c[2].m_child == 0);
 }
 
 /*
 先頭の前に挿入
-*/
-BOOST_AUTO_TEST_CASE(tree__insert__4)
-{
-	using namespace wordring;
-
-	test_tree t;
-	t.m_c.assign(4, { 0, 0, 0, 0 });
-	t.m_c[0] = { 3, 0, 0, 1 };
-	t.m_c[1] = { 0, 0, 0, 2 };
-	t.m_c[2] = { 1, 3, 3, 0 };
-	t.m_c[3] = { 1, 2, 0, 0 };
-
-	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 2), 100);
-
-	BOOST_CHECK(it.m_parent == 1);
-	BOOST_CHECK(it.m_index == 4);
-
-	BOOST_CHECK(t.size() == 4);
-
-	BOOST_CHECK(t.m_c[0].m_child == 1);
-
-	BOOST_CHECK(t.m_c[1].m_child == 4);
-
-	BOOST_CHECK(t.m_c[4].m_prev == 3);
-	BOOST_CHECK(t.m_c[4].m_next == 2);
-
-	BOOST_CHECK(t.m_c[2].m_prev == 4);
-	BOOST_CHECK(t.m_c[2].m_next == 3);
-
-	BOOST_CHECK(t.m_c[3].m_prev == 2);
-	BOOST_CHECK(t.m_c[3].m_next == 0);
-}
-
-/*
-単独の子の前に挿入
 */
 BOOST_AUTO_TEST_CASE(tree__insert__5)
 {
 	using namespace wordring;
 
 	test_tree t;
+	t.m_c.assign(4, { 0, 0, 0, 0 });
+	t.m_c[0] = { 3, 0, 0, 1 };
+	t.m_c[1] = { 0, 0, 0, 2 };
+	t.m_c[2] = { 1, 3, 3, 0 };
+	t.m_c[3] = { 1, 2, 0, 0 };
+
+	test_iterator it = t.insert(const_test_iterator(t.m_c, 1, 2), 100);
+
+	BOOST_CHECK(it.m_parent == 1);
+	BOOST_CHECK(it.m_index == 4);
+
+	BOOST_CHECK(t.size() == 4);
+
+	BOOST_CHECK(t.m_c[0].m_child == 1);
+
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
+	BOOST_CHECK(t.m_c[1].m_child == 4);
+
+	BOOST_CHECK(t.m_c[4].m_parent == 1);
+	BOOST_CHECK(t.m_c[4].m_prev == 3);
+	BOOST_CHECK(t.m_c[4].m_next == 2);
+	BOOST_CHECK(t.m_c[4].m_child == 0);
+
+	BOOST_CHECK(t.m_c[2].m_parent == 1);
+	BOOST_CHECK(t.m_c[2].m_prev == 4);
+	BOOST_CHECK(t.m_c[2].m_next == 3);
+	BOOST_CHECK(t.m_c[2].m_child == 0);
+
+	BOOST_CHECK(t.m_c[3].m_parent == 1);
+	BOOST_CHECK(t.m_c[3].m_prev == 2);
+	BOOST_CHECK(t.m_c[3].m_next == 0);
+	BOOST_CHECK(t.m_c[3].m_child == 0);
+}
+
+/*
+単独の子の前に挿入
+*/
+BOOST_AUTO_TEST_CASE(tree__insert__6)
+{
+	using namespace wordring;
+
+	test_tree t;
 	t.m_c.assign(3, { 0, 0, 0, 0 });
 	t.m_c[0] = { 2, 0, 0, 1 };
 	t.m_c[1] = { 0, 0, 0, 2 };
@@ -283,19 +335,24 @@ BOOST_AUTO_TEST_CASE(tree__insert__5)
 
 	BOOST_CHECK(t.m_c[0].m_child == 1);
 
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
 	BOOST_CHECK(t.m_c[1].m_child == 3);
 
+	BOOST_CHECK(t.m_c[3].m_parent == 1);
 	BOOST_CHECK(t.m_c[3].m_prev == 2);
 	BOOST_CHECK(t.m_c[3].m_next == 2);
+	BOOST_CHECK(t.m_c[3].m_child == 0);
 
+	BOOST_CHECK(t.m_c[2].m_parent == 1);
 	BOOST_CHECK(t.m_c[2].m_prev == 3);
 	BOOST_CHECK(t.m_c[2].m_next == 0);
+	BOOST_CHECK(t.m_c[2].m_child == 0);
 }
 
 /*
 終端の前に挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__6)
+BOOST_AUTO_TEST_CASE(tree__insert__7)
 {
 	using namespace wordring;
 
@@ -315,22 +372,29 @@ BOOST_AUTO_TEST_CASE(tree__insert__6)
 
 	BOOST_CHECK(t.m_c[0].m_child == 1);
 
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
 	BOOST_CHECK(t.m_c[1].m_child == 2);
 
+	BOOST_CHECK(t.m_c[2].m_parent == 1);
 	BOOST_CHECK(t.m_c[2].m_prev == 4);
 	BOOST_CHECK(t.m_c[2].m_next == 3);
+	BOOST_CHECK(t.m_c[2].m_child == 0);
 
+	BOOST_CHECK(t.m_c[3].m_parent == 1);
 	BOOST_CHECK(t.m_c[3].m_prev == 2);
 	BOOST_CHECK(t.m_c[3].m_next == 4);
+	BOOST_CHECK(t.m_c[3].m_child == 0);
 
+	BOOST_CHECK(t.m_c[4].m_parent == 1);
 	BOOST_CHECK(t.m_c[4].m_prev == 3);
 	BOOST_CHECK(t.m_c[4].m_next == 0);
+	BOOST_CHECK(t.m_c[4].m_child == 0);
 }
 
 /*
 単独の子の後に挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__7)
+BOOST_AUTO_TEST_CASE(tree__insert__8)
 {
 	using namespace wordring;
 
@@ -349,13 +413,60 @@ BOOST_AUTO_TEST_CASE(tree__insert__7)
 
 	BOOST_CHECK(t.m_c[0].m_child == 1);
 
+	BOOST_CHECK(t.m_c[1].m_parent == 0);
 	BOOST_CHECK(t.m_c[1].m_child == 2);
 
+	BOOST_CHECK(t.m_c[2].m_parent == 1);
 	BOOST_CHECK(t.m_c[2].m_prev == 3);
 	BOOST_CHECK(t.m_c[2].m_next == 3);
+	BOOST_CHECK(t.m_c[2].m_child == 0);
 
+	BOOST_CHECK(t.m_c[3].m_parent == 1);
 	BOOST_CHECK(t.m_c[3].m_prev == 2);
 	BOOST_CHECK(t.m_c[3].m_next == 0);
+	BOOST_CHECK(t.m_c[3].m_child == 0);
+}
+
+/*
+部分木を挿入する
+
+iterator insert(const_iterator pos, const_iterator sub)
+*/
+BOOST_AUTO_TEST_CASE(tree__insert__9)
+{
+	using namespace wordring;
+
+	test_tree t1;
+	auto it1 = t1.insert(t1.begin(), 1);
+	auto it2 = t1.insert(it1.end(), 2);
+	t1.insert(it2.end(), 4);
+	t1.insert(it2.end(), 5);
+	auto it3 = t1.insert(it1.end(), 3);
+	t1.insert(it3.end(), 6);
+	t1.insert(it3.end(), 7);
+
+	test_tree t2;
+	t2.insert(t2.cend(), t1.cbegin());
+
+	BOOST_CHECK(t2.size() == t1.size());
+
+	auto p1 = t2.begin();
+	BOOST_CHECK(*p1 == 1);
+
+	auto p2 = p1.begin();
+	BOOST_CHECK(*p2 == 2);
+	auto p3 = ++p1.begin();
+	BOOST_CHECK(*p3 == 3);
+
+	auto p4 = p2.begin();
+	BOOST_CHECK(*p4 == 4);
+	auto p5 = ++p2.begin();
+	BOOST_CHECK(*p5 == 5);
+
+	auto p6 = p3.begin();
+	BOOST_CHECK(*p6 == 6);
+	auto p7 = ++p3.begin();
+	BOOST_CHECK(*p7 == 7);
 }
 
 /*
@@ -477,7 +588,6 @@ BOOST_AUTO_TEST_CASE(tree__erase__4)
 	BOOST_CHECK(t.m_c[2].m_next == 0);
 }
 
-
 /*
 終端の前を削除
 */
@@ -578,7 +688,7 @@ BOOST_AUTO_TEST_CASE(tree__allocate__1)
 	test_tree t;
 	t.m_c.assign({ { 0, 0, 0, 0 } });
 
-	auto idx = t.allocate();
+	auto idx = t.allocate(100);
 
 	BOOST_CHECK(idx == 1);
 
@@ -598,7 +708,7 @@ BOOST_AUTO_TEST_CASE(tree__allocate__2)
 	test_tree t;
 	t.m_c.assign({ { 0, 1, 1, 0 }, { 0, 0, 0, 0 } });
 
-	auto idx = t.allocate();
+	auto idx = t.allocate(100);
 
 	BOOST_CHECK(idx == 1);
 
@@ -618,7 +728,7 @@ BOOST_AUTO_TEST_CASE(tree__allocate__3)
 	test_tree t;
 	t.m_c.assign({ { 0, 3, 2, 0 }, { 0, 0, 0, 0 }, { 0, 0, 3, 0 }, { 0, 2, 0, 0 } });
 
-	auto idx = t.allocate();
+	auto idx = t.allocate(100);
 
 	BOOST_CHECK(idx == 2);
 

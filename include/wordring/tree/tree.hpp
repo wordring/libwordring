@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <algorithm>
-#include <deque>
+#include <array>
 #include <iterator>
 #include <limits>
 #include <memory>
@@ -35,37 +35,6 @@ namespace wordring::detail
 		index_type m_child;
 
 		value_type m_value;
-	};
-
-	// ------------------------------------------------------------------------
-	// tree_node_proxy
-	// ------------------------------------------------------------------------
-
-	/*! 初期化子リスト挿入時、ツリー階層を解決するために、コンパイラから使用される
-	*/
-	template <typename T>
-	struct tree_node_proxy
-	{
-		T m_value;
-		std::vector<tree_node_proxy<T>> m_children;
-
-		tree_node_proxy(T const& value)
-			: m_value(value)
-			, m_children()
-		{
-		}
-
-		tree_node_proxy(T const& value, std::initializer_list<T> children)
-			: m_value(value)
-			, m_children(children.begin(), children.end())
-		{
-		}
-
-		tree_node_proxy(T const& value, std::initializer_list<tree_node_proxy<T>> children)
-			: m_value(value)
-			, m_children(children)
-		{
-		}
 	};
 
 	// ------------------------------------------------------------------------
@@ -133,7 +102,7 @@ namespace wordring::detail
 		{
 			assert(m_index != null_value);
 
-			return (m_c->m_c.data() + m_index)->m_value;
+			return (m_c->data() + m_index)->m_value;
 		}
 
 		pointer operator->() const { return std::addressof(operator*()); }
@@ -142,7 +111,7 @@ namespace wordring::detail
 		{
 			assert(m_index != null_value);
 
-			m_index = (m_c->m_c.data() + m_index)->m_next;
+			m_index = (m_c->data() + m_index)->m_next;
 
 			return *this;
 		}
@@ -159,22 +128,22 @@ namespace wordring::detail
 
 		tree_node_iterator& operator--()
 		{
-			auto* h = m_c->m_c.data();
+			auto const* d = m_c->data();
 
-			if (m_index != null_value) // prevがある場合(end以外はある)
+			if (m_index != 0) // prevがある場合(end以外はある)
 			{
-				assert(m_parent != null_value && (h + m_parent)->m_child != m_index); // 先頭をデクリメントしようとしている。
-				m_index = (h + m_index)->m_prev;
+				assert(m_parent != 0 && (d + m_parent)->m_child != m_index); // 先頭をデクリメントしようとしている。
+				m_index = (d + m_index)->m_prev;
 			}
-			else if (m_parent != null_value) // prevが無い場合(endは無い)
+			else if (m_parent != 0) // prevが無い場合(endは無い)
 			{
-				index_type child = (h + m_parent)->m_child; // begin
-				m_index = (h + child)->m_prev; // endの前はtail
+				index_type child = (d + m_parent)->m_child; // begin
+				m_index = (d + child)->m_prev; // endの前はtail
 			}
-			else
+			else // 根の終端
 			{
-				assert(!m_c->empty()); // 空のツリーで根をデクリメントしようとしている。
-				m_index = m_c->m_root; // 親が無い場合(rootは親が無い)
+				m_index = d->m_child;
+				assert(m_index != 0); // 空のツリーで根をデクリメントしようとしている。
 			}
 
 			return *this;
@@ -183,16 +152,14 @@ namespace wordring::detail
 		tree_node_iterator operator--(int)
 		{
 			auto result = *this;
-
 			operator--();
-
 			return result;
 		}
 
 		tree_node_iterator begin() const
 		{
 			assert(m_index != null_value);
-			return tree_node_iterator(*m_c, m_index, (m_c->m_c.data() + m_index)->m_child);
+			return tree_node_iterator(*m_c, m_index, (m_c->data() + m_index)->m_child);
 		}
 
 		tree_node_iterator end() const
@@ -205,7 +172,7 @@ namespace wordring::detail
 		{
 			assert(m_index != null_value);
 
-			auto* h = m_c->m_c.data();
+			auto* h = m_c->data();
 
 			index_type p = (h + m_index)->m_parent;                             // 親
 			index_type pp = (p == null_value) ? null_value : (h + p)->m_parent; // 親の親
@@ -315,11 +282,9 @@ namespace wordring
 		friend class detail::tree_node_iterator;
 
 	protected:
-		using tree_type = tree<T, Allocator>;
-		using node_type = detail::tree_node<T>;
+		using node_type  = detail::tree_node<T>;
 		using index_type = typename node_type::index_type;
-		using node_proxy = detail::tree_node_proxy<T>;
-		using container = std::vector<node_type, Allocator>;
+		using container  = std::vector<node_type, Allocator>;
 
 		static constexpr index_type null_value = node_type::null_value;
 
@@ -337,17 +302,26 @@ namespace wordring
 		using const_iterator  = detail::tree_node_iterator<value_type const, container const>;
 
 	public:
+		/*! @brief 空のコンテナを構築する
+		*/
 		tree()
 			: m_c(1, node_type{})
 		{
 		}
 
+		/*! @brief アロケータを指定して空のコンテナを構築する
+
+		@param [in]	alloc アロケータ
+		*/
 		explicit tree(allocator_type const& alloc)
 			: m_c(1, node_type{}, alloc)
 		{
 		}
 
-		/*! 要素から構築する
+		/*! @brief 要素からコンテナを構築する
+
+		@param [in] value 根となる要素
+		@param [in]	alloc アロケータ
 		*/
 		explicit tree(value_type const& value, allocator_type const& alloc = allocator_type())
 			: m_c(1, node_type{}, alloc)
@@ -355,29 +329,15 @@ namespace wordring
 			insert(begin(), value);
 		}
 
-		/*! 要素から構築する
+		/*! @brief 要素からコンテナを構築する
+
+		@param [in] value 根となる要素
+		@param [in]	alloc アロケータ
 		*/
 		explicit tree(value_type&& value, allocator_type const& alloc = allocator_type())
 			: m_c(1, node_type{}, alloc)
 		{
 			insert(begin(), std::move(value));
-		}
-
-		explicit tree(node_proxy proxy, allocator_type const& alloc = allocator_type())
-			: m_c(1, node_type{}, alloc)
-		{
-			insert(begin(), proxy);
-		}
-
-		//tree& operator=(tree const&) = default;
-
-		//tree& operator=(tree&&) noexcept = default;
-
-		tree& operator=(node_proxy proxy)
-		{
-			clear();
-			insert(begin(), proxy);
-			return *this;
 		}
 
 		void assign(value_type const& value)
@@ -390,12 +350,6 @@ namespace wordring
 		{
 			clear();
 			insert(begin(), std::move(value));
-		}
-
-		void assign(node_proxy proxy)
-		{
-			clear();
-			insert(begin(), proxy);
 		}
 
 		allocator_type get_allocator() const { return m_c.get_allocator(); }
@@ -420,46 +374,86 @@ namespace wordring
 
 		// イテレータ ----------------------------------------------------------
 
+		/*! @brief 根を指すイテレータを返す
+
+		@return 根を指すイテレータ
+		*/
 		iterator begin() noexcept { return iterator(m_c, 0, empty() ? 0 : 1); }
 
-		const_iterator begin() const noexcept { return iterator(m_c, 0, empty() ? 0 : 1); }
+		/*! @brief 根を指すイテレータを返す
 
+		@return 根を指すイテレータ
+		*/
+		const_iterator begin() const noexcept { return const_iterator(m_c, 0, empty() ? 0 : 1); }
+
+		/*! @brief 根を指すイテレータを返す
+
+		@return 根を指すイテレータ
+		*/
 		const_iterator cbegin() const noexcept { return begin(); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+		*/
 		iterator end() noexcept { return iterator(m_c, 0, 0); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+		*/
 		const_iterator end() const noexcept { return const_iterator(m_c, 0, 0); }
 
+		/*! @brief 根の終端を指すイテレータを返す
+
+		@return 根の終端を指すイテレータ
+		*/
 		const_iterator cend() const noexcept { return end(); }
 
 		// 容量 ---------------------------------------------------------------
 
+		/*! @brief 要素を格納していないことを調べる
+		
+		@return 要素を格納していない場合 true 、それ以外の場合 false
+		*/
 		bool empty() const noexcept { return size() == 0; }
 
+		/*! @brief 格納している要素数を調べる
+
+		@return コンテナに格納されている要素の数
+		*/
 		size_type size() const noexcept { return m_c.front().m_parent; }
 
+		/*! @brief 格納可能な要素の最大数を調べる
+
+		@return 格納可能な要素の最大数
+		*/
 		size_type max_size() const noexcept { return m_c.max_size(); }
 
 		// 変更 ---------------------------------------------------------------
 
+		/*! @brief すべての要素を削除する
+		*/
 		void clear() noexcept
 		{
 			m_c.clear();
 			m_c.emplace_back(node_type{});
 		}
 
-		/*! @brief ノードを挿入する
+		void swap(tree& other) { m_c.swap(other.m_c); }
+
+		/*! @brief 要素を挿入する
 
 		@param [in] pos   挿入位置を指すイテレータ
 		@param [in] value 挿入する値
 
-		@return 挿入されたノードを指すイテレータ
+		@return 挿入された要素を指すイテレータ
 
 		@sa iterator insert(const_iterator pos, value_type&& value)
 		*/
 		iterator insert(const_iterator pos, value_type const& value)
 		{
-			return allocate(pos, value_type(value));
+			return insert(pos, value_type(value));
 		}
 
 		/*! @brief ノードを挿入する
@@ -627,52 +621,89 @@ namespace wordring
 				(d + after)->m_prev = idx;
 				(d + idx)->m_next = after;
 			}
+			(d + idx)->m_parent = parent;
 
 			++d->m_parent;
 
 			return iterator(m_c, parent, idx);
 		}
 
-		iterator insert(const_iterator pos, size_type count, value_type const& value)
+		/*! @brief 部分木を挿入する
+		
+		@param [in] pos 挿入位置を指すイテレータ
+		@param [in] sub 部分木の根を指すイテレータ
+
+		@return posを返す
+
+		@internal
+		<hr>
+
+		@par 二つのスタックを使って部分木をコピーするアルゴリズム
+
+		スタックを使った一般的な木探索アルゴリズムは、木の構造を保持しないため、
+		POPしたノードを「どこに挿入するか？」という情報を取り出せない。
+		そこで、挿入地点を記録する「<b>親スタック</b>」を使う。
+
+		<b>探索スタック</b>から値をPOPするとき、子が有ればすべて<b>探索スタック</b>にPUSHする。
+		同時に、親を<b>親スタック</b>にPUSHする。
+		<b>親スタック</b>にPUSHするとき、スタックTOPが挿入しようとするノードの親であるか検査する。
+		親でない場合、POPしてからノードをPUSHする。
+
+		以上の操作で、<b>親スタック</b>のTOPは常に挿入地点となる。
+
+		ところで、以上のアルゴリズムは、引数の部分木について親を記録する。
+		実際に必要なのは、挿入先の親である。
+		そこで、<b>親スタック</b>には、挿入先の親も一緒に記録する。
+
+		@image html tree_node_insert_8.svg
+
+		@par 実装
+
+		- 根の挿入位置は <b>pos</b> だが、それ以外は親スタックTOPの <b>%end()</b> 。
+		  従って、根だけ特別扱いが必要。
+		.
+
+		@todo スタックはインデックスが有れば十分で、イテレータを入れておくのは冗長。
+			  今後、性能を改良するときに考慮する必要がある。
+		*/
+		iterator insert(const_iterator pos, const_iterator sub)
 		{
-			iterator result(*this, pos.m_parent, pos.m_index);
+			std::vector<std::array<const_iterator, 2>> x; // 親スタック [pos, sub]
+			std::vector<const_iterator> v;            // 探索スタック
 
-			if (count != 0) result = allocate(pos, value);
-			for (size_t i = 1; i < count; i++) allocate(pos, value);
-
-			return result;
-		}
-
-		template <typename InputIterator>
-		iterator insert(const_iterator pos, InputIterator first, InputIterator last)
-		{
-			iterator result(*this, pos.m_parent, pos.m_index);
-
-			if (first != last) pos = result = allocate(pos, *first++);
-			while (first != last) pos = insert(++pos, *first++);
-
-			return result;
-		}
-
-		iterator insert(const_iterator pos, detail::tree_node_proxy<T> proxy)
-		{
-			iterator result = insert(pos, proxy.m_value);
-
-			auto it1 = proxy.m_children.cbegin();
-			auto it2 = proxy.m_children.cend();
-			auto it3 = result.end();
-			while (it1 != it2)
+			// 根を特別扱い
 			{
-				it3 = insert(it3, *it1++);
-				++it3;
+				iterator it = insert(pos, *sub);
+				x.push_back({ it, sub });
+				const_iterator it1 = sub.begin();
+				const_iterator it2 = sub.end();
+				while (it1 != it2) v.push_back(it1++);
 			}
 
-			return result;
-		}
+			// 根以外
+			while (!v.empty())
+			{
+				const_iterator it = v.back();
+				v.pop_back();
+				const_iterator p = insert(x.back()[0].end(), *it);
 
-		iterator insert(const_iterator pos, std::initializer_list<value_type> ilist)
-		{
-			return insert(pos, ilist.begin(), ilist.end());
+				if (it.begin() != it.end()) // 子がある
+				{
+					//auto it1 = std::make_reverse_iterator(it.begin());
+					//auto it2 = std::make_reverse_iterator(it.end());
+					auto it1 = it.begin();
+					auto it2 = it.end();
+
+					while(it1 != it2)  v.push_back(it1++);
+
+					auto i = it.parent();
+					auto j = x.back()[1];
+					if (it.parent() != x.back()[1]) x.pop_back();
+					x.push_back({ p, it });
+				}
+			}
+
+			return iterator(m_c, pos.m_parent, pos.m_index);
 		}
 
 		template <typename... Args>
@@ -746,9 +777,7 @@ namespace wordring
 		- <b>child</b> が <b>idx</b> と一致する場合、<b>before</b> は無い。
 		- <b>after</b> は、 <b>idx</b> の <b>m_next</b> 。
 
-		- <b>lead</b> は、<b>idx</b> の <b>m_child</b> とする。
-		  これは、子孫を解放するために使われる。
-		  子孫の解放は、リンクの付け替えが発生しないので、単に開放するのみである。
+		子孫の解放は、リンクの付け替えが発生しないので、単に開放するのみである。
 
 		<hr>
 
@@ -781,8 +810,6 @@ namespace wordring
 			index_type before = (child != idx) ? (d + idx)->m_prev : 0;
 			index_type after = (d + idx)->m_next;
 
-			iterator result(m_c, parent, after);
-
 			if (before == 0)
 			{
 				if (after == 0) (d + parent)->m_child = 0;
@@ -812,42 +839,11 @@ namespace wordring
 				free(i);
 			}
 
-			return result;
-		}
-
-		/*! @brief 要素を削除する
-
-		@param [in] first 削除する要素範囲の先頭を指すイテレータ
-		@param [in] last  削除する要素範囲の終端を指すイテレータ
-
-		@return 削除された要素の次を指すイテレータ
-
-		@sa iterator erase(const_iterator pos)
-		*/
-		iterator erase(const_iterator first, const_iterator last)
-		{
-			assert(first.m_parent == last.m_parent);
-
-			while (first != last) erase(first++);
-
-			return iterator(*this, first.m_parent, first.m_index);
+			return iterator(m_c, parent, after);
 		}
 
 	protected:
 		// 内部 ---------------------------------------------------------------
-
-		/*! @brief ノードを確保する
-
-		@param [in] val 格納する値
-
-		@return 確保されたノードのインデックス値
-
-		@sa index_type allocate(value_type&& val)
-		*/
-		index_type allocate(value_type const& val = value_type())
-		{
-			return allocate(value_type(val));
-		}
 
 		/*! @brief ノードを確保する
 
@@ -878,7 +874,7 @@ namespace wordring
 			return idx;
 		}
 
-		/*! @brief ノードを開放する
+		/*! @brief ノードを解放する
 
 		@param [in] idx 解放するノードのインデックス
 		*/
