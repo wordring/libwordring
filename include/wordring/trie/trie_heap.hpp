@@ -388,9 +388,8 @@ namespace wordring::detail
 			alloc アロケータ
 		*/
 		trie_heap(std::initializer_list<trie_node> il, allocator_type const& alloc = allocator_type())
-			: m_c(2, { 0, 0 }, alloc)
+			: m_c(il, alloc)
 		{
-			m_c.insert(m_c.cend(), il);
 		}
 
 		index_type limit() const { return m_c.size(); }

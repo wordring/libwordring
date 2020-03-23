@@ -1,0 +1,41 @@
+﻿# wordring_cpp/generator/whatwg/html
+#
+# このプロジェクトはwhatwg/html用のソースコード生成プログラムを作成します。
+#
+
+cmake_minimum_required (VERSION 3.12)
+
+project(generator__whatwg__html CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+find_package (
+	Boost 1.67 REQUIRED
+	COMPONENTS
+		system
+		filesystem
+)
+
+include_directories (
+	${Boost_INCLUDE_DIRS}
+	${Wordring_INCLUDE_DIR}
+)
+
+add_executable(
+	atom
+		atom.cpp
+)
+
+add_definitions(-DDATA_PATH=${CMAKE_CURRENT_SOURCE_DIR}/data/)
+
+add_definitions(-DATOM_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/html/atom_tbl.hpp)
+add_definitions(-DATOM_CPP_PATH=${Wordring_DIR}/lib/whatwg/html/atom_tbl.cpp)
+
+target_link_libraries(
+	atom
+		${Boost_FILESYSTEM_LIBRARY}
+		${Boost_SYSTEM_LIBRARY}
+)
+#${CMAKE_CURRENT_SOURCE_DIR}

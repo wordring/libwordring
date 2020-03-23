@@ -125,6 +125,8 @@ BOOST_AUTO_TEST_CASE(trie_base__constrcut__3)
 
 	std::vector<std::int32_t> v2{ t1.ibegin(), t1.iend() };
 	detail::trie_base<> t2{ v2.begin(), v2.end(), std::allocator<detail::trie_node>() };
+
+	BOOST_CHECK(t1.size() == t2.size());
 }
 
 // trie_base(ForwardIterator first, ForwardIterator last, allocator_type const& alloc = allocator_type())

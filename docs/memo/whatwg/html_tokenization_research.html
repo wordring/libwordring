@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>トークン化の調査</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body><a href="file:///C:/Users/Kouichi/source/repos/wordring_cpp/docs/memo/index.html"><img
+        src="file:///C:/Users/Kouichi/source/repos/wordring_cpp/docs/up.svg" alt=""></a>
+    <h1> </h1>
+    <h1>トークン化の調査</h1>
+    <h2>規格で不明な点</h2>
+    <h3>文書化されていない、状態間で共有する変数の調査</h3>
+    <h4>結果</h4>
+    <ul>
+      <li>「現在の○○タグ・トークン」、「現在の○○タグ・トークンの属性」といったものが状態間で共有されている。</li>
+      <ul>
+        <li>contextに追加</li>
+      </ul>
+      <li>「文字参照コード」が状態間で共有されている。</li>
+      <ul>
+        <li>contextに追加</li>
+      </ul>
+      <li>名前指定文字参照の表が必要。</li>
+      <ul>
+        <li>用意する</li>
+      </ul>
+      <li>冒頭で<b style="color: #333399;">次の入力文字を消費</b>しない状態が5つ有る。</li>
+      <ul>
+        <li>再消費の動作では、次の入力を消費すると定義されている場合でも、消費しない。</li>
+        <li>実際に何も消費しない状態が一つある。</li>
+      </ul>
+      <li>複数の入力文字を必要とする状態がある。</li>
+      <ul>
+        <li>複数の文字が入力されるまで待つ状態を新設することでプッシュ型パーサに変換できるかもしれない。</li>
+        <li>状態の中で複数の文字を必要とし、マッチした場合さらに二文字を先読みする状態が一つある。</li>
+      </ul>
+      <li>名前指定文字参照表（<a href="https://html.spec.whatwg.org/multipage/named-characters.html#named-character-references">https://html.spec.whatwg.org/multipage/named-characters.html</a>）
+        を必要とする</li>
+      <li>変換表（<a href="https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state">https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state</a>）
+        が必要</li>
+    </ul>
+    <h4>文書化されていない変数へのアクセスを追跡したリスト</h4>
+    <ol>
+      <li>Data state</li>
+      <li>RCDATA state</li>
+      <li>RAWTEXT state</li>
+      <li>Script data state</li>
+      <li>PLAINTEXT state</li>
+      <li>Tag open state</li>
+      <ul>
+        <li>開始タグトークンを作成</li>
+        <li>コメントトークンを作成</li>
+      </ul>
+      <li>End tag open state</li>
+      <ul>
+        <li>終了タグトークンを作成</li>
+        <li>コメントトークンを作成</li>
+      </ul>
+      <li>Tag name state</li>
+      <ul>
+        <li>現在のタグトークンをEmit</li>
+        <li>現在のタグトークンのタグ名に文字を追加</li>
+      </ul>
+      <li>RCDATA less-than sign state</li>
+      <li>RCDATA end tag open state</li>
+      <ul>
+        <li>タグ名が空文字列の終了タグトークンを作成し、RCDATA end tag name stateで再消費</li>
+      </ul>
+      <li>RCDATA end tag name state</li>
+      <ul>
+        <li>現在の終了タグトークンを検証</li>
+        <li>現在のタグトークンをEmit</li>
+        <li>現在のタグトークンのタグ名に文字を追加</li>
+      </ul>
+      <li>RAWTEXT less-than sign state</li>
+      <li>RAWTEXT end tag open state</li>
+      <ul>
+        <li>タグ名が空文字列の終了タグトークンを作成し、RCDATA end tag name stateで再消費</li>
+      </ul>
+      <li>RAWTEXT end tag name state</li>
+      <ul>
+        <li>現在の終了タグトークンを検証</li>
+        <li>現在のタグトークンをEmit</li>
+        <li>現在のタグトークンのタグ名に文字を追加</li>
+      </ul>
+      <li>Script data less-than sign state</li>
+      <li>Script data end tag open state</li>
+      <ul>
+        <li>タグ名が空文字列の終了タグトークンを作成し、script data end tag name stateで再消費</li>
+      </ul>
+      <li>Script data end tag name state</li>
+      <ul>
+        <li>現在の終了タグトークンを検証</li>
+        <li>現在のタグトークンをEmit</li>
+        <li>現在のタグトークンのタグ名に文字を追加</li>
+      </ul>
+      <li>Script data escape start state</li>
+      <li>Script data escape start dash state</li>
+      <li>Script data escaped state</li>
+      <li>Script data escaped dash state</li>
+      <li>Script data escaped dash dash state</li>
+      <li>Script data escaped less-than sign state</li>
+      <li>Script data escaped end tag open state</li>
+      <ul>
+        <li>タグ名が空文字列の終了タグトークンを作成し、Script data escaped end tag name stateで再消費</li>
+      </ul>
+      <li>Script data escaped end tag name state</li>
+      <ul>
+        <li>現在の終了タグトークンを検証</li>
+        <li>現在のタグトークンのタグ名に文字を追加</li>
+      </ul>
+      <li>Script data double escape start state</li>
+      <li>Script data double escaped state</li>
+      <li>Script data double escaped dash state</li>
+      <li>Script data double escaped dash dash state</li>
+      <li>Script data double escaped less-than sign state</li>
+      <li>Script data double escape end state</li>
+      <li>Before attribute name state</li>
+      <ul>
+        <li>現在のタグトークン内に新たな属性を作成</li>
+      </ul>
+      <li>Attribute name state</li>
+      <ul>
+        <li>現在の属性の名前に文字を追加</li>
+      </ul>
+      <li>After attribute name state</li>
+      <ul>
+        <li>現在のタグトークンをEmit</li>
+      </ul>
+      <li>Before attribute value state</li>
+      <ul>
+        <li>現在のタグトークンをEmit</li>
+      </ul>
+      <li>Attribute value (double-quoted) state</li>
+      <ul>
+        <li>現在の属性の値に文字を追加</li>
+      </ul>
+      <li>Attribute value (single-quoted) state</li>
+      <ul>
+        <li>現在の属性の値に文字を追加</li>
+        <li>現在のタグトークンをEmit</li>
+      </ul>
+      <li>Attribute value (unquoted) state</li>
+      <ul>
+        <li>現在のタグトークンをEmit</li>
+        <li>現在の属性の値に文字を追加</li>
+      </ul>
+      <li>After attribute value (quoted) state</li>
+      <ul>
+        <li>現在のタグトークンをEmit</li>
+      </ul>
+      <li>Self-closing start tag state</li>
+      <ul>
+        <li>現在のタグトークンの自己閉じフラグをtrueに設定</li>
+        <li>現在のタグトークンをEmit</li>
+      </ul>
+      <li>Bogus comment state</li>
+      <ul>
+        <li>現在のコメントトークンをEmit</li>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+      </ul>
+      <li>Markup declaration open state</li>
+      <ul>
+        <li><b style="color: #333399;">冒頭で次の入力文字を消費しない</b></li>
+        <ul>
+          <li>複数の文字にマッチした場合消費するか、あるいはマッチしない場合、一切消費せずに別の状態に切り替わる。</li>
+        </ul>
+      </ul>
+      <ul>
+        <li><b style="color: #990000;">この状態は複数の文字（最大7文字）を読む場合が有る点で特異である</b></li>
+      </ul>
+      <ul>
+        <li>データが空文字列のコメントトークンを作成する</li>
+        <li>データが「[CDATA[」のコメントトークンを作成する</li>
+      </ul>
+      <li>Comment start state</li>
+      <ul>
+        <li>現在のコメントトークンをEmit</li>
+      </ul>
+      <li>Comment start dash state</li>
+      <ul>
+        <li>現在のコメントトークンをEmit</li>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+      </ul>
+      <li>Comment state</li>
+      <ul>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+        <li>現在のコメントトークンをEmit</li>
+      </ul>
+      <li>Comment less-than sign state</li>
+      <ul>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+      </ul>
+      <li>Comment less-than sign bang state</li>
+      <li>Comment less-than sign bang dash state</li>
+      <li>Comment less-than sign bang dash dash state</li>
+      <li>Comment end dash state</li>
+      <ul>
+        <li>現在のコメントトークンをEmit</li>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+      </ul>
+      <li>Comment end state</li>
+      <ul>
+        <li>現在のコメントトークンをEmit</li>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+      </ul>
+      <li>Comment end bang state</li>
+      <ul>
+        <li>現在のコメントトークンをEmit</li>
+        <li>現在のコメントトークンのデータへ文字を追加</li>
+      </ul>
+      <li>DOCTYPE state</li>
+      <ul>
+        <li>DOCTYPEトークンを作成</li>
+        <li>DOCTYPEトークンをEmit</li>
+      </ul>
+      <li>Before DOCTYPE name state</li>
+      <ul>
+        <li>DOCTYPEトークンを作成</li>
+        <li>DOCTYPEトークンの名前へ文字を追加</li>
+        <li>DOCTYPEトークンをEmit</li>
+      </ul>
+      <li>DOCTYPE name state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンをEmit</li>
+        <li>現在のDOCTYPEトークンの名前へ文字を追加</li>
+      </ul>
+      <li>After DOCTYPE name state</li>
+      <ul>
+        <li><b style="color: #990000;">この状態は複数の文字（最大6文字）を読む場合が有る点で特異である</b></li>
+        <li><b style="color: #990000;"></b>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>After DOCTYPE public keyword state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンの公開識別子を空文字列に設定</li>
+        <li><b style="color: #990000;"></b>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>Before DOCTYPE public identifier state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンの公開識別子を空文字列に設定</li>
+        <li><b style="color: #990000;"></b>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>DOCTYPE public identifier (double-quoted) state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンの公開識別子へ文字を追加</li>
+        <li><b style="color: #990000;"></b>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>DOCTYPE public identifier (single-quoted) state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンの公開識別子へ文字を追加</li>
+        <li><b style="color: #990000;"></b>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>After DOCTYPE public identifier state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンをEmit</li>
+        <li>現在のDOCTYPEトークンのシステム識別子を空文字列に設定</li>
+      </ul>
+      <li>Between DOCTYPE public and system identifiers state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンをEmit</li>
+        <li>現在のDOCTYPEトークンのシステム識別子を空文字列に設定</li>
+      </ul>
+      <li>After DOCTYPE system keyword state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンのシステム識別子を空文字列に設定</li>
+        <li>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>Before DOCTYPE system identifier state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンのシステム識別子を空文字列に設定</li>
+        <li>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>DOCTYPE system identifier (double-quoted) state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンのシステム識別子へ文字を追加</li>
+        <li>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>DOCTYPE system identifier (single-quoted) state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンのシステム識別子へ文字を追加</li>
+        <li>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>After DOCTYPE system identifier state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>Bogus DOCTYPE state</li>
+      <ul>
+        <li>現在のDOCTYPEトークンをEmit</li>
+      </ul>
+      <li>CDATA section state</li>
+      <li>CDATA section bracket state</li>
+      <li>CDATA section end state</li>
+      <li>Character reference state</li>
+      <ul>
+        <li>日本語訳で「&amp;」と現在の入力文字をバッファへ追加することになっているが、これは間違い（原文のほうが正しい）。</li>
+      </ul>
+      <ul>
+        <li><b style="color: #333399;">冒頭で次の入力文字を消費しない</b></li>
+        <ul>
+          <li>これは、バッファへの追加順の問題で、それ以外の点では、冒頭で入力文字を消費するのと変わらない。</li>
+        </ul>
+      </ul>
+      <li>Named character reference state</li>
+      <ul>
+        <li><b style="color: #333399;">冒頭で次の入力文字を消費しない</b></li>
+        <ul>
+          <li>複数の文字にマッチした場合消費する</li>
+          <ul>
+            <li>上記でマッチした場合、さらに、次の二文字を先読みする必要が有るが、この二文字は消費しない</li>
+          </ul>
+        </ul>
+      </ul>
+      <ul>
+        <li><b style="color: #990000;">この状態は複数の文字（最大</b><b style="color: #990000;"><b
+              style="color: #990000;">名前指定文字参照の文字数分+;</b>）を読む場合が有る点で特異である</b></li>
+        <ul>
+          <li><b style="color: #339999;">名前指定文字参照表</b>（<a href="https://html.spec.whatwg.org/multipage/named-characters.html#named-character-references">https://html.spec.whatwg.org/multipage/named-characters.html</a>）
+            を必要とする</li>
+        </ul>
+      </ul>
+      <li>Ambiguous ampersand state</li>
+      <ul>
+        <li>現在の属性の値に文字を追加</li>
+      </ul>
+      <li>Numeric character reference state</li>
+      <ul>
+        <li><b style="color: #333399;">冒頭で次の入力文字を消費しない</b></li>
+        <ul>
+          <li>これは、文字参照コード初期化順の問題で、それ以外の点では、冒頭で入力文字を消費するのと変わらない。</li>
+        </ul>
+      </ul>
+      <ul>
+        <li>文字参照コードを0に初期化</li>
+      </ul>
+      <li>Hexadecimal character reference start state</li>
+      <li>Decimal character reference start state</li>
+      <li>Hexadecimal character reference state</li>
+      <ul>
+        <li>文字参照コード変更</li>
+      </ul>
+      <li>Decimal character reference state</li>
+      <ul>
+        <li>文字参照コード変更</li>
+      </ul>
+      <li>Numeric character reference end state</li>
+      <ul>
+        <li><b style="color: #333399;">冒頭で次の入力文字を消費しない</b></li>
+        <ul>
+          <li>この状態では入力文字を一切消費しない<b style=" color: #333399;"><br>
+            </b></li>
+        </ul>
+      </ul>
+      <ul>
+        <li>文字参照コード変更</li>
+        <ul>
+          <li><b style="color: #339999;">変換表</b>（<a href="https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state">https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state</a>）
+            が必要</li>
+        </ul>
+      </ul>
+    </ol>
+    <p><br>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+xlink:actuate	xlink	actuate
+xlink:arcrole	xlink	arcrole
+xlink:href	xlink	href
+xlink:role	xlink	role
+xlink:show	xlink	show
+xlink:title	xlink	title
+xlink:type	xlink	type
+xml:lang	xml	lang
+xml:space	xml	space
+xmlns		xmlns
+xmlns:xlink	xmlns	xlink

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>木構築の調査</title>
+    <link type="text/css" rel="stylesheet" href="file:///C:/Users/Kouichi/source/repos/wordring_cpp/docs/default.css">
+  </head>
+  <body><a href="../index.html"><img src="../../up.svg" alt=""></a> <br>
+    <h1>木構築の調査</h1>
+    <h2>規格で不明な点</h2>
+    <h3>挿入モードの調査</h3>
+    <h4>記録</h4>
+    <ul>
+      <li>開始タグトークンを新規作成する場合がある（入力テキストに存在しなくても、DOMに挿入するから？）</li>
+      <li>開始タグトークンを作成して現トークンとする</li>
+      <ul>
+        <li>&nbsp;"in body" insertion mode</li>
+      </ul>
+      <li>別のモードに切り替えてから、現トークンを再処理する場合がある。</li>
+      <ul>
+        <li>切り替えない処理は定義されている。</li>
+      </ul>
+      <li>開始タグ「image」のタグ名を「img」に変えて再処理</li>
+      <ul>
+        <li>"in body" insertion mode</li>
+      </ul>
+      <li>符号化を変更する場合がある。</li>
+      <ul>
+        <li>&nbsp;"in head" insertion mode</li>
+      </ul>
+      <li>パーサがdocument.write()、document.writeln()から呼び出されている場合の場合分けがある。</li>
+      <ul>
+        <li>&nbsp;"in head" insertion mode</li>
+      </ul>
+      <li>script要素固有のフラグを立てる</li>
+      <ul>
+        <li>&nbsp;"in head" insertion mode</li>
+      </ul>
+      <li>DOM木から要素を除去する場合がある</li>
+      <ul>
+        <li>&nbsp;"in body" insertion mode</li>
+      </ul>
+      <li>次のトークンを参照し、LFだった場合、それを無視する動作が必要。</li>
+      <ul>
+        <li>&nbsp;"in body" insertion mode</li>
+      </ul>
+      <li>スクリプトの処理</li>
+      <ul>
+        <li>パーサー内からパーサ内への再入が有るので、規格通りでは危険かもしれない</li>
+        <li>&nbsp;"text" insertion mode</li>
+      </ul>
+      <li>&nbsp;変数pending table character tokens</li>
+      <ul>
+        <li>&nbsp;"in table" insertion mode</li>
+      </ul>
+      <li>&nbsp;"in table" insertion modeの処理を拝借</li>
+      <ul>
+        <li>小さな処理なので複製で良いかもしれない</li>
+        <li>&nbsp;"in table text" insertion mode</li>
+      </ul>
+    </ul>
+    <h4>挿入モードの追跡調査リスト</h4>
+    <h5>The rules for parsing tokens in HTML content</h5>
+    <ol>
+      <li>&nbsp;"initial" insertion mode</li>
+      <ul>
+        <li><b>公開識別子判定表</b></li>
+      </ul>
+      <li>&nbsp;"before html" insertion mode</li>
+      <li>&nbsp;"before head" insertion mode</li>
+      <ul>
+        <li>開始タグトークン「head」を作成する</li>
+      </ul>
+      <li>&nbsp;"in head" insertion mode</li>
+      <ul>
+        <li>符号化を変更する</li>
+        <li>document.write()、document.writeln()から呼び出されている場合の場合分け</li>
+        <li>script要素固有のフラグを立てる</li>
+      </ul>
+      <li>&nbsp;"in head noscript" insertion mode</li>
+      <li>&nbsp;"after head" insertion mode</li>
+      <ul>
+        <li>開始タグトークン「body」を作成する</li>
+      </ul>
+      <li>&nbsp;"in body" insertion mode</li>
+      <ul>
+        <li>「stack of open
+          elements」内の二個目の要素とは、「html」「body」とPUSHされる前提があるからと考えられる。</li>
+        <li>DOM木から要素を除去する</li>
+        <li>次のトークンを参照し、LFだった場合、そのLFを無視する動作が必要。（この一カ所のみ）</li>
+        <li>開始タグトークン「br」を作成して現トークンとする</li>
+        <ul>
+          <li>終了タグ「/br」を開始タグ「br」として処理したいだけ？</li>
+        </ul>
+        <li>開始タグ「image」のタグ名を「img」に変えて再処理</li>
+      </ul>
+      <li>&nbsp;"text" insertion mode</li>
+      <ul>
+        <li>スクリプトの処理を含む</li>
+      </ul>
+      <li>&nbsp;"in table" insertion mode</li>
+      <ul>
+        <li>&nbsp;変数pending table character tokens</li>
+        <li>開始タグトークン「colgroup」を作成する</li>
+        <li>開始タグトークン「tbody」を作成する</li>
+      </ul>
+      <li>&nbsp;"in table text" insertion mode</li>
+      <ul>
+        <li>&nbsp;"in table" insertion modeの処理を拝借</li>
+      </ul>
+      <li>&nbsp;"in caption" insertion mode</li>
+      <li>&nbsp;"in column group" insertion mode</li>
+      <li>&nbsp;"in table body" insertion mode</li>
+      <li>&nbsp;"in row" insertion mode</li>
+      <li>&nbsp;"in cell" insertion mode</li>
+      <li>&nbsp;"in select" insertion mode</li>
+      <li>&nbsp;"in select in table" insertion mode</li>
+      <li>&nbsp;"in template" insertion mode</li>
+      <li>&nbsp;"after body" insertion mode</li>
+      <li>&nbsp;"in frameset" insertion mode</li>
+      <li>&nbsp;"after frameset" insertion mode</li>
+      <li>&nbsp;"after after body" insertion mode</li>
+      <li>&nbsp;"after after frameset" insertion mode</li>
+    </ol>
+    <h5>The rules for parsing tokens in foreign content</h5>
+    <ul>
+      <li><b>SVGタグ名変換表</b></li>
+    </ul>
+  </body>
+</html>

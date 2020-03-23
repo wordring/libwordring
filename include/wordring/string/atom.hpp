@@ -374,6 +374,20 @@ namespace wordring
 			assign(first, last);
 		}
 
+		/*! @brief 初期化子リストから構築する
+
+		@param [in]
+			il ノード・データの初期化子リスト
+		@param [in]
+			alloc アロケータ
+
+		@sa detail::trie_heap::trie_heap(std::initializer_list<trie_node>, allocator_type const&)
+		*/
+		basic_atom_set(std::initializer_list<detail::trie_node> il, allocator_type const& alloc = allocator_type())
+			: base_type(il, alloc)
+		{
+		}
+
 		/*! @brief 直列化データからの割り当て
 
 		@param [in]

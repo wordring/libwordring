@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>HTML のアトムと列挙体</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body><a href="../index.html"><img src="../../up.svg" alt=""></a>
+    <h1>HTML のアトムと列挙体</h1>
+    <p>パーサーの木構築でタグ名によって処理を振り分ける必要があるため、名前と数値の相互変換を実装する。名前を列挙したテキスト・ファイルを基に、
+      atom_setとenumを自動生成する。</p>
+    <h2>生成するソース</h2>
+    <h2>アトム</h2>
+    <p>HTML要素が入力テキストの文字列を保持する（入力されたタグ名が大文字であれば、要素のタグ名も大文字にする）必要が有るかは場合による。しかし、比較
+      は常に小文字で行われる。したがって、パーサは、（小文字に基づく）アトムの整数値と実際の入力文字列を出力する。DOM要素側で保持するか決めれば良い。</p>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/indices.html#elements-3">HTML
+              タグ名（小文字）</a></td>
+          <td>elements.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/indices.html#attributes-3">HTML
+              属性名（小文字）（イベントを除く）</a></td>
+          <td>attributes.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/indices.html#attributes-3">HTML
+              イベント名（小文字）</a></td>
+          <td>events.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-svg-attributes">SVG
+              属性名</a></td>
+          <td>svg_attributes.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-mathml-attributes">MathML
+              属性名</a></td>
+          <td>mathml_attributes.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-foreign-attributes">外
+              来属性名</a></td>
+          <td>foreign_attributes.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">SVG
+              タグ名</a></td>
+          <td>svg_elements.txt</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>HTMLタグ名</li>
+      <li>HTML属性名</li>
+      <li>HTMLイベント名</li>
+      <li>SVG属性名</li>
+      <li>MathML属性名</li>
+      <li>外来属性名</li>
+      <li>SVGタグ名</li>
+    </ul>
+    <p>以上すべてをまとめた小文字による一つのアトム・テーブルを用意する。分岐用の高速比較に使うので、アトムから文字列の所属（クラス）を判別する能力は必要
+      ないと思われる。</p>
+    <p>表の名前は atom_tbl を予定する。</p>
+    <h2><span style="color: #6594e0;">変換テーブル</span></h2>
+    <p>conversion table</p>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/named-characters.html">名
+              前指定文字参照表</a></td>
+          <td>named_character_reference.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state">文
+              字参照コード変換表</a></td>
+          <td>character_reference_code.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-svg-attributes">&nbsp;adjust
+              SVG attributes</a></td>
+          <td>svg_attributes.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-foreign-attributes">&nbsp;adjust
+              foreign attributes</a></td>
+          <td>foreign_attributes.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode">12.2.6.4.1
+              The "initial" insertion mode</a></td>
+          <td>quirks_mode.txt</td>
+        </tr>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">12.2.6.5
+              The rules for parsing tokens in foreign content</a></td>
+          <td>svg_elements.txt</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <h3>トークン化</h3>
+    <ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/named-characters.html">名
+          前指定文字参照表</a></li>
+      <ul>
+        <li>Named character references</li>
+        <ul>
+          <li>named_character_reference_tbl</li>
+        </ul>
+        <li>12.2.5.73 Named character reference state </li>
+        <li>名前の文字列とstd::array&lt;char32_t, 2&gt;のstd:unordered_map</li>
+        <li>名前はキャメルケースを含めて網羅されているので、小文字に変換などせず、そのまま使う。</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#numeric-character-reference-end-state">文
+          字参照コード変換表</a></li>
+      <ul>
+        <li>character reference code</li>
+        <ul>
+          <li>character_reference_code_tbl</li>
+        </ul>
+        <li>12.2.5.80 Numeric character reference end state</li>
+        <li>char32_tとchar32_tのstd::unordered_map</li>
+      </ul>
+    </ul>
+    <h3>木構築</h3>
+    <ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-mathml-attributes">&nbsp;adjust
+          MathML attributes</a></li>
+      <ul>
+        <li><span style="color: rgb(80, 80, 80); font-family: Meiryo; font-size: medium; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;">MathML
+            名前空間の属性名について、小文字からキャメルケースに変更するための表</span></li>
+        <li>一つしか項目が無いのでテーブルは用意しない。</li>
+        <li>アトムテーブルには追加する</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-svg-attributes">&nbsp;adjust
+          SVG attributes</a></li>
+      <ul>
+        <li>adjust_svg_attribute_tbl</li>
+        <li>SVG名前空間の属性名について、小文字からキャメルケースに変更するための表</li>
+        <li>属性名アトムの整数値とキャメルケース文字列のstd:unordered_map</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-foreign-attributes">&nbsp;adjust
+          foreign attributes</a></li>
+      <ul>
+        <li>adjust_foreign_attribute_tbl</li>
+        <li>属性名を接頭辞とローカル名に分けるための表</li>
+        <li>属性名アトムの整数値をキー、std::array&lt;std::u32string, 2&gt;を値とするstd:unordered_map</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode">12.2.6.4.1
+          The "initial" insertion mode</a></li>
+      <ul>
+        <li>quirks_mode_tbl</li>
+        <li>一つだけ大きな表が有る。</li>
+        <li>公開識別子の前方一致についてのみ、trie_base を使って表とする。</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">12.2.6.5
+          The rules for parsing tokens in foreign content</a></li>
+      <ul>
+        <li>svg_tag_name_tbl</li>
+        <li>SVG名前空間の要素名について、小文字名からキャメルケースに変更するための表</li>
+        <li>タグ名アトムの整数値とキャメルケース文字列のstd:unordered_map</li>
+      </ul>
+    </ul>
+    <h2>列挙体</h2>
+    <ul>
+      <li>タグ名</li>
+      <li>属性名</li>
+      <li>SVG属性名</li>
+      <li>外来属性名</li>
+    </ul>
+    <p> </p>
+  </body>
+</html>

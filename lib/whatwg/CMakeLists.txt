@@ -10,21 +10,14 @@ set(INCLUDE_DIR ${Wordring_INCLUDE_DIR}/wordring/whatwg)
 add_library (
 	whatwg OBJECT
 # encoding --------------------------------------------------------------------
-		${INCLUDE_DIR}/encoding/coder.hpp
-		${INCLUDE_DIR}/encoding/encoding.hpp
-		${INCLUDE_DIR}/encoding/encoding_defs.hpp
-		${INCLUDE_DIR}/encoding/indexes.hpp
-		${INCLUDE_DIR}/encoding/stream.hpp
 		encoding/encoding.cpp
 		encoding/indexes_code_point.cpp
 		encoding/indexes_pointer.cpp
+
+# html ------------------------------------------------------------------------
+		html/atom_tbl.cpp
 # infra -----------------------------------------------------------------------
-		${INCLUDE_DIR}/infra/infra.hpp
-		${INCLUDE_DIR}/infra/unicode.hpp
 # url -------------------------------------------------------------------------
-		${INCLUDE_DIR}/url/host.hpp
-		${INCLUDE_DIR}/url/infra.hpp
-		${INCLUDE_DIR}/url/url.hpp
 		url/host.cpp
 )
 

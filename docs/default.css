@@ -5,7 +5,17 @@ body {
 }
 
 h2 {
-    color: #505050;
+    color: #6594e0;
+  border-bottom: dashed 2px #6594e0;
+  margin-top: 2em;
+}
+
+h3 {
+  padding: 0.1em 0.5em;
+  margin-top: 2em;
+  color: #494949;
+  background: transparent;
+  border-left: solid 5px #7db4e6;
 }
 
 table {

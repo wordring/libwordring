@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>HTML パーサー</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body> <a href="../index.html"><img src="../../up.svg" alt=""></a>
+    <h1>HTML パーサー</h1>
+    <h2>規格</h2>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html">https://html.spec.whatwg.org/multipage/parsing.html</a></td>
+          <td>HTML5 パーサー規格</td>
+        </tr>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/HTML-parsing-ja.html">https://triple-underscore.github.io/HTML-parsing-ja.html</a></td>
+          <td>日本語訳</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>俯瞰</h2>
+    <p>規格で、パーサーの入力は「<b>バイト列</b>」、出力は「<b>DOM</b>」である。</p>
+    <p>パーサは大きく分けて以下の段階から成り立つ。</p>
+    <ul>
+      <li><a href="#byte_stream_decorder">バイト・ストリーム復号器</a></li>
+      <li><a href="#input_stream_preprocessor">入力ストリーム・プリプロセッサ</a></li>
+      <li><a href="#tokenizer">トークン化</a></li>
+      <li><a href="#tree_construction">木構築</a></li>
+    </ul>
+    <p>データは上から下に流れるが、下流が上流の状態に影響を及ぼす場合もある。したがって、実装は各段階の変数を集成した「<b>parser_context</b>」
+      を導入し、段階を飛び越えて変更できるようにする。</p>
+    <h2><a id="byte_stream_decorder">バイト・ストリーム復号器</a></h2>
+    <p>「<b>バイト・ストリーム復号器</b>」の入力は「<b>バイト列</b>」、出力は「<b>ユニコード・コード・ポイント列</b>」である。実装は
+      実際の文字としてコード・ポイントと一対一で対応する「<b>char32_t</b>」を使用する。</p>
+    <h2><a id="input_stream_preprocessor">入力ストリーム・プリプロセッサ</a></h2>
+    <p>「<b>入力ストリーム・プリプロセッサ</b>」の入力は「<b>ユニコード・コード・ポイント列</b>」、出力は「<b>ユニコード・コード・ポイン
+        ト列</b>」である。</p>
+    <p>入力された「<b>コード・ポイント</b>」の改行文字正規化、禁止文字の「<b>エラー報告</b>」などを行う。</p>
+    <h2><a id="tokenizer">トークン化</a></h2>
+    <p>規格は「<b>トークン化</b>」を「<b>tokenization stage</b>」と呼ぶ。</p>
+    <p>「<b>トークン化</b>」の入力は「<b>ユニコード・コード・ポイント列</b>」、出力は「<b>トークン</b>」である。トークンは「<a href="#tree_construction_dispatcher"><b>tree
+          construction dispatcher</b></a>」へ出力する。 </p>
+    <p>「<b>トークン</b>」の種類は以下の通り。</p>
+    <ul>
+      <li><a href="#doctype"><b>DOCTYPE</b></a></li>
+      <li><b><a href="#start_tag">start tag</a></b></li>
+      <li><b><a href="#end_tag">end tag</a></b></li>
+      <li><b><a href="#comment">comment</a></b></li>
+      <li><b><a href="#character">character</a></b></li>
+      <li><b><a href="#end_of_file">end-of-file</a></b></li>
+    </ul>
+    <p>トークン化段階のほか、木構築段階でも「開始タグ・トークン」を生成する場合がある。</p>
+    <p>「<b>トークン</b>」は、<a href="#tree_construction_dispatcher"><b>tree
+          construction dispatcher</b></a>を経て、最終的に「<b><a href="#insert">挿入手続き</a></b>」
+      へ入力される。</p>
+    <p>「<b>トークン</b>」内の文字列はメモリーの動的確保を含むため、「<b>parser_context</b>」内に固定の変数として持つ方法を考
+      えたほうが良いかもしれない。しかし、「<b>木構築</b>」段階でもトークンは作成されるため、「<a href="#tree_construction_dispatcher"><b>tree
+          construction dispatcher</b></a>」～「<b>各挿入モード</b>」～「<b><a href="#insert">挿
+          入手続き</a></b>」呼び出しは、「<b>トークン</b>」を const 参照として引数で取るべきかもしれない。</p>
+    <h3><a id="doctype">DOCTYPE</a></h3>
+    <table style="width: 100%;" border="1">
+      <thead>
+        <tr>
+          <th>メンバ名</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>name</td>
+          <td>名前（std::u32string と アトムの整数値） </td>
+        </tr>
+        <tr>
+          <td>public identifier</td>
+          <td>公開識別子（std::u32string と アトムの整数値） </td>
+        </tr>
+        <tr>
+          <td>system identifier</td>
+          <td>システム識別子（std::u32string と アトムの整数値） </td>
+        </tr>
+        <tr>
+          <td>force-quirks flag</td>
+          <td>互換性フラグ<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3><a id="start_tag">start tag</a></h3>
+    <table style="width: 100%;" border="1">
+      <thead>
+        <tr>
+          <th>メンバ名</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>tag name</td>
+          <td>タグ名（std::u32string と アトムの整数値） </td>
+        </tr>
+        <tr>
+          <td>self-closing flag</td>
+          <td>自己閉じタグのフラグ（bool） </td>
+        </tr>
+        <tr>
+          <td>attributeのリスト</td>
+          <td>属性リスト<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>規格で「<b>トークン</b>」の「<b>attribute</b>」は名前と値の文字列ペアとされるが、実際には「<b>SVG属性</b>」と「<b>foreign
+        属性</b>」が「属性名、接頭辞、ローカル名、名前空間」の情報を必要とし、分割は木構築内で行われる。したがって、<b>トークン</b>内にも各変
+      数が必要かもしれない。</p>
+    <h3><a>end tag</a></h3>
+    <table style="width: 100%;" border="1">
+      <thead>
+        <tr>
+          <th>メンバ名</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>tag name</td>
+          <td>タグ名（std::u32string と アトムの整数値）<br>
+          </td>
+        </tr>
+        <tr>
+          <td>self-closing flag</td>
+          <td>自己閉じタグのフラグ（bool）<br>
+          </td>
+        </tr>
+        <tr>
+          <td>attributeのリスト</td>
+          <td>属性リスト<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3><a id="comment">comment</a></h3>
+    <table style="width: 100%;" border="1">
+      <thead>
+        <tr>
+          <th>メンバ名</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>data</td>
+          <td>文字列（std::u32string）<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3><a id="character">character</a></h3>
+    <table style="width: 100%;" border="1">
+      <thead>
+        <tr>
+          <th>メンバ名</th>
+          <th>説明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>data</td>
+          <td>文字（char32_t）<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3><a id="end_of_file">end-of-file</a></h3>
+    <p>end-of-file にメンバはない。</p>
+    <h2><a id="tree_construction">木構築</a></h2>
+    <p>規格は「<b>木構築</b>」を「<b>tree construction stage</b>」と呼ぶ。</p>
+    <p>規格は木構築の主要部を「<a href="#tree_construction_dispatcher"><b>tree construction
+          dispatcher</b></a>」と呼ぶ。</p>
+    <h3><a id="tree_construction_dispatcher">tree construction dispatcher</a></h3>
+    <p>「<b>tree construction dispatcher</b>」の入力は「<b>トークン</b>」、出力は「<b>DOM</b>」であ
+      る。「<a href="#stack_of_open_elements"><b>stack of open elements</b></a>」を使用
+      して木構築を行う。 </p>
+    <h3><a id="stack_of_open_elements">stack of open elements</a></h3>
+    <p>規格は、「<b>一本のスタックによる木構築アルゴリズム</b>」を使用してDOM木を組み立てる。規格は、このスタックを「<b>stack of
+        open elements</b>」と呼ぶ。</p>
+    <p>開始タグが検出されたとき、スタックTOPの要素の子として、その開始タグに相当する要素を追加する。同時に、スタックへ要素をPUSHする。終了タグが検
+      出されたとき、スタックからPOPする。この動作で、木が構築できる。</p>
+    <p><img src="img/stack_of_open_elements_concept.svg" alt=""></p>
+    <p>規格は、終了タグの省略を許す。上図で<b>&lt;H1&gt;</b>がスタックトップにあるとき、終了タグ<b>&lt;/H1&gt;</b>が検
+      出されれば、POPされ、スタックTOPは適切に<b>&lt;BODY&gt;</b>になる。しかし、（終了タグ<b>&lt;/H1&gt;</b>が
+      省略され）終了タグ<b>&lt;/BODY&gt;</b>が検出された場合、スタックは不適切となる。したがって、スタックから<b>&lt;BODY&gt;</b>ま
+      で取り除き、<b>&lt;HTML&gt;</b>がスタックTOPに来るようにしなければならない。</p>
+    <p>終了タグの省略だけなら、スタックTOPの要素のタグ名「<b>H1</b>」と検出された終了タグ名「<b>BODY</b>」が一致しないので、一致す
+      る要素までPOPし続ければ良い。しかし、入力テキストに不要な終了タグが含まれる場合もある。</p>
+    <p>規格は、上記の理由で、スタックを適切に巻き戻すためのアルゴリズムを備える。そのためにいくつかの「<b>挿入モード</b>」と変数を使用する。</p>
+    <h3><a id="insert"><span style="color: #505050;">挿入手続き</span></a></h3>
+    <h4><a id="insert_element"><span style="color: #505050;">要素を挿入する手続き</span></a></h4>
+    <p>規格は「<b>insert element</b>」と呼ぶ。トークンから要素を作成し、挿入先に「<b>要素</b>」を挿入する。同時に「<b>stack
+        of open elements</b>」に「<b>要素</b>」（へのイテレータあるいは参照）をPUSHする。</p>
+    <h4>文字を挿入する手続き</h4>
+    <p>規格は「<b>insert character</b>」と呼ぶ。挿入先に「<b>Textノード</b>」が有れば、その末尾に、無ければ「<b>Text
+        ノード</b>」を挿入し、その末尾に文字を追加する。</p>
+    <h4>コメントを挿入する手続き</h4>
+    <p>規格は「<b>insert comment</b>」と呼ぶ。挿入先に「<b>commentノード</b>」を挿入する。</p>
+    <h3><a id="closing"><span style="color: #505050;">閉じる手続き</span></a></h3>
+    <h4><span style="color: #505050;">暗黙の終了タグを持つ要素を閉じる手続き</span></h4>
+    <p>条件を満たすまで「<b>stack of open elements</b>」をPOPする。条件は各挿入モード内で定義される。</p>
+    <h4>要素を閉じる手続き</h4>
+    <p>条件を満たすまで「<b>stack of open elements</b>」をPOPする。条件は各挿入モード内で定義される。</p>
+  </body>
+</html>
