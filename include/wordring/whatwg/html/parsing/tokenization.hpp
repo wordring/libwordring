@@ -808,7 +808,8 @@ namespace wordring::whatwg::html::parsing
 					change_state(script_data_escaped_end_tag_open_state);
 					return;
 				}
-				else if (is_ascii_alpha(cp))
+
+				if (is_ascii_alpha(cp))
 				{
 					m_temporary_buffer.clear();
 					emit_token(U'<');
@@ -840,9 +841,52 @@ namespace wordring::whatwg::html::parsing
 			reconsume(script_data_escaped_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.25 Script data escaped end tag name state */
 		void on_script_data_escaped_end_tag_name_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+				switch (cp)
+				{
+				case U'\x9':  // TAB
+				case U'\xA':  // LF
+				case U'\xC':  // FF
+				case U'\x20': // SPACE
+					if (!is_appropriate_end_tag_token(m_end_tag_token)) goto AnythingElse;
+					change_state(before_attribute_name_state);
+					return;
+				case U'/':
+					if (!is_appropriate_end_tag_token(m_end_tag_token)) goto AnythingElse;
+					change_state(self_closing_start_tag_state);
+					return;
+				case U'>':
+					if (!is_appropriate_end_tag_token(m_end_tag_token)) goto AnythingElse;
+					change_state(data_state);
+					emit_token(current_tag_token());
+					return;
+				}
+
+				if (is_ascii_upper_alpha(cp))
+				{
+					current_tag_token().tag_name.push_back(cp + 0x20);
+					m_temporary_buffer.push_back(cp);
+					return;
+				}
+
+				if (is_ascii_lower_alpha(cp))
+				{
+					current_tag_token().tag_name.push_back(cp);
+					m_temporary_buffer.push_back(cp);
+					return;
+				}
+			}
+
+		AnythingElse:
+			emit_token(U'<');
+			emit_token(U'/');
+			for (char32_t c : m_temporary_buffer) emit_token(c);
+			reconsume(script_data_escaped_state);
 		}
 
 		/*!  */
