@@ -10,6 +10,26 @@
     <h1> </h1>
     <h1>トークン化の調査</h1>
     <h2>規格で不明な点</h2>
+    <h3>複数文字を消費する状態の調査</h3>
+    <ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#markup-declaration-open-state">12.2.5.42
+          Markup declaration open state</a></li>
+      <ul>
+        <li>DOCTYPE</li>
+        <li>[CDATA[</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#after-doctype-name-state">12.2.5.56
+          After DOCTYPE name state</a></li>
+      <ul>
+        <li>PUBLIC</li>
+        <li>SYSTEM</li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#named-character-reference-state">12.2.5.73
+          Named character reference state</a></li>
+      <ul>
+        <li>名前指定文字参照</li>
+      </ul>
+    </ul>
     <h3>文書化されていない、状態間で共有する変数の調査</h3>
     <h4>結果</h4>
     <ul>

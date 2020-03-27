@@ -5,11 +5,11 @@
 
 #include <cstdint>
 
-namespace wordring::whatwg::html::detail
+namespace wordring::whatwg::html::parsing
 {
 	// 12.2.2 Parse errors ----------------------------------------------------
 
-	enum parse_error : std::uint32_t
+	enum class error : std::uint32_t
 	{
 		abrupt_closing_of_empty_comment,
 		abrupt_doctype_public_identifier,
@@ -61,7 +61,16 @@ namespace wordring::whatwg::html::detail
 		unexpected_solidus_in_tag,
 		unknown_named_character_reference,
 	};
+
+	// 12.2.3 The input byte stream -------------------------------------------
 	
+	enum encoding_confidence : std::uint32_t
+	{
+		tentative,
+		certain,
+		irrelevant,
+	};
+
 	// 12.2.5 Tokenization ----------------------------------------------------
 
 	enum tokenizer_state : std::uint32_t

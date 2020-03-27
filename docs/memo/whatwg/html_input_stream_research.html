@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>入力ストリームの調査</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body><a href="file:///C:/Users/Kouichi/source/repos/wordring_cpp/docs/memo/index.html"><img
+        src="../../up.svg" alt=""></a>
+    <h1>入力ストリームの調査</h1>
+    <h2>改行の正規化</h2>
+    <p><img src="img/normalize_newlines.svg" alt=""></p>
+    <p>初期状態からCRが入力されたとき、CR状態に入る（LFが入力された場合、そのまま出力して初期状態にとどまる）。</p>
+    <p>CR状態からCRが入力された場合、CR状態にとどまる。それ以外の入力は、初期状態に戻る。</p>
+    <h2>変数</h2>
+    <h3>insertion-point</h3>
+    <p>終了タグ<b>&lt;/script&gt;</b>の処理中に参照・変更される。スクリプト内から<b>document.write()</b>で文
+      字を書き込まれる位置。<b>document.write()</b>内から更に<b>&lt;script&gt;</b>タグが入力されその中か
+      ら・・・という風にネストされることがある。</p>
+    <p>操作箇所は以下の通り。</p>
+    <ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-incdata">12.2.6.4.8
+          The "text" insertion mode</a></li>
+      <ul>
+        <li>An end tag whose tag name is "script"</li>
+      </ul>
+      <li>12.2.6.5 The rules for parsing tokens in foreign content</li>
+      <ul>
+        <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign:insertion-point">An
+            end tag whose tag name is "script"</a></li>
+      </ul>
+      <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#the-end:insertion-point">12.2.7
+          The end</a></li>
+    </ul>
+    <p>挿入地点は常に「次の入力の前」なので、何回ネストされようとも同じ位置になるように思えるが、規格は位置の保存と復帰を行う。実装はスクリプトをサポート
+      しないので、入力ストリームの「挿入点」も実装しないが、拡張時に備えてツリー構築から呼び出しする。しかし、何もせず挿入点も変更しない。拡張時に備えて、
+      変数の直接操作ではなく、メンバ関数の呼び出しとする。</p>
+  </body>
+</html>

@@ -3,7 +3,7 @@
 // https://url.spec.whatwg.org/
 // https://triple-underscore.github.io/URL-ja.html
 
-#include <wordring/whatwg/html/parser_defs.hpp>
+#include <wordring/whatwg/html/parsing/parser_defs.hpp>
 
 #include <array>
 #include <cassert>

@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-namespace wordring::whatwg::html::detail
+namespace wordring::whatwg::html::parsing
 {
 	struct DOCTYPE_token
 	{
@@ -17,18 +17,28 @@ namespace wordring::whatwg::html::detail
 		bool force_quirks_flag;
 	};
 
-	struct start_tag_token
+	struct tag_token
 	{
 		std::u32string tag_name;
+		std::uint32_t tag_name_id;
 		bool self_closing_flag;
 		std::vector<std::u32string> attributes;
+
+		void clear()
+		{
+			tag_name.clear();
+			tag_name_id = 0;
+			self_closing_flag = false;
+			attributes.clear();
+		}
 	};
 
-	struct end_tag_token
+	struct start_tag_token : tag_token
 	{
-		std::u32string tag_name;
-		bool self_closing_flag;
-		std::vector<std::u32string> attributes;
+	};
+
+	struct end_tag_token : tag_token
+	{
 	};
 
 	struct comment_token

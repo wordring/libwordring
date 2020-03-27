@@ -24,17 +24,17 @@ include_directories (
 )
 
 add_executable(
-	atom
-		atom.cpp
+	atom_tbl
+		atom_tbl.cpp
 )
 
 add_definitions(-DDATA_PATH=${CMAKE_CURRENT_SOURCE_DIR}/data/)
 
-add_definitions(-DATOM_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/html/atom_tbl.hpp)
-add_definitions(-DATOM_CPP_PATH=${Wordring_DIR}/lib/whatwg/html/atom_tbl.cpp)
+add_definitions(-DATOM_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/html/parsing/atom_tbl.hpp)
+add_definitions(-DATOM_CPP_PATH=${Wordring_DIR}/lib/whatwg/html/parsing/atom_tbl.cpp)
 
 target_link_libraries(
-	atom
+	atom_tbl
 		${Boost_FILESYSTEM_LIBRARY}
 		${Boost_SYSTEM_LIBRARY}
 )
