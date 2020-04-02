@@ -10,6 +10,33 @@
     <p>パーサーの木構築でタグ名によって処理を振り分ける必要があるため、名前と数値の相互変換を実装する。名前を列挙したテキスト・ファイルを基に、
       atom_setとenumを自動生成する。</p>
     <h2>生成するソース</h2>
+    <h2>列挙体</h2>
+    <ul>
+      <li>タグ名</li>
+      <li>属性名</li>
+      <li>SVG属性名</li>
+      <li>外来属性名</li>
+    </ul>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td>namespaces</td>
+          <td>名前空間</td>
+        </tr>
+        <tr>
+          <td>tag_names<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td>attribute_names</td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p></p>
     <h2>アトム</h2>
     <p>HTML要素が入力テキストの文字列を保持する（入力されたタグ名が大文字であれば、要素のタグ名も大文字にする）必要が有るかは場合による。しかし、比較
       は常に小文字で行われる。したがって、パーサは、（小文字に基づく）アトムの整数値と実際の入力文字列を出力する。DOM要素側で保持するか決めれば良い。</p>
@@ -50,6 +77,10 @@
               タグ名</a></td>
           <td>svg_elements.txt</td>
         </tr>
+        <tr>
+          <td><a href="https://infra.spec.whatwg.org/#namespaces">名前空間</a></td>
+          <td>namespaces.txt</td>
+        </tr>
       </tbody>
     </table>
     <ul>
@@ -60,6 +91,7 @@
       <li>MathML属性名</li>
       <li>外来属性名</li>
       <li>SVGタグ名</li>
+      <li>名前空間</li>
     </ul>
     <p>以上すべてをまとめた小文字による一つのアトム・テーブルを用意する。分岐用の高速比較に使うので、アトムから文字列の所属（クラス）を判別する能力は必要
       ないと思われる。</p>
@@ -165,13 +197,10 @@
         <li>タグ名アトムの整数値とキャメルケース文字列のstd:unordered_map</li>
       </ul>
     </ul>
-    <h2>列挙体</h2>
-    <ul>
-      <li>タグ名</li>
-      <li>属性名</li>
-      <li>SVG属性名</li>
-      <li>外来属性名</li>
-    </ul>
+    <br>
+    <br>
+    <p><br>
+    </p>
     <p> </p>
   </body>
 </html>

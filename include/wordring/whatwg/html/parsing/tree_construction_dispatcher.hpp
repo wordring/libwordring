@@ -8,14 +8,18 @@
 
 namespace wordring::whatwg::html::parsing
 {
-	template <typename T>
-	class tree_construction_dispatcher : public tokenizer<T>
+	template <typename T, typename NodePolicy>
+	class tree_construction_dispatcher : public tokenizer<T, NodePolicy>
 	{
-		friend tokenizer<T>;
+		friend tokenizer<T, NodePolicy>;
 
 	protected:
-		using base_type = tokenizer<T>;
+		using base_type = tokenizer<T, NodePolicy>;
 		using this_type = T;
+
+		using node_policy = NodePolicy;
+
+		 
 
 	public:
 		using base_type::report_error;
@@ -57,11 +61,30 @@ namespace wordring::whatwg::html::parsing
 	protected:
 		tree_construction_dispatcher()
 			: m_insertion_mode(mode::initial_insertion_mode)
+			, m_omit_lf(false)
 		{
 		}
 
+	protected:
+
+		// スタック -----------------------------------------------------------
+
+		// 
+
+		template <typename Element>
+		bool is_MathML_text_integration_point(Element c)
+		{
+
+		}
+
 		template <typename Token>
-		void on_emit_token(Token const& token)
+		void reprocess_token(Token& token)
+		{
+			on_emit_token(token);
+		}
+
+		template <typename Token>
+		void on_emit_token(Token& token)
 		{
 			switch (m_insertion_mode)
 			{
@@ -92,117 +115,125 @@ namespace wordring::whatwg::html::parsing
 		}
 
 		template <typename Token>
-		void on_initial_insertion_mode(Token const& token)
+		void on_initial_insertion_mode(Token& token)
+		{
+			if constexpr (std::is_same_v<character_token, Token>)
+			{
+				if (is_ascii_white_space(token.m_data)) return;
+			}
+			else if constexpr (std::is_same_v<comment_token, Token>)
+			{
+
+			}
+		}
+
+		template <typename Token>
+		void on_before_html_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_before_html_insertion_mode(Token const& token)
+		void on_before_head_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_before_head_insertion_mode(Token const& token)
+		void on_in_head_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_head_insertion_mode(Token const& token)
+		void on_in_head_noscript_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_head_noscript_insertion_mode(Token const& token)
+		void on_after_head_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_after_head_insertion_mode(Token const& token)
+		void on_in_body_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_body_insertion_mode(Token const& token)
+		void on_text_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_text_insertion_mode(Token const& token)
+		void on_in_table_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_table_insertion_mode(Token const& token)
+		void on_in_table_text_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_table_text_insertion_mode(Token const& token)
+		void on_in_caption_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_caption_insertion_mode(Token const& token)
+		void on_in_column_group_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_column_group_insertion_mode(Token const& token)
+		void on_in_table_body_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_table_body_insertion_mode(Token const& token)
+		void on_in_row_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_row_insertion_mode(Token const& token)
+		void on_in_cell_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_cell_insertion_mode(Token const& token)
+		void on_in_select_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_select_insertion_mode(Token const& token)
+		void on_in_select_in_table_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_select_in_table_insertion_mode(Token const& token)
+		void on_in_template_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_template_insertion_mode(Token const& token)
+		void on_after_body_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_after_body_insertion_mode(Token const& token)
+		void on_in_frameset_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_in_frameset_insertion_mode(Token const& token)
+		void on_after_frameset_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_after_frameset_insertion_mode(Token const& token)
+		void on_after_after_body_insertion_mode(Token& token)
 		{
 		}
 
 		template <typename Token>
-		void on_after_after_body_insertion_mode(Token const& token)
-		{
-		}
-
-		template <typename Token>
-		void on_after_after_frameset_insertion_mode(Token const& token)
+		void on_after_after_frameset_insertion_mode(Token& token)
 		{
 		}
 	};

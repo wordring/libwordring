@@ -14,7 +14,7 @@
 namespace wordring::whatwg::html::parsing
 {
 
-	template <typename T>
+	template <typename T, typename Policy>
 	class tokenizer : public input_stream<T>
 	{
 		friend input_stream<T>;
@@ -23,12 +23,23 @@ namespace wordring::whatwg::html::parsing
 		using base_type = input_stream<T>;
 		using this_type = T;
 
+		using policy = Policy;
 
 		using state_type = void(tokenizer::*)();
 
+		using typename base_type::match_result;
+
+		using node_pointer = typename policy::node_pointer;
+
+		using base_type::flush_code_point;
 		using base_type::current_input_character;
 		using base_type::next_input_character;
+		using base_type::begin;
+		using base_type::end;
+		using base_type::match_named_character_reference;
+		using base_type::named_character_reference;
 		using base_type::consume;
+		using base_type::match;
 
 		using base_type::report_error;
 		using base_type::eof;
@@ -55,10 +66,19 @@ namespace wordring::whatwg::html::parsing
 
 		std::u32string m_last_start_tag_name;
 
+		char32_t m_character_reference_code;
+
+		// スタック -----------------------------------------------------------
+
+		std::deque<node_pointer> m_stack_of_open_elements;
+
+		node_pointer m_context_element;
+
 		tokenizer()
 			: m_state(data_state)
 			, m_return_state(nullptr)
 			, m_current_tag_token_id(0)
+			, m_character_reference_code(0)
 		{
 		}
 
@@ -80,8 +100,13 @@ namespace wordring::whatwg::html::parsing
 
 		void create_comment_token(char32_t const* data = U"")
 		{
-			m_current_tag_token_id = 0;
-			m_comment_token.data = data;
+			m_comment_token.m_data = data;
+		}
+
+		DOCTYPE_token& create_DOCTYPE_token()
+		{
+			m_DOCTYPE_token.clear();
+			return m_DOCTYPE_token;
 		}
 
 		/*! @brief 現在のタグ・トークンを返す
@@ -99,10 +124,71 @@ namespace wordring::whatwg::html::parsing
 		{
 			assert(m_current_tag_token_id == 3);
 
-			if (m_last_start_tag_name.empty() || (m_last_start_tag_name != token.tag_name)) return false;
+			if (m_last_start_tag_name.empty() || (m_last_start_tag_name != token.m_tag_name)) return false;
 			return true;
 		}
 
+		/*! @brief 現在のタグ・トークン上で新しい属性を開始する
+		*/
+		typename tag_token::attribute& create_attribute()
+		{
+			return current_tag_token().attributes().create();
+		}
+
+		/*! @brief 現在の属性を返す
+		*/
+		typename tag_token::attribute& current_attribute()
+		{
+			return current_tag_token().attributes().current();
+		}
+
+		comment_token& current_comment_token()
+		{
+			return m_comment_token;
+		}
+
+		DOCTYPE_token& current_DOCTYPE_token()
+		{
+			return m_DOCTYPE_token;
+		}
+
+		/*! @brief 属性の重複を削る
+		
+		12.2.5.33 Attribute name state 
+		*/
+		void unify_attribute()
+		{
+			tag_token::attribute_list& al = current_tag_token().attributes();
+			auto it1 = al.begin();
+			auto it2 = std::prev(al.end(), 1);
+			while (it1 != it2) if (it1++->m_name == al.current().m_name) al.current().m_omitted = true;
+		}
+
+		// スタック -----------------------------------------------------------
+
+		node_pointer current_node()
+		{
+			assert(!m_stack_of_open_elements.empty());
+			return m_stack_of_open_elements.back();
+		}
+
+		node_pointer adjusted_current_node()
+		{
+			if constexpr (policy::is_fragments_parser) if (m_stack_of_open_elements.size() == 1) return m_context_element;
+			return current_node();
+		}
+
+		/*! @brief 与えられたノードがHTML名前空間に属するか調べる
+		*/
+		bool in_html_namespace(node_pointer it) const
+		{
+			return static_cast<this_type const*>(this)->in_html_namespace(it);
+		}
+
+		bool empty_stack_of_open_elements() const
+		{
+			return m_stack_of_open_elements.empty();
+		}
 		// トークンの発送-------------------------------------------------------
 
 		template <typename Token>
@@ -114,11 +200,11 @@ namespace wordring::whatwg::html::parsing
 			{
 				assert(m_current_tag_token_id == 2 || m_current_tag_token_id == 3);
 
-				token.tag_name_id = atom_tbl.at(token.tag_name);
+				token.m_tag_name_id = atom_tbl.at(token.m_tag_name);
 				
 				if (m_current_tag_token_id == 2)
 				{
-					m_last_start_tag_name = m_start_tag_token.tag_name;
+					m_last_start_tag_name = m_start_tag_token.m_tag_name;
 					p->on_emit_token(m_start_tag_token);
 				}
 				else if (m_current_tag_token_id == 3) p->on_emit_token(m_end_tag_token);
@@ -128,7 +214,7 @@ namespace wordring::whatwg::html::parsing
 
 		void emit_token(char32_t cp)
 		{
-			m_character_token.data = cp;
+			m_character_token.m_data = cp;
 			static_cast<this_type*>(this)->on_emit_token(m_character_token);
 		}
 
@@ -143,6 +229,8 @@ namespace wordring::whatwg::html::parsing
 
 		void return_state(state_type st) { m_return_state = st; }
 
+		state_type return_state() const { return m_return_state; }
+
 		// 文字の再消費 --------------------------------------------------------
 
 		void reconsume(state_type st)
@@ -150,6 +238,22 @@ namespace wordring::whatwg::html::parsing
 			change_state(st);
 			base_type::reconsume();
 			on_emit_code_point();
+		}
+
+		// 
+		bool consumed_as_part_of_attribute()
+		{
+			if (m_return_state == attribute_value_double_quoted_state
+				|| m_return_state == attribute_value_single_quoted_state
+				|| m_return_state == attribute_value_unquoted_state) return true;
+
+			return false;
+		}
+
+		void flush_code_points_consumed_as_character_reference()
+		{
+			if (consumed_as_part_of_attribute()) for (char32_t cp : m_temporary_buffer) current_attribute().m_value.push_back(cp);
+			else for (char32_t cp : m_temporary_buffer) emit_token(cp);
 		}
 
 		// コールバック --------------------------------------------------------
@@ -391,17 +495,17 @@ namespace wordring::whatwg::html::parsing
 				return;
 			case U'\x0':
 				report_error(error::unexpected_null_character);
-				current_tag_token().tag_name.push_back(U'\xFFFD');
+				current_tag_token().m_tag_name.push_back(U'\xFFFD');
 				return;
 			}
 
 			if (is_ascii_upper_alpha(cp))
 			{
-				current_tag_token().tag_name.push_back(cp + 0x20);
+				current_tag_token().m_tag_name.push_back(cp + 0x20);
 				return;
 			}
 
-			current_tag_token().tag_name.push_back(cp);	
+			current_tag_token().m_tag_name.push_back(cp);	
 		}
 
 		/*! 12.2.5.9 RCDATA less-than sign state */
@@ -469,14 +573,14 @@ namespace wordring::whatwg::html::parsing
 
 				if (is_ascii_upper_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp + 0x20);
+					current_tag_token().m_tag_name.push_back(cp + 0x20);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
 
 				if (is_ascii_lower_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp);
+					current_tag_token().m_tag_name.push_back(cp);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
@@ -554,14 +658,14 @@ namespace wordring::whatwg::html::parsing
 
 				if (is_ascii_upper_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp + 0x20);
+					current_tag_token().m_tag_name.push_back(cp + 0x20);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
 
 				if (is_ascii_lower_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp);
+					current_tag_token().m_tag_name.push_back(cp);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
@@ -645,14 +749,14 @@ namespace wordring::whatwg::html::parsing
 
 				if (is_ascii_upper_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp + 0x20);
+					current_tag_token().m_tag_name.push_back(cp + 0x20);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
 
 				if (is_ascii_lower_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp);
+					current_tag_token().m_tag_name.push_back(cp);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
@@ -869,14 +973,14 @@ namespace wordring::whatwg::html::parsing
 
 				if (is_ascii_upper_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp + 0x20);
+					current_tag_token().m_tag_name.push_back(cp + 0x20);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
 
 				if (is_ascii_lower_alpha(cp))
 				{
-					current_tag_token().tag_name.push_back(cp);
+					current_tag_token().m_tag_name.push_back(cp);
 					m_temporary_buffer.push_back(cp);
 					return;
 				}
@@ -889,279 +993,1778 @@ namespace wordring::whatwg::html::parsing
 			reconsume(script_data_escaped_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.26 Script data double escape start state */
 		void on_script_data_double_escape_start_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+				switch (cp)
+				{
+				case U'\x9':  // TAB
+				case U'\xA':  // LF
+				case U'\xC':  // FF
+				case U'\x20': // SPACE
+				case U'/':
+				case U'>':
+					if (m_temporary_buffer == U"script") change_state(script_data_double_escaped_state);
+					else change_state(before_attribute_name_state);
+					emit_token(cp);
+					return;
+				}
+
+				if (is_ascii_upper_alpha(cp))
+				{
+					m_temporary_buffer.push_back(cp + 0x20);
+					emit_token(cp);
+					return;
+				}
+
+				if (is_ascii_lower_alpha(cp))
+				{
+					m_temporary_buffer.push_back(cp);
+					emit_token(cp);
+					return;
+				}
+			}
+
+			reconsume(script_data_escaped_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.27 Script data double escaped state */
 		void on_script_data_double_escaped_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_script_html_comment_like_text);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+			switch (cp)
+			{
+			case U'-':
+				change_state(script_data_double_escaped_dash_state);
+				emit_token(U'-');
+				return;
+			case U'<':
+				change_state(script_data_double_escaped_less_than_sign_state);
+				emit_token(U'<');
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				emit_token(U'\xFFFD');
+				return;
+			}
+
+			emit_token(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.28 Script data double escaped dash state */
 		void on_script_data_double_escaped_dash_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_script_html_comment_like_text);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'-':
+				change_state(script_data_double_escaped_dash_dash_state);
+				emit_token(U'-');
+				return;
+			case U'<':
+				change_state(script_data_double_escaped_less_than_sign_state);
+				emit_token(U'<');
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				change_state(script_data_double_escaped_state);
+				emit_token(U'\xFFFD');
+				return;
+			}
+
+			change_state(script_data_double_escaped_state);
+			emit_token(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.29 Script data double escaped dash dash state */
 		void on_script_data_double_escaped_dash_dash_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_script_html_comment_like_text);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'-':
+				emit_token(U'-');
+				return;
+			case U'<':
+				change_state(script_data_double_escaped_less_than_sign_state);
+				emit_token(U'<');
+				return;
+			case U'>':
+				change_state(script_data_state);
+				emit_token(U'>');
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				change_state(script_data_double_escaped_state);
+				emit_token(U'\xFFFD');
+				return;
+			}
+
+			change_state(script_data_double_escaped_state);
+			emit_token(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.30 Script data double escaped less-than sign state */
 		void on_script_data_double_escaped_less_than_sign_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (cp == U'/')
+				{
+					m_temporary_buffer.clear();
+					change_state(script_data_double_escape_end_state);
+					emit_token(U'/');
+					return;
+				}
+			}
+
+			reconsume(script_data_double_escaped_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.31 Script data double escape end state */
 		void on_script_data_double_escape_end_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				switch (cp)
+				{
+				case U'\x9':  // TAB
+				case U'\xA':  // LF
+				case U'\xC':  // FF
+				case U'\x20': // SPACE
+				case U'/':
+				case U'>':
+					if (m_temporary_buffer == U"script") change_state(script_data_escaped_state);
+					else change_state(script_data_double_escaped_state);
+					emit_token(cp);
+					return;
+				}
+
+				if (is_ascii_upper_alpha(cp))
+				{
+					m_temporary_buffer.push_back(cp + 0x20);
+					emit_token(cp);
+					return;
+				}
+
+				if (is_ascii_lower_alpha(cp))
+				{
+					m_temporary_buffer.push_back(cp);
+					emit_token(cp);
+					return;
+				}
+			}
+
+			reconsume(script_data_double_escaped_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.32 Before attribute name state */
 		void on_before_attribute_name_state()
 		{
+			if (eof())
+			{
+				reconsume(after_attribute_name_state);
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'/':
+			case U'>':
+				reconsume(after_attribute_name_state);
+				return;
+			case U'=':
+				report_error(error::unexpected_equals_sign_before_attribute_name);
+				create_attribute();
+				change_state(attribute_name_state);
+				return;
+			}
+
+			create_attribute();
+			reconsume(attribute_name_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.33 Attribute name state */
 		void on_attribute_name_state()
 		{
+			if (eof())
+			{
+				reconsume(after_attribute_name_state);
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+			case U'/':
+			case U'>':
+				unify_attribute();
+				reconsume(after_attribute_name_state);
+				return;
+			case U'=':
+				unify_attribute();
+				change_state(before_attribute_value_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_attribute().m_name.push_back(U'\xFFFD');
+				return;
+			case U'"':
+			case U'\'':
+			case U'<':
+				report_error(error::unexpected_character_in_attribute_name);
+				goto AnythingElse;
+			}
+
+			if (is_ascii_upper_alpha(cp))
+			{
+				current_attribute().m_name.push_back(cp + 0x20);
+				return;
+			}
+
+		AnythingElse:
+			current_attribute().m_name.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.34 After attribute name state */
 		void on_after_attribute_name_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_tag);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'/':
+				change_state(self_closing_start_tag_state);
+				return;
+			case U'=':
+				change_state(before_attribute_value_state);
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_tag_token());
+				return;
+			}
+
+			create_attribute();
+			reconsume(attribute_name_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.35 Before attribute value state */
 		void on_before_attribute_value_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				switch (cp)
+				{
+				case U'\x9':  // TAB
+				case U'\xA':  // LF
+				case U'\xC':  // FF
+				case U'\x20': // SPACE
+					return;
+				case U'"':
+					change_state(attribute_value_double_quoted_state);
+					return;
+				case U'\'':
+					change_state(attribute_value_single_quoted_state);
+					return;
+				case U'>':
+					report_error(error::missing_attribute_value);
+					change_state(data_state);
+					emit_token(current_tag_token());
+					return;
+				}
+			}
+
+			reconsume(attribute_value_unquoted_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.36 Attribute value (double-quoted) state */
 		void on_attribute_value_double_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_tag);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'"':
+				change_state(after_attribute_value_quoted_state);
+				return;
+			case U'&':
+				return_state(attribute_value_double_quoted_state);
+				change_state(character_reference_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_attribute().m_value.push_back(U'\xFFFD');
+				return;
+			}
+
+			current_attribute().m_value.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.37 Attribute value (single-quoted) state */
 		void on_attribute_value_single_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_tag);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\'':
+				change_state(after_attribute_value_quoted_state);
+				return;
+			case U'&':
+				return_state(attribute_value_single_quoted_state);
+				change_state(character_reference_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_attribute().m_value.push_back(U'\xFFFD');
+				return;
+			}
+
+			current_attribute().m_value.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.38 Attribute value (unquoted) state */
 		void on_attribute_value_unquoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_tag);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(before_attribute_name_state);
+				return;
+			case U'&':
+				return_state(attribute_value_unquoted_state);
+				change_state(character_reference_state);
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_tag_token());
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_attribute().m_value.push_back(U'\xFFFD');
+				return;
+			case U'"':
+			case U'\'':
+			case U'<':
+			case U'=':
+			case U'`':
+				report_error(error::unexpected_character_in_unquoted_attribute_value);
+				goto AnythingElse;
+			}
+
+		AnythingElse:
+			current_attribute().m_value.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.39 After attribute value (quoted) state */
 		void on_after_attribute_value_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_tag);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(before_attribute_name_state);
+				return;
+			case U'/':
+				change_state(self_closing_start_tag_state);
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_tag_token());
+				return;
+			}
+
+			report_error(error::missing_whitespace_between_attributes);
+			reconsume(before_attribute_name_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.40 Self-closing start tag state */
 		void on_self_closing_start_tag_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_tag);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+			if (cp == U'>')
+			{
+				current_tag_token().m_self_closing_flag = true;
+				change_state(data_state);
+				emit_token(current_tag_token());
+				return;
+			}
+
+			report_error(error::unexpected_solidus_in_tag);
+			reconsume(before_attribute_name_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.41 Bogus comment state */
 		void on_bogus_comment_state()
 		{
+			if (eof())
+			{
+				emit_token(current_comment_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'>':
+				change_state(data_state);
+				emit_token(current_comment_token());
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_comment_token().m_data.push_back(U'\xFFFD');
+				return;
+			}
+
+			current_comment_token().m_data.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.42 Markup declaration open state */
 		void on_markup_declaration_open_state()
 		{
+			match_result r = match(U"--", false);
+			if (r != match_result::failed)
+			{
+				if (r == match_result::succeed)
+				{
+					consume(std::size(U"--") - 1);
+					create_comment_token();
+					change_state(comment_start_state);
+					return;
+				}
+				else return; // partial
+			}
+
+			r = match(U"doctype", true);
+			if (r != match_result::failed)
+			{
+				if (r == match_result::succeed)
+				{
+					consume(std::size(U"doctype") - 1);
+					change_state(DOCTYPE_state);
+					return;
+				}
+				else return; // partial
+			}
+
+			r = match(U"[CDATA[", false);
+			if (r != match_result::failed)
+			{
+				if (r == match_result::succeed)
+				{
+					consume(std::size(U"[CDATA[") - 1);
+					
+					if (!empty_stack_of_open_elements())
+					{
+						node_pointer it = adjusted_current_node();
+						if (!in_html_namespace(it))
+						{
+							change_state(CDATA_section_state);
+							return;
+						}
+					}
+
+					report_error(error::cdata_in_html_content);
+					create_comment_token(U"[CDATA[");
+					change_state(bogus_comment_state);
+					return;
+				}
+				else return; // partial
+			}
+
+			report_error(error::incorrectly_opened_comment);
+			create_comment_token();
+			change_state(bogus_comment_state);
+
+			flush_code_point();
 		}
 
-		/*!  */
+		/*! 12.2.5.43 Comment start state */
 		void on_comment_start_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				switch (cp)
+				{
+				case U'-':
+					change_state(comment_start_dash_state);
+					return;
+				case U'>':
+					report_error(error::abrupt_closing_of_empty_comment);
+					change_state(data_state);
+					emit_token(current_comment_token());
+					return;
+				}
+			}
+
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.44 Comment start dash state */
 		void on_comment_start_dash_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_comment);
+				emit_token(current_comment_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'-':
+				change_state(comment_end_state);
+				return;
+			case U'>':
+				report_error(error::abrupt_closing_of_empty_comment);
+				change_state(data_state);
+				emit_token(current_comment_token());
+				return;
+			}
+
+			current_comment_token().m_data.push_back(U'-');
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.45 Comment state */
 		void on_comment_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_comment);
+				emit_token(current_comment_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'<':
+				current_comment_token().m_data.push_back(cp);
+				change_state(comment_less_than_sign_state);
+				return;
+			case U'-':
+				change_state(comment_end_dash_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				emit_token(U'\xFFFD');
+				return;
+			}
+
+			current_comment_token().m_data.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.46 Comment less-than sign state */
 		void on_comment_less_than_sign_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				switch (cp)
+				{
+				case U'!':
+					current_comment_token().m_data.push_back(cp);
+					change_state(comment_less_than_sign_bang_state);
+					return;
+				case U'<':
+					current_comment_token().m_data.push_back(cp);
+					return;
+				}
+			}
+
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.47 Comment less-than sign bang state */
 		void on_comment_less_than_sign_bang_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (cp == U'-')
+				{
+					change_state(comment_less_than_sign_bang_dash_state);
+					return;
+				}
+			}
+
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.48 Comment less-than sign bang dash state */
 		void on_comment_less_than_sign_bang_dash_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (cp == U'-')
+				{
+					change_state(comment_less_than_sign_bang_dash_dash_state);
+					return;
+				}
+			}
+
+			reconsume(comment_end_dash_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.49 Comment less-than sign bang dash dash state */
 		void on_comment_less_than_sign_bang_dash_dash_state()
 		{
+			if (eof())
+			{
+				reconsume(comment_end_state);
+				return;
+			}
+
+			char32_t cp = consume();
+
+			if (cp == U'>')
+			{
+				reconsume(comment_end_state);
+				return;
+			}
+
+			report_error(error::nested_comment);
+			reconsume(comment_end_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.50 Comment end dash state */
 		void on_comment_end_dash_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_comment);
+				emit_token(current_comment_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			if (cp == U'-')
+			{
+				change_state(comment_end_state);
+				return;
+			}
+
+			current_comment_token().m_data.push_back(U'-');
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.51 Comment end state */
 		void on_comment_end_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_comment);
+				emit_token(current_comment_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'>':
+				change_state(data_state);
+				emit_token(current_comment_token());
+				return;
+			case U'!':
+				change_state(comment_end_bang_state);
+				return;
+			case U'-':
+				current_comment_token().m_data.push_back(U'-');
+				return;
+			}
+
+			current_comment_token().m_data.push_back(U'-');
+			current_comment_token().m_data.push_back(U'-');
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.52 Comment end bang state */
 		void on_comment_end_bang_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_comment);
+				emit_token(current_comment_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'-':
+				current_comment_token().m_data.push_back(U'-');
+				current_comment_token().m_data.push_back(U'-');
+				current_comment_token().m_data.push_back(U'!');
+				change_state(comment_end_dash_state);
+				return;
+			case U'>':
+				report_error(error::incorrectly_closed_comment);
+				change_state(data_state);
+				emit_token(current_comment_token());
+				return;
+			}
+
+			current_comment_token().m_data.push_back(U'-');
+			current_comment_token().m_data.push_back(U'-');
+			current_comment_token().m_data.push_back(U'!');
+			reconsume(comment_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.53 DOCTYPE state */
 		void on_DOCTYPE_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				DOCTYPE_token& d = create_DOCTYPE_token();
+				d.m_force_quirks_flag = true;
+				emit_token(d);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(before_DOCTYPE_name_state);
+				return;
+			case U'>':
+				reconsume(before_DOCTYPE_name_state);
+				return;
+			}
+
+			report_error(error::missing_whitespace_before_doctype_name);
+			reconsume(before_DOCTYPE_name_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.54 Before DOCTYPE name state */
 		void on_before_DOCTYPE_name_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				DOCTYPE_token& d = create_DOCTYPE_token();
+				d.m_force_quirks_flag = true;
+				emit_token(d);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				create_DOCTYPE_token();
+				current_DOCTYPE_token().m_name = U'\xFFFD';
+				change_state(DOCTYPE_name_state);
+				return;
+			case U'>':
+				report_error(error::missing_doctype_name);
+				create_DOCTYPE_token();
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			if (is_ascii_upper_alpha(cp))
+			{
+				create_DOCTYPE_token();
+				current_DOCTYPE_token().m_name = cp + 0x20;
+				change_state(DOCTYPE_name_state);
+				return;
+			}
+
+			DOCTYPE_token& d = create_DOCTYPE_token();
+			d.m_name = cp;
+			change_state(DOCTYPE_name_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.55 DOCTYPE name state */
 		void on_DOCTYPE_name_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(after_DOCTYPE_name_state);
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_DOCTYPE_token().m_name.push_back(U'\xFFFD');
+				return;
+			}
+
+			if (is_ascii_upper_alpha(cp))
+			{
+				current_DOCTYPE_token().m_name.push_back(cp + 0x20);
+				return;
+			}
+
+			current_DOCTYPE_token().m_name.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.56 After DOCTYPE name state */
 		void on_after_DOCTYPE_name_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			match_result r = match(U"public", true);
+			if (r != match_result::failed)
+			{
+				if (r == match_result::succeed)
+				{
+					consume(std::size(U"PUBLIC") - 1);
+					change_state(after_DOCTYPE_public_keyword_state);
+					return;
+				}
+				else return; // partial
+			}
+
+			r = match(U"system", true);
+			if (r != match_result::failed)
+			{
+				if (r == match_result::succeed)
+				{
+					consume(std::size(U"SYSTEM") - 1);
+					change_state(after_DOCTYPE_system_keyword_state);
+					return;
+				}
+				else return; // partial
+			}
+
+			report_error(error::invalid_character_sequence_after_doctype_name);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
+
+			flush_code_point();
 		}
 
-		/*!  */
+		/*! 12.2.5.57 After DOCTYPE public keyword state */
 		void on_after_DOCTYPE_public_keyword_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(before_DOCTYPE_public_identifier_state);
+				return;
+			case U'"':
+				report_error(error::missing_whitespace_after_doctype_public_keyword);
+				current_DOCTYPE_token().m_public_identifier.clear();
+				change_state(DOCTYPE_public_identifier_double_quoted_state);
+				return;
+			case U'\'':
+				report_error(error::missing_whitespace_after_doctype_public_keyword);
+				current_DOCTYPE_token().m_public_identifier.clear();
+				change_state(DOCTYPE_public_identifier_single_quoted_state);
+				return;
+			case U'>':
+				report_error(error::missing_doctype_public_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			report_error(error::missing_quote_before_doctype_public_identifier);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.58 Before DOCTYPE public identifier state */
 		void on_before_DOCTYPE_public_identifier_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'"':
+				current_DOCTYPE_token().m_public_identifier.clear();
+				change_state(DOCTYPE_public_identifier_double_quoted_state);
+				return;
+			case U'\'':
+				current_DOCTYPE_token().m_public_identifier.clear();
+				change_state(DOCTYPE_public_identifier_single_quoted_state);
+				return;
+			case U'>':
+				report_error(error::missing_doctype_public_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			report_error(error::missing_quote_before_doctype_public_identifier);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.59 DOCTYPE public identifier (double-quoted) state */
 		void on_DOCTYPE_public_identifier_double_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'"':
+				change_state(after_DOCTYPE_public_identifier_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_DOCTYPE_token().m_public_identifier.push_back(U'\xFFFD');
+				return;
+			case U'>':
+				report_error(error::abrupt_doctype_public_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			current_DOCTYPE_token().m_public_identifier.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.60 DOCTYPE public identifier (single-quoted) state */
 		void on_DOCTYPE_public_identifier_single_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\'':
+				change_state(after_DOCTYPE_public_identifier_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_DOCTYPE_token().m_public_identifier.push_back(U'\xFFFD');
+				return;
+			case U'>':
+				report_error(error::abrupt_doctype_public_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			current_DOCTYPE_token().m_public_identifier.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.61 After DOCTYPE public identifier state */
 		void on_after_DOCTYPE_public_identifier_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(between_DOCTYPE_public_and_system_identifiers_state);
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			case U'"':
+				report_error(error::missing_whitespace_between_doctype_public_and_system_identifiers);
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_double_quoted_state);
+				return;
+			case U'\'':
+				report_error(error::missing_whitespace_between_doctype_public_and_system_identifiers);
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_single_quoted_state);
+				return;
+			}
+
+			report_error(error::missing_quote_before_doctype_system_identifier);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.62 Between DOCTYPE public and system identifiers state */
 		void on_between_DOCTYPE_public_and_system_identifiers_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			case U'"':
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_double_quoted_state);
+				return;
+			case U'\'':
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_single_quoted_state);
+				return;
+			}
+
+			report_error(error::missing_quote_before_doctype_system_identifier);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.63 After DOCTYPE system keyword state */
 		void on_after_DOCTYPE_system_keyword_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				change_state(before_DOCTYPE_system_identifier_state);
+				return;
+			case U'"':
+				report_error(error::missing_whitespace_after_doctype_system_keyword);
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_double_quoted_state);
+				return;
+			case U'\'':
+				report_error(error::missing_whitespace_after_doctype_system_keyword);
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_single_quoted_state);
+				return;
+			case U'>':
+				report_error(error::missing_doctype_system_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			report_error(error::missing_quote_before_doctype_system_identifier);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.64 Before DOCTYPE system identifier state */
 		void on_before_DOCTYPE_system_identifier_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'"':
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_double_quoted_state);
+				return;
+			case U'\'':
+				current_DOCTYPE_token().m_system_identifier.clear();
+				change_state(DOCTYPE_system_identifier_single_quoted_state);
+				return;
+			case U'>':
+				report_error(error::missing_doctype_system_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			report_error(error::missing_quote_before_doctype_system_identifier);
+			current_DOCTYPE_token().m_force_quirks_flag = true;
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.65 DOCTYPE system identifier (double-quoted) state */
 		void on_DOCTYPE_system_identifier_double_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'"':
+				change_state(after_DOCTYPE_system_identifier_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_DOCTYPE_token().m_system_identifier.push_back(U'\xFFFD');
+				return;
+			case U'>':
+				report_error(error::abrupt_doctype_system_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			current_DOCTYPE_token().m_system_identifier.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.66 DOCTYPE system identifier (single-quoted) state */
 		void on_DOCTYPE_system_identifier_single_quoted_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\'':
+				change_state(after_DOCTYPE_system_identifier_state);
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				current_DOCTYPE_token().m_system_identifier.push_back(U'\xFFFD');
+				return;
+			case U'>':
+				report_error(error::abrupt_doctype_system_identifier);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			current_DOCTYPE_token().m_system_identifier.push_back(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.67 After DOCTYPE system identifier state */
 		void on_after_DOCTYPE_system_identifier_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_doctype);
+				current_DOCTYPE_token().m_force_quirks_flag = true;
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'\x9':  // TAB
+			case U'\xA':  // LF
+			case U'\xC':  // FF
+			case U'\x20': // SPACE
+				return;
+			case U'>':
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			}
+
+			report_error(error::unexpected_character_after_doctype_system_identifier);
+			reconsume(bogus_DOCTYPE_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.68 Bogus DOCTYPE state */
 		void on_bogus_DOCTYPE_state()
 		{
+			if (eof())
+			{
+				emit_token(current_DOCTYPE_token());
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+
+			switch (cp)
+			{
+			case U'>':
+				change_state(data_state);
+				emit_token(current_DOCTYPE_token());
+				return;
+			case U'\x0':
+				report_error(error::unexpected_null_character);
+				return;
+			}
 		}
 
-		/*!  */
+		/*! 12.2.5.69 CDATA section state */
 		void on_CDATA_section_state()
 		{
+			if (eof())
+			{
+				report_error(error::eof_in_cdata);
+				emit_token(end_of_file_token());
+				return;
+			}
+
+			char32_t cp = consume();
+			if (cp == U']')
+			{
+				change_state(CDATA_section_bracket_state);
+				return;
+			}
+
+			emit_token(cp);
 		}
 
-		/*!  */
+		/*! 12.2.5.70 CDATA section bracket state */
 		void on_CDATA_section_bracket_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (cp == U']')
+				{
+					change_state(CDATA_section_end_state);
+					return;
+				}
+			}
+
+			emit_token(U']');
+			reconsume(CDATA_section_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.71 CDATA section end state */
 		void on_CDATA_section_end_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				switch (cp)
+				{
+				case U']':
+					emit_token(U']');
+					return;
+				case U'>':
+					change_state(data_state);
+					return;
+				}
+			}
+
+			emit_token(U']');
+			emit_token(U']');
+			reconsume(CDATA_section_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.72 Character reference state */
 		void on_character_reference_state()
 		{
+			m_temporary_buffer.clear();
+			m_temporary_buffer.push_back(U'&');
+
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (is_ascii_alphanumeric(cp))
+				{
+					reconsume(named_character_reference_state);
+					return;
+				}
+
+				if (cp == U'#')
+				{
+					m_temporary_buffer.push_back(cp);
+					change_state(numeric_character_reference_state);
+					return;
+				}
+			}
+
+			flush_code_points_consumed_as_character_reference();
+			reconsume(return_state());
 		}
 
-		/*!  */
+		/*! 12.2.5.73 Named character reference state */
 		void on_named_character_reference_state()
 		{
+			std::uint32_t idx, len;
+			auto r = match_named_character_reference(idx, len);
+			
+			if (r == match_result::partial) return; // partial
+
+			if (r == match_result::succeed) // matched
+			{
+				char32_t tail = *std::next(begin(), len - 1);
+				char32_t cp = 0;
+				consume(len);
+				if(!eof()) cp = next_input_character();
+				if (!(consumed_as_part_of_attribute() && tail != U';' && (cp == U'=' || is_ascii_alphanumeric(cp))))
+				{
+					if (tail != U';') report_error(error::missing_semicolon_after_character_reference);
+					
+					m_temporary_buffer.clear();
+					std::array<char32_t, 2> a = named_character_reference(idx);
+					m_temporary_buffer.push_back(a[0]);
+					if(a[1] != 0) m_temporary_buffer.push_back(a[1]);
+				}
+
+				flush_code_points_consumed_as_character_reference();
+				change_state(return_state());
+
+				flush_code_point();
+				return;
+			}
+
+			flush_code_points_consumed_as_character_reference();
+			change_state(ambiguous_ampersand_state);
+
+			flush_code_point();
 		}
 
-		/*!  */
+		/*! 12.2.5.74 Ambiguous ampersand state */
 		void on_ambiguous_ampersand_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (is_ascii_alphanumeric(cp))
+				{
+					if (consumed_as_part_of_attribute()) current_attribute().m_value.push_back(cp);
+					else emit_token(cp);
+					return;
+				}
+
+				if (cp == U';')
+				{
+					report_error(error::unknown_named_character_reference);
+					reconsume(return_state());
+					return;
+				}
+			}
+
+			reconsume(return_state());
 		}
 
-		/*!  */
+		/*! 12.2.5.75 Numeric character reference state */
 		void on_numeric_character_reference_state()
 		{
+			m_character_reference_code = 0;
+
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				switch (cp)
+				{
+				case U'x':
+				case U'X':
+					m_temporary_buffer.push_back(cp);
+					change_state(hexadecimal_character_reference_start_state);
+					return;
+				}
+			}
+
+			reconsume(decimal_character_reference_start_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.76 Hexadecimal character reference start state */
 		void on_hexadecimal_character_reference_start_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (is_ascii_hex_digit(cp))
+				{
+					reconsume(hexadecimal_character_reference_state);
+					return;
+				}
+			}
+
+			report_error(error::absence_of_digits_in_numeric_character_reference);
+			flush_code_points_consumed_as_character_reference();
+			reconsume(return_state());
 		}
 
-		/*!  */
+		/*! 12.2.5.77 Decimal character reference start state */
 		void on_decimal_character_reference_start_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (is_ascii_digit(cp))
+				{
+					reconsume(decimal_character_reference_state);
+					return;
+				}
+			}
+
+			report_error(error::absence_of_digits_in_numeric_character_reference);
+			flush_code_points_consumed_as_character_reference();
+			reconsume(return_state());
 		}
 
-		/*!  */
+		/*! 12.2.5.78 Hexadecimal character reference state */
 		void on_hexadecimal_character_reference_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (is_ascii_hex_digit(cp))
+				{
+					char32_t c = cp;
+					
+					if (is_ascii_digit(cp)) c -= 0x30;
+					else if (is_ascii_upper_hex_digit(cp)) c -= 0x37;
+					else c -= 0x57;
+
+					m_character_reference_code = (m_character_reference_code * 16) + c;
+
+					return;
+				}
+
+				if (cp == U';')
+				{
+					change_state(numeric_character_reference_end_state);
+					return;
+				}
+			}
+
+			report_error(error::missing_semicolon_after_character_reference);
+			reconsume(numeric_character_reference_end_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.79 Decimal character reference state */
 		void on_decimal_character_reference_state()
 		{
+			if (!eof())
+			{
+				char32_t cp = consume();
+
+				if (is_ascii_digit(cp))
+				{
+					m_character_reference_code = (m_character_reference_code * 10) + (cp - 0x30);
+					return;
+				}
+
+				if (cp == U';')
+				{
+					change_state(numeric_character_reference_end_state);
+					return;
+				}
+			}
+
+			report_error(error::missing_semicolon_after_character_reference);
+			reconsume(numeric_character_reference_end_state);
 		}
 
-		/*!  */
+		/*! 12.2.5.80 Numeric character reference end state */
 		void on_numeric_character_reference_end_state()
 		{
+			char32_t c = m_character_reference_code;
+
+			if (c == 0x0)
+			{
+				report_error(error::null_character_reference);
+				m_character_reference_code = U'\xFFFD';
+			}
+
+			if(0x10FFFF < c)
+			{
+				report_error(error::character_reference_outside_unicode_range);
+				m_character_reference_code = U'\xFFFD';
+			}
+
+			if (is_surrogate(c))
+			{
+				report_error(error::surrogate_character_reference);
+				m_character_reference_code = U'\xFFFD';
+			}
+
+			if (is_noncharacter(c))
+			{
+				report_error(error::noncharacter_character_reference);
+			}
+
+			if (c == 0xD || (is_control(c) && !is_ascii_white_space(c)))
+			{
+				report_error(error::control_character_reference);
+			}
+
+			auto it = character_reference_code_tbl.find(c);
+			if (it != character_reference_code_tbl.end()) m_character_reference_code = it->second;
+			
+			m_temporary_buffer.assign(1, m_character_reference_code);
+			flush_code_points_consumed_as_character_reference();
+			change_state(return_state());
 		}
 
 		// 状態番号 -----------------------------------------------------------

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>木構築ポリシー</title>
+    <link type="text/css" rel="stylesheet" href="file:///C:/Users/Kouichi/source/repos/wordring_cpp/docs/default.css">
+  </head>
+  <body> <a href="../index.html"><img src="../../up.svg" alt=""></a> <br>
+    <h1>木構築ポリシー</h1>
+    <p>HTML5規格はDOM木を想定しているが、実装はSTLと互換性を持つ木を想定する。したがって、要素から親や子を取り出すことはできず、移動にイテレー
+      タを使う。一方で、DOMに対応する必要もある。</p>
+    <p>そこで、パーサから要素へのアクセスはポリシーを通して行う。プロキシではなくポリシーとしたのは、型についての情報も持つため。</p>
+    <h2><span style="color: #505050;">ポリシーに必要な型</span></h2>
+    <h3>node_pointer</h3>
+    <p>木構築用スタック（stack of open elements）に積まれるポインタ様式の値。実装は主にイテレータを想定する。</p>
+  </body>
+</html>

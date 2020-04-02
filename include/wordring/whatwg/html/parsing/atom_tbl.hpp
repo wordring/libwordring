@@ -12,15 +12,16 @@ namespace wordring::whatwg::html::parsing
 {
 	extern wordring::basic_atom_set<std::u32string> const atom_tbl;
 
-	extern std::unordered_map<std::u32string, std::array<char32_t, 2>> const named_character_reference_tbl;
+	extern wordring::trie<char32_t> const named_character_reference_idx_tbl;
+	extern std::array<std::array<char32_t, 2>, 2231> const named_character_reference_map_tbl;
 
 	extern std::unordered_map<char32_t, char32_t> const character_reference_code_tbl;
 
-	extern std::unordered_map<uint32_t, std::u32string> const adjust_svg_attribute_tbl;
+	extern std::unordered_map<std::uint32_t, std::u32string> const adjust_svg_attribute_tbl;
 
-	extern std::unordered_map<uint32_t, std::array<std::u32string, 2>> const adjust_foreign_attribute_tbl;
+	extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const adjust_foreign_attribute_tbl;
 
 	extern wordring::trie<char32_t> const quirks_mode_tbl;
 
-	extern std::unordered_map<uint32_t, std::u32string> const svg_tag_name_tbl;
+	extern std::unordered_map<std::uint32_t, std::u32string> const svg_tag_name_tbl;
 }

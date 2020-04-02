@@ -69,7 +69,7 @@
       <li>&nbsp;"before html" insertion mode</li>
       <li>&nbsp;"before head" insertion mode</li>
       <ul>
-        <li>開始タグトークン「head」を作成する</li>
+        <li>開始タグトークン「head」を<b><span style="color: #990000;">作成する</span></b></li>
       </ul>
       <li>&nbsp;"in head" insertion mode</li>
       <ul>
@@ -80,7 +80,7 @@
       <li>&nbsp;"in head noscript" insertion mode</li>
       <li>&nbsp;"after head" insertion mode</li>
       <ul>
-        <li>開始タグトークン「body」を作成する</li>
+        <li>開始タグトークン「body」を<b><span style="color: #990000;">作成する</span></b></li>
       </ul>
       <li>&nbsp;"in body" insertion mode</li>
       <ul>
@@ -88,11 +88,12 @@
           elements」内の二個目の要素とは、「html」「body」とPUSHされる前提があるからと考えられる。</li>
         <li>DOM木から要素を除去する</li>
         <li>次のトークンを参照し、LFだった場合、そのLFを無視する動作が必要。（この一カ所のみ）</li>
-        <li>開始タグトークン「br」を作成して現トークンとする</li>
+        <li>開始タグトークン「br」を<b style="color: #990000;">作成して</b>現トークンとする</li>
         <ul>
           <li>終了タグ「/br」を開始タグ「br」として処理したいだけ？</li>
         </ul>
-        <li>開始タグ「image」のタグ名を「img」に変えて再処理</li>
+        <li>開始タグ「image」のタグ名を「img」に<b><span style="color: #990000;">変えて</span></b>再
+          処理</li>
       </ul>
       <li>&nbsp;"text" insertion mode</li>
       <ul>
@@ -101,8 +102,8 @@
       <li>&nbsp;"in table" insertion mode</li>
       <ul>
         <li>&nbsp;変数pending table character tokens</li>
-        <li>開始タグトークン「colgroup」を作成する</li>
-        <li>開始タグトークン「tbody」を作成する</li>
+        <li>開始タグトークン「colgroup」を<b><span style="color: #990000;">作成する</span></b></li>
+        <li>開始タグトークン「tbody」を<b><span style="color: #990000;">作成する</span></b></li>
       </ul>
       <li>&nbsp;"in table text" insertion mode</li>
       <ul>

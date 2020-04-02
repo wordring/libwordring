@@ -71,6 +71,7 @@ namespace wordring::whatwg::html::parsing
 		irrelevant,
 	};
 
+	/*
 	// 12.2.5 Tokenization ----------------------------------------------------
 
 	enum tokenizer_state : std::uint32_t
@@ -185,5 +186,5 @@ namespace wordring::whatwg::html::parsing
 		after_after_body_insertion_mode,
 		after_after_frameset_insertion_mode,
 	};
-
+	*/
 }
