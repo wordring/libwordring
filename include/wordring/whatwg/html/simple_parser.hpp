@@ -75,9 +75,24 @@ namespace wordring::whatwg::html::simple
 
 		// ノード作成 ----------------------------------------------------------
 
+		/* @brief 要素を作成する
+
+		- https://dom.spec.whatwg.org/#concept-create-element に対応する要素作成関数
+			- https://triple-underscore.github.io/DOM4-ja.html#concept-create-element
+		.
+
+		*/
 		element_node_type create_element(string_type local, string_type ns, string_type prefix)
 		{
+			element_node_type el;
 
+			
+			return el;
+		}
+
+		void insert_comment(node_pointer pos, comment_token& comment)
+		{
+			c.insert(pos, comment);
 		}
 
 		/*! @brief 与えられたノードがHTML名前空間に属するか調べる
@@ -89,15 +104,10 @@ namespace wordring::whatwg::html::simple
 			if (std::holds_alternative<element_node_type>(p))
 			{
 				element_node_type const& elm = std::get<element_node_type>(p);
-				return elm == parsing::namespaces::HTML;
+				return elm.namespace_uri() == parsing::namespaces::HTML;
 			}
 
 			return false;
-		}
-
-		void insert_comment(node_pointer pos, comment_token& comment)
-		{
-			c.insert(pos, comment);
 		}
 
 
