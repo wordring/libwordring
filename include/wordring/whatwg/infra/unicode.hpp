@@ -188,20 +188,36 @@ namespace wordring::whatwg
 
 	// ------------------------------------------------------------------------
 
-	template <typename Result, typename String>
-	inline Result encoding_cast(String input)
+	template <typename Result, typename String, std::enable_if_t<std::negation_v<std::is_same<Result, String>>, std::nullptr_t> = nullptr>
+	inline Result encoding_cast(String const& in)
 	{
-		std::u32string in{};
-		uint32_t ch{};
-		auto it = input.cbegin();
-		while (it != input.cend())
-		{
-			it = to_code_point(it, input.cend(), ch);
-			in.push_back(ch);
-		}
+		Result s;
+		encoding_cast(in, std::back_inserter(s));
+		return s;
+	}
 
-		Result result{};
-		for (uint32_t cp : in) to_string(cp, std::back_inserter(result));
-		return result;
+	template <typename Result, typename String, std::enable_if_t<std::is_same_v<Result, String>, std::nullptr_t> = nullptr>
+	inline Result encoding_cast(String in)
+	{
+		return std::forward<String>(in);
+	}
+
+	template <typename String, typename Container>
+	inline void encoding_cast(String const& in, std::back_insert_iterator<Container> out)
+	{
+		auto it = std::begin(in);
+		while (it != std::end(in))
+		{
+			// 文字列リテラルの場合
+			if constexpr (std::is_array_v<std::remove_cv_t<std::remove_reference_t<String>>>) if (*it == 0) break;
+
+			uint32_t cp;
+
+			if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<String>>, std::u32string>) cp = *it++;
+			else it = to_code_point(it, std::end(in), cp);
+
+			if constexpr (std::is_same_v<Container, std::u32string>) *out++ = cp;
+			else to_string(cp, out);
+		}
 	}
 }

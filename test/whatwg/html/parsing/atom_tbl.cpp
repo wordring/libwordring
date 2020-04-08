@@ -4,12 +4,112 @@
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 
+#include <wordring/whatwg/html/parsing/atom_defs.hpp>
+
 #include <algorithm>
 #include <iterator>
 
-BOOST_AUTO_TEST_SUITE(whatwg__html__parsing__atom_tbl__test)
+BOOST_AUTO_TEST_SUITE(whatwg_html_parsing_atom_tbl_test)
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__1)
+/*
+extern wordring::trie<char32_t> const tag_atom_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_tag_atom_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(tag_atom_tbl.find(std::u32string(U"a")) != tag_atom_tbl.end());
+	BOOST_CHECK(tag_atom_tbl.at(std::u32string(U"a")) == tag_name::A);
+}
+
+BOOST_AUTO_TEST_CASE(atom_tbl_tag_atom_tbl_2)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(tag_atom_tbl.find(std::u32string(U"xor")) != tag_atom_tbl.end());
+	BOOST_CHECK(tag_atom_tbl.at(std::u32string(U"xor")) == tag_name::Xor);
+}
+
+BOOST_AUTO_TEST_CASE(atom_tbl_tag_atom_tbl_3)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(tag_atom_tbl.find(std::u32string(U"altGlyph")) != tag_atom_tbl.end());
+	BOOST_CHECK(tag_atom_tbl.at(std::u32string(U"altGlyph")) == tag_name::AltGlyph);
+}
+
+BOOST_AUTO_TEST_CASE(atom_tbl_tag_atom_tbl_4)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(tag_atom_tbl.find(std::u32string(U"altglyph")) != tag_atom_tbl.end());
+	BOOST_CHECK(tag_atom_tbl.at(std::u32string(U"altglyph")) == tag_name::Altglyph);
+}
+
+/*
+extern wordring::trie<char32_t> const attribute_atom_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_attribute_atom_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(attribute_atom_tbl.find(std::u32string(U"abbr")) != attribute_atom_tbl.end());
+	BOOST_CHECK(attribute_atom_tbl.at(std::u32string(U"abbr")) == attribute_name::Abbr);
+}
+
+BOOST_AUTO_TEST_CASE(atom_tbl_attribute_atom_tbl_2)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(attribute_atom_tbl.find(std::u32string(U"zoomAndPan")) != attribute_atom_tbl.end());
+	BOOST_CHECK(attribute_atom_tbl.at(std::u32string(U"zoomAndPan")) == attribute_name::ZoomAndPan);
+}
+
+BOOST_AUTO_TEST_CASE(atom_tbl_attribute_atom_tbl_3)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(attribute_atom_tbl.find(std::u32string(U"zoomandpan")) != attribute_atom_tbl.end());
+	BOOST_CHECK(attribute_atom_tbl.at(std::u32string(U"zoomandpan")) == attribute_name::Zoomandpan);
+}
+
+/*
+extern std::array<std::u32string, 406> const tag_name_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_tag_name_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(tag_name_tbl[1] == U"a");
+	BOOST_CHECK(tag_name_tbl[405] == U"xor");
+}
+
+/*
+extern std::array<std::u32string, 634> const attribute_name_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_attribute_name_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(attribute_name_tbl[1] == U"abbr");
+	BOOST_CHECK(attribute_name_tbl[633] == U"zoomandpan");
+}
+
+/*
+extern std::array<std::u32string, 7> const ns_uri_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_ns_uri_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(ns_uri_tbl[1] == U"http://www.w3.org/1999/xhtml");
+	BOOST_CHECK(ns_uri_tbl[6] == U"http://www.w3.org/2000/xmlns/");
+}
+
+/*
+extern wordring::trie<char32_t> const named_character_reference_idx_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -19,7 +119,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__1)
 	BOOST_CHECK(pair.first != named_character_reference_idx_tbl.begin());
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__2)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_2)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -30,7 +130,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__2)
 	BOOST_CHECK(partial_match);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__3)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_3)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -41,7 +141,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__3)
 	BOOST_CHECK(match);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__4)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_4)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -52,7 +152,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__4)
 	BOOST_CHECK(full_match == false);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__5)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_5)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -63,7 +163,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__5)
 	BOOST_CHECK(full_match);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__6)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_6)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -76,7 +176,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__6)
 	BOOST_CHECK(match_failed);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__7)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_7)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -89,7 +189,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__7)
 	BOOST_CHECK(match_failed);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__8)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_8)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -102,7 +202,7 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__8)
 	BOOST_CHECK(!match_failed);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__9)
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_idx_tbl_9)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -115,7 +215,10 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_idx_tbl__9)
 	BOOST_CHECK(!match_failed);
 }
 
-BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_map_tbl__1)
+/*
+extern std::array<std::array<char32_t, 2>, 2231> const named_character_reference_map_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_named_character_reference_map_tbl_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -126,6 +229,63 @@ BOOST_AUTO_TEST_CASE(atom_tbl__named_character_reference_map_tbl__1)
 
 	BOOST_CHECK(a[0] == 0x000C1);
 	BOOST_CHECK(a[1] == 0);
+}
+
+/*
+extern std::unordered_map<char32_t, char32_t> const character_reference_code_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_character_reference_code_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(character_reference_code_tbl.at(U'\x80') == U'\x20AC');
+	BOOST_CHECK(character_reference_code_tbl.at(U'\x9F') == U'\x178');
+}
+
+/*
+extern std::unordered_map<std::uint32_t, std::u32string> const svg_attributes_conversion_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_svg_attributes_conversion_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(svg_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Attributename)) == U"attributeName");
+	BOOST_CHECK(svg_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Zoomandpan)) == U"zoomAndPan");
+}
+
+/*
+extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const foreign_attributes_conversion_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_foreign_attributes_conversion_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xlink_actuate))[0] == U"xlink");
+	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xlink_actuate))[1] == U"actuate");
+	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xmlns_xlink))[0] == U"xmlns");
+	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xmlns_xlink))[1] == U"xlink");
+}
+
+/*
+extern wordring::trie<char32_t> const quirks_mode_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_quirks_mode_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(quirks_mode_tbl.find(U"+//Silmaril//dtd html Pro v0r11 19970101//") != quirks_mode_tbl.end());
+	BOOST_CHECK(quirks_mode_tbl.find(U"-//WebTechs//DTD Mozilla HTML//") != quirks_mode_tbl.end());
+}
+
+/*
+extern std::unordered_map<std::uint32_t, std::u32string> const svg_elements_conversion_tbl;
+*/
+BOOST_AUTO_TEST_CASE(atom_tbl_svg_elements_conversion_tbl_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	BOOST_CHECK(svg_elements_conversion_tbl.at(static_cast<std::uint32_t>(tag_name::Altglyph)) == U"altGlyph");
+	BOOST_CHECK(svg_elements_conversion_tbl.at(static_cast<std::uint32_t>(tag_name::Textpath)) == U"textPath");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

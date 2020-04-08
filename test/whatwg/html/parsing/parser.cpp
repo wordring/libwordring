@@ -15,13 +15,19 @@ namespace
 {
 	using node_type = wordring::whatwg::html::simple::basic_node<std::u32string>;
 	using tree      = wordring::tree<node_type>;
-	using policy    = wordring::whatwg::html::simple::policy<std::u32string, tree>;
+	using policy    = wordring::whatwg::html::simple::tree_construction_policy<std::u32string, tree>;
 
 	class test_parser : public wordring::whatwg::html::parsing::parser<test_parser, policy>
 	{
 
 		using base_type = wordring::whatwg::html::parsing::parser<test_parser, policy>;
 		//using base_type::eof;
+	public:
+		bool in_html_namespace(node_pointer it) const
+		{
+			assert(false);
+			return false;
+		}
 	};
 }
 

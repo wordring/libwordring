@@ -7,12 +7,15 @@
 
 BOOST_AUTO_TEST_SUITE(whatwg_infra__unicode_test)
 
-#pragma warning(push)
-#pragma warning(disable:4566)
-std::u8string const utf_8{ u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-std::u16string const utf_16{ u"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-std::u32string const utf_32{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-#pragma warning(pop)
+//#pragma warning(push)
+//#pragma warning(disable:4566)
+namespace
+{
+	std::u8string const utf_8{ u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
+	std::u16string const utf_16{ u"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
+	std::u32string const utf_32{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
+}
+//#pragma warning(pop)
 
 // utf-8
 BOOST_AUTO_TEST_CASE(to_code_point__1)
@@ -160,6 +163,60 @@ BOOST_AUTO_TEST_CASE(encoding_cast__9)
 {
 	using namespace wordring::whatwg;
 	BOOST_CHECK(encoding_cast<std::u32string>(utf_32) == utf_32);
+}
+
+// UTF-8 -> UTF-8
+BOOST_AUTO_TEST_CASE(encoding_cast__10)
+{
+	using namespace wordring::whatwg;
+	BOOST_CHECK(encoding_cast<std::u8string>(u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠") == utf_8);
+}
+
+// UTF-8 -> UTF-16
+BOOST_AUTO_TEST_CASE(encoding_cast__11)
+{
+	using namespace wordring::whatwg;
+	BOOST_CHECK(encoding_cast<std::u16string>(u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠") == utf_16);
+}
+
+// UTF-8 -> UTF-32
+BOOST_AUTO_TEST_CASE(encoding_cast__12)
+{
+	using namespace wordring::whatwg;
+	BOOST_CHECK(encoding_cast<std::u32string>(u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠") == utf_32);
+}
+
+// UTF-8 -> UTF-8
+BOOST_AUTO_TEST_CASE(encoding_cast__13)
+{
+	using namespace wordring::whatwg;
+	
+	std::string s;
+	encoding_cast(u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠", std::back_inserter(s));
+
+	BOOST_CHECK(s == utf_8);
+}
+
+// UTF-8 -> UTF-16
+BOOST_AUTO_TEST_CASE(encoding_cast__14)
+{
+	using namespace wordring::whatwg;
+
+	std::u16string s;
+	encoding_cast(u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠", std::back_inserter(s));
+
+	BOOST_CHECK(s == utf_16);
+}
+
+// UTF-8 -> UTF-32
+BOOST_AUTO_TEST_CASE(encoding_cast__15)
+{
+	using namespace wordring::whatwg;
+
+	std::u32string s;
+	encoding_cast(u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠", std::back_inserter(s));
+
+	BOOST_CHECK(s == utf_32);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -1,6 +1,6 @@
-http://www.w3.org/1999/xhtml	HTML
-http://www.w3.org/1998/Math/MathML	MathML
-http://www.w3.org/2000/svg	SVG
-http://www.w3.org/1999/xlink	XLink
-http://www.w3.org/XML/1998/namespace	XML
-http://www.w3.org/2000/xmlns/	XMLNS
+HTML	http://www.w3.org/1999/xhtml
+MathML	http://www.w3.org/1998/Math/MathML
+SVG	http://www.w3.org/2000/svg
+XLink	http://www.w3.org/1999/xlink
+XML	http://www.w3.org/XML/1998/namespace
+XMLNS	http://www.w3.org/2000/xmlns/

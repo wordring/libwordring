@@ -127,5 +127,29 @@
     <ul>
       <li><b>SVGタグ名変換表</b></li>
     </ul>
+    <h3>12.2.4.2 The stack of open elements</h3>
+    <h4>in a specific scope</h4>
+    <h5>ターゲットとして指定されるもの</h5>
+    <ul>
+      <li>タグ名（タグ名、名前空間）</li>
+      <li>トークンのタグ名と一致するHTML要素（タグ名、HTML名前空間）</li>
+      <li>タグ名の集合</li>
+      <li>要素</li>
+    </ul>
+    <h3>12.2.4.3 The list of active formatting elements</h3>
+    <h4>整形要素のリストに挿入されるもの</h4>
+    <ul>
+      <li>要素とトークンのペア</li>
+      <li>マーカ</li>
+    </ul>
+    <h4><a href="https://html.spec.whatwg.org/multipage/parsing.html#push-onto-the-list-of-active-formatting-elements">&nbsp;push
+        onto the list of active formatting elements</a></h4>
+    <p>then remove the earliest <b style="color: #ffcc33;">such element</b>
+      from the list of active formatting elements.</p>
+    <p>「そのような要素」という部分から、リストの先頭を削除するのではなく、マーカーがある場合は、マーカー以降にある同一シグネチャの要素のうち最も古いも
+      の、あるいはマーカーが無い場合リスト全体内の同一シグネチャを持つ要素のうち最も古いものを削除すると考えられる。</p>
+    <p>つまり、マーカーが有ればマーカからマーカ、無ければリスト全体において、3個以上同一シグネチャの要素を面倒見ないということだと思われる。</p>
+    <ul>
+    </ul>
   </body>
 </html>

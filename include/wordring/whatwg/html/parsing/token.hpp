@@ -3,6 +3,8 @@
 // https://html.spec.whatwg.org/multipage/parsing.html
 // https://triple-underscore.github.io/HTML-parsing-ja.html
 
+#include <wordring/whatwg/html/parsing/html_atom.hpp>
+
 #include <cstdint>
 #include <string>
 #include <vector>
@@ -89,7 +91,7 @@ namespace wordring::whatwg::html::parsing
 		};
 
 		std::u32string m_tag_name;
-		std::uint32_t m_tag_name_id;
+		basic_html_atom<std::u32string, tag_name> m_tag_atom;
 
 		bool m_self_closing_flag;
 
@@ -98,7 +100,6 @@ namespace wordring::whatwg::html::parsing
 		void clear()
 		{
 			m_tag_name.clear();
-			m_tag_name_id = 0;
 			m_self_closing_flag = false;
 			m_attributes.clear();
 		}

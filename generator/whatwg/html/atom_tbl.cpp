@@ -1,6 +1,6 @@
 ﻿
-#include <wordring/string/atom.hpp>
 #include <wordring/trie/trie.hpp>
+#include <wordring/whatwg/infra/infra.hpp>
 #include <wordring/whatwg/infra/unicode.hpp>
 
 #include <boost/algorithm/string.hpp>
@@ -70,27 +70,42 @@ Container read(std::filesystem::path const& path)
 	return result;
 }
 
+std::string cpp_cast(std::u32string const& s)
+{
+	using namespace wordring::whatwg;
+
+	std::string ret = encoding_cast<std::string>(s);
+	for (auto& c : ret) if (!is_ascii_alphanumeric(c)) c = '_';
+	if (is_ascii_lower_alpha(ret[0])) ret[0] -= 0x20;
+
+	return ret;
+}
+
 int main()
 {
 	using namespace wordring;
+	using namespace wordring::whatwg;
 
-	// HTML タグ
-	auto elements = read(data_path / "elements.txt");
+	// ファイル読み込み --------------------------------------------------------
+
+	// HTML タグ名
+	auto html_elements = read(data_path / "html_elements.txt");
+	// SVGタグ名
+	auto svg_elements = read(data_path / "svg_elements.txt");
+	// MathML タグ名
+	auto mathml_elements = read(data_path / "mathml_elements.txt");
+
 	// HTML 属性
-	auto attributes = read(data_path / "attributes.txt");
+	auto html_attributes = read(data_path / "html_attributes.txt");
 	// HTML イベント
-	auto events = read(data_path / "events.txt");
-
-	// SVG 属性 [ token_attr, element_attr ]
-	auto svg_attributes = read<std::vector<std::array<std::u32string, 2>>>(data_path / "svg_attributes.txt");
+	auto html_events = read(data_path / "html_events.txt");
+	// SVG 属性
+	auto svg_attributes = read(data_path / "svg_attributes.txt");
 	// MathML属性名
 	auto mathml_attributes = read(data_path / "mathml_attributes.txt");
+
 	// 外来属性 [ attr, prefix, local_name ]
-	auto foreign_attributes = read<std::vector<std::array<std::u32string, 3>>>(data_path / "foreign_attributes.txt");
-	// 互換性モードテーブル
-	auto quirks_mode = read(data_path / "quirks_mode.txt");
-	// SVGタグ名
-	auto svg_elements = read<std::vector<std::array<std::u32string, 2>>>(data_path / "svg_elements.txt");
+	auto foreign_attributes = read<std::vector<std::array<std::u32string, 3>>>(data_path / "foreign_attributes_conversion.txt");
 
 	// 名前空間
 	auto namespaces = read<std::vector<std::array<std::u32string, 2>>>(data_path / "namespaces.txt");
@@ -100,24 +115,102 @@ int main()
 	// 文字参照コード変換表
 	auto character_reference_code = read<std::vector<std::array<std::u32string, 2>>>(data_path / "character_reference_code.txt");
 
-	// アトム集合を作成
-	basic_atom_set<std::u32string> atom_tbl;
+	// SVG属性変換表
+	auto svg_attributes_conversion_tbl = read<std::vector<std::array<std::u32string, 2>>>(data_path / "svg_attributes_conversion.txt");
+	// 外来属性変換表
+	auto foreign_attributes_conversion_tbl = read<std::vector<std::array<std::u32string, 3>>>(data_path / "foreign_attributes_conversion.txt");
+	// 互換性モードテーブル
+	auto quirks_mode_tbl = read(data_path / "quirks_mode.txt");
+	// SVGタグ名変換表
+	auto svg_elements_conversion_tbl = read<std::vector<std::array<std::u32string, 2>>>(data_path/ "svg_elements_conversion.txt");
+	// タグ名 -----------------------------------------------------------------
+
+	std::vector<std::u32string> tag_names;
 	{
-		std::vector<std::u32string> v = elements;
+		tag_names = html_elements;
+		for (auto const& s : svg_elements)
+		{
+			std::u32string lower;
+			to_ascii_lowercase(s.begin(), s.end(), std::back_inserter(lower));
+			tag_names.push_back(s);
+			tag_names.push_back(lower);
+		}
+		for (auto const& s : mathml_elements)
+		{
+			std::u32string lower;
+			to_ascii_lowercase(s.begin(), s.end(), std::back_inserter(lower));
+			tag_names.push_back(s);
+			tag_names.push_back(lower);
+		}
 
-		std::copy(attributes.begin(), attributes.end(), std::back_inserter(v));
-		std::copy(events.begin(), events.end(), std::back_inserter(v));
-		for (auto const& a : svg_attributes) v.push_back(a[0]);
-		std::copy(mathml_attributes.begin(), mathml_attributes.end(), std::back_inserter(v));
-		for (auto const& a : foreign_attributes) v.push_back(a[0]);
-		for (auto const& a : svg_elements) v.push_back(a[0]);
-		for (auto const& a : namespaces) v.push_back(a[0]);
+		for (auto const& a : svg_elements_conversion_tbl)
+		{
+			tag_names.push_back(a[0]);
+			tag_names.push_back(a[1]);
+		}
 
-		std::sort(v.begin(), v.end());
-		v.erase(std::unique(v.begin(), v.end()), v.end());
-
-		atom_tbl.assign(v.begin(), v.end());
+		std::sort(tag_names.begin(), tag_names.end());
+		tag_names.erase(std::unique(tag_names.begin(), tag_names.end()), tag_names.end());
 	}
+	// アトム集合
+	std::unordered_map<std::u32string, std::uint32_t> tag_atom_tbl;
+	for (std::uint32_t i = 0; i < tag_names.size(); ++i) tag_atom_tbl[tag_names[i]] = i + 1;
+
+	// 属性名 -----------------------------------------------------------------
+
+	std::vector<std::u32string> attribute_names;
+	{
+		attribute_names = html_attributes;
+		std::copy(html_events.begin(), html_events.end(), std::back_inserter(attribute_names));
+		for (auto const& s : svg_attributes)
+		{
+			if (s.empty()) continue;
+			std::u32string lower;
+			to_ascii_lowercase(s.begin(), s.end(), std::back_inserter(lower));
+			attribute_names.push_back(s);
+			attribute_names.push_back(lower);
+		}
+		for (auto const& s : mathml_attributes)
+		{
+			if (s.empty()) continue;
+			std::u32string lower;
+			to_ascii_lowercase(s.begin(), s.end(), std::back_inserter(lower));
+			attribute_names.push_back(s);
+			attribute_names.push_back(lower);
+		}
+		for (auto const& a : foreign_attributes)
+		{
+			std::u32string const& name       = a[0];
+			//std::u32string const& prefix     = a[1];
+			std::u32string const& local_name = a[2];
+
+			std::u32string lower;
+			to_ascii_lowercase(name.begin(), name.end(), std::back_inserter(lower));
+			if(!name.empty()) attribute_names.push_back(name);
+			if (!lower.empty()) attribute_names.push_back(lower);
+
+			lower.clear();
+			to_ascii_lowercase(local_name.begin(), local_name.end(), std::back_inserter(lower));
+			if (!local_name.empty()) attribute_names.push_back(local_name);
+			if (!lower.empty()) attribute_names.push_back(lower);
+		}
+		for (auto const& a : svg_attributes_conversion_tbl)
+		{
+			if (!a[0].empty()) attribute_names.push_back(a[0]);
+			if (!a[1].empty()) attribute_names.push_back(a[1]);
+		}
+		for (auto const& a : foreign_attributes_conversion_tbl)
+		{
+			if (!a[0].empty()) attribute_names.push_back(a[0]);
+			if (!a[1].empty()) attribute_names.push_back(a[1]);
+		}
+
+		std::sort(attribute_names.begin(), attribute_names.end());
+		attribute_names.erase(std::unique(attribute_names.begin(), attribute_names.end()), attribute_names.end());
+	}
+	// アトム集合
+	std::unordered_map<std::u32string, std::uint32_t> attribute_atom_tbl;
+	for (std::uint32_t i = 0; i < attribute_names.size(); ++i) attribute_atom_tbl[attribute_names[i]] = i + 1;
 
 	// 名前指定文字参照表索引を作成
 	wordring::trie<char32_t> named_character_reference_idx_tbl;
@@ -129,50 +222,6 @@ int main()
 			named_character_reference_idx_tbl.insert(a[0], i++);
 			named_character_reference_map_tbl.push_back({ a[1], a[2] });
 		}
-	}
-
-	// atom_tbl.hpp
-	{
-		std::ofstream hpp;
-		hpp.open(atom_hpp_path, std::ios::out);
-		assert(!hpp.fail());
-
-		hpp << "#pragma once" << std::endl;
-		hpp << "// generated by wordring_cpp/generator/whatwg/html/atom_tbl.cpp" << "" << std::endl;
-		hpp << std::endl;
-		hpp << "#include <wordring/string/atom.hpp>" << std::endl;
-		hpp << "#include <wordring/trie/trie.hpp>" << std::endl;
-		hpp << std::endl;
-		hpp << "#include <array>" << std::endl;
-		hpp << "#include <string>" << std::endl;
-		hpp << "#include <unordered_map>" << std::endl;
-		hpp << std::endl;
-		hpp << "namespace wordring::whatwg::html::parsing" << std::endl;
-		hpp << "{" << std::endl;
-
-		// アトム表
-		hpp << "\t" << "extern wordring::basic_atom_set<std::u32string> const atom_tbl;" << std::endl;
-		hpp << std::endl;
-		// 名前指定文字参照表
-		hpp << "\t" << "extern wordring::trie<char32_t> const named_character_reference_idx_tbl;" << std::endl;
-		hpp << "\t" << "extern std::array<std::array<char32_t, 2>, " << named_character_reference_map_tbl.size() << "> const named_character_reference_map_tbl;" << std::endl;
-		hpp << std::endl;
-		// 文字参照コード変換表
-		hpp << "\t" << "extern std::unordered_map<char32_t, char32_t> const character_reference_code_tbl;" << std::endl;
-		hpp << std::endl;
-		// SVG属性変換表
-		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::u32string> const adjust_svg_attribute_tbl;" << std::endl;
-		hpp << std::endl;
-		// 外来属性変換表
-		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const adjust_foreign_attribute_tbl;" << std::endl;
-		hpp << std::endl;
-		// 互換性モードテーブル
-		hpp << "\t" << "extern wordring::trie<char32_t> const quirks_mode_tbl;" << std::endl;
-		hpp << std::endl;
-		// SVGタグ名変換表
-		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::u32string> const svg_tag_name_tbl;" << std::endl;
-
-		hpp << "}" << std::endl;
 	}
 
 	// atom_defs.hpp
@@ -192,19 +241,94 @@ int main()
 		hpp << "{" << std::endl;
 
 		// 名前空間
-		hpp << "\t" << "enum class namespaces : std::uint32_t" << std::endl;
+		hpp << "\t" << "enum class ns_name : std::uint32_t" << std::endl;
 		hpp << "\t" << "{" << std::endl;
+		for (std::uint32_t i = 0; i < namespaces.size(); ++i)
+			hpp << "\t\t" << cpp_cast(namespaces[i][0]) << " = " << i + 1 << "," << std::endl;
+		hpp << "\t};" << std::endl;
+		hpp << std::endl;
 
-		for (auto a : namespaces)
-		{
-			std::u32string label = a[0];
-			auto atom = atom_tbl.at(label);
-			hpp << "\t\t" <<  encoding_cast<std::string>(a[1]) << " = " << static_cast<std::uint32_t>(atom) << "," << std::endl;
-		}
+		// タグ名
+		hpp << "\t" << "enum class tag_name : std::uint32_t" << std::endl;
+		hpp << "\t" << "{" << std::endl;
+		for (std::uint32_t i = 0; i < tag_names.size(); ++i)
+			hpp << "\t\t" << cpp_cast(tag_names[i]) << " = " << i + 1 << "," << std::endl;
+		hpp << "\t};" << std::endl;
+		hpp << std::endl;
 
-		// 
+		// 属性名
+		hpp << "\t" << "enum class attribute_name : std::uint32_t" << std::endl;
+		hpp << "\t" << "{" << std::endl;
+		for (std::uint32_t i = 0; i < attribute_names.size(); ++i)
+			hpp << "\t\t" << cpp_cast(attribute_names[i]) << " = " << i + 1 << "," << std::endl;
+		hpp << "\t};" << std::endl;
+		hpp << std::endl;
 
-		hpp << "\t" << "};" << std::endl;
+		hpp << "}" << std::endl;
+	}
+
+	// atom_tbl.hpp
+	{
+		std::ofstream hpp;
+		hpp.open(atom_hpp_path, std::ios::out);
+		assert(!hpp.fail());
+
+		hpp << "#pragma once" << std::endl;
+		hpp << "// generated by wordring_cpp/generator/whatwg/html/atom_tbl.cpp" << "" << std::endl;
+		hpp << std::endl;
+		hpp << "#include <wordring/whatwg/html/parsing/atom_defs.hpp>" << std::endl;
+		hpp << std::endl;
+		hpp << "#include <wordring/string/atom.hpp>" << std::endl;
+		hpp << "#include <wordring/trie/trie.hpp>" << std::endl;
+		hpp << std::endl;
+		hpp << "#include <array>" << std::endl;
+		hpp << "#include <string>" << std::endl;
+		hpp << "#include <unordered_map>" << std::endl;
+		hpp << "#include <unordered_set>" << std::endl;
+		hpp << std::endl;
+		hpp << "namespace wordring::whatwg::html::parsing" << std::endl;
+		hpp << "{" << std::endl;
+
+		// タグ・アトム表
+		hpp << "\t" << "extern std::unordered_map<std::u32string, tag_name> const tag_atom_tbl;" << std::endl;
+		hpp << std::endl;
+		// 属性アトム表
+		hpp << "\t" << "extern std::unordered_map<std::u32string, attribute_name> const attribute_atom_tbl;" << std::endl;
+		hpp << std::endl;
+		// 名前空間アトム表
+		hpp << "\t" << "extern std::unordered_map<std::u32string, ns_name> const ns_uri_atom_tbl;" << std::endl;
+		hpp << std::endl;
+
+		// タグ文字列表
+		hpp << "\t" << "extern std::array<std::u32string, " << tag_names.size() + 1 << "> const tag_name_tbl;" << std::endl;
+		hpp << std::endl;
+		// 属性文字列表
+		hpp << "\t" << "extern std::array<std::u32string, " << attribute_names.size() + 1 << "> const attribute_name_tbl;" << std::endl;
+		hpp << std::endl;
+		// 名前空間URI文字列表
+		hpp << "\t" << "extern std::array<std::u32string, " << namespaces.size() + 1 << "> const ns_uri_tbl;" << std::endl;
+		hpp << std::endl;
+
+		// 名前指定文字参照表
+		hpp << "\t" << "extern wordring::trie<char32_t> const named_character_reference_idx_tbl;" << std::endl;
+		hpp << "\t" << "extern std::array<std::array<char32_t, 2>, " << named_character_reference_map_tbl.size() << "> const named_character_reference_map_tbl;" << std::endl;
+		hpp << std::endl;
+		// 文字参照コード変換表
+		hpp << "\t" << "extern std::unordered_map<char32_t, char32_t> const character_reference_code_tbl;" << std::endl;
+		hpp << std::endl;
+
+		// SVG属性変換表
+		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::u32string> const svg_attributes_conversion_tbl;" << std::endl;
+		hpp << std::endl;
+		// 外来属性変換表
+		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const foreign_attributes_conversion_tbl;" << std::endl;
+		hpp << std::endl;
+		// 互換性モード表
+		hpp << "\t" << "extern std::unordered_set<std::u32string> const quirks_mode_tbl;" << std::endl;
+		hpp << std::endl;
+		// SVGタグ名変換表
+		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::u32string> const svg_elements_conversion_tbl;" << std::endl;
+
 		hpp << "}" << std::endl;
 	}
 
@@ -218,45 +342,97 @@ int main()
 		cpp << std::endl;
 		cpp << "#include <wordring/whatwg/html/parsing/atom_tbl.hpp>" << std::endl;
 		cpp << std::endl;
+		cpp << "using namespace wordring::whatwg::html::parsing;" << std::endl;
+		cpp << std::endl;
 
-		// アトム表
-		cpp << "wordring::basic_atom_set<std::u32string> const wordring::whatwg::html::parsing::atom_tbl = {" << std::endl;
-		auto it1 = atom_tbl.ibegin();
-		auto it2 = atom_tbl.iend();
-		std::uint32_t n = 0;
-		for (std::uint32_t i = 0; it1 != it2; ++i)
+		// タグ名・アトム表
+		cpp << "std::unordered_map<std::u32string, tag_name> const wordring::whatwg::html::parsing::tag_atom_tbl = {" << std::endl;
+		for (auto const& s : tag_names) cpp << "\t{ U\"" << encoding_cast<std::string>(s) << "\", tag_name::" <<  cpp_cast(s) << " }," << std::endl;
+		cpp << "};" << std::endl;
+		cpp << std::endl;
+
+		// 属性名・アトム表
+		cpp << "std::unordered_map<std::u32string, attribute_name> const wordring::whatwg::html::parsing::attribute_atom_tbl = {" << std::endl;
+		for (auto const& s : attribute_names) cpp << "\t{ U\"" << encoding_cast<std::string>(s) << "\", attribute_name::" << cpp_cast(s) << " }," << std::endl;
+		cpp << "};" << std::endl;
+		cpp << std::endl;
+
+		// 名前空間アトム表
+		cpp << "std::unordered_map<std::u32string, ns_name> const wordring::whatwg::html::parsing::ns_uri_atom_tbl = {" << std::endl;
+		for (auto const& a : namespaces) cpp << "\t{ U\"" << encoding_cast<std::string>(a[1]) << "\", ns_name::" << encoding_cast<std::string>(a[0]) << " }," << std::endl;
+		cpp << "};" << std::endl;
+		cpp << std::endl;
+
+		// タグ名・文字列表
+		cpp << "std::array<std::u32string, " << tag_names.size() + 1 << "> const wordring::whatwg::html::parsing::tag_name_tbl = {{" << std::endl;
 		{
-			++n;
-			std::int32_t j = *it1++;
-			if (n == 1) cpp << "\t";
-			if (i % 2 == 0) cpp << "{ " << j << ", ";
-			else cpp << j << " }, ";
-			if (n == 20)
+			std::vector<std::u32string> v(1, U"");
+			std::copy(tag_names.begin(), tag_names.end(), std::back_inserter(v));
+			std::uint32_t n = 0;
+			for (std::u32string const& s : v)
 			{
-				cpp << std::endl;
-				n = 0;
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "U\"" << encoding_cast<std::string>(s) << "\", ";
+				if (n == 9)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
+		cpp << "}};" << std::endl;
 		cpp << std::endl;
-		cpp << "};" << std::endl;
+
+		// 属性名・文字列表
+		cpp << "std::array<std::u32string, " << attribute_names.size() + 1 << "> const wordring::whatwg::html::parsing::attribute_name_tbl = {{" << std::endl;
+		{
+			std::vector<std::u32string> v(1, U"");
+			std::copy(attribute_names.begin(), attribute_names.end(), std::back_inserter(v));
+			std::uint32_t n = 0;
+			for (std::u32string const& s : v)
+			{
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "U\"" << encoding_cast<std::string>(s) << "\", ";
+				if (n == 9)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
+			}
+		}
+		cpp << "}};" << std::endl;
+		cpp << std::endl;
+
+		// 名前空間・文字列表
+		cpp << "std::array<std::u32string, " << namespaces.size() + 1 << "> const wordring::whatwg::html::parsing::ns_uri_tbl = {{" << std::endl;
+		{
+			std::vector<std::array<std::u32string, 2>> v(1, { U"", U"" });
+			std::copy(namespaces.begin(), namespaces.end(), std::back_inserter(v));
+			for (auto const& a : v) cpp << "\tU\"" << encoding_cast<std::string>(a[1]) << "\", " << std::endl;
+		}
+		cpp << "}};" << std::endl;
 		cpp << std::endl;
 
 		// 名前指定文字参照表
 		cpp << "wordring::trie<char32_t> const wordring::whatwg::html::parsing::named_character_reference_idx_tbl = {" << std::endl;
-		auto it3 = named_character_reference_idx_tbl.ibegin();
-		auto it4 = named_character_reference_idx_tbl.iend();
-		n = 0;
-		for (std::uint32_t i = 0; it3 != it4; ++i)
 		{
-			++n;
-			std::int32_t j = *it3++;
-			if (n == 1) cpp << "\t";
-			if (i % 2 == 0) cpp << "{ " << j << ", ";
-			else cpp << j << " }, ";
-			if (n == 20)
+			auto it1 = named_character_reference_idx_tbl.ibegin();
+			auto it2 = named_character_reference_idx_tbl.iend();
+			std::uint32_t n = 0;
+			for (std::uint32_t i = 0; it1 != it2; ++i)
 			{
-				cpp << std::endl;
-				n = 0;
+				++n;
+				std::int32_t j = *it1++;
+				if (n == 1) cpp << "\t";
+				if (i % 2 == 0) cpp << "{ " << j << ", ";
+				else cpp << j << " }, ";
+				if (n == 20)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
 		cpp << std::endl;
@@ -264,18 +440,19 @@ int main()
 		cpp << std::endl;
 
 		cpp << "std::array<std::array<char32_t, 2>, " << named_character_reference_map_tbl.size() << "> const wordring::whatwg::html::parsing::named_character_reference_map_tbl = {{" << std::endl;
-		n = 0;
-		for (std::array<std::u32string, 2> const& a : named_character_reference_map_tbl)
 		{
-			using namespace wordring::whatwg;
-			++n;
-			if (n == 1) cpp << "\t";
-			cpp << "{ " << encoding_cast<std::string>(a[0]) << ", "
-				<< (a[1].empty() ? "0" : encoding_cast<std::string>(a[1])) << " }, ";
-			if (n == 10)
+			std::uint32_t n = 0;
+			for (std::array<std::u32string, 2> const& a : named_character_reference_map_tbl)
 			{
-				cpp << std::endl;
-				n = 0;
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "{ " << encoding_cast<std::string>(a[0]) << ", "
+					<< (a[1].empty() ? "0" : encoding_cast<std::string>(a[1])) << " }, ";
+				if (n == 10)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
 		cpp << std::endl;
@@ -284,17 +461,18 @@ int main()
 
 		// 文字参照コード変換表
 		cpp << "std::unordered_map<char32_t, char32_t> const wordring::whatwg::html::parsing::character_reference_code_tbl = {" << std::endl;
-		n = 0;
-		for (std::array<std::u32string, 2> const& a : character_reference_code)
 		{
-			using namespace wordring::whatwg;
-			++n;
-			if (n == 1) cpp << "\t";
-			cpp << "{ " << encoding_cast<std::string>(a[0]) << ", " << encoding_cast<std::string>(a[1]) << " }, ";
-			if (n == 10)
+			std::uint32_t n = 0;
+			for (std::array<std::u32string, 2> const& a : character_reference_code)
 			{
-				cpp << std::endl;
-				n = 0;
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "{ " << encoding_cast<std::string>(a[0]) << ", " << encoding_cast<std::string>(a[1]) << " }, ";
+				if (n == 10)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
 		cpp << std::endl;
@@ -302,19 +480,20 @@ int main()
 		cpp << std::endl;
 
 		// SVG属性変換表
-		cpp << "std::unordered_map<uint32_t, std::u32string> const wordring::whatwg::html::parsing::adjust_svg_attribute_tbl = {" << std::endl;
-		n = 0;
-		for (std::array<std::u32string, 2> const& a : svg_attributes)
+		cpp << "std::unordered_map<uint32_t, std::u32string> const wordring::whatwg::html::parsing::svg_attributes_conversion_tbl = {" << std::endl;
 		{
-			using namespace wordring::whatwg;
-			auto atm = atom_tbl.at(a[0]);
-			++n;
-			if (n == 1) cpp << "\t";
-			cpp << "{ " << static_cast<std::uint32_t>(atm) << ", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
-			if (n == 10)
+			std::uint32_t n = 0;
+			for (std::array<std::u32string, 2> const& a : svg_attributes_conversion_tbl)
 			{
-				cpp << std::endl;
-				n = 0;
+				auto atm = attribute_atom_tbl.at(a[0]);
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "{ " << static_cast<std::uint32_t>(atm) << ", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
+				if (n == 6)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
 		cpp << std::endl;
@@ -322,21 +501,22 @@ int main()
 		cpp << std::endl;
 
 		// 外来属性変換表
-		cpp << "std::unordered_map<uint32_t, std::array<std::u32string, 2>> const wordring::whatwg::html::parsing::adjust_foreign_attribute_tbl = {" << std::endl;
-		n = 0;
-		for (std::array<std::u32string, 3> const& a : foreign_attributes)
+		cpp << "std::unordered_map<uint32_t, std::array<std::u32string, 2>> const wordring::whatwg::html::parsing::foreign_attributes_conversion_tbl = {" << std::endl;
 		{
-			using namespace wordring::whatwg;
-			auto atm = atom_tbl.at(a[0]);
-			++n;
-			if (n == 1) cpp << "\t";
-			cpp << "{ " << static_cast<std::uint32_t>(atm)
-				<< ", { U\"" << encoding_cast<std::string>(a[1]) << "\", "
-				<< "U\"" << encoding_cast<std::string>(a[2]) << "\" } }, ";
-			if (n == 10)
+			std::uint32_t n = 0;
+			for (std::array<std::u32string, 3> const& a : foreign_attributes_conversion_tbl)
 			{
-				cpp << std::endl;
-				n = 0;
+				auto atm = attribute_atom_tbl.at(a[0]);
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "{ " << static_cast<std::uint32_t>(atm)
+					<< ", { U\"" << encoding_cast<std::string>(a[1]) << "\", "
+					<< "U\"" << encoding_cast<std::string>(a[2]) << "\" } }, ";
+				if (n == 6)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
 		cpp << std::endl;
@@ -344,44 +524,26 @@ int main()
 		cpp << std::endl;
 
 		// 互換性モードテーブル
-		cpp << "wordring::trie<char32_t> const wordring::whatwg::html::parsing::quirks_mode_tbl = {" << std::endl;
-		std::sort(quirks_mode.begin(), quirks_mode.end());
-		quirks_mode.erase(std::unique(quirks_mode.begin(), quirks_mode.end()), quirks_mode.end());
-		auto quirks_mode_tbl = wordring::trie<char32_t>(quirks_mode.begin(), quirks_mode.end());
-		auto it5 = quirks_mode_tbl.ibegin();
-		auto it6 = quirks_mode_tbl.iend();
-		n = 0;
-		for (std::uint32_t i = 0; it5 != it6; ++i)
-		{
-			++n;
-			std::int32_t j = *it5++;
-			if (n == 1) cpp << "\t";
-			if (i % 2 == 0) cpp << "{ " << j << ", ";
-			else cpp << j << " }, ";
-			if (n == 20)
-			{
-				cpp << std::endl;
-				n = 0;
-			}
-		}
-		cpp << std::endl;
+		cpp << "std::unordered_set<std::u32string> const wordring::whatwg::html::parsing::quirks_mode_tbl = {" << std::endl;
+		for (std::u32string const& s : quirks_mode_tbl) cpp << "\tU\"" << encoding_cast<std::string>(s) << "\"," << std::endl;
 		cpp << "};" << std::endl;
 		cpp << std::endl;
 
 		// SVGタグ名変換表
-		cpp << "std::unordered_map<uint32_t, std::u32string> const wordring::whatwg::html::parsing::svg_tag_name_tbl = {" << std::endl;
-		n = 0;
-		for (std::array<std::u32string, 2> const& a : svg_elements)
+		cpp << "std::unordered_map<uint32_t, std::u32string> const wordring::whatwg::html::parsing::svg_elements_conversion_tbl = {" << std::endl;
 		{
-			using namespace wordring::whatwg;
-			auto atm = atom_tbl.at(a[0]);
-			++n;
-			if (n == 1) cpp << "\t";
-			cpp << "{ " << static_cast<std::uint32_t>(atm) << ", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
-			if (n == 10)
+			std::uint32_t n = 0;
+			for (std::array<std::u32string, 2> const& a : svg_elements_conversion_tbl)
 			{
-				cpp << std::endl;
-				n = 0;
+				auto atm = tag_atom_tbl.at(a[0]);
+				++n;
+				if (n == 1) cpp << "\t";
+				cpp << "{ " << static_cast<std::uint32_t>(atm) << ", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
+				if (n == 10)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
 			}
 		}
 		cpp << std::endl;

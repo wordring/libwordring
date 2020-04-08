@@ -1,58 +1,398 @@
-attributename	attributeName
-attributetype	attributeType
-basefrequency	baseFrequency
-baseprofile	baseProfile
-calcmode	calcMode
-clippathunits	clipPathUnits
-diffuseconstant	diffuseConstant
-edgemode	edgeMode
-filterunits	filterUnits
-glyphref	glyphRef
-gradienttransform	gradientTransform
-gradientunits	gradientUnits
-kernelmatrix	kernelMatrix
-kernelunitlength	kernelUnitLength
-keypoints	keyPoints
-keysplines	keySplines
-keytimes	keyTimes
-lengthadjust	lengthAdjust
-limitingconeangle	limitingConeAngle
-markerheight	markerHeight
-markerunits	markerUnits
-markerwidth	markerWidth
-maskcontentunits	maskContentUnits
-maskunits	maskUnits
-numoctaves	numOctaves
-pathlength	pathLength
-patterncontentunits	patternContentUnits
-patterntransform	patternTransform
-patternunits	patternUnits
-pointsatx	pointsAtX
-pointsaty	pointsAtY
-pointsatz	pointsAtZ
-preservealpha	preserveAlpha
-preserveaspectratio	preserveAspectRatio
-primitiveunits	primitiveUnits
-refx	refX
-refy	refY
-repeatcount	repeatCount
-repeatdur	repeatDur
-requiredextensions	requiredExtensions
-requiredfeatures	requiredFeatures
-specularconstant	specularConstant
-specularexponent	specularExponent
-spreadmethod	spreadMethod
-startoffset	startOffset
-stddeviation	stdDeviation
-stitchtiles	stitchTiles
-surfacescale	surfaceScale
-systemlanguage	systemLanguage
-tablevalues	tableValues
-targetx	targetX
-targety	targetY
-textlength	textLength
-viewbox	viewBox
-viewtarget	viewTarget
-xchannelselector	xChannelSelector
-ychannelselector	yChannelSelector
-zoomandpan	zoomAndPan
+accumulate
+additive
+amplitude
+aria-activedescendant
+aria-atomic
+aria-autocomplete
+aria-busy
+aria-checked
+aria-colcount
+aria-colindex
+aria-colspan
+aria-controls
+aria-current
+aria-describedby
+aria-details
+aria-disabled
+aria-dropeffect
+aria-errormessage
+aria-expanded
+aria-flowto
+aria-grabbed
+aria-haspopup
+aria-hidden
+aria-invalid
+aria-keyshortcuts
+aria-label
+aria-labelledby
+aria-level
+aria-live
+aria-modal
+aria-multiline
+aria-multiselectable
+aria-orientation
+aria-owns
+aria-placeholder
+aria-posinset
+aria-pressed
+aria-readonly
+aria-relevant
+aria-required
+aria-roledescription
+aria-rowcount
+aria-rowindex
+aria-rowspan
+aria-selected
+aria-setsize
+aria-sort
+aria-valuemax
+aria-valuemin
+aria-valuenow
+aria-valuetext
+attributeName
+autofocus
+azimuth
+baseFrequency
+begin
+begin
+bias
+by
+calcMode
+class
+clipPathUnits
+crossorigin
+crossorigin
+crossorigin
+cx
+cy
+diffuseConstant
+divisor
+download
+dur
+dx
+dx
+dx
+dx
+dy
+dy
+dy
+dy
+edgeMode
+edgeMode
+elevation
+end
+exponent
+fill
+filterUnits
+fr
+from
+fx
+fy
+gradientTransform
+gradientTransform
+gradientUnits
+gradientUnits
+height
+height
+height
+height
+href
+href
+href
+href
+href
+href
+href
+href
+href
+href
+href
+href
+href
+hreflang
+id
+in
+in2
+in2
+in2
+intercept
+k1
+k2
+k3
+k4
+kernelMatrix
+kernelUnitLength
+kernelUnitLength
+kernelUnitLength
+keyPoints
+keySplines
+keyTimes
+lang
+lengthAdjust
+limitingConeAngle
+markerHeight
+markerUnits
+markerWidth
+maskContentUnits
+maskUnits
+max
+media
+method
+min
+mode
+numOctaves
+offset
+offset
+onabort
+onafterprint
+onbeforeprint
+onbegin
+oncancel
+oncanplay
+oncanplaythrough
+onchange
+onclick
+onclose
+oncopy
+oncuechange
+oncut
+ondblclick
+ondrag
+ondragend
+ondragenter
+ondragexit
+ondragleave
+ondragover
+ondragstart
+ondrop
+ondurationchange
+onemptied
+onend
+onended
+onerror
+onerror
+onfocus
+onhashchange
+oninput
+oninvalid
+onkeydown
+onkeypress
+onkeyup
+onload
+onloadeddata
+onloadedmetadata
+onloadstart
+onmessage
+onmousedown
+onmouseenter
+onmouseleave
+onmousemove
+onmouseout
+onmouseover
+onmouseup
+onoffline
+ononline
+onpagehide
+onpageshow
+onpaste
+onpause
+onplay
+onplaying
+onpopstate
+onprogress
+onratechange
+onrepeat
+onreset
+onresize
+onresize
+onscroll
+onscroll
+onseeked
+onseeking
+onselect
+onshow
+onstalled
+onstorage
+onsubmit
+onsuspend
+ontimeupdate
+ontoggle
+onunload
+onunload
+onvolumechange
+onwaiting
+onwheel
+operator
+operator
+order
+orient
+origin
+path
+path
+pathLength
+patternContentUnits
+patternTransform
+patternUnits
+ping
+playbackorder
+points
+points
+pointsAtX
+pointsAtY
+pointsAtZ
+preserveAlpha
+preserveAspectRatio
+primitiveUnits
+r
+radius
+refX
+refX
+refY
+refY
+referrerpolicy
+rel
+repeatCount
+repeatDur
+requiredExtensions
+restart
+result
+role
+rotate
+rotate
+rotate
+scale
+seed
+side
+slope
+spacing
+specularConstant
+specularExponent
+specularExponent
+spreadMethod
+spreadMethod
+startOffset
+stdDeviation
+stdDeviation
+stitchTiles
+style
+surfaceScale
+surfaceScale
+systemLanguage
+tabindex
+tableValues
+target
+targetX
+targetY
+textLength
+textLength
+timelinebegin
+title
+to
+to
+transform
+type
+type
+type
+type
+type
+type
+type
+values
+values
+viewBox
+width
+width
+width
+width
+x
+x
+x
+x
+x
+x
+x
+x
+x1
+x1
+x2
+x2
+xChannelSelector
+xlink:href
+xlink:href
+xlink:title
+xml:space
+y
+y
+y
+y
+y
+y
+y
+y
+y1
+y1
+y2
+y2
+yChannelSelector
+z
+z
+alignment-baseline
+writing-mode
+clip
+clip-path
+clip-rule
+color
+color-interpolation
+color-interpolation-filters
+cursor
+direction
+display
+dominant-baseline
+fill
+fill-opacity
+fill-rule
+filter
+flood-color
+flood-opacity
+font-family
+font-size
+font-size-adjust
+font-stretch
+font-style
+font-variant
+font-weight
+glyph-orientation-horizontal
+glyph-orientation-vertical
+image-rendering
+letter-spacing
+lighting-color
+baseline-shift
+marker-mid
+marker-start
+mask
+mask-type
+opacity
+overflow
+paint-order
+pointer-events
+shape-rendering
+stop-color
+stop-opacity
+stroke
+stroke-dasharray
+stroke-dashoffset
+stroke-linecap
+stroke-linejoin
+stroke-miterlimit
+stroke-opacity
+stroke-width
+text-anchor
+text-decoration
+text-rendering
+transform
+transform-origin
+unicode-bidi
+vector-effect
+visibility
+word-spacing
+marker-end

@@ -31,6 +31,7 @@ add_executable(
 		algorithm.cpp
 		pair.cpp
 		set.cpp
+		type_traits.cpp
 		unordered_set.cpp
 		vector.cpp
 )

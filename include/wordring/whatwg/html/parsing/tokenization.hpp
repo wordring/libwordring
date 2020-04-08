@@ -70,7 +70,7 @@ namespace wordring::whatwg::html::parsing
 
 		// スタック -----------------------------------------------------------
 
-		std::deque<node_pointer> m_stack_of_open_elements;
+		std::deque<node_pointer> m_open_element_stack;
 
 		node_pointer m_context_element;
 
@@ -168,13 +168,13 @@ namespace wordring::whatwg::html::parsing
 
 		node_pointer current_node()
 		{
-			assert(!m_stack_of_open_elements.empty());
-			return m_stack_of_open_elements.back();
+			assert(!m_open_element_stack.empty());
+			return m_open_element_stack.back();
 		}
 
 		node_pointer adjusted_current_node()
 		{
-			if constexpr (policy::is_fragments_parser) if (m_stack_of_open_elements.size() == 1) return m_context_element;
+			if constexpr (policy::is_fragments_parser) if (m_open_element_stack.size() == 1) return m_context_element;
 			return current_node();
 		}
 
@@ -182,12 +182,15 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool in_html_namespace(node_pointer it) const
 		{
-			return static_cast<this_type const*>(this)->in_html_namespace(it);
+			this_type const* P = static_cast<this_type const*>(this);
+			assert(P->is_element(it));
+
+			return P->namespace_uri_name(it) == ns_name::HTML;
 		}
 
 		bool empty_stack_of_open_elements() const
 		{
-			return m_stack_of_open_elements.empty();
+			return m_open_element_stack.empty();
 		}
 		// トークンの発送-------------------------------------------------------
 
@@ -200,7 +203,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				assert(m_current_tag_token_id == 2 || m_current_tag_token_id == 3);
 
-				token.m_tag_name_id = atom_tbl.at(token.m_tag_name);
+				token.m_tag_atom = token.m_tag_name;
 				
 				if (m_current_tag_token_id == 2)
 				{

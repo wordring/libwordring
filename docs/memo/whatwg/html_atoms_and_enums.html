@@ -11,98 +11,187 @@
       atom_setとenumを自動生成する。</p>
     <h2>生成するソース</h2>
     <h2>列挙体</h2>
-    <ul>
-      <li>タグ名</li>
-      <li>属性名</li>
-      <li>SVG属性名</li>
-      <li>外来属性名</li>
-    </ul>
+    <p>列挙体から文字列へ変換する需要があるため、値をアトムと一致させる。したがって、アトムから先に生成する。</p>
+    <p>タグ名、属性名にはC++で認められない文字、文字列が存在する。そこで、ASCII英数字以外を「_」に変更し、一文字目を大文字にする。例えば属性名
+      「xmlns:xlink」は「Xmlns_xlink」となる。</p>
+    <p>トークンにおいてタグ名・属性名は必ず小文字化される。一方、要素が作成されるとき、（SVG、MathMLのような）外来要素はキャメルケースに修正され
+      る。実装は小文字の名前とキャメルケースの文字列双方に項目を割り当て、同一視はしない。前述の一文字目大文字化による名前の衝突は、いまのところ存在しな
+      い。</p>
     <table style="width: 100%" border="1">
       <tbody>
         <tr>
-          <td>namespaces</td>
+          <td>ns_name</td>
           <td>名前空間</td>
         </tr>
         <tr>
-          <td>tag_names<br>
+          <td>tag_name<br>
           </td>
-          <td><br>
+          <td>タグ名<br>
           </td>
         </tr>
         <tr>
-          <td>attribute_names</td>
-          <td><br>
+          <td>attribute_name</td>
+          <td>属性名<br>
           </td>
         </tr>
       </tbody>
     </table>
-    <p></p>
     <h2>アトム</h2>
-    <p>HTML要素が入力テキストの文字列を保持する（入力されたタグ名が大文字であれば、要素のタグ名も大文字にする）必要が有るかは場合による。しかし、比較
-      は常に小文字で行われる。したがって、パーサは、（小文字に基づく）アトムの整数値と実際の入力文字列を出力する。DOM要素側で保持するか決めれば良い。</p>
+    <h3>考察</h3>
+    <h4>要素名</h4>
+    <p>要素のタグ名・属性名は、トークン化段階で小文字に修正される。トークンは名前を小文字で保持する。木構築段階でSVG・MathMLの属性名の一部はキャ
+      メルケースに修正される。</p>
+    <p>HTMLの title 要素と SVG の title 要素のように、別の名前空間に属する同名のタグが存在する。DOM において HTML
+      Element は、 Element を継承する。DOM において SVG Element は、 Element を継承する。実装は DOM
+      に準拠しないため、判別に名前空間を用いる。要素型で判別することはできない。</p>
+    <p>名前空間の開始は、木構築段階の「<a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inbody">12.2.6.4.7
+        The "in body" insertion mode</a>」で行われ、「math」開始タグ・トークンあるいは「svg」開始タグ・トークンが
+      入力された場合、それぞれの名前空間でノードが作成される。その後、木構築スタックのトップに名前空間のノードが有るため、「<a href="https://html.spec.whatwg.org/multipage/parsing.html#tree-construction-dispatcher">tree
+        construction dispatcher</a>」の手続きで適切に振り分けられる。HTML名前空間の親へ挿入される場合、通常の規則へ、
+      HTML名前空間以外の親に挿入されるとき、「<a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">12.2.6.5
+        The rules for parsing tokens in foreign content</a>」の規則へ振り分けられる。「<a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">12.2.6.5
+        The rules for parsing tokens in foreign content</a>」は（スタックにある）親の名前空間に従って
+      ノードを作成する。したがって、大まかにsvgタグ配下のノードは全てSVG名前空間、mathタグ配下のノードは全てMathML名前空間と解釈される。</p>
+    <p>あるトークンの名前空間を知るには、挿入されようとする親ノードの名前空間を知る必要が有り、（※Google
+      Gumboは必要に応じてタグ名に名前空間を重畳するが）名前空間によってタグ名を区別する必要は薄いと思う。</p>
+    <h4>属性名</h4>
+    <p>SVGやMathMLのような外来要素は大文字小文字を区別する属性名が必要。規格で、トークン化段階で親ノードは確定しないので、トークンにおいて属性名
+      は全て小文字化される。その後、木構築段階で親ノードが確定し、名前空間が判明し、属性名はキャメルケースに変更される。</p>
+    <h3>方針</h3>
+    <p>タグ名アトムは小文字を保持する。</p>
+    <p>属性名アトムは小文字に加え、SVGとMathMLについてはキャメルケースも保持する。</p>
+    <h3>アトム・テーブル</h3>
+    <p>文字列を整数値（列挙体）へ変換するために使う。</p>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td>HTML・SVG・MathMLタグ名</td>
+          <td>tag_atom_tbl</td>
+        </tr>
+        <tr>
+          <td>HTML・SVG・MathML属性名・HTMLイベント名</td>
+          <td>attribute_atom_tbl</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3><span style="color: #505050;">文字列テーブル</span></h3>
+    <p>整数値（列挙体）を文字列へ変換するために使う。</p>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td>HTML・SVG・MathMLタグ名</td>
+          <td>tag_name_tbl</td>
+        </tr>
+        <tr>
+          <td>HTML・SVG・MathML属性名・HTMLイベント名・外来属性名</td>
+          <td>attribute_name_tbl</td>
+        </tr>
+        <tr>
+          <td>名前空間</td>
+          <td>namespace_uri_tbl</td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+    </ul>
+    <h3>入力ファイル<br>
+    </h3>
     <table style="width: 100%" border="1">
       <tbody>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/indices.html#elements-3">HTML
-              タグ名（小文字）</a></td>
-          <td>elements.txt</td>
+              タグ名</a></td>
+          <td>html_elements.txt<br>
+            「htmlタグ名（小文字）」のリスト</td>
+        </tr>
+        <tr>
+          <td><a href="https://svgwg.org/svg2-draft/eltindex.html">SVG タグ名</a></td>
+          <td>svg_elements.txt<br>
+            「SVGタグ名」のリスト</td>
+        </tr>
+        <tr>
+          <td><a href="https://www.w3.org/TR/MathML3/appendixi.html#index.elem">MathML
+              タグ名</a></td>
+          <td>mathml_elements.txt<br>
+            「MathMLタグ名」のリスト</td>
         </tr>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/indices.html#attributes-3">HTML
-              属性名（小文字）（イベントを除く）</a></td>
-          <td>attributes.txt</td>
+              属性名（イベントを除く）</a></td>
+          <td>html_attributes.txt<br>
+            「html属性名（小文字）」のリスト</td>
         </tr>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/indices.html#attributes-3">HTML
-              イベント名（小文字）</a></td>
-          <td>events.txt</td>
+              イベント名</a></td>
+          <td>html_events.txt<br>
+            「htmlイベント名（小文字）」のリスト</td>
         </tr>
         <tr>
-          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-svg-attributes">SVG
-              属性名</a></td>
-          <td>svg_attributes.txt</td>
+          <td><a href="https://svgwg.org/svg2-draft/attindex.html">SVG 属性名</a></td>
+          <td>svg_attributes.txt<br>
+            「SVG属性名」のリスト（重複を取り除いていない）</td>
         </tr>
         <tr>
-          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-mathml-attributes">MathML
+          <td><a href="https://www.w3.org/TR/MathML3/appendixi.html#index.att">MathML
               属性名</a></td>
-          <td>mathml_attributes.txt</td>
+          <td>mathml_attributes.txt<br>
+            「MathML属性名」のリスト</td>
         </tr>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-foreign-attributes">外
               来属性名</a></td>
-          <td>foreign_attributes.txt</td>
+          <td>foreign_attributes_conversion.txt<br>
+            「外来属性名の[属性名, 接頭辞, ローカル名]」のリスト（SVG、MathMLと重複するが完全を期するため）</td>
         </tr>
         <tr>
-          <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">SVG
-              タグ名</a></td>
-          <td>svg_elements.txt</td>
-        </tr>
-        <tr>
-          <td><a href="https://infra.spec.whatwg.org/#namespaces">名前空間</a></td>
-          <td>namespaces.txt</td>
+          <td><a href="https://infra.spec.whatwg.org/#namespaces">名前 空間</a></td>
+          <td>namespaces.txt<br>
+            「名前空間の[名前, URI]」のリスト</td>
         </tr>
       </tbody>
     </table>
-    <ul>
-      <li>HTMLタグ名</li>
-      <li>HTML属性名</li>
-      <li>HTMLイベント名</li>
-      <li>SVG属性名</li>
-      <li>MathML属性名</li>
-      <li>外来属性名</li>
-      <li>SVGタグ名</li>
-      <li>名前空間</li>
-    </ul>
-    <p>以上すべてをまとめた小文字による一つのアトム・テーブルを用意する。分岐用の高速比較に使うので、アトムから文字列の所属（クラス）を判別する能力は必要
-      ないと思われる。</p>
-    <p>表の名前は atom_tbl を予定する。</p>
     <h2><span style="color: #6594e0;">変換テーブル</span></h2>
     <p>conversion table</p>
+    <h3>変換表</h3>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td>名前指定文字参照表</td>
+          <td>named_character_reference_idx_tbl<br>
+            named_character_reference_map_tbl</td>
+        </tr>
+        <tr>
+          <td>文字参照コード変換表</td>
+          <td>character_reference_code_tbl</td>
+        </tr>
+        <tr>
+          <td>SVG属性変換表</td>
+          <td>svg_attributes_conversion_tbl</td>
+        </tr>
+        <tr>
+          <td>外来属性変換表</td>
+          <td>foreign_attributes_conversion_tbl</td>
+        </tr>
+        <tr>
+          <td><span style="color: #0000ee;"></span>互換性モード表</td>
+          <td>quirks_mode_tbl</td>
+        </tr>
+        <tr>
+          <td>SVGタグ名変換表</td>
+          <td>svg_elements_conversion_tbl</td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <h3>入力ファイル</h3>
     <table style="width: 100%" border="1">
       <tbody>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/named-characters.html">名
-              前指定文字参照表</a></td>
+              前指定文字参照表</a><br>
+            <a href="https://html.spec.whatwg.org/multipage/named-characters.html"></a></td>
           <td>named_character_reference.txt</td>
         </tr>
         <tr>
@@ -113,12 +202,12 @@
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-svg-attributes">&nbsp;adjust
               SVG attributes</a></td>
-          <td>svg_attributes.txt</td>
+          <td>svg_attributes_conversion.txt</td>
         </tr>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#adjust-foreign-attributes">&nbsp;adjust
               foreign attributes</a></td>
-          <td>foreign_attributes.txt</td>
+          <td>foreign_attributes_conversion.txt</td>
         </tr>
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode">12.2.6.4.1
@@ -128,12 +217,10 @@
         <tr>
           <td><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">12.2.6.5
               The rules for parsing tokens in foreign content</a></td>
-          <td>svg_elements.txt</td>
+          <td>svg_elements_conversion.txt</td>
         </tr>
       </tbody>
     </table>
-    <p><br>
-    </p>
     <h3>トークン化</h3>
     <ul>
       <li><a href="https://html.spec.whatwg.org/multipage/named-characters.html">名
@@ -180,7 +267,8 @@
       <ul>
         <li>adjust_foreign_attribute_tbl</li>
         <li>属性名を接頭辞とローカル名に分けるための表</li>
-        <li>属性名アトムの整数値をキー、std::array&lt;std::u32string, 2&gt;を値とするstd:unordered_map</li>
+        <li>属性名アトムの整数値をキー、std::array&lt;std::u32string,
+          2&gt;を値とするstd:unordered_map</li>
       </ul>
       <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode">12.2.6.4.1
           The "initial" insertion mode</a></li>
@@ -188,6 +276,8 @@
         <li>quirks_mode_tbl</li>
         <li>一つだけ大きな表が有る。</li>
         <li>公開識別子の前方一致についてのみ、trie_base を使って表とする。</li>
+      </ul>
+      <ul>
       </ul>
       <li><a href="https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign">12.2.6.5
           The rules for parsing tokens in foreign content</a></li>
@@ -197,10 +287,7 @@
         <li>タグ名アトムの整数値とキャメルケース文字列のstd:unordered_map</li>
       </ul>
     </ul>
-    <br>
-    <br>
     <p><br>
     </p>
-    <p> </p>
   </body>
 </html>

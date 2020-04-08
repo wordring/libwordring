@@ -28,11 +28,12 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		parsing/atom_defs.cpp
-		parsing/atom_tbl.cpp
-		parsing/input_stream.cpp
+#		parsing/atom_defs.cpp
+#		parsing/atom_tbl.cpp
+#		parsing/html_atom.cpp
+#		parsing/input_stream.cpp
 #		parsing/parser.cpp
-		parsing/tokenization.cpp
+#		parsing/tokenization.cpp
 		simple_node.cpp
 		simple_parser.cpp
 		simple_policy.cpp
