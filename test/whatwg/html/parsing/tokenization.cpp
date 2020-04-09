@@ -25,6 +25,12 @@ namespace
 
 	struct test_tokenizer : tokenizer<test_tokenizer, test_policy>
 	{
+		using policy = test_policy;
+
+
+		using element_node_type = typename policy::element_node_type;
+
+
 		using base_type = tokenizer<test_tokenizer, test_policy>;
 
 		using base_type::m_c;
@@ -34,18 +40,22 @@ namespace
 		using base_type::return_state;
 		using base_type::current_tag_token;
 
-		error m_ec;
+		error_name m_ec;
 		std::u32string m_emited_codepoints;
 
 		//
 
-		bool in_html_namespace(node_pointer it) const
+		bool is_element(node_pointer it) const
 		{
-			return true;
+			return std::holds_alternative<element_node_type>(*it);
 		}
 
+		ns_name namespace_uri_name(node_pointer it) const
+		{
+			return std::get_if<element_node_type>(std::addressof(*it))->namespace_uri_id();
+		}
 
-		void on_report_error(error ec) { m_ec = ec; }
+		void on_report_error(error_name ec) { m_ec = ec; }
 
 		template <typename Token>
 		void on_emit_token(Token const& token)
@@ -69,6 +79,14 @@ tokenizer()
 BOOST_AUTO_TEST_CASE(tokenizer__construct__1)
 {
 	test_tokenizer tt;
+}
+
+BOOST_AUTO_TEST_CASE(tokenizer__emit_token__1)
+{
+	test_tokenizer t;
+	std::u32string s(U"<A>");
+	for(char32_t cp : s) t.push_code_point(cp);
+	BOOST_CHECK(t.m_start_tag_token.m_tag_name_id == tag_name::A);
 }
 
 // 状態関数 ------------------------------------------------------------------

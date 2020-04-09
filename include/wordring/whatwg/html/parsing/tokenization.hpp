@@ -132,14 +132,14 @@ namespace wordring::whatwg::html::parsing
 		*/
 		typename tag_token::attribute& create_attribute()
 		{
-			return current_tag_token().attributes().create();
+			return current_tag_token().m_attributes.create();
 		}
 
 		/*! @brief 現在の属性を返す
 		*/
 		typename tag_token::attribute& current_attribute()
 		{
-			return current_tag_token().attributes().current();
+			return current_tag_token().m_attributes.current();
 		}
 
 		comment_token& current_comment_token()
@@ -158,7 +158,7 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void unify_attribute()
 		{
-			tag_token::attribute_list& al = current_tag_token().attributes();
+			tag_token::attribute_list& al = current_tag_token().m_attributes;
 			auto it1 = al.begin();
 			auto it2 = std::prev(al.end(), 1);
 			while (it1 != it2) if (it1++->m_name == al.current().m_name) al.current().m_omitted = true;
@@ -203,8 +203,9 @@ namespace wordring::whatwg::html::parsing
 			{
 				assert(m_current_tag_token_id == 2 || m_current_tag_token_id == 3);
 
-				token.m_tag_atom = token.m_tag_name;
-				
+				tag_token& t = static_cast<tag_token&>(token);
+				t.m_tag_name_id = tag_atom_tbl.at(t.m_tag_name);
+
 				if (m_current_tag_token_id == 2)
 				{
 					m_last_start_tag_name = m_start_tag_token.m_tag_name;
@@ -288,7 +289,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(tag_open_state);
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(cp);
 				break;
 			default:
@@ -317,7 +318,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(RCDATA_less_than_sign_state);
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				break;
 			default:
@@ -342,7 +343,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(RAWTEXT_less_than_sign_state);
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				break;
 			default:
@@ -367,7 +368,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(script_data_less_than_sign_state);
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				break;
 			default:
@@ -389,7 +390,7 @@ namespace wordring::whatwg::html::parsing
 
 			if (cp == U'\x0')
 			{
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				return;
 			}
@@ -402,7 +403,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_before_tag_name);
+				report_error(error_name::eof_before_tag_name);
 				emit_token(U'<');
 				emit_token(end_of_file_token());
 				return;
@@ -418,7 +419,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(end_tag_open_state);
 				return;
 			case U'?':
-				report_error(error::unexpected_question_mark_instead_of_tag_name);
+				report_error(error_name::unexpected_question_mark_instead_of_tag_name);
 				create_comment_token();
 				reconsume(bogus_comment_state);
 				return;
@@ -431,7 +432,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::invalid_first_character_of_tag_name);
+			report_error(error_name::invalid_first_character_of_tag_name);
 			emit_token(U'<');
 			reconsume(data_state);
 		}
@@ -441,7 +442,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_before_tag_name);
+				report_error(error_name::eof_before_tag_name);
 				emit_token(U'<');
 				emit_token(U'/');
 				emit_token(end_of_file_token());
@@ -459,12 +460,12 @@ namespace wordring::whatwg::html::parsing
 
 			if (cp == U'>')
 			{
-				report_error(error::missing_end_tag_name);
+				report_error(error_name::missing_end_tag_name);
 				change_state(data_state);
 				return;
 			}
 
-			report_error(error::invalid_first_character_of_tag_name);
+			report_error(error_name::invalid_first_character_of_tag_name);
 			create_comment_token();
 			reconsume(bogus_comment_state);
 		}
@@ -474,7 +475,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -497,7 +498,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(current_tag_token());
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_tag_token().m_tag_name.push_back(U'\xFFFD');
 				return;
 			}
@@ -811,7 +812,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_script_html_comment_like_text);
+				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -827,7 +828,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(script_data_escaped_less_than_sign_state);
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				break;
 			default:
@@ -841,7 +842,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_script_html_comment_like_text);
+				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -857,7 +858,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(script_data_escaped_less_than_sign_state);
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				change_state(script_data_escaped_state);
 				emit_token(U'\xFFFD');
 				break;
@@ -873,7 +874,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_script_html_comment_like_text);
+				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -892,7 +893,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(U'>');
 				break;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				change_state(script_data_escaped_state);
 				emit_token(U'\xFFFD');
 				break;
@@ -1039,7 +1040,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_script_html_comment_like_text);
+				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1056,7 +1057,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(U'<');
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				return;
 			}
@@ -1069,7 +1070,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_script_html_comment_like_text);
+				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1087,7 +1088,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(U'<');
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				change_state(script_data_double_escaped_state);
 				emit_token(U'\xFFFD');
 				return;
@@ -1102,7 +1103,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_script_html_comment_like_text);
+				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1123,7 +1124,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(U'>');
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				change_state(script_data_double_escaped_state);
 				emit_token(U'\xFFFD');
 				return;
@@ -1214,7 +1215,7 @@ namespace wordring::whatwg::html::parsing
 				reconsume(after_attribute_name_state);
 				return;
 			case U'=':
-				report_error(error::unexpected_equals_sign_before_attribute_name);
+				report_error(error_name::unexpected_equals_sign_before_attribute_name);
 				create_attribute();
 				change_state(attribute_name_state);
 				return;
@@ -1251,13 +1252,13 @@ namespace wordring::whatwg::html::parsing
 				change_state(before_attribute_value_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_attribute().m_name.push_back(U'\xFFFD');
 				return;
 			case U'"':
 			case U'\'':
 			case U'<':
-				report_error(error::unexpected_character_in_attribute_name);
+				report_error(error_name::unexpected_character_in_attribute_name);
 				goto AnythingElse;
 			}
 
@@ -1276,7 +1277,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1327,7 +1328,7 @@ namespace wordring::whatwg::html::parsing
 					change_state(attribute_value_single_quoted_state);
 					return;
 				case U'>':
-					report_error(error::missing_attribute_value);
+					report_error(error_name::missing_attribute_value);
 					change_state(data_state);
 					emit_token(current_tag_token());
 					return;
@@ -1342,7 +1343,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1359,7 +1360,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(character_reference_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_attribute().m_value.push_back(U'\xFFFD');
 				return;
 			}
@@ -1372,7 +1373,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1389,7 +1390,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(character_reference_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_attribute().m_value.push_back(U'\xFFFD');
 				return;
 			}
@@ -1402,7 +1403,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1426,7 +1427,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(current_tag_token());
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_attribute().m_value.push_back(U'\xFFFD');
 				return;
 			case U'"':
@@ -1434,7 +1435,7 @@ namespace wordring::whatwg::html::parsing
 			case U'<':
 			case U'=':
 			case U'`':
-				report_error(error::unexpected_character_in_unquoted_attribute_value);
+				report_error(error_name::unexpected_character_in_unquoted_attribute_value);
 				goto AnythingElse;
 			}
 
@@ -1447,7 +1448,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1471,7 +1472,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::missing_whitespace_between_attributes);
+			report_error(error_name::missing_whitespace_between_attributes);
 			reconsume(before_attribute_name_state);
 		}
 
@@ -1480,7 +1481,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_tag);
+				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -1494,7 +1495,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::unexpected_solidus_in_tag);
+			report_error(error_name::unexpected_solidus_in_tag);
 			reconsume(before_attribute_name_state);
 		}
 
@@ -1517,7 +1518,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(current_comment_token());
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_comment_token().m_data.push_back(U'\xFFFD');
 				return;
 			}
@@ -1570,7 +1571,7 @@ namespace wordring::whatwg::html::parsing
 						}
 					}
 
-					report_error(error::cdata_in_html_content);
+					report_error(error_name::cdata_in_html_content);
 					create_comment_token(U"[CDATA[");
 					change_state(bogus_comment_state);
 					return;
@@ -1578,7 +1579,7 @@ namespace wordring::whatwg::html::parsing
 				else return; // partial
 			}
 
-			report_error(error::incorrectly_opened_comment);
+			report_error(error_name::incorrectly_opened_comment);
 			create_comment_token();
 			change_state(bogus_comment_state);
 
@@ -1598,7 +1599,7 @@ namespace wordring::whatwg::html::parsing
 					change_state(comment_start_dash_state);
 					return;
 				case U'>':
-					report_error(error::abrupt_closing_of_empty_comment);
+					report_error(error_name::abrupt_closing_of_empty_comment);
 					change_state(data_state);
 					emit_token(current_comment_token());
 					return;
@@ -1613,7 +1614,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_comment);
+				report_error(error_name::eof_in_comment);
 				emit_token(current_comment_token());
 				emit_token(end_of_file_token());
 				return;
@@ -1627,7 +1628,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(comment_end_state);
 				return;
 			case U'>':
-				report_error(error::abrupt_closing_of_empty_comment);
+				report_error(error_name::abrupt_closing_of_empty_comment);
 				change_state(data_state);
 				emit_token(current_comment_token());
 				return;
@@ -1642,7 +1643,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_comment);
+				report_error(error_name::eof_in_comment);
 				emit_token(current_comment_token());
 				emit_token(end_of_file_token());
 				return;
@@ -1660,7 +1661,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(comment_end_dash_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				emit_token(U'\xFFFD');
 				return;
 			}
@@ -1741,7 +1742,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::nested_comment);
+			report_error(error_name::nested_comment);
 			reconsume(comment_end_state);
 		}
 
@@ -1750,7 +1751,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_comment);
+				report_error(error_name::eof_in_comment);
 				emit_token(current_comment_token());
 				emit_token(end_of_file_token());
 				return;
@@ -1773,7 +1774,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_comment);
+				report_error(error_name::eof_in_comment);
 				emit_token(current_comment_token());
 				emit_token(end_of_file_token());
 				return;
@@ -1805,7 +1806,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_comment);
+				report_error(error_name::eof_in_comment);
 				emit_token(current_comment_token());
 				emit_token(end_of_file_token());
 				return;
@@ -1822,7 +1823,7 @@ namespace wordring::whatwg::html::parsing
 				change_state(comment_end_dash_state);
 				return;
 			case U'>':
-				report_error(error::incorrectly_closed_comment);
+				report_error(error_name::incorrectly_closed_comment);
 				change_state(data_state);
 				emit_token(current_comment_token());
 				return;
@@ -1839,7 +1840,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				DOCTYPE_token& d = create_DOCTYPE_token();
 				d.m_force_quirks_flag = true;
 				emit_token(d);
@@ -1862,7 +1863,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::missing_whitespace_before_doctype_name);
+			report_error(error_name::missing_whitespace_before_doctype_name);
 			reconsume(before_DOCTYPE_name_state);
 		}
 
@@ -1871,7 +1872,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				DOCTYPE_token& d = create_DOCTYPE_token();
 				d.m_force_quirks_flag = true;
 				emit_token(d);
@@ -1889,13 +1890,13 @@ namespace wordring::whatwg::html::parsing
 			case U'\x20': // SPACE
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				create_DOCTYPE_token();
 				current_DOCTYPE_token().m_name = U'\xFFFD';
 				change_state(DOCTYPE_name_state);
 				return;
 			case U'>':
-				report_error(error::missing_doctype_name);
+				report_error(error_name::missing_doctype_name);
 				create_DOCTYPE_token();
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
@@ -1921,7 +1922,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -1943,7 +1944,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(current_DOCTYPE_token());
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_DOCTYPE_token().m_name.push_back(U'\xFFFD');
 				return;
 			}
@@ -1962,7 +1963,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2008,7 +2009,7 @@ namespace wordring::whatwg::html::parsing
 				else return; // partial
 			}
 
-			report_error(error::invalid_character_sequence_after_doctype_name);
+			report_error(error_name::invalid_character_sequence_after_doctype_name);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 
@@ -2020,7 +2021,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2038,24 +2039,24 @@ namespace wordring::whatwg::html::parsing
 				change_state(before_DOCTYPE_public_identifier_state);
 				return;
 			case U'"':
-				report_error(error::missing_whitespace_after_doctype_public_keyword);
+				report_error(error_name::missing_whitespace_after_doctype_public_keyword);
 				current_DOCTYPE_token().m_public_identifier.clear();
 				change_state(DOCTYPE_public_identifier_double_quoted_state);
 				return;
 			case U'\'':
-				report_error(error::missing_whitespace_after_doctype_public_keyword);
+				report_error(error_name::missing_whitespace_after_doctype_public_keyword);
 				current_DOCTYPE_token().m_public_identifier.clear();
 				change_state(DOCTYPE_public_identifier_single_quoted_state);
 				return;
 			case U'>':
-				report_error(error::missing_doctype_public_identifier);
+				report_error(error_name::missing_doctype_public_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
 				return;
 			}
 
-			report_error(error::missing_quote_before_doctype_public_identifier);
+			report_error(error_name::missing_quote_before_doctype_public_identifier);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 		}
@@ -2065,7 +2066,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2090,14 +2091,14 @@ namespace wordring::whatwg::html::parsing
 				change_state(DOCTYPE_public_identifier_single_quoted_state);
 				return;
 			case U'>':
-				report_error(error::missing_doctype_public_identifier);
+				report_error(error_name::missing_doctype_public_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
 				return;
 			}
 
-			report_error(error::missing_quote_before_doctype_public_identifier);
+			report_error(error_name::missing_quote_before_doctype_public_identifier);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 		}
@@ -2107,7 +2108,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2122,11 +2123,11 @@ namespace wordring::whatwg::html::parsing
 				change_state(after_DOCTYPE_public_identifier_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_DOCTYPE_token().m_public_identifier.push_back(U'\xFFFD');
 				return;
 			case U'>':
-				report_error(error::abrupt_doctype_public_identifier);
+				report_error(error_name::abrupt_doctype_public_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
@@ -2141,7 +2142,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2156,11 +2157,11 @@ namespace wordring::whatwg::html::parsing
 				change_state(after_DOCTYPE_public_identifier_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_DOCTYPE_token().m_public_identifier.push_back(U'\xFFFD');
 				return;
 			case U'>':
-				report_error(error::abrupt_doctype_public_identifier);
+				report_error(error_name::abrupt_doctype_public_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
@@ -2175,7 +2176,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2197,18 +2198,18 @@ namespace wordring::whatwg::html::parsing
 				emit_token(current_DOCTYPE_token());
 				return;
 			case U'"':
-				report_error(error::missing_whitespace_between_doctype_public_and_system_identifiers);
+				report_error(error_name::missing_whitespace_between_doctype_public_and_system_identifiers);
 				current_DOCTYPE_token().m_system_identifier.clear();
 				change_state(DOCTYPE_system_identifier_double_quoted_state);
 				return;
 			case U'\'':
-				report_error(error::missing_whitespace_between_doctype_public_and_system_identifiers);
+				report_error(error_name::missing_whitespace_between_doctype_public_and_system_identifiers);
 				current_DOCTYPE_token().m_system_identifier.clear();
 				change_state(DOCTYPE_system_identifier_single_quoted_state);
 				return;
 			}
 
-			report_error(error::missing_quote_before_doctype_system_identifier);
+			report_error(error_name::missing_quote_before_doctype_system_identifier);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 		}
@@ -2218,7 +2219,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2248,7 +2249,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::missing_quote_before_doctype_system_identifier);
+			report_error(error_name::missing_quote_before_doctype_system_identifier);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 		}
@@ -2258,7 +2259,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2276,24 +2277,24 @@ namespace wordring::whatwg::html::parsing
 				change_state(before_DOCTYPE_system_identifier_state);
 				return;
 			case U'"':
-				report_error(error::missing_whitespace_after_doctype_system_keyword);
+				report_error(error_name::missing_whitespace_after_doctype_system_keyword);
 				current_DOCTYPE_token().m_system_identifier.clear();
 				change_state(DOCTYPE_system_identifier_double_quoted_state);
 				return;
 			case U'\'':
-				report_error(error::missing_whitespace_after_doctype_system_keyword);
+				report_error(error_name::missing_whitespace_after_doctype_system_keyword);
 				current_DOCTYPE_token().m_system_identifier.clear();
 				change_state(DOCTYPE_system_identifier_single_quoted_state);
 				return;
 			case U'>':
-				report_error(error::missing_doctype_system_identifier);
+				report_error(error_name::missing_doctype_system_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
 				return;
 			}
 
-			report_error(error::missing_quote_before_doctype_system_identifier);
+			report_error(error_name::missing_quote_before_doctype_system_identifier);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 		}
@@ -2303,7 +2304,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2328,14 +2329,14 @@ namespace wordring::whatwg::html::parsing
 				change_state(DOCTYPE_system_identifier_single_quoted_state);
 				return;
 			case U'>':
-				report_error(error::missing_doctype_system_identifier);
+				report_error(error_name::missing_doctype_system_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
 				return;
 			}
 
-			report_error(error::missing_quote_before_doctype_system_identifier);
+			report_error(error_name::missing_quote_before_doctype_system_identifier);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 		}
@@ -2345,7 +2346,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2360,11 +2361,11 @@ namespace wordring::whatwg::html::parsing
 				change_state(after_DOCTYPE_system_identifier_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_DOCTYPE_token().m_system_identifier.push_back(U'\xFFFD');
 				return;
 			case U'>':
-				report_error(error::abrupt_doctype_system_identifier);
+				report_error(error_name::abrupt_doctype_system_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
@@ -2379,7 +2380,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2394,11 +2395,11 @@ namespace wordring::whatwg::html::parsing
 				change_state(after_DOCTYPE_system_identifier_state);
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				current_DOCTYPE_token().m_system_identifier.push_back(U'\xFFFD');
 				return;
 			case U'>':
-				report_error(error::abrupt_doctype_system_identifier);
+				report_error(error_name::abrupt_doctype_system_identifier);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
@@ -2413,7 +2414,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_doctype);
+				report_error(error_name::eof_in_doctype);
 				current_DOCTYPE_token().m_force_quirks_flag = true;
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
@@ -2435,7 +2436,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error(error::unexpected_character_after_doctype_system_identifier);
+			report_error(error_name::unexpected_character_after_doctype_system_identifier);
 			reconsume(bogus_DOCTYPE_state);
 		}
 
@@ -2458,7 +2459,7 @@ namespace wordring::whatwg::html::parsing
 				emit_token(current_DOCTYPE_token());
 				return;
 			case U'\x0':
-				report_error(error::unexpected_null_character);
+				report_error(error_name::unexpected_null_character);
 				return;
 			}
 		}
@@ -2468,7 +2469,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			if (eof())
 			{
-				report_error(error::eof_in_cdata);
+				report_error(error_name::eof_in_cdata);
 				emit_token(end_of_file_token());
 				return;
 			}
@@ -2568,7 +2569,7 @@ namespace wordring::whatwg::html::parsing
 				if(!eof()) cp = next_input_character();
 				if (!(consumed_as_part_of_attribute() && tail != U';' && (cp == U'=' || is_ascii_alphanumeric(cp))))
 				{
-					if (tail != U';') report_error(error::missing_semicolon_after_character_reference);
+					if (tail != U';') report_error(error_name::missing_semicolon_after_character_reference);
 					
 					m_temporary_buffer.clear();
 					std::array<char32_t, 2> a = named_character_reference(idx);
@@ -2605,7 +2606,7 @@ namespace wordring::whatwg::html::parsing
 
 				if (cp == U';')
 				{
-					report_error(error::unknown_named_character_reference);
+					report_error(error_name::unknown_named_character_reference);
 					reconsume(return_state());
 					return;
 				}
@@ -2650,7 +2651,7 @@ namespace wordring::whatwg::html::parsing
 				}
 			}
 
-			report_error(error::absence_of_digits_in_numeric_character_reference);
+			report_error(error_name::absence_of_digits_in_numeric_character_reference);
 			flush_code_points_consumed_as_character_reference();
 			reconsume(return_state());
 		}
@@ -2669,7 +2670,7 @@ namespace wordring::whatwg::html::parsing
 				}
 			}
 
-			report_error(error::absence_of_digits_in_numeric_character_reference);
+			report_error(error_name::absence_of_digits_in_numeric_character_reference);
 			flush_code_points_consumed_as_character_reference();
 			reconsume(return_state());
 		}
@@ -2701,7 +2702,7 @@ namespace wordring::whatwg::html::parsing
 				}
 			}
 
-			report_error(error::missing_semicolon_after_character_reference);
+			report_error(error_name::missing_semicolon_after_character_reference);
 			reconsume(numeric_character_reference_end_state);
 		}
 
@@ -2725,7 +2726,7 @@ namespace wordring::whatwg::html::parsing
 				}
 			}
 
-			report_error(error::missing_semicolon_after_character_reference);
+			report_error(error_name::missing_semicolon_after_character_reference);
 			reconsume(numeric_character_reference_end_state);
 		}
 
@@ -2736,30 +2737,30 @@ namespace wordring::whatwg::html::parsing
 
 			if (c == 0x0)
 			{
-				report_error(error::null_character_reference);
+				report_error(error_name::null_character_reference);
 				m_character_reference_code = U'\xFFFD';
 			}
 
 			if(0x10FFFF < c)
 			{
-				report_error(error::character_reference_outside_unicode_range);
+				report_error(error_name::character_reference_outside_unicode_range);
 				m_character_reference_code = U'\xFFFD';
 			}
 
 			if (is_surrogate(c))
 			{
-				report_error(error::surrogate_character_reference);
+				report_error(error_name::surrogate_character_reference);
 				m_character_reference_code = U'\xFFFD';
 			}
 
 			if (is_noncharacter(c))
 			{
-				report_error(error::noncharacter_character_reference);
+				report_error(error_name::noncharacter_character_reference);
 			}
 
 			if (c == 0xD || (is_control(c) && !is_ascii_white_space(c)))
 			{
-				report_error(error::control_character_reference);
+				report_error(error_name::control_character_reference);
 			}
 
 			auto it = character_reference_code_tbl.find(c);

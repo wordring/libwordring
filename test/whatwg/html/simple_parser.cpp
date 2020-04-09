@@ -28,17 +28,42 @@ namespace
 		using base_type = parser<test_parser, std::string, tree>;
 
 	public:
+		using base_type::push_code_point;
+
+		using base_type::insertion_mode;
 		using base_type::current_node;
 		using base_type::adjusted_current_node;
 		using base_type::is_special;
 		using base_type::is_formatting;
 		using base_type::in_specific_scope;
+		using base_type::is_default_scope;
+		using base_type::is_list_item_scope;
+		using base_type::is_button_scope;
+		using base_type::is_table_scope;
+		using base_type::is_select_scope;
 
 		using base_type::push_active_formatting_element_list;
 		using base_type::reconstruct_active_formatting_element_list;
-
+		using base_type::clear_active_formatting_element_list;
 
 		using base_type::appropriate_place_for_inserting_node;
+		using base_type::create_element_for_token;
+		using base_type::insert_foreign_element;
+		using base_type::insert_html_element;
+		using base_type::adjust_mathml_attributes;
+		using base_type::adjust_svg_attributes;
+		using base_type::adjust_foreign_attributes;
+
+		using base_type::insert_character;
+		using base_type::insert_comment;
+
+		using base_type::process_token;
+		using base_type::reprocess_token;
+		using base_type::on_emit_token;
+
+		using base_type::on_initial_insertion_mode;
+		using base_type::in_quirks_condition;
+		using base_type::in_limited_quirks_condition;
 
 		using base_type::default_scope;
 		using base_type::list_item_scope;
@@ -49,6 +74,14 @@ namespace
 		using base_type::m_open_element_stack;
 		using base_type::m_active_formatting_element_list;
 		using base_type::m_foster_parenting;
+
+		using base_type::to_document;
+		using base_type::to_document_type;
+		using base_type::to_document_fragment;
+		using base_type::to_element;
+		using base_type::to_text;
+		using base_type::to_processing_instruction;
+		using base_type::to_comment;
 
 		using base_type::namespace_uri_name;
 		using base_type::local_name_name;
@@ -69,7 +102,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_construct_1)
 	for (char32_t cp : s) p.push_code_point(cp);
 	p.eof(true);
 
-	//attribute_set.contains(std::u32string());
+	BOOST_CHECK(p.to_comment(p.document().begin())->data() == " Comment ");
 }
 
 BOOST_AUTO_TEST_CASE(simple_parser_current_node_1)
@@ -122,6 +155,13 @@ BOOST_AUTO_TEST_CASE(simple_parser_in_specific_scope_2)
 
 	BOOST_CHECK(!p.in_specific_scope(test_parser::default_scope, std::make_pair(ns_name::HTML, tag_name::A)));
 }
+
+// --------------------------------------------------------------------
+// 整形要素のリスト
+// 
+// 12.2.4.3 The list of active formatting elements
+// https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
+// --------------------------------------------------------------------
 
 /*
 https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
@@ -200,6 +240,16 @@ BOOST_AUTO_TEST_CASE(simple_parser_reconstruct_active_formatting_element_list_1)
 	BOOST_CHECK(p.m_active_formatting_element_list[3].m_marker == true);
 }
 
+// --------------------------------------------------------------------
+// ノードの作成と挿入
+//
+// 12.2.6.1 Creating and inserting nodes
+// https://html.spec.whatwg.org/multipage/parsing.html#creating-and-inserting-nodes
+// --------------------------------------------------------------------
+
+/*
+https://html.spec.whatwg.org/multipage/parsing.html#appropriate-place-for-inserting-a-node
+*/
 BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_1)
 {
 	tree t;
@@ -220,7 +270,8 @@ BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_1)
 BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_2)
 {
 	test_parser p;
-	auto HTML = p.insert(p.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto document = p.document();
+	auto HTML = p.insert(document.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
 	auto P = p.insert(HTML.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::P));
 	auto TABLE = p.insert(P.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Table));
 	p.m_open_element_stack.push_back(HTML);
@@ -235,7 +286,8 @@ BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_2)
 BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_3)
 {
 	test_parser p;
-	auto HTML = p.insert(p.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto document = p.document();
+	auto HTML = p.insert(document.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
 	auto TEMPLATE = p.insert(HTML.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Template));
 	auto TABLE = p.insert(TEMPLATE.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Table));
 	p.m_open_element_stack.push_back(HTML);
@@ -251,7 +303,8 @@ BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_3)
 BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_4)
 {
 	test_parser p;
-	auto TABLE = p.insert(p.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto document = p.document();
+	auto TABLE = p.insert(document.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Table));
 	auto P = p.insert(TABLE.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::P));
 	p.m_open_element_stack.push_back(P);
 	p.m_open_element_stack.push_back(TABLE);
@@ -265,7 +318,8 @@ BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_4)
 BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_5)
 {
 	test_parser p;
-	auto TABLE = p.insert(p.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto document = p.document();
+	auto TABLE = p.insert(document.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Table));
 	auto P = p.insert(TABLE.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::P));
 	p.m_open_element_stack.push_back(P);
 	p.m_open_element_stack.push_back(TABLE);
@@ -274,6 +328,190 @@ BOOST_AUTO_TEST_CASE(simple_parser_appropriate_place_for_inserting_node_5)
 
 	BOOST_CHECK(it == TABLE.end());
 }
+
+/*
+https://html.spec.whatwg.org/multipage/parsing.html#create-an-element-for-the-token
+*/
+BOOST_AUTO_TEST_CASE(simple_parser_create_element_for_token_1)
+{
+	test_parser p;
+	auto document = p.document();
+	auto HTML = p.insert(document.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	start_tag_token token;
+	token.m_tag_name = U"body";
+	auto el = p.create_element_for_token(token, ns_name::HTML, HTML);
+
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_adjust_mathml_attributes_1)
+{
+	test_parser p;
+	start_tag_token token;
+	token.m_attributes.create();
+	token.m_attributes.current().m_name = U"definitionurl";
+
+	p.adjust_mathml_attributes(token);
+
+	BOOST_CHECK(token.m_attributes.current().m_name == U"definitionURL");
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_adjust_svg_attributes_1)
+{
+	test_parser p;
+	start_tag_token token;
+	token.m_attributes.create();
+	token.m_attributes.current().m_name = U"attributename";
+
+	p.adjust_svg_attributes(token);
+
+	BOOST_CHECK(token.m_attributes.current().m_name == U"attributeName");
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_adjust_svg_attributes_2)
+{
+	test_parser p;
+	start_tag_token token;
+	token.m_attributes.create();
+	token.m_attributes.current().m_name = U"attributenameABCD";
+
+	p.adjust_svg_attributes(token);
+
+	BOOST_CHECK(token.m_attributes.current().m_name == U"attributenameABCD");
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_adjust_foreign_attributes_1)
+{
+	test_parser p;
+	start_tag_token token;
+	token.m_attributes.create();
+	token.m_attributes.current().m_name = U"xlink:actuate";
+
+	p.adjust_foreign_attributes(token);
+
+	BOOST_CHECK(token.m_attributes.current().m_name == U"xlink:actuate");
+	BOOST_CHECK(token.m_attributes.current().m_prefix == U"xlink");
+	BOOST_CHECK(token.m_attributes.current().m_local_name == U"actuate");
+	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XLink);
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_adjust_foreign_attributes_2)
+{
+	test_parser p;
+	start_tag_token token;
+	token.m_attributes.create();
+	token.m_attributes.current().m_name = U"xmlns";
+
+	p.adjust_foreign_attributes(token);
+
+	BOOST_CHECK(token.m_attributes.current().m_name == U"xmlns");
+	BOOST_CHECK(token.m_attributes.current().m_prefix == U"");
+	BOOST_CHECK(token.m_attributes.current().m_local_name == U"xmlns");
+	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XMLNS);
+}
+
+
+
+
+
+
+
+// --------------------------------------------------------------------
+// 12.2.6.4.1 The "initial" insertion mode
+//
+// https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode
+// --------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_quirks_condition_1)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//ietf//dtd html strict//";
+
+	BOOST_CHECK(p.in_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_quirks_condition_2)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//ietf//dtd html strict//abcd";
+
+	BOOST_CHECK(p.in_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_quirks_condition_3)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//ietf//dtd html strict/";
+
+	BOOST_CHECK(!(p.in_quirks_condition(token)));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_quirks_condition_4)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//w3c//dtd html 4.01 frameset//";
+
+	BOOST_CHECK(p.in_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_quirks_condition_5)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//w3c//dtd html 4.01 frameset//ABCD";
+
+	BOOST_CHECK(p.in_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_quirks_condition_6)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//w3c//dtd html 4.01 frameset/";
+
+	BOOST_CHECK(!p.in_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_limited_quirks_condition_1)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//w3c//dtd xhtml 1.0 frameset//";
+
+	BOOST_CHECK(p.in_limited_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_limited_quirks_condition_2)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//w3c//dtd xhtml 1.0 frameset//ABCD";
+
+	BOOST_CHECK(p.in_limited_quirks_condition(token));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_in_limited_quirks_condition_3)
+{
+	test_parser p;
+	DOCTYPE_token token;
+	token.m_name = U"html";
+	token.m_public_identifier = U"-//w3c//dtd xhtml 1.0 frameset/";
+
+	BOOST_CHECK(!p.in_limited_quirks_condition(token));
+}
+
+
 
 /*
 BOOST_AUTO_TEST_CASE(simple_parser__1)

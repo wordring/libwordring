@@ -105,7 +105,7 @@ int main()
 	auto mathml_attributes = read(data_path / "mathml_attributes.txt");
 
 	// 外来属性 [ attr, prefix, local_name ]
-	auto foreign_attributes = read<std::vector<std::array<std::u32string, 3>>>(data_path / "foreign_attributes_conversion.txt");
+	auto foreign_attributes = read<std::vector<std::array<std::u32string, 4>>>(data_path / "foreign_attributes_conversion.txt");
 
 	// 名前空間
 	auto namespaces = read<std::vector<std::array<std::u32string, 2>>>(data_path / "namespaces.txt");
@@ -118,7 +118,7 @@ int main()
 	// SVG属性変換表
 	auto svg_attributes_conversion_tbl = read<std::vector<std::array<std::u32string, 2>>>(data_path / "svg_attributes_conversion.txt");
 	// 外来属性変換表
-	auto foreign_attributes_conversion_tbl = read<std::vector<std::array<std::u32string, 3>>>(data_path / "foreign_attributes_conversion.txt");
+	auto foreign_attributes_conversion_tbl = read<std::vector<std::array<std::u32string, 4>>>(data_path / "foreign_attributes_conversion.txt");
 	// 互換性モードテーブル
 	auto quirks_mode_tbl = read(data_path / "quirks_mode.txt");
 	// SVGタグ名変換表
@@ -318,16 +318,22 @@ int main()
 		hpp << std::endl;
 
 		// SVG属性変換表
-		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::u32string> const svg_attributes_conversion_tbl;" << std::endl;
+		hpp << "\t" << "extern std::unordered_map<std::u32string, std::u32string> const svg_attributes_conversion_tbl;" << std::endl;
 		hpp << std::endl;
 		// 外来属性変換表
-		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const foreign_attributes_conversion_tbl;" << std::endl;
+		hpp << "\tstruct foreign_attributes_conversion_entry" << std::endl;
+		hpp << "\t{" << std::endl;
+		hpp << "\t\tstd::u32string m_prefix;" << std::endl;
+		hpp << "\t\tstd::u32string m_local_name;" << std::endl;
+		hpp << "\t\tns_name m_namespace;" << std::endl;
+		hpp << "\t}; " << std::endl;
+		hpp << "\t" << "extern std::unordered_map<std::u32string, foreign_attributes_conversion_entry> const foreign_attributes_conversion_tbl;" << std::endl;
 		hpp << std::endl;
 		// 互換性モード表
-		hpp << "\t" << "extern std::unordered_set<std::u32string> const quirks_mode_tbl;" << std::endl;
+		hpp << "\t" << "extern wordring::trie<char32_t> const quirks_mode_tbl;" << std::endl;
 		hpp << std::endl;
 		// SVGタグ名変換表
-		hpp << "\t" << "extern std::unordered_map<std::uint32_t, std::u32string> const svg_elements_conversion_tbl;" << std::endl;
+		hpp << "\t" << "extern std::unordered_map<std::u32string, std::u32string> const svg_elements_conversion_tbl;" << std::endl;
 
 		hpp << "}" << std::endl;
 	}
@@ -480,15 +486,14 @@ int main()
 		cpp << std::endl;
 
 		// SVG属性変換表
-		cpp << "std::unordered_map<uint32_t, std::u32string> const wordring::whatwg::html::parsing::svg_attributes_conversion_tbl = {" << std::endl;
+		cpp << "std::unordered_map<std::u32string, std::u32string> const wordring::whatwg::html::parsing::svg_attributes_conversion_tbl = {" << std::endl;
 		{
 			std::uint32_t n = 0;
-			for (std::array<std::u32string, 2> const& a : svg_attributes_conversion_tbl)
+			for (std::array<std::u32string, 2>& a : svg_attributes_conversion_tbl)
 			{
-				auto atm = attribute_atom_tbl.at(a[0]);
 				++n;
 				if (n == 1) cpp << "\t";
-				cpp << "{ " << static_cast<std::uint32_t>(atm) << ", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
+				cpp << "{ U\"" << encoding_cast<std::string>(a[0]) << "\", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
 				if (n == 6)
 				{
 					cpp << std::endl;
@@ -501,17 +506,17 @@ int main()
 		cpp << std::endl;
 
 		// 外来属性変換表
-		cpp << "std::unordered_map<uint32_t, std::array<std::u32string, 2>> const wordring::whatwg::html::parsing::foreign_attributes_conversion_tbl = {" << std::endl;
+		cpp << "std::unordered_map<std::u32string, wordring::whatwg::html::parsing::foreign_attributes_conversion_entry> const wordring::whatwg::html::parsing::foreign_attributes_conversion_tbl = {" << std::endl;
 		{
 			std::uint32_t n = 0;
-			for (std::array<std::u32string, 3> const& a : foreign_attributes_conversion_tbl)
+			for (std::array<std::u32string, 4> const& a : foreign_attributes_conversion_tbl)
 			{
-				auto atm = attribute_atom_tbl.at(a[0]);
 				++n;
 				if (n == 1) cpp << "\t";
-				cpp << "{ " << static_cast<std::uint32_t>(atm)
-					<< ", { U\"" << encoding_cast<std::string>(a[1]) << "\", "
-					<< "U\"" << encoding_cast<std::string>(a[2]) << "\" } }, ";
+				cpp << "{ U\"" << encoding_cast<std::string>(a[0]) << "\", "
+					<< "{ U\"" << encoding_cast<std::string>(a[1]) << "\", "
+					<< "U\"" << encoding_cast<std::string>(a[2]) << "\", "
+					<< "ns_name::" << encoding_cast<std::string>(a[3]) << " } }, ";
 				if (n == 6)
 				{
 					cpp << std::endl;
@@ -524,21 +529,41 @@ int main()
 		cpp << std::endl;
 
 		// 互換性モードテーブル
-		cpp << "std::unordered_set<std::u32string> const wordring::whatwg::html::parsing::quirks_mode_tbl = {" << std::endl;
-		for (std::u32string const& s : quirks_mode_tbl) cpp << "\tU\"" << encoding_cast<std::string>(s) << "\"," << std::endl;
+		cpp << "wordring::trie<char32_t> const wordring::whatwg::html::parsing::quirks_mode_tbl = {" << std::endl;
+		{
+			std::sort(quirks_mode_tbl.begin(), quirks_mode_tbl.end());
+			quirks_mode_tbl.erase(std::unique(quirks_mode_tbl.begin(), quirks_mode_tbl.end()), quirks_mode_tbl.end());
+			auto qmode_tbl = wordring::trie<char32_t>(quirks_mode_tbl.begin(), quirks_mode_tbl.end());
+			auto it1 = qmode_tbl.ibegin();
+			auto it2 = qmode_tbl.iend();
+			std::uint32_t n = 0;
+			for (std::uint32_t i = 0; it1 != it2; ++i)
+			{
+				++n;
+				std::int32_t j = *it1++;
+				if (n == 1) cpp << "\t";
+				if (i % 2 == 0) cpp << "{ " << j << ", ";
+				else cpp << j << " }, ";
+				if (n == 20)
+				{
+					cpp << std::endl;
+					n = 0;
+				}
+			}
+		}
+		cpp << std::endl;
 		cpp << "};" << std::endl;
 		cpp << std::endl;
 
 		// SVGタグ名変換表
-		cpp << "std::unordered_map<uint32_t, std::u32string> const wordring::whatwg::html::parsing::svg_elements_conversion_tbl = {" << std::endl;
+		cpp << "std::unordered_map<std::u32string, std::u32string> const wordring::whatwg::html::parsing::svg_elements_conversion_tbl = {" << std::endl;
 		{
 			std::uint32_t n = 0;
 			for (std::array<std::u32string, 2> const& a : svg_elements_conversion_tbl)
 			{
-				auto atm = tag_atom_tbl.at(a[0]);
 				++n;
 				if (n == 1) cpp << "\t";
-				cpp << "{ " << static_cast<std::uint32_t>(atm) << ", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
+				cpp << "{ U\"" << encoding_cast<std::string>(a[0]) << "\", U\"" << encoding_cast<std::string>(a[1]) << "\" }, ";
 				if (n == 10)
 				{
 					cpp << std::endl;

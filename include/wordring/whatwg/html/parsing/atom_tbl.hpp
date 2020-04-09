@@ -30,11 +30,17 @@ namespace wordring::whatwg::html::parsing
 
 	extern std::unordered_map<char32_t, char32_t> const character_reference_code_tbl;
 
-	extern std::unordered_map<std::uint32_t, std::u32string> const svg_attributes_conversion_tbl;
+	extern std::unordered_map<std::u32string, std::u32string> const svg_attributes_conversion_tbl;
 
-	extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const foreign_attributes_conversion_tbl;
+	struct foreign_attributes_conversion_entry
+	{
+		std::u32string m_prefix;
+		std::u32string m_local_name;
+		ns_name m_namespace;
+	}; 
+	extern std::unordered_map<std::u32string, foreign_attributes_conversion_entry> const foreign_attributes_conversion_tbl;
 
-	extern std::unordered_set<std::u32string> const quirks_mode_tbl;
+	extern wordring::trie<char32_t> const quirks_mode_tbl;
 
-	extern std::unordered_map<std::uint32_t, std::u32string> const svg_elements_conversion_tbl;
+	extern std::unordered_map<std::u32string, std::u32string> const svg_elements_conversion_tbl;
 }

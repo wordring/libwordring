@@ -20,6 +20,11 @@ namespace wordring::whatwg::html::parsing
 		std::u32string m_system_identifier;
 		bool m_force_quirks_flag;
 
+		DOCTYPE_token()
+			: m_force_quirks_flag(false)
+		{
+		}
+
 		void clear()
 		{
 			m_name.clear();
@@ -37,12 +42,17 @@ namespace wordring::whatwg::html::parsing
 		struct attribute
 		{
 			std::u32string m_name;
+			std::u32string m_prefix;
+			std::u32string m_local_name;
+			ns_name        m_namespace;
+
 			std::u32string m_value;
 
 			bool m_omitted;
 
 			attribute()
-				: m_omitted(false)
+				: m_namespace(static_cast<ns_name>(0))
+				, m_omitted(false)
 			{
 			}
 
@@ -90,12 +100,17 @@ namespace wordring::whatwg::html::parsing
 			iterator end() { return std::next(begin(), m_last); }
 		};
 
-		std::u32string m_tag_name;
-		basic_html_atom<std::u32string, tag_name> m_tag_atom;
+		tag_token()
+			: m_tag_name_id(static_cast<tag_name>(0))
+			, m_self_closing_flag(false)
+		{
+		}
 
-		bool m_self_closing_flag;
-
-		attribute_list m_attributes;
+		tag_token(tag_name tag)
+			: m_tag_name_id(tag)
+			, m_self_closing_flag(false)
+		{
+		}
 
 		void clear()
 		{
@@ -104,12 +119,26 @@ namespace wordring::whatwg::html::parsing
 			m_attributes.clear();
 		}
 
-		// 属性 ---------------------------------------------------------------
+		std::u32string m_tag_name;
+		tag_name       m_tag_name_id;
+		bool           m_self_closing_flag;
 
-		attribute_list& attributes() { return m_attributes; }
+		attribute_list m_attributes;
 	};
 
-	struct start_tag_token : tag_token {};
+	struct start_tag_token : tag_token
+	{
+		start_tag_token()
+			: tag_token()
+		{
+		}
+		
+		start_tag_token(tag_name tag)
+			: tag_token(tag)
+		{
+		}
+
+	};
 
 	struct end_tag_token : tag_token {};
 

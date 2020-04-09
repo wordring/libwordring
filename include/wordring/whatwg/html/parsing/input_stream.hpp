@@ -97,7 +97,7 @@ namespace wordring::whatwg::html::parsing
 
 		この関数は、利用者が用意する on_report_error(error ec) コールバック・メンバ関数を呼び出す。
 		*/
-		void report_error(error ec)
+		void report_error(error_name ec = static_cast<error_name>(0))
 		{
 			static_cast<this_type*>(this)->on_report_error(ec);
 		}
@@ -108,9 +108,9 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void push_code_point(value_type cp)
 		{
-			if (is_surrogate(cp)) report_error(error::surrogate_in_input_stream);
-			if (is_noncharacter(cp)) report_error(error::noncharacter_in_input_stream);
-			if (!(is_ascii_white_space(cp) || cp == 0) && is_control(cp)) report_error(error::control_character_in_input_stream);
+			if (is_surrogate(cp)) report_error(error_name::surrogate_in_input_stream);
+			if (is_noncharacter(cp)) report_error(error_name::noncharacter_in_input_stream);
+			if (!(is_ascii_white_space(cp) || cp == 0) && is_control(cp)) report_error(error_name::control_character_in_input_stream);
 
 			// 改行文字正規化
 			if (m_cr_state)

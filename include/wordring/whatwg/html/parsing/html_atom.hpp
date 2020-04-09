@@ -47,7 +47,7 @@ namespace wordring::whatwg::html::parsing
 
 	public:
 		using string_type = String;
-		using atom_type = Atom;
+		using atom_type   = Atom;
 
 	public:
 		basic_html_atom()

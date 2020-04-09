@@ -2,6 +2,8 @@
 
 #include <wordring/whatwg/html/simple_defs.hpp>
 
+#include <wordring/whatwg/html/dom_defs.hpp>
+
 #include <wordring/whatwg/infra/infra.hpp>
 
 #include <iterator>
@@ -80,8 +82,23 @@ namespace wordring::whatwg::html::simple
 		using usv_string_type = std::u32string;
 
 	public:
+		document_type_name document_type() const { return m_document_type; }
+
+		void document_type(document_type_name type)
+		{
+			m_document_type = type;
+		}
+
+		document_mode_name document_mode() const { return m_document_mode; }
+
+		void document_mode(document_mode_name mode)
+		{
+			m_document_mode = mode;
+		}
 
 	protected:
+		document_type_name m_document_type;
+		document_mode_name m_document_mode;
 	};
 
 	template <typename String1>
@@ -185,24 +202,26 @@ namespace wordring::whatwg::html::simple
 		using usv_string_type = std::u32string;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using lacal_name_type = basic_html_atom<string_type, tag_name>;
+		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
 
 
 		using attr_type = basic_attr<string_type>;
 
 	public:
-		basic_element() {}
+		basic_element()
+		{
+		}
 
-		basic_element(namespace_uri_type const& ns, string_type const& prfx, lacal_name_type const& name)
+		basic_element(namespace_uri_type const& ns, string_type const& prefix, lacal_name_type const& name)
 			: m_namespace_uri(ns)
-			, m_prefix(prfx)
+			, m_namespace_prefix(prefix)
 			, m_local_name(name)
 		{
 		}
 
-		basic_element(string_type const& ns, string_type const& prfx, string_type const& name)
+		basic_element(string_type const& ns, string_type const& prefix, string_type const& name)
 			: m_namespace_uri(ns)
-			, m_prefix(prfx)
+			, m_namespace_prefix(prefix)
 			, m_local_name(name)
 		{
 		}
@@ -211,18 +230,26 @@ namespace wordring::whatwg::html::simple
 
 		void namespace_uri(string_type const& uri) { m_namespace_uri = uri; }
 
-		namespace_uri_type const& namespace_uri_atom() const { return m_namespace_uri; }
+		ns_name  namespace_uri_id() const { return m_namespace_uri; }
+
+		void  namespace_uri_id(ns_name ns) { m_namespace_uri = ns; }
+
+		string_type namespace_prefix() const { return m_namespace_prefix; }
+
+		void namespace_prefix(string_type const& prefix) { m_namespace_prefix = prefix; }
 
 		string_type local_name() const { return static_cast<string_type>(m_local_name); }
 
 		void local_name(string_type const& name) { m_local_name = name; }
 
-		lacal_name_type const& local_name_atom() const { return m_local_name; }
+		tag_name local_name_id() const { return m_local_name; }
+
+		void local_name_id(tag_name name) { m_local_name = name; }
 
 	private:
 		namespace_uri_type m_namespace_uri;
-		string_type m_prefix;
-		lacal_name_type m_local_name;
+		string_type        m_namespace_prefix;
+		lacal_name_type    m_local_name;
 
 
 
@@ -326,22 +353,25 @@ namespace wordring::whatwg::html::simple
 		using string_type = String;
 
 	public:
-		template <typename String1>
-		basic_comment(String1 const& s)
+		basic_comment()
 		{
-			data(s);
 		}
 
-		template <typename String1>
-		void data(String1 const& s)
+		basic_comment(string_type const& s)
+			: m_data(s)
 		{
-			m_data.clear();
-			encoding_cast(s, std::back_inserter(m_data));
 		}
+
+		basic_comment(string_type&& s)
+			: m_data(std::move(s))
+		{
+		}
+
+		void data(string_type const& s) { m_data = s; }
+
+		void data(string_type&& s) { m_data = std::move(s); }
 
 		string_type const& data() const { return m_data; }
-
-		string_type& data() { return m_data; }
 
 	protected:
 		string_type m_data;

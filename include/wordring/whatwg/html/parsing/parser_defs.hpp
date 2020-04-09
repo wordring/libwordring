@@ -9,9 +9,9 @@ namespace wordring::whatwg::html::parsing
 {
 	// 12.2.2 Parse errors ----------------------------------------------------
 
-	enum class error : std::uint32_t
+	enum class error_name : std::uint32_t
 	{
-		abrupt_closing_of_empty_comment,
+		abrupt_closing_of_empty_comment = 1,
 		abrupt_doctype_public_identifier,
 		abrupt_doctype_system_identifier,
 		absence_of_digits_in_numeric_character_reference,
@@ -66,125 +66,10 @@ namespace wordring::whatwg::html::parsing
 	
 	enum encoding_confidence : std::uint32_t
 	{
-		tentative,
+		tentative = 1,
 		certain,
 		irrelevant,
 	};
 
-	/*
-	// 12.2.5 Tokenization ----------------------------------------------------
-
-	enum tokenizer_state : std::uint32_t
-	{
-		data_state,
-		RCDATA_state,
-		RAWTEXT_state,
-		script_data_state,
-		PLAINTEXT_state,
-		tag_open_state,
-		end_tag_open_state,
-		tag_name_state,
-		RCDATA_less_than_sign_state,
-		RCDATA_end_tag_open_state,
-		RCDATA_end_tag_name_state,
-		RAWTEXT_less_than_sign_state,
-		RAWTEXT_end_tag_open_state,
-		RAWTEXT_end_tag_name_state,
-		script_data_less_than_sign_state,
-		script_data_end_tag_open_state,
-		script_data_end_tag_name_state,
-		script_data_escape_start_state,
-		script_data_escape_start_dash_state,
-		script_data_escaped_state,
-		script_data_escaped_dash_state,
-		script_data_escaped_dash_dash_state,
-		script_data_escaped_less_than_sign_state,
-		script_data_escaped_end_tag_open_state,
-		script_data_escaped_end_tag_name_state,
-		script_data_double_escape_start_state,
-		script_data_double_escaped_state,
-		script_data_double_escaped_dash_state,
-		script_data_double_escaped_dash_dash_state,
-		script_data_double_escaped_less_than_sign_state,
-		script_data_double_escape_end_state,
-		before_attribute_name_state,
-		attribute_name_state,
-		after_attribute_name_state,
-		before_attribute_value_state,
-		attribute_value_double_quoted_state,
-		attribute_value_single_quoted_state,
-		attribute_value_unquoted_state,
-		after_attribute_value_quoted_state,
-		self_closing_start_tag_state,
-		bogus_comment_state,
-		markup_declaration_open_state,
-		comment_start_state,
-		comment_start_dash_state,
-		comment_state,
-		comment_less_than_sign_state,
-		comment_less_than_sign_bang_state,
-		comment_less_than_sign_bang_dash_state,
-		comment_less_than_sign_bang_dash_dash_state,
-		comment_end_dash_state,
-		comment_end_state,
-		comment_end_bang_state,
-		DOCTYPE_state,
-		before_DOCTYPE_name_state,
-		DOCTYPE_name_state,
-		after_DOCTYPE_name_state,
-		after_DOCTYPE_public_keyword_state,
-		before_DOCTYPE_public_identifier_state,
-		DOCTYPE_public_identifier_double_quoted_state,
-		DOCTYPE_public_identifier_single_quoted_state,
-		after_DOCTYPE_public_identifier_state,
-		between_DOCTYPE_public_and_system_identifiers_state,
-		after_DOCTYPE_system_keyword_state,
-		before_DOCTYPE_system_identifier_state,
-		DOCTYPE_system_identifier_double_quoted_state,
-		DOCTYPE_system_identifier_single_quoted_state,
-		after_DOCTYPE_system_identifier_state,
-		bogus_DOCTYPE_state,
-		CDATA_section_state,
-		CDATA_section_bracket_state,
-		CDATA_section_end_state,
-		character_reference_state,
-		named_character_reference_state,
-		ambiguous_ampersand_state,
-		numeric_character_reference_state,
-		hexadecimal_character_reference_start_state,
-		decimal_character_reference_start_state,
-		hexadecimal_character_reference_state,
-		decimal_character_reference_state,
-		numeric_character_reference_end_state,
-	};
-
-	// 12.2.6.4 The rules for parsing tokens in HTML content ------------------
-
-	enum insertion_mode : std::uint32_t
-	{
-		initial_insertion_mode,
-		before_html_insertion_mode,
-		before_head_insertion_mode,
-		in_head_insertion_mode,
-		in_head_noscript_insertion_mode,
-		after_head_insertion_mode,
-		in_body_insertion_mode,
-		text_insertion_mode,
-		in_table_insertion_mode,
-		in_table_text_insertion_mode,
-		in_caption_insertion_mode,
-		in_column_group_insertion_mode,
-		in_table_body_insertion_mode,
-		in_row_insertion_mode,
-		in_cell_insertion_mode,
-		in_select_insertion_mode,
-		in_select_in_table_insertion_mode,
-		in_template_insertion_mode,
-		after_body_insertion_mode,
-		in_frameset_insertion_mode,
-		after_frameset_insertion_mode,
-		after_after_body_insertion_mode,
-		after_after_frameset_insertion_mode,
-	};
-	*/
+	
 }
