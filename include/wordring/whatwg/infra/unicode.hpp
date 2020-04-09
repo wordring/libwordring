@@ -188,20 +188,6 @@ namespace wordring::whatwg
 
 	// ------------------------------------------------------------------------
 
-	template <typename Result, typename String, std::enable_if_t<std::negation_v<std::is_same<Result, String>>, std::nullptr_t> = nullptr>
-	inline Result encoding_cast(String const& in)
-	{
-		Result s;
-		encoding_cast(in, std::back_inserter(s));
-		return s;
-	}
-
-	template <typename Result, typename String, std::enable_if_t<std::is_same_v<Result, String>, std::nullptr_t> = nullptr>
-	inline Result encoding_cast(String in)
-	{
-		return std::forward<String>(in);
-	}
-
 	template <typename String, typename Container>
 	inline void encoding_cast(String const& in, std::back_insert_iterator<Container> out)
 	{
@@ -219,5 +205,19 @@ namespace wordring::whatwg
 			if constexpr (std::is_same_v<Container, std::u32string>) *out++ = cp;
 			else to_string(cp, out);
 		}
+	}
+
+	template <typename Result, typename String, std::enable_if_t<std::negation_v<std::is_same<Result, String>>, std::nullptr_t> = nullptr>
+	inline Result encoding_cast(String const& in)
+	{
+		Result s;
+		encoding_cast(in, std::back_inserter(s));
+		return s;
+	}
+
+	template <typename Result, typename String, std::enable_if_t<std::is_same_v<Result, String>, std::nullptr_t> = nullptr>
+	inline Result encoding_cast(String in)
+	{
+		return std::forward<String>(in);
 	}
 }
