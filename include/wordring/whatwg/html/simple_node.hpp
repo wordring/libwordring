@@ -13,6 +13,10 @@
 
 namespace wordring::whatwg::html::simple
 {
+	// ---------------------------------------------------------------------------------------------
+	// 属性
+	// ---------------------------------------------------------------------------------------------
+
 	template <typename String>
 	class basic_attr
 	{
@@ -68,6 +72,11 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// --------------------------------------------------------------------------------------------
+	// 文書
+	// --------------------------------------------------------------------------------------------
+
+
 	template <typename String>
 	class basic_document
 	{
@@ -114,6 +123,10 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// --------------------------------------------------------------------------------------------
+	// 文書型
+	// --------------------------------------------------------------------------------------------
+
 	template <typename String>
 	class basic_document_type
 	{
@@ -158,6 +171,9 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// --------------------------------------------------------------------------------------------
+	// 文書片
+	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
 	class basic_document_fragment
@@ -187,6 +203,9 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// --------------------------------------------------------------------------------------------
+	// 要素
+	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
 	class basic_element
@@ -284,6 +303,9 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// --------------------------------------------------------------------------------------------
+	// テキスト
+	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
 	class basic_text
@@ -296,7 +318,17 @@ namespace wordring::whatwg::html::simple
 
 	public:
 		using string_type = String;
+		using value_type = typename string_type::value_type;
 
+	public:
+		string_type const& data() const { return m_data; }
+
+		void data(string_type const& s) { m_data = s; }
+
+		void push_back(value_type ch) { m_data.push_back(ch); }
+
+	protected:
+		string_type m_data;
 	};
 
 	template <typename String1>
@@ -312,6 +344,9 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// ---------------------------------------------------------------------------------------------
+	// 処理命令
+	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
 	class basic_processing_instruction
@@ -339,6 +374,10 @@ namespace wordring::whatwg::html::simple
 	{
 		return !(lhs == rhs);
 	}
+
+	// ---------------------------------------------------------------------------------------------
+	// コメント
+	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
 	class basic_comment
@@ -390,6 +429,9 @@ namespace wordring::whatwg::html::simple
 		return !(lhs == rhs);
 	}
 
+	// ---------------------------------------------------------------------------------------------
+	// ノード
+	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
 	using basic_node = std::variant<

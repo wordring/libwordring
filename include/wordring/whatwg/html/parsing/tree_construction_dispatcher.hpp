@@ -49,15 +49,32 @@ namespace wordring::whatwg::html::parsing
 		using base_type::report_error;
 		using base_type::eof;
 
-		using mode_type = void(tree_construction_dispatcher::*)();
+	protected:
+		// ----------------------------------------------------------------------------------------
+		// 入力バイトストリーム
+		//
+		// 12.2.3 The input byte stream
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-input-byte-stream
+		// ----------------------------------------------------------------------------------------
+
+		encoding_confidence m_encoding_confidence;
+
+		// ----------------------------------------------------------------------------------------
+		// 挿入モード
+		//
+		// 12.2.4.1 The insertion mode
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-insertion-mode
+		// ----------------------------------------------------------------------------------------
+
+		using mode_type  = void(tree_construction_dispatcher::*)();
 		using scope_type = bool(tree_construction_dispatcher::*)(node_pointer);
 
-		struct active_formatting_element
-		{
-			node_pointer    m_it;
-			start_tag_token m_token;
-			bool            m_marker;
-		};
+		// ----------------------------------------------------------------------------------------
+		// スタック
+		//
+		// 12.2.4.2 The stack of open elements
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements
+		// ----------------------------------------------------------------------------------------
 
 		/*! @brief 挿入モード
 		- https://html.spec.whatwg.org/multipage/parsing.html#insertion-mode
@@ -89,12 +106,9 @@ namespace wordring::whatwg::html::parsing
 			after_after_frameset_insertion_mode,
 		};
 
-	protected:
 		mode_name m_insertion_mode;
-		bool m_omit_lf;
-
-		node_pointer m_context_element;
-
+		mode_name m_original_insertion_mode;
+		std::deque<mode_name> m_template_insertion_mode_stack;
 
 		// ----------------------------------------------------------------------------------------
 		// 整形要素のリスト
@@ -102,6 +116,13 @@ namespace wordring::whatwg::html::parsing
 		// 12.2.4.3 The list of active formatting elements
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
 		// ----------------------------------------------------------------------------------------
+
+		struct active_formatting_element
+		{
+			node_pointer    m_it;
+			start_tag_token m_token;
+			bool            m_marker;
+		};
 
 		std::deque<active_formatting_element> m_active_formatting_element_list;
 
@@ -121,15 +142,21 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool m_foster_parenting;
 
-	protected:
-		tree_construction_dispatcher()
-			: m_insertion_mode(mode_name::initial_insertion_mode)
-			, m_omit_lf(false)
-			, m_foster_parenting(false)
-		{
-		}
+
+
+		bool m_omit_lf;
+
+		node_pointer m_context_element;
 
 	protected:
+		tree_construction_dispatcher()
+			: m_encoding_confidence(encoding_confidence::irrelevant)
+			, m_insertion_mode(mode_name::initial_insertion_mode)
+			, m_original_insertion_mode(static_cast<mode_name>(0))
+			, m_foster_parenting(false)
+			, m_omit_lf(false)
+		{
+		}
 
 		// ----------------------------------------------------------------------------------------
 		// 挿入モード
@@ -143,12 +170,12 @@ namespace wordring::whatwg::html::parsing
 			m_insertion_mode = mode;
 		}
 
-		// --------------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
 		// スタック
 		//
 		// 12.2.4.2 The stack of open elements
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements
-		// -----------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
 
 		node_pointer current_node()
 		{
@@ -481,6 +508,116 @@ namespace wordring::whatwg::html::parsing
 
 
 		// ----------------------------------------------------------------------------------------
+		// ツリー構築
+		//
+		// 12.2.6 Tree construction
+		// https://html.spec.whatwg.org/multipage/parsing.html#tree-construction
+		// ----------------------------------------------------------------------------------------
+
+		template <typename Token>
+		void process_token(mode_name mode, Token& token)
+		{
+			this_type* P = static_cast<this_type*>(this);
+			node_pointer it;
+
+			if (m_open_element_stack.empty()) goto Html;
+			
+			it = adjusted_current_node();
+
+			if (P->namespace_uri_name(it) == ns_name::HTML) goto Html;
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (is_mathml_text_integration_point(it)
+					&& token.m_tag_name_id != tag_name::Mglyph
+					&& token.m_tag_name_id != tag_name::Malignmark) goto Html;
+
+				if (P->local_name_name(it) == tag_name::Annotation_xml
+					&& token.m_tag_name_id == tag_name::Svg) goto Html;
+
+				if (is_html_integration_point(it)) goto Html;
+			}
+			if constexpr (std::is_same_v<character_token, Token>)
+			{
+				if (is_mathml_text_integration_point(it)) goto Html;
+				if (is_html_integration_point(it)) goto Html;
+			}
+			if constexpr (std::is_same_v<end_of_file_token, Token>) goto Html;
+
+			return on_foreign_content(token);
+
+		Html:
+			switch (mode)
+			{
+			case mode_name::initial_insertion_mode:              return on_initial_insertion_mode(token);
+			case mode_name::before_html_insertion_mode:          return on_before_html_insertion_mode(token);
+			case mode_name::before_head_insertion_mode:          return on_before_head_insertion_mode(token);
+			case mode_name::in_head_insertion_mode:              return on_in_head_insertion_mode(token);
+			case mode_name::in_head_noscript_insertion_mode:     return on_in_head_noscript_insertion_mode(token);
+			case mode_name::after_head_insertion_mode:           return on_after_head_insertion_mode(token);
+			case mode_name::in_body_insertion_mode:              return on_in_body_insertion_mode(token);
+			case mode_name::text_insertion_mode:                 return on_text_insertion_mode(token);
+			case mode_name::in_table_insertion_mode:             return on_in_table_insertion_mode(token);
+			case mode_name::in_table_text_insertion_mode:        return on_in_table_text_insertion_mode(token);
+			case mode_name::in_caption_insertion_mode:           return on_in_caption_insertion_mode(token);
+			case mode_name::in_column_group_insertion_mode:      return on_in_column_group_insertion_mode(token);
+			case mode_name::in_table_body_insertion_mode:        return on_in_table_body_insertion_mode(token);
+			case mode_name::in_row_insertion_mode:               return on_in_row_insertion_mode(token);
+			case mode_name::in_cell_insertion_mode:              return on_in_cell_insertion_mode(token);
+			case mode_name::in_select_insertion_mode:            return on_in_select_insertion_mode(token);
+			case mode_name::in_select_in_table_insertion_mode:   return on_in_select_in_table_insertion_mode(token);
+			case mode_name::in_template_insertion_mode:          return on_in_template_insertion_mode(token);
+			case mode_name::after_body_insertion_mode:           return on_after_body_insertion_mode(token);
+			case mode_name::in_frameset_insertion_mode:          return on_in_frameset_insertion_mode(token);
+			case mode_name::after_frameset_insertion_mode:       return on_after_frameset_insertion_mode(token);
+			case mode_name::after_after_body_insertion_mode:     return on_after_after_body_insertion_mode(token);
+			case mode_name::after_after_frameset_insertion_mode: return on_after_after_frameset_insertion_mode(token);
+			}
+		}
+
+		template <typename Token>
+		void reprocess_token(Token& token)
+		{
+			on_emit_token(token);
+		}
+
+		template <typename Token>
+		void on_emit_token(Token& token)
+		{
+			process_token(m_insertion_mode, token);
+		}
+
+		bool is_mathml_text_integration_point(node_pointer it)
+		{
+			this_type* P = static_cast<this_type*>(this);
+
+			if (P->namespace_uri_name(it) == ns_name::MathML)
+			{
+				switch (P->local_name_name(it))
+				{
+				case tag_name::Mi: case tag_name::Mo: case tag_name::Mn: case tag_name::Ms: case tag_name::Mtext:
+					return true;
+				default:
+					break;
+				}
+			}
+
+			return false;
+		}
+
+		bool is_html_integration_point(node_pointer it)
+		{
+			this_type* P = static_cast<this_type*>(this);
+
+			if (P->namespace_uri_name(it) == ns_name::MathML && P->local_name_name(it) == tag_name::Annotation_xml)
+			{
+
+			}
+
+			return false;
+		}
+
+
+		// ----------------------------------------------------------------------------------------
 		// ノードの作成と挿入
 		//
 		// 12.2.6.1 Creating and inserting nodes
@@ -506,6 +643,7 @@ namespace wordring::whatwg::html::parsing
 			default:
 				tbl = false;
 			}
+
 			if (m_foster_parenting && tbl)
 			{
 				auto it = std::find_if(m_open_element_stack.rbegin(), m_open_element_stack.rend(), [=](node_pointer it) {
@@ -564,7 +702,6 @@ namespace wordring::whatwg::html::parsing
 
 			element_node_type el = P->create_element(token.m_tag_name, ns, U"");
 			
-
 			return el;
 		}
 
@@ -639,9 +776,26 @@ namespace wordring::whatwg::html::parsing
 		/*!
 		https://html.spec.whatwg.org/multipage/parsing.html#insert-a-character
 		*/
-		int insert_character()
+		void insert_character(char32_t cp)
 		{
+			this_type* P = static_cast<this_type*>(this);
 
+			node_pointer it1 = appropriate_place_for_inserting_node(current_node());
+
+			node_pointer parent = P->parent(it1);
+			if (parent == P->document()) return;
+
+			if (it1 != P->begin(parent))
+			{
+				node_pointer prev = P->prev(it1);
+				if (P->is_text(prev)) P->append_text(prev, cp);
+			}
+			else
+			{
+				text_node_type text = P->create_text(cp);
+				node_pointer it2 = P->insert(it1, text);
+				P->set_document(it2, P->document());
+			}
 		}
 
 		/*!
@@ -660,85 +814,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			insert_comment(token, appropriate_place_for_inserting_node(current_node()));
 		}
-		// 
-
-		template <typename Element>
-		bool is_MathML_text_integration_point(Element c)
-		{
-
-		}
-
-
-
-		template <typename Token>
-		void process_token(mode_name mode, Token& token)
-		{
-			switch (mode)
-			{
-			case mode_name::initial_insertion_mode:              return on_initial_insertion_mode(token);
-			case mode_name::before_html_insertion_mode:          return on_before_html_insertion_mode(token);
-			case mode_name::before_head_insertion_mode:          return on_before_head_insertion_mode(token);
-			case mode_name::in_head_insertion_mode:              return on_in_head_insertion_mode(token);
-			case mode_name::in_head_noscript_insertion_mode:     return on_in_head_noscript_insertion_mode(token);
-			case mode_name::after_head_insertion_mode:           return on_after_head_insertion_mode(token);
-			case mode_name::in_body_insertion_mode:              return on_in_body_insertion_mode(token);
-			case mode_name::text_insertion_mode:                 return on_text_insertion_mode(token);
-			case mode_name::in_table_insertion_mode:             return on_in_table_insertion_mode(token);
-			case mode_name::in_table_text_insertion_mode:        return on_in_table_text_insertion_mode(token);
-			case mode_name::in_caption_insertion_mode:           return on_in_caption_insertion_mode(token);
-			case mode_name::in_column_group_insertion_mode:      return on_in_column_group_insertion_mode(token);
-			case mode_name::in_table_body_insertion_mode:        return on_in_table_body_insertion_mode(token);
-			case mode_name::in_row_insertion_mode:               return on_in_row_insertion_mode(token);
-			case mode_name::in_cell_insertion_mode:              return on_in_cell_insertion_mode(token);
-			case mode_name::in_select_insertion_mode:            return on_in_select_insertion_mode(token);
-			case mode_name::in_select_in_table_insertion_mode:   return on_in_select_in_table_insertion_mode(token);
-			case mode_name::in_template_insertion_mode:          return on_in_template_insertion_mode(token);
-			case mode_name::after_body_insertion_mode:           return on_after_body_insertion_mode(token);
-			case mode_name::in_frameset_insertion_mode:          return on_in_frameset_insertion_mode(token);
-			case mode_name::after_frameset_insertion_mode:       return on_after_frameset_insertion_mode(token);
-			case mode_name::after_after_body_insertion_mode:     return on_after_after_body_insertion_mode(token);
-			case mode_name::after_after_frameset_insertion_mode: return on_after_after_frameset_insertion_mode(token);
-			}
-		}
-
-
-		template <typename Token>
-		void reprocess_token(Token& token)
-		{
-			on_emit_token(token);
-		}
-
-		template <typename Token>
-		void on_emit_token(Token& token)
-		{
-			switch (m_insertion_mode)
-			{
-			case mode_name::initial_insertion_mode:              return on_initial_insertion_mode(token);
-			case mode_name::before_html_insertion_mode:          return on_before_html_insertion_mode(token);
-			case mode_name::before_head_insertion_mode:          return on_before_head_insertion_mode(token);
-			case mode_name::in_head_insertion_mode:              return on_in_head_insertion_mode(token);
-			case mode_name::in_head_noscript_insertion_mode:     return on_in_head_noscript_insertion_mode(token);
-			case mode_name::after_head_insertion_mode:           return on_after_head_insertion_mode(token);
-			case mode_name::in_body_insertion_mode:              return on_in_body_insertion_mode(token);
-			case mode_name::text_insertion_mode:                 return on_text_insertion_mode(token);
-			case mode_name::in_table_insertion_mode:             return on_in_table_insertion_mode(token);
-			case mode_name::in_table_text_insertion_mode:        return on_in_table_text_insertion_mode(token);
-			case mode_name::in_caption_insertion_mode:           return on_in_caption_insertion_mode(token);
-			case mode_name::in_column_group_insertion_mode:      return on_in_column_group_insertion_mode(token);
-			case mode_name::in_table_body_insertion_mode:        return on_in_table_body_insertion_mode(token);
-			case mode_name::in_row_insertion_mode:               return on_in_row_insertion_mode(token);
-			case mode_name::in_cell_insertion_mode:              return on_in_cell_insertion_mode(token);
-			case mode_name::in_select_insertion_mode:            return on_in_select_insertion_mode(token);
-			case mode_name::in_select_in_table_insertion_mode:   return on_in_select_in_table_insertion_mode(token);
-			case mode_name::in_template_insertion_mode:          return on_in_template_insertion_mode(token);
-			case mode_name::after_body_insertion_mode:           return on_after_body_insertion_mode(token);
-			case mode_name::in_frameset_insertion_mode:          return on_in_frameset_insertion_mode(token);
-			case mode_name::after_frameset_insertion_mode:       return on_after_frameset_insertion_mode(token);
-			case mode_name::after_after_body_insertion_mode:     return on_after_after_body_insertion_mode(token);
-			case mode_name::after_after_frameset_insertion_mode: return on_after_after_frameset_insertion_mode(token);
-			}
-		}
-
+		
 		// ----------------------------------------------------------------------------------------
 		// 12.2.6.4.1 The "initial" insertion mode
 		//
@@ -769,8 +845,8 @@ namespace wordring::whatwg::html::parsing
 
 				if (!P->is_iframe_srcdoc_document())
 				{
-					if (in_quirks_condition(token)) P->document_mode(document_mode_name::quirks);
-					else if (in_limited_quirks_condition(token)) P->document_mode(document_mode_name::limited_quirks);
+					if (in_quirks_condition(token)) P->set_document_mode(document_mode_name::quirks);
+					else if (in_limited_quirks_condition(token)) P->set_document_mode(document_mode_name::limited_quirks);
 				}
 
 				insertion_mode(mode_name::before_html_insertion_mode);
@@ -781,7 +857,7 @@ namespace wordring::whatwg::html::parsing
 			if (!P->is_iframe_srcdoc_document())
 			{
 				P->report_error();
-				P->document_mode(document_mode_name::quirks);
+				P->set_document_mode(document_mode_name::quirks);
 			}
 
 			insertion_mode(mode_name::before_html_insertion_mode);
@@ -1200,6 +1276,17 @@ namespace wordring::whatwg::html::parsing
 		void on_after_after_frameset_insertion_mode(Token& token)
 		{
 		}
-	};
 
+		// ----------------------------------------------------------------------------------------
+		// 12.2.6.5 The rules for parsing tokens in foreign content
+		//
+		// https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inforeign
+		// ----------------------------------------------------------------------------------------
+		
+		template <typename Token>
+		void on_foreign_content(Token& token)
+		{
+
+		}
+	};
 }

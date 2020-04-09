@@ -15,6 +15,7 @@
 #include <wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp>
 
 #include <cassert>
+#include <iterator>
 #include <variant>
 
 namespace wordring::whatwg::html::parsing
@@ -63,7 +64,9 @@ namespace wordring::whatwg::html::simple
 			m_c.insert(m_c.end(), document_node_type());
 		}
 
-		// ノード型判定 --------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
+		// ノード
+		// ----------------------------------------------------------------------------------------
 
 		bool is_document(node_pointer it) const { return std::holds_alternative<document_node_type>(*it); }
 
@@ -79,8 +82,6 @@ namespace wordring::whatwg::html::simple
 
 		bool is_comment(node_pointer it) const { return std::holds_alternative<comment_node_type>(*it); }
 
-		// ノード取得 ----------------------------------------------------------
-
 		document_node_type* to_document(node_pointer it) { return std::get_if<document_node_type>(std::addressof(*it)); }
 
 		document_type_node_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_node_type>(std::addressof(*it)); }
@@ -89,13 +90,23 @@ namespace wordring::whatwg::html::simple
 
 		element_node_type const* to_element(node_pointer it) const { return std::get_if<element_node_type>(std::addressof(*it)); }
 
-		text_node_type const* to_text(node_pointer it) const { return std::get_if<text_node_type>(std::addressof(*it)); }
+		text_node_type* to_text(node_pointer it) { return std::get_if<text_node_type>(std::addressof(*it)); }
 
 		processing_instruction_node_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_node_type>(std::addressof(*it)); }
 
 		comment_node_type const* to_comment(node_pointer it) const { return std::get_if<comment_node_type>(std::addressof(*it)); }
 
-		// 文書 ---------------------------------------------------------------
+		/*! @brief ノードを挿入する
+		*/
+		template <typename Node>
+		node_pointer insert(node_pointer pos, Node node)
+		{
+			return m_c.insert(pos, std::forward<Node>(node));
+		}
+
+		// ----------------------------------------------------------------------------------------
+		// 文書
+		// ----------------------------------------------------------------------------------------
 
 		/*! @brief 文書ノードを返す
 
@@ -103,31 +114,40 @@ namespace wordring::whatwg::html::simple
 		*/
 		node_pointer document() { return m_c.begin(); }
 
-		/*! @brief 最初の子を返す
-		*/
-		//node_pointer begin() { return m_c.begin(); }
-
-		/*! @brief 最後の子の次を返す
-		*/
-		//node_pointer end() { return m_c.end(); }
-
 		/*! @brief 文書が IFRAME ソース文書か調べる
 
 		https://html.spec.whatwg.org/multipage/iframe-embed-object.html#an-iframe-srcdoc-document
 		*/
 		bool is_iframe_srcdoc_document() const { return false; }
 
-		void document_type(document_type_name type)
+		void set_document_type(document_type_name type)
 		{
 			to_document(document())->document_type(type);
 		}
 
-		void document_mode(document_mode_name mode)
+		void set_document_mode(document_mode_name mode)
 		{
 			to_document(document())->document_mode(mode);
 		}
 
-		// 要素 ---------------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
+		// 文書型
+		// ----------------------------------------------------------------------------------------
+
+		document_type_node_type create_document_type(std::u32string const& name, std::u32string const& public_id, std::u32string const& system_id)
+		{
+			document_type_node_type doctype;
+
+			doctype.name(encoding_cast<string_type>(name));
+			doctype.public_id(encoding_cast<string_type>(public_id));
+			doctype.system_id(encoding_cast<string_type>(system_id));
+
+			return doctype;
+		}
+
+		// ----------------------------------------------------------------------------------------
+		// 要素
+		// ----------------------------------------------------------------------------------------
 
 		/*! @brief 親要素を返す
 		*/
@@ -140,6 +160,14 @@ namespace wordring::whatwg::html::simple
 		/*! @brief 最後の子の次を返す
 		*/
 		node_pointer end(node_pointer it) { return it.end(); }
+
+		/*! @brief 前の兄弟を返す
+		*/
+		node_pointer prev(node_pointer it) { return std::prev(it); }
+
+		/*! @brief 次の兄弟を返す
+		*/
+		node_pointer next(node_pointer it) { return std::next(it); }
 
 		/* @brief 要素を作成する
 
@@ -167,22 +195,17 @@ namespace wordring::whatwg::html::simple
 			return el;
 		}
 
+		/*! @brief 要素へオーナー文書を設定する
+
+		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
+		*/
 		void set_document(node_pointer it, node_pointer doc) {}
 
 		/*! @brief 要素へ属性を付加する
-		
 		*/
 		void append_attribute(element_node_type el)
 		{
 
-		}
-
-		/*!
-		*/
-		template <typename Node>
-		node_pointer insert(node_pointer pos, Node node)
-		{
-			return m_c.insert(pos, std::forward<Node>(node));
 		}
 
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる
@@ -196,10 +219,32 @@ namespace wordring::whatwg::html::simple
 
 		ns_name namespace_uri_name(node_pointer it) const { return to_element(it)->namespace_uri_id(); }
 
-		tag_name local_name_name(node_pointer it) { return to_element(it)->local_name_id(); }
+		tag_name local_name_name(node_pointer it) const { return to_element(it)->local_name_id(); }
 
+		std::u32string find_attribute_value(node_pointer it) const
+		{
+			to_element(it)->
+		}
 
-		// コメント -----------------------------------------------------------
+		// ----------------------------------------------------------------------------------------
+		// テキスト
+		// ----------------------------------------------------------------------------------------
+		
+		text_node_type create_text(char32_t cp)
+		{
+			text_node_type text;
+			to_string(cp, std::back_inserter(text));
+			return text;
+		}
+
+		void append_text(node_pointer it, char32_t cp)
+		{
+			to_string(cp, std::back_inserter(*to_text(it)));
+		}
+
+		// ----------------------------------------------------------------------------------------
+		// コメント
+		// ----------------------------------------------------------------------------------------
 
 		comment_node_type create_comment(std::u32string data)
 		{
@@ -208,20 +253,9 @@ namespace wordring::whatwg::html::simple
 
 		// ノード作成 ----------------------------------------------------------
 
-		document_type_node_type create_document_type(std::u32string const& name, std::u32string const& public_id, std::u32string const& system_id)
-		{
-			document_type_node_type doctype;
-
-			doctype.name(encoding_cast<string_type>(name));
-			doctype.public_id(encoding_cast<string_type>(public_id));
-			doctype.system_id(encoding_cast<string_type>(system_id));
-
-			return doctype;
-		}
 
 		document_fragment_node_type create_document_fragment(){}
 
-		text_node_type create_text() {}
 
 		processing_instruction_node_type create_processing_instruction() {}
 
@@ -229,15 +263,11 @@ namespace wordring::whatwg::html::simple
 
 		// 
 
-		void append_document_type(document_type_node_type const& doctype)
-		{
 
-		}
-
-		void insert_comment(node_pointer pos, comment_token& comment)
+		/*void insert_comment(node_pointer pos, comment_token& comment)
 		{
 			m_c.insert(pos, comment_node_type(comment.m_data));
-		}
+		}*/
 
 		/*! @brief 与えられたノードがHTML名前空間に属するか調べる
 		*/

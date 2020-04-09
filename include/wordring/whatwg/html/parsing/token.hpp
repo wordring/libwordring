@@ -137,7 +137,6 @@ namespace wordring::whatwg::html::parsing
 			: tag_token(tag)
 		{
 		}
-
 	};
 
 	struct end_tag_token : tag_token {};

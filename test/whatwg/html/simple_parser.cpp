@@ -85,6 +85,10 @@ namespace
 
 		using base_type::namespace_uri_name;
 		using base_type::local_name_name;
+
+		using base_type::insert;
+
+		using base_type::m_c;
 	};
 }
 
@@ -412,9 +416,6 @@ BOOST_AUTO_TEST_CASE(simple_parser_adjust_foreign_attributes_2)
 
 
 
-
-
-
 // --------------------------------------------------------------------
 // 12.2.6.4.1 The "initial" insertion mode
 //
@@ -501,14 +502,68 @@ BOOST_AUTO_TEST_CASE(simple_parser_in_limited_quirks_condition_2)
 	BOOST_CHECK(p.in_limited_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(simple_parser_in_limited_quirks_condition_3)
+BOOST_AUTO_TEST_CASE(simple_parser_insert_character_1)
 {
 	test_parser p;
-	DOCTYPE_token token;
-	token.m_name = U"html";
-	token.m_public_identifier = U"-//w3c//dtd xhtml 1.0 frameset/";
+	auto HTML = p.m_c.insert(p.document().end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	p.m_open_element_stack.push_back(HTML);
+	p.m_foster_parenting = true;
 
-	BOOST_CHECK(!p.in_limited_quirks_condition(token));
+	auto it = p.appropriate_place_for_inserting_node(HTML);
+	BOOST_CHECK(it == HTML.end());
+
+	p.insert_character(U'A');
+
+	BOOST_CHECK(p.to_text(HTML.begin())->data() == "A");
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_insert_character_2)
+{
+	test_parser p;
+	auto HTML = p.m_c.insert(p.document().end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	p.m_open_element_stack.push_back(HTML);
+	p.m_foster_parenting = true;
+
+	auto it = p.appropriate_place_for_inserting_node(HTML);
+	BOOST_CHECK(it == HTML.end());
+
+	p.insert_character(U'A');
+	p.insert_character(U'B');
+	p.insert_character(U'C');
+
+	BOOST_CHECK(p.to_text(HTML.begin())->data() == "ABC");
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_insert_comment_1)
+{
+	test_parser p;
+	auto HTML = p.m_c.insert(p.document().end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+
+	comment_token comment;
+	comment.m_data = U"ABC";
+
+	p.insert_comment(comment, HTML.end());
+
+	BOOST_CHECK(p.to_comment(HTML.begin())->data() == "ABC");
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_insert_comment_2)
+{
+	test_parser p;
+	auto HTML = p.m_c.insert(p.document().end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+
+	p.m_open_element_stack.push_back(HTML);
+	p.m_foster_parenting = true;
+
+	auto it = p.appropriate_place_for_inserting_node(HTML);
+	BOOST_CHECK(it == HTML.end());
+
+	comment_token comment;
+	comment.m_data = U"ABC";
+
+	p.insert_comment(comment);
+
+	BOOST_CHECK(p.to_comment(HTML.begin())->data() == "ABC");
 }
 
 

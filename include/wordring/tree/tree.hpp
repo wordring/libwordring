@@ -215,7 +215,7 @@ namespace wordring::detail
 
 		tree_node_iterator parent() const
 		{
-			assert(m_index != null_value);
+			//assert(m_index != null_value);
 
 			auto* h = m_c->data();
 
