@@ -157,7 +157,7 @@ namespace wordring::whatwg::html::parsing
 
 		node_pointer adjusted_current_node()
 		{
-			if constexpr (is_fragment_parser) { if (m_stack_of_open_elements.size() == 1) return m_context_element; }
+			if constexpr (is_fragments_parser) { if (m_open_element_stack.size() == 1) return m_context_element; }
 			return current_node();
 		}
 

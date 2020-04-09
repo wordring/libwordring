@@ -179,10 +179,10 @@ namespace wordring::whatwg::html::simple
 
 		/*!
 		*/
-		template <typename T>
-		node_pointer insert(node_pointer pos, T node)
+		template <typename Node>
+		node_pointer insert(node_pointer pos, Node node)
 		{
-			return m_c.insert(pos, std::forward<T>(node));
+			return m_c.insert(pos, std::forward<Node>(node));
 		}
 
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる

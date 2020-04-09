@@ -109,7 +109,7 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
-	inline bool operator!=(basic_document<String1> const&, basic_document<String1> const&)
+	inline bool operator!=(basic_document<String1> const& lhs, basic_document<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -153,7 +153,7 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
-	inline bool operator!=(basic_document_type<String1> const&, basic_document_type<String1> const&)
+	inline bool operator!=(basic_document_type<String1> const& lhs, basic_document_type<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -182,7 +182,7 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
-	inline bool operator!=(basic_document_fragment<String1> const&, basic_document_fragment<String1> const&)
+	inline bool operator!=(basic_document_fragment<String1> const& lhs, basic_document_fragment<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -307,7 +307,7 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
-	inline bool operator!=(basic_text<String1> const&, basic_text<String1> const&)
+	inline bool operator!=(basic_text<String1> const& lhs, basic_text<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -335,7 +335,7 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
-	inline bool operator!=(basic_processing_instruction<String1> const&, basic_processing_instruction<String1> const&)
+	inline bool operator!=(basic_processing_instruction<String1> const& lhs, basic_processing_instruction<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -385,7 +385,7 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
-	inline bool operator!=(basic_comment<String1> const&, basic_comment<String1> const&)
+	inline bool operator!=(basic_comment<String1> const& lhs, basic_comment<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
