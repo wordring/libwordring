@@ -81,7 +81,6 @@ BOOST_AUTO_TEST_CASE(atom_tbl_tag_name_tbl_1)
 	using namespace wordring::whatwg::html::parsing;
 
 	BOOST_CHECK(tag_name_tbl[1] == U"a");
-	BOOST_CHECK(tag_name_tbl[405] == U"xor");
 }
 
 /*
@@ -243,49 +242,14 @@ BOOST_AUTO_TEST_CASE(atom_tbl_character_reference_code_tbl_1)
 }
 
 /*
-extern std::unordered_map<std::uint32_t, std::u32string> const svg_attributes_conversion_tbl;
-*/
-BOOST_AUTO_TEST_CASE(atom_tbl_svg_attributes_conversion_tbl_1)
-{
-	using namespace wordring::whatwg::html::parsing;
-
-	BOOST_CHECK(svg_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Attributename)) == U"attributeName");
-	BOOST_CHECK(svg_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Zoomandpan)) == U"zoomAndPan");
-}
-
-/*
-extern std::unordered_map<std::uint32_t, std::array<std::u32string, 2>> const foreign_attributes_conversion_tbl;
-*/
-BOOST_AUTO_TEST_CASE(atom_tbl_foreign_attributes_conversion_tbl_1)
-{
-	using namespace wordring::whatwg::html::parsing;
-
-	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xlink_actuate))[0] == U"xlink");
-	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xlink_actuate))[1] == U"actuate");
-	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xmlns_xlink))[0] == U"xmlns");
-	BOOST_CHECK(foreign_attributes_conversion_tbl.at(static_cast<std::uint32_t>(attribute_name::Xmlns_xlink))[1] == U"xlink");
-}
-
-/*
 extern wordring::trie<char32_t> const quirks_mode_tbl;
 */
 BOOST_AUTO_TEST_CASE(atom_tbl_quirks_mode_tbl_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
-	BOOST_CHECK(quirks_mode_tbl.find(U"+//Silmaril//dtd html Pro v0r11 19970101//") != quirks_mode_tbl.end());
-	BOOST_CHECK(quirks_mode_tbl.find(U"-//WebTechs//DTD Mozilla HTML//") != quirks_mode_tbl.end());
-}
-
-/*
-extern std::unordered_map<std::uint32_t, std::u32string> const svg_elements_conversion_tbl;
-*/
-BOOST_AUTO_TEST_CASE(atom_tbl_svg_elements_conversion_tbl_1)
-{
-	using namespace wordring::whatwg::html::parsing;
-
-	BOOST_CHECK(svg_elements_conversion_tbl.at(static_cast<std::uint32_t>(tag_name::Altglyph)) == U"altGlyph");
-	BOOST_CHECK(svg_elements_conversion_tbl.at(static_cast<std::uint32_t>(tag_name::Textpath)) == U"textPath");
+	BOOST_CHECK(quirks_mode_tbl.find(std::u32string_view(U"+//silmaril//dtd html pro v0r11 19970101//")) != quirks_mode_tbl.end());
+	BOOST_CHECK(quirks_mode_tbl.find(std::u32string_view(U"-//webtechs//dtd mozilla html//")) != quirks_mode_tbl.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

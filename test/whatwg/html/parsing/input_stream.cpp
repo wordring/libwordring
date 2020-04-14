@@ -18,24 +18,24 @@ namespace
 
 		using base_type::m_c;
 
-		wordring::whatwg::html::parsing::error m_ec;
+		wordring::whatwg::html::parsing::error_name m_ec;
 
 		std::u32string m_emits;
 
-		void on_report_error(wordring::whatwg::html::parsing::error ec) { m_ec = ec; }
+		void on_report_error(wordring::whatwg::html::parsing::error_name ec) { m_ec = ec; }
 
 		void on_emit_code_point() { if(!eof()) m_emits.push_back(m_c.back()); }
 	};
 }
 
-BOOST_AUTO_TEST_SUITE(parsing__input_stream__test)
+BOOST_AUTO_TEST_SUITE(parsing_input_stream_test)
 
 /*
 空の入力ストリームを構築する
 
 input_stream()
 */
-BOOST_AUTO_TEST_CASE(input_stream__construct__1)
+BOOST_AUTO_TEST_CASE(input_stream_construct_1)
 {
 	test_stream ts;
 }
@@ -43,16 +43,16 @@ BOOST_AUTO_TEST_CASE(input_stream__construct__1)
 /*
 エラー報告する
 
-void report_error(error ec)
+void report_error(error_name ec)
 */
-BOOST_AUTO_TEST_CASE(input_stream__report_error__1)
+BOOST_AUTO_TEST_CASE(input_stream_report_error_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
 	test_stream ts;
-	ts.report_error(error::cdata_in_html_content);
+	ts.report_error(error_name::cdata_in_html_content);
 
-	BOOST_CHECK(ts.m_ec == error::cdata_in_html_content);
+	BOOST_CHECK(ts.m_ec == error_name::cdata_in_html_content);
 }
 
 /*
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_CASE(input_stream__report_error__1)
 
 void emit_code_point(value_type cp)
 */
-BOOST_AUTO_TEST_CASE(input_stream__emit_code_point__1)
+BOOST_AUTO_TEST_CASE(input_stream_emit_code_point_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(input_stream__emit_code_point__1)
 
 void push_code_point(value_type cp)
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__1)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_1)
 {
 	test_stream ts;
 	ts.push_code_point(U'A');
@@ -87,14 +87,14 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__1)
 エラー報告をテスト
 サロゲート文字
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__2)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_2)
 {
 	using namespace wordring::whatwg::html::parsing;
 
 	test_stream ts;
 	ts.push_code_point(U'\xD800');
 
-	BOOST_CHECK(ts.m_ec == error::surrogate_in_input_stream);
+	BOOST_CHECK(ts.m_ec == error_name::surrogate_in_input_stream);
 	BOOST_CHECK(ts.next_input_character() == U'\xD800');
 }
 
@@ -102,14 +102,14 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__2)
 エラー報告をテスト
 非文字
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__3)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_3)
 {
 	using namespace wordring::whatwg::html::parsing;
 
 	test_stream ts;
 	ts.push_code_point(U'\xFFFE');
 
-	BOOST_CHECK(ts.m_ec == error::noncharacter_in_input_stream);
+	BOOST_CHECK(ts.m_ec == error_name::noncharacter_in_input_stream);
 	BOOST_CHECK(ts.next_input_character() == U'\xFFFE');
 }
 
@@ -117,39 +117,39 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__3)
 エラー報告をテスト
 コントロール文字
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__4)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_4)
 {
 	using namespace wordring::whatwg::html::parsing;
 
 	test_stream ts;
 	ts.push_code_point(U'\x7F');
 
-	BOOST_CHECK(ts.m_ec == error::control_character_in_input_stream);
+	BOOST_CHECK(ts.m_ec == error_name::control_character_in_input_stream);
 	BOOST_CHECK(ts.next_input_character() == U'\x7F');
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__5)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_5)
 {
 	using namespace wordring::whatwg::html::parsing;
 
 	test_stream ts;
 
-	ts.m_ec = error::abrupt_closing_of_empty_comment; // エラー無しの判定用ダミー
+	ts.m_ec = error_name::abrupt_closing_of_empty_comment; // エラー無しの判定用ダミー
 	ts.push_code_point(U'\x9');
 
-	BOOST_CHECK(ts.m_ec == error::abrupt_closing_of_empty_comment);
+	BOOST_CHECK(ts.m_ec == error_name::abrupt_closing_of_empty_comment);
 	BOOST_CHECK(ts.next_input_character() == U'\x9');
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__6)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_6)
 {
 	using namespace wordring::whatwg::html::parsing;
 
 	test_stream ts;
-	ts.m_ec = error::abrupt_closing_of_empty_comment; // エラー無しの判定用ダミー
+	ts.m_ec = error_name::abrupt_closing_of_empty_comment; // エラー無しの判定用ダミー
 	ts.push_code_point(U'\x0');
 
-	BOOST_CHECK(ts.m_ec == error::abrupt_closing_of_empty_comment);
+	BOOST_CHECK(ts.m_ec == error_name::abrupt_closing_of_empty_comment);
 	BOOST_CHECK(ts.next_input_character() == U'\x0');
 }
 
@@ -157,7 +157,7 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__6)
 改行文字正規化をテスト
 CR
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__7)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_7)
 {
 	test_stream ts;
 	ts.push_code_point(U'\r');
@@ -171,7 +171,7 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__7)
 /*
 LF
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__8)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_8)
 {
 	test_stream ts;
 	ts.push_code_point(U'\n');
@@ -185,7 +185,7 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__8)
 /*
 CRLF
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__9)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_9)
 {
 	test_stream ts;
 	ts.push_code_point(U'\r');
@@ -200,7 +200,7 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__9)
 /*
 CRCR
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__10)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_10)
 {
 	test_stream ts;
 	ts.push_code_point(U'\r');
@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__10)
 /*
 LFCR
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__11)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_11)
 {
 	test_stream ts;
 	ts.push_code_point(U'\n');
@@ -234,11 +234,11 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__11)
 /*
 CR, EOF
 */
-BOOST_AUTO_TEST_CASE(input_stream__push_code_point__12)
+BOOST_AUTO_TEST_CASE(input_stream_push_code_point_12)
 {
 	test_stream ts;
 	ts.push_code_point(U'\r');
-	ts.eof(true);
+	ts.push_eof();
 
 	BOOST_CHECK(ts.next_input_character() == U'\n');
 	BOOST_CHECK(!ts.eof());
@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE(input_stream__push_code_point__12)
 
 value_type current_input_character() const
 */
-BOOST_AUTO_TEST_CASE(input_stream__current_input_character__1)
+BOOST_AUTO_TEST_CASE(input_stream_current_input_character_1)
 {
 	test_stream ts;
 	ts.push_code_point(U'A');
@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE(input_stream__current_input_character__1)
 
 value_type next_input_character() const
 */
-BOOST_AUTO_TEST_CASE(input_stream__next_input_character__1)
+BOOST_AUTO_TEST_CASE(input_stream_next_input_character_1)
 {
 	test_stream ts;
 	ts.push_code_point(U'A');
@@ -274,10 +274,35 @@ BOOST_AUTO_TEST_CASE(input_stream__next_input_character__1)
 }
 
 /*
+与えられた文字列とストリーム・バッファ内の文字列を比較する
+*/
+BOOST_AUTO_TEST_CASE(input_stream_match_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	test_stream ts;
+	auto s = std::u32string(U"PUBL");
+	for (char32_t cp : s) ts.push_code_point(cp);
+
+	BOOST_CHECK(!ts.match(U"public", false, true));
+}
+
+BOOST_AUTO_TEST_CASE(input_stream_match_2)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	test_stream ts;
+	auto s = std::u32string(U"PUBLICA");
+	for (char32_t cp : s) ts.push_code_point(cp);
+
+	BOOST_CHECK(ts.match(U"public", false, true));
+}
+
+/*
 名前付き文字参照とストリーム・バッファ内の文字列を比較する
 
 */
-BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__1)
+BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -298,7 +323,7 @@ BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__1)
 	BOOST_CHECK(n == std::size(U"xodot;") - 1);
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__2)
+BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_2)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -317,7 +342,7 @@ BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__2)
 	BOOST_CHECK(r == test_stream::match_result::failed);
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__3)
+BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_3)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -336,7 +361,7 @@ BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__3)
 	BOOST_CHECK(r == test_stream::match_result::failed);
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__4)
+BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_4)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -361,7 +386,7 @@ BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__4)
 	BOOST_CHECK(a[1] == 0);
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__5)
+BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_5)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -386,7 +411,7 @@ BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__5)
 	BOOST_CHECK(a[1] == 0);
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__6)
+BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_6)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -411,7 +436,7 @@ BOOST_AUTO_TEST_CASE(input_stream__match_named_character_reference__6)
 	BOOST_CHECK(a[1] == 0);
 }
 
-BOOST_AUTO_TEST_CASE(input_stream__named_character_reference__1)
+BOOST_AUTO_TEST_CASE(input_stream_named_character_reference_1)
 {
 	using namespace wordring::whatwg::html::parsing;
 
@@ -441,7 +466,7 @@ BOOST_AUTO_TEST_CASE(input_stream__named_character_reference__1)
 
 void consume()
 */
-BOOST_AUTO_TEST_CASE(input_stream__consume__1)
+BOOST_AUTO_TEST_CASE(input_stream_consume_1)
 {
 	test_stream ts;
 	ts.push_code_point(U'A');
@@ -455,7 +480,7 @@ BOOST_AUTO_TEST_CASE(input_stream__consume__1)
 
 void reconsume()
 */
-BOOST_AUTO_TEST_CASE(input_stream__reconsume__1)
+BOOST_AUTO_TEST_CASE(input_stream_reconsume_1)
 {
 	test_stream ts;
 	ts.push_code_point(U'A');
@@ -470,7 +495,7 @@ BOOST_AUTO_TEST_CASE(input_stream__reconsume__1)
 
 bool eof() const
 */
-BOOST_AUTO_TEST_CASE(input_stream__eof__1)
+BOOST_AUTO_TEST_CASE(input_stream_eof_1)
 {
 	test_stream ts;
 
@@ -482,10 +507,10 @@ BOOST_AUTO_TEST_CASE(input_stream__eof__1)
 
 void eof(bool b)
 */
-BOOST_AUTO_TEST_CASE(input_stream__eof__2)
+BOOST_AUTO_TEST_CASE(input_stream_eof_2)
 {
 	test_stream ts;
-	ts.eof(true);
+	ts.push_eof();
 
 	BOOST_CHECK(ts.eof());
 }

@@ -659,3 +659,11 @@ namespace wordring::whatwg::encoding
 		encode(first, last, name::UTF_8, output);
 	}
 }
+
+namespace wordring::whatwg
+{
+	inline encoding_name get_encoding_name(std::u32string_view label)
+	{
+		return encoding::get_name(std::u32string(label));
+	}
+}

@@ -16,8 +16,6 @@ namespace wordring::whatwg::html::simple
 		using node_type    = basic_node<String>;
 		using node_pointer = typename container_type::iterator;
 
-		using attr_type = basic_attr<string_type>;
-
 		using document_node_type               = basic_document<string_type>;
 		using document_type_node_type          = basic_document_type<string_type>;
 		using document_fragment_node_type      = basic_document_fragment<string_type>;
@@ -26,6 +24,10 @@ namespace wordring::whatwg::html::simple
 		using processing_instruction_node_type = basic_processing_instruction<string_type>;
 		using comment_node_type                = basic_comment<string_type>;
 
+		using attribute_type = basic_attr<string_type>;
+		//using attribute_pointer = 
+
+		/*
 		using DOCTYPE_token     = wordring::whatwg::html::parsing::DOCTYPE_token;
 		using tag_token         = wordring::whatwg::html::parsing::tag_token;
 		using start_tag_token   = wordring::whatwg::html::parsing::start_tag_token;
@@ -33,7 +35,7 @@ namespace wordring::whatwg::html::simple
 		using comment_token     = wordring::whatwg::html::parsing::comment_token;
 		using character_token   = wordring::whatwg::html::parsing::character_token;
 		using end_of_file_token = wordring::whatwg::html::parsing::end_of_file_token;
-
+		*/
 
 	};
 }

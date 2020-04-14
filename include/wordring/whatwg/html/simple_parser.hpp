@@ -49,9 +49,13 @@ namespace wordring::whatwg::html::simple
 		using processing_instruction_node_type = typename policy::processing_instruction_node_type;
 		using comment_node_type                = typename policy::comment_node_type;
 
+		using attribute_type    = typename policy::attribute_type;
+		//using attribute_pointer = typename policy::attribute_pointer;
+
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
 		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
 
+		using base_type::m_open_element_stack;
 
 		using base_type::report_error;
 		using base_type::eof;
@@ -68,33 +72,33 @@ namespace wordring::whatwg::html::simple
 		// ノード
 		// ----------------------------------------------------------------------------------------
 
-		bool is_document(node_pointer it) const { return std::holds_alternative<document_node_type>(*it); }
+		//bool is_document(node_pointer it) const { return std::holds_alternative<document_node_type>(*it); }
 
-		bool is_document_type(node_pointer it) const { return std::holds_alternative<document_type_node_type>(*it); }
+		//bool is_document_type(node_pointer it) const { return std::holds_alternative<document_type_node_type>(*it); }
 
-		bool is_document_fragment(node_pointer it) const { return std::holds_alternative<document_fragment_node_type>(*it); }
+		//bool is_document_fragment(node_pointer it) const { return std::holds_alternative<document_fragment_node_type>(*it); }
 
-		bool is_element(node_pointer it) const { return std::holds_alternative<element_node_type>(*it); }
+		//bool is_element(node_pointer it) const { return std::holds_alternative<element_node_type>(*it); }
 
 		bool is_text(node_pointer it) const { return std::holds_alternative<text_node_type>(*it); }
 
-		bool is_processing_instruction(node_pointer it) const { return std::holds_alternative<processing_instruction_node_type>(*it); }
+		//bool is_processing_instruction(node_pointer it) const { return std::holds_alternative<processing_instruction_node_type>(*it); }
 
-		bool is_comment(node_pointer it) const { return std::holds_alternative<comment_node_type>(*it); }
+		//bool is_comment(node_pointer it) const { return std::holds_alternative<comment_node_type>(*it); }
 
-		document_node_type* to_document(node_pointer it) { return std::get_if<document_node_type>(std::addressof(*it)); }
+		//document_node_type* to_document(node_pointer it) { return std::get_if<document_node_type>(std::addressof(*it)); }
 
-		document_type_node_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_node_type>(std::addressof(*it)); }
+		//document_type_node_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_node_type>(std::addressof(*it)); }
 
-		document_fragment_node_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_node_type>(std::addressof(*it)); }
+		//document_fragment_node_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_node_type>(std::addressof(*it)); }
 
-		element_node_type const* to_element(node_pointer it) const { return std::get_if<element_node_type>(std::addressof(*it)); }
+		//element_node_type const* to_element(node_pointer it) const { return std::get_if<element_node_type>(std::addressof(*it)); }
 
-		text_node_type* to_text(node_pointer it) { return std::get_if<text_node_type>(std::addressof(*it)); }
+		//text_node_type* to_text(node_pointer it) { return std::get_if<text_node_type>(std::addressof(*it)); }
 
-		processing_instruction_node_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_node_type>(std::addressof(*it)); }
+		//processing_instruction_node_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_node_type>(std::addressof(*it)); }
 
-		comment_node_type const* to_comment(node_pointer it) const { return std::get_if<comment_node_type>(std::addressof(*it)); }
+		//comment_node_type const* to_comment(node_pointer it) const { return std::get_if<comment_node_type>(std::addressof(*it)); }
 
 		/*! @brief ノードを挿入する
 		*/
@@ -122,12 +126,12 @@ namespace wordring::whatwg::html::simple
 
 		void set_document_type(document_type_name type)
 		{
-			to_document(document())->document_type(type);
+			std::get_if<document_node_type>(std::addressof(*document()))->document_type(type);
 		}
 
 		void set_document_mode(document_mode_name mode)
 		{
-			to_document(document())->document_mode(mode);
+			std::get_if<document_node_type>(std::addressof(*document()))->document_mode(mode);
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -201,6 +205,22 @@ namespace wordring::whatwg::html::simple
 		*/
 		void set_document(node_pointer it, node_pointer doc) {}
 
+		/*! @brief script 要素の "non-blocking" flag を設定する
+		
+		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
+		*/
+		void set_non_blocking_flag(node_pointer it, bool b) {}
+
+		/*! @brief script 要素の "already started" flag を設定する
+
+		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
+		*/
+		void set_already_started_flag(node_pointer it, bool b) {}
+
+		// ----------------------------------------------------------------------------------------
+		// 属性
+		// ----------------------------------------------------------------------------------------
+
 		/*! @brief 要素へ属性を付加する
 		*/
 		void append_attribute(element_node_type el)
@@ -217,14 +237,20 @@ namespace wordring::whatwg::html::simple
 			return *lhs == *rhs;
 		}
 
-		ns_name namespace_uri_name(node_pointer it) const { return to_element(it)->namespace_uri_id(); }
-
-		tag_name local_name_name(node_pointer it) const { return to_element(it)->local_name_id(); }
-
-		std::u32string find_attribute_value(node_pointer it) const
+		ns_name namespace_uri_name(node_pointer it) const
 		{
-			to_element(it)->
+			return std::get_if<element_node_type>(std::addressof(*it))->namespace_uri_id();
 		}
+
+		tag_name local_name_name(node_pointer it) const
+		{
+			return std::get_if<element_node_type>(std::addressof(*it))->local_name_id();
+		}
+
+		//attribute_pointer find_attribute(node_pointer it) const
+		//{
+		//	//to_element(it)->
+		//}
 
 		// ----------------------------------------------------------------------------------------
 		// テキスト
@@ -239,7 +265,7 @@ namespace wordring::whatwg::html::simple
 
 		void append_text(node_pointer it, char32_t cp)
 		{
-			to_string(cp, std::back_inserter(*to_text(it)));
+			to_string(cp, std::back_inserter(*std::get_if<text_node_type>(std::addressof(*it))));
 		}
 
 		// ----------------------------------------------------------------------------------------

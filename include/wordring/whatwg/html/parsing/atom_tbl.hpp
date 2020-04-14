@@ -19,7 +19,7 @@ namespace wordring::whatwg::html::parsing
 
 	extern std::unordered_map<std::u32string, ns_name> const ns_uri_atom_tbl;
 
-	extern std::array<std::u32string, 425> const tag_name_tbl;
+	extern std::array<std::u32string, 427> const tag_name_tbl;
 
 	extern std::array<std::u32string, 634> const attribute_name_tbl;
 

@@ -1,4 +1,4 @@
-﻿# wordring_cpp/test/whatwg/html
+﻿# wordring_cpp/test/whatwg/html/parsing/
 #
 # このプロジェクトはwhatwg/htmlのテストを作成します。
 #
@@ -28,12 +28,13 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-#		parsing/atom_defs.cpp
-#		parsing/atom_tbl.cpp
-#		parsing/html_atom.cpp
-#		parsing/input_stream.cpp
-#		parsing/parser.cpp
-#		parsing/tokenization.cpp
+		parsing/atom_defs.cpp
+		parsing/atom_tbl.cpp
+		parsing/html_atom.cpp
+		parsing/input_stream.cpp
+		parsing/tokenization.cpp
+		parsing/tree_construction_dispatcher.cpp
+		parsing/on_initial_insertion_mode.cpp
 		simple_node.cpp
 		simple_parser.cpp
 		simple_policy.cpp

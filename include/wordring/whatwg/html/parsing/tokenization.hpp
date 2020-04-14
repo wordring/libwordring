@@ -3,11 +3,15 @@
 // https://html.spec.whatwg.org/multipage/parsing.html
 // https://triple-underscore.github.io/HTML-parsing-ja.html
 
-#include <wordring/whatwg/infra/infra.hpp>
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/input_stream.hpp>
+#include <wordring/whatwg/html/parsing/open_element_stack.hpp>
 #include <wordring/whatwg/html/parsing/parser_defs.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
+
+#include <wordring/whatwg/infra/infra.hpp>
+
+#include <wordring/string/matcher.hpp>
 
 #include <type_traits>
 
@@ -32,6 +36,7 @@ namespace wordring::whatwg::html::parsing
 		using node_pointer = typename policy::node_pointer;
 
 		using base_type::flush_code_point;
+		using base_type::fill;
 		using base_type::current_input_character;
 		using base_type::next_input_character;
 		using base_type::begin;
@@ -68,12 +73,9 @@ namespace wordring::whatwg::html::parsing
 
 		char32_t m_character_reference_code;
 
-		// スタック -----------------------------------------------------------
+		//
 
-		std::deque<node_pointer> m_open_element_stack;
-
-		node_pointer m_context_element;
-
+	public:
 		tokenizer()
 			: m_state(data_state)
 			, m_return_state(nullptr)
@@ -130,14 +132,14 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief 現在のタグ・トークン上で新しい属性を開始する
 		*/
-		typename tag_token::attribute& create_attribute()
+		token_attribute& create_attribute()
 		{
 			return current_tag_token().m_attributes.create();
 		}
 
 		/*! @brief 現在の属性を返す
 		*/
-		typename tag_token::attribute& current_attribute()
+		token_attribute& current_attribute()
 		{
 			return current_tag_token().m_attributes.current();
 		}
@@ -152,46 +154,40 @@ namespace wordring::whatwg::html::parsing
 			return m_DOCTYPE_token;
 		}
 
+
+		// ----------------------------------------------------------------------------------------
+		// スタック
+		//
+		// 12.2.4.2 The stack of open elements
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements
+		// ----------------------------------------------------------------------------------------
+
+		/*! @brief カレント・ノードがHTML名前空間に属するか調べる
+		*/
+		bool in_html_namespace() const
+		{
+			this_type const* P = static_cast<this_type const*>(this);
+			return P->namespace_uri_name(P->adjusted_current_node().m_it) == ns_name::HTML;
+		}
+
 		/*! @brief 属性の重複を削る
 		
 		12.2.5.33 Attribute name state 
 		*/
 		void unify_attribute()
 		{
-			tag_token::attribute_list& al = current_tag_token().m_attributes;
+			token_attribute_list& al = current_tag_token().m_attributes;
 			auto it1 = al.begin();
 			auto it2 = std::prev(al.end(), 1);
 			while (it1 != it2) if (it1++->m_name == al.current().m_name) al.current().m_omitted = true;
 		}
-
-		// スタック -----------------------------------------------------------
-
-		node_pointer current_node()
-		{
-			assert(!m_open_element_stack.empty());
-			return m_open_element_stack.back();
-		}
-
-		node_pointer adjusted_current_node()
-		{
-			if constexpr (policy::is_fragments_parser) if (m_open_element_stack.size() == 1) return m_context_element;
-			return current_node();
-		}
-
-		/*! @brief 与えられたノードがHTML名前空間に属するか調べる
-		*/
-		bool in_html_namespace(node_pointer it) const
-		{
-			this_type const* P = static_cast<this_type const*>(this);
-			assert(P->is_element(it));
-
-			return P->namespace_uri_name(it) == ns_name::HTML;
-		}
-
+		
+		/*
 		bool empty_stack_of_open_elements() const
 		{
 			return m_open_element_stack.empty();
 		}
+		*/
 		// トークンの発送-------------------------------------------------------
 
 		template <typename Token>
@@ -204,7 +200,16 @@ namespace wordring::whatwg::html::parsing
 				assert(m_current_tag_token_id == 2 || m_current_tag_token_id == 3);
 
 				tag_token& t = static_cast<tag_token&>(token);
-				t.m_tag_name_id = tag_atom_tbl.at(t.m_tag_name);
+				auto tag_it = tag_atom_tbl.find(t.m_tag_name);
+				t.m_tag_name_id = (tag_it == tag_atom_tbl.end()) ? static_cast<tag_name>(0) : tag_it->second;
+
+				auto it1 = t.begin();
+				auto it2 = t.end();
+				while (it1 != it2)
+				{
+					auto attr_it = attribute_atom_tbl.find(it1->m_name);
+					it1->m_name_id = (attr_it == attribute_atom_tbl.end()) ? static_cast<attribute_name>(0) : attr_it->second;
+				}
 
 				if (m_current_tag_token_id == 2)
 				{
@@ -1529,60 +1534,50 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.42 Markup declaration open state */
 		void on_markup_declaration_open_state()
 		{
-			match_result r = match(U"--", false);
-			if (r != match_result::failed)
-			{
-				if (r == match_result::succeed)
-				{
-					consume(std::size(U"--") - 1);
-					create_comment_token();
-					change_state(comment_start_state);
-					return;
-				}
-				else return; // partial
-			}
+			std::size_t constexpr n = std::max({ std::size(U"--") - 1, std::size(U"doctype") - 1, std::size(U"[CDATA[") - 1 });
+			if (!fill(n)) return;
 
-			r = match(U"doctype", true);
-			if (r != match_result::failed)
+			if (match(U"--", false, false))
 			{
-				if (r == match_result::succeed)
-				{
-					consume(std::size(U"doctype") - 1);
-					change_state(DOCTYPE_state);
-					return;
-				}
-				else return; // partial
+				consume(std::size(U"--") - 1);
+				create_comment_token();
+				change_state(comment_start_state);
+				goto Flush;
 			}
-
-			r = match(U"[CDATA[", false);
-			if (r != match_result::failed)
+			
+			if (match(U"doctype", false, true))
 			{
-				if (r == match_result::succeed)
+				consume(std::size(U"doctype") - 1);
+				change_state(DOCTYPE_state);
+				goto Flush;
+			}
+			
+			if (match(U"[CDATA[", false, false))
+			{
+				consume(std::size(U"[CDATA[") - 1);
+
+				this_type const* P = static_cast<this_type const*>(this);
+
+				if (!P->m_open_element_stack.empty())
 				{
-					consume(std::size(U"[CDATA[") - 1);
-					
-					if (!empty_stack_of_open_elements())
+					if (in_html_namespace())
 					{
-						node_pointer it = adjusted_current_node();
-						if (!in_html_namespace(it))
-						{
-							change_state(CDATA_section_state);
-							return;
-						}
+						change_state(CDATA_section_state);
+						goto Flush;
 					}
-
-					report_error(error_name::cdata_in_html_content);
-					create_comment_token(U"[CDATA[");
-					change_state(bogus_comment_state);
-					return;
 				}
-				else return; // partial
+
+				report_error(error_name::cdata_in_html_content);
+				create_comment_token(U"[CDATA[");
+				change_state(bogus_comment_state);
+				goto Flush;
 			}
 
 			report_error(error_name::incorrectly_opened_comment);
 			create_comment_token();
 			change_state(bogus_comment_state);
 
+		Flush:
 			flush_code_point();
 		}
 
@@ -1961,6 +1956,9 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.56 After DOCTYPE name state */
 		void on_after_DOCTYPE_name_state()
 		{
+			std::size_t constexpr n = std::max(std::size(U"public") - 1, std::size(U"system") - 1);
+			if (!fill(n)) return;
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -1978,41 +1976,32 @@ namespace wordring::whatwg::html::parsing
 			case U'\xA':  // LF
 			case U'\xC':  // FF
 			case U'\x20': // SPACE
-				return;
+				goto Flush;
 			case U'>':
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
-				return;
+				goto Flush;
 			}
 
-			match_result r = match(U"public", true);
-			if (r != match_result::failed)
+			if (match(U"public", true, true))
 			{
-				if (r == match_result::succeed)
-				{
-					consume(std::size(U"PUBLIC") - 1);
-					change_state(after_DOCTYPE_public_keyword_state);
-					return;
-				}
-				else return; // partial
+				consume(std::size(U"public") - 2);
+				change_state(after_DOCTYPE_public_keyword_state);
+				goto Flush;
 			}
 
-			r = match(U"system", true);
-			if (r != match_result::failed)
+			if (match(U"system", true, true))
 			{
-				if (r == match_result::succeed)
-				{
-					consume(std::size(U"SYSTEM") - 1);
-					change_state(after_DOCTYPE_system_keyword_state);
-					return;
-				}
-				else return; // partial
+				consume(std::size(U"system") - 2);
+				change_state(after_DOCTYPE_system_keyword_state);
+				goto Flush;
 			}
 
 			report_error(error_name::invalid_character_sequence_after_doctype_name);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
 
+		Flush:
 			flush_code_point();
 		}
 

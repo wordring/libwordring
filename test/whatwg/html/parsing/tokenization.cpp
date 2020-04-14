@@ -27,7 +27,7 @@ namespace
 	{
 		using policy = test_policy;
 
-
+		using node_pointer = policy::node_pointer;
 		using element_node_type = typename policy::element_node_type;
 
 
@@ -39,10 +39,18 @@ namespace
 		using base_type::eof;
 		using base_type::return_state;
 		using base_type::current_tag_token;
+		using base_type::consume;
+
+		using stack_entry_type = open_element_stack_entry<policy>;
+
+		open_element_stack<policy> m_open_element_stack;
+		stack_entry_type m_dummy_stack_entry;
 
 		error_name m_ec;
 		std::u32string m_emited_codepoints;
 
+		stack_entry_type const& adjusted_current_node() const { return m_dummy_stack_entry; }
+		
 		//
 
 		bool is_element(node_pointer it) const
@@ -52,7 +60,7 @@ namespace
 
 		ns_name namespace_uri_name(node_pointer it) const
 		{
-			return std::get_if<element_node_type>(std::addressof(*it))->namespace_uri_id();
+			return ns_name::HTML;
 		}
 
 		void on_report_error(error_name ec) { m_ec = ec; }
@@ -69,19 +77,19 @@ namespace
 	};
 }
 
-BOOST_AUTO_TEST_SUITE(whatwg__html__parsing__tokenization__test)
+BOOST_AUTO_TEST_SUITE(whatwg_html_parsing_tokenization_test)
 
 /*
 空のトークン化器を構築する
 
 tokenizer()
 */
-BOOST_AUTO_TEST_CASE(tokenizer__construct__1)
+BOOST_AUTO_TEST_CASE(tokenizer_construct_1)
 {
 	test_tokenizer tt;
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__emit_token__1)
+BOOST_AUTO_TEST_CASE(tokenizer_emit_token_1)
 {
 	test_tokenizer t;
 	std::u32string s(U"<A>");
@@ -92,7 +100,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__emit_token__1)
 // 状態関数 ------------------------------------------------------------------
 
 /* 12.2.5.1 Data state */
-BOOST_AUTO_TEST_CASE(tokenizer__on_data_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_data_state_1)
 {
 	test_tokenizer tt;
 	tt.push_code_point(U'A');
@@ -100,7 +108,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_data_state__1)
 }
 
 /* 12.2.5.2 RCDATA state */
-BOOST_AUTO_TEST_CASE(tokenizer__on_RCDATA_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_RCDATA_state_1)
 {
 	test_tokenizer tt;
 
@@ -111,7 +119,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_RCDATA_state__1)
 }
 
 /* 12.2.5.3 RAWTEXT state */
-BOOST_AUTO_TEST_CASE(tokenizer__on_RAWTEXT_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_RAWTEXT_state_1)
 {
 	test_tokenizer tt;
 
@@ -122,7 +130,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_RAWTEXT_state__1)
 }
 
 /* 12.2.5.4 Script data state */
-BOOST_AUTO_TEST_CASE(tokenizer__on_script_data_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_script_data_state_1)
 {
 	test_tokenizer tt;
 
@@ -133,13 +141,13 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_script_data_state__1)
 }
 
 /* 12.2.5.5 PLAINTEXT state */
-BOOST_AUTO_TEST_CASE(tokenizer__on_PLAINTEXT_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_PLAINTEXT_state_1)
 {
 	test_tokenizer tt;
 
 	tt.m_state = test_tokenizer::PLAINTEXT_state;
 	tt.push_code_point(U'A');
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_c.empty());
 }
@@ -150,7 +158,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_PLAINTEXT_state__1)
 12.2.5.8 Tag name state
 12.2.5.33 Attribute name state
 */
-BOOST_AUTO_TEST_CASE(tokenizer__on_attribute_name_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_attribute_name_state_1)
 {
 	test_tokenizer tt;
 
@@ -173,7 +181,7 @@ unify_attribute()
 12.2.5.37 Attribute value (single-quoted) state
 12.2.5.39 After attribute value (quoted) state
 */
-BOOST_AUTO_TEST_CASE(tokenizer__on_attribute_name_state__2)
+BOOST_AUTO_TEST_CASE(tokenizer_on_attribute_name_state_2)
 {
 	test_tokenizer tt;
 
@@ -183,18 +191,17 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_attribute_name_state__2)
 	for (char32_t cp : s) tt.push_code_point(cp);
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::after_attribute_value_quoted_state);
-	BOOST_CHECK(tt.current_tag_token().attributes().begin()->m_name == U"attribute");
-	BOOST_CHECK(tt.current_tag_token().attributes().begin()->m_value == U"Value1");
-	BOOST_CHECK(tt.current_tag_token().attributes().begin()->m_omitted == false);
-	BOOST_CHECK((++tt.current_tag_token().attributes().begin())->m_name == U"attribute");
-	BOOST_CHECK((++tt.current_tag_token().attributes().begin())->m_value == U"Value2");
-	BOOST_CHECK((++tt.current_tag_token().attributes().begin())->m_omitted == true);
+	BOOST_CHECK(tt.current_tag_token().m_attributes.begin()->m_name == U"attribute");
+	BOOST_CHECK(tt.current_tag_token().m_attributes.begin()->m_value == U"Value1");
+	BOOST_CHECK(tt.current_tag_token().m_attributes.begin()->m_omitted == false);
+	BOOST_CHECK((++tt.current_tag_token().m_attributes.begin())->m_name == U"attribute");
+	BOOST_CHECK((++tt.current_tag_token().m_attributes.begin())->m_value == U"Value2");
+	BOOST_CHECK((++tt.current_tag_token().m_attributes.begin())->m_omitted == true);
 	BOOST_CHECK(tt.m_c.empty());
 }
 
-
 /* 12.2.5.42 Markup declaration open state */
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_1)
 {
 	BOOST_CHECK(std::size(U"--") == 3);
 
@@ -203,38 +210,40 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__1)
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"--");
 	for (char32_t cp : s) tt.push_code_point(cp);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::comment_start_state);
 	BOOST_CHECK(tt.m_c.empty());
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__2)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_2)
 {
 	test_tokenizer tt;
 
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"--A");
 	for (char32_t cp : s) tt.push_code_point(cp);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::comment_state);
 	BOOST_CHECK(tt.m_c.empty());
 	BOOST_CHECK(tt.current_comment_token().m_data == U"A");
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__3)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_3)
 {
 	test_tokenizer tt;
 
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"-");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::bogus_comment_state);
 	BOOST_CHECK(tt.m_c.empty());
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__4)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_4)
 {
 	BOOST_CHECK(std::size(U"DOCTYPE") == 8);
 
@@ -243,10 +252,12 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__4)
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"DOCTYPE");
 	for (char32_t cp : s) tt.push_code_point(cp);
+	tt.push_eof();
+
 	BOOST_CHECK(tt.m_state == test_tokenizer::DOCTYPE_state);
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__5)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_5)
 {
 	BOOST_CHECK(std::size(U"doctype") == 8);
 
@@ -255,34 +266,54 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__5)
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"doctype");
 	for (char32_t cp : s) tt.push_code_point(cp);
+	tt.push_eof();
+
 	BOOST_CHECK(tt.m_state == test_tokenizer::DOCTYPE_state);
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__6)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_6)
 {
 	test_tokenizer tt;
 
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"[CDATA[");
 	for (char32_t cp : s) tt.push_code_point(cp);
+	tt.push_eof();
+
 	BOOST_CHECK(tt.m_state == test_tokenizer::bogus_comment_state);
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_markup_declaration_open_state__7)
+BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_7)
 {
 	test_tokenizer tt;
 
 	tt.m_state = test_tokenizer::markup_declaration_open_state;
 	auto s = std::u32string(U"[CDATA]");
 	for (char32_t cp : s) tt.push_code_point(cp);
+	tt.push_eof();
+
 	BOOST_CHECK(tt.m_state == test_tokenizer::bogus_comment_state);
+}
+
+/* 12.2.5.56 After DOCTYPE name state */
+BOOST_AUTO_TEST_CASE(tokenizer_on_after_DOCTYPE_name_state_1)
+{
+	test_tokenizer tt;
+
+	tt.m_state = test_tokenizer::after_DOCTYPE_name_state;
+	auto s = std::u32string(U"PUBLIC");
+	for (char32_t cp : s) tt.push_code_point(cp);
+	//tt.push_eof();
+
+	BOOST_CHECK(tt.m_state == test_tokenizer::after_DOCTYPE_public_keyword_state);
+	BOOST_CHECK(tt.m_c.empty());
 }
 
 /*
 12.2.5.73 Named character reference state
 12.2.5.73 Named character reference state
 */
-BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_named_character_reference_state_1)
 {
 	test_tokenizer tt;
 
@@ -291,14 +322,14 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__1)
 
 	auto s = std::u32string(U"Aacute");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());
 	BOOST_CHECK(tt.m_emited_codepoints == U"\xC1");
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__2)
+BOOST_AUTO_TEST_CASE(tokenizer_on_named_character_reference_state_2)
 {
 	test_tokenizer tt;
 
@@ -307,14 +338,14 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__2)
 
 	auto s = std::u32string(U"Aacute;");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());
 	BOOST_CHECK(tt.m_emited_codepoints == U"\xC1");
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__3)
+BOOST_AUTO_TEST_CASE(tokenizer_on_named_character_reference_state_3)
 {
 	test_tokenizer tt;
 
@@ -323,14 +354,14 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__3)
 
 	auto s = std::u32string(U"Aacute;=");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());
 	BOOST_CHECK(tt.m_emited_codepoints == U"\xC1=");
 }
 
-BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__4)
+BOOST_AUTO_TEST_CASE(tokenizer_on_named_character_reference_state_4)
 {
 	test_tokenizer tt;
 
@@ -339,7 +370,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__4)
 
 	auto s = std::u32string(U"acE;");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());
@@ -353,7 +384,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_named_character_reference_state__4)
 12.2.5.78 Hexadecimal character reference state
 12.2.5.80 Numeric character reference end state
 */
-BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__1)
+BOOST_AUTO_TEST_CASE(tokenizer_on_numeric_character_reference_end_state_1)
 {
 	test_tokenizer tt;
 
@@ -362,7 +393,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__1)
 
 	auto s = std::u32string(U"#x3042;");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());
@@ -376,7 +407,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__1)
 12.2.5.79 Decimal character reference state
 12.2.5.80 Numeric character reference end state
 */
-BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__2)
+BOOST_AUTO_TEST_CASE(tokenizer_on_numeric_character_reference_end_state_2)
 {
 	test_tokenizer tt;
 
@@ -385,7 +416,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__2)
 
 	auto s = std::u32string(U"#12354;");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());
@@ -397,7 +428,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__2)
 
 character_reference_code_tbl のテスト
 */
-BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__3)
+BOOST_AUTO_TEST_CASE(tokenizer_on_numeric_character_reference_end_state_3)
 {
 	test_tokenizer tt;
 
@@ -406,7 +437,7 @@ BOOST_AUTO_TEST_CASE(tokenizer__on_numeric_character_reference_end_state__3)
 
 	auto s = std::u32string(U"#x80;");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	tt.eof(true);
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::data_state);
 	BOOST_CHECK(tt.m_c.empty());

@@ -29,6 +29,7 @@ add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
 		atom.cpp
+		matcher.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})

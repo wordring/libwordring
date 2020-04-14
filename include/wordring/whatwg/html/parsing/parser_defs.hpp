@@ -64,7 +64,7 @@ namespace wordring::whatwg::html::parsing
 
 	// 12.2.3 The input byte stream -------------------------------------------
 	
-	enum class encoding_confidence : std::uint32_t
+	enum class encoding_confidence_name : std::uint32_t
 	{
 		tentative = 1,
 		certain,

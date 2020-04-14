@@ -66,6 +66,7 @@ namespace wordring::whatwg::html::parsing
 		/*! EOF 検出用状態変数
 		*/
 		bool m_eof;
+		bool m_eof_consumed;
 
 		/*! 改行文字正規化用状態変数
 		*/
@@ -84,6 +85,7 @@ namespace wordring::whatwg::html::parsing
 		input_stream()
 			: m_current_input_character()
 			, m_eof(false)
+			, m_eof_consumed(false)
 			, m_cr_state(false)
 			, m_match_state()
 		{
@@ -135,6 +137,25 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
+		/*! @brief ストリーム終端を設定する
+
+		@todo 複数回呼び出された場合の対処
+		*/
+		void push_eof()
+		{
+			this_type* p = static_cast<this_type*>(this);
+
+			m_eof = true;
+
+			if (m_cr_state)
+			{
+				m_c.push_back(U'\n');
+				p->on_emit_code_point();
+			}
+
+			p->on_emit_code_point();
+		}
+
 		/*! @brief コード・ポイントを発送する
 		
 		@param [in] cp コード・ポイント
@@ -142,7 +163,7 @@ namespace wordring::whatwg::html::parsing
 		この関数は、tokenizerが用意する on_emit_code_point() コールバック・メンバ関数を呼び出す。
 
 		文字が消費されるかどうかにかかわらず、バッファに文字が追加された回数、コールバックが呼び出される。
-		実装において、（スクリプトをサポートしないので）EOFは文字ではないが、eof(bool)の呼び出しも、コールバックが呼び出される。
+		実装において、（スクリプトをサポートしないので）EOFは文字ではないが、push_eof()の呼び出しも、コールバックが呼び出される。
 		*/
 		void emit_code_point(value_type cp)
 		{
@@ -151,10 +172,19 @@ namespace wordring::whatwg::html::parsing
 		}
 
 		/*! @brief ストリーム・バッファ内のコード・ポイントをすべて発送する
+
+		複数文字を待つトークン化の状態がある。中途でマッチに失敗した場合、いくつかのコードポイントがバッファに残る。
+		マッチに失敗した時点で、このメンバを実行する。
+
+		このメンバは規格にない。プッシュ型パーサの特性を持たせるため新設した。
 		*/
 		void flush_code_point()
 		{
+			assert(!m_eof_consumed); // ?
+			if (m_eof_consumed) return;
+
 			for(std::uint32_t i = 0; i < m_c.size(); ++i) static_cast<this_type*>(this)->on_emit_code_point();
+			if(!m_eof_consumed) static_cast<this_type*>(this)->on_emit_code_point();
 		}
 
 		/*! @brief 現在の入力文字を返す
@@ -180,6 +210,61 @@ namespace wordring::whatwg::html::parsing
 			return m_c.front();
 		}
 
+		/*! @brief ストリーム終端に達しているか調べる
+
+		@return ストリーム終端に達している場合 <b>true</b> 、その他の場合 <b>false</b> を返す。
+		*/
+		bool eof() const { return m_c.empty() && m_eof; }
+
+		/*! @brief バッファに指定文字数貯まっているか調べる
+		
+		@param [in] 文字数
+
+		@return 指定文字数バッファに貯まるかEOFに達した場合 true 、それ以外の場合 false を返す。
+		*/
+		bool fill(std::uint32_t n) const
+		{
+			return m_eof || m_c.size() == n;
+		}
+
+		/*! @brief 次の入力文字を消費する
+
+		@return 現在の入力文字
+
+		消費した文字が現在の入力文字となる。
+		*/
+		value_type consume()
+		{
+			if (m_c.empty() && m_eof)
+			{
+				m_eof_consumed = true;
+				return 0;
+			}
+
+			m_current_input_character = m_c.front();
+			m_c.pop_front();
+			return m_current_input_character;
+		}
+
+		/*! @brief バッファの文字を <b>n</b> 個消費する
+
+		トークン化段階で、いくつかの状態は文字列を待ち受ける。
+		その間、バッファに文字が溜まっていく。
+		もしも期待する文字列が得られたなら、このメンバを呼び出し消費する。
+
+		*/
+		void consume(std::uint32_t n)
+		{
+			for (std::uint32_t i = 0; i < n; ++i) consume();
+		}
+
+		/*! @brief 現在の入力文字を再消費する
+		*/
+		void reconsume()
+		{
+			m_c.push_front(m_current_input_character);
+		}
+
 		const_iterator begin() const { return m_c.begin(); }
 
 		const_iterator end() const { return m_c.end(); }
@@ -197,38 +282,32 @@ namespace wordring::whatwg::html::parsing
 
 			大文字小文字を無視して比較する場合、 <b>label</b> を小文字で指定すること。
 		*/
-		match_result match(std::u32string_view label, bool case_insensitive)
+		bool match(std::u32string_view label, bool with_current, bool case_insensitive)
 		{
-			if (m_c.size() < label.size())
+			auto it1 = label.begin();
+			auto it2 = label.end();
+
+			if (with_current)
 			{
-				if (m_eof) return match_result::failed;
-
-				auto it = label.begin();
-				for (char32_t cp : m_c)
-				{
-					char32_t ch = *it++;
-					if (case_insensitive && is_ascii_upper_alpha(cp)) cp += 0x20;
-
-					if (cp != ch) return match_result::failed;
-				}
-
-				return match_result::partial;
-			}
-			else if (label.size() <= m_c.size())
-			{
-				auto it = m_c.begin();
-				for (char32_t ch : label)
-				{
-					char32_t cp = *it++;
-					if (case_insensitive && is_ascii_upper_alpha(cp)) cp += 0x20;
-
-					if (cp != ch) return match_result::failed;
-				}
-
-				return match_result::succeed;
+				char32_t cp = current_input_character();
+				if (case_insensitive && is_ascii_upper_alpha(cp)) cp += 0x20;
+				if (cp != *it1++) return false;
 			}
 
-			return match_result::failed;
+			auto it3 = m_c.begin();
+			auto it4 = m_c.end();
+
+			while (it1 != it2)
+			{
+				if (it3 == it4) return false;
+
+				char32_t cp = *it3++;
+				if (case_insensitive && is_ascii_upper_alpha(cp)) cp += 0x20;
+
+				if(cp != *it1++) return false;
+			}
+
+			return true;
 		}
 
 		/*! @brief 名前付き文字参照とストリーム・バッファ内の文字列を比較する
@@ -296,66 +375,6 @@ namespace wordring::whatwg::html::parsing
 		std::array<char32_t, 2> named_character_reference(std::uint32_t idx)
 		{
 			return named_character_reference_map_tbl[idx];
-		}
-
-		/*! @brief 次の入力文字を消費する
-		
-		@return 現在の入力文字
-
-		消費した文字が現在の入力文字となる。
-		*/
-		value_type consume()
-		{
-			assert(!m_c.empty());
-
-			m_current_input_character = m_c.front();
-			m_c.pop_front();
-			return m_current_input_character;
-		}
-
-		/*! @brief バッファの文字を <b>n</b> 個消費する
-
-		トークン化段階で、いくつかの状態は文字列を待ち受ける。
-		その間、バッファに文字が溜まっていく。
-		もしも期待する文字列が得られたなら、このメンバを呼び出し消費する。
-
-		*/
-		void consume(std::uint32_t n)
-		{
-			for (std::uint32_t i = 0; i < n; ++i) consume();
-		}
-
-		/*! @brief 現在の入力文字を再消費する
-		*/
-		void reconsume()
-		{
-			m_c.push_front(m_current_input_character);
-		}
-
-		/*! @brief ストリーム終端に達しているか調べる
-
-		@return ストリーム終端に達している場合 <b>true</b> 、その他の場合 <b>false</b> を返す。
-		*/
-		bool eof() const { return m_c.empty() && m_eof; }
-
-		/*! @brief ストリーム終端を設定する
-
-		@param b [in] 常に <b>true</b> を設定する。
-
-		@todo 複数回呼び出された場合の対処
-		*/
-		void eof(bool b)
-		{
-			assert(b);
-			m_eof = b;
-
-			this_type* p = static_cast<this_type*>(this);
-			if (m_cr_state)
-			{
-				m_c.push_back(U'\n');
-				p->on_emit_code_point();
-			}
-			p->on_emit_code_point();
 		}
 
 	};

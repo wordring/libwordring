@@ -56,7 +56,7 @@ namespace wordring::whatwg::encoding
 
 	enum class name : uint32_t
 	{
-		UTF_8 = 0,
+		UTF_8 = 1,
 
 		// Legacy single - byte encodings
 		IBM866,
@@ -109,4 +109,9 @@ namespace wordring::whatwg::encoding
 		UTF_16LE,
 		x_user_defined,
 	};
+}
+
+namespace wordring::whatwg
+{
+	using encoding_name = encoding::name;
 }

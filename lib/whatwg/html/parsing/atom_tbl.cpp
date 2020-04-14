@@ -350,6 +350,7 @@ std::unordered_map<std::u32string, tag_name> const wordring::whatwg::html::parsi
 	{ U"radialGradient", tag_name::RadialGradient },
 	{ U"radialgradient", tag_name::Radialgradient },
 	{ U"rationals", tag_name::Rationals },
+	{ U"rb", tag_name::Rb },
 	{ U"real", tag_name::Real },
 	{ U"reals", tag_name::Reals },
 	{ U"rect", tag_name::Rect },
@@ -358,6 +359,7 @@ std::unordered_map<std::u32string, tag_name> const wordring::whatwg::html::parsi
 	{ U"root", tag_name::Root },
 	{ U"rp", tag_name::Rp },
 	{ U"rt", tag_name::Rt },
+	{ U"rtc", tag_name::Rtc },
 	{ U"ruby", tag_name::Ruby },
 	{ U"s", tag_name::S },
 	{ U"samp", tag_name::Samp },
@@ -1076,7 +1078,7 @@ std::unordered_map<std::u32string, ns_name> const wordring::whatwg::html::parsin
 	{ U"http://www.w3.org/2000/xmlns/", ns_name::XMLNS },
 };
 
-std::array<std::u32string, 425> const wordring::whatwg::html::parsing::tag_name_tbl = {{
+std::array<std::u32string, 427> const wordring::whatwg::html::parsing::tag_name_tbl = {{
 	U"", U"a", U"abbr", U"abs", U"address", U"altGlyph", U"altGlyphDef", U"altGlyphItem", U"altglyph", 
 	U"altglyphdef", U"altglyphitem", U"and", U"animate", U"animateColor", U"animateMotion", U"animateTransform", U"animatecolor", U"animatemotion", 
 	U"animatetransform", U"annotation", U"annotation-xml", U"applet", U"apply", U"approx", U"arccos", U"arccosh", U"arccot", 
@@ -1115,16 +1117,16 @@ std::array<std::u32string, 425> const wordring::whatwg::html::parsing::tag_name_
 	U"ol", U"optgroup", U"option", U"or", U"otherwise", U"outerproduct", U"output", U"p", U"param", 
 	U"partialdiff", U"path", U"pattern", U"pi", U"picture", U"piece", U"piecewise", U"plaintext", U"plus", 
 	U"polygon", U"polyline", U"power", U"pre", U"primes", U"product", U"progress", U"prsubset", U"q", 
-	U"quotient", U"radialGradient", U"radialgradient", U"rationals", U"real", U"reals", U"rect", U"reln", U"rem", 
-	U"root", U"rp", U"rt", U"ruby", U"s", U"samp", U"scalarproduct", U"script", U"sdev", 
-	U"sec", U"sech", U"section", U"select", U"selector", U"semantics", U"sep", U"set", U"setdiff", 
-	U"share", U"sin", U"sinh", U"slot", U"small", U"source", U"span", U"stop", U"strike", 
-	U"strong", U"style", U"sub", U"subset", U"sum", U"summary", U"sup", U"svg", U"switch", 
-	U"symbol", U"table", U"tan", U"tanh", U"tbody", U"td", U"template", U"tendsto", U"text", 
-	U"textPath", U"textarea", U"textpath", U"tfoot", U"th", U"thead", U"time", U"times", U"title", 
-	U"tr", U"track", U"transpose", U"true", U"tspan", U"tt", U"u", U"ul", U"union", 
-	U"uplimit", U"use", U"var", U"variance", U"vector", U"vectorproduct", U"video", U"view", U"wbr", 
-	U"xmp", U"xor", }};
+	U"quotient", U"radialGradient", U"radialgradient", U"rationals", U"rb", U"real", U"reals", U"rect", U"reln", 
+	U"rem", U"root", U"rp", U"rt", U"rtc", U"ruby", U"s", U"samp", U"scalarproduct", 
+	U"script", U"sdev", U"sec", U"sech", U"section", U"select", U"selector", U"semantics", U"sep", 
+	U"set", U"setdiff", U"share", U"sin", U"sinh", U"slot", U"small", U"source", U"span", 
+	U"stop", U"strike", U"strong", U"style", U"sub", U"subset", U"sum", U"summary", U"sup", 
+	U"svg", U"switch", U"symbol", U"table", U"tan", U"tanh", U"tbody", U"td", U"template", 
+	U"tendsto", U"text", U"textPath", U"textarea", U"textpath", U"tfoot", U"th", U"thead", U"time", 
+	U"times", U"title", U"tr", U"track", U"transpose", U"true", U"tspan", U"tt", U"u", 
+	U"ul", U"union", U"uplimit", U"use", U"var", U"variance", U"vector", U"vectorproduct", U"video", 
+	U"view", U"wbr", U"xmp", U"xor", }};
 
 std::array<std::u32string, 634> const wordring::whatwg::html::parsing::attribute_name_tbl = {{
 	U"", U"abbr", U"accent", U"accentunder", U"accept", U"accept-charset", U"accesskey", U"accumulate", U"action", 
