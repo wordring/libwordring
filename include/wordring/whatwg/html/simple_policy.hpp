@@ -24,8 +24,8 @@ namespace wordring::whatwg::html::simple
 		using processing_instruction_node_type = basic_processing_instruction<string_type>;
 		using comment_node_type                = basic_comment<string_type>;
 
-		using attribute_type = basic_attr<string_type>;
-		//using attribute_pointer = 
+		using attribute_type = typename element_node_type::attribute_type;
+		using attribute_pointer = typename element_node_type::iterator;
 
 		/*
 		using DOCTYPE_token     = wordring::whatwg::html::parsing::DOCTYPE_token;

@@ -338,16 +338,16 @@ BOOST_AUTO_TEST_CASE(simple_parser_push_active_formatting_element_list_2)
 
 BOOST_AUTO_TEST_CASE(simple_parser_reconstruct_active_formatting_element_list_1)
 {
-	tree t;
-	auto html = t.insert(t.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto a1 = t.insert(html.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto a2 = t.insert(a1.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto a3 = t.insert(a2.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto a4 = t.insert(a3.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto a5 = t.insert(a4.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
 	test_parser p;
+	auto html = p.insert(p.document().end(), basic_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto a1 = p.insert(html.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto a2 = p.insert(a1.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto a3 = p.insert(a2.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto a4 = p.insert(a3.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto a5 = p.insert(a4.end(), basic_element<std::string>(ns_name::HTML, "", tag_name::A));
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
+	p.m_open_element_stack.push_back({ start_tag_token(), html });
 	p.push_active_formatting_element_list(a1, token1);
 	p.push_active_formatting_element_list();
 	p.push_active_formatting_element_list(a2, token1);

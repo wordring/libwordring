@@ -31,20 +31,28 @@ namespace wordring::whatwg::html::simple
 		using string_type = String;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
+		using lacal_name_type    = basic_html_atom<string_type, attribute_name>;
 
 	public:
 		string_type namespace_uri() const { return static_cast<string_type>(m_namespace_uri); }
 
 		void namespace_uri(string_type const& uri) { m_namespace_uri = uri; }
 
-		namespace_uri_type const& namespace_uri_atom() const { return m_namespace_uri; }
+		namespace_uri_type const& namespace_uri_id() const { return m_namespace_uri; }
+
+		void namespace_uri_id(ns_name uri) { m_namespace_uri = uri; }
+
+		string_type const& prefix() const { return m_prefix; }
+
+		void prefix(string_type const& s) { m_prefix = s; }
 
 		string_type local_name() const { return static_cast<string_type>(m_local_name); }
 
 		void local_name(string_type const& name) { m_local_name = name; }
 
-		lacal_name_type const& local_name_atom() const { return m_local_name; }
+		lacal_name_type const& local_name_id() const { return m_local_name; }
+
+		void local_name_id(attribute_name name) { m_local_name = name; }
 
 		string_type const& value() const { return m_value; }
 
@@ -224,7 +232,10 @@ namespace wordring::whatwg::html::simple
 		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
 
 
-		using attr_type = basic_attr<string_type>;
+		using attribute_type = basic_attr<string_type>;
+		using container = std::vector< attribute_type>;
+		using iterator = typename container::iterator;
+		using const_iterator = typename container::const_iterator;
 
 	public:
 		basic_element()
@@ -265,6 +276,27 @@ namespace wordring::whatwg::html::simple
 
 		void local_name_id(tag_name name) { m_local_name = name; }
 
+		// 属性
+		void push_back(attribute_type&& attr) { m_attributes.push_back(std::move(attr)); }
+
+		iterator begin() { return m_attributes.begin(); }
+
+		const_iterator begin() const { return m_attributes.begin(); }
+
+		iterator end() { return m_attributes.end(); }
+
+		const_iterator end() const { return m_attributes.end(); }
+
+		const_iterator find(string_type const& name) const
+		{
+			return std::find(m_attributes.begin(), m_attributes.end(), name);
+		}
+
+		const_iterator find(attribute_name name) const
+		{
+			return std::find(m_attributes.begin(), m_attributes.end(), name);
+		}
+
 	private:
 		namespace_uri_type m_namespace_uri;
 		string_type        m_namespace_prefix;
@@ -279,17 +311,17 @@ namespace wordring::whatwg::html::simple
 		string_type m_id;
 		string_type m_class_name;
 
-		std::vector<attr_type> m_attributes;
+		container m_attributes;
 	};
 
 	template <typename String1>
 	inline bool operator==(basic_element<String1> const& lhs, basic_element<String1> const& rhs)
 	{
-		using attr_type = typename basic_element<String1>::attr_type;
+		using attribute_type = typename basic_element<String1>::attribute_type;
 
 		if (lhs.m_attributes.size() != rhs.m_attributes.size()) return false;
 
-		for (attr_type const& a : lhs.m_attributes)
+		for (attribute_type const& a : lhs.m_attributes)
 		{
 			if (std::find(rhs.m_attributes.begin(), rhs.m_attributes.end(), a) == rhs.m_attributes.end()) return false;
 		}

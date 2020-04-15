@@ -15,6 +15,7 @@ namespace
 		using match_result = typename base_type::match_result;
 
 		using base_type::match_named_character_reference;
+		using base_type::consume;
 
 		using base_type::m_c;
 
@@ -24,7 +25,10 @@ namespace
 
 		void on_report_error(wordring::whatwg::html::parsing::error_name ec) { m_ec = ec; }
 
-		void on_emit_code_point() { if(!eof()) m_emits.push_back(m_c.back()); }
+		void on_emit_code_point()
+		{
+			if(!m_c.empty()) m_emits.push_back(m_c.back());
+		}
 	};
 }
 
@@ -241,6 +245,7 @@ BOOST_AUTO_TEST_CASE(input_stream_push_code_point_12)
 	ts.push_eof();
 
 	BOOST_CHECK(ts.next_input_character() == U'\n');
+	ts.consume();
 	BOOST_CHECK(!ts.eof());
 	ts.consume();
 	BOOST_CHECK(ts.eof());
@@ -512,6 +517,8 @@ BOOST_AUTO_TEST_CASE(input_stream_eof_2)
 	test_stream ts;
 	ts.push_eof();
 
+	BOOST_CHECK(!ts.eof());
+	BOOST_CHECK(ts.consume() == 0);
 	BOOST_CHECK(ts.eof());
 }
 

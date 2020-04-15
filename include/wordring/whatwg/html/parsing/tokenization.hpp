@@ -31,8 +31,6 @@ namespace wordring::whatwg::html::parsing
 
 		using state_type = void(tokenizer::*)();
 
-		using typename base_type::match_result;
-
 		using node_pointer = typename policy::node_pointer;
 
 		using base_type::flush_code_point;
@@ -41,7 +39,7 @@ namespace wordring::whatwg::html::parsing
 		using base_type::next_input_character;
 		using base_type::begin;
 		using base_type::end;
-		using base_type::match_named_character_reference;
+		//using base_type::match_named_character_reference;
 		using base_type::named_character_reference;
 		using base_type::consume;
 		using base_type::match;
@@ -277,13 +275,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.1 Data state */
 		void on_data_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(end_of_file_token());
 				return;
 			}
 			
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'&':
@@ -306,13 +305,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.2 RCDATA state */
 		void on_RCDATA_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(end_of_file_token());
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'&':
@@ -335,13 +335,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.3 RAWTEXT state */
 		void on_RAWTEXT_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(end_of_file_token());
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'<':
@@ -360,13 +361,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.4 Script data state */
 		void on_script_data_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(end_of_file_token());
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'<':
@@ -385,13 +387,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.5 PLAINTEXT state */
 		void on_PLAINTEXT_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			if (cp == U'\x0')
 			{
@@ -406,6 +408,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.6 Tag open state */
 		void on_tag_open_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_before_tag_name);
@@ -414,7 +418,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'!':
@@ -445,6 +448,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.7 End tag open state */
 		void on_end_tag_open_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_before_tag_name);
@@ -453,8 +458,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			if (is_ascii_alpha(cp))
 			{
@@ -478,14 +481,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.8 Tag name state */
 		void on_tag_name_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -520,15 +523,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.9 RCDATA less-than sign state */
 		void on_RCDATA_less_than_sign_state()
 		{
-			if (!eof())
+			char32_t cp = consume();
+
+			if (!eof() && cp == U'/')
 			{
-				char32_t cp = consume();
-				if (cp == U'/')
-				{
-					m_temporary_buffer.clear();
-					change_state(RCDATA_end_tag_open_state);
-					return;
-				}
+				m_temporary_buffer.clear();
+				change_state(RCDATA_end_tag_open_state);
+				return;
 			}
 
 			emit_token(U'<');
@@ -538,15 +539,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.10 RCDATA end tag open state */
 		void on_RCDATA_end_tag_open_state()
 		{
-			if (!eof())
+			char32_t cp = consume();
+
+			if (!eof() && is_ascii_alpha(cp))
 			{
-				char32_t cp = consume();
-				if (is_ascii_alpha(cp))
-				{
-					create_end_tag_token();
-					reconsume(RCDATA_end_tag_name_state);
-					return;
-				}
+				create_end_tag_token();
+				reconsume(RCDATA_end_tag_name_state);
+				return;
 			}
 
 			emit_token(U'<');
@@ -557,9 +556,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.11 RCDATA end tag name state */
 		void on_RCDATA_end_tag_name_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -605,15 +605,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.12 RAWTEXT less-than sign state */
 		void on_RAWTEXT_less_than_sign_state()
 		{
-			if (!eof())
+			char32_t cp = consume();
+
+			if (!eof() && cp == U'/')
 			{
-				char32_t cp = consume();
-				if (cp == U'/')
-				{
-					m_temporary_buffer.clear();
-					change_state(RAWTEXT_end_tag_open_state);
-					return;
-				}
+				m_temporary_buffer.clear();
+				change_state(RAWTEXT_end_tag_open_state);
+				return;
 			}
 
 			emit_token(U'<');
@@ -623,15 +621,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.13 RAWTEXT end tag open state */
 		void on_RAWTEXT_end_tag_open_state()
 		{
-			if (!eof())
+			char32_t cp = consume();
+
+			if (!eof() && is_ascii_alpha(cp))
 			{
-				char32_t cp = consume();
-				if (is_ascii_alpha(cp))
-				{
-					create_end_tag_token();
-					reconsume(RAWTEXT_end_tag_name_state);
-					return;
-				}
+				create_end_tag_token();
+				reconsume(RAWTEXT_end_tag_name_state);
+				return;
 			}
 
 			emit_token(U'<');
@@ -642,9 +638,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.14 RAWTEXT end tag name state */
 		void on_RAWTEXT_end_tag_name_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -690,9 +687,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.15 Script data less-than sign state */
 		void on_script_data_less_than_sign_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				switch (cp)
 				{
 				case U'/':
@@ -714,9 +712,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.16 Script data end tag open state */
 		void on_script_data_end_tag_open_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				if (is_ascii_alpha(cp))
 				{
 					create_end_tag_token();
@@ -733,9 +732,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.17 Script data end tag name state */
 		void on_script_data_end_tag_name_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -781,15 +781,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.18 Script data escape start state */
 		void on_script_data_escape_start_state()
 		{
-			if (!eof())
+			char32_t cp = consume();
+
+			if (!eof() && cp == U'-')
 			{
-				char32_t cp = consume();
-				if (cp == U'-')
-				{
-					change_state(script_data_escape_start_dash_state);
-					emit_token(U'-');
-					return;
-				}
+				change_state(script_data_escape_start_dash_state);
+				emit_token(U'-');
+				return;
 			}
 
 			reconsume(script_data_state);
@@ -798,15 +796,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.19 Script data escape start dash state */
 		void on_script_data_escape_start_dash_state()
 		{
-			if (!eof())
+			char32_t cp = consume();
+			
+			if (!eof() && cp == U'-')
 			{
-				char32_t cp = consume();
-				if (cp == U'-')
-				{
-					change_state(script_data_escaped_dash_dash_state);
-					emit_token(U'-');
-					return;
-				}
+				change_state(script_data_escaped_dash_dash_state);
+				emit_token(U'-');
+				return;
 			}
 
 			reconsume(script_data_state);
@@ -815,6 +811,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.20 Script data escaped state */
 		void on_script_data_escaped_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_script_html_comment_like_text);
@@ -822,7 +820,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'-':
@@ -845,6 +842,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.21 Script data escaped dash state */
 		void on_script_data_escaped_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_script_html_comment_like_text);
@@ -852,7 +851,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'-':
@@ -877,6 +875,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.22 Script data escaped dash dash state */
 		void on_script_data_escaped_dash_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_script_html_comment_like_text);
@@ -884,7 +884,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'-':
@@ -912,9 +911,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.23 Script data escaped less-than sign state */
 		void on_script_data_escaped_less_than_sign_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				if (cp == U'/')
 				{
 					m_temporary_buffer.clear();
@@ -938,9 +938,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.24 Script data escaped end tag open state */
 		void on_script_data_escaped_end_tag_open_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				if (is_ascii_alpha(cp))
 				{
 					create_end_tag_token();
@@ -957,9 +958,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.25 Script data escaped end tag name state */
 		void on_script_data_escaped_end_tag_name_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -1005,9 +1007,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.26 Script data double escape start state */
 		void on_script_data_double_escape_start_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -1043,6 +1046,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.27 Script data double escaped state */
 		void on_script_data_double_escaped_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_script_html_comment_like_text);
@@ -1050,7 +1055,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			switch (cp)
 			{
 			case U'-':
@@ -1073,14 +1077,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.28 Script data double escaped dash state */
 		void on_script_data_double_escaped_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1106,14 +1110,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.29 Script data double escaped dash dash state */
 		void on_script_data_double_escaped_dash_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_script_html_comment_like_text);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1142,17 +1146,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.30 Script data double escaped less-than sign state */
 		void on_script_data_double_escaped_less_than_sign_state()
 		{
-			if (!eof())
-			{
-				char32_t cp = consume();
+			char32_t cp = consume();
 
-				if (cp == U'/')
-				{
-					m_temporary_buffer.clear();
-					change_state(script_data_double_escape_end_state);
-					emit_token(U'/');
-					return;
-				}
+			if (!eof() && cp == U'/')
+			{
+				m_temporary_buffer.clear();
+				change_state(script_data_double_escape_end_state);
+				emit_token(U'/');
+				return;
 			}
 
 			reconsume(script_data_double_escaped_state);
@@ -1161,10 +1162,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.31 Script data double escape end state */
 		void on_script_data_double_escape_end_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -1200,13 +1201,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.32 Before attribute name state */
 		void on_before_attribute_name_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				reconsume(after_attribute_name_state);
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1233,13 +1234,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.33 Attribute name state */
 		void on_attribute_name_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				reconsume(after_attribute_name_state);
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1280,14 +1281,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.34 After attribute name state */
 		void on_after_attribute_name_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1315,10 +1316,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.35 Before attribute value state */
 		void on_before_attribute_value_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				switch (cp)
 				{
 				case U'\x9':  // TAB
@@ -1346,14 +1347,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.36 Attribute value (double-quoted) state */
 		void on_attribute_value_double_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1376,14 +1377,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.37 Attribute value (single-quoted) state */
 		void on_attribute_value_single_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1406,14 +1407,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.38 Attribute value (unquoted) state */
 		void on_attribute_value_unquoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1451,14 +1452,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.39 After attribute value (quoted) state */
 		void on_after_attribute_value_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1484,6 +1485,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.40 Self-closing start tag state */
 		void on_self_closing_start_tag_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_tag);
@@ -1491,7 +1494,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			if (cp == U'>')
 			{
 				current_tag_token().m_self_closing_flag = true;
@@ -1507,14 +1509,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.41 Bogus comment state */
 		void on_bogus_comment_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(current_comment_token());
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1542,14 +1544,16 @@ namespace wordring::whatwg::html::parsing
 				consume(std::size(U"--") - 1);
 				create_comment_token();
 				change_state(comment_start_state);
-				goto Flush;
+				flush_code_point();
+				return;
 			}
 			
 			if (match(U"doctype", false, true))
 			{
 				consume(std::size(U"doctype") - 1);
 				change_state(DOCTYPE_state);
-				goto Flush;
+				flush_code_point();
+				return;
 			}
 			
 			if (match(U"[CDATA[", false, false))
@@ -1563,31 +1567,31 @@ namespace wordring::whatwg::html::parsing
 					if (in_html_namespace())
 					{
 						change_state(CDATA_section_state);
-						goto Flush;
+						flush_code_point();
+						return;
 					}
 				}
 
 				report_error(error_name::cdata_in_html_content);
 				create_comment_token(U"[CDATA[");
 				change_state(bogus_comment_state);
-				goto Flush;
+				flush_code_point();
+				return;
 			}
 
 			report_error(error_name::incorrectly_opened_comment);
 			create_comment_token();
 			change_state(bogus_comment_state);
-
-		Flush:
 			flush_code_point();
 		}
 
 		/*! 12.2.5.43 Comment start state */
 		void on_comment_start_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				switch (cp)
 				{
 				case U'-':
@@ -1607,6 +1611,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.44 Comment start dash state */
 		void on_comment_start_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_comment);
@@ -1614,8 +1620,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1636,6 +1640,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.45 Comment state */
 		void on_comment_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_comment);
@@ -1643,8 +1649,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1667,10 +1671,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.46 Comment less-than sign state */
 		void on_comment_less_than_sign_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				switch (cp)
 				{
 				case U'!':
@@ -1689,15 +1693,12 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.47 Comment less-than sign bang state */
 		void on_comment_less_than_sign_bang_state()
 		{
-			if (!eof())
-			{
-				char32_t cp = consume();
+			char32_t cp = consume();
 
-				if (cp == U'-')
-				{
-					change_state(comment_less_than_sign_bang_dash_state);
-					return;
-				}
+			if (!eof() && cp == U'-')
+			{
+				change_state(comment_less_than_sign_bang_dash_state);
+				return;
 			}
 
 			reconsume(comment_state);
@@ -1706,15 +1707,12 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.48 Comment less-than sign bang dash state */
 		void on_comment_less_than_sign_bang_dash_state()
 		{
-			if (!eof())
-			{
-				char32_t cp = consume();
+			char32_t cp = consume();
 
-				if (cp == U'-')
-				{
-					change_state(comment_less_than_sign_bang_dash_dash_state);
-					return;
-				}
+			if (!eof() && cp == U'-')
+			{
+				change_state(comment_less_than_sign_bang_dash_dash_state);
+				return;
 			}
 
 			reconsume(comment_end_dash_state);
@@ -1723,13 +1721,13 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.49 Comment less-than sign bang dash dash state */
 		void on_comment_less_than_sign_bang_dash_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				reconsume(comment_end_state);
 				return;
 			}
-
-			char32_t cp = consume();
 
 			if (cp == U'>')
 			{
@@ -1744,6 +1742,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.50 Comment end dash state */
 		void on_comment_end_dash_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_comment);
@@ -1751,8 +1751,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			if (cp == U'-')
 			{
@@ -1767,6 +1765,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.51 Comment end state */
 		void on_comment_end_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_comment);
@@ -1774,8 +1774,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1799,6 +1797,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.52 Comment end bang state */
 		void on_comment_end_bang_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_comment);
@@ -1806,8 +1806,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1833,6 +1831,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.53 DOCTYPE state */
 		void on_DOCTYPE_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -1842,8 +1842,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1865,6 +1863,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.54 Before DOCTYPE name state */
 		void on_before_DOCTYPE_name_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -1874,8 +1874,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1915,6 +1913,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.55 DOCTYPE name state */
 		void on_DOCTYPE_name_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -1923,8 +1923,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1959,6 +1957,8 @@ namespace wordring::whatwg::html::parsing
 			std::size_t constexpr n = std::max(std::size(U"public") - 1, std::size(U"system") - 1);
 			if (!fill(n)) return;
 
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -1967,8 +1967,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -1976,38 +1974,42 @@ namespace wordring::whatwg::html::parsing
 			case U'\xA':  // LF
 			case U'\xC':  // FF
 			case U'\x20': // SPACE
-				goto Flush;
+				flush_code_point();
+				return;
 			case U'>':
 				change_state(data_state);
 				emit_token(current_DOCTYPE_token());
-				goto Flush;
+				flush_code_point();
+				return;
 			}
 
 			if (match(U"public", true, true))
 			{
 				consume(std::size(U"public") - 2);
 				change_state(after_DOCTYPE_public_keyword_state);
-				goto Flush;
+				flush_code_point();
+				return;
 			}
 
 			if (match(U"system", true, true))
 			{
 				consume(std::size(U"system") - 2);
 				change_state(after_DOCTYPE_system_keyword_state);
-				goto Flush;
+				flush_code_point();
+				return;
 			}
 
 			report_error(error_name::invalid_character_sequence_after_doctype_name);
 			current_DOCTYPE_token().m_force_quirks_flag = true;
 			reconsume(bogus_DOCTYPE_state);
-
-		Flush:
 			flush_code_point();
 		}
 
 		/*! 12.2.5.57 After DOCTYPE public keyword state */
 		void on_after_DOCTYPE_public_keyword_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2016,8 +2018,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2053,6 +2053,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.58 Before DOCTYPE public identifier state */
 		void on_before_DOCTYPE_public_identifier_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2061,8 +2063,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2095,6 +2095,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.59 DOCTYPE public identifier (double-quoted) state */
 		void on_DOCTYPE_public_identifier_double_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2103,8 +2105,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2129,6 +2129,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.60 DOCTYPE public identifier (single-quoted) state */
 		void on_DOCTYPE_public_identifier_single_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2137,8 +2139,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2163,6 +2163,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.61 After DOCTYPE public identifier state */
 		void on_after_DOCTYPE_public_identifier_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2171,8 +2173,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2206,6 +2206,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.62 Between DOCTYPE public and system identifiers state */
 		void on_between_DOCTYPE_public_and_system_identifiers_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2214,8 +2216,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2246,6 +2246,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.63 After DOCTYPE system keyword state */
 		void on_after_DOCTYPE_system_keyword_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2254,8 +2256,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2291,6 +2291,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.64 Before DOCTYPE system identifier state */
 		void on_before_DOCTYPE_system_identifier_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2299,8 +2301,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2333,6 +2333,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.65 DOCTYPE system identifier (double-quoted) state */
 		void on_DOCTYPE_system_identifier_double_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2341,8 +2343,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2367,6 +2367,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.66 DOCTYPE system identifier (single-quoted) state */
 		void on_DOCTYPE_system_identifier_single_quoted_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2375,8 +2377,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2401,6 +2401,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.67 After DOCTYPE system identifier state */
 		void on_after_DOCTYPE_system_identifier_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_doctype);
@@ -2409,8 +2411,6 @@ namespace wordring::whatwg::html::parsing
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2432,14 +2432,14 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.68 Bogus DOCTYPE state */
 		void on_bogus_DOCTYPE_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				emit_token(current_DOCTYPE_token());
 				emit_token(end_of_file_token());
 				return;
 			}
-
-			char32_t cp = consume();
 
 			switch (cp)
 			{
@@ -2456,6 +2456,8 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.69 CDATA section state */
 		void on_CDATA_section_state()
 		{
+			char32_t cp = consume();
+
 			if (eof())
 			{
 				report_error(error_name::eof_in_cdata);
@@ -2463,7 +2465,6 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			char32_t cp = consume();
 			if (cp == U']')
 			{
 				change_state(CDATA_section_bracket_state);
@@ -2476,15 +2477,12 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.70 CDATA section bracket state */
 		void on_CDATA_section_bracket_state()
 		{
-			if (!eof())
-			{
-				char32_t cp = consume();
+			char32_t cp = consume();
 
-				if (cp == U']')
-				{
-					change_state(CDATA_section_end_state);
-					return;
-				}
+			if (!eof() && cp == U']')
+			{
+				change_state(CDATA_section_end_state);
+				return;
 			}
 
 			emit_token(U']');
@@ -2494,10 +2492,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.71 CDATA section end state */
 		void on_CDATA_section_end_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				switch (cp)
 				{
 				case U']':
@@ -2520,10 +2518,10 @@ namespace wordring::whatwg::html::parsing
 			m_temporary_buffer.clear();
 			m_temporary_buffer.push_back(U'&');
 
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				if (is_ascii_alphanumeric(cp))
 				{
 					reconsume(named_character_reference_state);
@@ -2545,30 +2543,40 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.73 Named character reference state */
 		void on_named_character_reference_state()
 		{
-			std::uint32_t idx, len;
-			auto r = match_named_character_reference(idx, len);
-			
-			if (r == match_result::partial) return; // partial
+			if (!fill(named_character_reference_max_length + 1)) return;
 
-			if (r == match_result::succeed) // matched
+			std::uint32_t len = 0;
+			std::array<char32_t, 2> a = match_named_character_reference(len);
+			
+			if (len != 0) // matched
 			{
-				char32_t tail = *std::next(begin(), len - 1);
-				char32_t cp = 0;
+				char32_t tail = *(begin() + len - 1);
+
+				auto it1 = begin();
+				auto it2 = begin() + len;
+				while (it1 != it2) m_temporary_buffer.push_back(*it1++);
 				consume(len);
-				if(!eof()) cp = next_input_character();
-				if (!(consumed_as_part_of_attribute() && tail != U';' && (cp == U'=' || is_ascii_alphanumeric(cp))))
+				
+				if (begin() != end())
 				{
-					if (tail != U';') report_error(error_name::missing_semicolon_after_character_reference);
-					
-					m_temporary_buffer.clear();
-					std::array<char32_t, 2> a = named_character_reference(idx);
-					m_temporary_buffer.push_back(a[0]);
-					if(a[1] != 0) m_temporary_buffer.push_back(a[1]);
+					char32_t cp = next_input_character();
+					if (consumed_as_part_of_attribute() && tail != U';' && (cp == U'=' || is_ascii_alphanumeric(cp)))
+					{
+						flush_code_points_consumed_as_character_reference();
+						change_state(return_state());
+						flush_code_point();
+						return;
+					}
 				}
+
+				if (tail != U';') report_error(error_name::missing_semicolon_after_character_reference);
+
+				m_temporary_buffer.clear();
+				m_temporary_buffer.push_back(a[0]);
+				if (a[1] != 0) m_temporary_buffer.push_back(a[1]);
 
 				flush_code_points_consumed_as_character_reference();
 				change_state(return_state());
-
 				flush_code_point();
 				return;
 			}
@@ -2582,10 +2590,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.74 Ambiguous ampersand state */
 		void on_ambiguous_ampersand_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				if (is_ascii_alphanumeric(cp))
 				{
 					if (consumed_as_part_of_attribute()) current_attribute().m_value.push_back(cp);
@@ -2609,10 +2617,10 @@ namespace wordring::whatwg::html::parsing
 		{
 			m_character_reference_code = 0;
 
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				switch (cp)
 				{
 				case U'x':
@@ -2629,15 +2637,12 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.76 Hexadecimal character reference start state */
 		void on_hexadecimal_character_reference_start_state()
 		{
-			if (!eof())
-			{
-				char32_t cp = consume();
+			char32_t cp = consume();
 
-				if (is_ascii_hex_digit(cp))
-				{
-					reconsume(hexadecimal_character_reference_state);
-					return;
-				}
+			if (!eof() && is_ascii_hex_digit(cp))
+			{
+				reconsume(hexadecimal_character_reference_state);
+				return;
 			}
 
 			report_error(error_name::absence_of_digits_in_numeric_character_reference);
@@ -2648,15 +2653,12 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.77 Decimal character reference start state */
 		void on_decimal_character_reference_start_state()
 		{
-			if (!eof())
-			{
-				char32_t cp = consume();
+			char32_t cp = consume();
 
-				if (is_ascii_digit(cp))
-				{
-					reconsume(decimal_character_reference_state);
-					return;
-				}
+			if (!eof() && is_ascii_digit(cp))
+			{
+				reconsume(decimal_character_reference_state);
+				return;
 			}
 
 			report_error(error_name::absence_of_digits_in_numeric_character_reference);
@@ -2667,10 +2669,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.78 Hexadecimal character reference state */
 		void on_hexadecimal_character_reference_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				if (is_ascii_hex_digit(cp))
 				{
 					char32_t c = cp;
@@ -2698,10 +2700,10 @@ namespace wordring::whatwg::html::parsing
 		/*! 12.2.5.79 Decimal character reference state */
 		void on_decimal_character_reference_state()
 		{
+			char32_t cp = consume();
+
 			if (!eof())
 			{
-				char32_t cp = consume();
-
 				if (is_ascii_digit(cp))
 				{
 					m_character_reference_code = (m_character_reference_code * 10) + (cp - 0x30);

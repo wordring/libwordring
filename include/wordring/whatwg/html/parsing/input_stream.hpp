@@ -35,33 +35,16 @@ namespace wordring::whatwg::html::parsing
 
 		static std::uint32_t constexpr null_insertion_point = std::numeric_limits<std::uint32_t>::max();
 
-		enum class match_result : std::uint32_t
-		{
-			failed = 0, partial = 1, succeed = 2,
-		};
-
-		struct match_state
-		{
-			std::uint32_t m_offset;
-			std::uint32_t m_last_match;
-
-			match_state()
-				: m_offset(0)
-				, m_last_match(0)
-			{
-			}
-
-			void clear()
-			{
-				m_offset = 0;
-				m_last_match = 0;
-			}
-		};
-
 	protected:
+		/*! コード・ポイント・バッファ
+		*/
 		container m_c;
 
 		value_type    m_current_input_character;
+
+		/*! バッファ埋め待ち検出用状態変数
+		*/
+		std::uint32_t m_fill_length;
 
 		/*! EOF 検出用状態変数
 		*/
@@ -72,22 +55,16 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool m_cr_state;
 
-		/*! 名前付き文字参照用状態変数
-
-		match_named_character_reference() から使用される。
-		*/
-		match_state m_match_state;
-
 	public:
 
 		/*! @brief 空の入力ストリームを構築する
 		*/
 		input_stream()
 			: m_current_input_character()
+			, m_fill_length(0)
 			, m_eof(false)
 			, m_eof_consumed(false)
 			, m_cr_state(false)
-			, m_match_state()
 		{
 		}
 
@@ -143,17 +120,18 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void push_eof()
 		{
-			this_type* p = static_cast<this_type*>(this);
+			this_type* P = static_cast<this_type*>(this);
 
 			m_eof = true;
 
 			if (m_cr_state)
 			{
 				m_c.push_back(U'\n');
-				p->on_emit_code_point();
+				P->on_emit_code_point();
 			}
 
-			p->on_emit_code_point();
+			P->on_emit_code_point();
+			//p->on_emit_code_point();
 		}
 
 		/*! @brief コード・ポイントを発送する
@@ -180,11 +158,14 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void flush_code_point()
 		{
+			this_type* P = static_cast<this_type*>(this);
+
 			assert(!m_eof_consumed); // ?
 			if (m_eof_consumed) return;
 
-			for(std::uint32_t i = 0; i < m_c.size(); ++i) static_cast<this_type*>(this)->on_emit_code_point();
-			if(!m_eof_consumed) static_cast<this_type*>(this)->on_emit_code_point();
+			while(!m_c.empty()) P->on_emit_code_point();
+
+			if(m_eof && !m_eof_consumed) P->on_emit_code_point();
 		}
 
 		/*! @brief 現在の入力文字を返す
@@ -214,7 +195,7 @@ namespace wordring::whatwg::html::parsing
 
 		@return ストリーム終端に達している場合 <b>true</b> 、その他の場合 <b>false</b> を返す。
 		*/
-		bool eof() const { return m_c.empty() && m_eof; }
+		bool eof() const { return m_eof_consumed; }
 
 		/*! @brief バッファに指定文字数貯まっているか調べる
 		
@@ -222,8 +203,9 @@ namespace wordring::whatwg::html::parsing
 
 		@return 指定文字数バッファに貯まるかEOFに達した場合 true 、それ以外の場合 false を返す。
 		*/
-		bool fill(std::uint32_t n) const
+		bool fill(std::uint32_t n)
 		{
+			m_fill_length += (n - m_c.size());
 			return m_eof || m_c.size() == n;
 		}
 
@@ -240,6 +222,8 @@ namespace wordring::whatwg::html::parsing
 				m_eof_consumed = true;
 				return 0;
 			}
+
+			if (m_fill_length) --m_fill_length;
 
 			m_current_input_character = m_c.front();
 			m_c.pop_front();
@@ -262,7 +246,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void reconsume()
 		{
-			m_c.push_front(m_current_input_character);
+			if (m_eof_consumed) m_eof_consumed = false;
+			else m_c.push_front(m_current_input_character);
 		}
 
 		const_iterator begin() const { return m_c.begin(); }
@@ -312,30 +297,71 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief 名前付き文字参照とストリーム・バッファ内の文字列を比較する
 
-		@param [out] idx named_character_reference() に渡す idx 値を返す
 		@param [out] len マッチした文字数を返す
 
-		@return
-			完全に一致する場合 succeed　、
-			途中まで一致するがバッファの文字列が足りない場合 partial 、
-			一致に失敗した場合 failed を返す。
+		@return 0 ～ 2 個の文字参照コードを返す。
 
 		最長一致を試みる。
 
 		失敗するまで検索し、失敗する前に一致が有ればそれを返す動作となる。
 		したがってどの場合でも、バッファにコード・ポイントが残る。
-
-		最後に一致した場所を保持する状態変数として m_ncr_state を使う。
 		*/
-		match_result match_named_character_reference(std::uint32_t& idx, std::uint32_t& len)
+		std::array<char32_t, 2> match_named_character_reference(std::uint32_t& len)
 		{
+			auto it1 = named_character_reference_idx_tbl.begin();
+			auto it2 = named_character_reference_idx_tbl.end();
+
+			auto tail = it1;
+			std::uint32_t j = 0;
+
+			for (std::uint32_t i = 0; it1 != it2 && i < m_c.size(); ++i)
+			{
+				it1 = it1[m_c[i]];
+				if (it1)
+				{
+					tail = it1;
+					j = i + 1;
+				}
+			}
+			std::u32string s;
+			tail.string(s);
+
+			while (tail != named_character_reference_idx_tbl.begin())
+			{
+				if (tail)
+				{
+					len = j;
+					break;
+				}
+				tail = tail.parent();
+			}
+
+			if (len != 0)
+			{
+				std::uint32_t idx = named_character_reference_idx_tbl.at(tail);
+				std::array<char32_t, 2> a = named_character_reference_map_tbl[idx];
+				return a;
+			}
+
+			return std::array<char32_t, 2>();
+
+			/*
+			auto r = named_character_reference_idx_tbl.lookup(m_c.begin(), m_c.end());
+			auto tail = r.first;
+			while (named_character_reference_idx_tbl.begin() != tail)
+			{
+				if (tail) break;
+				tail = tail.parent();
+			}
+
+			len = std::distance(m_c.begin(), r.second);
+
+
 			if (!m_eof && m_match_state.m_offset != m_c.size())
 			{
 				assert(m_match_state.m_offset != m_c.size());
 
 				++m_match_state.m_offset;
-				auto r = named_character_reference_idx_tbl.lookup(m_c.begin(), m_c.end());
-				len = std::distance(m_c.begin(), r.second);
 
 				if (r.first)
 				{
@@ -345,7 +371,7 @@ namespace wordring::whatwg::html::parsing
 						return match_result::partial;
 					}
 				}
-				else if(len == m_c.size()) return match_result::partial;
+				else if (len == m_c.size()) return match_result::partial;
 			}
 
 			if (m_match_state.m_last_match != 0)
@@ -361,8 +387,8 @@ namespace wordring::whatwg::html::parsing
 			m_match_state.clear();
 
 			return match_result::failed;
+			*/
 		}
-
 		/*! @brief 名前付き文字参照のコード・ポイントを取得する
 
 		@param [in] idx match_named_character_reference() から返される<b>マップの索引</b>

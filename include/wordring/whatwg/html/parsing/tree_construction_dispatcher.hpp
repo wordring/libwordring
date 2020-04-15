@@ -44,6 +44,9 @@ namespace wordring::whatwg::html::parsing
 		using processing_instruction_node_type = typename policy::processing_instruction_node_type;
 		using comment_node_type                = typename policy::comment_node_type;
 
+		using attribute_type    = typename policy::attribute_type;
+		using attribute_pointer = typename policy::attribute_pointer;
+
 	public:
 		//using state_type = base_type::state_type;
 
@@ -965,8 +968,18 @@ namespace wordring::whatwg::html::parsing
 			//TODO: 未実装
 			this_type* P = static_cast<this_type*>(this);
 
-			element_node_type el = P->create_element(token.m_tag_name, ns, U"");
-			
+			element_node_type el;
+			if (!token.m_tag_name.empty()) el = P->create_element(P->document(), token.m_tag_name, ns, U"");
+			else if (token.m_tag_name_id != static_cast<tag_name>(0)) el = P->create_element(P->document(), token.m_tag_name_id, ns, U"");
+			else assert(false);
+
+			for (token_attribute const& a : token)
+			{
+				if (a.m_omitted) continue;
+				attribute_type attr = P->create_attribute(el, a.m_local_name, a.m_namespace, a.m_prefix);
+				P->append_attribute(el, std::move(attr));
+			}
+
 			return el;
 		}
 
@@ -1341,7 +1354,7 @@ namespace wordring::whatwg::html::parsing
 
 			goto AnythingElse;
 		AnythingElse:
-			element_node_type el = P->create_element(tag_name::Html);
+			element_node_type el = P->create_element(P->document(), tag_name::Html);
 			node_pointer it = P->insert(P->document().end(), std::move(el));
 			P->set_document(it, P->document());
 			m_open_element_stack.push_back({ start_tag_token(), it });
@@ -1563,6 +1576,7 @@ namespace wordring::whatwg::html::parsing
 
 			goto AnythingElse;
 		AnythingElse:
+			tag_name tag = P->local_name_name(current_node().m_it);
 			assert(P->local_name_name(current_node().m_it) == tag_name::Head);
 			m_open_element_stack.pop_back();
 			insertion_mode(mode_name::after_head_insertion_mode);

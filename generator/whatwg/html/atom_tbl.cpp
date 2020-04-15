@@ -213,12 +213,14 @@ int main()
 	for (std::uint32_t i = 0; i < attribute_names.size(); ++i) attribute_atom_tbl[attribute_names[i]] = i + 1;
 
 	// 名前指定文字参照表索引を作成
+	std::uint32_t named_character_reference_max_length = 0;
 	wordring::trie<char32_t> named_character_reference_idx_tbl;
 	std::vector<std::array<std::u32string, 2>> named_character_reference_map_tbl;
 	{
 		std::uint32_t i = 0;
 		for (auto const& a : named_character_reference)
 		{
+			named_character_reference_max_length = std::max(a[0].size(), named_character_reference_max_length);
 			named_character_reference_idx_tbl.insert(a[0], i++);
 			named_character_reference_map_tbl.push_back({ a[1], a[2] });
 		}
@@ -310,6 +312,7 @@ int main()
 		hpp << std::endl;
 
 		// 名前指定文字参照表
+		hpp << "\t" << "std::uint32_t constexpr named_character_reference_max_length = " << named_character_reference_max_length << ";" << std::endl;
 		hpp << "\t" << "extern wordring::trie<char32_t> const named_character_reference_idx_tbl;" << std::endl;
 		hpp << "\t" << "extern std::array<std::array<char32_t, 2>, " << named_character_reference_map_tbl.size() << "> const named_character_reference_map_tbl;" << std::endl;
 		hpp << std::endl;

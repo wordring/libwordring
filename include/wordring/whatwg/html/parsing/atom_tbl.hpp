@@ -25,6 +25,7 @@ namespace wordring::whatwg::html::parsing
 
 	extern std::array<std::u32string, 7> const ns_uri_tbl;
 
+	std::uint32_t constexpr named_character_reference_max_length = 32;
 	extern wordring::trie<char32_t> const named_character_reference_idx_tbl;
 	extern std::array<std::array<char32_t, 2>, 2231> const named_character_reference_map_tbl;
 

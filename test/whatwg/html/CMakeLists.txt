@@ -31,7 +31,7 @@ add_executable(
 		parsing/atom_defs.cpp
 		parsing/atom_tbl.cpp
 		parsing/html_atom.cpp
-		parsing/input_stream.cpp
+#		parsing/input_stream.cpp
 		parsing/tokenization.cpp
 		parsing/tree_construction_dispatcher.cpp
 		parsing/on_initial_insertion_mode.cpp

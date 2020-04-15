@@ -212,7 +212,7 @@ BOOST_AUTO_TEST_CASE(tokenizer_on_markup_declaration_open_state_1)
 	for (char32_t cp : s) tt.push_code_point(cp);
 	tt.push_eof();
 
-	BOOST_CHECK(tt.m_state == test_tokenizer::comment_start_state);
+	BOOST_CHECK(tt.m_state == test_tokenizer::comment_state);
 	BOOST_CHECK(tt.m_c.empty());
 }
 
@@ -303,10 +303,11 @@ BOOST_AUTO_TEST_CASE(tokenizer_on_after_DOCTYPE_name_state_1)
 	tt.m_state = test_tokenizer::after_DOCTYPE_name_state;
 	auto s = std::u32string(U"PUBLIC");
 	for (char32_t cp : s) tt.push_code_point(cp);
-	//tt.push_eof();
+	tt.push_eof();
 
 	BOOST_CHECK(tt.m_state == test_tokenizer::after_DOCTYPE_public_keyword_state);
 	BOOST_CHECK(tt.m_c.empty());
+	BOOST_CHECK(tt.eof());
 }
 
 /*

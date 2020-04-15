@@ -50,7 +50,7 @@ namespace wordring::whatwg::html::simple
 		using comment_node_type                = typename policy::comment_node_type;
 
 		using attribute_type    = typename policy::attribute_type;
-		//using attribute_pointer = typename policy::attribute_pointer;
+		using attribute_pointer = typename policy::attribute_pointer;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
 		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
@@ -178,7 +178,7 @@ namespace wordring::whatwg::html::simple
 		- https://dom.spec.whatwg.org/#concept-create-element に対応する要素作成関数
 		- https://triple-underscore.github.io/DOM4-ja.html#concept-create-element
 		*/
-		element_node_type create_element(std::u32string local_name, namespace_uri_type ns, std::u32string prefix)
+		element_node_type create_element(node_pointer doc, std::u32string local_name, namespace_uri_type ns, std::u32string prefix)
 		{
 			element_node_type el;
 
@@ -189,7 +189,18 @@ namespace wordring::whatwg::html::simple
 			return el;
 		}
 
-		element_node_type create_element(tag_name name, ns_name ns = ns_name::HTML)
+		element_node_type create_element(node_pointer doc, tag_name local_name_id, namespace_uri_type ns, std::u32string prefix)
+		{
+			element_node_type el;
+
+			el.namespace_uri(ns);
+			el.namespace_prefix(encoding_cast<string_type>(prefix));
+			el.local_name_id(local_name_id);
+
+			return el;
+		}
+
+		element_node_type create_element(node_pointer doc, tag_name name, ns_name ns = ns_name::HTML)
 		{
 			element_node_type el;
 
@@ -216,16 +227,19 @@ namespace wordring::whatwg::html::simple
 		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
 		*/
 		void set_already_started_flag(node_pointer it, bool b) {}
-
-		// ----------------------------------------------------------------------------------------
-		// 属性
-		// ----------------------------------------------------------------------------------------
-
-		/*! @brief 要素へ属性を付加する
+		
+		/*! @brief 要素の名前空間を返す
 		*/
-		void append_attribute(element_node_type el)
+		ns_name namespace_uri_name(node_pointer it) const
 		{
+			return std::get_if<element_node_type>(std::addressof(*it))->namespace_uri_id();
+		}
 
+		/*! @brief 要素のローカル名を返す
+		*/
+		tag_name local_name_name(node_pointer it) const
+		{
+			return std::get_if<element_node_type>(std::addressof(*it))->local_name_id();
 		}
 
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる
@@ -237,14 +251,37 @@ namespace wordring::whatwg::html::simple
 			return *lhs == *rhs;
 		}
 
-		ns_name namespace_uri_name(node_pointer it) const
+		// ----------------------------------------------------------------------------------------
+		// 属性
+		// ----------------------------------------------------------------------------------------
+
+		attribute_type create_attribute(element_node_type& el, std::u32string local_name, ns_name ns, std::u32string prefix)
 		{
-			return std::get_if<element_node_type>(std::addressof(*it))->namespace_uri_id();
+			attribute_type a;
+
+			a.namespace_uri_id(ns);
+			a.local_name(encoding_cast<string_type>(local_name));
+			a.prefix(encoding_cast<string_type>(prefix));
+
+			return a;
 		}
 
-		tag_name local_name_name(node_pointer it) const
+		attribute_type create_attribute(element_node_type& el, attribute_name local_name, ns_name ns, std::u32string prefix)
 		{
-			return std::get_if<element_node_type>(std::addressof(*it))->local_name_id();
+			attribute_type a;
+
+			a.namespace_uri_id(ns);
+			a.local_name_id(local_name);
+			a.prefix(encoding_cast<string_type>(prefix));
+
+			return a;
+		}
+
+		/*! @brief 要素へ属性を付加する
+		*/
+		void append_attribute(element_node_type& el, attribute_type&& attr)
+		{
+			el.push_back(std::move(attr));
 		}
 
 		//attribute_pointer find_attribute(node_pointer it) const
