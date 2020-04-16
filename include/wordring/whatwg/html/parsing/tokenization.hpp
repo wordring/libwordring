@@ -39,7 +39,7 @@ namespace wordring::whatwg::html::parsing
 		using base_type::next_input_character;
 		using base_type::begin;
 		using base_type::end;
-		//using base_type::match_named_character_reference;
+		using base_type::match_named_character_reference;
 		using base_type::named_character_reference;
 		using base_type::consume;
 		using base_type::match;
@@ -207,6 +207,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					auto attr_it = attribute_atom_tbl.find(it1->m_name);
 					it1->m_name_id = (attr_it == attribute_atom_tbl.end()) ? static_cast<attribute_name>(0) : attr_it->second;
+					++it1;
 				}
 
 				if (m_current_tag_token_id == 2)

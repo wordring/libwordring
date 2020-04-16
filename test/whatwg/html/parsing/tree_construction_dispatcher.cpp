@@ -40,7 +40,7 @@ namespace
 		using comment_node_type                = typename policy_type::comment_node_type;
 
 		using base_type::mode_type;
-		using base_type::stack_entry_type;
+		using base_type::stack_entry;
 
 		using base_type::mode_name;
 
@@ -491,7 +491,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_mathml_text_integration_poi
 	auto it = p.insert(p.document().end(), basic_element<std::string>(ns_name::MathML, "", tag_name::Mtext));
 	start_tag_token token;
 	token.m_tag_name_id = tag_name::Mtext;
-	test_parser::stack_entry_type entry{ token, it };
+	test_parser::stack_entry entry{ token, it };
 
 	BOOST_CHECK(p.is_mathml_text_integration_point(entry));
 }
@@ -505,7 +505,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_html_integration_point_1)
 	auto& attr = token.m_attributes.create();
 	attr.m_name_id = attribute_name::Encoding;
 	attr.m_value = U"Application/xhtml+xml";
-	test_parser::stack_entry_type entry{ token, it };
+	test_parser::stack_entry entry{ token, it };
 
 	BOOST_CHECK(p.is_html_integration_point(entry));
 }
@@ -611,6 +611,16 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_1)
 	token.m_tag_name = U"body";
 	auto el = p.create_element_for_token(token, ns_name::HTML, HTML);
 
+}
+
+BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_2)
+{
+	test_parser p;
+
+	std::u32string s(U"<A href=\"http://uri.com/\">ABC</A>");
+	for (char32_t cp : s) p.push_code_point(cp);
+
+	int i = 0;
 }
 
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_mathml_attributes_1)

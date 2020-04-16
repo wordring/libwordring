@@ -114,10 +114,15 @@ namespace wordring::whatwg::html::parsing
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements
 		// ----------------------------------------------------------------------------------------
 
-		using stack_entry_type = open_element_stack_entry<policy>;
-		using stack_pointer = typename open_element_stack<policy>::iterator;
+		struct stack_entry
+		{
+			start_tag_token m_token;
+			node_pointer    m_it;
+		};
 
-		open_element_stack<policy> m_open_element_stack;
+		//using stack_pointer = typename open_element_stack<policy>::iterator;
+
+		std::deque<stack_entry> m_open_element_stack;
 
 		// ----------------------------------------------------------------------------------------
 		// アクティブ整形要素のリスト
@@ -180,7 +185,7 @@ namespace wordring::whatwg::html::parsing
 
 		static bool constexpr is_fragments_parser = policy::is_fragments_parser;
 
-		stack_entry_type m_context_entry;
+		stack_entry m_context_entry;
 
 
 
@@ -310,17 +315,17 @@ namespace wordring::whatwg::html::parsing
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements
 		// ----------------------------------------------------------------------------------------
 
-		stack_entry_type& current_node() { return m_open_element_stack.back(); }
+		stack_entry& current_node() { return m_open_element_stack.back(); }
 
-		stack_entry_type const& current_node() const { return m_open_element_stack.back(); }
+		stack_entry const& current_node() const { return m_open_element_stack.back(); }
 
-		stack_entry_type& adjusted_current_node()
+		stack_entry& adjusted_current_node()
 		{
 			if constexpr (is_fragments_parser) { if (m_open_element_stack.size() == 1) return m_context_entry; }
 			return current_node();
 		}
 
-		stack_entry_type const& adjusted_current_node() const
+		stack_entry const& adjusted_current_node() const
 		{
 			if constexpr (is_fragments_parser) { if (m_open_element_stack.size() == 1) return m_context_entry; }
 			return current_node();
@@ -718,7 +723,7 @@ namespace wordring::whatwg::html::parsing
 			if (m_open_element_stack.empty()) goto Html;
 			else
 			{
-				stack_entry_type& entry = adjusted_current_node();
+				stack_entry& entry = adjusted_current_node();
 
 				if (P->namespace_uri_name(entry.m_it) == ns_name::HTML) goto Html;
 				if constexpr (std::is_same_v<start_tag_token, Token>)
@@ -839,7 +844,7 @@ namespace wordring::whatwg::html::parsing
 			process_token(m_insertion_mode, token);
 		}
 
-		bool is_mathml_text_integration_point(stack_entry_type const& entry) const
+		bool is_mathml_text_integration_point(stack_entry const& entry) const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
 
@@ -857,7 +862,7 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		bool is_html_integration_point(stack_entry_type const& entry) const
+		bool is_html_integration_point(stack_entry const& entry) const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
 
@@ -913,11 +918,11 @@ namespace wordring::whatwg::html::parsing
 
 			if (m_foster_parenting && tbl)
 			{
-				auto it = std::find_if(m_open_element_stack.rbegin(), m_open_element_stack.rend(), [=](stack_entry_type const& entry) {
+				auto it = std::find_if(m_open_element_stack.rbegin(), m_open_element_stack.rend(), [=](stack_entry const& entry) {
 					return P->local_name_name(entry.m_it) == tag_name::Template; });
 				auto last_template = (it == m_open_element_stack.rend()) ? m_open_element_stack.end() : (++it).base();
 
-				it = std::find_if(m_open_element_stack.rbegin(), m_open_element_stack.rend(), [=](stack_entry_type const& entry) {
+				it = std::find_if(m_open_element_stack.rbegin(), m_open_element_stack.rend(), [=](stack_entry const& entry) {
 					return P->local_name_name(entry.m_it) == tag_name::Table; });
 				auto last_table = (it == m_open_element_stack.rend()) ? m_open_element_stack.end() : (++it).base();
 
@@ -1435,9 +1440,8 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void on_in_head_insertion_mode(Token& token)
 		{
-			bool state_flag = false;
-
 			this_type* P = static_cast<this_type*>(this);
+			bool f;
 
 			if constexpr (std::is_same_v<character_token, Token>)
 			{
@@ -1565,10 +1569,14 @@ namespace wordring::whatwg::html::parsing
 				}
 			}
 
-			state_flag = false;
-			if constexpr (std::is_same_v<start_tag_token, Token>) if (token.m_tag_name_id == tag_name::Head) state_flag = true;
-			if constexpr (std::is_same_v<end_tag_token, Token>) state_flag = true;
-			if(state_flag)
+			f = false;
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Head) f = true;
+			}
+			else if constexpr (std::is_same_v<end_tag_token, Token>) f = true;
+
+			if(f)
 			{
 				report_error();
 				return;
@@ -1576,33 +1584,207 @@ namespace wordring::whatwg::html::parsing
 
 			goto AnythingElse;
 		AnythingElse:
-			tag_name tag = P->local_name_name(current_node().m_it);
 			assert(P->local_name_name(current_node().m_it) == tag_name::Head);
+			//tag_name tag = P->local_name_name(current_node().m_it);
 			m_open_element_stack.pop_back();
 			insertion_mode(mode_name::after_head_insertion_mode);
 			reprocess_token(token);
 		}
 
 		// ----------------------------------------------------------------------------------------
-		// 
+		// 12.2.6.4.5 The "in head noscript" insertion mode
 		//
-		// 
+		// https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inheadnoscript
 		// ----------------------------------------------------------------------------------------
 
 		template <typename Token>
 		void on_in_head_noscript_insertion_mode(Token& token)
 		{
+			this_type* P = static_cast<this_type*>(this);
+			bool f;
+
+			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
+			{
+				report_error();
+				return;
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Html)
+				{
+					on_in_body_insertion_mode(token);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Noscript)
+				{
+					assert(P->local_name_name(current_node().m_it) == tag_name::Noscript);
+					m_open_element_stack.pop_back();
+					assert(P->local_name_name(current_node().m_it) == tag_name::Head);
+					insertion_mode(mode_name::in_head_insertion_mode);
+					return;
+				}
+			}
+
+			f = false;
+			if constexpr (std::is_same_v<character_token, Token>)
+			{
+				if (is_ascii_white_space(token.m_data)) f = true;
+			}
+			else if constexpr (std::is_same_v<comment_token, Token>) f = true;
+			else if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::Basefont: case tag_name::Bgsound: case tag_name::Link: case tag_name::Meta:
+				case tag_name::Noframes: case tag_name::Style:
+					f = true;
+					break;
+				default:
+					break;
+				}
+			}
+
+			if (f)
+			{
+				on_in_head_insertion_mode(token);
+				return;
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Br) goto AnythingElse;
+			}
+
+			f = false;
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::Head: case tag_name::Noscript:
+					f = true;
+					break;
+				default:
+					break;
+				}
+			}
+			else if constexpr (std::is_same_v<end_tag_token, Token>) f = true;
+
+			if (f)
+			{
+				report_error();
+				return;
+			}
+
+			goto AnythingElse;
+		AnythingElse:
+			report_error();
+			assert(P->local_name_name(current_node().m_it) == tag_name::Noscript);
+			m_open_element_stack.pop_back();
+			assert(P->local_name_name(current_node().m_it) == tag_name::Head);
+			insertion_mode(mode_name::in_head_insertion_mode);
+			reprocess_token(token);
 		}
 
 		// ----------------------------------------------------------------------------------------
-		// 
+		// 12.2.6.4.6 The "after head" insertion mode
 		//
-		// 
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-after-head-insertion-mode
 		// ----------------------------------------------------------------------------------------
 
 		template <typename Token>
 		void on_after_head_insertion_mode(Token& token)
 		{
+			bool f;
+
+			if constexpr (std::is_same_v<character_token, Token>)
+			{
+				if (is_ascii_white_space(token.m_data))
+				{
+					insert_character(token.m_data);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<comment_token, Token>)
+			{
+				insert_comment(token);
+				return;
+			}
+
+			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
+			{
+				report_error();
+				return;
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::Html:
+					on_in_body_insertion_mode(token);
+					return;
+				case tag_name::Body:
+					insert_html_element(token);
+					m_frameset_ok_flag = false;
+					insertion_mode(mode_name::in_body_insertion_mode);
+					return;
+				case tag_name::Frameset:
+					insert_html_element(token);
+					insertion_mode(mode_name::in_frameset_insertion_mode);
+					return;
+				case tag_name::Base:     case tag_name::Basefont: case tag_name::Bgsound: case tag_name::Link:
+				case tag_name::Meta:     case tag_name::Noframes: case tag_name::Script:  case tag_name::Style:
+				case tag_name::Template: case tag_name::Title:
+					report_error();
+					m_open_element_stack.push_back({ start_tag_token(), m_head_element_pointer });
+					on_in_head_insertion_mode(token);
+					m_open_element_stack.erase(std::remove_if(m_open_element_stack.begin(), m_open_element_stack.end(), [this](stack_entry const& entry) {
+						return entry.m_it == m_head_element_pointer; }), m_open_element_stack.end());
+					return;
+				default:
+					break;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::Template:
+					on_in_head_insertion_mode(token);
+					return;
+				case tag_name::Body: case tag_name::Html: case tag_name::Br:
+					goto AnythingElse;
+				default:
+					break;
+				}
+			}
+
+			f = false;
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Head) f = true;
+			}
+			if constexpr (std::is_same_v<start_tag_token, Token>) f = true;
+
+			if (f)
+			{
+				report_error();
+				return;
+			}
+
+			goto AnythingElse;
+		AnythingElse:
+			start_tag_token t(tag_name::Body);
+			insert_html_element(t);
+			insertion_mode(mode_name::in_body_insertion_mode);
+			reprocess_token(token);
 		}
 
 		// ----------------------------------------------------------------------------------------
