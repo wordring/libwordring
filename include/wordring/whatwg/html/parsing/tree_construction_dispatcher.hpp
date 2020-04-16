@@ -575,8 +575,8 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
-		template <typename T>
-		void pop_until(T conditions)
+		template <typename T1>
+		void pop_until(T1 conditions)
 		{
 			this_type* P = static_cast<this_type*>(this);
 

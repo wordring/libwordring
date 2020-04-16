@@ -220,7 +220,7 @@ int main()
 		std::uint32_t i = 0;
 		for (auto const& a : named_character_reference)
 		{
-			named_character_reference_max_length = std::max(a[0].size(), named_character_reference_max_length);
+			named_character_reference_max_length = std::max(static_cast<std::uint32_t>(a[0].size()), named_character_reference_max_length);
 			named_character_reference_idx_tbl.insert(a[0], i++);
 			named_character_reference_map_tbl.push_back({ a[1], a[2] });
 		}
