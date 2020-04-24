@@ -24,21 +24,58 @@ namespace wordring::whatwg::html::simple
 		friend bool operator==(basic_attr<String1> const&, basic_attr<String1> const&);
 
 		template <typename String1>
+		friend bool operator==(basic_attr<String1> const&, attribute_name);
+
+		template <typename String1>
+		friend bool operator==(attribute_name, basic_attr<String1> const&);
+
+		template <typename String1>
+		friend bool operator==(basic_attr<String1> const&, String1 const&);
+
+		template <typename String1>
+		friend bool operator==(String1 const&, basic_attr<String1> const&);
+
+		template <typename String1>
 		friend bool operator!=(basic_attr<String1> const&, basic_attr<String1> const&);
 
-	public:
+		template <typename String1>
+		friend bool operator!=(basic_attr<String1> const&, attribute_name);
 
+		template <typename String1>
+		friend bool operator!=(attribute_name, basic_attr<String1> const&);
+
+		template <typename String1>
+		friend bool operator!=(basic_attr<String1> const&, String1 const&);
+
+		template <typename String1>
+		friend bool operator!=(String1 const&, basic_attr<String1> const&);
+
+	public:
 		using string_type = String;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using lacal_name_type    = basic_html_atom<string_type, attribute_name>;
+		using local_name_type    = basic_html_atom<string_type, attribute_name>;
 
 	public:
+		basic_attr()
+		{
+		}
+		
+		basic_attr(string_type const& name)
+			: m_local_name(name)
+		{
+		}
+
+		basic_attr(attribute_name name)
+			: m_local_name(name)
+		{
+		}
+
 		string_type namespace_uri() const { return static_cast<string_type>(m_namespace_uri); }
 
 		void namespace_uri(string_type const& uri) { m_namespace_uri = uri; }
 
-		namespace_uri_type const& namespace_uri_id() const { return m_namespace_uri; }
+		ns_name namespace_uri_id() const { return m_namespace_uri; }
 
 		void namespace_uri_id(ns_name uri) { m_namespace_uri = uri; }
 
@@ -50,7 +87,7 @@ namespace wordring::whatwg::html::simple
 
 		void local_name(string_type const& name) { m_local_name = name; }
 
-		lacal_name_type const& local_name_id() const { return m_local_name; }
+		attribute_name local_name_id() const { return m_local_name; }
 
 		void local_name_id(attribute_name name) { m_local_name = name; }
 
@@ -61,7 +98,7 @@ namespace wordring::whatwg::html::simple
 	protected:
 		namespace_uri_type m_namespace_uri;
 		string_type        m_prefix;
-		lacal_name_type    m_local_name;
+		local_name_type    m_local_name;
 
 		string_type        m_value;
 	};
@@ -75,9 +112,57 @@ namespace wordring::whatwg::html::simple
 	}
 
 	template <typename String1>
+	inline bool operator==(basic_attr<String1> const& lhs, attribute_name local_name)
+	{
+		return lhs.m_local_name == local_name;
+	}
+
+	template <typename String1>
+	inline bool operator==(attribute_name local_name, basic_attr<String1> const& rhs)
+	{
+		return local_name == rhs.m_local_name;
+	}
+
+	template <typename String1>
+	inline bool operator==(basic_attr<String1> const& lhs, String1 const& local_name)
+	{
+		return lhs.m_local_name == local_name;
+	}
+
+	template <typename String1>
+	inline bool operator==(String1 const& local_name, basic_attr<String1> const& rhs)
+	{
+		return local_name == rhs.m_local_name;
+	}
+
+	template <typename String1>
 	inline bool operator!=(basic_attr<String1> const& lhs, basic_attr<String1> const& rhs)
 	{
 		return !(lhs == rhs);
+	}
+
+	template <typename String1>
+	inline bool operator!=(basic_attr<String1> const& lhs, attribute_name local_name)
+	{
+		return !(lhs == local_name);
+	}
+
+	template <typename String1>
+	inline bool operator!=(attribute_name local_name, basic_attr<String1> const& rhs)
+	{
+		return !(local_name == rhs);
+	}
+
+	template <typename String1>
+	inline bool operator!=(basic_attr<String1> const& lhs, String1 const& local_name)
+	{
+		return !(lhs == local_name);
+	}
+
+	template <typename String1>
+	inline bool operator!=(String1 const& local_name, basic_attr<String1> const& rhs)
+	{
+		return !(local_name == rhs);
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -229,7 +314,7 @@ namespace wordring::whatwg::html::simple
 		using usv_string_type = std::u32string;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
+		using local_name_type    = basic_html_atom<string_type, tag_name>;
 
 
 		using attribute_type = basic_attr<string_type>;
@@ -242,7 +327,7 @@ namespace wordring::whatwg::html::simple
 		{
 		}
 
-		basic_element(namespace_uri_type const& ns, string_type const& prefix, lacal_name_type const& name)
+		basic_element(namespace_uri_type const& ns, string_type const& prefix, local_name_type const& name)
 			: m_namespace_uri(ns)
 			, m_namespace_prefix(prefix)
 			, m_local_name(name)
@@ -277,7 +362,7 @@ namespace wordring::whatwg::html::simple
 		void local_name_id(tag_name name) { m_local_name = name; }
 
 		// 属性
-		void push_back(attribute_type&& attr) { m_attributes.push_back(std::move(attr)); }
+		void push_back(attribute_type const& attr) { m_attributes.push_back(std::move(attr)); }
 
 		iterator begin() { return m_attributes.begin(); }
 
@@ -297,11 +382,18 @@ namespace wordring::whatwg::html::simple
 			return std::find(m_attributes.begin(), m_attributes.end(), name);
 		}
 
+		iterator find(attribute_name name)
+		{
+			return std::find_if(m_attributes.begin(), m_attributes.end(), [name](attribute_type const& a)->bool {
+				return a.local_name_id() == name; });
+		}
+
 	private:
 		namespace_uri_type m_namespace_uri;
 		string_type        m_namespace_prefix;
-		lacal_name_type    m_local_name;
+		local_name_type    m_local_name;
 
+		container m_attributes;
 
 
 
@@ -311,7 +403,6 @@ namespace wordring::whatwg::html::simple
 		string_type m_id;
 		string_type m_class_name;
 
-		container m_attributes;
 	};
 
 	template <typename String1>

@@ -131,17 +131,25 @@ BOOST_AUTO_TEST_SUITE(simple_parser_test)
 
 BOOST_AUTO_TEST_CASE(simple_parser_construct_1)
 {
-	using namespace wordring::whatwg::html;
-	using namespace wordring::whatwg::html::parsing;
-
-	BOOST_CHECK(true);
-
 	test_parser p;
 	std::u32string s = U"<!-- Comment -->";
 	for (char32_t cp : s) p.push_code_point(cp);
 	p.push_eof();
 
 	BOOST_CHECK(p.to_comment(p.document().begin())->data() == " Comment ");
+}
+
+
+BOOST_AUTO_TEST_CASE(simple_parser_find_attribute_1)
+{
+	test_parser p;
+	auto el = p.create_element(p.document(), tag_name::P);
+	auto attr = p.create_attribute(el, attribute_name::Abbr, ns_name::HTML, U"");
+	p.append_attribute(el, std::move(attr));
+	auto it = p.insert(p.document().end(), std::move(el));
+	//auto attr = p.create_attribute(it, )
+
+	//BOOST_CHECK(p.find_attribute(it, attribute_name::Abbr) != it->end());
 }
 
 

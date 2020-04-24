@@ -255,6 +255,10 @@ namespace wordring::whatwg::html::simple
 		// 属性
 		// ----------------------------------------------------------------------------------------
 
+		attribute_pointer abegin(node_pointer it)
+		{
+		}
+
 		attribute_type create_attribute(element_node_type& el, std::u32string local_name, ns_name ns, std::u32string prefix)
 		{
 			attribute_type a;
@@ -282,6 +286,11 @@ namespace wordring::whatwg::html::simple
 		void append_attribute(element_node_type& el, attribute_type&& attr)
 		{
 			el.push_back(std::move(attr));
+		}
+
+		attribute_pointer find_attribute(node_pointer it, attribute_name name)
+		{
+			return std::get_if<element_node_type>(std::addressof(*it))->find(name);
 		}
 
 		//attribute_pointer find_attribute(node_pointer it) const

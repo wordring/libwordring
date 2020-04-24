@@ -1788,14 +1788,66 @@ namespace wordring::whatwg::html::parsing
 		}
 
 		// ----------------------------------------------------------------------------------------
-		// 
+		// 12.2.6.4.7 The "in body" insertion mode
 		//
-		// 
+		// https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inbody
 		// ----------------------------------------------------------------------------------------
 
 		template <typename Token>
 		void on_in_body_insertion_mode(Token& token)
 		{
+			this_type* P = static_cast<this_type*>(this);
+			bool f;
+
+			if constexpr (std::is_same_v<character_token, Token>)
+			{
+				if (token.m_data == 0)
+				{
+					report_error();
+					return;
+				}
+
+				if (is_ascii_white_space(token.m_data))
+				{
+					reconstruct_active_formatting_element_list();
+					insert_character(token.m_data);
+					return;
+				}
+
+				reconstruct_active_formatting_element_list();
+				insert_character(token.m_data);
+				m_frameset_ok_flag = false;
+				return;
+			}
+
+			if constexpr (std::is_same_v<comment_token, Token>)
+			{
+				insert_comment(token);
+				return;
+			}
+
+			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
+			{
+				report_error();
+				return;
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Html)
+				{
+					report_error();
+					if (std::find_if(m_open_element_stack.begin(), m_open_element_stack.end(), [P](stack_entry const& entry) {
+						return P->local_name_name(entry.m_it) == tag_name::Template; }) != m_open_element_stack.end()) return;
+					node_pointer it = m_open_element_stack.front().m_it;
+					for (token_attribute const& a : token)
+					{
+						auto p = P->find_attribute(it, a.m_name_id);
+					}
+				}
+			}
+
+			f = false;
 		}
 
 		// ----------------------------------------------------------------------------------------

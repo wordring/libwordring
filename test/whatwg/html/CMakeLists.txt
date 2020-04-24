@@ -35,7 +35,7 @@ add_executable(
 		parsing/tokenization.cpp
 		parsing/tree_construction_dispatcher.cpp
 		parsing/on_initial_insertion_mode.cpp
-#		simple_node.cpp
+		simple_node.cpp
 		simple_parser.cpp
 #		simple_policy.cpp
 )
