@@ -23,45 +23,45 @@ namespace wordring::whatwg::html::parsing
 
 }
 
-namespace wordring::whatwg::html
+namespace wordring::whatwg::html::simple
 {
+	namespace parsing = wordring::whatwg::html::parsing;
+
 	template <typename T, typename String, typename Container, bool IsFragmentsParser = false>
-	class simple_parser : public parsing::tree_construction_dispatcher<T, simple_policy<String, Container, IsFragmentsParser>>
+	class parser : public parsing::tree_construction_dispatcher<T, tree_construction_policy<String, Container, IsFragmentsParser>>
 	{
 	public:
-		using policy = simple_policy<String, Container, IsFragmentsParser>;
+		using policy = tree_construction_policy<String, Container, IsFragmentsParser>;
 
 		using base_type = parsing::tree_construction_dispatcher<T, policy>;
 		using this_type = T;
 
-		using string_type = typename policy::string_type;
+		using string_type    = typename policy::string_type;
 		using container_type = typename policy::container_type;
-		using node_type = typename policy::node_type;
-		using node_pointer = typename container_type::iterator;
+		using node_type      = typename policy::node_type;
+		using node_pointer   = typename container_type::iterator;
 
-		using document_node_type = typename policy::document_node_type;
-		using document_type_node_type = typename policy::document_type_node_type;
-		using document_fragment_node_type = typename policy::document_fragment_node_type;
-		using element_node_type = typename policy::element_node_type;
-		using text_node_type = typename policy::text_node_type;
+		using document_node_type               = typename policy::document_node_type;
+		using document_type_node_type          = typename policy::document_type_node_type;
+		using document_fragment_node_type      = typename policy::document_fragment_node_type;
+		using element_node_type                = typename policy::element_node_type;
+		using text_node_type                   = typename policy::text_node_type;
 		using processing_instruction_node_type = typename policy::processing_instruction_node_type;
-		using comment_node_type = typename policy::comment_node_type;
+		using comment_node_type                = typename policy::comment_node_type;
 
-		using attribute_type = typename policy::attribute_type;
+		using attribute_type    = typename policy::attribute_type;
 		using attribute_pointer = typename policy::attribute_pointer;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using lacal_name_type = basic_html_atom<string_type, tag_name>;
+		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
 
 		using base_type::m_open_element_stack;
 
 		using base_type::report_error;
 		using base_type::eof;
 
-		using base_type::mode_name;
-
 	public:
-		simple_parser()
+		parser()
 			: m_script_nesting_level(0)
 			, m_parser_pause_flag(false)
 		{
@@ -217,7 +217,7 @@ namespace wordring::whatwg::html
 		void set_document(node_pointer it, node_pointer doc) {}
 
 		/*! @brief script 要素の "non-blocking" flag を設定する
-
+		
 		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
 		*/
 		void set_non_blocking_flag(node_pointer it, bool b) {}
@@ -227,7 +227,7 @@ namespace wordring::whatwg::html
 		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
 		*/
 		void set_already_started_flag(node_pointer it, bool b) {}
-
+		
 		/*! @brief 要素の名前空間を返す
 		*/
 		ns_name namespace_uri_name(node_pointer it) const
@@ -301,7 +301,7 @@ namespace wordring::whatwg::html
 		// ----------------------------------------------------------------------------------------
 		// テキスト
 		// ----------------------------------------------------------------------------------------
-
+		
 		text_node_type create_text(char32_t cp)
 		{
 			text_node_type text;
@@ -326,7 +326,7 @@ namespace wordring::whatwg::html
 		// ノード作成 ----------------------------------------------------------
 
 
-		document_fragment_node_type create_document_fragment() {}
+		document_fragment_node_type create_document_fragment(){}
 
 
 		processing_instruction_node_type create_processing_instruction() {}

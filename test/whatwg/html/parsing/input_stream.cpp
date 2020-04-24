@@ -12,8 +12,6 @@ namespace
 	{
 		using base_type = wordring::whatwg::html::parsing::input_stream<test_stream>;
 
-		using match_result = typename base_type::match_result;
-
 		using base_type::match_named_character_reference;
 		using base_type::consume;
 
@@ -309,161 +307,87 @@ BOOST_AUTO_TEST_CASE(input_stream_match_2)
 */
 BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_1)
 {
-	using namespace wordring::whatwg::html::parsing;
-
 	test_stream ts;
 	auto s = std::u32string(U"xodot;");
 	for (char32_t cp : s) ts.push_code_point(cp);
 	ts.eof();
 
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
+	std::uint32_t len;
+	std::array<char32_t, 2> a = ts.match_named_character_reference(len);
 
-	BOOST_CHECK(r == test_stream::match_result::succeed);
-	BOOST_CHECK(n == std::size(U"xodot;") - 1);
+	BOOST_CHECK(len == 6);
+	BOOST_CHECK(a[0] == U'\x2A00');
+	BOOST_CHECK(a[1] == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_2)
 {
-	using namespace wordring::whatwg::html::parsing;
-
 	test_stream ts;
 	auto s = std::u32string(U"xodot");
 	for (char32_t cp : s) ts.push_code_point(cp);
 
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
+	std::uint32_t len;
+	std::array<char32_t, 2> a = ts.match_named_character_reference(len);
 
-	BOOST_CHECK(r == test_stream::match_result::failed);
+	BOOST_CHECK(len == 0);
+	BOOST_CHECK(a[0] == U'\0');
+	BOOST_CHECK(a[1] == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_3)
 {
-	using namespace wordring::whatwg::html::parsing;
-
 	test_stream ts;
 	auto s = std::u32string(U"xodotA");
 	for (char32_t cp : s) ts.push_code_point(cp);
 
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
+	std::uint32_t len;
+	std::array<char32_t, 2> a = ts.match_named_character_reference(len);
 
-	BOOST_CHECK(r == test_stream::match_result::failed);
+	BOOST_CHECK(len == 0);
+	BOOST_CHECK(a[0] == U'\0');
+	BOOST_CHECK(a[1] == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_4)
 {
-	using namespace wordring::whatwg::html::parsing;
-
 	test_stream ts;
 	auto s = std::u32string(U"xodot;A");
 	for (char32_t cp : s) ts.push_code_point(cp);
 
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
+	std::uint32_t len;
+	std::array<char32_t, 2> a = ts.match_named_character_reference(len);
 
-	BOOST_CHECK(r == test_stream::match_result::succeed);
-	BOOST_CHECK(n == std::size(U"xodot;") - 1);
-
-	auto a = named_character_reference_map_tbl[idx];
-
-	BOOST_CHECK(a[0] == 0x02A00);
-	BOOST_CHECK(a[1] == 0);
+	BOOST_CHECK(len == 6);
+	BOOST_CHECK(a[0] == U'\x2A00');
+	BOOST_CHECK(a[1] == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_5)
 {
-	using namespace wordring::whatwg::html::parsing;
-
 	test_stream ts;
 	auto s = std::u32string(U"Aacute;");
 	for (char32_t cp : s) ts.push_code_point(cp);
 
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
+	std::uint32_t len;
+	std::array<char32_t, 2> a = ts.match_named_character_reference(len);
 
-	BOOST_CHECK(r == test_stream::match_result::succeed);
-	BOOST_CHECK(n == std::size(U"Aacute;") - 1);
-
-	auto a = named_character_reference_map_tbl[idx];
-
-	BOOST_CHECK(a[0] == 0x000C1);
-	BOOST_CHECK(a[1] == 0);
+	BOOST_CHECK(len == 7);
+	BOOST_CHECK(a[0] == U'\xC1');
+	BOOST_CHECK(a[1] == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(input_stream_match_named_character_reference_6)
 {
-	using namespace wordring::whatwg::html::parsing;
-
 	test_stream ts;
 	auto s = std::u32string(U"Aacute");
 	for (char32_t cp : s) ts.push_code_point(cp);
 
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
+	std::uint32_t len;
+	std::array<char32_t, 2> a = ts.match_named_character_reference(len);
 
-	BOOST_CHECK(r == test_stream::match_result::succeed);
-	BOOST_CHECK(n == std::size(U"Aacute") - 1);
-
-	auto a = named_character_reference_map_tbl[idx];
-
-	BOOST_CHECK(a[0] == 0x000C1);
-	BOOST_CHECK(a[1] == 0);
-}
-
-BOOST_AUTO_TEST_CASE(input_stream_named_character_reference_1)
-{
-	using namespace wordring::whatwg::html::parsing;
-
-	test_stream ts;
-	auto s = std::u32string(U"xodot;A");
-	for (char32_t cp : s) ts.push_code_point(cp);
-
-	test_stream::match_result r;
-	std::uint32_t idx, n;
-	while (true)
-	{
-		r = ts.match_named_character_reference(idx, n);
-		if (r != test_stream::match_result::partial) break;
-	}
-
-	BOOST_CHECK(r == test_stream::match_result::succeed);
-	BOOST_CHECK(n == std::size(U"xodot;") - 1);
-
-	auto a = ts.named_character_reference(idx);
-
-	BOOST_CHECK(a[0] == 0x02A00);
-	BOOST_CHECK(a[1] == 0);
+	BOOST_CHECK(len == 6);
+	BOOST_CHECK(a[0] == U'\xC1');
+	BOOST_CHECK(a[1] == U'\0');
 }
 
 /*

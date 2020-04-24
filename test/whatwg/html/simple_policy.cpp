@@ -9,11 +9,11 @@
 
 namespace
 {
-	using node_type = wordring::whatwg::html::simple::basic_node<std::u32string>;
+	using node_type = wordring::whatwg::html::simple_node<std::u32string>;
 
 	using tree = wordring::tree<node_type>;
 
-	using policy = wordring::whatwg::html::simple::tree_construction_policy<std::u32string, tree>;
+	using policy = wordring::whatwg::html::simple_policy<std::u32string, tree>;
 
 	struct test_policy : policy
 	{
@@ -26,8 +26,6 @@ BOOST_AUTO_TEST_SUITE(whatwg_html__simple_policy__test)
 BOOST_AUTO_TEST_CASE(simple_policy__construct__1)
 {
 	//using namespace wordring::whatwg::html::parsing;
-	using namespace wordring::whatwg::html::simple;
-
 	test_policy tp;
 	BOOST_CHECK(true);
 }

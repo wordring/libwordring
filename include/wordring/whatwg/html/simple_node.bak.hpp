@@ -11,62 +11,62 @@
 #include <variant>
 #include <vector>
 
-namespace wordring::whatwg::html
+namespace wordring::whatwg::html::simple
 {
 	// ---------------------------------------------------------------------------------------------
 	// 属性
 	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_attr
+	class basic_attr
 	{
 		template <typename String1>
-		friend bool operator==(simple_attr<String1> const&, simple_attr<String1> const&);
+		friend bool operator==(basic_attr<String1> const&, basic_attr<String1> const&);
 
 		template <typename String1>
-		friend bool operator==(simple_attr<String1> const&, attribute_name);
+		friend bool operator==(basic_attr<String1> const&, attribute_name);
 
 		template <typename String1>
-		friend bool operator==(attribute_name, simple_attr<String1> const&);
+		friend bool operator==(attribute_name, basic_attr<String1> const&);
 
 		template <typename String1>
-		friend bool operator==(simple_attr<String1> const&, String1 const&);
+		friend bool operator==(basic_attr<String1> const&, String1 const&);
 
 		template <typename String1>
-		friend bool operator==(String1 const&, simple_attr<String1> const&);
+		friend bool operator==(String1 const&, basic_attr<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_attr<String1> const&, simple_attr<String1> const&);
+		friend bool operator!=(basic_attr<String1> const&, basic_attr<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_attr<String1> const&, attribute_name);
+		friend bool operator!=(basic_attr<String1> const&, attribute_name);
 
 		template <typename String1>
-		friend bool operator!=(attribute_name, simple_attr<String1> const&);
+		friend bool operator!=(attribute_name, basic_attr<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_attr<String1> const&, String1 const&);
+		friend bool operator!=(basic_attr<String1> const&, String1 const&);
 
 		template <typename String1>
-		friend bool operator!=(String1 const&, simple_attr<String1> const&);
+		friend bool operator!=(String1 const&, basic_attr<String1> const&);
 
 	public:
 		using string_type = String;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using local_name_type = basic_html_atom<string_type, attribute_name>;
+		using local_name_type    = basic_html_atom<string_type, attribute_name>;
 
 	public:
-		simple_attr()
+		basic_attr()
 		{
 		}
-
-		simple_attr(string_type const& name)
+		
+		basic_attr(string_type const& name)
 			: m_local_name(name)
 		{
 		}
 
-		simple_attr(attribute_name name)
+		basic_attr(attribute_name name)
 			: m_local_name(name)
 		{
 		}
@@ -104,63 +104,63 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_attr<String1> const& lhs, simple_attr<String1> const& rhs)
+	inline bool operator==(basic_attr<String1> const& lhs, basic_attr<String1> const& rhs)
 	{
 		return lhs.m_namespace_uri == rhs.m_namespace_uri
-			&& lhs.m_local_name == rhs.m_local_name
-			&& lhs.m_value == rhs.m_value;
+			&& lhs.m_local_name    == rhs.m_local_name
+			&& lhs.m_value         == rhs.m_value;
 	}
 
 	template <typename String1>
-	inline bool operator==(simple_attr<String1> const& lhs, attribute_name local_name)
+	inline bool operator==(basic_attr<String1> const& lhs, attribute_name local_name)
 	{
 		return lhs.m_local_name == local_name;
 	}
 
 	template <typename String1>
-	inline bool operator==(attribute_name local_name, simple_attr<String1> const& rhs)
+	inline bool operator==(attribute_name local_name, basic_attr<String1> const& rhs)
 	{
 		return local_name == rhs.m_local_name;
 	}
 
 	template <typename String1>
-	inline bool operator==(simple_attr<String1> const& lhs, String1 const& local_name)
+	inline bool operator==(basic_attr<String1> const& lhs, String1 const& local_name)
 	{
 		return lhs.m_local_name == local_name;
 	}
 
 	template <typename String1>
-	inline bool operator==(String1 const& local_name, simple_attr<String1> const& rhs)
+	inline bool operator==(String1 const& local_name, basic_attr<String1> const& rhs)
 	{
 		return local_name == rhs.m_local_name;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_attr<String1> const& lhs, simple_attr<String1> const& rhs)
+	inline bool operator!=(basic_attr<String1> const& lhs, basic_attr<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_attr<String1> const& lhs, attribute_name local_name)
+	inline bool operator!=(basic_attr<String1> const& lhs, attribute_name local_name)
 	{
 		return !(lhs == local_name);
 	}
 
 	template <typename String1>
-	inline bool operator!=(attribute_name local_name, simple_attr<String1> const& rhs)
+	inline bool operator!=(attribute_name local_name, basic_attr<String1> const& rhs)
 	{
 		return !(local_name == rhs);
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_attr<String1> const& lhs, String1 const& local_name)
+	inline bool operator!=(basic_attr<String1> const& lhs, String1 const& local_name)
 	{
 		return !(lhs == local_name);
 	}
 
 	template <typename String1>
-	inline bool operator!=(String1 const& local_name, simple_attr<String1> const& rhs)
+	inline bool operator!=(String1 const& local_name, basic_attr<String1> const& rhs)
 	{
 		return !(local_name == rhs);
 	}
@@ -171,16 +171,16 @@ namespace wordring::whatwg::html
 
 
 	template <typename String>
-	class simple_document
+	class basic_document
 	{
 		template <typename String1>
-		friend bool operator==(simple_document<String1> const&, simple_document<String1> const&);
+		friend bool operator==(basic_document<String1> const&, basic_document<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_document<String1> const&, simple_document<String1> const&);
+		friend bool operator!=(basic_document<String1> const&, basic_document<String1> const&);
 
 	public:
-		using string_type = String;
+		using string_type     = String;
 		using usv_string_type = std::u32string;
 
 	public:
@@ -204,14 +204,14 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_document<String1> const&, simple_document<String1> const&)
+	inline bool operator==(basic_document<String1> const&, basic_document<String1> const&)
 	{
 		assert(false);
 		return false;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_document<String1> const& lhs, simple_document<String1> const& rhs)
+	inline bool operator!=(basic_document<String1> const& lhs, basic_document<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -221,13 +221,13 @@ namespace wordring::whatwg::html
 	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_document_type
+	class basic_document_type
 	{
 		template <typename String1>
-		friend bool operator==(simple_document_type<String1> const&, simple_document_type<String1> const&);
+		friend bool operator==(basic_document_type<String1> const&, basic_document_type<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_document_type<String1> const&, simple_document_type<String1> const&);
+		friend bool operator!=(basic_document_type<String1> const&, basic_document_type<String1> const&);
 
 	public:
 		using string_type = String;
@@ -252,14 +252,14 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_document_type<String1> const&, simple_document_type<String1> const&)
+	inline bool operator==(basic_document_type<String1> const&, basic_document_type<String1> const&)
 	{
 		assert(false);
 		return false;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_document_type<String1> const& lhs, simple_document_type<String1> const& rhs)
+	inline bool operator!=(basic_document_type<String1> const& lhs, basic_document_type<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -269,13 +269,13 @@ namespace wordring::whatwg::html
 	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_document_fragment
+	class basic_document_fragment
 	{
 		template <typename String1>
-		friend bool operator==(simple_document_fragment<String1> const&, simple_document_fragment<String1> const&);
+		friend bool operator==(basic_document_fragment<String1> const&, basic_document_fragment<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_document_fragment<String1> const&, simple_document_fragment<String1> const&);
+		friend bool operator!=(basic_document_fragment<String1> const&, basic_document_fragment<String1> const&);
 
 	public:
 		using string_type = String;
@@ -284,14 +284,14 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_document_fragment<String1> const&, simple_document_fragment<String1> const&)
+	inline bool operator==(basic_document_fragment<String1> const&, basic_document_fragment<String1> const&)
 	{
 		assert(false);
 		return false;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_document_fragment<String1> const& lhs, simple_document_fragment<String1> const& rhs)
+	inline bool operator!=(basic_document_fragment<String1> const& lhs, basic_document_fragment<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -301,40 +301,40 @@ namespace wordring::whatwg::html
 	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_element
+	class basic_element
 	{
 		template <typename String1>
-		friend bool operator==(simple_element<String1> const&, simple_element<String1> const&);
+		friend bool operator==(basic_element<String1> const&, basic_element<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_element<String1> const&, simple_element<String1> const&);
+		friend bool operator!=(basic_element<String1> const&, basic_element<String1> const&);
 
 	public:
-		using string_type = String;
+		using string_type     = String;
 		using usv_string_type = std::u32string;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using local_name_type = basic_html_atom<string_type, tag_name>;
+		using local_name_type    = basic_html_atom<string_type, tag_name>;
 
 
-		using attribute_type = simple_attr<string_type>;
+		using attribute_type = basic_attr<string_type>;
 		using container = std::vector< attribute_type>;
 		using iterator = typename container::iterator;
 		using const_iterator = typename container::const_iterator;
 
 	public:
-		simple_element()
+		basic_element()
 		{
 		}
 
-		simple_element(namespace_uri_type const& ns, string_type const& prefix, local_name_type const& name)
+		basic_element(namespace_uri_type const& ns, string_type const& prefix, local_name_type const& name)
 			: m_namespace_uri(ns)
 			, m_namespace_prefix(prefix)
 			, m_local_name(name)
 		{
 		}
 
-		simple_element(string_type const& ns, string_type const& prefix, string_type const& name)
+		basic_element(string_type const& ns, string_type const& prefix, string_type const& name)
 			: m_namespace_uri(ns)
 			, m_namespace_prefix(prefix)
 			, m_local_name(name)
@@ -406,9 +406,9 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_element<String1> const& lhs, simple_element<String1> const& rhs)
+	inline bool operator==(basic_element<String1> const& lhs, basic_element<String1> const& rhs)
 	{
-		using attribute_type = typename simple_element<String1>::attribute_type;
+		using attribute_type = typename basic_element<String1>::attribute_type;
 
 		if (lhs.m_attributes.size() != rhs.m_attributes.size()) return false;
 
@@ -421,7 +421,7 @@ namespace wordring::whatwg::html
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_element<String1> const& lhs, simple_element<String1> const& rhs)
+	inline bool operator!=(basic_element<String1> const& lhs, basic_element<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -431,29 +431,20 @@ namespace wordring::whatwg::html
 	// --------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_text
+	class basic_text
 	{
 		template <typename String1>
-		friend bool operator==(simple_text<String1> const&, simple_text<String1> const&);
+		friend bool operator==(basic_text<String1> const&, basic_text<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_text<String1> const&, simple_text<String1> const&);
+		friend bool operator!=(basic_text<String1> const&, basic_text<String1> const&);
 
 	public:
 		using string_type = String;
 		using value_type = typename string_type::value_type;
 
 	public:
-		simple_text() = default;
-
-		simple_text(string_type const& s)
-			: m_data(s)
-		{
-		}
-
 		string_type const& data() const { return m_data; }
-
-		string_type& data() { return m_data; }
 
 		void data(string_type const& s) { m_data = s; }
 
@@ -464,14 +455,14 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_text<String1> const&, simple_text<String1> const&)
+	inline bool operator==(basic_text<String1> const&, basic_text<String1> const&)
 	{
 		assert(false);
 		return false;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_text<String1> const& lhs, simple_text<String1> const& rhs)
+	inline bool operator!=(basic_text<String1> const& lhs, basic_text<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -481,13 +472,13 @@ namespace wordring::whatwg::html
 	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_processing_instruction
+	class basic_processing_instruction
 	{
 		template <typename String1>
-		friend bool operator==(simple_processing_instruction<String1> const&, simple_processing_instruction<String1> const&);
+		friend bool operator==(basic_processing_instruction<String1> const&, basic_processing_instruction<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_processing_instruction<String1> const&, simple_processing_instruction<String1> const&);
+		friend bool operator!=(basic_processing_instruction<String1> const&, basic_processing_instruction<String1> const&);
 
 	public:
 		using string_type = String;
@@ -495,14 +486,14 @@ namespace wordring::whatwg::html
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_processing_instruction<String1> const&, simple_processing_instruction<String1> const&)
+	inline bool operator==(basic_processing_instruction<String1> const&, basic_processing_instruction<String1> const&)
 	{
 		assert(false);
 		return false;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_processing_instruction<String1> const& lhs, simple_processing_instruction<String1> const& rhs)
+	inline bool operator!=(basic_processing_instruction<String1> const& lhs, basic_processing_instruction<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -512,54 +503,51 @@ namespace wordring::whatwg::html
 	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
-	class simple_comment
+	class basic_comment
 	{
 		template <typename String1>
-		friend bool operator==(simple_comment<String1> const&, simple_comment<String1> const&);
+		friend bool operator==(basic_comment<String1> const&, basic_comment<String1> const&);
 
 		template <typename String1>
-		friend bool operator!=(simple_comment<String1> const&, simple_comment<String1> const&);
+		friend bool operator!=(basic_comment<String1> const&, basic_comment<String1> const&);
 
 	public:
 		using string_type = String;
 
 	public:
-		simple_comment()
+		basic_comment()
 		{
 		}
 
-		simple_comment(string_type const& s)
+		basic_comment(string_type const& s)
 			: m_data(s)
 		{
 		}
 
-		simple_comment(string_type&& s)
+		basic_comment(string_type&& s)
 			: m_data(std::move(s))
 		{
 		}
-
-		string_type const& data() const { return m_data; }
-
-		string_type& data() { return m_data; }
 
 		void data(string_type const& s) { m_data = s; }
 
 		void data(string_type&& s) { m_data = std::move(s); }
 
+		string_type const& data() const { return m_data; }
 
 	protected:
 		string_type m_data;
 	};
 
 	template <typename String1>
-	inline bool operator==(simple_comment<String1> const&, simple_comment<String1> const&)
+	inline bool operator==(basic_comment<String1> const&, basic_comment<String1> const&)
 	{
 		assert(false);
 		return false;
 	}
 
 	template <typename String1>
-	inline bool operator!=(simple_comment<String1> const& lhs, simple_comment<String1> const& rhs)
+	inline bool operator!=(basic_comment<String1> const& lhs, basic_comment<String1> const& rhs)
 	{
 		return !(lhs == rhs);
 	}
@@ -568,76 +556,18 @@ namespace wordring::whatwg::html
 	// ノード
 	// ---------------------------------------------------------------------------------------------
 
-	/*
 	template <typename String>
-	class simple_node
-	{
-		template <typename String1>
-		friend auto& data(simple_node<String1>&);
+	class basic_node {
 
-	public:
-		using string_type = String;
-
-		using document_type               = simple_document<string_type>;
-		using document_type_type          = simple_document_type<string_type>;
-		using document_fragment_type      = simple_document_fragment<string_type>;
-		using element_type                = simple_element<string_type>;
-		using text_type                   = simple_text<string_type>;
-		using processing_instruction_type = simple_processing_instruction<string_type>;
-		using comment_type                = simple_comment<string_type>;
-
-		using container = std::variant<document_type, document_type_type, document_fragment_type,
-			element_type, text_type, processing_instruction_type, comment_type>;
-
-	private:
-
-	public:
-		document_type* to_document() { return std::get_if<document_type>(std::addressof(m_c)); }
-
-	protected:
-		container m_c;
 	};
-	*/
 
 	template <typename String>
-	using simple_node = std::variant<simple_document<String>, simple_document_type<String>,
-		simple_document_fragment<String>, simple_element<String>, simple_text<String>,
-		simple_processing_instruction<String>, simple_comment<String>>;
-
-	template <typename String>
-	auto& to_comment(simple_node<String>& node)
-	{
-	}
-
-	/*! @brief ノードの文字列データを参照する
-	*/
-	template <typename String>
-	String& data(simple_node<String>& node)
-	{
-		if (std::holds_alternative<simple_text<String>>(node))
-		{
-			return std::get<simple_text<String>>(node).data();
-		}
-
-		return std::get<simple_comment<String>>(node).data();
-	}
-
-	/*! @brief ノードの文字列データを参照する
-	*/
-	template <typename String>
-	String const& data(simple_node<String> const& node)
-	{
-		if (std::holds_alternative<simple_text<String>>(node))
-		{
-			return std::get<simple_text<String>>(node).data();
-		}
-
-		return std::get<simple_comment<String>>(node).data();
-	}
-
-	template <typename String>
-	typename simple_element<String>::iterator begin(simple_node<String>& node)
-	{
-		return std::get<simple_element<String>>(node).begin();
-	}
+	using basic_node_ = std::variant<
+		basic_document<String>,
+		basic_document_type<String>,
+		basic_document_fragment<String>,
+		basic_element<String>,
+		basic_text<String>,
+		basic_processing_instruction<String>,
+		basic_comment<String>>;
 }

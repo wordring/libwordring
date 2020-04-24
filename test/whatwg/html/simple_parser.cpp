@@ -17,15 +17,16 @@
 
 namespace
 {
-	using namespace wordring::whatwg::html::simple;
+	using namespace wordring::whatwg::html;
+	using namespace wordring::whatwg::html::parsing;
 
-	using node_type      = basic_node<std::string>;
+	using node_type      = simple_node<std::string>;
 	using tree           = wordring::tree<node_type>;
-	using policy_type    = tree_construction_policy<std::string, tree>;
+	using policy_type    = simple_policy<std::string, tree>;
 
-	class test_parser : public parser<test_parser, std::string, tree>
+	class test_parser : public simple_parser<test_parser, std::string, tree>
 	{
-		using base_type = parser<test_parser, std::string, tree>;
+		using base_type = simple_parser<test_parser, std::string, tree>;
 
 	public:
 		using document_node_type               = typename policy::document_node_type;

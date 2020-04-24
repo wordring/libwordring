@@ -21,11 +21,10 @@ namespace
 {
 	using namespace wordring::whatwg::html;
 	using namespace wordring::whatwg::html::parsing;
-	using namespace wordring::whatwg::html::simple;
 
-	using node_type   = basic_node<std::string>;
+	using node_type   = simple_node<std::string>;
 	using tree        = wordring::tree<node_type>;
-	using policy_type = tree_construction_policy<std::string, tree>;
+	using policy_type = simple_policy<std::string, tree>;
 
 	using document_type               = typename policy_type::document_node_type;
 	using document_type_type          = typename policy_type::document_type_node_type;
@@ -35,9 +34,10 @@ namespace
 	using processing_instruction_type = typename policy_type::processing_instruction_node_type;
 	using comment_type                = typename policy_type::comment_node_type;
 
-	struct test_parser : parser<test_parser, std::string, tree>
+	struct test_parser : public simple_parser<test_parser, std::string, tree>
 	{
-		using base_type = parser<test_parser, std::string, tree>;
+	public:
+		using base_type = simple_parser<test_parser, std::string, tree>;
 
 		using base_type::mode_name;
 

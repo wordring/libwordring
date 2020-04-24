@@ -308,6 +308,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		std::array<char32_t, 2> match_named_character_reference(std::uint32_t& len)
 		{
+			len = 0;
+
 			auto it1 = named_character_reference_idx_tbl.begin();
 			auto it2 = named_character_reference_idx_tbl.end();
 

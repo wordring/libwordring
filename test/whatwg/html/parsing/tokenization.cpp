@@ -14,14 +14,14 @@
 
 namespace
 {
-	using namespace wordring::whatwg::html::simple;
+	using namespace wordring::whatwg::html;
 	using namespace wordring::whatwg::html::parsing;
 
-	using node_type = basic_node<std::u32string>;
+	using node_type = simple_node<std::u32string>;
 
 	using tree = wordring::tree<node_type>;
 
-	using test_policy = tree_construction_policy<std::u32string, tree>;
+	using test_policy = simple_policy<std::u32string, tree>;
 
 	struct test_tokenizer : tokenizer<test_tokenizer, test_policy>
 	{

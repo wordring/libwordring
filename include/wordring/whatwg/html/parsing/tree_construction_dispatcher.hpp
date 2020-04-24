@@ -53,7 +53,7 @@ namespace wordring::whatwg::html::parsing
 		using base_type::report_error;
 		using base_type::eof;
 
-	protected:
+	public:
 		// ----------------------------------------------------------------------------------------
 		// 入力バイトストリーム
 		//
