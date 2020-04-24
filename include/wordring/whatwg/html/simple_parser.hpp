@@ -58,7 +58,7 @@ namespace wordring::whatwg::html
 		using base_type::report_error;
 		using base_type::eof;
 
-		using base_type::mode_name;
+		using typename base_type::mode_name;
 
 	public:
 		simple_parser()

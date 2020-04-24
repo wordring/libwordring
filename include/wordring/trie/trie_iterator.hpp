@@ -153,6 +153,12 @@ namespace wordring::detail
 				{
 					std::uint8_t ch = static_cast<unsigned_type>(label) >> (coefficient - i - 1) * 8 & 0xFFu;
 					index_type base = (d + parent)->m_base;
+					if (base <= 0)
+					{
+						idx = 0;
+						break;
+					}
+
 					idx = base + ch;
 
 					if ((d + idx)->m_check != parent)
