@@ -1,8 +1,7 @@
 ﻿#pragma once
 
-#include <wordring/whatwg/html/simple_defs.hpp>
-
-#include <wordring/whatwg/html/dom_defs.hpp>
+#include <wordring/whatwg/html/html_atom.hpp>
+#include <wordring/whatwg/html/html_defs.hpp>
 
 #include <wordring/whatwg/infra/infra.hpp>
 
@@ -61,13 +60,30 @@ namespace wordring::whatwg::html
 		{
 		}
 
-		simple_attr(string_type const& name)
-			: m_local_name(name)
+		explicit simple_attr(string_type const& name, ns_name ns = ns_name::HTML, string_type const& prefix = string_type())
+			: m_namespace_uri(ns)
+			, m_prefix(prefix)
+			, m_local_name(name)
 		{
 		}
 
-		simple_attr(attribute_name name)
-			: m_local_name(name)
+		simple_attr(string_type const& name, string_type const& value)
+			: m_namespace_uri(ns_name::HTML)
+			, m_local_name(name)
+			, m_value(value)
+		{
+		}
+
+		explicit simple_attr(attribute_name name)
+			: m_namespace_uri(ns_name::HTML)
+			, m_local_name(name)
+		{
+		}
+
+		simple_attr(attribute_name name, string_type const& value)
+			: m_namespace_uri(ns_name::HTML)
+			, m_local_name(name)
+			, m_value(value)
 		{
 		}
 
@@ -103,12 +119,16 @@ namespace wordring::whatwg::html
 		string_type        m_value;
 	};
 
+	/*! @brief 名前空間、接頭辞、ローカル名が一致する場合、true を返す
+	
+	検索用に定義した演算子のため、値を無視して比較する。
+	*/
 	template <typename String1>
 	inline bool operator==(simple_attr<String1> const& lhs, simple_attr<String1> const& rhs)
 	{
 		return lhs.m_namespace_uri == rhs.m_namespace_uri
-			&& lhs.m_local_name == rhs.m_local_name
-			&& lhs.m_value == rhs.m_value;
+			&& lhs.m_prefix == rhs.m_prefix
+			&& lhs.m_local_name == rhs.m_local_name;
 	}
 
 	template <typename String1>
@@ -372,20 +392,21 @@ namespace wordring::whatwg::html
 
 		const_iterator end() const { return m_attributes.end(); }
 
-		const_iterator find(string_type const& name) const
+		const_iterator find(attribute_type const& attr) const
 		{
-			return std::find(m_attributes.begin(), m_attributes.end(), name);
+			return std::find(m_attributes.begin(), m_attributes.end(), attr);
 		}
 
-		const_iterator find(attribute_name name) const
+		const_iterator find(string_type const& name, ns_name ns = ns_name::HTML, string_type const& prefix = string_type()) const
 		{
-			return std::find(m_attributes.begin(), m_attributes.end(), name);
+			return std::find_if(m_attributes.begin(), m_attributes.end(), [&](attribute_type const& a)->bool {
+				return a.local_name() == name && a.namespace_uri_id() == ns && a.prefix() == prefix; });
 		}
 
-		iterator find(attribute_name name)
+		const_iterator find(attribute_name name, ns_name ns = ns_name::HTML, string_type const& prefix = string_type()) const
 		{
-			return std::find_if(m_attributes.begin(), m_attributes.end(), [name](attribute_type const& a)->bool {
-				return a.local_name_id() == name; });
+			return std::find_if(m_attributes.begin(), m_attributes.end(), [&](attribute_type const& a)->bool {
+				return a.local_name_id() == name && a.namespace_uri_id() == ns && a.prefix() == prefix; });
 		}
 
 	private:
@@ -568,46 +589,10 @@ namespace wordring::whatwg::html
 	// ノード
 	// ---------------------------------------------------------------------------------------------
 
-	/*
-	template <typename String>
-	class simple_node
-	{
-		template <typename String1>
-		friend auto& data(simple_node<String1>&);
-
-	public:
-		using string_type = String;
-
-		using document_type               = simple_document<string_type>;
-		using document_type_type          = simple_document_type<string_type>;
-		using document_fragment_type      = simple_document_fragment<string_type>;
-		using element_type                = simple_element<string_type>;
-		using text_type                   = simple_text<string_type>;
-		using processing_instruction_type = simple_processing_instruction<string_type>;
-		using comment_type                = simple_comment<string_type>;
-
-		using container = std::variant<document_type, document_type_type, document_fragment_type,
-			element_type, text_type, processing_instruction_type, comment_type>;
-
-	private:
-
-	public:
-		document_type* to_document() { return std::get_if<document_type>(std::addressof(m_c)); }
-
-	protected:
-		container m_c;
-	};
-	*/
-
 	template <typename String>
 	using simple_node = std::variant<simple_document<String>, simple_document_type<String>,
 		simple_document_fragment<String>, simple_element<String>, simple_text<String>,
 		simple_processing_instruction<String>, simple_comment<String>>;
-
-	template <typename String>
-	auto& to_comment(simple_node<String>& node)
-	{
-	}
 
 	/*! @brief ノードの文字列データを参照する
 	*/
@@ -635,9 +620,70 @@ namespace wordring::whatwg::html
 		return std::get<simple_comment<String>>(node).data();
 	}
 
+	/*! @brief ノードを要素と解釈して属性の開始を返す
+	*/
 	template <typename String>
 	typename simple_element<String>::iterator begin(simple_node<String>& node)
 	{
 		return std::get<simple_element<String>>(node).begin();
 	}
+
+	/*! @brief ノードを要素と解釈して属性の開始を返す
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator begin(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).begin();
+	}
+
+	/*! @brief ノードを要素と解釈して属性の終端を返す
+	*/
+	template <typename String>
+	typename simple_element<String>::iterator end(simple_node<String>& node)
+	{
+		return std::get<simple_element<String>>(node).end();
+	}
+
+	/*! @brief ノードを要素と解釈して属性の終端を返す
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator end(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).end();
+	}
+
+	/*! @brief ノードを要素と解釈して属性を追加する
+	*/
+	template <typename String>
+	void push_back(simple_node<String>& node, simple_attr<String> const& attr)
+	{
+		return std::get<simple_element<String>>(node).push_back(attr);
+	}
+
+	/*! @brief ノードを要素と解釈して属性を検索する
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator find(simple_node<String> const& node, simple_attr<String> const& attr)
+	{
+		return std::get<simple_element<String>>(node).find(attr);
+	}
+
+	/*! @brief ノードを要素と解釈して属性を検索する
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator
+		find(simple_node<String> const& node, String const& name, ns_name ns = ns_name::HTML, String const& prefix = String())
+	{
+		return std::get<simple_element<String>>(node).find(name, ns, prefix);
+	}
+
+	/*! @brief ノードを要素と解釈して属性を検索する
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator
+		find(simple_node<String> const& node, attribute_name name, ns_name ns = ns_name::HTML, String const& prefix = String())
+	{
+		return std::get<simple_element<String>>(node).find(name, ns, prefix);
+	}
+
 }

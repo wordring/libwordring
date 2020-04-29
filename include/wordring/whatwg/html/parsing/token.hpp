@@ -64,11 +64,9 @@ namespace wordring::whatwg::html::parsing
 			m_omitted = false;
 		}
 
-		std::u32string m_name;
-		std::u32string m_prefix;
-		std::u32string m_local_name;
-		attribute_name m_name_id;
 		ns_name        m_namespace;
+		std::u32string m_prefix;
+		std::u32string m_name;
 
 		std::u32string m_value;
 
@@ -146,18 +144,18 @@ namespace wordring::whatwg::html::parsing
 			m_attributes.clear();
 		}
 
-		iterator begin() { return m_attributes.begin(); }
+		//iterator begin() { return m_attributes.begin(); }
 
 		const_iterator begin() const { return m_attributes.begin(); }
 
-		iterator end() { return m_attributes.end(); }
+		//iterator end() { return m_attributes.end(); }
 
 		const_iterator end() const { return m_attributes.end(); }
 
-		iterator find(std::u32string const& name)
+		const_iterator find(std::u32string const& name) const
 		{
-			iterator it1 = begin();
-			iterator it2 = end();
+			const_iterator it1 = begin();
+			const_iterator it2 = end();
 			while (it1 != it2)
 			{
 				if (!it1->m_omitted) { if (name == it1->m_name) return it1; }
@@ -166,6 +164,7 @@ namespace wordring::whatwg::html::parsing
 			return it2;
 		}
 
+		/*
 		iterator find(attribute_name name)
 		{
 			iterator it1 = begin();
@@ -189,6 +188,7 @@ namespace wordring::whatwg::html::parsing
 			}
 			return it2;
 		}
+		*/
 
 		std::u32string m_tag_name;
 		tag_name       m_tag_name_id;

@@ -29,13 +29,13 @@ namespace
 		using base_type = simple_parser<test_parser, std::string, tree>;
 
 	public:
-		using document_node_type               = typename policy::document_node_type;
-		using document_type_node_type          = typename policy::document_type_node_type;
-		using document_fragment_node_type      = typename policy::document_fragment_node_type;
-		using element_node_type                = typename policy::element_node_type;
-		using text_node_type                   = typename policy::text_node_type;
-		using processing_instruction_node_type = typename policy::processing_instruction_node_type;
-		using comment_node_type                = typename policy::comment_node_type;
+		using document_type               = typename policy::document_type;
+		using document_type_type          = typename policy::document_type_type;
+		using document_fragment_type      = typename policy::document_fragment_type;
+		using element_type                = typename policy::element_type;
+		using text_type                   = typename policy::text_type;
+		using processing_instruction_type = typename policy::processing_instruction_type;
+		using comment_type                = typename policy::comment_type;
 
 		using base_type::mode_type;
 		using base_type::stack_entry;
@@ -103,27 +103,27 @@ namespace
 		//using base_type::to_processing_instruction;
 		//using base_type::to_comment;
 
-		using base_type::namespace_uri_name;
-		using base_type::local_name_name;
+		using base_type::get_namespace_uri_id;
+		using base_type::get_local_name_id;
 
-		using base_type::insert;
+		using base_type::insert_element;
 
 		using base_type::m_c;
 
 
-		document_node_type* to_document(node_pointer it) { return std::get_if<document_node_type>(std::addressof(*it)); }
+		document_type* to_document(node_pointer it) { return std::get_if<document_type>(std::addressof(*it)); }
 
-		document_type_node_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_node_type>(std::addressof(*it)); }
+		document_type_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_type>(std::addressof(*it)); }
 
-		document_fragment_node_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_node_type>(std::addressof(*it)); }
+		document_fragment_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_type>(std::addressof(*it)); }
 
-		element_node_type const* to_element(node_pointer it) const { return std::get_if<element_node_type>(std::addressof(*it)); }
+		element_type const* to_element(node_pointer it) const { return std::get_if<element_type>(std::addressof(*it)); }
 
-		text_node_type* to_text(node_pointer it) { return std::get_if<text_node_type>(std::addressof(*it)); }
+		text_type* to_text(node_pointer it) { return std::get_if<text_type>(std::addressof(*it)); }
 
-		processing_instruction_node_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_node_type>(std::addressof(*it)); }
+		processing_instruction_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_type>(std::addressof(*it)); }
 
-		comment_node_type const* to_comment(node_pointer it) const { return std::get_if<comment_node_type>(std::addressof(*it)); }
+		comment_type const* to_comment(node_pointer it) const { return std::get_if<comment_type>(std::addressof(*it)); }
 
 	};
 }
@@ -140,14 +140,40 @@ BOOST_AUTO_TEST_CASE(simple_parser_construct_1)
 	BOOST_CHECK(p.to_comment(p.document().begin())->data() == " Comment ");
 }
 
+BOOST_AUTO_TEST_CASE(simple_parser_contains_1)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	test_parser p;
+	auto el = p.create_element(p.document(), tag_name::P);
+	auto abbr = p.create_attribute(el, U"abbr");
+	p.append_attribute(el, std::move(abbr));
+	auto it = p.insert_element(p.document().end(), std::move(el));
+
+	BOOST_CHECK(p.contains(it, U"abbr", ns_name::HTML, U""));
+}
+
+BOOST_AUTO_TEST_CASE(simple_parser_contains_2)
+{
+	using namespace wordring::whatwg::html::parsing;
+
+	test_parser p;
+	auto el = p.create_element(p.document(), tag_name::P);
+	auto abbr = p.create_attribute(el, U"abbr");
+	p.append_attribute(el, std::move(abbr));
+	auto it = p.insert_element(p.document().end(), std::move(el));
+
+	BOOST_CHECK(p.contains(it, U"", ns_name::HTML, U"") == false);
+}
 
 BOOST_AUTO_TEST_CASE(simple_parser_find_attribute_1)
 {
 	test_parser p;
 	auto el = p.create_element(p.document(), tag_name::P);
-	auto attr = p.create_attribute(el, attribute_name::Abbr, ns_name::HTML, U"");
+	auto attr = p.create_attribute(el, U"attr", ns_name::HTML, U"");
 	p.append_attribute(el, std::move(attr));
-	auto it = p.insert(p.document().end(), std::move(el));
+	auto it = p.insert_element(p.document().end(), std::move(el));
+	BOOST_CHECK(it != p.document().end());
 	//auto attr = p.create_attribute(it, )
 
 	//BOOST_CHECK(p.find_attribute(it, attribute_name::Abbr) != it->end());

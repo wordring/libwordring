@@ -26,13 +26,13 @@ namespace
 	using tree        = wordring::tree<node_type>;
 	using policy_type = simple_policy<std::string, tree>;
 
-	using document_type               = typename policy_type::document_node_type;
-	using document_type_type          = typename policy_type::document_type_node_type;
-	using document_fragment_type      = typename policy_type::document_fragment_node_type;
-	using element_type                = typename policy_type::element_node_type;
-	using text_type                   = typename policy_type::text_node_type;
-	using processing_instruction_type = typename policy_type::processing_instruction_node_type;
-	using comment_type                = typename policy_type::comment_node_type;
+	using document_type               = typename policy_type::document_type;
+	using document_type_type          = typename policy_type::document_type_type;
+	using document_fragment_type      = typename policy_type::document_fragment_type;
+	using element_type                = typename policy_type::element_type;
+	using text_type                   = typename policy_type::text_type;
+	using processing_instruction_type = typename policy_type::processing_instruction_type;
+	using comment_type                = typename policy_type::comment_type;
 
 	struct test_parser : public simple_parser<test_parser, std::string, tree>
 	{

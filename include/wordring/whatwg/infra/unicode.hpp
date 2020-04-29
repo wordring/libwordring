@@ -38,13 +38,13 @@ namespace wordring::whatwg
 	*/
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char8_t>, std::nullptr_t> = nullptr>
-	inline InputIterator to_code_point(InputIterator first, InputIterator last, uint32_t& output)
+	inline InputIterator to_code_point(InputIterator first, InputIterator last, char32_t& output)
 	{
 		assert(first != last);
 		unsigned char ch1 = static_cast<unsigned char>(*first++);
 		if ((ch1 & 0x80u) == 0u)
 		{
-			output = static_cast<uint32_t>(ch1);
+			output = static_cast<char32_t>(ch1);
 			return first;
 		}
 
@@ -53,7 +53,7 @@ namespace wordring::whatwg
 		assert((ch2 & 0xC0u) == 0x80u);
 		if ((ch1 & 0xE0u) == 0xC0u)
 		{
-			output = static_cast<uint32_t>(((ch1 & 0x1Fu) << 6) + (ch2 & 0x3Fu));
+			output = static_cast<char32_t>(((ch1 & 0x1Fu) << 6) + (ch2 & 0x3Fu));
 			return first;
 		}
 
@@ -62,7 +62,7 @@ namespace wordring::whatwg
 		assert((ch3 & 0xC0u) == 0x80u);
 		if ((ch1 & 0xF0u) == 0xE0u)
 		{
-			output = static_cast<uint32_t>(((ch1 & 0xFu) << 12) + ((ch2 & 0x3Fu) << 6) + (ch3 & 0x3Fu));
+			output = static_cast<char32_t>(((ch1 & 0xFu) << 12) + ((ch2 & 0x3Fu) << 6) + (ch3 & 0x3Fu));
 			return first;
 		}
 
@@ -71,7 +71,7 @@ namespace wordring::whatwg
 		assert((ch4 & 0xC0u) == 0x80u);
 		if ((ch1 & 0xF8u) == 0xF0u)
 		{
-			output = static_cast<uint32_t>(((ch1 & 0x7u) << 18) + ((ch2 & 0x3Fu) << 12) + ((ch3 & 0x3Fu) << 6) + (ch4 & 0x3Fu));
+			output = static_cast<char32_t>(((ch1 & 0x7u) << 18) + ((ch2 & 0x3Fu) << 12) + ((ch3 & 0x3Fu) << 6) + (ch4 & 0x3Fu));
 			return first;
 		}
 
@@ -81,13 +81,13 @@ namespace wordring::whatwg
 
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char16_t>, nullptr_t> = nullptr>
-	inline InputIterator to_code_point(InputIterator first, InputIterator last, uint32_t& output)
+	inline InputIterator to_code_point(InputIterator first, InputIterator last, char32_t& output)
 	{
 		assert(first != last);
 		uint16_t ch1 = *first++;
 		if ((ch1 & 0xFC00u) != 0xD800u)
 		{
-			output = static_cast<uint32_t>(ch1);
+			output = static_cast<char32_t>(ch1);
 			return first;
 		}
 
@@ -100,7 +100,7 @@ namespace wordring::whatwg
 
 	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char32_t>, nullptr_t> = nullptr>
-	inline InputIterator to_code_point(InputIterator first, InputIterator last, uint32_t& output)
+	inline InputIterator to_code_point(InputIterator first, InputIterator last, char32_t& output)
 	{
 		assert(first != last);
 		output = *first++;
@@ -135,7 +135,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char8_t>,
 					std::is_same<typename OutputIterator::container_type::value_type, char8_t>>>, nullptr_t> = nullptr>
-	inline void to_string(uint32_t ch, OutputIterator output)
+	inline void to_string(char32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFFFF80u) == 0) *output++ = static_cast<unsigned char>(ch); // 一バイト文字
 		else if ((ch & 0xFFFFF800u) == 0) // 二バイト文字
@@ -166,7 +166,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char16_t>,
 					std::is_same<typename OutputIterator::container_type::value_type, char16_t>>>, nullptr_t> = nullptr>
-	inline void to_string(uint32_t ch, OutputIterator output)
+	inline void to_string(char32_t ch, OutputIterator output)
 	{
 		if ((ch & 0xFFFF0000u) == 0) *output++ = static_cast<char16_t>(ch);
 		else if ((ch & 0xFFE00000u) == 0)
@@ -184,7 +184,7 @@ namespace wordring::whatwg
 				std::disjunction<
 					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char32_t>,
 					std::is_same<typename OutputIterator::container_type::value_type, char32_t>>>, nullptr_t> = nullptr>
-	inline void to_string(uint32_t ch, OutputIterator output) { *output++ = ch; }
+	inline void to_string(char32_t ch, OutputIterator output) { *output++ = ch; }
 
 	// ------------------------------------------------------------------------
 
@@ -197,7 +197,7 @@ namespace wordring::whatwg
 			// 文字列リテラルの場合
 			if constexpr (std::is_array_v<std::remove_cv_t<std::remove_reference_t<String>>>) if (*it == 0) break;
 
-			uint32_t cp;
+			char32_t cp;
 
 			if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<String>>, std::u32string>) cp = *it++;
 			else it = to_code_point(it, std::end(in), cp);

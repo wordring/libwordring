@@ -28,16 +28,17 @@ namespace
 
 	class test_parser : public simple_parser<test_parser, std::string, tree>
 	{
+	public:
 		using base_type = simple_parser<test_parser, std::string, tree>;
 
 	public:
-		using document_node_type               = typename policy_type::document_node_type;
-		using document_type_node_type          = typename policy_type::document_type_node_type;
-		using document_fragment_node_type      = typename policy_type::document_fragment_node_type;
-		using element_node_type                = typename policy_type::element_node_type;
-		using text_node_type                   = typename policy_type::text_node_type;
-		using processing_instruction_node_type = typename policy_type::processing_instruction_node_type;
-		using comment_node_type                = typename policy_type::comment_node_type;
+		using document_type               = typename policy_type::document_type;
+		using document_type_type          = typename policy_type::document_type_type;
+		using document_fragment_type      = typename policy_type::document_fragment_type;
+		using element_type                = typename policy_type::element_type;
+		using text_type                   = typename policy_type::text_type;
+		using processing_instruction_type = typename policy_type::processing_instruction_type;
+		using comment_type                = typename policy_type::comment_type;
 
 		using base_type::mode_type;
 		using base_type::stack_entry;
@@ -134,27 +135,27 @@ namespace
 		//using base_type::to_processing_instruction;
 		//using base_type::to_comment;
 
-		using base_type::namespace_uri_name;
-		using base_type::local_name_name;
+		using base_type::get_namespace_uri_id;
+		using base_type::get_local_name_id;
 
-		using base_type::insert;
+		using base_type::insert_element;
 
 		using base_type::m_c;
 
 		/*
-		document_node_type* to_document(node_pointer it) { return std::get_if<document_node_type>(std::addressof(*it)); }
+		document_type* to_document(node_pointer it) { return std::get_if<document_type>(std::addressof(*it)); }
 
-		document_type_node_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_node_type>(std::addressof(*it)); }
+		document_type_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_type>(std::addressof(*it)); }
 
-		document_fragment_node_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_node_type>(std::addressof(*it)); }
+		document_fragment_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_type>(std::addressof(*it)); }
 
-		element_node_type const* to_element(node_pointer it) const { return std::get_if<element_node_type>(std::addressof(*it)); }
+		element_type const* to_element(node_pointer it) const { return std::get_if<element_type>(std::addressof(*it)); }
 
-		text_node_type* to_text(node_pointer it) { return std::get_if<text_node_type>(std::addressof(*it)); }
+		text_type* to_text(node_pointer it) { return std::get_if<text_type>(std::addressof(*it)); }
 
-		processing_instruction_node_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_node_type>(std::addressof(*it)); }
+		processing_instruction_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_type>(std::addressof(*it)); }
 
-		comment_node_type const* to_comment(node_pointer it) const { return std::get_if<comment_node_type>(std::addressof(*it)); }
+		comment_type const* to_comment(node_pointer it) const { return std::get_if<comment_type>(std::addressof(*it)); }
 		*/
 
 		void on_report_error(error_name ec) { ++m_error_count; }
@@ -196,9 +197,9 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto TABLE = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
-	auto SELECT = p.insert(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Select));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto TABLE = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto SELECT = p.insert_element(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Select));
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML });
 	p.m_open_element_stack.push_back({ start_tag_token(), TABLE });
 	p.m_open_element_stack.push_back({ start_tag_token(), SELECT });
@@ -212,10 +213,10 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 {
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto TABLE = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
-	auto TEMPLATE = p.insert(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Template));
-	auto SELECT = p.insert(TEMPLATE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Select));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto TABLE = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto TEMPLATE = p.insert_element(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Template));
+	auto SELECT = p.insert_element(TEMPLATE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Select));
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML });
 	p.m_open_element_stack.push_back({ start_tag_token(), TABLE });
 	p.m_open_element_stack.push_back({ start_tag_token(), TEMPLATE });
@@ -230,9 +231,9 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 {
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto HEAD = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Head));
-	auto A = p.insert(HEAD.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto HEAD = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Head));
+	auto A = p.insert_element(HEAD.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML });
 	p.m_open_element_stack.push_back({ start_tag_token(), HEAD });
 	p.m_open_element_stack.push_back({ start_tag_token(), A });
@@ -246,9 +247,9 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 {
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto HTML2 = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto A = p.insert(HTML2.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto HTML2 = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto A = p.insert_element(HTML2.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML });
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML2 });
 	p.m_open_element_stack.push_back({ start_tag_token(), A });
@@ -331,7 +332,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_1)
 
 	p.pop_until(tag_name::Body);
 
-	BOOST_CHECK(p.local_name_name(p.m_open_element_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(p.get_local_name_id(p.m_open_element_stack.back().m_it) == tag_name::Html);
 }
 
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_2)
@@ -350,7 +351,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_2)
 	std::array<tag_name, 2> constexpr tags = { tag_name::A, tag_name::Body };
 	p.pop_until(tags);
 
-	BOOST_CHECK(p.local_name_name(p.m_open_element_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(p.get_local_name_id(p.m_open_element_stack.back().m_it) == tag_name::Html);
 }
 
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_3)
@@ -368,7 +369,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_3)
 
 	p.pop_until(BODY);
 
-	BOOST_CHECK(p.local_name_name(p.m_open_element_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(p.get_local_name_id(p.m_open_element_stack.back().m_it) == tag_name::Html);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -434,12 +435,12 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_push_active_formatting_element
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reconstruct_active_formatting_element_list_1)
 {
 	test_parser p;
-	auto HTML = p.insert(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto A1 = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A2 = p.insert(A1.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A3 = p.insert(A2.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A4 = p.insert(A3.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A5 = p.insert(A4.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto HTML = p.insert_element(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto A1 = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto A2 = p.insert_element(A1.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto A3 = p.insert_element(A2.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto A4 = p.insert_element(A3.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	auto A5 = p.insert_element(A4.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
 	p.m_open_element_stack.push_back({ token1, HTML });
@@ -489,7 +490,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_clear_active_formatting_elemen
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_mathml_text_integration_point_1)
 {
 	test_parser p;
-	auto it = p.insert(p.document().end(), simple_element<std::string>(ns_name::MathML, "", tag_name::Mtext));
+	auto it = p.insert_element(p.document().end(), simple_element<std::string>(ns_name::MathML, "", tag_name::Mtext));
 	start_tag_token token;
 	token.m_tag_name_id = tag_name::Mtext;
 	test_parser::stack_entry entry{ token, it };
@@ -500,11 +501,11 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_mathml_text_integration_poi
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_html_integration_point_1)
 {
 	test_parser p;
-	auto it = p.insert(p.document().end(), simple_element<std::string>(ns_name::MathML, "", tag_name::Annotation_xml));
+	auto it = p.insert_element(p.document().end(), simple_element<std::string>(ns_name::MathML, "", tag_name::Annotation_xml));
 	start_tag_token token;
 	token.m_tag_name_id = tag_name::Annotation_xml;
 	auto& attr = token.m_attributes.create();
-	attr.m_name_id = attribute_name::Encoding;
+	attr.m_name = U"encoding";// attribute_name::Encoding;
 	attr.m_value = U"Application/xhtml+xml";
 	test_parser::stack_entry entry{ token, it };
 
@@ -542,9 +543,9 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 {
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto P = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::P));
-	auto TABLE = p.insert(P.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto P = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::P));
+	auto TABLE = p.insert_element(P.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML });
 	p.m_open_element_stack.push_back({ start_tag_token(), P });
 	p.m_foster_parenting = true;
@@ -558,9 +559,9 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 {
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
-	auto TEMPLATE = p.insert(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Template));
-	auto TABLE = p.insert(TEMPLATE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto TEMPLATE = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Template));
+	auto TABLE = p.insert_element(TEMPLATE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
 	p.m_open_element_stack.push_back({ start_tag_token(), HTML });
 	p.m_open_element_stack.push_back({ start_tag_token(), TEMPLATE });
 	p.m_open_element_stack.push_back({ start_tag_token(), TABLE });
@@ -575,8 +576,8 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 {
 	test_parser p;
 	auto document = p.document();
-	auto TABLE = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
-	auto P = p.insert(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::P));
+	auto TABLE = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto P = p.insert_element(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::P));
 	p.m_open_element_stack.push_back({ start_tag_token(), P });
 	p.m_open_element_stack.push_back({ start_tag_token(), TABLE });
 	p.m_foster_parenting = true;
@@ -590,8 +591,8 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 {
 	test_parser p;
 	auto document = p.document();
-	auto TABLE = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
-	auto P = p.insert(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::P));
+	auto TABLE = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Table));
+	auto P = p.insert_element(TABLE.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::P));
 	p.m_open_element_stack.push_back({ start_tag_token(), P });
 	p.m_open_element_stack.push_back({ start_tag_token(), TABLE });
 
@@ -607,7 +608,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_1)
 {
 	test_parser p;
 	auto document = p.document();
-	auto HTML = p.insert(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
+	auto HTML = p.insert_element(document.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
 	start_tag_token token;
 	token.m_tag_name = U"body";
 	auto el = p.create_element_for_token(token, ns_name::HTML, HTML);
@@ -621,7 +622,6 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_2)
 	std::u32string s(U"<A href=\"http://uri.com/\">ABC</A>");
 	for (char32_t cp : s) p.push_code_point(cp);
 
-	int i = 0;
 }
 
 BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_mathml_attributes_1)
@@ -669,9 +669,8 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_foreign_attributes_1)
 
 	p.adjust_foreign_attributes(token);
 
-	BOOST_CHECK(token.m_attributes.current().m_name == U"xlink:actuate");
 	BOOST_CHECK(token.m_attributes.current().m_prefix == U"xlink");
-	BOOST_CHECK(token.m_attributes.current().m_local_name == U"actuate");
+	BOOST_CHECK(token.m_attributes.current().m_name == U"actuate");
 	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XLink);
 }
 
@@ -686,7 +685,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_foreign_attributes_2)
 
 	BOOST_CHECK(token.m_attributes.current().m_name == U"xmlns");
 	BOOST_CHECK(token.m_attributes.current().m_prefix == U"");
-	BOOST_CHECK(token.m_attributes.current().m_local_name == U"xmlns");
+	BOOST_CHECK(token.m_attributes.current().m_name == U"xmlns");
 	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XMLNS);
 }
 
@@ -816,7 +815,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_comment_1)
 	comment_token comment;
 	comment.m_data = U"ABC";
 
-	p.insert_comment(comment, HTML.end());
+	p.base_type::base_type::insert_comment(comment, HTML.end());
 
 	BOOST_CHECK(data(*HTML.begin()) == "ABC");
 }
@@ -835,7 +834,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_comment_2)
 	comment_token comment;
 	comment.m_data = U"ABC";
 
-	p.insert_comment(comment);
+	p.base_type::base_type::insert_comment(comment);
 
 	BOOST_CHECK(data(*HTML.begin()) == "ABC");
 }

@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(to_code_point__1)
 	using namespace wordring::whatwg;
 
 	std::u32string out{};
-	uint32_t cp{};
+	char32_t cp{};
 
 	auto it = utf_8.begin();
 	while (it != utf_8.end())
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(to_code_point__2)
 	using namespace wordring::whatwg;
 
 	std::u32string out{};
-	uint32_t cp{};
+	char32_t cp{};
 
 	auto it = utf_16.begin();
 	while (it != utf_16.end())
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_CASE(to_code_point__3)
 	using namespace wordring::whatwg;
 
 	std::u32string out{};
-	uint32_t cp{};
+	char32_t cp{};
 
 	auto it = utf_32.begin();
 	while (it != utf_32.end())

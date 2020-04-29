@@ -28,7 +28,7 @@ namespace
 		using policy = test_policy;
 
 		using node_pointer = policy::node_pointer;
-		using element_node_type = typename policy::element_node_type;
+		using element_type = typename policy::element_type;
 
 
 		using base_type = tokenizer<test_tokenizer, test_policy>;
@@ -41,24 +41,28 @@ namespace
 		using base_type::current_tag_token;
 		using base_type::consume;
 
-		using stack_entry_type = open_element_stack_entry<policy>;
+		struct stack_entry
+		{
+			start_tag_token m_token;
+			node_pointer    m_it;
+		};
 
-		open_element_stack<policy> m_open_element_stack;
-		stack_entry_type m_dummy_stack_entry;
+		std::deque<stack_entry> m_open_element_stack;
+		stack_entry m_dummy_stack_entry;
 
 		error_name m_ec;
 		std::u32string m_emited_codepoints;
 
-		stack_entry_type const& adjusted_current_node() const { return m_dummy_stack_entry; }
+		stack_entry const& adjusted_current_node() const { return m_dummy_stack_entry; }
 		
 		//
 
 		bool is_element(node_pointer it) const
 		{
-			return std::holds_alternative<element_node_type>(*it);
+			return std::holds_alternative<element_type>(*it);
 		}
 
-		ns_name namespace_uri_name(node_pointer it) const
+		ns_name get_namespace_uri_id(node_pointer it) const
 		{
 			return ns_name::HTML;
 		}

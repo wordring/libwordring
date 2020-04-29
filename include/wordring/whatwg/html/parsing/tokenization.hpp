@@ -165,7 +165,7 @@ namespace wordring::whatwg::html::parsing
 		bool in_html_namespace() const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
-			return P->namespace_uri_name(P->adjusted_current_node().m_it) == ns_name::HTML;
+			return P->get_namespace_uri_id(P->adjusted_current_node().m_it) == ns_name::HTML;
 		}
 
 		/*! @brief 属性の重複を削る
@@ -180,12 +180,6 @@ namespace wordring::whatwg::html::parsing
 			while (it1 != it2) if (it1++->m_name == al.current().m_name) al.current().m_omitted = true;
 		}
 		
-		/*
-		bool empty_stack_of_open_elements() const
-		{
-			return m_open_element_stack.empty();
-		}
-		*/
 		// トークンの発送-------------------------------------------------------
 
 		template <typename Token>
@@ -201,6 +195,7 @@ namespace wordring::whatwg::html::parsing
 				auto tag_it = tag_atom_tbl.find(t.m_tag_name);
 				t.m_tag_name_id = (tag_it == tag_atom_tbl.end()) ? static_cast<tag_name>(0) : tag_it->second;
 
+				/*
 				auto it1 = t.begin();
 				auto it2 = t.end();
 				while (it1 != it2)
@@ -209,7 +204,7 @@ namespace wordring::whatwg::html::parsing
 					it1->m_name_id = (attr_it == attribute_atom_tbl.end()) ? static_cast<attribute_name>(0) : attr_it->second;
 					++it1;
 				}
-
+				*/
 				if (m_current_tag_token_id == 2)
 				{
 					m_last_start_tag_name = m_start_tag_token.m_tag_name;

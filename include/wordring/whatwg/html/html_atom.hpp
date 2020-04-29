@@ -9,7 +9,7 @@
 #include <string_view>
 #include <type_traits>
 
-namespace wordring::whatwg::html::parsing
+namespace wordring::whatwg::html
 {
 	/*! @brief 列挙体と文字列の相互変換を行うクラス
 
@@ -44,6 +44,18 @@ namespace wordring::whatwg::html::parsing
 
 		template <typename String1, typename Atom1>
 		friend bool operator!=(Atom1, basic_html_atom<String1, Atom1> const&);
+
+		template <typename String1, typename Atom1>
+		friend bool operator==(basic_html_atom<String1, Atom1> const&, String1 const&);
+
+		template <typename String1, typename Atom1>
+		friend bool operator!=(basic_html_atom<String1, Atom1> const&, String1 const&);
+
+		template <typename String1, typename Atom1>
+		friend bool operator==(String1 const&, basic_html_atom<String1, Atom1> const&);
+
+		template <typename String1, typename Atom1>
+		friend bool operator!=(String1 const&, basic_html_atom<String1, Atom1> const&);
 
 	public:
 		using string_type = String;
@@ -125,7 +137,7 @@ namespace wordring::whatwg::html::parsing
 
 		atom_type find(std::u32string const& s) const
 		{
-			using wordring::whatwg::html::parsing::ns_uri_atom_tbl;
+			using namespace wordring::whatwg::html::parsing;
 
 			if constexpr (std::is_same_v<atom_type, ns_name>)
 			{
@@ -148,6 +160,8 @@ namespace wordring::whatwg::html::parsing
 
 		std::u32string const& find(atom_type i) const
 		{
+			using namespace wordring::whatwg::html::parsing;
+
 			if constexpr (std::is_same_v<atom_type, ns_name>)
 				return ns_uri_tbl[static_cast<std::uint32_t>(m_i)];
 			else if constexpr (std::is_same_v<atom_type, tag_name>)
@@ -198,4 +212,29 @@ namespace wordring::whatwg::html::parsing
 	{
 		return !(i == rhs);
 	}
+
+	template <typename String1, typename Atom1>
+	inline bool operator==(basic_html_atom<String1, Atom1> const& lhs, String1 const& s)
+	{
+		return lhs == basic_html_atom<String1, Atom1>(s);
+	}
+
+	template <typename String1, typename Atom1>
+	inline bool operator!=(basic_html_atom<String1, Atom1> const& lhs, String1 const& s)
+	{
+		return !(lhs == s);
+	}
+
+	template <typename String1, typename Atom1>
+	inline bool operator==(String1 const& s, basic_html_atom<String1, Atom1> const& rhs)
+	{
+		return basic_html_atom<String1, Atom1>(s) == rhs;
+	}
+
+	template <typename String1, typename Atom1>
+	inline bool operator!=(String1 const& s, basic_html_atom<String1, Atom1> const& rhs)
+	{
+		return !(s == rhs);
+	}
+
 }

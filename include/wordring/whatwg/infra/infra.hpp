@@ -100,14 +100,14 @@ namespace wordring::whatwg
 
 	// 4.5. Code points -------------------------------------------------------
 
-	inline bool is_surrogate(uint32_t cp) noexcept
+	inline bool is_surrogate(char32_t cp) noexcept
 	{
 		return 0xD800 <= cp && cp <= 0xDFFF;
 	}
 
-	inline bool is_scalar_value(uint32_t cp) noexcept { return !is_surrogate(cp); }
+	inline bool is_scalar_value(char32_t cp) noexcept { return !is_surrogate(cp); }
 
-	inline bool is_noncharacter(uint32_t cp) noexcept
+	inline bool is_noncharacter(char32_t cp) noexcept
 	{
 		if (0xFDD0 <= cp && cp <= 0xFDEF) return true;
 
@@ -153,72 +153,72 @@ namespace wordring::whatwg
 		return false;
 	}
 
-	inline bool is_ascii_code_point(uint32_t cp) noexcept
+	inline bool is_ascii_code_point(char32_t cp) noexcept
 	{
 		return 0 <= cp && cp <= 0x7F;
 	}
 
-	inline bool is_ascii_tab_or_newline(uint32_t cp) noexcept
+	inline bool is_ascii_tab_or_newline(char32_t cp) noexcept
 	{
 		return cp == 0x9 || cp == 0xA || cp == 0xD;
 	}
 
-	inline bool is_ascii_white_space(uint32_t cp) noexcept
+	inline bool is_ascii_white_space(char32_t cp) noexcept
 	{
 		return cp == 0x9 || cp == 0xA || cp == 0xC || cp == 0xD || cp == 0x20;
 	}
 
-	inline bool is_c0_control(uint32_t cp) noexcept
+	inline bool is_c0_control(char32_t cp) noexcept
 	{
 		return cp <= 0x1F;
 	}
 
-	inline bool is_c0_control_or_space(uint32_t cp) noexcept
+	inline bool is_c0_control_or_space(char32_t cp) noexcept
 	{
 		return is_c0_control(cp) || cp == 0x20;
 	}
 
-	inline bool is_control(uint32_t cp) noexcept
+	inline bool is_control(char32_t cp) noexcept
 	{
 		return is_c0_control(cp) || (0x7F <= cp && cp <= 0x9F);
 	}
 
-	inline bool is_ascii_digit(uint32_t cp) noexcept
+	inline bool is_ascii_digit(char32_t cp) noexcept
 	{
 		return 0x30 <= cp && cp <= 0x39;
 	}
 
-	inline bool is_ascii_upper_hex_digit(uint32_t cp) noexcept
+	inline bool is_ascii_upper_hex_digit(char32_t cp) noexcept
 	{
 		return is_ascii_digit(cp) || (0x41 <= cp && cp <= 0x46);
 	}
 
-	inline bool is_ascii_lower_hex_digit(uint32_t cp) noexcept
+	inline bool is_ascii_lower_hex_digit(char32_t cp) noexcept
 	{
 		return is_ascii_digit(cp) || (0x61 <= cp && cp <= 0x66);
 	}
 
-	inline bool is_ascii_hex_digit(uint32_t cp) noexcept
+	inline bool is_ascii_hex_digit(char32_t cp) noexcept
 	{
 		return is_ascii_upper_hex_digit(cp) || is_ascii_lower_hex_digit(cp);
 	}
 
-	inline bool is_ascii_upper_alpha(uint32_t cp) noexcept
+	inline bool is_ascii_upper_alpha(char32_t cp) noexcept
 	{
 		return 0x41 <= cp && cp <= 0x5A;
 	}
 
-	inline bool is_ascii_lower_alpha(uint32_t cp) noexcept
+	inline bool is_ascii_lower_alpha(char32_t cp) noexcept
 	{
 		return 0x61 <= cp && cp <= 0x7A;
 	}
 
-	inline bool is_ascii_alpha(uint32_t cp) noexcept
+	inline bool is_ascii_alpha(char32_t cp) noexcept
 	{
 		return is_ascii_upper_alpha(cp) || is_ascii_lower_alpha(cp);
 	}
 
-	inline bool is_ascii_alphanumeric(uint32_t cp) noexcept
+	inline bool is_ascii_alphanumeric(char32_t cp) noexcept
 	{
 		return is_ascii_digit(cp) || is_ascii_alpha(cp);
 	}
@@ -238,7 +238,7 @@ namespace wordring::whatwg
 	template <typename InputIterator>
 	inline bool	is_ascii_string(InputIterator first, InputIterator last)
 	{
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -252,7 +252,7 @@ namespace wordring::whatwg
 	template <typename InputIterator, typename OutputIterator>
 	inline void to_ascii_lowercase(InputIterator first, InputIterator last, OutputIterator output)
 	{
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -266,7 +266,7 @@ namespace wordring::whatwg
 	template <typename InputIterator, typename OutputIterator>
 	inline void to_ascii_uppercase(InputIterator first, InputIterator last, OutputIterator output)
 	{
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -280,7 +280,7 @@ namespace wordring::whatwg
 	template <typename InputIterator1, typename InputIterator2>
 	inline bool is_ascii_case_insensitive_match(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)
 	{
-		uint32_t cp1{}, cp2{};
+		char32_t cp1{}, cp2{};
 		while (first1 != last1 && first2 != last2)
 		{
 			first1 = to_code_point(first1, last1, cp1);
@@ -318,7 +318,7 @@ namespace wordring::whatwg
 	template <typename InputIterator, typename OutputIterator>
 	inline void strip_newlines(InputIterator first, InputIterator last, OutputIterator output)
 	{
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -336,10 +336,10 @@ namespace wordring::whatwg
 	template <typename InputIterator, typename OutputIterator>
 	inline void normalize_newlines(InputIterator first, InputIterator last, OutputIterator output)
 	{
-		enum class states : uint32_t { Start, Cr };
+		enum class states : std::uint32_t { Start, Cr };
 
 		states state{ states::Start };
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -376,8 +376,8 @@ namespace wordring::whatwg
 	{
 		static_assert(std::is_base_of_v<std::forward_iterator_tag, typename std::iterator_traits<ForwardIterator>::iterator_category>);
 
-		std::basic_string<uint32_t> tmp{};
-		uint32_t cp{};
+		std::u32string tmp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -395,10 +395,10 @@ namespace wordring::whatwg
 	{
 		static_assert(std::is_base_of_v<std::input_iterator_tag, typename std::iterator_traits<InputIterator>::iterator_category>);
 
-		enum class states : uint32_t { Start, Leading, Normal, Ws };
+		enum class states : std::uint32_t { Start, Leading, Normal, Ws };
 
 		states state{ states::Start };
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -436,7 +436,7 @@ namespace wordring::whatwg
 	{
 		InputIterator result{ first };
 
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -454,7 +454,7 @@ namespace wordring::whatwg
 	{
 		InputIterator result{ first };
 
-		uint32_t cp{};
+		char32_t cp{};
 		while (first != last)
 		{
 			first = to_code_point(first, last, cp);
@@ -470,27 +470,27 @@ namespace wordring::whatwg
 	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline void strictly_split_on_a_particular_delimiter(
-		InputIterator first, InputIterator last, OutputIterator output, uint32_t delimiter)
+		InputIterator first, InputIterator last, OutputIterator output, char32_t delimiter)
 	{
 		using char_type = typename std::iterator_traits<InputIterator>::value_type;
 		using string_type = typename std::basic_string<char_type>;
 
 		string_type token{};
-		first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](uint32_t cp)->bool { return cp != delimiter; });
+		first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)->bool { return cp != delimiter; });
 		*output++ = token;
 		token.clear();
 		while (first != last)
 		{
-			assert([](InputIterator first, InputIterator last, uint32_t delimiter)->bool
+			assert([](InputIterator first, InputIterator last, char32_t delimiter)->bool
 			{
-				uint32_t cp{};
+				char32_t cp{};
 				to_code_point(first, last, cp);
 				return cp == delimiter;
 			}(first, last, delimiter));
 
 			++first;
 			token.clear();
-			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](uint32_t cp)->bool { return cp != delimiter; });
+			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)->bool { return cp != delimiter; });
 			*output++ = token;
 		}
 	}
@@ -506,7 +506,7 @@ namespace wordring::whatwg
 		while (first != last)
 		{
 			token.clear();
-			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [](uint32_t cp)->bool { return !is_ascii_white_space(cp); });
+			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [](char32_t cp)->bool { return !is_ascii_white_space(cp); });
 			*output++ = token;
 			first = skip_ascii_whitespace(first, last);
 		}
@@ -521,7 +521,7 @@ namespace wordring::whatwg
 		while (first != last)
 		{
 			string_type tmp1{}, tmp2{};
-			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(tmp1), [](uint32_t cp)->bool { return cp != 0x2Cu; });
+			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(tmp1), [](char32_t cp)->bool { return cp != 0x2Cu; });
 			strip_leading_and_trailing_ascii_whitespace(tmp1.begin(), tmp1.end(), std::back_inserter(tmp2));
 			*output++ = tmp2;
 			if (first != last)
