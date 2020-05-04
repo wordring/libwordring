@@ -53,37 +53,46 @@ namespace wordring::whatwg::html
 		using string_type = String;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using local_name_type = basic_html_atom<string_type, attribute_name>;
+		using local_name_type    = basic_html_atom<string_type, attribute_name>;
 
 	public:
 		simple_attr()
+			: m_namespace_uri(static_cast<ns_name>(0))
+			, m_prefix()
+			, m_local_name(static_cast<attribute_name>(0))
+			, m_value()
 		{
 		}
 
-		explicit simple_attr(string_type const& name, ns_name ns = ns_name::HTML, string_type const& prefix = string_type())
+		simple_attr(ns_name ns, string_type const& prefix, string_type const& name, string_type const& s = string_type())
 			: m_namespace_uri(ns)
 			, m_prefix(prefix)
 			, m_local_name(name)
+			, m_value(s)
 		{
 		}
 
-		simple_attr(string_type const& name, string_type const& value)
+		simple_attr(string_type const& name, string_type const& s = string_type())
 			: m_namespace_uri(ns_name::HTML)
+			, m_prefix()
 			, m_local_name(name)
-			, m_value(value)
+			, m_value(s)
 		{
 		}
 
-		explicit simple_attr(attribute_name name)
-			: m_namespace_uri(ns_name::HTML)
+		simple_attr(ns_name ns, string_type const& prefix, attribute_name name, string_type const& s = string_type())
+			: m_namespace_uri(ns)
+			, m_prefix(prefix)
 			, m_local_name(name)
+			, m_value(s)
 		{
 		}
 
-		simple_attr(attribute_name name, string_type const& value)
+		simple_attr(attribute_name name, string_type const& s = string_type())
 			: m_namespace_uri(ns_name::HTML)
+			, m_prefix()
 			, m_local_name(name)
-			, m_value(value)
+			, m_value(s)
 		{
 		}
 
@@ -134,25 +143,25 @@ namespace wordring::whatwg::html
 	template <typename String1>
 	inline bool operator==(simple_attr<String1> const& lhs, attribute_name local_name)
 	{
-		return lhs.m_local_name == local_name;
+		return lhs == simple_attr<String1>(local_name);
 	}
 
 	template <typename String1>
 	inline bool operator==(attribute_name local_name, simple_attr<String1> const& rhs)
 	{
-		return local_name == rhs.m_local_name;
+		return simple_attr<String1>(local_name) == rhs;
 	}
 
 	template <typename String1>
 	inline bool operator==(simple_attr<String1> const& lhs, String1 const& local_name)
 	{
-		return lhs.m_local_name == local_name;
+		return lhs == simple_attr<String1>(local_name);
 	}
 
 	template <typename String1>
 	inline bool operator==(String1 const& local_name, simple_attr<String1> const& rhs)
 	{
-		return local_name == rhs.m_local_name;
+		return simple_attr<String1>(local_name) == rhs;
 	}
 
 	template <typename String1>
@@ -204,6 +213,12 @@ namespace wordring::whatwg::html
 		using usv_string_type = std::u32string;
 
 	public:
+		simple_document()
+			: m_document_type(document_type_name::html)
+			, m_document_mode(document_mode_name::no_quirks)
+		{
+		}
+
 		document_type_name document_type() const { return m_document_type; }
 
 		void document_type(document_type_name type)
@@ -331,26 +346,21 @@ namespace wordring::whatwg::html
 
 	public:
 		using string_type = String;
-		using usv_string_type = std::u32string;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
-		using local_name_type = basic_html_atom<string_type, tag_name>;
-
+		using local_name_type    = basic_html_atom<string_type, tag_name>;
 
 		using attribute_type = simple_attr<string_type>;
-		using container = std::vector< attribute_type>;
-		using iterator = typename container::iterator;
+		using container      = std::vector< attribute_type>;
+		using iterator       = typename container::iterator;
 		using const_iterator = typename container::const_iterator;
 
 	public:
 		simple_element()
-		{
-		}
-
-		simple_element(namespace_uri_type const& ns, string_type const& prefix, local_name_type const& name)
-			: m_namespace_uri(ns)
-			, m_namespace_prefix(prefix)
-			, m_local_name(name)
+			: m_namespace_uri(static_cast<ns_name>(0))
+			, m_namespace_prefix()
+			, m_local_name(static_cast<tag_name>(0))
+			, m_attributes()
 		{
 		}
 
@@ -358,6 +368,31 @@ namespace wordring::whatwg::html
 			: m_namespace_uri(ns)
 			, m_namespace_prefix(prefix)
 			, m_local_name(name)
+			, m_attributes()
+		{
+		}
+
+		simple_element(string_type const& name)
+			: m_namespace_uri(ns_name::HTML)
+			, m_namespace_prefix()
+			, m_local_name(name)
+			, m_attributes()
+		{
+		}
+
+		simple_element(ns_name ns, string_type const& prefix, tag_name name)
+			: m_namespace_uri(ns)
+			, m_namespace_prefix(prefix)
+			, m_local_name(name)
+			, m_attributes()
+		{
+		}
+
+		simple_element(tag_name name)
+			: m_namespace_uri(ns_name::HTML)
+			, m_namespace_prefix()
+			, m_local_name(name)
+			, m_attributes()
 		{
 		}
 
@@ -392,21 +427,41 @@ namespace wordring::whatwg::html
 
 		const_iterator end() const { return m_attributes.end(); }
 
+		/*! @brief 属性を検索する
+		*/
 		const_iterator find(attribute_type const& attr) const
 		{
 			return std::find(m_attributes.begin(), m_attributes.end(), attr);
 		}
 
-		const_iterator find(string_type const& name, ns_name ns = ns_name::HTML, string_type const& prefix = string_type()) const
+		/*! @brief 属性を検索する
+		*/
+		const_iterator find(ns_name ns, string_type const& prefix, string_type const& name) const
 		{
 			return std::find_if(m_attributes.begin(), m_attributes.end(), [&](attribute_type const& a)->bool {
-				return a.local_name() == name && a.namespace_uri_id() == ns && a.prefix() == prefix; });
+				return a == attribute_type(ns, prefix, name); });
 		}
 
-		const_iterator find(attribute_name name, ns_name ns = ns_name::HTML, string_type const& prefix = string_type()) const
+		/*! @brief 属性を検索する
+		*/
+		const_iterator find(string_type const& name) const
+		{
+			return find(ns_name::HTML, string_type(), name);
+		}
+
+		/*! @brief 属性を検索する
+		*/
+		const_iterator find(ns_name ns, string_type const& prefix, attribute_name name) const
 		{
 			return std::find_if(m_attributes.begin(), m_attributes.end(), [&](attribute_type const& a)->bool {
-				return a.local_name_id() == name && a.namespace_uri_id() == ns && a.prefix() == prefix; });
+				return a == attribute_type(ns, prefix, name); });
+		}
+
+		/*! @brief 属性を検索する
+		*/
+		const_iterator find(attribute_name name) const
+		{
+			return find(ns_name::HTML, string_type(), name);
 		}
 
 	private:
@@ -415,15 +470,6 @@ namespace wordring::whatwg::html
 		local_name_type    m_local_name;
 
 		container m_attributes;
-
-
-
-
-		string_type m_tag_name;
-
-		string_type m_id;
-		string_type m_class_name;
-
 	};
 
 	template <typename String1>
@@ -672,18 +718,38 @@ namespace wordring::whatwg::html
 	*/
 	template <typename String>
 	typename simple_element<String>::const_iterator
-		find(simple_node<String> const& node, String const& name, ns_name ns = ns_name::HTML, String const& prefix = String())
+		find(simple_node<String> const& node, ns_name ns, String const& prefix, String const& name)
 	{
-		return std::get<simple_element<String>>(node).find(name, ns, prefix);
+		return std::get<simple_element<String>>(node).find(ns, prefix, name);
+	}
+
+	/*! @brief ノードを要素と解釈して属性を検索する
+
+	HTML要素用。
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator find(simple_node<String> const& node, String const& name)
+	{
+		return std::get<simple_element<String>>(node).find(name);
 	}
 
 	/*! @brief ノードを要素と解釈して属性を検索する
 	*/
 	template <typename String>
 	typename simple_element<String>::const_iterator
-		find(simple_node<String> const& node, attribute_name name, ns_name ns = ns_name::HTML, String const& prefix = String())
+		find(simple_node<String> const& node, ns_name ns, String const& prefix, attribute_name name)
 	{
-		return std::get<simple_element<String>>(node).find(name, ns, prefix);
+		return std::get<simple_element<String>>(node).find(ns, prefix, name);
+	}
+
+	/*! @brief ノードを要素と解釈して属性を検索する
+
+	HTML要素用。
+	*/
+	template <typename String>
+	typename simple_element<String>::const_iterator find(simple_node<String> const& node, attribute_name name)
+	{
+		return std::get<simple_element<String>>(node).find(name);
 	}
 
 }

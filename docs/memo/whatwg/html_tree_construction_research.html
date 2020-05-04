@@ -152,18 +152,136 @@
       <li>要素</li>
     </ul>
     <h3>12.2.4.3 The list of active formatting elements</h3>
-    <h4>整形要素のリストに挿入されるもの</h4>
+    <h4>整形要素リストに挿入されるもの</h4>
     <ul>
       <li>要素とトークンのペア</li>
       <li>マーカ</li>
     </ul>
+    <ul>
+    </ul>
     <h4><a href="https://html.spec.whatwg.org/multipage/parsing.html#push-onto-the-list-of-active-formatting-elements">&nbsp;push
         onto the list of active formatting elements</a></h4>
-    <p>then remove the earliest <b style="color: #ffcc33;">such element</b>
-      from the list of active formatting elements.</p>
-    <p>「そのような要素」という部分から、リストの先頭を削除するのではなく、マーカーがある場合は、マーカー以降にある同一シグネチャの要素のうち最も古いも
-      の、あるいはマーカーが無い場合リスト全体内の同一シグネチャを持つ要素のうち最も古いものを削除すると考えられる。</p>
-    <p>つまり、マーカーが有ればマーカからマーカ、無ければリスト全体において、3個以上同一シグネチャの要素を面倒見ないということだと思われる。</p>
+    <p>引数として要素 element と作成されたときのトークンをとる。</p>
+    <p>マーカーを挿入する場合を考慮しなければならない。</p>
+    <blockquote> </blockquote>
+    <ol>
+      <li>もしあるなら最後の marker の後、あるいは marker が無い場合、リスト内全域において、整形要素リスト内にすでに element
+        と同じタグ名、名前空間、属性を持つ3個の要素がある場合、、整形要素リストから最古のそのような要素を取り除く。<br>
+        この目的において、属性は要素がパーサーによって作成されたときのそれらで比較されなければならない。すべての解析済み属性が各ペアが同一の名前、名前空
+        間、値を持つ組で対にできる場合、二つの要素は同じ属性を持つ。(属性の順序は関係ない)。</li>
+      <li>整形要素リストへ要素を追加する。</li>
+    </ol>
+    <h4><a href="https://html.spec.whatwg.org/multipage/parsing.html#reconstruct-the-active-formatting-elements">reconstruct
+        the active formatting elements</a></h4>
+    <ol>
+      <li>整形要素リスト内に項目が無い場合、再構築の必要はなく、このアルゴリズムを停止する。</li>
+      <li>整形要素リスト内の（直近に追加された）最後の項目が marker
+        の場合、あるいはそれがスタック内の要素である場合、再構築の必要はなく、このアルゴリズムを停止する。</li>
+      <li><i>entry </i>を整形要素リスト内で（直近に追加された）最後の要素とする。</li>
+      <li><b><span style="color: #990000;">Rewind</span></b>: <br>
+        整形要素内で entry より前に項目が無い場合、Createラベルへジャンプする。</li>
+      <li>entry を整形要素リスト内で entry より一つ以前の項目とする。</li>
+      <li>entry が marker でもスタック内の要素でもない場合、Rewindラベルへ飛ぶ。</li>
+      <li><b style="color: #990000;">Advance</b>:<br>
+        entry を整形要素リスト内で entry より一つ後の要素とする。</li>
+      <li><b><span style="color: #990000;">Create</span></b>:<br>
+        new_element を入手するために、entry が作成されたときのトークンのための要素を挿入する。</li>
+      <li>リスト内の entry のための項目を new_element のための項目で置き換える。</li>
+      <li>整形要素リスト内の new_element のための項目がリスト内で最後の項目でない場合、Advanceラベルへ戻る。</li>
+    </ol>
+    <p>4-6のステップは、Marker
+      まで、あるいはスタック内にある（つまり閉じていない整形要素）整形要素リスト内の項目を探す。その後のステップは、リスト内の要素の複製を木に挿入する。</p>
+    <h4><a href="https://html.spec.whatwg.org/multipage/parsing.html#clear-the-list-of-active-formatting-elements-up-to-the-last-marker">clear
+        the list of active formatting elements up to the last marker</a></h4>
+    <ol>
+      <li><i>entry </i>を整形要素リスト内で（直近に追加された）最後の要素とする。</li>
+      <li>整形要素リストから entry を削除する。</li>
+      <li>entry が marker である場合、この時点でアルゴリズムを停止する。リストは最後の marker までクリアされている。</li>
+      <li>ステップ1へ飛ぶ。</li>
+    </ol>
+    <p> </p>
+    <h3><a href="https://html.spec.whatwg.org/multipage/parsing.html#adoption-agency-algorithm">adoption
+        agency algorithm</a></h3>
+    <p>仕様内でスタックは上から下に伸びていく。最初にPUSHされたものが一番上にあり、最後にPUSHされたものが一番下にある。</p>
+    <ol>
+      <li><i>subject </i>をトークンのタグ名とする。</li>
+      <li>current_node() がHTML要素でタグ名がsubjectと一致し、整形要素リスト内に current_node()
+        が無い場合、スタックから current_node() をPOPしてリターンする。</li>
+      <li><i>outer_loop_counter</i> を0とする。</li>
+      <li><b style="color: #990000;">OuterLoop</b>:<br>
+        outer_loop_counter が8あるいはそれ以上の場合、リターンする。</li>
+      <li>outer_loop_counter を一つ増やす。</li>
+      <li><i>formatting_element</i> を整形要素リスト内で以下の条件を満たす最後の要素とする。</li>
+      <ul>
+        <li>リストの最後から、もしあるなら最後のマーカー、無ければリストの最初までの間で</li>
+        <li>タグ名が subject と一致する</li>
+      </ul>
+      そのような要素が無い場合、リターンし、その他の終了タグに飛ばす。
+      <li>formatting_element がスタック内に無い場合、パースエラーとし、リストから要素を削除しリターンする。</li>
+      <li>formatting_element がスタック内にあるが、要素がスコープ内に無い場合、パースエラーとし、リターンする。</li>
+      <li>formatting_element が current_node() でない場合、パースエラーとする。（しかし、リターンしない。）</li>
+      <li><i>furthest_block </i>を formatting_element より低く、special
+        カテゴリーに属す要素である、スタック内で一番上のノードとする。それは無いかもしれない。</li>
+      <li>furthest_block が無い場合、まず、current_node()
+        からformatting_element（これを含めて）までをスタックのボトムからPOPしていき、次に整形要素リストからformatting_elementを削
+        除し、最後にリターンする。</li>
+      <li><i>common_ancestor</i> をスタック内でformatting_elementのすぐ上の要素とする。</li>
+      <li><i>bookmark </i>に、整形要素リスト内での formatting element
+        の位置を、リスト内でその両側にある要素を基準にして記録する。</li>
+      <li>node と last_node をfurthest_block とし、これらのステップに従う。</li>
+      <ol>
+        <li><i>inner_loop_counter</i> を0とする。</li>
+        <li><b><span style="color: #990000;">InnerLoop</span></b>:<br>
+          inner_loop_counterを一つ増やす。</li>
+        <li>node をスタック内で node のすぐ上の要素、あるいは（たとえばこのアルゴリズムによって既に削除されたため）スタック内に node
+          が既に無い場合は、削除前にスタック内で node のすぐ上に在った要素とする。</li>
+        <li>node が formatting elementである場合、アルゴリズム全体内の次のステップへ飛ぶ。</li>
+        <li>inner_loop_counter が3より大きく、node が整形要素リスト内にある場合、整形要素リストから node を削除する。</li>
+        <li>node が整形要素リスト内に無い場合、スタックから node を削除し、InnerLoopラベルへ戻る。</li>
+        <li>node 要素が作成されたときのトークンのためにHTML名前空間内でcommon_ancestor
+          を親として要素を作成し、整形要素リスト内の node のための項目を新しい要素のための項目で置き換え、スタック内の node
+          のための項目を新しい要素のための項目で置き換え、node を新しい要素とする。</li>
+        <li>last_node が furthest_block である場合、前述の bookmark を整形要素リスト内で新しい node
+          の直後とする。</li>
+        <li>もしあるなら、最初に以前の親ノードからそれ（last_node）を削除し、node 内に last_node を挿入する。</li>
+        <li>last_node を node とする。</li>
+        <li>InneLoop ラベルへ戻る。</li>
+      </ol>
+      <li>前のステップで何になっていようとも、上書きターゲットととして common_ancestor
+        を使って、appropriate_place_for_inserting_node() に last_node を挿入する。</li>
+      <li>HTML名前空間内で furthest_block を親として formatting_element
+        が作成されたときのトークンのための要素を作成する。</li>
+      <li> furthest_block のすべての子を取り出し、最後のステップ内で作成された要素へそれらを追加する。</li>
+      <li>その新しい要素を furthest_block にする。</li>
+      <li>整形要素リストから formatting_element を取り除き、そして前述の bookmark の位置で整形要素リスト内に新しい要素を
+        挿入する。</li>
+      <li>スタックから formatting_element を取り除き、そしてスタック内で furthest_block
+        の位置の直下へ新しい要素を挿入する。</li>
+      <li>OuterLoopラベルへ戻る。</li>
+    </ol>
+    <p><br>
+    </p>
+    <h2>木構築内からトークン化の状態を変更する場所</h2>
+    <ul>
+      <li><a href="https://triple-underscore.github.io/HTML-parsing-ja.html#parsing-main-inhead">in_head</a>
+        の開始タグ「script」</li>
+      <li><a href="https://triple-underscore.github.io/HTML-parsing-ja.html#parsing-main-inbody">in_body</a>
+        の開始タグ「plaintext」</li>
+      <li><a href="https://triple-underscore.github.io/HTML-parsing-ja.html#parsing-main-inhead">in_body</a>
+        の開始タグ「textarea」</li>
+    </ul>
+    <h2>タグ名</h2>
+    <p>木構築内でタグ名を必要とする部分の多くはトークンのHTMLタグ名で分岐した後に使用されるので、ほとんどが列挙値で十分である。しかし、「その他の終了
+      タグ」内から呼びされる場合など、文字列によるタグ名を必要とする場合も少数ながら存在する。</p>
+    <h2>要素</h2>
+    <p>規格は、要素自身が親や子といった周辺の要素を知っていることを想定する。一方、本実装は、コンテナに要素が格納され、イテレータによって周辺の要素へ移動
+      するSTL風のインターフェースを許容する。</p>
+    <p>木構築内で直接「要素」を構築する部分は、「before html」挿入モードの「その他」内と「トークンから要素を作成する」手続き内。「before
+      html」挿入モード内は直後に木に挿入するので、イテレータを得られる。「トークンから要素を作成する」手続きは「intended
+      parent」を引数として取るので、識別可能であれば「仮に挿入」してイテレータを得ることが出来る。</p>
+    <p>要素の作成時にコンテナへ挿入しなければイテレータを得られない。一方、HTML5規格は要素の作成と木への挿入を明確に分けている。そのうえHTML5規
+      格は、イテレータあるいはポインタ同士の比較を必要とする。</p>
+    <p>「仮に挿入」して得られたイテレータをHTML5規格によって「挿入」する場合は「移動」とする必要が有る。</p>
     <p><br>
     </p>
     <ul>

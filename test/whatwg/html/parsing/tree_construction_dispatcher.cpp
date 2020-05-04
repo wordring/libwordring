@@ -62,9 +62,9 @@ namespace
 		using base_type::is_select_scope;
 		using base_type::pop_until;
 
-		using base_type::push_active_formatting_element_list;
-		using base_type::reconstruct_active_formatting_element_list;
-		using base_type::clear_active_formatting_element_list;
+		using base_type::push_formatting_element_list;
+		using base_type::reconstruct_formatting_element_list;
+		using base_type::clear_formatting_element_list;
 
 		using base_type::process_token;
 		using base_type::reprocess_token;
@@ -124,7 +124,7 @@ namespace
 		using base_type::m_insertion_mode;
 
 		using base_type::m_open_element_stack;
-		using base_type::m_active_formatting_element_list;
+		using base_type::m_formatting_element_list;
 		using base_type::m_foster_parenting;
 
 		//using base_type::to_document;
@@ -169,9 +169,9 @@ namespace
 	};
 }
 
-BOOST_AUTO_TEST_SUITE(tree_construction_dispatcher_test)
+BOOST_AUTO_TEST_SUITE(dispatcher_test)
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_construct_1)
+BOOST_AUTO_TEST_CASE(dispatcher_construct_1)
 {
 	using namespace wordring::whatwg::html;
 	using namespace wordring::whatwg::html::parsing;
@@ -191,7 +191,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_construct_1)
 // https://html.spec.whatwg.org/multipage/parsing.html#the-insertion-mode
 // ------------------------------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropriately_1)
+BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_1)
 {
 	using namespace wordring::whatwg::html;
 
@@ -209,7 +209,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::in_select_in_table_insertion_mode);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropriately_2)
+BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_2)
 {
 	test_parser p;
 	auto document = p.document();
@@ -227,7 +227,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::in_select_insertion_mode);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropriately_3)
+BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_3)
 {
 	test_parser p;
 	auto document = p.document();
@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::in_head_insertion_mode);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropriately_4)
+BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_4)
 {
 	test_parser p;
 	auto document = p.document();
@@ -267,15 +267,15 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reset_insertion_mode_appropria
 // https://html.spec.whatwg.org/multipage/parsing.html#the-stack-of-open-elements
 // ------------------------------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_current_node_1)
+BOOST_AUTO_TEST_CASE(dispatcher_current_node_1)
 {
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjusted_current_node_1)
+BOOST_AUTO_TEST_CASE(dispatcher_adjusted_current_node_1)
 {
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_special_1)
+BOOST_AUTO_TEST_CASE(dispatcher_is_special_1)
 {
 	test_parser p;
 	tree t;
@@ -284,7 +284,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_special_1)
 	BOOST_CHECK(p.is_special(t.begin()));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_formatting_1)
+BOOST_AUTO_TEST_CASE(dispatcher_is_formatting_1)
 {
 	test_parser p;
 	tree t;
@@ -293,7 +293,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_formatting_1)
 	BOOST_CHECK(p.is_formatting(t.begin()));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_specific_scope_1)
+BOOST_AUTO_TEST_CASE(dispatcher_in_specific_scope_1)
 {
 	tree t;
 	t.insert(t.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -305,7 +305,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_specific_scope_1)
 	BOOST_CHECK(p.in_specific_scope(test_parser::default_scope, std::make_pair(ns_name::HTML, tag_name::Font)));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_specific_scope_2)
+BOOST_AUTO_TEST_CASE(dispatcher_in_specific_scope_2)
 {
 	tree t;
 	t.insert(t.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -317,7 +317,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_specific_scope_2)
 	BOOST_CHECK(!p.in_specific_scope(test_parser::default_scope, std::make_pair(ns_name::HTML, tag_name::A)));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_1)
+BOOST_AUTO_TEST_CASE(dispatcher_pop_until_1)
 {
 	tree t;
 
@@ -335,7 +335,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_1)
 	BOOST_CHECK(p.get_local_name_id(p.m_open_element_stack.back().m_it) == tag_name::Html);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_2)
+BOOST_AUTO_TEST_CASE(dispatcher_pop_until_2)
 {
 	tree t;
 
@@ -354,7 +354,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_2)
 	BOOST_CHECK(p.get_local_name_id(p.m_open_element_stack.back().m_it) == tag_name::Html);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_3)
+BOOST_AUTO_TEST_CASE(dispatcher_pop_until_3)
 {
 	tree t;
 
@@ -382,7 +382,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_pop_until_3)
 /*
 https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
 */
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_push_active_formatting_element_list_1)
+BOOST_AUTO_TEST_CASE(dispatcher_push_formatting_element_list_1)
 {
 	tree t;
 	auto html = t.insert(t.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -394,17 +394,17 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_push_active_formatting_element
 	test_parser p;
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
-	p.push_active_formatting_element_list(a1, token1);
-	p.push_active_formatting_element_list(a2, token1);
-	p.push_active_formatting_element_list(a3, token1);
-	p.push_active_formatting_element_list(a4, token1);
-	p.push_active_formatting_element_list(a5, token1);
+	p.push_formatting_element_list(a1, token1);
+	p.push_formatting_element_list(a2, token1);
+	p.push_formatting_element_list(a3, token1);
+	p.push_formatting_element_list(a4, token1);
+	p.push_formatting_element_list(a5, token1);
 
-	BOOST_CHECK(p.m_active_formatting_element_list.back().m_it == a3);
-	BOOST_CHECK(p.m_active_formatting_element_list.size() == 3);
+	BOOST_CHECK(p.m_formatting_element_list.front().m_it == a3);
+	BOOST_CHECK(p.m_formatting_element_list.size() == 3);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_push_active_formatting_element_list_2)
+BOOST_AUTO_TEST_CASE(dispatcher_push_formatting_element_list_2)
 {
 	tree t;
 	auto html = t.insert(t.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -416,47 +416,46 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_push_active_formatting_element
 	test_parser p;
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
-	p.push_active_formatting_element_list(a1, token1);
-	p.push_active_formatting_element_list();
-	p.push_active_formatting_element_list(a2, token1);
-	p.push_active_formatting_element_list(a3, token1);
-	p.push_active_formatting_element_list(a4, token1);
-	p.push_active_formatting_element_list(a5, token1);
+	p.push_formatting_element_list(a1, token1);
+	p.push_formatting_element_list();
+	p.push_formatting_element_list(a2, token1);
+	p.push_formatting_element_list(a3, token1);
+	p.push_formatting_element_list(a4, token1);
+	p.push_formatting_element_list(a5, token1);
 
-	BOOST_CHECK(p.m_active_formatting_element_list.size() == 5);
+	BOOST_CHECK(p.m_formatting_element_list.size() == 5);
 
-	BOOST_CHECK(p.m_active_formatting_element_list[0].m_it == a5);
-	BOOST_CHECK(p.m_active_formatting_element_list[1].m_it == a4);
-	BOOST_CHECK(p.m_active_formatting_element_list[2].m_it == a3);
-	BOOST_CHECK(p.m_active_formatting_element_list[3].m_marker == true);
-	BOOST_CHECK(p.m_active_formatting_element_list[4].m_it == a1);
+	BOOST_CHECK(std::next(p.m_formatting_element_list.begin(), 0)->m_it == a1);
+	BOOST_CHECK(std::next(p.m_formatting_element_list.begin(), 1)->m_marker == true);
+	// marker より後ろで最古のa2が削除されている。
+	BOOST_CHECK(std::next(p.m_formatting_element_list.begin(), 2)->m_it == a3);
+	BOOST_CHECK(std::next(p.m_formatting_element_list.begin(), 3)->m_it == a4);
+	BOOST_CHECK(std::next(p.m_formatting_element_list.begin(), 4)->m_it == a5);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_reconstruct_active_formatting_element_list_1)
+BOOST_AUTO_TEST_CASE(dispatcher_reconstruct_formatting_element_list_1)
 {
 	test_parser p;
 	auto HTML = p.insert_element(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
 	auto A1 = p.insert_element(HTML.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
 	auto A2 = p.insert_element(A1.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A3 = p.insert_element(A2.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A4 = p.insert_element(A3.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
-	auto A5 = p.insert_element(A4.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::A));
+	BOOST_CHECK(p.m_c.size() == 4);
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
 	p.m_open_element_stack.push_back({ token1, HTML });
-	p.push_active_formatting_element_list(A1, token1);
-	p.push_active_formatting_element_list();
-	p.push_active_formatting_element_list(A2, token1);
-	p.push_active_formatting_element_list(A3, token1);
-	p.push_active_formatting_element_list(A4, token1);
-	p.push_active_formatting_element_list(A5, token1);
+	p.push_formatting_element_list(A1, token1);
+	p.push_formatting_element_list();
+	p.push_formatting_element_list(A2, token1);
+	BOOST_CHECK(p.m_formatting_element_list.size() == 3);
 
-	p.reconstruct_active_formatting_element_list();
+	p.reconstruct_formatting_element_list();
 
-	BOOST_CHECK(p.m_active_formatting_element_list[3].m_marker == true);
+	// 複製が木に挿入されて数が増える
+	BOOST_CHECK(p.m_c.size() == 5);
+	BOOST_CHECK(p.m_formatting_element_list.size() == 3);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_clear_active_formatting_element_list_1)
+BOOST_AUTO_TEST_CASE(dispatcher_clear_formatting_element_list_1)
 {
 	tree t;
 	auto html = t.insert(t.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -468,16 +467,16 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_clear_active_formatting_elemen
 	test_parser p;
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
-	p.push_active_formatting_element_list(a1, token1);
-	p.push_active_formatting_element_list();
-	p.push_active_formatting_element_list(a2, token1);
-	p.push_active_formatting_element_list(a3, token1);
-	p.push_active_formatting_element_list(a4, token1);
-	p.push_active_formatting_element_list(a5, token1);
+	p.push_formatting_element_list(a1, token1);
+	p.push_formatting_element_list();
+	p.push_formatting_element_list(a2, token1);
+	p.push_formatting_element_list(a3, token1);
+	p.push_formatting_element_list(a4, token1);
+	p.push_formatting_element_list(a5, token1);
 
-	p.clear_active_formatting_element_list();
+	p.clear_formatting_element_list();
 
-	BOOST_CHECK(p.m_active_formatting_element_list.size() == 1);
+	BOOST_CHECK(p.m_formatting_element_list.size() == 1);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -487,7 +486,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_clear_active_formatting_elemen
 // https://html.spec.whatwg.org/multipage/parsing.html#tree-construction
 // ------------------------------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_mathml_text_integration_point_1)
+BOOST_AUTO_TEST_CASE(dispatcher_is_mathml_text_integration_point_1)
 {
 	test_parser p;
 	auto it = p.insert_element(p.document().end(), simple_element<std::string>(ns_name::MathML, "", tag_name::Mtext));
@@ -498,7 +497,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_mathml_text_integration_poi
 	BOOST_CHECK(p.is_mathml_text_integration_point(entry));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_html_integration_point_1)
+BOOST_AUTO_TEST_CASE(dispatcher_is_html_integration_point_1)
 {
 	test_parser p;
 	auto it = p.insert_element(p.document().end(), simple_element<std::string>(ns_name::MathML, "", tag_name::Annotation_xml));
@@ -522,7 +521,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_is_html_integration_point_1)
 /*
 https://html.spec.whatwg.org/multipage/parsing.html#appropriate-place-for-inserting-a-node
 */
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_inserting_node_1)
+BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_1)
 {
 	tree t;
 	auto HTML = t.insert(t.end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -539,7 +538,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 	BOOST_CHECK(it == TEMPLATE.end());
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_inserting_node_2)
+BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_2)
 {
 	test_parser p;
 	auto document = p.document();
@@ -555,7 +554,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 	BOOST_CHECK(it == HTML.end());
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_inserting_node_3)
+BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_3)
 {
 	test_parser p;
 	auto document = p.document();
@@ -572,7 +571,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 	BOOST_CHECK(it == TABLE);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_inserting_node_4)
+BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_4)
 {
 	test_parser p;
 	auto document = p.document();
@@ -587,7 +586,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 	BOOST_CHECK(it == P.end());
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_inserting_node_5)
+BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_5)
 {
 	test_parser p;
 	auto document = p.document();
@@ -604,7 +603,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_appropriate_place_for_insertin
 /*
 https://html.spec.whatwg.org/multipage/parsing.html#create-an-element-for-the-token
 */
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_1)
+BOOST_AUTO_TEST_CASE(dispatcher_create_element_for_token_1)
 {
 	test_parser p;
 	auto document = p.document();
@@ -615,7 +614,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_1)
 
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_2)
+BOOST_AUTO_TEST_CASE(dispatcher_create_element_for_token_2)
 {
 	test_parser p;
 
@@ -624,7 +623,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_create_element_for_token_2)
 
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_mathml_attributes_1)
+BOOST_AUTO_TEST_CASE(dispatcher_adjust_mathml_attributes_1)
 {
 	test_parser p;
 	start_tag_token token;
@@ -636,7 +635,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_mathml_attributes_1)
 	BOOST_CHECK(token.m_attributes.current().m_name == U"definitionURL");
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_svg_attributes_1)
+BOOST_AUTO_TEST_CASE(dispatcher_adjust_svg_attributes_1)
 {
 	test_parser p;
 	start_tag_token token;
@@ -648,7 +647,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_svg_attributes_1)
 	BOOST_CHECK(token.m_attributes.current().m_name == U"attributeName");
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_svg_attributes_2)
+BOOST_AUTO_TEST_CASE(dispatcher_adjust_svg_attributes_2)
 {
 	test_parser p;
 	start_tag_token token;
@@ -660,7 +659,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_svg_attributes_2)
 	BOOST_CHECK(token.m_attributes.current().m_name == U"attributenameABCD");
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_foreign_attributes_1)
+BOOST_AUTO_TEST_CASE(dispatcher_adjust_foreign_attributes_1)
 {
 	test_parser p;
 	start_tag_token token;
@@ -674,7 +673,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_foreign_attributes_1)
 	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XLink);
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_foreign_attributes_2)
+BOOST_AUTO_TEST_CASE(dispatcher_adjust_foreign_attributes_2)
 {
 	test_parser p;
 	start_tag_token token;
@@ -695,7 +694,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_adjust_foreign_attributes_2)
 // https://html.spec.whatwg.org/multipage/parsing.html#the-initial-insertion-mode
 // ------------------------------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_1)
+BOOST_AUTO_TEST_CASE(dispatcher_in_quirks_condition_1)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -705,7 +704,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_1)
 	BOOST_CHECK(p.in_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_2)
+BOOST_AUTO_TEST_CASE(dispatcher_in_quirks_condition_2)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -715,7 +714,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_2)
 	BOOST_CHECK(p.in_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_3)
+BOOST_AUTO_TEST_CASE(dispatcher_in_quirks_condition_3)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -725,7 +724,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_3)
 	BOOST_CHECK(!(p.in_quirks_condition(token)));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_4)
+BOOST_AUTO_TEST_CASE(dispatcher_in_quirks_condition_4)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -735,7 +734,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_4)
 	BOOST_CHECK(p.in_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_5)
+BOOST_AUTO_TEST_CASE(dispatcher_in_quirks_condition_5)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -745,7 +744,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_5)
 	BOOST_CHECK(p.in_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_6)
+BOOST_AUTO_TEST_CASE(dispatcher_in_quirks_condition_6)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -755,7 +754,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_quirks_condition_6)
 	BOOST_CHECK(!p.in_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_limited_quirks_condition_1)
+BOOST_AUTO_TEST_CASE(dispatcher_in_limited_quirks_condition_1)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -765,7 +764,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_limited_quirks_condition_1)
 	BOOST_CHECK(p.in_limited_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_limited_quirks_condition_2)
+BOOST_AUTO_TEST_CASE(dispatcher_in_limited_quirks_condition_2)
 {
 	test_parser p;
 	DOCTYPE_token token;
@@ -775,7 +774,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_in_limited_quirks_condition_2)
 	BOOST_CHECK(p.in_limited_quirks_condition(token));
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_character_1)
+BOOST_AUTO_TEST_CASE(dispatcher_insert_character_1)
 {
 	test_parser p;
 	auto HTML = p.m_c.insert(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -790,7 +789,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_character_1)
 	BOOST_CHECK(data(*HTML.begin()) == "A");
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_character_2)
+BOOST_AUTO_TEST_CASE(dispatcher_insert_character_2)
 {
 	test_parser p;
 	auto HTML = p.m_c.insert(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -807,7 +806,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_character_2)
 	BOOST_CHECK(data(*HTML.begin()) == "ABC");
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_comment_1)
+BOOST_AUTO_TEST_CASE(dispatcher_insert_comment_1)
 {
 	test_parser p;
 	auto HTML = p.m_c.insert(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -820,7 +819,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_comment_1)
 	BOOST_CHECK(data(*HTML.begin()) == "ABC");
 }
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_comment_2)
+BOOST_AUTO_TEST_CASE(dispatcher_insert_comment_2)
 {
 	test_parser p;
 	auto HTML = p.m_c.insert(p.document().end(), simple_element<std::string>(ns_name::HTML, "", tag_name::Html));
@@ -846,7 +845,7 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_insert_comment_2)
 // https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inhead
 // ------------------------------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_on_in_head_insertion_mode_1)
+BOOST_AUTO_TEST_CASE(dispatcher_on_in_head_insertion_mode_1)
 {
 	test_parser p;
 	p.insertion_mode(test_parser::mode_name::in_head_insertion_mode);
@@ -856,18 +855,47 @@ BOOST_AUTO_TEST_CASE(tree_construction_dispatcher_on_in_head_insertion_mode_1)
 	BOOST_CHECK(p.m_error_count == 1);
 }
 
+// ------------------------------------------------------------------------------------------------
+// 12.2.6.4.7 The "in body" insertion mode
+//
+// https://html.spec.whatwg.org/multipage/parsing.html#parsing-main-inbody
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(dispatcher_run_adoption_agency_algorithm_1)
+{
+	test_parser p;
+	//start_tag_token st1(tag_name::);
+}
+
+// ------------------------------------------------------------------------------------------------
+// 12.2.7 The end
+//
+// https://html.spec.whatwg.org/multipage/parsing.html#the-end
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(dispatcher_stop_parsing_1)
+{
+	test_parser p;
+	p.stop_parsing();
+}
+
+BOOST_AUTO_TEST_CASE(dispatcher_abort_parser_1)
+{
+	test_parser p;
+	p.abort_parser();
+}
 
 /*
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher__1)
+BOOST_AUTO_TEST_CASE(dispatcher__1)
 {
 }
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher__1)
+BOOST_AUTO_TEST_CASE(dispatcher__1)
 {
 }
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher__1)
+BOOST_AUTO_TEST_CASE(dispatcher__1)
 {
 }
-BOOST_AUTO_TEST_CASE(tree_construction_dispatcher__1)
+BOOST_AUTO_TEST_CASE(dispatcher__1)
 {
 }
 */

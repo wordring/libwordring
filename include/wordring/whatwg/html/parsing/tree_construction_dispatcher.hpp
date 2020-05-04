@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <deque>
+#include <list>
 #include <string>
 #include <string_view>
 
@@ -48,8 +49,6 @@ namespace wordring::whatwg::html::parsing
 		using attribute_pointer = typename policy::attribute_pointer;
 
 	public:
-		//using state_type = base_type::state_type;
-
 		using base_type::report_error;
 		using base_type::eof;
 
@@ -118,6 +117,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			start_tag_token m_token;
 			node_pointer    m_it;
+			element_type    m_element;
 		};
 
 		std::deque<stack_entry> m_open_element_stack;
@@ -131,16 +131,15 @@ namespace wordring::whatwg::html::parsing
 
 		struct active_formatting_element
 		{
-			node_pointer    m_it;
 			start_tag_token m_token;
+			node_pointer    m_it;
+			element_type    m_element;
 			bool            m_marker;
 		};
 
 		/*! @brief アクティブ整形要素のリスト
-		
-		逆順の検索が多いため、 front() へ新しい項目を追加していく。
 		*/
-		std::deque<active_formatting_element> m_active_formatting_element_list;
+		std::list<active_formatting_element> m_formatting_element_list;
 
 		// ----------------------------------------------------------------------------------------
 		// 要素ポインタ
@@ -200,6 +199,10 @@ namespace wordring::whatwg::html::parsing
 			, m_foster_parenting(false)
 			, m_omit_lf(false)
 		{
+			this_type const* P = static_cast<this_type const*>(this);
+
+			m_head_element_pointer = P->get_null_node_pointer();
+			m_form_element_pointer = P->get_null_node_pointer();
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -322,6 +325,12 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
+		bool contains(node_pointer it) const
+		{
+			for (stack_entry const& se : m_open_element_stack) { if (se.m_it == it) return true; }
+			return false;
+		}
+
 		stack_entry& current_node() { return m_open_element_stack.back(); }
 
 		stack_entry const& current_node() const { return m_open_element_stack.back(); }
@@ -439,6 +448,12 @@ namespace wordring::whatwg::html::parsing
 				else if constexpr (std::is_same_v<Target, node_pointer>)
 				{
 					if (it == target) return true;
+				}
+				else if constexpr (std::is_same_v<Target, tag_name>)
+				{
+					ns_name  ns  = P->get_namespace_uri_id(it);
+					tag_name t = P->get_local_name_id(it);
+					if (ns == ns_name::HTML && t == target) return true;
 				}
 				else
 				{
@@ -567,7 +582,8 @@ namespace wordring::whatwg::html::parsing
 		static scope_type constexpr table_scope     = &tree_construction_dispatcher::is_table_scope;
 		static scope_type constexpr select_scope    = &tree_construction_dispatcher::is_select_scope;
 
-		/*
+		/*! @brief スタックから指定のタグが現れるまでPOPする
+
 		https://triple-underscore.github.io/HTML-parsing-ja.html#_pop-until
 		*/
 		void pop_until(tag_name condition)
@@ -576,9 +592,22 @@ namespace wordring::whatwg::html::parsing
 
 			while (!m_open_element_stack.empty())
 			{
-				tag_name tag = P->get_local_name_id(m_open_element_stack.back().m_it);
+				tag_name tn = P->get_local_name_id(m_open_element_stack.back().m_it);
 				m_open_element_stack.pop_back();
-				if (tag == condition) break;
+				if (tn == condition) break;
+			}
+		}
+
+		void pop_until(ns_name ns, tag_name tag)
+		{
+			this_type* P = static_cast<this_type*>(this);
+
+			while (!m_open_element_stack.empty())
+			{
+				ns_name  nn = P->get_namespace_uri_id(m_open_element_stack.back().m_it);
+				tag_name tn = P->get_local_name_id(m_open_element_stack.back().m_it);
+				m_open_element_stack.pop_back();
+				if (nn ==  ns && tn == tag) break;
 			}
 		}
 
@@ -606,6 +635,29 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
+		auto find(node_pointer it)
+		{
+			auto it1 = m_open_element_stack.begin();
+			auto it2 = m_open_element_stack.end();
+			while (it1 != it2)
+			{
+				if (it1->m_it == it) break;
+				++it1;
+			}
+
+			return it1;
+		}
+
+		/*! @brief スタックから指定の項目を除去する
+		*/
+		void remove(node_pointer it)
+		{
+			auto it1 = std::find_if(m_open_element_stack.begin(), m_open_element_stack.end(), [it](stack_entry const& se) {
+				return se.m_it == it; });
+			assert(it1 != m_open_element_stack.end());
+			m_open_element_stack.erase(it1);
+		}
+
 		// ----------------------------------------------------------------------------------------
 		// 整形要素のリスト
 		// 
@@ -613,7 +665,7 @@ namespace wordring::whatwg::html::parsing
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
 		// ----------------------------------------------------------------------------------------
 
-		/*! @brief アクティブ整形要素リストへ整形要素を挿入する
+		/*! @brief 整形要素リストへ整形要素を挿入する
 
 		@todo
 			要素が作成されたときと同じ比較とは、ケース・インセンシティブ、名前空間接頭辞の分離前の比較を意味するかもしれない。
@@ -622,89 +674,106 @@ namespace wordring::whatwg::html::parsing
 			したがって、要素同士を比較している。
 		- https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
 		*/
-		void push_active_formatting_element_list(node_pointer it, start_tag_token const& token)
+		void push_formatting_element_list(node_pointer it, start_tag_token const& token)
 		{
 			this_type* P = static_cast<this_type*>(this);
 
 			std::uint32_t n = 0;
-			auto pos = m_active_formatting_element_list.end();
+			auto pos = m_formatting_element_list.end();
 
-			auto it1 = m_active_formatting_element_list.begin();
-			auto it2 = m_active_formatting_element_list.end();
+			auto it1 = m_formatting_element_list.end();
+			auto it2 = m_formatting_element_list.begin();
 			while (it1 != it2)
 			{
+				--it1;
 				if (it1->m_marker) break;
 				if (P->equals(it, it1->m_it))
 				{
 					pos = it1;
 					++n;
 				}
-
-				++it1;
 			}
 
-			if (3 <= n) m_active_formatting_element_list.erase(pos);
+			if (3 <= n) m_formatting_element_list.erase(pos);
 
-			m_active_formatting_element_list.push_front({ it, token, false });
+			m_formatting_element_list.push_back({ token, it, element_type(), false });
 		}
 
 		/*! @brief アクティブ整形要素リストへマーカーを挿入する
 
 		https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
 		*/
-		void push_active_formatting_element_list()
+		void push_formatting_element_list()
 		{
-			m_active_formatting_element_list.push_front({ node_pointer(), start_tag_token(), true });
+			m_formatting_element_list.push_back({ start_tag_token(), node_pointer(), element_type(), true });
 		}
 
 		/*! @brief アクティブ整形要素リストを再構築する
 
 		https://html.spec.whatwg.org/multipage/parsing.html#reconstruct-the-active-formatting-elements
 		*/
-		void reconstruct_active_formatting_element_list()
+		void reconstruct_formatting_element_list()
 		{
-			auto it1 = m_active_formatting_element_list.begin();
-			auto it2 = m_active_formatting_element_list.end();
+			node_pointer new_element; // 8.
 
-			if (it1 == it2) return;
-
-			if (it1->m_marker) return;
-			for (auto const& entry : m_open_element_stack) if (it1->m_it == entry.m_it) return;
-
+			// 1.
+			if (m_formatting_element_list.empty()) return;
+			// 2.
+			if (m_formatting_element_list.back().m_marker || contains(m_formatting_element_list.back().m_it)) return;
+			// 3.
+			auto entry = --m_formatting_element_list.end();
+			// 4.
 		Rewind:
-			if (std::distance(it1, it2) <= 1) goto Create;
-			
-			++it1;
-
-			if (!it1->m_marker)
-			{
-				if(std::find_if(m_open_element_stack.begin(), m_open_element_stack.end(), [&it1](auto const& entry)->bool {
-					return it1->m_it == entry.m_it; }) == m_open_element_stack.end()) goto Rewind;
-			}
-
+			if (entry == m_formatting_element_list.begin()) goto Create;
+			// 5.
+			--entry;
+			// 6.
+			if (!entry->m_marker && !contains(entry->m_it)) goto Rewind;
+			// 7.
 		Advance:
-			--it1;
-
+			++entry;
+			//8.
 		Create:
-			auto it = insert_html_element(it1->m_token);
-
-			it1->m_it = it;
-
-			if (it1 != m_active_formatting_element_list.begin()) goto Advance;
+			new_element = insert_html_element(entry->m_token);
+			// 9.
+			entry->m_it = new_element;
+			// 10.
+			if (std::next(entry) != m_formatting_element_list.end()) goto Advance;
 		}
 
 		/*! @brief アクティブ整形要素リストをマーカーまでクリアする
 		
 		https://html.spec.whatwg.org/multipage/parsing.html#clear-the-list-of-active-formatting-elements-up-to-the-last-marker
 		*/
-		void clear_active_formatting_element_list()
+		void clear_formatting_element_list()
 		{
-			while (!m_active_formatting_element_list.empty())
+			while (!m_formatting_element_list.empty())
 			{
-				bool marker = m_active_formatting_element_list.front().m_marker;
-				m_active_formatting_element_list.pop_front();
+				bool marker = m_formatting_element_list.back().m_marker;
+				m_formatting_element_list.pop_back();
 				if (marker) break;
 			}
+		}
+
+		auto find_formatting_element_list(node_pointer it)
+		{
+			auto it1 = m_formatting_element_list.begin();
+			auto it2 = m_formatting_element_list.end();
+			while (it1 != it2)
+			{
+				if (it1->m_it == it) break;
+				++it1;
+			}
+
+			return it1;
+		}
+
+		/*! @brief 整形要素リストから指定の要素を削除する
+		*/
+		void remove_formatting_element_list(node_pointer it)
+		{
+			auto it1 = find_formatting_element_list(it);
+			if (it1 != m_formatting_element_list.end()) m_formatting_element_list.erase(it1);
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -718,6 +787,15 @@ namespace wordring::whatwg::html::parsing
 		void process_token(mode_name mode, Token& token)
 		{
 			this_type* P = static_cast<this_type*>(this);
+			
+			if constexpr (std::is_same_v<character_token, Token>)
+			{
+				if (m_omit_lf && token.m_data == U'\xA')
+				{
+					m_omit_lf = false;
+					return;
+				}
+			}
 
 			if constexpr (std::is_same_v<end_tag_token, Token>)
 			{
@@ -988,7 +1066,7 @@ namespace wordring::whatwg::html::parsing
 			for (token_attribute const& a : token)
 			{
 				if (a.m_omitted) continue;
-				attribute_type attr = P->create_attribute(el, a.m_name, a.m_namespace, a.m_prefix);
+				attribute_type attr = P->create_attribute(el, a.m_namespace, a.m_prefix, a.m_name);
 				P->append_attribute(el, std::move(attr));
 			}
 
@@ -1158,14 +1236,30 @@ namespace wordring::whatwg::html::parsing
 		/*
 		https://html.spec.whatwg.org/multipage/parsing.html#generate-implied-end-tags
 		*/
-		void generate_implied_end_tags(tag_name without)
+		template <typename TagName>
+		void generate_implied_end_tags(TagName without)
 		{
 			this_type* P = static_cast<this_type*>(this);
 
 			while (!m_open_element_stack.empty())
 			{
-				tag_name tag = P->get_local_name_id(m_open_element_stack.back().m_it);
-				if (tag == without) return;
+				auto it = m_open_element_stack.back().m_it;
+				tag_name tag = P->get_local_name_id(it);
+
+				if constexpr (std::is_same_v<TagName, tag_name>)
+				{
+					if (tag == without) return;
+				}
+				if constexpr (std::is_same_v<TagName, std::pair<ns_name, tag_name>>)
+				{
+					if (P->get_namespace_uri_id(it) == without.first && tag == without.second) return;
+				}
+				if constexpr (std::is_same_v<TagName, std::pair<ns_name, std::u32string>>)
+				{
+					if (P->get_namespace_uri_id(it) == without.first
+						&& P->get_local_name(it) == without.second) return;
+				}
+
 				switch (tag)
 				{
 				case tag_name::Dd: case tag_name::Dt: case tag_name::Li: case tag_name::Optgroup: case tag_name::Option:
@@ -1176,6 +1270,11 @@ namespace wordring::whatwg::html::parsing
 					return;
 				}
 			}
+		}
+
+		void generate_implied_end_tags()
+		{
+			generate_implied_end_tags(0);
 		}
 
 		/*
@@ -1549,7 +1648,7 @@ namespace wordring::whatwg::html::parsing
 				if (token.m_tag_name_id == tag_name::Template)
 				{
 					insert_html_element(token);
-					push_active_formatting_element_list();
+					push_formatting_element_list();
 					m_frameset_ok_flag = false;
 					insertion_mode(mode_name::in_template_insertion_mode);
 					m_template_insertion_mode_stack.push_back(mode_name::in_template_insertion_mode);
@@ -1570,7 +1669,7 @@ namespace wordring::whatwg::html::parsing
 					generate_all_implied_end_tags_thoroughly();
 					if (P->get_local_name_id(current_node().m_it) != tag_name::Template) report_error();
 					pop_until(tag_name::Template);
-					clear_active_formatting_element_list();
+					clear_formatting_element_list();
 					m_template_insertion_mode_stack.pop_back();
 					reset_insertion_mode_appropriately();
 					return;
@@ -1817,12 +1916,12 @@ namespace wordring::whatwg::html::parsing
 
 				if (is_ascii_white_space(token.m_data))
 				{
-					reconstruct_active_formatting_element_list();
+					reconstruct_formatting_element_list();
 					insert_character(token.m_data);
 					return;
 				}
 
-				reconstruct_active_formatting_element_list();
+				reconstruct_formatting_element_list();
 				insert_character(token.m_data);
 				m_frameset_ok_flag = false;
 				return;
@@ -1850,9 +1949,9 @@ namespace wordring::whatwg::html::parsing
 					for (token_attribute const& a : token)
 					{
 						if (a.m_omitted) continue;
-						if (!P->contains(it, a.m_name, a.m_namespace, a.m_prefix))
+						if (!P->contains(it, a.m_namespace, a.m_prefix, a.m_name))
 						{
-							P->append_attribute(it, a.m_name, a.m_namespace, a.m_prefix, a.m_value);
+							P->append_attribute(it, a.m_namespace, a.m_prefix, a.m_name, a.m_value);
 						}
 					}
 					return;
@@ -1897,9 +1996,9 @@ namespace wordring::whatwg::html::parsing
 				for (token_attribute const& a : token)
 				{
 					if (a.m_omitted) continue;
-					if (!P->contains(it, a.m_name, a.m_namespace, a.m_prefix))
+					if (!P->contains(it, a.m_namespace, a.m_prefix, a.m_name))
 					{
-						P->append_attribute(it, a.m_name, a.m_namespace, a.m_prefix, a.m_value);
+						P->append_attribute(it, a.m_namespace, a.m_prefix, a.m_name, a.m_value);
 					}
 				}
 				return;
@@ -1944,8 +2043,382 @@ namespace wordring::whatwg::html::parsing
 					}
 				}
 
+				stop_parsing();
+				return;
 			}
 
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Body)
+				{
+					if (!in_specific_scope(default_scope, tag_name::Body))
+					{
+						report_error();
+						return;
+					}
+
+					for (stack_entry const& se : m_open_element_stack)
+					{
+						switch (P->get_local_name_id(se.m_it))
+						{
+						case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
+						case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
+						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
+							continue;
+						default:
+							report_error();
+							break;
+						}
+					}
+
+					insertion_mode(mode_name::after_body_insertion_mode);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Html)
+				{
+					if (!in_specific_scope(default_scope, tag_name::Body))
+					{
+						report_error();
+						return;
+					}
+
+					for (stack_entry const& se : m_open_element_stack)
+					{
+						switch (P->get_local_name_id(se.m_it))
+						{
+						case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
+						case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
+						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
+							continue;
+						default:
+							report_error();
+							break;
+						}
+					}
+
+					insertion_mode(mode_name::after_body_insertion_mode);
+					reprocess_token(token);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::Address: case tag_name::Article: case tag_name::Aside:    case tag_name::Blockquote:
+				case tag_name::Center:  case tag_name::Details: case tag_name::Dialog:   case tag_name::Dir:
+				case tag_name::Div:     case tag_name::Dl:      case tag_name::Fieldset: case tag_name::Figcaption:
+				case tag_name::Figure:  case tag_name::Footer:  case tag_name::Header:   case tag_name::Hgroup:
+				case tag_name::Main:    case tag_name::Menu:    case tag_name::Nav:      case tag_name::Ol:
+				case tag_name::P:       case tag_name::Section: case tag_name::Summary:  case tag_name::Ul:
+					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+					insert_html_element(token);
+					return;
+				default:
+					break;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
+					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+					if (P->get_namespace_uri_id(current_node().m_it) == ns_name::HTML)
+					{
+						switch (P->get_local_name_id(current_node().m_it))
+						{
+						case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
+							report_error();
+							m_open_element_stack.pop_back();
+							break;
+						default:
+							break;
+						}
+					}
+					insert_html_element(token);
+					return;
+				default:
+					break;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Pre || token.m_tag_name_id == tag_name::Listing)
+				{
+					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+					insert_html_element(token);
+					m_omit_lf = true;
+					m_frameset_ok_flag = false;
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Form)
+				{
+					if (P->get_null_node_pointer() != m_form_element_pointer && !contains(tag_name::Template))
+					{
+						report_error();
+						return;
+					}
+					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+					node_pointer it = insert_html_element(token);
+					if (!contains(tag_name::Template)) m_form_element_pointer = it;
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Li)
+				{
+					m_frameset_ok_flag = false;
+					for (stack_entry& se : m_open_element_stack)
+					{
+						if (P->get_local_name_id(se.m_it) == tag_name::Li)
+						{
+							generate_implied_end_tags(tag_name::Li);
+							if (P->get_local_name_id(current_node().m_it) != tag_name::Li) report_error();
+							pop_until(tag_name::Li);
+							break;
+						}
+						if (is_special(se.m_it))
+						{
+							tag_name tag = P->get_local_name_id(se.m_it);
+							if (tag == tag_name::Address || tag == tag_name::Div || tag == tag_name::P)
+								break;
+						}
+						if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+						insert_html_element(token);
+						return;
+					}
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Dd || token.m_tag_name_id == tag_name::Dt)
+				{
+					m_frameset_ok_flag = false;
+
+					auto it1 = --m_open_element_stack.end();
+					tag_name tag;
+				Loop:
+					tag = P->get_local_name_id(it1->m_it);
+
+					if (tag == tag_name::Dd)
+					{
+						generate_implied_end_tags(tag_name::Dd);
+						if (P->get_local_name_id(current_node().m_it) != tag_name::Dd) report_error();
+						pop_until(tag_name::Dd);
+						goto Done;
+					}
+
+					if (tag == tag_name::Dt)
+					{
+						generate_implied_end_tags(tag_name::Dt);
+						if (P->get_local_name_id(current_node().m_it) != tag_name::Dt) report_error();
+						pop_until(tag_name::Dt);
+						goto Done;
+					}
+
+					if (is_special(it1->m_it) && tag != tag_name::Address && tag != tag_name::Div && tag != tag_name::P)
+						goto Done;
+
+					--it1;
+					goto Loop;
+
+				Done:
+					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+					insert_html_element(token);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Plaintext)
+				{
+					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
+					insert_html_element(token);
+					base_type::change_state(base_type::PLAINTEXT_state);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Button)
+				{
+					if (in_specific_scope(default_scope, tag_name::P))
+					{
+						report_error();
+						generate_implied_end_tags();
+						pop_until(tag_name::Button);
+					}
+					reconstruct_formatting_element_list();
+					insert_html_element(token);
+					m_frameset_ok_flag = false;
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+					case tag_name::Address:    case tag_name::Article: case tag_name::Aside:   case tag_name::Blockquote:
+					case tag_name::Button:     case tag_name::Center:  case tag_name::Details: case tag_name::Dialog:
+					case tag_name::Dir:        case tag_name::Div:     case tag_name::Dl:      case tag_name::Fieldset:
+					case tag_name::Figcaption: case tag_name::Figure:  case tag_name::Footer:  case tag_name::Header:
+					case tag_name::Hgroup:     case tag_name::Listing: case tag_name::Main:    case tag_name::Menu:
+					case tag_name::Nav:        case tag_name::Ol:      case tag_name::Pre:     case tag_name::Section:
+					case tag_name::Summary:    case tag_name::Ul:
+						if (!in_specific_scope(default_scope, std::make_pair(ns_name::HTML, token.m_tag_name_id)))
+						{
+							report_error();
+							return;
+						}
+						generate_implied_end_tags();
+						if (P->get_local_name_id(current_node().m_it) != token.m_tag_name_id
+							|| P->get_namespace_uri_id(current_node().m_it) != ns_name::HTML) report_error();
+						pop_until(ns_name::HTML, token.m_tag_name_id);
+						return;
+					default:
+						break;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Form)
+				{
+					if (!contains(tag_name::Template))
+					{
+						node_pointer node = m_form_element_pointer;
+						m_form_element_pointer = P->get_null_node_pointer();
+						if (node == P->get_null_node_pointer() || !in_specific_scope(default_scope, node))
+						{
+							report_error();
+							return;
+						}
+						generate_implied_end_tags();
+						if (current_node().m_it != node) report_error();
+						remove(node);
+						return;
+					}
+				}
+
+				if (!in_specific_scope(default_scope, tag_name::Form))
+				{
+					report_error();
+					return;
+				}
+				generate_implied_end_tags();
+				if (P->get_local_name_id(current_node().m_it) != tag_name::Form) report_error();
+				pop_until(tag_name::Form);
+				return;
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::P)
+				{
+					if (!in_specific_scope(button_scope, tag_name::P))
+					{
+						report_error();
+						start_tag_token t(tag_name::P);
+						insert_html_element(t);
+					}
+					close_p_element();
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Li)
+				{
+					if (!in_specific_scope(list_item_scope, tag_name::Li))
+					{
+						report_error();
+						return;
+					}
+					generate_implied_end_tags(tag_name::Li);
+					if (P->get_local_name_id(current_node().m_it) != tag_name::Li) report_error();
+					pop_until(tag_name::Li);
+					return;
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::Dd || token.m_tag_name_id == tag_name::Dt)
+				{
+					if (!in_specific_scope(default_scope, std::make_pair(ns_name::HTML, token.m_tag_name_id)))
+					{
+						report_error();
+						return;
+					}
+					generate_implied_end_tags(std::make_pair(ns_name::HTML, token.m_tag_name_id));
+					if (P->get_namespace_uri_id(current_node().m_it) != ns_name::HTML
+						|| P->get_local_name_id(current_node().m_it) != token.m_tag_name_id) report_error();
+					pop_until(ns_name::HTML, token.m_tag_name_id);
+				}
+			}
+
+			if constexpr (std::is_same_v<end_tag_token, Token>)
+			{
+				switch (token.m_tag_name_id)
+				{
+				case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
+					if (!in_specific_scope(default_scope, std::array<tag_name, 6>({ tag_name::H1, tag_name::H2, tag_name::H3, tag_name::H4, tag_name::H5, tag_name::H6 })))
+					{
+						report_error();
+						return;
+					}
+					generate_implied_end_tags();
+					if (P->get_namespace_uri_id(current_node().m_it) != ns_name::HTML
+						|| P->get_local_name_id(current_node().m_it) != token.m_tag_name_id) report_error();
+					pop_until(std::array<tag_name, 6>({ tag_name::H1, tag_name::H2, tag_name::H3, tag_name::H4, tag_name::H5, tag_name::H6 }));
+					return;
+				default:
+					break;
+				}
+			}
+
+			if constexpr (std::is_same_v<start_tag_token, Token>)
+			{
+				if (token.m_tag_name_id == tag_name::A)
+				{
+					auto it1 = m_formatting_element_list.end();
+					auto it2 = m_formatting_element_list.begin();
+					while (it1 != it2)
+					{
+						--it1;
+						if (it1->m_marker) break;
+						if(P->get_local_name_id(it1->m_it) == tag_name::A)
+						{
+							report_error();
+							run_adoption_agency_algorithm(token);
+							break;
+						}
+					}
+
+
+
+					return;
+				}
+			}
 		}
 
 		void close_p_element()
@@ -1955,6 +2428,137 @@ namespace wordring::whatwg::html::parsing
 			generate_implied_end_tags(tag_name::P);
 			if (P->get_local_name_id(current_node().m_it) != tag_name::P) report_error();
 			pop_until(tag_name::P);
+		}
+
+		/*! adoption agency algorithm を実行する
+
+		@return その他の終了タグに飛ばす場合、true を返す。
+		*/
+		template <typename Token>
+		bool run_adoption_agency_algorithm(Token& token)
+		{
+			this_type* P = static_cast<this_type*>(this);
+
+			if constexpr (std::is_base_of_v<tag_token, Token>)
+			{
+				std::uint32_t outer_loop_counter; // 3.
+				node_pointer  formatting_element; // 5.
+				node_pointer  furthest_block;     // 10.
+				node_pointer  common_ancestor;    // 12.
+				typename std::list<active_formatting_element>::iterator bookmark; // 13.
+				node_pointer node;      // 14.
+				node_pointer last_node; // 14.
+				std::uint32_t inner_loop_counter; // 14.1.
+
+				// 1.
+				std::u32string const& subject = token.m_tag_name;
+				// 2.
+				node_pointer it = current_node().m_it;
+				if (P->get_namespace_uri_id(it) == ns_name::HTML
+					&& P->get_local_name(it) == subject
+					&& find_formatting_element_list(it) == m_formatting_element_list.end())
+				{
+					m_open_element_stack.pop_back();
+					return false;
+				}
+				// 3.
+				outer_loop_counter = 0;
+				// 4.
+			OuterLoop:
+				if (8 <= outer_loop_counter) return false;
+				// 5.
+				++outer_loop_counter;
+				// 6.
+				formatting_element = P->get_null_node_pointer();
+				{
+					auto it1 = m_formatting_element_list.end();
+					auto it2 = m_formatting_element_list.begin();
+					while (it1 != it2)
+					{
+						--it1;
+						if (it1->m_marker) break;
+						if (P->get_local_name(it1->m_it) == subject)
+						{
+							formatting_element = it1->m_it;
+							break;
+						}
+					}
+				}
+				if (formatting_element == P->get_null_node_pointer()) return true;
+				// 7.
+				if (!contains(formatting_element))
+				{
+					report_error();
+					remove_formatting_element_list(formatting_element);
+					return false;
+				}
+				// 8.
+				if (!in_specific_scope(default_scope, formatting_element))
+				{
+					report_error();
+					return false;
+				}
+				// 9.
+				if (formatting_element != current_node().m_it) report_error();
+				// 10.
+				furthest_block = P->get_null_node_pointer();
+				{
+					auto it1 = m_open_element_stack.begin();
+					auto it2 = m_open_element_stack.end();
+					while (it1 != it2) { if (it1++->m_it == formatting_element) break; }
+					while (it1 != it2)
+					{
+						if (is_special(it1->m_it))
+						{
+							furthest_block = it1->m_it;
+							break;
+						}
+						++it1;
+					}
+				}
+				// 11.
+				if (furthest_block == P->get_null_node_pointer())
+				{
+					pop_until(formatting_element);
+					remove_formatting_element_list(formatting_element);
+					return false;
+				}
+				// 12.
+				common_ancestor = std::prev(find(formatting_element))->m_it;
+				// 13.
+				bookmark = std::next(find_formatting_element_list(formatting_element));
+				// 14
+				node = furthest_block;
+				last_node = furthest_block;
+				// 14.1.
+				inner_loop_counter = 0;
+				// 14.2.
+			InnerLoop:
+				++inner_loop_counter;
+				// 14.3.
+				{
+					auto it1 = find(node);
+				}
+				// 14.4.
+				if (node != formatting_element) goto NextStep;
+				// 14.5.
+				if (3 < inner_loop_counter && find_formatting_element_list(node) != m_formatting_element_list.end())
+				{
+					remove_formatting_element_list(node);
+				}
+				// 14.6.
+				if (find_formatting_element_list(node) == m_formatting_element_list.end())
+				{
+					remove(node);
+					goto InnerLoop;
+				}
+				// 14.7.
+
+				
+			NextStep:
+
+				goto OuterLoop;
+			}
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -2151,9 +2755,34 @@ namespace wordring::whatwg::html::parsing
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-end
 		// ----------------------------------------------------------------------------------------
 
+		/*! @brief 構文解析を停止する
+
+		スクリプトに対応しないため、ほとんど何も実装しない。
+
+		https://html.spec.whatwg.org/multipage/parsing.html#stop-parsing
+		*/
 		void stop_parsing()
 		{
+			this_type* P = static_cast<this_type*>(this);
 
+			P->set_current_document_readiness(U"interactive");
+			m_open_element_stack.clear();
+			P->set_current_document_readiness(U"complete");
+		}
+
+		/*! @brief 構文解析を中止する
+
+		https://html.spec.whatwg.org/multipage/parsing.html#abort-a-parser
+		*/
+		void abort_parser()
+		{
+			this_type* P = static_cast<this_type*>(this);
+
+			base_type::m_c.clear();
+
+			P->set_current_document_readiness(U"interactive");
+			m_open_element_stack.clear();
+			P->set_current_document_readiness(U"complete");
 		}
 	};
 }

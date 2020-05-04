@@ -58,9 +58,9 @@ namespace
 		using base_type::is_table_scope;
 		using base_type::is_select_scope;
 
-		using base_type::push_active_formatting_element_list;
-		using base_type::reconstruct_active_formatting_element_list;
-		using base_type::clear_active_formatting_element_list;
+		using base_type::push_formatting_element_list;
+		using base_type::reconstruct_formatting_element_list;
+		using base_type::clear_formatting_element_list;
 
 		using base_type::appropriate_place_for_inserting_node;
 		using base_type::create_element_for_token;
@@ -92,7 +92,7 @@ namespace
 		using base_type::m_insertion_mode;
 
 		using base_type::m_open_element_stack;
-		using base_type::m_active_formatting_element_list;
+		using base_type::m_formatting_element_list;
 		using base_type::m_foster_parenting;
 
 		//using base_type::to_document;
@@ -146,11 +146,11 @@ BOOST_AUTO_TEST_CASE(simple_parser_contains_1)
 
 	test_parser p;
 	auto el = p.create_element(p.document(), tag_name::P);
-	auto abbr = p.create_attribute(el, U"abbr");
+	auto abbr = p.create_attribute(el, ns_name::HTML, U"", U"abbr");
 	p.append_attribute(el, std::move(abbr));
 	auto it = p.insert_element(p.document().end(), std::move(el));
 
-	BOOST_CHECK(p.contains(it, U"abbr", ns_name::HTML, U""));
+	BOOST_CHECK(p.contains(it, ns_name::HTML, U"", U"abbr"));
 }
 
 BOOST_AUTO_TEST_CASE(simple_parser_contains_2)
@@ -159,18 +159,18 @@ BOOST_AUTO_TEST_CASE(simple_parser_contains_2)
 
 	test_parser p;
 	auto el = p.create_element(p.document(), tag_name::P);
-	auto abbr = p.create_attribute(el, U"abbr");
+	auto abbr = p.create_attribute(el, ns_name::HTML, U"", U"abbr");
 	p.append_attribute(el, std::move(abbr));
 	auto it = p.insert_element(p.document().end(), std::move(el));
 
-	BOOST_CHECK(p.contains(it, U"", ns_name::HTML, U"") == false);
+	BOOST_CHECK(p.contains(it, ns_name::HTML, U"", U"") == false);
 }
 
 BOOST_AUTO_TEST_CASE(simple_parser_find_attribute_1)
 {
 	test_parser p;
 	auto el = p.create_element(p.document(), tag_name::P);
-	auto attr = p.create_attribute(el, U"attr", ns_name::HTML, U"");
+	auto attr = p.create_attribute(el, ns_name::HTML, U"", U"attr");
 	p.append_attribute(el, std::move(attr));
 	auto it = p.insert_element(p.document().end(), std::move(el));
 	BOOST_CHECK(it != p.document().end());

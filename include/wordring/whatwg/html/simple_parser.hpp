@@ -97,12 +97,13 @@ namespace wordring::whatwg::html
 
 		/*! @brief ノードを挿入する
 		*/
+		/*
 		template <typename Node>
 		node_pointer insert_(node_pointer pos, Node node)
 		{
 			return m_c.insert(pos, std::forward<Node>(node));
 		}
-
+		*/
 		// ----------------------------------------------------------------------------------------
 		// 文書
 		// ----------------------------------------------------------------------------------------
@@ -127,6 +128,14 @@ namespace wordring::whatwg::html
 		void set_document_mode(document_mode_name mode)
 		{
 			std::get_if<document_type>(std::addressof(*document()))->document_mode(mode);
+		}
+
+		/*! 文書の準備度を設定する
+		
+		https://html.spec.whatwg.org/multipage/dom.html#current-document-readiness
+		*/
+		void set_current_document_readiness(std::u32string const& rediness)
+		{
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -252,6 +261,11 @@ namespace wordring::whatwg::html
 			return std::get_if<element_type>(std::addressof(*it))->local_name_id();
 		}
 
+		std::u32string get_local_name(node_pointer it) const
+		{
+			return encoding_cast<std::u32string>(std::get_if<element_type>(std::addressof(*it))->local_name());
+		}
+
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる
 
 		push_active_formatting_element_list() から呼び出される。
@@ -265,15 +279,9 @@ namespace wordring::whatwg::html
 		// 属性
 		// ----------------------------------------------------------------------------------------
 
-		attribute_type create_attribute(element_type& el, std::u32string const& local_name, ns_name ns = ns_name::HTML, std::u32string const& prefix = U"")
+		attribute_type create_attribute(element_type& el, ns_name ns, std::u32string const& prefix, std::u32string const& local_name)
 		{
-			attribute_type a;
-
-			a.namespace_uri_id(ns);
-			a.local_name(encoding_cast<string_type>(local_name));
-			a.prefix(encoding_cast<string_type>(prefix));
-
-			return a;
+			return attribute_type(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(local_name));
 		}
 
 		/*! @brief 要素へ属性を付加する
@@ -283,13 +291,13 @@ namespace wordring::whatwg::html
 			el.push_back(std::move(attr));
 		}
 
-		void append_attribute(node_pointer it, std::u32string const& name, ns_name ns, std::u32string const& prefix, std::u32string const& value)
+		void append_attribute(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name, std::u32string const& value)
 		{
 		}
 
-		bool contains(node_pointer it, std::u32string const& name, ns_name ns, std::u32string const& prefix)
+		bool contains(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name)
 		{
-			return find(*it, encoding_cast<string_type>(name), ns, encoding_cast<string_type>(prefix)) != wordring::whatwg::html::end(*it);
+			return find(*it, ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name)) != wordring::whatwg::html::end(*it);
 		}
 
 		/*
@@ -337,6 +345,15 @@ namespace wordring::whatwg::html
 		node_pointer insert_comment(node_pointer pos, comment_type&& comment)
 		{
 			return m_c.insert(pos, std::move(comment));
+		}
+
+		// ----------------------------------------------------------------------------------------
+		// ノード
+		// ----------------------------------------------------------------------------------------
+
+		node_pointer get_null_node_pointer() const
+		{
+			return node_pointer();
 		}
 
 		// ノード作成 ----------------------------------------------------------
