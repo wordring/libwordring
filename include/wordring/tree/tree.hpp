@@ -79,8 +79,8 @@ namespace wordring::detail
 		*/
 		tree_node_iterator() noexcept
 			: m_c(nullptr)
-			, m_parent(0)
-			, m_index(0)
+			, m_parent(null_value)
+			, m_index(null_value)
 		{
 		}
 
@@ -160,7 +160,7 @@ namespace wordring::detail
 				assert(m_parent != 0 && (d + m_parent)->m_child != m_index); // 先頭をデクリメントしようとしている。
 				m_index = (d + m_index)->m_prev;
 			}
-			else if (m_parent != 0) // prevが無い場合(endは無い)
+			else if (m_parent != 0) // prevが無い(endは無い)且つ根以外の場合
 			{
 				index_type child = (d + m_parent)->m_child; // begin
 				m_index = (d + child)->m_prev; // endの前はtail
@@ -213,14 +213,18 @@ namespace wordring::detail
 			return std::make_reverse_iterator(begin());
 		}
 
+		/*! @brief 親を指すイテレータを取得する
+		
+		根に親は無い。
+		根以外は必ず親がある。
+		根でこのメンバを呼び出すとデフォルト構築された空のイテレータが返る。
+		*/
 		tree_node_iterator parent() const
 		{
-			//assert(m_index != null_value);
+			auto* d = m_c->data();
 
-			auto* h = m_c->data();
-
-			index_type p = (h + m_index)->m_parent;                             // 親
-			index_type pp = (p == null_value) ? null_value : (h + p)->m_parent; // 親の親
+			index_type p = m_parent;                                            // 親
+			index_type pp = (p == null_value) ? null_value : (d + p)->m_parent; // 親の親
 
 			return tree_node_iterator(*m_c, pp, p);
 		}
@@ -234,14 +238,18 @@ namespace wordring::detail
 	template <typename Container1, typename Container2>
 	inline bool operator==(tree_node_iterator<Container1> const& lhs, tree_node_iterator<Container2> const& rhs)
 	{
-		assert(const_cast<Container1 const*>(lhs.m_c) == const_cast<Container2 const*>(rhs.m_c));
 		return !(lhs != rhs);
 	}
 
 	template <typename Container1, typename Container2>
 	inline bool operator!=(tree_node_iterator<Container1> const& lhs, tree_node_iterator<Container2> const& rhs)
 	{
-		assert(const_cast<Container1 const*>(lhs.m_c) == const_cast<Container2 const*>(rhs.m_c));
+#ifndef NDEBUG
+		Container1 const* c1 = const_cast<Container1 const*>(lhs.m_c);
+		Container2 const* c2 = const_cast<Container1 const*>(lhs.m_c);
+		assert(c1 == c2 || c1 == nullptr || c2 == nullptr);
+#endif
+
 		return lhs.m_index != rhs.m_index || lhs.m_parent != rhs.m_parent;
 	}
 }
@@ -284,7 +292,7 @@ namespace wordring
 	<b>%tree</b> の内部は、一つの配列にすべてのノードが収まっている。
 	各ノードは、親、子の先頭、前の兄弟、次の兄弟の各インデックスを持つ。
 	配列のインデックスは <b>1</b> から始まる。
-	（もしあるなら）根のインデックスは <b>1</b> 。
+	根のインデックスは配列の <b>0</b> 番目の要素の <b>m_child</b> に格納される。
 
 	子の先頭の <b>m_prev</b> には最後の兄弟のインデックスを格納する。
 	先頭の子であることを確認するには、親の <b>m_child</b> と自身が一致するか調べる。
@@ -423,13 +431,13 @@ namespace wordring
 
 		@return 根を指すイテレータ
 		*/
-		iterator begin() noexcept { return iterator(m_c, 0, empty() ? 0 : 1); }
+		iterator begin() noexcept { return iterator(m_c, 0, m_c[0].m_child); }
 
 		/*! @brief 根を指すイテレータを返す
 
 		@return 根を指すイテレータ
 		*/
-		const_iterator begin() const noexcept { return const_iterator(m_c, 0, empty() ? 0 : 1); }
+		const_iterator begin() const noexcept { return const_iterator(m_c, 0, m_c[0].m_child); }
 
 		/*! @brief 根を指すイテレータを返す
 
@@ -465,9 +473,50 @@ namespace wordring
 
 		/*! @brief 格納している要素数を調べる
 
-		@return コンテナに格納されている要素の数
+		@return 木に格納されている要素の数
 		*/
-		size_type size() const noexcept { return m_c.front().m_parent; }
+		size_type size() const
+		{
+			size_type n = 0;
+			const_iterator it1 = begin();
+			const_iterator it2 = end();
+			
+			while (it1 != it2)
+			{
+				n += size(it1);
+				++it1;
+			}
+
+			return n;
+		}
+
+		/*! @brief 部分木が格納するノード数を調べる
+		
+		@param [in] pos 部分木の頂点を指すイテレータ
+
+		@return 頂点を含めて部分木が格納するノード数
+		*/
+		size_type size(const_iterator pos) const
+		{
+			index_type idx = pos.m_index;
+			if (idx == 0) return 0;
+
+			index_type n = 0;
+
+			node_type const* d = m_c.data();
+
+			std::vector<index_type> stack(1, idx);
+			while (!stack.empty())
+			{
+				index_type parent = stack.back();
+				stack.pop_back();
+				++n;
+
+				for (index_type i = (d + parent)->m_child; i != 0; i = (d + i)->m_next) stack.push_back(i);
+			}
+
+			return static_cast<std::make_unsigned_t<index_type>>(n);
+		}
 
 		/*! @brief 格納可能な要素の最大数を調べる
 
@@ -510,170 +559,14 @@ namespace wordring
 
 		挿入位置は、引数 <b>pos</b> の前。
 		子として追加されるのではないことに注意。
-
-		既存のノードが有る状態で根を挿入しようとした場合、何もせず end() を返す。
-		この場合、debug実行ではアサーションで失敗する。
-
-		@internal
-		<hr>
-
-		<b>idx</b> は、allocate() で取得した新規ノードのインデックス。
-		
-		<b>parent</b> は、引数 <b>pos</b> から取得する。
-
-		<b>child</b> は、 <b>parent</b> の <b>m_child</b> 。
-
-		<b>after</b> は、（挿入後にAfterとなるので）挿入位置のインデックス。
-		end() に挿入する場合、 <b>0</b> 。
-
-		<b>before</b> は
-		- <b>after</b> が有り
-			- 且つ <b>parent</b> の <b>m_child</b> が <b>after</b> でない場合、<b>after</b> の <b>m_prev</b> 
-			- それ以外の場合、 <b>0</b>
-		- <b>after</b> が無く
-			- <b>child</b> が有る場合、 <b>child</b> の <b>m_prev</b>
-			- それ以外の場合、 <b>0</b>
-		.
-
-		@par 根を挿入する場合
-
-		インデックス <b>0</b> の前に挿入。
-
-		- idx == 1
-		- before == 無し
-		- after == 無し
-
-		根は一つしか無い。
-		挿入前に格納数は <b>0</b> でなければならない。
-
-		@image html tree_node_insert_1.svg
-
-		@par ノードの間に挿入する場合
-
-		インデックス <b>3</b> の前に挿入。
-		- idx == 4
-		- before == 2
-		- after == 3
-
-		@image html tree_node_insert_2.svg
-
-		@par 子が無い場合の挿入
-
-		インデックス <b>0</b> の前に挿入。
-		- idx == 2
-		- before == 無し
-		- after == 無し
-
-		@image html tree_node_insert_3.svg
-
-		@par 先頭の前に挿入
-
-		インデックス <b>2</b> の前に挿入。
-		- idx == 4
-		- before == 無し
-		- after == 2
-
-		@image html tree_node_insert_4.svg
-		
-		@par 単独の子の先頭の前に挿入
-
-		インデックス <b>2</b> の前に挿入。
-		- idx == 3
-		- before == 無し
-		- after == 2
-
-		@image html tree_node_insert_5.svg
-
-		@par 終端の前に挿入
-
-		インデックス <b>0</b> の前に挿入。
-		- idx == 4
-		- before == 3
-		- after == 無し
-
-		@image html tree_node_insert_6.svg
-
-		@par 単独の子の終端の前に挿入
-
-		インデックス <b>0</b> の前に挿入。
-		- idx == 3
-		- before == 2
-		- after == 無し
-
-		@image html tree_node_insert_7.svg
-
-		<hr>
-
-		@par before が無い場合
-
-		- 親の <b>m_child</b> を新規挿入されるノードとする。
-		- <b>after</b> が有る場合
-			- <b>after</b> の <b>m_prev</b> には <b>tail</b> のインデックスが入っている。
-		- <b>after</b> が無い場合
-			-  <b>tail</b> は新規挿入されるノード自身である。
-		- 新規挿入されるノードの <b>m_prev</b> を <b>tail</b> とする。
-
-		@par before が有る場合
-
-		- <b>before</b> の <b>m_next</b> を新規挿入されるノードとする。
-
-		@par after が無い場合
-
-		- 新規挿入されるノードの <b>m_next</b> を <b>0</b> とする。
-		- <b>before</b> が有る場合
-			- 親の <b>m_child</b> には先頭のインデックスが入っている。
-			- 先頭の <b>m_prev</b> を新規挿入されるノードとする。
-		.
-
-		@par after が有る場合
-
-		-  <b>after</b> の <b>m_prev</b> を新規挿入されるノードとする。
-
 		*/
 		iterator insert(const_iterator pos, value_type&& value)
 		{
-			index_type parent = pos.m_parent;
-
-			assert(!(parent == 0 && m_c.size() != 1)); // 根に複数の要素を追加しようとしている。
-			if (parent == 0 && m_c.size() != 1) return end();
-
 			index_type idx = allocate(std::move(value));
 
-			node_type* d = m_c.data();
+			link(pos.m_parent, pos.m_index, idx);
 
-			index_type child  = (d + parent)->m_child;
-			index_type after  = pos.m_index;
-			index_type before = 0;
-			if (after != 0) before = (child != after) ? (d + after)->m_prev : 0;
-			else before = (child != 0) ? (d + child)->m_prev : 0;
-
-			if (before == 0)
-			{
-				(d + parent)->m_child = idx;
-				index_type tail = (after != 0) ? (d + after)->m_prev : idx;
-				(d + idx)->m_prev = tail;
-			}
-			else
-			{
-				(d + before)->m_next = idx;
-				(d + idx)->m_prev = before;
-			}
-
-			if (after == 0)
-			{
-				(d + idx)->m_next = 0;
-				if (before != 0) (d + child)->m_prev = idx;
-			}
-			else
-			{
-				(d + after)->m_prev = idx;
-				(d + idx)->m_next = after;
-			}
-			(d + idx)->m_parent = parent;
-
-			++d->m_parent;
-
-			return iterator(m_c, parent, idx);
+			return iterator(m_c, pos.m_parent, idx);
 		}
 
 		/*! @brief 部分木を挿入する
@@ -681,7 +574,7 @@ namespace wordring
 		@param [in] pos 挿入位置を指すイテレータ
 		@param [in] sub 部分木の根を指すイテレータ
 
-		@return posを返す
+		@return 挿入されたノードを指すイテレータ
 
 		@internal
 		<hr>
@@ -720,9 +613,9 @@ namespace wordring
 			std::vector<const_iterator> v;                // 探索スタック
 
 			// 根を特別扱い
+			iterator ret = insert(pos, *sub);
+			x.push_back({ ret, sub });
 			{
-				iterator it = insert(pos, *sub);
-				x.push_back({ it, sub });
 				auto it1 = sub.rbegin();
 				auto it2 = sub.rend();
 				while (it1 != it2) v.push_back((++it1).base());
@@ -747,7 +640,7 @@ namespace wordring
 				}
 			}
 
-			return iterator(m_c, pos.m_parent, pos.m_index);
+			return ret;
 		}
 
 		template <typename... Args>
@@ -756,120 +649,57 @@ namespace wordring
 			return insert(pos, value_type(std::forward<Args>(args)...));
 		}
 
+		/*! @brief 部分木を移動する
+		
+		@param [in] pos 挿入位置を指すイテレータ
+		@param [in] sub 部分木の根を指すイテレータ
+
+		@return 挿入されたノードを指すイテレータ
+
+		@throw std::invalid_argument 祖先を子孫へ移動させようとした場合
+
+		sub を根とする部分木を pos の前へ移動する。
+		循環するため、祖先を子孫へ移動する事は出来ない。
+		移動後は親が変わるため、sub は不正なイテレータとなる。
+		戻り値のイテレータを使うこと。
+
+		@internal
+		<hr>
+		親をたどって pos から sub に到達できる場合、祖先を子孫へ移動させようとしている。
+		*/
+		iterator move(const_iterator pos, const_iterator sub)
+		{
+			node_type* d = m_c.data();
+
+			for (index_type i = pos.m_index; i != 0; i = (d + i)->m_parent)
+			{
+				if (i == sub.m_index) throw std::invalid_argument("");
+			}
+
+			unlink(sub.m_index);
+			link(pos.m_parent, pos.m_index, sub.m_index);
+
+			return iterator(m_c, pos.m_parent, sub.m_index);
+		}
+
 		/*! @brief 要素を削除する
 		
 		@param [in] pos 削除する要素を指すイテレータ
 		
 		@return 削除された要素の次を指すイテレータ
 
-		@internal
-		<hr>
-
-		@par 根を削除
-
-		- idx == 1
-		- before == 0
-		- after == 0
-
-		@image html tree_node_erase_1.svg
-
-		@par ノードの間を削除
-
-		- idx == 4
-		- before == 2
-		- after == 3
-
-		@image html tree_node_erase_2.svg
-
-		@par 先頭の前を削除
-
-		- idx == 4
-		- before == 0
-		- after == 2
-
-		@image html tree_node_erase_4.svg
-
-		@par 削除で単独になる子の前を削除
-
-		- idx == 4
-		- before == 0
-		- after == 2
-
-		@image html tree_node_erase_5.svg
-
-		@par 終端の前を削除
-
-		- idx == 4
-		- before == 3
-		- after == 0
-
-		@image html tree_node_erase_6.svg
-
-		@par 削除で単独になる子の終端の前を削除
-
-		- idx == 3
-		- before == 2
-		- after == 0
-
-		@image html tree_node_erase_7.svg
-
-		<hr>
-
-		- <b>parent</b> 、 <b>idx</b> は、 <b>pos</b> から取得する。
-		- <b>child</b> は、 <b>parent</b> の <b>m_child</b> 。
-		- <b>beore</b> は、 <b>idx</b> の <b>m_prev</b> 。
-		- <b>child</b> が <b>idx</b> と一致する場合、<b>before</b> は無い。
-		- <b>after</b> は、 <b>idx</b> の <b>m_next</b> 。
-
-		子孫の解放は、リンクの付け替えが発生しないので、単に開放するのみである。
-
-		<hr>
-
-		- <b>before</b> が無い場合
-			- 削除後、 <b>after</b> が <b>先頭</b> になる
-				-  <b>after</b> が有る場合
-					- <b>parent</b> の <b>m_child</b> に <b>after</b> を設定する。
-					- <b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b> 
-					 （ココには今、末尾のインデックスが入っている）を設定する。
-				-  <b>after</b> が無い場合、 <b>parent</b> の <b>m_child</b> に <b>0</b> を設定する。
-		- <b>before</b> が有る場合
-			- <b>before</b> の <b>m_next</b> に <b>after</b> を設定する。
-			  <b>after</b> が無い場合、末尾を表す <b>0</b> なので、そのまま設定できる。
-		- <b>after</b> が無い場合
-			- 削除後、 <b>before</b> が <b>末尾</b> になる
-				- <b>before</b> が有る（つまり兄弟がある）場合、 <b>parent</b> の <b>m_child</b>
-				  （つまり <b>child</b> ）に <b>before</b> を設定する。
-		- <b>after</b> が有る場合
-			- <b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b> を設定する。
-		.
 		*/
 		iterator erase(const_iterator pos)
 		{
-			index_type idx = pos.m_index;
-			assert(idx != 0);
-			index_type parent = pos.m_parent;
+			assert(pos.m_index != 0);
 
 			node_type* d = m_c.data();
-			index_type child = (d + parent)->m_child;
-			index_type before = (child != idx) ? (d + idx)->m_prev : 0;
-			index_type after = (d + idx)->m_next;
 
-			if (before == 0)
-			{
-				if (after == 0) (d + parent)->m_child = 0;
-				else
-				{
-					(d + parent)->m_child = after;
-					(d + after)->m_prev = (d + idx)->m_prev;
-				}
-			}
-			else (d + before)->m_next = after;
+			index_type idx    = pos.m_index;
+			index_type parent = pos.m_parent;
+			index_type after  = (d + idx)->m_next;
 
-			if (after == 0)
-			{
-				if (before != 0) (d + child)->m_prev = before;
-			}
-			else (d + after)->m_prev = (d + idx)->m_prev;
+			unlink(idx);
 
 			// 解放
 			std::vector<index_type> v(1, idx);
@@ -877,9 +707,8 @@ namespace wordring
 			{
 				index_type i = v.back();
 				v.pop_back();
-				for (index_type j = (d + i)->m_child; j != 0; j = (d + j)->m_next) v.push_back(j);
+				for (index_type j = (d + i)->m_child; j != 0; j = (d + j)->m_next) v.push_back(j); // i の子をスタックに追加
 
-				--d->m_parent;
 				free(i);
 			}
 
@@ -946,6 +775,281 @@ namespace wordring
 			// 使わない項目を0に初期化
 			(d + idx)->m_parent = 0;
 			(d + idx)->m_child = 0;
+		}
+
+		/*! @brief ノードを木に挿入する
+
+		@param [in] parent 挿入位置の親のインデックス
+		@param [in] pos    挿入位置のインデックス
+		@param [in] idx    挿入するノードのインデックス
+
+		挿入するノードは allocate() で得た新規ノード、あるいは unlink() された既存のノード。
+		挿入するノードは子を持つ部分木であっても、子を持たない単独のノードでも構わない。
+
+		@internal
+		<hr>
+
+		<b>idx</b> は、allocate() で取得した新規ノードのインデックス。
+
+		<b>parent</b> は、引数 <b>pos</b> から取得する。
+
+		<b>child</b> は、 <b>parent</b> の <b>m_child</b> 。
+
+		<b>after</b> は、（挿入後にAfterとなるので）挿入位置のインデックス。
+		end() に挿入する場合、 <b>0</b> 。
+
+		<b>before</b> は
+		- <b>after</b> が有り
+			- 且つ <b>parent</b> の <b>m_child</b> が <b>after</b> でない場合、<b>after</b> の <b>m_prev</b>
+			- それ以外の場合、 <b>0</b>
+		- <b>after</b> が無く
+			- <b>child</b> が有る場合、 <b>child</b> の <b>m_prev</b>
+			- それ以外の場合、 <b>0</b>
+		.
+
+		@par 根を挿入する場合
+
+		インデックス <b>0</b> の前に挿入。
+
+		- idx == 1
+		- before == 無し
+		- after == 無し
+
+		根は一つしか無い。
+		挿入前に格納数は <b>0</b> でなければならない。
+
+		@image html tree_node_insert_1.svg
+
+		@par ノードの間に挿入する場合
+
+		インデックス <b>3</b> の前に挿入。
+		- idx == 4
+		- before == 2
+		- after == 3
+
+		@image html tree_node_insert_2.svg
+
+		@par 子が無い場合の挿入
+
+		インデックス <b>0</b> の前に挿入。
+		- idx == 2
+		- before == 無し
+		- after == 無し
+
+		@image html tree_node_insert_3.svg
+
+		@par 先頭の前に挿入
+
+		インデックス <b>2</b> の前に挿入。
+		- idx == 4
+		- before == 無し
+		- after == 2
+
+		@image html tree_node_insert_4.svg
+
+		@par 単独の子の先頭の前に挿入
+
+		インデックス <b>2</b> の前に挿入。
+		- idx == 3
+		- before == 無し
+		- after == 2
+
+		@image html tree_node_insert_5.svg
+
+		@par 終端の前に挿入
+
+		インデックス <b>0</b> の前に挿入。
+		- idx == 4
+		- before == 3
+		- after == 無し
+
+		@image html tree_node_insert_6.svg
+
+		@par 単独の子の終端の前に挿入
+
+		インデックス <b>0</b> の前に挿入。
+		- idx == 3
+		- before == 2
+		- after == 無し
+
+		@image html tree_node_insert_7.svg
+
+		<hr>
+
+		@par before が無い場合
+
+		- 親の <b>m_child</b> を新規挿入されるノードとする。
+		- <b>after</b> が有る場合
+			- <b>after</b> の <b>m_prev</b> には <b>tail</b> のインデックスが入っている。
+		- <b>after</b> が無い場合
+			-  <b>tail</b> は新規挿入されるノード自身である。
+		- 新規挿入されるノードの <b>m_prev</b> を <b>tail</b> とする。
+
+		@par before が有る場合
+
+		- <b>before</b> の <b>m_next</b> を新規挿入されるノードとする。
+
+		@par after が無い場合
+
+		- 新規挿入されるノードの <b>m_next</b> を <b>0</b> とする。
+		- <b>before</b> が有る場合
+			- 親の <b>m_child</b> には先頭のインデックスが入っている。
+			- 先頭の <b>m_prev</b> を新規挿入されるノードとする。
+		.
+
+		@par after が有る場合
+
+		-  <b>after</b> の <b>m_prev</b> を新規挿入されるノードとする。
+
+		*/
+		void link(index_type parent, index_type pos, index_type idx)
+		{
+			node_type* d = m_c.data();
+
+			index_type child = (d + parent)->m_child;
+			index_type after = pos;
+			index_type before = 0;
+			if (after != 0) before = (child != after) ? (d + after)->m_prev : 0;
+			else before = (child != 0) ? (d + child)->m_prev : 0;
+
+			if (before == 0)
+			{
+				(d + parent)->m_child = idx;
+				index_type tail = (after != 0) ? (d + after)->m_prev : idx;
+				(d + idx)->m_prev = tail;
+			}
+			else
+			{
+				(d + before)->m_next = idx;
+				(d + idx)->m_prev = before;
+			}
+
+			if (after == 0)
+			{
+				(d + idx)->m_next = 0;
+				if (before != 0) (d + child)->m_prev = idx;
+			}
+			else
+			{
+				(d + after)->m_prev = idx;
+				(d + idx)->m_next = after;
+			}
+			(d + idx)->m_parent = parent;
+		}
+
+		/*! @brief ノードを木から取り除く
+		
+		@param [in] idx 取り除くノード
+
+		この関数で取り除いたノードは木の中に無く、解放もされていない。
+		取り除いた後、どこかに挿入するか、解放する必要が有る。
+
+		@internal
+		<hr>
+
+		@par 根を除去
+
+		- idx == 1
+		- before == 0
+		- after == 0
+
+		@image html tree_node_erase_1.svg
+
+		@par ノードの間を除去
+
+		- idx == 4
+		- before == 2
+		- after == 3
+
+		@image html tree_node_erase_2.svg
+
+		@par 先頭の前を除去
+
+		- idx == 4
+		- before == 0
+		- after == 2
+
+		@image html tree_node_erase_4.svg
+
+		@par 除去で単独になる子の前を除去
+
+		- idx == 4
+		- before == 0
+		- after == 2
+
+		@image html tree_node_erase_5.svg
+
+		@par 終端の前を除去
+
+		- idx == 4
+		- before == 3
+		- after == 0
+
+		@image html tree_node_erase_6.svg
+
+		@par 除去で単独になる子の終端の前を除去
+
+		- idx == 3
+		- before == 2
+		- after == 0
+
+		@image html tree_node_erase_7.svg
+
+		<hr>
+
+		- <b>parent</b> 、 <b>idx</b> は、 <b>pos</b> から取得する。
+		- <b>child</b> は、 <b>parent</b> の <b>m_child</b> 。
+		- <b>beore</b> は、 <b>idx</b> の <b>m_prev</b> 。
+		- <b>child</b> が <b>idx</b> と一致する場合、<b>before</b> は無い。
+		- <b>after</b> は、 <b>idx</b> の <b>m_next</b> 。
+
+		<hr>
+
+		- <b>before</b> が無い場合
+			- 除去後、 <b>after</b> が <b>先頭</b> になる
+				-  <b>after</b> が有る場合
+					- <b>parent</b> の <b>m_child</b> に <b>after</b> を設定する。
+					- <b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b>
+					 （ココには今、末尾のインデックスが入っている）を設定する。
+				-  <b>after</b> が無い場合、 <b>parent</b> の <b>m_child</b> に <b>0</b> を設定する。
+		- <b>before</b> が有る場合
+			- <b>before</b> の <b>m_next</b> に <b>after</b> を設定する。
+			  <b>after</b> が無い場合、末尾を表す <b>0</b> なので、そのまま設定できる。
+		- <b>after</b> が無い場合
+			- 除去後、 <b>before</b> が <b>末尾</b> になる
+				- <b>before</b> が有る（つまり兄弟がある）場合、 <b>parent</b> の <b>m_child</b>
+				  （つまり <b>child</b> ）に <b>before</b> を設定する。
+		- <b>after</b> が有る場合
+			- <b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b> を設定する。
+		.
+		*/
+		void unlink(index_type idx)
+		{
+			assert(idx != 0);
+
+			node_type* d = m_c.data();
+
+			index_type parent = (d + idx)->m_parent;
+			index_type child  = (d + parent)->m_child;
+			index_type before = (child != idx) ? (d + idx)->m_prev : 0;
+			index_type after  = (d + idx)->m_next;
+
+			if (before == 0)
+			{
+				if (after == 0) (d + parent)->m_child = 0;
+				else
+				{
+					(d + parent)->m_child = after;
+					(d + after)->m_prev = (d + idx)->m_prev;
+				}
+			}
+			else (d + before)->m_next = after;
+
+			if (after == 0)
+			{
+				if (before != 0) (d + child)->m_prev = before;
+			}
+			else (d + after)->m_prev = (d + idx)->m_prev;
 		}
 
 	protected:

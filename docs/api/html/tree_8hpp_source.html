@@ -239,7 +239,7 @@ $(function() {
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
 <div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">tree_node_iterator</a> parent()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            assert(m_index != null_value);</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;            <span class="comment">//assert(m_index != null_value);</span></div>
 <div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
 <div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;            <span class="keyword">auto</span>* h = m_c-&gt;data();</div>
 <div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
@@ -359,9 +359,9 @@ $(function() {
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160; </div>
 <div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        <span class="comment">// イテレータ ----------------------------------------------------------</span></div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160; </div>
-<div class="line"><a name="l00426"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f">  426</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f">begin</a>() noexcept { <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, 0, <a class="code" href="classwordring_1_1tree.html#ab3e8fa94280be89759e11b06e7750209">empty</a>() ? 0 : 1); }</div>
+<div class="line"><a name="l00426"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f">  426</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f">begin</a>() noexcept { <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, 0, m_c[0].m_child); }</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
-<div class="line"><a name="l00432"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a0bd1a913daafd5002fef271e2e63f700">  432</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> <a class="code" href="classwordring_1_1tree.html#a0bd1a913daafd5002fef271e2e63f700">begin</a>() const noexcept { <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>(m_c, 0, <a class="code" href="classwordring_1_1tree.html#ab3e8fa94280be89759e11b06e7750209">empty</a>() ? 0 : 1); }</div>
+<div class="line"><a name="l00432"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a0bd1a913daafd5002fef271e2e63f700">  432</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> <a class="code" href="classwordring_1_1tree.html#a0bd1a913daafd5002fef271e2e63f700">begin</a>() const noexcept { <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>(m_c, 0, m_c[0].m_child); }</div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160; </div>
 <div class="line"><a name="l00438"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a97207e7ebd5e84da97174b84109be9fe">  438</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> <a class="code" href="classwordring_1_1tree.html#a97207e7ebd5e84da97174b84109be9fe">cbegin</a>() const noexcept { <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f">begin</a>(); }</div>
 <div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160; </div>
@@ -394,200 +394,233 @@ $(function() {
 <div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(pos, value_type(value));</div>
 <div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;        }</div>
 <div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160; </div>
-<div class="line"><a name="l00633"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">  633</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">insert</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, value_type&amp;&amp; value)</div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;        {</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;            index_type parent = pos.m_parent;</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160; </div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;            assert(!(parent == 0 &amp;&amp; m_c.size() != 1)); <span class="comment">// 根に複数の要素を追加しようとしている。</span></div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            <span class="keywordflow">if</span> (parent == 0 &amp;&amp; m_c.size() != 1) <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1tree.html#a918dc89c668cf65da211e8f8b1596ada">end</a>();</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160; </div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;            index_type idx = <a class="code" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">allocate</a>(std::move(value));</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; </div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; </div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;            index_type child  = (d + parent)-&gt;m_child;</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;            index_type after  = pos.m_index;</div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            index_type before = 0;</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;            <span class="keywordflow">if</span> (after != 0) before = (child != after) ? (d + after)-&gt;m_prev : 0;</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;            <span class="keywordflow">else</span> before = (child != 0) ? (d + child)-&gt;m_prev : 0;</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160; </div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;            <span class="keywordflow">if</span> (before == 0)</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;            {</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;                (d + parent)-&gt;m_child = idx;</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;                index_type tail = (after != 0) ? (d + after)-&gt;m_prev : idx;</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;                (d + idx)-&gt;m_prev = tail;</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;            }</div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;            {</div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;                (d + before)-&gt;m_next = idx;</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                (d + idx)-&gt;m_prev = before;</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;            }</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160; </div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;            <span class="keywordflow">if</span> (after == 0)</div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;            {</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;                (d + idx)-&gt;m_next = 0;</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;                <span class="keywordflow">if</span> (before != 0) (d + child)-&gt;m_prev = idx;</div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;            }</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;            {</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;                (d + after)-&gt;m_prev = idx;</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;                (d + idx)-&gt;m_next = after;</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;            }</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;            (d + idx)-&gt;m_parent = parent;</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160; </div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;            ++d-&gt;m_parent;</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160; </div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, parent, idx);</div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;        }</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160; </div>
-<div class="line"><a name="l00717"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">  717</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">insert</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> sub)</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;        {</div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;            std::vector&lt;std::array&lt;const_iterator, 2&gt;&gt; x; <span class="comment">// 親スタック [pos, sub]</span></div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;            std::vector&lt;const_iterator&gt; v;                <span class="comment">// 探索スタック</span></div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160; </div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;            <span class="comment">// 根を特別扱い</span></div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;            {</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;                <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> it = <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(pos, *sub);</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;                x.push_back({ it, sub });</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;                <span class="keyword">auto</span> it1 = sub.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a3b011bebe03153e2fea867ad0805d5f6">rbegin</a>();</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;                <span class="keyword">auto</span> it2 = sub.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a88a2d7e53b6d597be4f2ac6c3399c099">rend</a>();</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;                <span class="keywordflow">while</span> (it1 != it2) v.push_back((++it1).base());</div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;            }</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160; </div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;            <span class="comment">// 根以外</span></div>
-<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;            <span class="keywordflow">while</span> (!v.empty())</div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;            {</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;                <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> it = v.back();</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                v.pop_back();</div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160; </div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;                <span class="keywordflow">if</span> (it.parent() != x.back()[1]) x.pop_back();</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;                <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> p = <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(x.back()[0].end(), *it);</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160; </div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;                <span class="keywordflow">if</span> (it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a04f9ddcb5d7462ad5d55766113c6bf64">begin</a>() != it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a2ef5a1bbba9ae714b533ca2e0dd12942">end</a>()) <span class="comment">// 子がある</span></div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;                {</div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;                    <span class="keyword">auto</span> it1 = it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a3b011bebe03153e2fea867ad0805d5f6">rbegin</a>();</div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;                    <span class="keyword">auto</span> it2 = it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a88a2d7e53b6d597be4f2ac6c3399c099">rend</a>();</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;                    <span class="keywordflow">while</span>(it1 != it2)  v.push_back((++it1).base());</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160; </div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;                    x.push_back({ p, it });</div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;                }</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;            }</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160; </div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, pos.m_parent, pos.m_index);</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        }</div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160; </div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        iterator emplace(const_iterator pos, Args&amp;&amp;... args)</div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;        {</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(pos, value_type(std::forward&lt;Args&gt;(args)...));</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        }</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
-<div class="line"><a name="l00846"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">  846</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">erase</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos)</div>
+<div class="line"><a name="l00514"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">  514</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">insert</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, value_type&amp;&amp; value)</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;        {</div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;            index_type idx = <a class="code" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">allocate</a>(std::move(value));</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;            <a class="code" href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">link</a>(pos.m_parent, pos.m_index, idx);</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160; </div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, pos.m_parent, idx);</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        }</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160; </div>
+<div class="line"><a name="l00561"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">  561</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">insert</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> sub)</div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;        {</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;            std::vector&lt;std::array&lt;const_iterator, 2&gt;&gt; x; <span class="comment">// 親スタック [pos, sub]</span></div>
+<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;            std::vector&lt;const_iterator&gt; v;                <span class="comment">// 探索スタック</span></div>
+<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;            <span class="comment">// 根を特別扱い</span></div>
+<div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160;            {</div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;                <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> it = <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(pos, *sub);</div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;                x.push_back({ it, sub });</div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;                <span class="keyword">auto</span> it1 = sub.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a3b011bebe03153e2fea867ad0805d5f6">rbegin</a>();</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;                <span class="keyword">auto</span> it2 = sub.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a88a2d7e53b6d597be4f2ac6c3399c099">rend</a>();</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;                <span class="keywordflow">while</span> (it1 != it2) v.push_back((++it1).base());</div>
+<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;            }</div>
+<div class="line"><a name="l00574"></a><span class="lineno">  574</span>&#160; </div>
+<div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160;            <span class="comment">// 根以外</span></div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;            <span class="keywordflow">while</span> (!v.empty())</div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;            {</div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;                <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> it = v.back();</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;                v.pop_back();</div>
+<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160; </div>
+<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160;                <span class="keywordflow">if</span> (it.parent() != x.back()[1]) x.pop_back();</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160;                <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> p = <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(x.back()[0].end(), *it);</div>
+<div class="line"><a name="l00583"></a><span class="lineno">  583</span>&#160; </div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;                <span class="keywordflow">if</span> (it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a04f9ddcb5d7462ad5d55766113c6bf64">begin</a>() != it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a2ef5a1bbba9ae714b533ca2e0dd12942">end</a>()) <span class="comment">// 子がある</span></div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                {</div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;                    <span class="keyword">auto</span> it1 = it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a3b011bebe03153e2fea867ad0805d5f6">rbegin</a>();</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;                    <span class="keyword">auto</span> it2 = it.<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html#a88a2d7e53b6d597be4f2ac6c3399c099">rend</a>();</div>
+<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;                    <span class="keywordflow">while</span>(it1 != it2)  v.push_back((++it1).base());</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160; </div>
+<div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                    x.push_back({ p, it });</div>
+<div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                }</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            }</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, pos.m_parent, pos.m_index);</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        }</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        iterator emplace(const_iterator pos, Args&amp;&amp;... args)</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;        {</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">insert</a>(pos, value_type(std::forward&lt;Args&gt;(args)...));</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;        }</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160; </div>
+<div class="line"><a name="l00617"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a6b9929951e79e0da8a78fba512d4bc37">  617</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a6b9929951e79e0da8a78fba512d4bc37">move</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> sub)</div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;        {</div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160; </div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;            <span class="keywordflow">for</span> (index_type i = pos.m_index; i != 0; i = (d + i)-&gt;m_parent)</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;            {</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;                <span class="keywordflow">if</span> (i == sub.m_index) <span class="keywordflow">throw</span> std::invalid_argument(<span class="stringliteral">&quot;&quot;</span>);</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;            }</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160; </div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;            <a class="code" href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">unlink</a>(sub.m_index);</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;            <a class="code" href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">link</a>(pos.m_index, sub.m_index);</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160; </div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>();</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;        }</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160; </div>
+<div class="line"><a name="l00639"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">  639</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> <a class="code" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">erase</a>(<a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos)</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;        {</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;            assert(pos.m_index != 0);</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160; </div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;            index_type idx    = pos.m_index;</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            index_type parent = pos.m_parent;</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;            index_type after  = (d + idx)-&gt;m_next;</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160; </div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;            <a class="code" href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">unlink</a>(idx);</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;            <span class="comment">// 解放</span></div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;            std::vector&lt;index_type&gt; v(1, idx);</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;            <span class="keywordflow">while</span> (!v.empty())</div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;            {</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;                index_type i = v.back();</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;                v.pop_back();</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;                <span class="keywordflow">for</span> (index_type j = (d + i)-&gt;m_child; j != 0; j = (d + j)-&gt;m_next) v.push_back(j); <span class="comment">// i の子をスタックに追加</span></div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160; </div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;                --d-&gt;m_parent; <span class="comment">// size() を減らす</span></div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;                <a class="code" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">free</a>(i);</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;            }</div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160; </div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, parent, after);</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;        }</div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160; </div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;        <span class="comment">// 内部 ---------------------------------------------------------------</span></div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160; </div>
+<div class="line"><a name="l00675"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">  675</a></span>&#160;        index_type <a class="code" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">allocate</a>(value_type&amp;&amp; val)</div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;        {</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;            index_type idx = d-&gt;m_next;</div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160; </div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;            <span class="keywordflow">if</span> (idx == 0)</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;            {</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;                idx = m_c.size();</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;                m_c.emplace_back(<a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>{ 0, 0, 0, 0, std::move(val) });</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            }</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;            {</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;                index_type before = (d + idx)-&gt;m_prev;</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;                index_type after = (d + idx)-&gt;m_next;</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;                (d + idx)-&gt;m_value = std::move(val);</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160; </div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;                (d + before)-&gt;m_next = after;</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;                (d + after)-&gt;m_prev = before;</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;            }</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160; </div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;            <span class="keywordflow">return</span> idx;</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;        }</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160; </div>
+<div class="line"><a name="l00702"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">  702</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">free</a>(index_type idx)</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        {</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;            assert(idx &lt; m_c.size());</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160; </div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;            <span class="comment">// idx を超えない最後の未使用ノードを探す</span></div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;            index_type before = 0;</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;            <span class="keywordflow">for</span> (index_type i = d-&gt;m_next; i != 0 &amp;&amp; i &lt; idx; i = (d + before)-&gt;m_next) before = i;</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160; </div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;            <span class="comment">// idx を超える最初の未使用ノードを探す</span></div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;            index_type after = (d + before)-&gt;m_next;</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160; </div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;            <span class="comment">// リンクを張り替える</span></div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;            (d + before)-&gt;m_next = idx;</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160; </div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;            (d + idx)-&gt;m_prev = before;</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;            (d + idx)-&gt;m_next = after;</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;            (d + after)-&gt;m_prev = idx;</div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160; </div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;            <span class="comment">// 使わない項目を0に初期化</span></div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;            (d + idx)-&gt;m_parent = 0;</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;            (d + idx)-&gt;m_child = 0;</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        }</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
+<div class="line"><a name="l00846"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">  846</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">link</a>(index_type parent, index_type pos, index_type idx)</div>
 <div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;        {</div>
-<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;            index_type idx = pos.m_index;</div>
-<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;            assert(idx != 0);</div>
-<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;            index_type parent = pos.m_parent;</div>
-<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160; </div>
-<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
-<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;            index_type child = (d + parent)-&gt;m_child;</div>
-<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;            index_type before = (child != idx) ? (d + idx)-&gt;m_prev : 0;</div>
-<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;            index_type after = (d + idx)-&gt;m_next;</div>
-<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160; </div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;            <span class="keywordflow">if</span> (before == 0)</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;            {</div>
-<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160;                <span class="keywordflow">if</span> (after == 0) (d + parent)-&gt;m_child = 0;</div>
-<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;                {</div>
-<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;                    (d + parent)-&gt;m_child = after;</div>
-<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;                    (d + after)-&gt;m_prev = (d + idx)-&gt;m_prev;</div>
-<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;                }</div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160; </div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160; </div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160;            <span class="comment">//assert(!(parent == 0 &amp;&amp; m_c.size() != 1)); // 根に複数の要素を追加しようとしている。</span></div>
+<div class="line"><a name="l00852"></a><span class="lineno">  852</span>&#160;            <span class="comment">//if (parent == 0 &amp;&amp; m_c.size() != 1) return end();</span></div>
+<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160; </div>
+<div class="line"><a name="l00854"></a><span class="lineno">  854</span>&#160;            index_type child = (d + parent)-&gt;m_child;</div>
+<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;            index_type after = pos;</div>
+<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;            index_type before = 0;</div>
+<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;            <span class="keywordflow">if</span> (after != 0) before = (child != after) ? (d + after)-&gt;m_prev : 0;</div>
+<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160;            <span class="keywordflow">else</span> before = (child != 0) ? (d + child)-&gt;m_prev : 0;</div>
+<div class="line"><a name="l00859"></a><span class="lineno">  859</span>&#160; </div>
+<div class="line"><a name="l00860"></a><span class="lineno">  860</span>&#160;            <span class="keywordflow">if</span> (before == 0)</div>
+<div class="line"><a name="l00861"></a><span class="lineno">  861</span>&#160;            {</div>
+<div class="line"><a name="l00862"></a><span class="lineno">  862</span>&#160;                (d + parent)-&gt;m_child = idx;</div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;                index_type tail = (after != 0) ? (d + after)-&gt;m_prev : idx;</div>
+<div class="line"><a name="l00864"></a><span class="lineno">  864</span>&#160;                (d + idx)-&gt;m_prev = tail;</div>
 <div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;            }</div>
-<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;            <span class="keywordflow">else</span> (d + before)-&gt;m_next = after;</div>
-<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160; </div>
-<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;            <span class="keywordflow">if</span> (after == 0)</div>
-<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;            {</div>
-<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;                <span class="keywordflow">if</span> (before != 0) (d + child)-&gt;m_prev = before;</div>
-<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160;            }</div>
-<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;            <span class="keywordflow">else</span> (d + after)-&gt;m_prev = (d + idx)-&gt;m_prev;</div>
-<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160; </div>
-<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;            <span class="comment">// 解放</span></div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;            std::vector&lt;index_type&gt; v(1, idx);</div>
-<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;            <span class="keywordflow">while</span> (!v.empty())</div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;            {</div>
-<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;                index_type i = v.back();</div>
-<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;                v.pop_back();</div>
-<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;                <span class="keywordflow">for</span> (index_type j = (d + i)-&gt;m_child; j != 0; j = (d + j)-&gt;m_next) v.push_back(j);</div>
-<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160; </div>
-<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;                --d-&gt;m_parent;</div>
-<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160;                <a class="code" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">free</a>(i);</div>
-<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;            }</div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;            {</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160;                (d + before)-&gt;m_next = idx;</div>
+<div class="line"><a name="l00869"></a><span class="lineno">  869</span>&#160;                (d + idx)-&gt;m_prev = before;</div>
+<div class="line"><a name="l00870"></a><span class="lineno">  870</span>&#160;            }</div>
+<div class="line"><a name="l00871"></a><span class="lineno">  871</span>&#160; </div>
+<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;            <span class="keywordflow">if</span> (after == 0)</div>
+<div class="line"><a name="l00873"></a><span class="lineno">  873</span>&#160;            {</div>
+<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;                (d + idx)-&gt;m_next = 0;</div>
+<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;                <span class="keywordflow">if</span> (before != 0) (d + child)-&gt;m_prev = idx;</div>
+<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;            }</div>
+<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160;            <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00878"></a><span class="lineno">  878</span>&#160;            {</div>
+<div class="line"><a name="l00879"></a><span class="lineno">  879</span>&#160;                (d + after)-&gt;m_prev = idx;</div>
+<div class="line"><a name="l00880"></a><span class="lineno">  880</span>&#160;                (d + idx)-&gt;m_next = after;</div>
+<div class="line"><a name="l00881"></a><span class="lineno">  881</span>&#160;            }</div>
+<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;            (d + idx)-&gt;m_parent = parent;</div>
+<div class="line"><a name="l00883"></a><span class="lineno">  883</span>&#160; </div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;            ++d-&gt;m_parent;</div>
 <div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160; </div>
-<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>(m_c, parent, after);</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;            <span class="comment">//return iterator(m_c, parent, idx);</span></div>
 <div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160;        }</div>
 <div class="line"><a name="l00888"></a><span class="lineno">  888</span>&#160; </div>
-<div class="line"><a name="l00889"></a><span class="lineno">  889</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;        <span class="comment">// 内部 ---------------------------------------------------------------</span></div>
-<div class="line"><a name="l00891"></a><span class="lineno">  891</span>&#160; </div>
-<div class="line"><a name="l00898"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">  898</a></span>&#160;        index_type <a class="code" href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">allocate</a>(value_type&amp;&amp; val)</div>
-<div class="line"><a name="l00899"></a><span class="lineno">  899</span>&#160;        {</div>
-<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
-<div class="line"><a name="l00901"></a><span class="lineno">  901</span>&#160;            index_type idx = d-&gt;m_next;</div>
-<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160; </div>
-<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;            <span class="keywordflow">if</span> (idx == 0)</div>
-<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;            {</div>
-<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160;                idx = m_c.size();</div>
-<div class="line"><a name="l00906"></a><span class="lineno">  906</span>&#160;                m_c.emplace_back(<a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>{ 0, 0, 0, 0, std::move(val) });</div>
-<div class="line"><a name="l00907"></a><span class="lineno">  907</span>&#160;            }</div>
-<div class="line"><a name="l00908"></a><span class="lineno">  908</span>&#160;            <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;            {</div>
-<div class="line"><a name="l00910"></a><span class="lineno">  910</span>&#160;                index_type before = (d + idx)-&gt;m_prev;</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;                index_type after = (d + idx)-&gt;m_next;</div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;                (d + idx)-&gt;m_value = std::move(val);</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160; </div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160;                (d + before)-&gt;m_next = after;</div>
-<div class="line"><a name="l00915"></a><span class="lineno">  915</span>&#160;                (d + after)-&gt;m_prev = before;</div>
-<div class="line"><a name="l00916"></a><span class="lineno">  916</span>&#160;            }</div>
-<div class="line"><a name="l00917"></a><span class="lineno">  917</span>&#160; </div>
-<div class="line"><a name="l00918"></a><span class="lineno">  918</span>&#160;            <span class="keywordflow">return</span> idx;</div>
-<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;        }</div>
-<div class="line"><a name="l00920"></a><span class="lineno">  920</span>&#160; </div>
-<div class="line"><a name="l00925"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">  925</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">free</a>(index_type idx)</div>
-<div class="line"><a name="l00926"></a><span class="lineno">  926</span>&#160;        {</div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;            assert(idx &lt; m_c.size());</div>
-<div class="line"><a name="l00928"></a><span class="lineno">  928</span>&#160; </div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160; </div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;            <span class="comment">// idx を超えない最後の未使用ノードを探す</span></div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160;            index_type before = 0;</div>
-<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;            <span class="keywordflow">for</span> (index_type i = d-&gt;m_next; i != 0 &amp;&amp; i &lt; idx; i = (d + before)-&gt;m_next) before = i;</div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160; </div>
-<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;            <span class="comment">// idx を超える最初の未使用ノードを探す</span></div>
-<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;            index_type after = (d + before)-&gt;m_next;</div>
-<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160; </div>
-<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160;            <span class="comment">// リンクを張り替える</span></div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;            (d + before)-&gt;m_next = idx;</div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160; </div>
-<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;            (d + idx)-&gt;m_prev = before;</div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;            (d + idx)-&gt;m_next = after;</div>
-<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160; </div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;            (d + after)-&gt;m_prev = idx;</div>
-<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160; </div>
-<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;            <span class="comment">// 使わない項目を0に初期化</span></div>
-<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;            (d + idx)-&gt;m_parent = 0;</div>
-<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;            (d + idx)-&gt;m_child = 0;</div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;        }</div>
-<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160; </div>
-<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;        container  m_c;</div>
-<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;    };</div>
-<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;}</div>
+<div class="line"><a name="l00975"></a><span class="lineno"><a class="line" href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">  975</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">unlink</a>(index_type idx)</div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;        {</div>
+<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;            assert(idx != 0);</div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;            <a class="code" href="structwordring_1_1detail_1_1tree__node.html">node_type</a>* d = m_c.data();</div>
+<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160; </div>
+<div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160;            index_type parent = (d + idx)-&gt;m_parent;</div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;            index_type child  = (d + parent)-&gt;m_child;</div>
+<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;            index_type before = (child != idx) ? (d + idx)-&gt;m_prev : 0;</div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;            index_type after  = (d + idx)-&gt;m_next;</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;            <span class="keywordflow">if</span> (before == 0)</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160;            {</div>
+<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;                <span class="keywordflow">if</span> (after == 0) (d + parent)-&gt;m_child = 0;</div>
+<div class="line"><a name="l00988"></a><span class="lineno">  988</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;                {</div>
+<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;                    (d + parent)-&gt;m_child = after;</div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;                    (d + after)-&gt;m_prev = (d + idx)-&gt;m_prev;</div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;                }</div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;            }</div>
+<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;            <span class="keywordflow">else</span> (d + before)-&gt;m_next = after;</div>
+<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160; </div>
+<div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;            <span class="keywordflow">if</span> (after == 0)</div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;            {</div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;                <span class="keywordflow">if</span> (before != 0) (d + child)-&gt;m_prev = before;</div>
+<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;            }</div>
+<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;            <span class="keywordflow">else</span> (d + after)-&gt;m_prev = (d + idx)-&gt;m_prev;</div>
+<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;        }</div>
+<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160; </div>
+<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;        container  m_c;</div>
+<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    };</div>
+<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasswordring_1_1detail_1_1tree__node__iterator_html_a2ef5a1bbba9ae714b533ca2e0dd12942"><div class="ttname"><a href="classwordring_1_1detail_1_1tree__node__iterator.html#a2ef5a1bbba9ae714b533ca2e0dd12942">wordring::detail::tree_node_iterator::end</a></div><div class="ttdeci">tree_node_iterator end() const</div><div class="ttdoc">子の終端を指すイテレータを取得する</div><div class="ttdef"><b>Definition:</b> tree.hpp:196</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1tree__node__iterator_html_add853bc8e131744fc2c72d9893e5c763"><div class="ttname"><a href="classwordring_1_1detail_1_1tree__node__iterator.html#add853bc8e131744fc2c72d9893e5c763">wordring::detail::tree_node_iterator::tree_node_iterator</a></div><div class="ttdeci">tree_node_iterator(container &amp;c, index_type parent, index_type idx) noexcept</div><div class="ttdoc">イテレータを作成する</div><div class="ttdef"><b>Definition:</b> tree.hpp:92</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_aa038466bf7bf8ac32355bceb08d9035c"><div class="ttname"><a href="classwordring_1_1tree.html#aa038466bf7bf8ac32355bceb08d9035c">wordring::tree::size</a></div><div class="ttdeci">size_type size() const noexcept</div><div class="ttdoc">格納している要素数を調べる</div><div class="ttdef"><b>Definition:</b> tree.hpp:470</div></div>
-<div class="ttc" id="aclasswordring_1_1tree_html_a107028da2204d20b07bf198aa35bb852"><div class="ttname"><a href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">wordring::tree::allocate</a></div><div class="ttdeci">index_type allocate(value_type &amp;&amp;val)</div><div class="ttdoc">ノードを確保する</div><div class="ttdef"><b>Definition:</b> tree.hpp:898</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a107028da2204d20b07bf198aa35bb852"><div class="ttname"><a href="classwordring_1_1tree.html#a107028da2204d20b07bf198aa35bb852">wordring::tree::allocate</a></div><div class="ttdeci">index_type allocate(value_type &amp;&amp;val)</div><div class="ttdoc">ノードを確保する</div><div class="ttdef"><b>Definition:</b> tree.hpp:675</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1tree__node__iterator_html_a976af64adf97c9c00e437e28a84de122"><div class="ttname"><a href="classwordring_1_1detail_1_1tree__node__iterator.html#a976af64adf97c9c00e437e28a84de122">wordring::detail::tree_node_iterator::operator*</a></div><div class="ttdeci">auto &amp; operator*() const</div><div class="ttdoc">イテレータが指す要素の参照を取得する</div><div class="ttdef"><b>Definition:</b> tree.hpp:113</div></div>
-<div class="ttc" id="aclasswordring_1_1tree_html_a5d448b620515e1df7b3783e174559cb9"><div class="ttname"><a href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">wordring::tree::erase</a></div><div class="ttdeci">iterator erase(const_iterator pos)</div><div class="ttdoc">要素を削除する</div><div class="ttdef"><b>Definition:</b> tree.hpp:846</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a5d448b620515e1df7b3783e174559cb9"><div class="ttname"><a href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">wordring::tree::erase</a></div><div class="ttdeci">iterator erase(const_iterator pos)</div><div class="ttdoc">要素を削除する</div><div class="ttdef"><b>Definition:</b> tree.hpp:639</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1tree__node__iterator_html_a193f7b470b479c217c9507e6950332a4"><div class="ttname"><a href="classwordring_1_1detail_1_1tree__node__iterator.html#a193f7b470b479c217c9507e6950332a4">wordring::detail::tree_node_iterator::operator-&gt;</a></div><div class="ttdeci">auto operator-&gt;() const</div><div class="ttdoc">イテレータが指す要素のポインタを取得する</div><div class="ttdef"><b>Definition:</b> tree.hpp:122</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html"><div class="ttname"><a href="classwordring_1_1tree.html">wordring::tree</a></div><div class="ttdoc">木コンテナ</div><div class="ttdef"><b>Definition:</b> tree.hpp:15</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_a27673c8c32afaff4c9557916a90692f5"><div class="ttname"><a href="classwordring_1_1tree.html#a27673c8c32afaff4c9557916a90692f5">wordring::tree::cend</a></div><div class="ttdeci">const_iterator cend() const noexcept</div><div class="ttdoc">根の終端を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> tree.hpp:456</div></div>
@@ -605,14 +638,17 @@ $(function() {
 <div class="ttc" id="aclasswordring_1_1tree_html_a918dc89c668cf65da211e8f8b1596ada"><div class="ttname"><a href="classwordring_1_1tree.html#a918dc89c668cf65da211e8f8b1596ada">wordring::tree::end</a></div><div class="ttdeci">iterator end() noexcept</div><div class="ttdoc">根の終端を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> tree.hpp:444</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1tree__node__iterator_html"><div class="ttname"><a href="classwordring_1_1detail_1_1tree__node__iterator.html">wordring::detail::tree_node_iterator</a></div><div class="ttdef"><b>Definition:</b> tree.hpp:45</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_ab3e8fa94280be89759e11b06e7750209"><div class="ttname"><a href="classwordring_1_1tree.html#ab3e8fa94280be89759e11b06e7750209">wordring::tree::empty</a></div><div class="ttdeci">bool empty() const noexcept</div><div class="ttdoc">要素を格納していないことを調べる</div><div class="ttdef"><b>Definition:</b> tree.hpp:464</div></div>
-<div class="ttc" id="aclasswordring_1_1tree_html_a4b1d299d662878ab1b1c575368a5a4e6"><div class="ttname"><a href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">wordring::tree::insert</a></div><div class="ttdeci">iterator insert(const_iterator pos, const_iterator sub)</div><div class="ttdoc">部分木を挿入する</div><div class="ttdef"><b>Definition:</b> tree.hpp:717</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a4b1d299d662878ab1b1c575368a5a4e6"><div class="ttname"><a href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">wordring::tree::insert</a></div><div class="ttdeci">iterator insert(const_iterator pos, const_iterator sub)</div><div class="ttdoc">部分木を挿入する</div><div class="ttdef"><b>Definition:</b> tree.hpp:561</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_a61c409d4dc46962d774894b130b8c66f"><div class="ttname"><a href="classwordring_1_1tree.html#a61c409d4dc46962d774894b130b8c66f">wordring::tree::tree</a></div><div class="ttdeci">tree(value_type &amp;&amp;value, allocator_type const &amp;alloc=allocator_type())</div><div class="ttdoc">要素からコンテナを構築する</div><div class="ttdef"><b>Definition:</b> tree.hpp:382</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a689b043d7979535c1c39228c8c1bbd9d"><div class="ttname"><a href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">wordring::tree::link</a></div><div class="ttdeci">void link(index_type parent, index_type pos, index_type idx)</div><div class="ttdoc">ノードを木に挿入する</div><div class="ttdef"><b>Definition:</b> tree.hpp:846</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_aeac50b4ba415e57df484200fac9f9c1a"><div class="ttname"><a href="classwordring_1_1tree.html#aeac50b4ba415e57df484200fac9f9c1a">wordring::tree::end</a></div><div class="ttdeci">const_iterator end() const noexcept</div><div class="ttdoc">根の終端を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> tree.hpp:450</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a3d411fab5b000f30b976bf355b9aff3f"><div class="ttname"><a href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">wordring::tree::unlink</a></div><div class="ttdeci">void unlink(index_type idx)</div><div class="ttdoc">ノードを木から取り除く</div><div class="ttdef"><b>Definition:</b> tree.hpp:975</div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1tree__node__iterator_html_a04f9ddcb5d7462ad5d55766113c6bf64"><div class="ttname"><a href="classwordring_1_1detail_1_1tree__node__iterator.html#a04f9ddcb5d7462ad5d55766113c6bf64">wordring::detail::tree_node_iterator::begin</a></div><div class="ttdeci">tree_node_iterator begin() const</div><div class="ttdoc">子の先頭を指すイテレータを取得する</div><div class="ttdef"><b>Definition:</b> tree.hpp:188</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a6b9929951e79e0da8a78fba512d4bc37"><div class="ttname"><a href="classwordring_1_1tree.html#a6b9929951e79e0da8a78fba512d4bc37">wordring::tree::move</a></div><div class="ttdeci">iterator move(const_iterator pos, const_iterator sub)</div><div class="ttdoc">部分木を移動する</div><div class="ttdef"><b>Definition:</b> tree.hpp:617</div></div>
 <div class="ttc" id="anamespacewordring_1_1detail_html"><div class="ttname"><a href="namespacewordring_1_1detail.html">wordring::detail</a></div></div>
 <div class="ttc" id="astructwordring_1_1detail_1_1tree__node_html"><div class="ttname"><a href="structwordring_1_1detail_1_1tree__node.html">wordring::detail::tree_node</a></div><div class="ttdef"><b>Definition:</b> tree.hpp:25</div></div>
-<div class="ttc" id="aclasswordring_1_1tree_html_a50c9d91ff90e176fd7f2078456a67aa7"><div class="ttname"><a href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">wordring::tree::insert</a></div><div class="ttdeci">iterator insert(const_iterator pos, value_type &amp;&amp;value)</div><div class="ttdoc">ノードを挿入する</div><div class="ttdef"><b>Definition:</b> tree.hpp:633</div></div>
-<div class="ttc" id="aclasswordring_1_1tree_html_a218d362072b005500e1b6e80ebc9c375"><div class="ttname"><a href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">wordring::tree::free</a></div><div class="ttdeci">void free(index_type idx)</div><div class="ttdoc">ノードを解放する</div><div class="ttdef"><b>Definition:</b> tree.hpp:925</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a50c9d91ff90e176fd7f2078456a67aa7"><div class="ttname"><a href="classwordring_1_1tree.html#a50c9d91ff90e176fd7f2078456a67aa7">wordring::tree::insert</a></div><div class="ttdeci">iterator insert(const_iterator pos, value_type &amp;&amp;value)</div><div class="ttdoc">ノードを挿入する</div><div class="ttdef"><b>Definition:</b> tree.hpp:514</div></div>
+<div class="ttc" id="aclasswordring_1_1tree_html_a218d362072b005500e1b6e80ebc9c375"><div class="ttname"><a href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">wordring::tree::free</a></div><div class="ttdeci">void free(index_type idx)</div><div class="ttdoc">ノードを解放する</div><div class="ttdef"><b>Definition:</b> tree.hpp:702</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_adb99557d9d6694d0d4aaf7e04fb1077d"><div class="ttname"><a href="classwordring_1_1tree.html#adb99557d9d6694d0d4aaf7e04fb1077d">wordring::tree::insert</a></div><div class="ttdeci">iterator insert(const_iterator pos, value_type const &amp;value)</div><div class="ttdoc">要素を挿入する</div><div class="ttdef"><b>Definition:</b> tree.hpp:499</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_aaeb7da745c3df8a90057284898795d21"><div class="ttname"><a href="classwordring_1_1tree.html#aaeb7da745c3df8a90057284898795d21">wordring::tree::max_size</a></div><div class="ttdeci">size_type max_size() const noexcept</div><div class="ttdoc">格納可能な要素の最大数を調べる</div><div class="ttdef"><b>Definition:</b> tree.hpp:476</div></div>
 <div class="ttc" id="aclasswordring_1_1tree_html_a135bcb3bf868b5d3fc741e2411630c23"><div class="ttname"><a href="classwordring_1_1tree.html#a135bcb3bf868b5d3fc741e2411630c23">wordring::tree::tree</a></div><div class="ttdeci">tree(value_type const &amp;value, allocator_type const &amp;alloc=allocator_type())</div><div class="ttdoc">要素からコンテナを構築する</div><div class="ttdef"><b>Definition:</b> tree.hpp:371</div></div>

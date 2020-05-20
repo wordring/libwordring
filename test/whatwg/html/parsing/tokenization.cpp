@@ -47,7 +47,7 @@ namespace
 			node_pointer    m_it;
 		};
 
-		std::deque<stack_entry> m_open_element_stack;
+		std::deque<stack_entry> m_stack;
 		stack_entry m_dummy_stack_entry;
 
 		error_name m_ec;

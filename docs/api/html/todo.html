@@ -44,7 +44,14 @@ $(function() {
 <div class="contents">
 <div class="textblock"><dl class="reflist">
 <dt>メンバ <a class="el" href="classwordring_1_1tree.html#a4b1d299d662878ab1b1c575368a5a4e6">wordring::tree::insert</a>  (const_iterator pos, const_iterator sub)</dt>
-<dd><a class="anchor" id="_todo000001"></a>スタックはインデックスが有れば十分で、イテレータを入れておくのは冗長。 今後、性能を改良するときに考慮する必要がある。 </dd>
+<dd><a class="anchor" id="_todo000001"></a>スタックはインデックスが有れば十分で、イテレータを入れておくのは冗長。 今後、性能を改良するときに考慮する必要がある。  </dd>
+<dt>メンバ <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a840f2e7d15014f7a7fb9ea5baa97b5a3">wordring::whatwg::html::parsing::input_stream&lt; T &gt;::push_eof</a>  ()</dt>
+<dd><a class="anchor" id="_todo000002"></a>複数回呼び出された場合の対処  </dd>
+<dt>メンバ <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a3b3ab7542490afe67bdb8c9fb6fcc9ec">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, NodePolicy &gt;::push_formatting_element_list</a>  (node_pointer it, <a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">start_tag_token</a> const &amp;token)</dt>
+<dd><a class="anchor" id="_todo000003"></a> 要素が作成されたときと同じ比較とは、ケース・インセンシティブ、名前空間接頭辞の分離前の比較を意味するかもしれない。 あるいは、実際にトークンと比較するのかもしれない。 この実装は、スクリプトをサポートしないため、トークンと要素の属性は違いが無い。 したがって、要素同士を比較している。<ul>
+<li><a href="https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements">https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements</a> </li>
+</ul>
+</dd>
 </dl>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

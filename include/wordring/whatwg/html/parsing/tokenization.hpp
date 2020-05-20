@@ -213,6 +213,14 @@ namespace wordring::whatwg::html::parsing
 				else if (m_current_tag_token_id == 3) p->on_emit_token(m_end_tag_token);
 			}
 			else static_cast<this_type*>(this)->on_emit_token(token);
+
+			if constexpr (std::is_same_v<Token, start_tag_token>)
+			{
+				if (token.m_self_closing_flag && !token.m_acknowledged_self_closing_flag)
+				{
+					report_error(error_name::non_void_html_element_start_tag_with_trailing_solidus);
+				}
+			}
 		}
 
 		void emit_token(char32_t cp)
@@ -1558,7 +1566,7 @@ namespace wordring::whatwg::html::parsing
 
 				this_type const* P = static_cast<this_type const*>(this);
 
-				if (!P->m_open_element_stack.empty())
+				if (!P->m_stack.empty())
 				{
 					if (in_html_namespace())
 					{

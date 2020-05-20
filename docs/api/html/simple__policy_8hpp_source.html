@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: simple_policy.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_60775d12a87b61a33d2f427675caa884.html">whatwg</a></li><li class="navelem"><a class="el" href="dir_c3582e4effb217c0de2b54b9446ec214.html">html</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">simple_policy.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/whatwg/html/parsing/token.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg_1_1html.html">wordring::whatwg::html</a></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;{</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String, <span class="keyword">typename</span> Container, <span class="keywordtype">bool</span> IsFragmentsParser = false&gt;</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1simple__policy.html">    8</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__policy.html">simple_policy</a></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;    {</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">bool</span> constexpr is_fragments_parser = IsFragmentsParser;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keyword">using</span> string_type    = String;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">using</span> container_type = Container;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> node_type    = simple_node&lt;String&gt;;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">using</span> node_pointer = <span class="keyword">typename</span> container_type::iterator;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__document.html">document_type</a>               = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__document.html">simple_document&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__document__type.html">document_type_type</a>          = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__document__type.html">simple_document_type&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__document__fragment.html">document_fragment_type</a>      = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__document__fragment.html">simple_document_fragment&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__element.html">element_type</a>                = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__element.html">simple_element&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__text.html">text_type</a>                   = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__text.html">simple_text&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__processing__instruction.html">processing_instruction_type</a> = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__comment.html">comment_type</a>                = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__comment.html">simple_comment&lt;string_type&gt;</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">using</span> attribute_type    = <span class="keyword">typename</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1simple__attr.html">element_type::attribute_type</a>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">using</span> attribute_pointer = <span class="keyword">typename</span> element_type::const_iterator;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    };</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="anamespacewordring_1_1whatwg_1_1html_html"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1html.html">wordring::whatwg::html</a></div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__attr_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__attr.html">wordring::whatwg::html::simple_attr</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:20</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__comment_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__comment.html">wordring::whatwg::html::simple_comment</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:582</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__text_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__text.html">wordring::whatwg::html::simple_text</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:501</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__processing__instruction_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__processing__instruction.html">wordring::whatwg::html::simple_processing_instruction</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:551</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__document__fragment_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__document__fragment.html">wordring::whatwg::html::simple_document_fragment</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:307</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__document__type_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__document__type.html">wordring::whatwg::html::simple_document_type</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:259</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__document_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__document.html">wordring::whatwg::html::simple_document</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:203</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__policy_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__policy.html">wordring::whatwg::html::simple_policy</a></div><div class="ttdef"><b>Definition:</b> simple_policy.hpp:8</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1simple__element_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1simple__element.html">wordring::whatwg::html::simple_element</a></div><div class="ttdef"><b>Definition:</b> simple_node.hpp:339</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

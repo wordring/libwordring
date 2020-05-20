@@ -177,6 +177,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="e
 template&lt;typename... Args&gt; </td></tr>
 <tr class="memitem:aa4226bbaf850e5743be1f33cf8117f57"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>emplace</b> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, Args &amp;&amp;... args)</td></tr>
 <tr class="separator:aa4226bbaf850e5743be1f33cf8117f57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b9929951e79e0da8a78fba512d4bc37"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a6b9929951e79e0da8a78fba512d4bc37">move</a> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos, <a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> sub)</td></tr>
+<tr class="memdesc:a6b9929951e79e0da8a78fba512d4bc37"><td class="mdescLeft">&#160;</td><td class="mdescRight">部分木を移動する  <a href="classwordring_1_1tree.html#a6b9929951e79e0da8a78fba512d4bc37">[詳解]</a><br /></td></tr>
+<tr class="separator:a6b9929951e79e0da8a78fba512d4bc37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d448b620515e1df7b3783e174559cb9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">erase</a> (<a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a> pos)</td></tr>
 <tr class="memdesc:a5d448b620515e1df7b3783e174559cb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素を削除する  <a href="classwordring_1_1tree.html#a5d448b620515e1df7b3783e174559cb9">[詳解]</a><br /></td></tr>
 <tr class="separator:a5d448b620515e1df7b3783e174559cb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,6 +204,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = std:
 <tr class="memitem:a218d362072b005500e1b6e80ebc9c375"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">free</a> (index_type idx)</td></tr>
 <tr class="memdesc:a218d362072b005500e1b6e80ebc9c375"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを解放する  <a href="classwordring_1_1tree.html#a218d362072b005500e1b6e80ebc9c375">[詳解]</a><br /></td></tr>
 <tr class="separator:a218d362072b005500e1b6e80ebc9c375"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a689b043d7979535c1c39228c8c1bbd9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">link</a> (index_type parent, index_type pos, index_type idx)</td></tr>
+<tr class="memdesc:a689b043d7979535c1c39228c8c1bbd9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを木に挿入する  <a href="classwordring_1_1tree.html#a689b043d7979535c1c39228c8c1bbd9d">[詳解]</a><br /></td></tr>
+<tr class="separator:a689b043d7979535c1c39228c8c1bbd9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d411fab5b000f30b976bf355b9aff3f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">unlink</a> (index_type idx)</td></tr>
+<tr class="memdesc:a3d411fab5b000f30b976bf355b9aff3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを木から取り除く  <a href="classwordring_1_1tree.html#a3d411fab5b000f30b976bf355b9aff3f">[詳解]</a><br /></td></tr>
+<tr class="separator:a3d411fab5b000f30b976bf355b9aff3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 限定公開変数類</h2></td></tr>
@@ -230,13 +239,13 @@ template&lt;typename Container1 &gt; </td></tr>
 </div>
 <dl class="section user"><dt>イテレータ</dt><dd></dd></dl>
 <p><b>tree</b> において要素間の移動はイテレータを使う。 <b>tree</b> のメンバ関数 <b><a class="el" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f" title="根を指すイテレータを返す">begin()</a></b> で根を指すイテレータを取得する。</p>
-<p>イテレータのメンバ関数 <b>parent()</b> で親を取得する。 イテレータのメンバ関数 <b><a class="el" href="classwordring_1_1tree.html#a084de3cd92f0d8350d0849f9ec03420f" title="根を指すイテレータを返す">begin()</a></b> で先頭の子を取得する。 イテレータのメンバ関数 <b><a class="el" href="classwordring_1_1tree.html#a918dc89c668cf65da211e8f8b1596ada" title="根の終端を指すイテレータを返す">end()</a></b> で子の終端を取得する。 イテレータのメンバ関数 <b>operator++()</b> で次の兄弟を取得する。</p>
+<p>イテレータのメンバ関数 <b>parent()</b> で親を取得する。 イテレータのメンバ関数 <b>begin()</b> で先頭の子を取得する。 イテレータのメンバ関数 <b>end()</b> で子の終端を取得する。 イテレータのメンバ関数 <b>operator++()</b> で次の兄弟を取得する。</p>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_iterator_concept.svg" style="pointer-events: none;"></object>
 </div>
 <hr  />
  <dl class="section user"><dt>木ノード</dt><dd></dd></dl>
-<p><b>tree</b> の内部は、一つの配列にすべてのノードが収まっている。 各ノードは、親、子の先頭、前の兄弟、次の兄弟の各インデックスを持つ。 配列のインデックスは <b>1</b> から始まる。 （もしあるなら）根のインデックスは <b>1</b> 。</p>
+<p><b>tree</b> の内部は、一つの配列にすべてのノードが収まっている。 各ノードは、親、子の先頭、前の兄弟、次の兄弟の各インデックスを持つ。 配列のインデックスは <b>1</b> から始まる。 根のインデックスは配列の <b>0</b> 番目の要素の <b>m_child</b> に格納される。</p>
 <p>子の先頭の <b>m_prev</b> には最後の兄弟のインデックスを格納する。 先頭の子であることを確認するには、親の <b>m_child</b> と自身が一致するか調べる。</p>
 <p>イテレータは、指すノードのインデックスと親のインデックスを保持する。 終端を指すイテレータは、インデックスを <b>0</b> として示す。 終端を指すイテレータも（デクリメントで必要となるため）親のインデックスを保持する。 根の親は <b>0</b> である。 終端を指すイテレータをデクリメントする場合、親の <b>m_child</b> の <b>m_prev</b> へ 移動する。</p>
 <div class="image">
@@ -723,8 +732,269 @@ template&lt;typename Container1 &gt; </td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>挿入されたノードを指すイテレータ</dd></dl>
-<p>挿入位置は、引数 <b>pos</b> の前。 子として追加されるのではないことに注意。</p>
-<p>既存のノードが有る状態で根を挿入しようとした場合、何もせず <a class="el" href="classwordring_1_1tree.html#a918dc89c668cf65da211e8f8b1596ada" title="根の終端を指すイテレータを返す">end()</a> を返す。 この場合、debug実行ではアサーションで失敗する。</p>
+<p>挿入位置は、引数 <b>pos</b> の前。 子として追加されるのではないことに注意。 </p>
+
+</div>
+</div>
+<a id="a4b1d299d662878ab1b1c575368a5a4e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b1d299d662878ab1b1c575368a5a4e6">&#9670;&nbsp;</a></span>insert() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::insert </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>sub</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>部分木を挿入する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>挿入位置を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sub</td><td>部分木の根を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>posを返す</dd></dl>
+<hr  />
+<dl class="section user"><dt>二つのスタックを使って部分木をコピーするアルゴリズム</dt><dd></dd></dl>
+<p>スタックを使った一般的な木探索アルゴリズムは、木の構造を保持しないため、 POPしたノードを「どこに挿入するか？」という情報を取り出せない。 そこで、挿入地点を記録する「<b>親スタック</b>」を使う。</p>
+<p><b>探索スタック</b>から値をPOPするとき、子が有ればすべて<b>探索スタック</b>にPUSHする。 同時に、親を<b>親スタック</b>にPUSHする。 <b>親スタック</b>にPUSHするとき、スタックTOPが挿入しようとするノードの親であるか検査する。 親でない場合、POPしてからノードをPUSHする。</p>
+<p>以上の操作で、<b>親スタック</b>のTOPは常に挿入地点となる。</p>
+<p>ところで、以上のアルゴリズムは、引数の部分木について親を記録する。 実際に必要なのは、挿入先の親である。 そこで、<b>親スタック</b>には、挿入先の親も一緒に記録する。</p>
+<div class="image">
+<object type="image/svg+xml" data="tree_node_insert_8.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>実装</dt><dd></dd></dl>
+<ul>
+<li>根の挿入位置は <b>pos</b> だが、それ以外は親スタックTOPの <b>end()</b> 。 従って、根だけ特別扱いが必要。</li>
+</ul>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">todo:</a></b></dt><dd>スタックはインデックスが有れば十分で、イテレータを入れておくのは冗長。 今後、性能を改良するときに考慮する必要がある。 </dd></dl>
+
+</div>
+</div>
+<a id="a6b9929951e79e0da8a78fba512d4bc37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b9929951e79e0da8a78fba512d4bc37">&#9670;&nbsp;</a></span>move()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::move </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>sub</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>部分木を移動する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>挿入位置を指すイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">sub</td><td>部分木の根を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="exception"><dt>例外</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">std::invalid_argument</td><td>祖先を子孫へ移動させようとした場合</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>sub を根とする部分木を pos の前へ移動する。 循環するため、祖先を子孫へ移動する事は出来ない。</p>
+<hr  />
+<p> 親をたどって pos から sub に到達できる場合、祖先を子孫へ移動させようとしている。 </p>
+
+</div>
+</div>
+<a id="a5d448b620515e1df7b3783e174559cb9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d448b620515e1df7b3783e174559cb9">&#9670;&nbsp;</a></span>erase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::erase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
+          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>要素を削除する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>削除する要素を指すイテレータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>削除された要素の次を指すイテレータ </dd></dl>
+
+</div>
+</div>
+<a id="a107028da2204d20b07bf198aa35bb852"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107028da2204d20b07bf198aa35bb852">&#9670;&nbsp;</a></span>allocate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">index_type wordring::tree::allocate </td>
+          <td>(</td>
+          <td class="paramtype">value_type &amp;&amp;&#160;</td>
+          <td class="paramname"><em>val</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを確保する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>格納する値</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>確保されたノードのインデックス値 </dd></dl>
+
+</div>
+</div>
+<a id="a218d362072b005500e1b6e80ebc9c375"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a218d362072b005500e1b6e80ebc9c375">&#9670;&nbsp;</a></span>free()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::tree::free </td>
+          <td>(</td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを解放する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">idx</td><td>解放するノードのインデックス </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a689b043d7979535c1c39228c8c1bbd9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a689b043d7979535c1c39228c8c1bbd9d">&#9670;&nbsp;</a></span>link()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::tree::link </td>
+          <td>(</td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>idx</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを木に挿入する </p>
 <hr  />
 <p><b>idx</b> は、allocate() で取得した新規ノードのインデックス。</p>
 <p><b>parent</b> は、引数 <b>pos</b> から取得する。</p>
@@ -841,8 +1111,8 @@ template&lt;typename Container1 &gt; </td></tr>
 
 </div>
 </div>
-<a id="a4b1d299d662878ab1b1c575368a5a4e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4b1d299d662878ab1b1c575368a5a4e6">&#9670;&nbsp;</a></span>insert() <span class="overload">[3/3]</span></h2>
+<a id="a3d411fab5b000f30b976bf355b9aff3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d411fab5b000f30b976bf355b9aff3f">&#9670;&nbsp;</a></span>unlink()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -851,90 +1121,30 @@ template&lt;typename Container1 &gt; </td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::insert </td>
+          <td class="memname">void wordring::tree::unlink </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
-          <td class="paramname"><em>pos</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
-          <td class="paramname"><em>sub</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>部分木を挿入する </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>挿入位置を指すイテレータ </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">sub</td><td>部分木の根を指すイテレータ</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>posを返す</dd></dl>
-<hr  />
-<dl class="section user"><dt>二つのスタックを使って部分木をコピーするアルゴリズム</dt><dd></dd></dl>
-<p>スタックを使った一般的な木探索アルゴリズムは、木の構造を保持しないため、 POPしたノードを「どこに挿入するか？」という情報を取り出せない。 そこで、挿入地点を記録する「<b>親スタック</b>」を使う。</p>
-<p><b>探索スタック</b>から値をPOPするとき、子が有ればすべて<b>探索スタック</b>にPUSHする。 同時に、親を<b>親スタック</b>にPUSHする。 <b>親スタック</b>にPUSHするとき、スタックTOPが挿入しようとするノードの親であるか検査する。 親でない場合、POPしてからノードをPUSHする。</p>
-<p>以上の操作で、<b>親スタック</b>のTOPは常に挿入地点となる。</p>
-<p>ところで、以上のアルゴリズムは、引数の部分木について親を記録する。 実際に必要なのは、挿入先の親である。 そこで、<b>親スタック</b>には、挿入先の親も一緒に記録する。</p>
-<div class="image">
-<object type="image/svg+xml" data="tree_node_insert_8.svg" style="pointer-events: none;"></object>
-</div>
-<dl class="section user"><dt>実装</dt><dd></dd></dl>
-<ul>
-<li>根の挿入位置は <b>pos</b> だが、それ以外は親スタックTOPの <b>end()</b> 。 従って、根だけ特別扱いが必要。</li>
-</ul>
-<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">todo:</a></b></dt><dd>スタックはインデックスが有れば十分で、イテレータを入れておくのは冗長。 今後、性能を改良するときに考慮する必要がある。 </dd></dl>
-
-</div>
-</div>
-<a id="a5d448b620515e1df7b3783e174559cb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d448b620515e1df7b3783e174559cb9">&#9670;&nbsp;</a></span>erase()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">iterator</a> wordring::tree::erase </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classwordring_1_1detail_1_1tree__node__iterator.html">const_iterator</a>&#160;</td>
-          <td class="paramname"><em>pos</em></td><td>)</td>
+          <td class="paramtype">index_type&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>要素を削除する </p>
+<p>ノードを木から取り除く </p>
 <dl class="params"><dt>引数</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pos</td><td>削除する要素を指すイテレータ</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">idx</td><td>取り除くノード</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>削除された要素の次を指すイテレータ</dd></dl>
+<p>この関数で取り除いたノードは木の中に無く、解放もされていない。 取り除いた後、どこかに挿入するか、解放する必要が有る。</p>
 <hr  />
-<dl class="section user"><dt>根を削除</dt><dd></dd></dl>
+<dl class="section user"><dt>根を除去</dt><dd></dd></dl>
 <ul>
 <li>idx == 1</li>
 <li>before == 0</li>
@@ -943,7 +1153,7 @@ template&lt;typename Container1 &gt; </td></tr>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_erase_1.svg" style="pointer-events: none;"></object>
 </div>
-<dl class="section user"><dt>ノードの間を削除</dt><dd></dd></dl>
+<dl class="section user"><dt>ノードの間を除去</dt><dd></dd></dl>
 <ul>
 <li>idx == 4</li>
 <li>before == 2</li>
@@ -952,7 +1162,7 @@ template&lt;typename Container1 &gt; </td></tr>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_erase_2.svg" style="pointer-events: none;"></object>
 </div>
-<dl class="section user"><dt>先頭の前を削除</dt><dd></dd></dl>
+<dl class="section user"><dt>先頭の前を除去</dt><dd></dd></dl>
 <ul>
 <li>idx == 4</li>
 <li>before == 0</li>
@@ -961,7 +1171,7 @@ template&lt;typename Container1 &gt; </td></tr>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_erase_4.svg" style="pointer-events: none;"></object>
 </div>
-<dl class="section user"><dt>削除で単独になる子の前を削除</dt><dd></dd></dl>
+<dl class="section user"><dt>除去で単独になる子の前を除去</dt><dd></dd></dl>
 <ul>
 <li>idx == 4</li>
 <li>before == 0</li>
@@ -970,7 +1180,7 @@ template&lt;typename Container1 &gt; </td></tr>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_erase_5.svg" style="pointer-events: none;"></object>
 </div>
-<dl class="section user"><dt>終端の前を削除</dt><dd></dd></dl>
+<dl class="section user"><dt>終端の前を除去</dt><dd></dd></dl>
 <ul>
 <li>idx == 4</li>
 <li>before == 3</li>
@@ -979,7 +1189,7 @@ template&lt;typename Container1 &gt; </td></tr>
 <div class="image">
 <object type="image/svg+xml" data="tree_node_erase_6.svg" style="pointer-events: none;"></object>
 </div>
-<dl class="section user"><dt>削除で単独になる子の終端の前を削除</dt><dd></dd></dl>
+<dl class="section user"><dt>除去で単独になる子の終端の前を除去</dt><dd></dd></dl>
 <ul>
 <li>idx == 3</li>
 <li>before == 2</li>
@@ -996,11 +1206,10 @@ template&lt;typename Container1 &gt; </td></tr>
 <li><b>child</b> が <b>idx</b> と一致する場合、<b>before</b> は無い。</li>
 <li><b>after</b> は、 <b>idx</b> の <b>m_next</b> 。</li>
 </ul>
-<p>子孫の解放は、リンクの付け替えが発生しないので、単に開放するのみである。</p>
 <hr  />
 <ul>
 <li><b>before</b> が無い場合<ul>
-<li>削除後、 <b>after</b> が <b>先頭</b> になる<ul>
+<li>除去後、 <b>after</b> が <b>先頭</b> になる<ul>
 <li><b>after</b> が有る場合<ul>
 <li><b>parent</b> の <b>m_child</b> に <b>after</b> を設定する。</li>
 <li><b>after</b> の <b>m_prev</b> に <b>idx</b> の <b>m_prev</b> （ココには今、末尾のインデックスが入っている）を設定する。</li>
@@ -1016,7 +1225,7 @@ template&lt;typename Container1 &gt; </td></tr>
 </ul>
 </li>
 <li><b>after</b> が無い場合<ul>
-<li>削除後、 <b>before</b> が <b>末尾</b> になる<ul>
+<li>除去後、 <b>before</b> が <b>末尾</b> になる<ul>
 <li><b>before</b> が有る（つまり兄弟がある）場合、 <b>parent</b> の <b>m_child</b> （つまり <b>child</b> ）に <b>before</b> を設定する。</li>
 </ul>
 </li>
@@ -1027,75 +1236,6 @@ template&lt;typename Container1 &gt; </td></tr>
 </ul>
 </li>
 </ul>
-
-</div>
-</div>
-<a id="a107028da2204d20b07bf198aa35bb852"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a107028da2204d20b07bf198aa35bb852">&#9670;&nbsp;</a></span>allocate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">index_type wordring::tree::allocate </td>
-          <td>(</td>
-          <td class="paramtype">value_type &amp;&amp;&#160;</td>
-          <td class="paramname"><em>val</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>ノードを確保する </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">val</td><td>格納する値</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>確保されたノードのインデックス値 </dd></dl>
-
-</div>
-</div>
-<a id="a218d362072b005500e1b6e80ebc9c375"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a218d362072b005500e1b6e80ebc9c375">&#9670;&nbsp;</a></span>free()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void wordring::tree::free </td>
-          <td>(</td>
-          <td class="paramtype">index_type&#160;</td>
-          <td class="paramname"><em>idx</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>ノードを解放する </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">idx</td><td>解放するノードのインデックス </td></tr>
-  </table>
-  </dd>
-</dl>
 
 </div>
 </div>

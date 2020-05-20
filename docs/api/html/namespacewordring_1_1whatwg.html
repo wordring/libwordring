@@ -80,12 +80,18 @@ $(function() {
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 型定義</h2></td></tr>
+<tr class="memitem:a1d6eb098eae833efd976fd194cee7654"><td class="memItemLeft" align="right" valign="top"><a id="a1d6eb098eae833efd976fd194cee7654"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>encoding_name</b> = encoding::name</td></tr>
+<tr class="separator:a1d6eb098eae833efd976fd194cee7654"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e9349649cdce7fd5e5d6c75ee497bbe"><td class="memItemLeft" align="right" valign="top"><a id="a0e9349649cdce7fd5e5d6c75ee497bbe"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>host</b> = std::variant&lt; <a class="el" href="structwordring_1_1whatwg_1_1domain.html">domain</a>, <a class="el" href="structwordring_1_1whatwg_1_1ipv4__address.html">ipv4_address</a>, <a class="el" href="structwordring_1_1whatwg_1_1ipv6__address.html">ipv6_address</a>, <a class="el" href="structwordring_1_1whatwg_1_1opaque__host.html">opaque_host</a>, <a class="el" href="structwordring_1_1whatwg_1_1empty__host.html">empty_host</a> &gt;</td></tr>
 <tr class="separator:a0e9349649cdce7fd5e5d6c75ee497bbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
+<tr class="memitem:a8de45b808d52de577949719a521fb9c2"><td class="memItemLeft" align="right" valign="top"><a id="a8de45b808d52de577949719a521fb9c2"></a>
+encoding_name&#160;</td><td class="memItemRight" valign="bottom"><b>get_encoding_name</b> (std::u32string_view label)</td></tr>
+<tr class="separator:a8de45b808d52de577949719a521fb9c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3274cdc6edc8bee8a9f295916ac84358"><td class="memItemLeft" align="right" valign="top"><a id="a3274cdc6edc8bee8a9f295916ac84358"></a>
 constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_byte</b> (char ch) noexcept</td></tr>
 <tr class="separator:a3274cdc6edc8bee8a9f295916ac84358"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,57 +112,57 @@ template&lt;typename InputIterator1 , typename InputIterator2 &gt; </td></tr>
 <tr class="memitem:abfe6199fee02b37013341b6687bdd8ce"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#abfe6199fee02b37013341b6687bdd8ce">isomorphic_decode</a> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
 <tr class="memdesc:abfe6199fee02b37013341b6687bdd8ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">同型にデコードする  <a href="namespacewordring_1_1whatwg.html#abfe6199fee02b37013341b6687bdd8ce">[詳解]</a><br /></td></tr>
 <tr class="separator:abfe6199fee02b37013341b6687bdd8ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54275cfbe3d6ac931e36519da0d22058"><td class="memItemLeft" align="right" valign="top"><a id="a54275cfbe3d6ac931e36519da0d22058"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_surrogate</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a54275cfbe3d6ac931e36519da0d22058"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbb1a250e32e038c888965fd6019aaa6"><td class="memItemLeft" align="right" valign="top"><a id="abbb1a250e32e038c888965fd6019aaa6"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_scalar_value</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:abbb1a250e32e038c888965fd6019aaa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7418314fa9918961dd77f0da21067d4f"><td class="memItemLeft" align="right" valign="top"><a id="a7418314fa9918961dd77f0da21067d4f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_noncharacter</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a7418314fa9918961dd77f0da21067d4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d83ca214de5cfc87702a5c3d2e738b2"><td class="memItemLeft" align="right" valign="top"><a id="a2d83ca214de5cfc87702a5c3d2e738b2"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_code_point</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a2d83ca214de5cfc87702a5c3d2e738b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27bec93b625c1e4f0cd5112d4d543a7a"><td class="memItemLeft" align="right" valign="top"><a id="a27bec93b625c1e4f0cd5112d4d543a7a"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_tab_or_newline</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a27bec93b625c1e4f0cd5112d4d543a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ec732f21c1c73b4e5ea5fbc54d29ae7"><td class="memItemLeft" align="right" valign="top"><a id="a7ec732f21c1c73b4e5ea5fbc54d29ae7"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_white_space</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a7ec732f21c1c73b4e5ea5fbc54d29ae7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a969bc2eaaf278f187c86684d24754c49"><td class="memItemLeft" align="right" valign="top"><a id="a969bc2eaaf278f187c86684d24754c49"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_c0_control</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a969bc2eaaf278f187c86684d24754c49"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acaa763c49209cbc45ca755d993be802b"><td class="memItemLeft" align="right" valign="top"><a id="acaa763c49209cbc45ca755d993be802b"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_c0_control_or_space</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:acaa763c49209cbc45ca755d993be802b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6a6b6fcd9f2006fb23c09a87ecdc3c8c"><td class="memItemLeft" align="right" valign="top"><a id="a6a6b6fcd9f2006fb23c09a87ecdc3c8c"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_control</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a6a6b6fcd9f2006fb23c09a87ecdc3c8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a056768fcbd07ef2701e5c0e26797d3b5"><td class="memItemLeft" align="right" valign="top"><a id="a056768fcbd07ef2701e5c0e26797d3b5"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_digit</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a056768fcbd07ef2701e5c0e26797d3b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5ffea8aa8ef04019b98f076bb1f6ddda"><td class="memItemLeft" align="right" valign="top"><a id="a5ffea8aa8ef04019b98f076bb1f6ddda"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_upper_hex_digit</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a5ffea8aa8ef04019b98f076bb1f6ddda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32552738c77a11fe712855f078885afd"><td class="memItemLeft" align="right" valign="top"><a id="a32552738c77a11fe712855f078885afd"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_lower_hex_digit</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a32552738c77a11fe712855f078885afd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4721031721077dd2c51f623415ab94c3"><td class="memItemLeft" align="right" valign="top"><a id="a4721031721077dd2c51f623415ab94c3"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_hex_digit</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a4721031721077dd2c51f623415ab94c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0973484178bd41e9e5ab0ebad34547f"><td class="memItemLeft" align="right" valign="top"><a id="ac0973484178bd41e9e5ab0ebad34547f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_upper_alpha</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:ac0973484178bd41e9e5ab0ebad34547f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2c59459a1d1391e0078b6e59220be0f"><td class="memItemLeft" align="right" valign="top"><a id="aa2c59459a1d1391e0078b6e59220be0f"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_lower_alpha</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:aa2c59459a1d1391e0078b6e59220be0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57e870b1ef1b178b50c164802844ef40"><td class="memItemLeft" align="right" valign="top"><a id="a57e870b1ef1b178b50c164802844ef40"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_alpha</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:a57e870b1ef1b178b50c164802844ef40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab190426d1f34e0545f145a417f8fe877"><td class="memItemLeft" align="right" valign="top"><a id="ab190426d1f34e0545f145a417f8fe877"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_alphanumeric</b> (uint32_t cp) noexcept</td></tr>
-<tr class="separator:ab190426d1f34e0545f145a417f8fe877"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4becf394b68aeedf2c718949853d8e"><td class="memItemLeft" align="right" valign="top"><a id="abd4becf394b68aeedf2c718949853d8e"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_surrogate</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:abd4becf394b68aeedf2c718949853d8e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21330adb34b1b05e54fec2c4b721076f"><td class="memItemLeft" align="right" valign="top"><a id="a21330adb34b1b05e54fec2c4b721076f"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_scalar_value</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a21330adb34b1b05e54fec2c4b721076f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6bfd903f2f658c763f720be19a11aff"><td class="memItemLeft" align="right" valign="top"><a id="ac6bfd903f2f658c763f720be19a11aff"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_noncharacter</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:ac6bfd903f2f658c763f720be19a11aff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d46a8387635b6aab83e409230438218"><td class="memItemLeft" align="right" valign="top"><a id="a5d46a8387635b6aab83e409230438218"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_code_point</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a5d46a8387635b6aab83e409230438218"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abde07a921b1bc6f573661080ed4b6e94"><td class="memItemLeft" align="right" valign="top"><a id="abde07a921b1bc6f573661080ed4b6e94"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_tab_or_newline</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:abde07a921b1bc6f573661080ed4b6e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae96e405678a755e689944d0d6d743278"><td class="memItemLeft" align="right" valign="top"><a id="ae96e405678a755e689944d0d6d743278"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_white_space</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:ae96e405678a755e689944d0d6d743278"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bf1f517200b4f8cea3eff78368659db"><td class="memItemLeft" align="right" valign="top"><a id="a1bf1f517200b4f8cea3eff78368659db"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_c0_control</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a1bf1f517200b4f8cea3eff78368659db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29751560f383d3f7791a43d7d5a1b9f4"><td class="memItemLeft" align="right" valign="top"><a id="a29751560f383d3f7791a43d7d5a1b9f4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_c0_control_or_space</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a29751560f383d3f7791a43d7d5a1b9f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24fec1771bb6bf26961582b29d7d2581"><td class="memItemLeft" align="right" valign="top"><a id="a24fec1771bb6bf26961582b29d7d2581"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_control</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a24fec1771bb6bf26961582b29d7d2581"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d6278f28916fc5380f7bc86ea4cd6b6"><td class="memItemLeft" align="right" valign="top"><a id="a4d6278f28916fc5380f7bc86ea4cd6b6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_digit</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a4d6278f28916fc5380f7bc86ea4cd6b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2552497dd4abeab2085b636ed1aa433"><td class="memItemLeft" align="right" valign="top"><a id="ae2552497dd4abeab2085b636ed1aa433"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_upper_hex_digit</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:ae2552497dd4abeab2085b636ed1aa433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a51fd6ba1e438db098d3c2510140237a3"><td class="memItemLeft" align="right" valign="top"><a id="a51fd6ba1e438db098d3c2510140237a3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_lower_hex_digit</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a51fd6ba1e438db098d3c2510140237a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8c1a6cbc8ceb7f3f9bbaab2756cd801"><td class="memItemLeft" align="right" valign="top"><a id="ab8c1a6cbc8ceb7f3f9bbaab2756cd801"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_hex_digit</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:ab8c1a6cbc8ceb7f3f9bbaab2756cd801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8423ded2c05ce199ada85992dd8b2135"><td class="memItemLeft" align="right" valign="top"><a id="a8423ded2c05ce199ada85992dd8b2135"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_upper_alpha</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a8423ded2c05ce199ada85992dd8b2135"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8647963ef23862c44608c78f4b83b0d4"><td class="memItemLeft" align="right" valign="top"><a id="a8647963ef23862c44608c78f4b83b0d4"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_lower_alpha</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a8647963ef23862c44608c78f4b83b0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abf5a78d5da1601701ab494ab55f37baa"><td class="memItemLeft" align="right" valign="top"><a id="abf5a78d5da1601701ab494ab55f37baa"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_alpha</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:abf5a78d5da1601701ab494ab55f37baa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30d363c66e05f1732acbe6b686f2d813"><td class="memItemLeft" align="right" valign="top"><a id="a30d363c66e05f1732acbe6b686f2d813"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_ascii_alphanumeric</b> (char32_t cp) noexcept</td></tr>
+<tr class="separator:a30d363c66e05f1732acbe6b686f2d813"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0e1cb875f8098d152c1880c93dffe95d"><td class="memTemplParams" colspan="2"><a id="a0e1cb875f8098d152c1880c93dffe95d"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:a0e1cb875f8098d152c1880c93dffe95d"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>isomorphic_encode</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
@@ -213,11 +219,11 @@ template&lt;typename InputIterator , typename OutputIterator , typename Conditio
 template&lt;typename InputIterator &gt; </td></tr>
 <tr class="memitem:aa6e5de5a141d56c8e3344fdce6039009"><td class="memTemplItemLeft" align="right" valign="top">InputIterator&#160;</td><td class="memTemplItemRight" valign="bottom"><b>skip_ascii_whitespace</b> (InputIterator first, InputIterator last)</td></tr>
 <tr class="separator:aa6e5de5a141d56c8e3344fdce6039009"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a02241562c62efa4c61bdca2e17b239df"><td class="memTemplParams" colspan="2"><a id="a02241562c62efa4c61bdca2e17b239df"></a>
+<tr class="memitem:aa19dd68dee0d603bb24af573a508c997"><td class="memTemplParams" colspan="2"><a id="aa19dd68dee0d603bb24af573a508c997"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:a02241562c62efa4c61bdca2e17b239df"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#a02241562c62efa4c61bdca2e17b239df">strictly_split_on_a_particular_delimiter</a> (InputIterator first, InputIterator last, OutputIterator output, uint32_t delimiter)</td></tr>
-<tr class="memdesc:a02241562c62efa4c61bdca2e17b239df"><td class="mdescLeft">&#160;</td><td class="mdescRight">特定の区切り文字で厳密に分割する <br /></td></tr>
-<tr class="separator:a02241562c62efa4c61bdca2e17b239df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa19dd68dee0d603bb24af573a508c997"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#aa19dd68dee0d603bb24af573a508c997">strictly_split_on_a_particular_delimiter</a> (InputIterator first, InputIterator last, OutputIterator output, char32_t delimiter)</td></tr>
+<tr class="memdesc:aa19dd68dee0d603bb24af573a508c997"><td class="mdescLeft">&#160;</td><td class="mdescRight">特定の区切り文字で厳密に分割する <br /></td></tr>
+<tr class="separator:aa19dd68dee0d603bb24af573a508c997"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40dcdcd295643b2f4dc3dd74af66f277"><td class="memTemplParams" colspan="2"><a id="a40dcdcd295643b2f4dc3dd74af66f277"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:a40dcdcd295643b2f4dc3dd74af66f277"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>split_on_ascii_whitespace</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
@@ -229,18 +235,26 @@ template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:ab8c37e6a7e1bced1a8fd183f435c6ec5"><td class="memItemLeft" align="right" valign="top"><a id="ab8c37e6a7e1bced1a8fd183f435c6ec5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>string_concatenate</b> ()</td></tr>
 <tr class="separator:ab8c37e6a7e1bced1a8fd183f435c6ec5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99e0ebb269f62b7ae74cbe389004b0ad"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_same_v&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type, char8_t &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
-<tr class="memitem:a99e0ebb269f62b7ae74cbe389004b0ad"><td class="memTemplItemLeft" align="right" valign="top">InputIterator&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#a99e0ebb269f62b7ae74cbe389004b0ad">to_code_point</a> (InputIterator first, InputIterator last, uint32_t &amp;output)</td></tr>
-<tr class="memdesc:a99e0ebb269f62b7ae74cbe389004b0ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列からコードポイントを一つ読み取る。  <a href="namespacewordring_1_1whatwg.html#a99e0ebb269f62b7ae74cbe389004b0ad">[詳解]</a><br /></td></tr>
-<tr class="separator:a99e0ebb269f62b7ae74cbe389004b0ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a098e20f9fe55f66745f2d8fcf7da2844"><td class="memTemplParams" colspan="2">template&lt;typename OutputIterator , typename std::enable_if_t&lt; std::conjunction_v&lt; std::is_same&lt; typename std::iterator_traits&lt; OutputIterator &gt;::iterator_category, std::output_iterator_tag &gt;, std::disjunction&lt; std::is_same&lt; typename std::iterator_traits&lt; OutputIterator &gt;::value_type, char8_t &gt;, std::is_same&lt; typename OutputIterator::container_type::value_type, char8_t &gt;&gt;&gt;, nullptr_t &gt;  = nullptr&gt; </td></tr>
-<tr class="memitem:a098e20f9fe55f66745f2d8fcf7da2844"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#a098e20f9fe55f66745f2d8fcf7da2844">to_string</a> (uint32_t ch, OutputIterator output)</td></tr>
-<tr class="memdesc:a098e20f9fe55f66745f2d8fcf7da2844"><td class="mdescLeft">&#160;</td><td class="mdescRight">ユニコード・コードポイントから文字列に変換する。  <a href="namespacewordring_1_1whatwg.html#a098e20f9fe55f66745f2d8fcf7da2844">[詳解]</a><br /></td></tr>
-<tr class="separator:a098e20f9fe55f66745f2d8fcf7da2844"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21ca83731936c6001ab8d1d06a89af83"><td class="memTemplParams" colspan="2"><a id="a21ca83731936c6001ab8d1d06a89af83"></a>
-template&lt;typename Result , typename String &gt; </td></tr>
-<tr class="memitem:a21ca83731936c6001ab8d1d06a89af83"><td class="memTemplItemLeft" align="right" valign="top">Result&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoding_cast</b> (String input)</td></tr>
-<tr class="separator:a21ca83731936c6001ab8d1d06a89af83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1258213090187f044307917bebda5dee"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_same_v&lt; typename std::iterator_traits&lt; InputIterator &gt;::value_type, char8_t &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:a1258213090187f044307917bebda5dee"><td class="memTemplItemLeft" align="right" valign="top">InputIterator&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#a1258213090187f044307917bebda5dee">to_code_point</a> (InputIterator first, InputIterator last, char32_t &amp;output)</td></tr>
+<tr class="memdesc:a1258213090187f044307917bebda5dee"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字列からコードポイントを一つ読み取る。  <a href="namespacewordring_1_1whatwg.html#a1258213090187f044307917bebda5dee">[詳解]</a><br /></td></tr>
+<tr class="separator:a1258213090187f044307917bebda5dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbac9e245b7ac908078713d03cb5585c"><td class="memTemplParams" colspan="2">template&lt;typename OutputIterator , typename std::enable_if_t&lt; std::conjunction_v&lt; std::is_same&lt; typename std::iterator_traits&lt; OutputIterator &gt;::iterator_category, std::output_iterator_tag &gt;, std::disjunction&lt; std::is_same&lt; typename std::iterator_traits&lt; OutputIterator &gt;::value_type, char8_t &gt;, std::is_same&lt; typename OutputIterator::container_type::value_type, char8_t &gt;&gt;&gt;, nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:adbac9e245b7ac908078713d03cb5585c"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg.html#adbac9e245b7ac908078713d03cb5585c">to_string</a> (char32_t ch, OutputIterator output)</td></tr>
+<tr class="memdesc:adbac9e245b7ac908078713d03cb5585c"><td class="mdescLeft">&#160;</td><td class="mdescRight">ユニコード・コードポイントから文字列に変換する。  <a href="namespacewordring_1_1whatwg.html#adbac9e245b7ac908078713d03cb5585c">[詳解]</a><br /></td></tr>
+<tr class="separator:adbac9e245b7ac908078713d03cb5585c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0504fe09e2ef1663e8a7e5d967834b84"><td class="memTemplParams" colspan="2"><a id="a0504fe09e2ef1663e8a7e5d967834b84"></a>
+template&lt;typename String , typename Container &gt; </td></tr>
+<tr class="memitem:a0504fe09e2ef1663e8a7e5d967834b84"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoding_cast</b> (String const &amp;in, std::back_insert_iterator&lt; Container &gt; out)</td></tr>
+<tr class="separator:a0504fe09e2ef1663e8a7e5d967834b84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae22cb690f38c2f20f183f272b0c9d034"><td class="memTemplParams" colspan="2"><a id="ae22cb690f38c2f20f183f272b0c9d034"></a>
+template&lt;typename Result , typename String , std::enable_if_t&lt; std::negation_v&lt; std::is_same&lt; Result, String &gt;&gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:ae22cb690f38c2f20f183f272b0c9d034"><td class="memTemplItemLeft" align="right" valign="top">Result&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoding_cast</b> (String const &amp;in)</td></tr>
+<tr class="separator:ae22cb690f38c2f20f183f272b0c9d034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7db41258aaafa119a04a56ea801a0f1f"><td class="memTemplParams" colspan="2"><a id="a7db41258aaafa119a04a56ea801a0f1f"></a>
+template&lt;typename Result , typename String , std::enable_if_t&lt; std::is_same_v&lt; Result, String &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:a7db41258aaafa119a04a56ea801a0f1f"><td class="memTemplItemLeft" align="right" valign="top">Result&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encoding_cast</b> (String in)</td></tr>
+<tr class="separator:a7db41258aaafa119a04a56ea801a0f1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad93e8f1745556640b84a8098868cea5a"><td class="memItemLeft" align="right" valign="top"><a id="ad93e8f1745556640b84a8098868cea5a"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_forbidden_host_code_point</b> (std::uint32_t cp)</td></tr>
 <tr class="separator:ad93e8f1745556640b84a8098868cea5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -511,8 +525,8 @@ template&lt;typename InputIterator , typename OutputIterator &gt; </div>
 
 </div>
 </div>
-<a id="a99e0ebb269f62b7ae74cbe389004b0ad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99e0ebb269f62b7ae74cbe389004b0ad">&#9670;&nbsp;</a></span>to_code_point()</h2>
+<a id="a1258213090187f044307917bebda5dee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1258213090187f044307917bebda5dee">&#9670;&nbsp;</a></span>to_code_point()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -537,7 +551,7 @@ template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_same_
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t &amp;&#160;</td>
+          <td class="paramtype">char32_t &amp;&#160;</td>
           <td class="paramname"><em>output</em>&#160;</td>
         </tr>
         <tr>
@@ -573,8 +587,8 @@ template&lt;typename InputIterator , typename std::enable_if_t&lt; std::is_same_
 
 </div>
 </div>
-<a id="a098e20f9fe55f66745f2d8fcf7da2844"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a098e20f9fe55f66745f2d8fcf7da2844">&#9670;&nbsp;</a></span>to_string()</h2>
+<a id="adbac9e245b7ac908078713d03cb5585c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbac9e245b7ac908078713d03cb5585c">&#9670;&nbsp;</a></span>to_string()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -587,7 +601,7 @@ template&lt;typename OutputIterator , typename std::enable_if_t&lt; std::conjunc
         <tr>
           <td class="memname">void wordring::whatwg::to_string </td>
           <td>(</td>
-          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramtype">char32_t&#160;</td>
           <td class="paramname"><em>ch</em>, </td>
         </tr>
         <tr>

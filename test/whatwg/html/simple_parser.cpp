@@ -91,8 +91,8 @@ namespace
 
 		using base_type::m_insertion_mode;
 
-		using base_type::m_open_element_stack;
-		using base_type::m_formatting_element_list;
+		using base_type::m_stack;
+		using base_type::m_list;
 		using base_type::m_foster_parenting;
 
 		//using base_type::to_document;
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_contains_1)
 	auto el = p.create_element(p.document(), tag_name::P);
 	auto abbr = p.create_attribute(el, ns_name::HTML, U"", U"abbr");
 	p.append_attribute(el, std::move(abbr));
-	auto it = p.insert_element(p.document().end(), std::move(el));
+	auto it = p.insert_element(p.document().end(), el);
 
 	BOOST_CHECK(p.contains(it, ns_name::HTML, U"", U"abbr"));
 }
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_contains_2)
 	auto el = p.create_element(p.document(), tag_name::P);
 	auto abbr = p.create_attribute(el, ns_name::HTML, U"", U"abbr");
 	p.append_attribute(el, std::move(abbr));
-	auto it = p.insert_element(p.document().end(), std::move(el));
+	auto it = p.insert_element(p.document().end(), el);
 
 	BOOST_CHECK(p.contains(it, ns_name::HTML, U"", U"") == false);
 }
@@ -172,7 +172,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_find_attribute_1)
 	auto el = p.create_element(p.document(), tag_name::P);
 	auto attr = p.create_attribute(el, ns_name::HTML, U"", U"attr");
 	p.append_attribute(el, std::move(attr));
-	auto it = p.insert_element(p.document().end(), std::move(el));
+	auto it = p.insert_element(p.document().end(), el);
 	BOOST_CHECK(it != p.document().end());
 	//auto attr = p.create_attribute(it, )
 

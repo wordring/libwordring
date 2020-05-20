@@ -1,0 +1,791 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::whatwg::html::parsing::input_stream&lt; T &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1whatwg.html">whatwg</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1whatwg_1_1html.html">html</a></li><li class="navelem"><b>parsing</b></li><li class="navelem"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">input_stream</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pro-types">限定公開型</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="#pro-static-attribs">静的限定公開変数類</a> &#124;
+<a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::whatwg::html::parsing::input_stream&lt; T &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>HTML5 パーサー用のユニコード・コード・ポイント入力ストリーム  
+ <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="input__stream_8hpp_source.html">input_stream.hpp</a>&gt;</code></p>
+<div class="dynheader">
+wordring::whatwg::html::parsing::input_stream&lt; T &gt; の継承関係図</div>
+<div class="dyncontent">
+ <div class="center">
+  <img src="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.png" usemap="#wordring::whatwg::html::parsing::input_5Fstream_3C_20T_20_3E_map" alt=""/>
+  <map id="wordring::whatwg::html::parsing::input_5Fstream_3C_20T_20_3E_map" name="wordring::whatwg::html::parsing::input_5Fstream_3C_20T_20_3E_map">
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html" alt="wordring::whatwg::html::parsing::tokenizer&lt; T, NodePolicy &gt;" shape="rect" coords="0,56,629,80"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html" alt="wordring::whatwg::html::parsing::tokenizer&lt; T, simple_policy&lt; String, Container, false &gt; &gt;" shape="rect" coords="639,56,1268,80"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html" alt="wordring::whatwg::html::parsing::tokenizer&lt; T, Policy &gt;" shape="rect" coords="1278,56,1907,80"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html" alt="wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, NodePolicy &gt;" shape="rect" coords="0,112,629,136"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html" alt="wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_policy&lt; String, Container, false &gt; &gt;" shape="rect" coords="639,112,1268,136"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html" alt="wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, Policy &gt;" shape="rect" coords="1278,112,1907,136"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1simple__parser.html" alt="wordring::whatwg::html::simple_parser&lt; T, String, Container, IsFragmentsParser &gt;" shape="rect" coords="639,168,1268,192"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1parser.html" alt="wordring::whatwg::html::parsing::parser&lt; T, Policy &gt;" shape="rect" coords="1278,168,1907,192"/>
+  </map>
+</div></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a30163f1989500e41df729c7b29102483"><td class="memItemLeft" align="right" valign="top"><a id="a30163f1989500e41df729c7b29102483"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a30163f1989500e41df729c7b29102483">input_stream</a> ()</td></tr>
+<tr class="memdesc:a30163f1989500e41df729c7b29102483"><td class="mdescLeft">&#160;</td><td class="mdescRight">空の入力ストリームを構築する <br /></td></tr>
+<tr class="separator:a30163f1989500e41df729c7b29102483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b471294042399219124374ec13bf1ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">report_error</a> (error_name ec=static_cast&lt; error_name &gt;(0))</td></tr>
+<tr class="memdesc:a1b471294042399219124374ec13bf1ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">エラー報告する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">[詳解]</a><br /></td></tr>
+<tr class="separator:a1b471294042399219124374ec13bf1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1c1179f509c43222c229f0cf9b60f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aaa1c1179f509c43222c229f0cf9b60f5">push_code_point</a> (value_type cp)</td></tr>
+<tr class="memdesc:aaa1c1179f509c43222c229f0cf9b60f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">コード・ポイントを末尾に追加する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aaa1c1179f509c43222c229f0cf9b60f5">[詳解]</a><br /></td></tr>
+<tr class="separator:aaa1c1179f509c43222c229f0cf9b60f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a840f2e7d15014f7a7fb9ea5baa97b5a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a840f2e7d15014f7a7fb9ea5baa97b5a3">push_eof</a> ()</td></tr>
+<tr class="memdesc:a840f2e7d15014f7a7fb9ea5baa97b5a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム終端を設定する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a840f2e7d15014f7a7fb9ea5baa97b5a3">[詳解]</a><br /></td></tr>
+<tr class="separator:a840f2e7d15014f7a7fb9ea5baa97b5a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ae6daf25d35e7077293da6a0c6d9451"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a4ae6daf25d35e7077293da6a0c6d9451">emit_code_point</a> (value_type cp)</td></tr>
+<tr class="memdesc:a4ae6daf25d35e7077293da6a0c6d9451"><td class="mdescLeft">&#160;</td><td class="mdescRight">コード・ポイントを発送する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a4ae6daf25d35e7077293da6a0c6d9451">[詳解]</a><br /></td></tr>
+<tr class="separator:a4ae6daf25d35e7077293da6a0c6d9451"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa74f237691850527b543bf851ef7151"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#afa74f237691850527b543bf851ef7151">flush_code_point</a> ()</td></tr>
+<tr class="memdesc:afa74f237691850527b543bf851ef7151"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム・バッファ内のコード・ポイントをすべて発送する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#afa74f237691850527b543bf851ef7151">[詳解]</a><br /></td></tr>
+<tr class="separator:afa74f237691850527b543bf851ef7151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a048c666182324b981670ca4d7c7bbeb5"><td class="memItemLeft" align="right" valign="top">value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a048c666182324b981670ca4d7c7bbeb5">current_input_character</a> () const</td></tr>
+<tr class="memdesc:a048c666182324b981670ca4d7c7bbeb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">現在の入力文字を返す  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a048c666182324b981670ca4d7c7bbeb5">[詳解]</a><br /></td></tr>
+<tr class="separator:a048c666182324b981670ca4d7c7bbeb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af399a48cfc8ca031e773d2eea527b26a"><td class="memItemLeft" align="right" valign="top">value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af399a48cfc8ca031e773d2eea527b26a">next_input_character</a> () const</td></tr>
+<tr class="memdesc:af399a48cfc8ca031e773d2eea527b26a"><td class="mdescLeft">&#160;</td><td class="mdescRight">次の入力文字を返す  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af399a48cfc8ca031e773d2eea527b26a">[詳解]</a><br /></td></tr>
+<tr class="separator:af399a48cfc8ca031e773d2eea527b26a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbf98f5ec86cf295bdb98d0ab9a59aca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#acbf98f5ec86cf295bdb98d0ab9a59aca">eof</a> () const</td></tr>
+<tr class="memdesc:acbf98f5ec86cf295bdb98d0ab9a59aca"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム終端に達しているか調べる  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#acbf98f5ec86cf295bdb98d0ab9a59aca">[詳解]</a><br /></td></tr>
+<tr class="separator:acbf98f5ec86cf295bdb98d0ab9a59aca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56f4cfb62fa26c97ca3827e1b1f435a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af56f4cfb62fa26c97ca3827e1b1f435a">fill</a> (std::uint32_t n)</td></tr>
+<tr class="memdesc:af56f4cfb62fa26c97ca3827e1b1f435a"><td class="mdescLeft">&#160;</td><td class="mdescRight">バッファに指定文字数貯まっているか調べる  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af56f4cfb62fa26c97ca3827e1b1f435a">[詳解]</a><br /></td></tr>
+<tr class="separator:af56f4cfb62fa26c97ca3827e1b1f435a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa0b457a341fce9f7816e3992c46867ff"><td class="memItemLeft" align="right" valign="top">value_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aa0b457a341fce9f7816e3992c46867ff">consume</a> ()</td></tr>
+<tr class="memdesc:aa0b457a341fce9f7816e3992c46867ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">次の入力文字を消費する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aa0b457a341fce9f7816e3992c46867ff">[詳解]</a><br /></td></tr>
+<tr class="separator:aa0b457a341fce9f7816e3992c46867ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46e3cc21645e13b0116faba165a84048"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a46e3cc21645e13b0116faba165a84048">consume</a> (std::uint32_t n)</td></tr>
+<tr class="memdesc:a46e3cc21645e13b0116faba165a84048"><td class="mdescLeft">&#160;</td><td class="mdescRight">バッファの文字を <b>n</b> 個消費する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a46e3cc21645e13b0116faba165a84048">[詳解]</a><br /></td></tr>
+<tr class="separator:a46e3cc21645e13b0116faba165a84048"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1a95f1928c5e5cef2384d6ee97aab3a"><td class="memItemLeft" align="right" valign="top"><a id="ab1a95f1928c5e5cef2384d6ee97aab3a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#ab1a95f1928c5e5cef2384d6ee97aab3a">reconsume</a> ()</td></tr>
+<tr class="memdesc:ab1a95f1928c5e5cef2384d6ee97aab3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">現在の入力文字を再消費する <br /></td></tr>
+<tr class="separator:ab1a95f1928c5e5cef2384d6ee97aab3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c69735affd879c475d739f49205b1c6"><td class="memItemLeft" align="right" valign="top"><a id="a3c69735affd879c475d739f49205b1c6"></a>
+const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const</td></tr>
+<tr class="separator:a3c69735affd879c475d739f49205b1c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ef15eb816eac8270e4c6a0f1bf3bfcd"><td class="memItemLeft" align="right" valign="top"><a id="a1ef15eb816eac8270e4c6a0f1bf3bfcd"></a>
+const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td></tr>
+<tr class="separator:a1ef15eb816eac8270e4c6a0f1bf3bfcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf76c295be91ebd16ec9b53c19a5dfab"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aaf76c295be91ebd16ec9b53c19a5dfab">match</a> (std::u32string_view label, bool with_current, bool case_insensitive)</td></tr>
+<tr class="memdesc:aaf76c295be91ebd16ec9b53c19a5dfab"><td class="mdescLeft">&#160;</td><td class="mdescRight">与えられた文字列とストリーム・バッファ内の文字列を比較する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aaf76c295be91ebd16ec9b53c19a5dfab">[詳解]</a><br /></td></tr>
+<tr class="separator:aaf76c295be91ebd16ec9b53c19a5dfab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5da4ebc4f236538e6db754d3f7ea19a"><td class="memItemLeft" align="right" valign="top">std::array&lt; char32_t, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af5da4ebc4f236538e6db754d3f7ea19a">match_named_character_reference</a> (std::uint32_t &amp;len)</td></tr>
+<tr class="memdesc:af5da4ebc4f236538e6db754d3f7ea19a"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前付き文字参照とストリーム・バッファ内の文字列を比較する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af5da4ebc4f236538e6db754d3f7ea19a">[詳解]</a><br /></td></tr>
+<tr class="separator:af5da4ebc4f236538e6db754d3f7ea19a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a5c73ac6373680a42c6855efd6081c2"><td class="memItemLeft" align="right" valign="top">std::array&lt; char32_t, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a9a5c73ac6373680a42c6855efd6081c2">named_character_reference</a> (std::uint32_t idx)</td></tr>
+<tr class="memdesc:a9a5c73ac6373680a42c6855efd6081c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前付き文字参照のコード・ポイントを取得する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a9a5c73ac6373680a42c6855efd6081c2">[詳解]</a><br /></td></tr>
+<tr class="separator:a9a5c73ac6373680a42c6855efd6081c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+限定公開型</h2></td></tr>
+<tr class="memitem:ab7aa6153151e53eeed1618f5c35c7ee8"><td class="memItemLeft" align="right" valign="top"><a id="ab7aa6153151e53eeed1618f5c35c7ee8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = T</td></tr>
+<tr class="separator:ab7aa6153151e53eeed1618f5c35c7ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36c1fe20b873f637d4a44c742f5581e4"><td class="memItemLeft" align="right" valign="top"><a id="a36c1fe20b873f637d4a44c742f5581e4"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = char32_t</td></tr>
+<tr class="separator:a36c1fe20b873f637d4a44c742f5581e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1bcbb59decc7d86823a2519c785f8ab"><td class="memItemLeft" align="right" valign="top"><a id="ab1bcbb59decc7d86823a2519c785f8ab"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = std::deque&lt; value_type &gt;</td></tr>
+<tr class="separator:ab1bcbb59decc7d86823a2519c785f8ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaad0a5b33c0857e24e44511de559c2cd"><td class="memItemLeft" align="right" valign="top"><a id="aaad0a5b33c0857e24e44511de559c2cd"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = container::const_iterator</td></tr>
+<tr class="separator:aaad0a5b33c0857e24e44511de559c2cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:a675b19e9d6da632976193d62e5bc4eaa"><td class="memItemLeft" align="right" valign="top">container&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a675b19e9d6da632976193d62e5bc4eaa">m_c</a></td></tr>
+<tr class="separator:a675b19e9d6da632976193d62e5bc4eaa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a918edfb93423db29d0d6a06987331dd2"><td class="memItemLeft" align="right" valign="top"><a id="a918edfb93423db29d0d6a06987331dd2"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_current_input_character</b></td></tr>
+<tr class="separator:a918edfb93423db29d0d6a06987331dd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b8c84930edd78d1d647ce684a5b4cf8"><td class="memItemLeft" align="right" valign="top">std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a7b8c84930edd78d1d647ce684a5b4cf8">m_fill_length</a></td></tr>
+<tr class="separator:a7b8c84930edd78d1d647ce684a5b4cf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b97fafffd069fb2363100003b94ada"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af2b97fafffd069fb2363100003b94ada">m_eof</a></td></tr>
+<tr class="separator:af2b97fafffd069fb2363100003b94ada"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab807f4a00aca7954e35c4798573d7a50"><td class="memItemLeft" align="right" valign="top"><a id="ab807f4a00aca7954e35c4798573d7a50"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_eof_consumed</b></td></tr>
+<tr class="separator:ab807f4a00aca7954e35c4798573d7a50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5872d365684111b41d7644d817bb9c34"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a5872d365684111b41d7644d817bb9c34">m_cr_state</a></td></tr>
+<tr class="separator:a5872d365684111b41d7644d817bb9c34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+静的限定公開変数類</h2></td></tr>
+<tr class="memitem:a923557921f75ef761686d1d4ab8409e0"><td class="memItemLeft" align="right" valign="top"><a id="a923557921f75ef761686d1d4ab8409e0"></a>
+static constexpr std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>null_insertion_point</b> = std::numeric_limits&lt;std::uint32_t&gt;::max()</td></tr>
+<tr class="separator:a923557921f75ef761686d1d4ab8409e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+class wordring::whatwg::html::parsing::input_stream&lt; T &gt;</h3>
+
+<p>HTML5 パーサー用のユニコード・コード・ポイント入力ストリーム </p>
+<dl class="section user"><dt>コールバック</dt><dd></dd></dl>
+<ul>
+<li>on_report_error(error err)</li>
+<li>on_emit_code_point() </li>
+</ul>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a1b471294042399219124374ec13bf1ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b471294042399219124374ec13bf1ce">&#9670;&nbsp;</a></span>report_error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::report_error </td>
+          <td>(</td>
+          <td class="paramtype">error_name&#160;</td>
+          <td class="paramname"><em>ec</em> = <code>static_cast&lt;error_name&gt;(0)</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>エラー報告する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ecエラー番号</td><td>この関数は、利用者が用意する on_report_error(error ec) コールバック・メンバ関数を呼び出す。 </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aaa1c1179f509c43222c229f0cf9b60f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa1c1179f509c43222c229f0cf9b60f5">&#9670;&nbsp;</a></span>push_code_point()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::push_code_point </td>
+          <td>(</td>
+          <td class="paramtype">value_type&#160;</td>
+          <td class="paramname"><em>cp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>コード・ポイントを末尾に追加する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">cp</td><td>コード・ポイント </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a840f2e7d15014f7a7fb9ea5baa97b5a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a840f2e7d15014f7a7fb9ea5baa97b5a3">&#9670;&nbsp;</a></span>push_eof()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::push_eof </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ストリーム終端を設定する </p>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">todo:</a></b></dt><dd>複数回呼び出された場合の対処 </dd></dl>
+
+</div>
+</div>
+<a id="a4ae6daf25d35e7077293da6a0c6d9451"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ae6daf25d35e7077293da6a0c6d9451">&#9670;&nbsp;</a></span>emit_code_point()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::emit_code_point </td>
+          <td>(</td>
+          <td class="paramtype">value_type&#160;</td>
+          <td class="paramname"><em>cp</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>コード・ポイントを発送する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">cp</td><td>コード・ポイント</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>この関数は、tokenizerが用意する on_emit_code_point() コールバック・メンバ関数を呼び出す。</p>
+<p>文字が消費されるかどうかにかかわらず、バッファに文字が追加された回数、コールバックが呼び出される。 実装において、（スクリプトをサポートしないので）EOFは文字ではないが、push_eof()の呼び出しも、コールバックが呼び出される。 </p>
+
+</div>
+</div>
+<a id="afa74f237691850527b543bf851ef7151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa74f237691850527b543bf851ef7151">&#9670;&nbsp;</a></span>flush_code_point()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::flush_code_point </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ストリーム・バッファ内のコード・ポイントをすべて発送する </p>
+<p>複数文字を待つトークン化の状態がある。中途でマッチに失敗した場合、いくつかのコードポイントがバッファに残る。 マッチに失敗した時点で、このメンバを実行する。</p>
+<p>このメンバは規格にない。プッシュ型パーサの特性を持たせるため新設した。 </p>
+
+</div>
+</div>
+<a id="a048c666182324b981670ca4d7c7bbeb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a048c666182324b981670ca4d7c7bbeb5">&#9670;&nbsp;</a></span>current_input_character()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">value_type <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::current_input_character </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>現在の入力文字を返す </p>
+<dl class="section return"><dt>戻り値</dt><dd>現在の入力文字</dd></dl>
+<p>何も消費していない場合、現在の入力文字は不定。 </p>
+
+</div>
+</div>
+<a id="af399a48cfc8ca031e773d2eea527b26a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af399a48cfc8ca031e773d2eea527b26a">&#9670;&nbsp;</a></span>next_input_character()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">value_type <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::next_input_character </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>次の入力文字を返す </p>
+<dl class="section return"><dt>戻り値</dt><dd>次の入力文字</dd></dl>
+<p>バッファに文字が無い場合、次の入力文字は不定。 </p>
+
+</div>
+</div>
+<a id="acbf98f5ec86cf295bdb98d0ab9a59aca"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbf98f5ec86cf295bdb98d0ab9a59aca">&#9670;&nbsp;</a></span>eof()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::eof </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ストリーム終端に達しているか調べる </p>
+<dl class="section return"><dt>戻り値</dt><dd>ストリーム終端に達している場合 <b>true</b> 、その他の場合 <b>false</b> を返す。 </dd></dl>
+
+</div>
+</div>
+<a id="af56f4cfb62fa26c97ca3827e1b1f435a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56f4cfb62fa26c97ca3827e1b1f435a">&#9670;&nbsp;</a></span>fill()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::fill </td>
+          <td>(</td>
+          <td class="paramtype">std::uint32_t&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>バッファに指定文字数貯まっているか調べる </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">文字数</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>指定文字数バッファに貯まるかEOFに達した場合 true 、それ以外の場合 false を返す。 </dd></dl>
+
+</div>
+</div>
+<a id="aa0b457a341fce9f7816e3992c46867ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0b457a341fce9f7816e3992c46867ff">&#9670;&nbsp;</a></span>consume() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">value_type <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::consume </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>次の入力文字を消費する </p>
+<dl class="section return"><dt>戻り値</dt><dd>現在の入力文字</dd></dl>
+<p>消費した文字が現在の入力文字となる。 </p>
+
+</div>
+</div>
+<a id="a46e3cc21645e13b0116faba165a84048"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a46e3cc21645e13b0116faba165a84048">&#9670;&nbsp;</a></span>consume() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::consume </td>
+          <td>(</td>
+          <td class="paramtype">std::uint32_t&#160;</td>
+          <td class="paramname"><em>n</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>バッファの文字を <b>n</b> 個消費する </p>
+<p>トークン化段階で、いくつかの状態は文字列を待ち受ける。 その間、バッファに文字が溜まっていく。 もしも期待する文字列が得られたなら、このメンバを呼び出し消費する。 </p>
+
+</div>
+</div>
+<a id="aaf76c295be91ebd16ec9b53c19a5dfab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf76c295be91ebd16ec9b53c19a5dfab">&#9670;&nbsp;</a></span>match()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::match </td>
+          <td>(</td>
+          <td class="paramtype">std::u32string_view&#160;</td>
+          <td class="paramname"><em>label</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>with_current</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>case_insensitive</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>与えられた文字列とストリーム・バッファ内の文字列を比較する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">label</td><td>文字列 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">case_insensitive</td><td>大文字小文字を無視して比較する場合 true</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>完全に一致する場合 succeed　、 途中まで一致するがバッファの文字列が足りない場合 partial 、 一致に失敗した場合 failed を返す。</dd></dl>
+<p>大文字小文字を無視して比較する場合、 <b>label</b> を小文字で指定すること。 </p>
+
+</div>
+</div>
+<a id="af5da4ebc4f236538e6db754d3f7ea19a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5da4ebc4f236538e6db754d3f7ea19a">&#9670;&nbsp;</a></span>match_named_character_reference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;char32_t, 2&gt; <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::match_named_character_reference </td>
+          <td>(</td>
+          <td class="paramtype">std::uint32_t &amp;&#160;</td>
+          <td class="paramname"><em>len</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>名前付き文字参照とストリーム・バッファ内の文字列を比較する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">len</td><td>マッチした文字数を返す</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>0 ～ 2 個の文字参照コードを返す。</dd></dl>
+<p>最長一致を試みる。</p>
+<p>失敗するまで検索し、失敗する前に一致が有ればそれを返す動作となる。 したがってどの場合でも、バッファにコード・ポイントが残る。 </p>
+
+</div>
+</div>
+<a id="a9a5c73ac6373680a42c6855efd6081c2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a5c73ac6373680a42c6855efd6081c2">&#9670;&nbsp;</a></span>named_character_reference()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::array&lt;char32_t, 2&gt; <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::named_character_reference </td>
+          <td>(</td>
+          <td class="paramtype">std::uint32_t&#160;</td>
+          <td class="paramname"><em>idx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>名前付き文字参照のコード・ポイントを取得する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">idx</td><td><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af5da4ebc4f236538e6db754d3f7ea19a" title="名前付き文字参照とストリーム・バッファ内の文字列を比較する">match_named_character_reference()</a> から返される<b>マップの索引</b></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>コード・ポイントの配列</dd></dl>
+<p>名前付き文字参照のコード・ポイントは、1個あるいは2個である。 1個のコード・ポイントを返す場合、二個目を <b>0</b> とすることで示す。 </p>
+
+</div>
+</div>
+<h2 class="groupheader">メンバ詳解</h2>
+<a id="a675b19e9d6da632976193d62e5bc4eaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a675b19e9d6da632976193d62e5bc4eaa">&#9670;&nbsp;</a></span>m_c</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">container <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::m_c</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>コード・ポイント・バッファ </p>
+
+</div>
+</div>
+<a id="a7b8c84930edd78d1d647ce684a5b4cf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b8c84930edd78d1d647ce684a5b4cf8">&#9670;&nbsp;</a></span>m_fill_length</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::uint32_t <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::m_fill_length</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>バッファ埋め待ち検出用状態変数 </p>
+
+</div>
+</div>
+<a id="af2b97fafffd069fb2363100003b94ada"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2b97fafffd069fb2363100003b94ada">&#9670;&nbsp;</a></span>m_eof</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::m_eof</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>EOF 検出用状態変数 </p>
+
+</div>
+</div>
+<a id="a5872d365684111b41d7644d817bb9c34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5872d365684111b41d7644d817bb9c34">&#9670;&nbsp;</a></span>m_cr_state</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream</a>&lt; T &gt;::m_cr_state</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>改行文字正規化用状態変数 </p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="input__stream_8hpp_source.html">input_stream.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

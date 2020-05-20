@@ -706,6 +706,12 @@ namespace wordring::whatwg::html
 		return std::get<simple_element<String>>(node).push_back(attr);
 	}
 
+	template <typename String>
+	void push_back(simple_node<String>& node, simple_attr<String>&& attr)
+	{
+		return std::get<simple_element<String>>(node).push_back(std::move(attr));
+	}
+
 	/*! @brief ノードを要素と解釈して属性を検索する
 	*/
 	template <typename String>

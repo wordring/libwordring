@@ -56,13 +56,13 @@ namespace
 	};
 }
 
-BOOST_AUTO_TEST_SUITE(tree__test)
+BOOST_AUTO_TEST_SUITE(tree_test)
 
 // ----------------------------------------------------------------------------
 // tree_node
 // ----------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(tree_node__construct__1)
+BOOST_AUTO_TEST_CASE(tree_node_construct_1)
 {
 	using namespace wordring::detail;
 
@@ -82,14 +82,14 @@ BOOST_AUTO_TEST_CASE(tree_node__construct__1)
 
 tree_node_iterator() noexcept
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__construct__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_construct_1)
 {
 	using namespace wordring::detail;
 
 	tree_node_iterator<test_tree::container> it;
 }
 
-BOOST_AUTO_TEST_CASE(tree_node_iterator__construct__2)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_construct_2)
 {
 	using namespace wordring::detail;
 
@@ -102,7 +102,7 @@ const_iterator を取得する
 
 operator tree_node_iterator<container const>() const
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__cast__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_cast_1)
 {
 	using namespace wordring;
 	using namespace wordring::detail;
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__cast__1)
 
 auto& operator*() const
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__reference__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_reference_1)
 {
 	test_tree t;
 	t.insert(t.end(), 100);
@@ -139,7 +139,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__reference__1)
 
 auto operator->() const
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__reference__2)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_reference_2)
 {
 	using namespace wordring;
 
@@ -161,7 +161,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__reference__2)
 tree_node_iterator& operator++()
 tree_node_iterator operator++(int)
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__increment__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_increment_1)
 {
 	test_tree t;
 	auto it1 = t.insert(t.begin(), 1);
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__increment__1)
 tree_node_iterator& operator--()
 tree_node_iterator operator--(int)
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__decrement__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_decrement_1)
 {
 	test_tree t;
 	auto it1 = t.insert(t.begin(), 1);
@@ -210,7 +210,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__decrement__1)
 tree_node_iterator begin() const
 tree_node_iterator end() const
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__begin__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_begin_1)
 {
 	test_tree t;
 	auto it1 = t.insert(t.begin(), 1);
@@ -236,7 +236,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__begin__1)
 reverse_iterator rbegin() const
 reverse_iterator rend() const
 */
-BOOST_AUTO_TEST_CASE(tree_node_iterator__rbegin__1)
+BOOST_AUTO_TEST_CASE(tree_node_iterator_rbegin_1)
 {
 	test_tree t;
 	auto it1 = t.insert(t.begin(), 1);
@@ -255,6 +255,28 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__rbegin__1)
 	BOOST_CHECK(v == std::vector<int>({ 4, 3, 2 }));
 }
 
+/*
+親を指すイテレータを取得する
+
+tree_node_iterator parent() const
+*/
+BOOST_AUTO_TEST_CASE(tree_node_iterator_parent_1)
+{
+	test_tree t;
+	auto it1 = t.insert(t.begin(), 1);
+	auto it2 = t.insert(it1.end(), 2);
+
+	BOOST_CHECK(it2.parent() == it1);
+}
+
+BOOST_AUTO_TEST_CASE(tree_node_iterator_parent_2)
+{
+	// 根の親を取得する。
+	test_tree t;
+	auto it1 = t.insert(t.begin(), 1);
+
+	BOOST_CHECK(it1.parent() == decltype(it1)());
+}
 
 // ----------------------------------------------------------------------------
 // tree
@@ -265,7 +287,7 @@ BOOST_AUTO_TEST_CASE(tree_node_iterator__rbegin__1)
 
 tree()
 */
-BOOST_AUTO_TEST_CASE(tree__construct__1)
+BOOST_AUTO_TEST_CASE(tree_construct_1)
 {
 	using namespace wordring;
 
@@ -278,7 +300,7 @@ BOOST_AUTO_TEST_CASE(tree__construct__1)
 
 explicit tree(allocator_type const& alloc)
 */
-BOOST_AUTO_TEST_CASE(tree__construct__2)
+BOOST_AUTO_TEST_CASE(tree_construct_2)
 {
 	using namespace wordring;
 
@@ -292,7 +314,7 @@ BOOST_AUTO_TEST_CASE(tree__construct__2)
 
 explicit tree(value_type const& value, allocator_type const& alloc = allocator_type())
 */
-BOOST_AUTO_TEST_CASE(tree__construct__3)
+BOOST_AUTO_TEST_CASE(tree_construct_3)
 {
 	using namespace wordring;
 
@@ -307,7 +329,7 @@ BOOST_AUTO_TEST_CASE(tree__construct__3)
 
 explicit tree(value_type&& value, allocator_type const& alloc = allocator_type())
 */
-BOOST_AUTO_TEST_CASE(tree__construct__4)
+BOOST_AUTO_TEST_CASE(tree_construct_4)
 {
 	using namespace wordring;
 
@@ -319,7 +341,7 @@ BOOST_AUTO_TEST_CASE(tree__construct__4)
 // 変更 -----------------------------------------------------------------------
 
 
-BOOST_AUTO_TEST_CASE(tree__clear__1)
+BOOST_AUTO_TEST_CASE(tree_clear_1)
 {
 	using namespace wordring;
 
@@ -331,7 +353,7 @@ BOOST_AUTO_TEST_CASE(tree__clear__1)
 
 iterator insert(const_iterator pos, value_type const& value)
 */
-BOOST_AUTO_TEST_CASE(tree__insert__1)
+BOOST_AUTO_TEST_CASE(tree_insert_1)
 {
 	using namespace wordring;
 
@@ -355,7 +377,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__1)
 
 iterator insert(const_iterator pos, value_type&& value)
 */
-BOOST_AUTO_TEST_CASE(tree__insert__2)
+BOOST_AUTO_TEST_CASE(tree_insert_2)
 {
 	using namespace wordring;
 
@@ -378,7 +400,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__2)
 /*
 ノードの間に挿入する
 */
-BOOST_AUTO_TEST_CASE(tree__insert__3)
+BOOST_AUTO_TEST_CASE(tree_insert_3)
 {
 	using namespace wordring;
 
@@ -420,7 +442,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__3)
 /*
 子が無い場合の挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__4)
+BOOST_AUTO_TEST_CASE(tree_insert_4)
 {
 	using namespace wordring;
 
@@ -450,7 +472,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__4)
 /*
 先頭の前に挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__5)
+BOOST_AUTO_TEST_CASE(tree_insert_5)
 {
 	using namespace wordring;
 
@@ -492,7 +514,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__5)
 /*
 単独の子の前に挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__6)
+BOOST_AUTO_TEST_CASE(tree_insert_6)
 {
 	using namespace wordring;
 
@@ -528,7 +550,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__6)
 /*
 終端の前に挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__7)
+BOOST_AUTO_TEST_CASE(tree_insert_7)
 {
 	using namespace wordring;
 
@@ -570,7 +592,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__7)
 /*
 単独の子の後に挿入
 */
-BOOST_AUTO_TEST_CASE(tree__insert__8)
+BOOST_AUTO_TEST_CASE(tree_insert_8)
 {
 	using namespace wordring;
 
@@ -608,7 +630,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__8)
 
 iterator insert(const_iterator pos, const_iterator sub)
 */
-BOOST_AUTO_TEST_CASE(tree__insert__9)
+BOOST_AUTO_TEST_CASE(tree_insert_9)
 {
 	using namespace wordring;
 
@@ -643,7 +665,74 @@ BOOST_AUTO_TEST_CASE(tree__insert__9)
 	BOOST_CHECK(*p6 == 6);
 	auto p7 = ++p3.begin();
 	BOOST_CHECK(*p7 == 7);
-	
+}
+
+/*
+部分木を移動する
+
+iterator move(const_iterator pos, const_iterator sub)
+*/
+BOOST_AUTO_TEST_CASE(tree_move_1)
+{
+	// 祖先を子孫へ移動。
+	using namespace wordring;
+
+	test_tree t;
+	auto it1 = t.insert(t.end(), 1);
+	auto it2 = t.insert(it1.end(), 2);
+	auto it3 = t.insert(it2.end(), 3);
+
+	BOOST_CHECK_THROW(t.move(it3, it1), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(tree_move_2)
+{
+	// 移動元と移動先が同じ
+	using namespace wordring;
+
+	test_tree t;
+	auto it1 = t.insert(t.end(), 1);
+	auto it2 = t.insert(it1.end(), 2);
+	t.insert(it2.end(), 3);
+
+	BOOST_CHECK_THROW(t.move(it1, it1), std::invalid_argument);
+}
+
+BOOST_AUTO_TEST_CASE(tree_move_3)
+{
+	using namespace wordring;
+
+	test_tree t;
+	auto it1 = t.insert(t.end(), 1);
+	auto it2 = t.insert(it1.end(), 2);
+	auto it3 = t.insert(it2.end(), 3);
+
+	t.move(it1.begin(), it3);
+
+	BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(*it1.begin() == 3);
+	BOOST_CHECK(*++(it1.begin()) == 2);
+}
+
+BOOST_AUTO_TEST_CASE(tree_move_4)
+{
+	// 根に複数のノードを入れる
+	using namespace wordring;
+
+	test_tree t;
+	auto it1 = t.insert(t.end(), 1);
+	t.insert(it1.end(), 2);
+	auto it3 = t.insert(it1.end(), 3);
+
+	t.move(t.end(), it3);
+
+	BOOST_CHECK(*it1 == 1);
+	BOOST_CHECK(*std::next(it1) == 3);
+	BOOST_CHECK(*it1.begin() == 2);
+}
+
+BOOST_AUTO_TEST_CASE(tree_move_5)
+{
 }
 
 /*
@@ -651,7 +740,7 @@ BOOST_AUTO_TEST_CASE(tree__insert__9)
 
 iterator erase(const_iterator pos)
 */
-BOOST_AUTO_TEST_CASE(tree__erase__1)
+BOOST_AUTO_TEST_CASE(tree_erase_1)
 {
 	using namespace wordring;
 
@@ -673,7 +762,7 @@ BOOST_AUTO_TEST_CASE(tree__erase__1)
 /*
 ノードの間を削除
 */
-BOOST_AUTO_TEST_CASE(tree__erase__2)
+BOOST_AUTO_TEST_CASE(tree_erase_2)
 {
 	using namespace wordring;
 
@@ -706,7 +795,7 @@ BOOST_AUTO_TEST_CASE(tree__erase__2)
 /*
 先頭の前を削除
 */
-BOOST_AUTO_TEST_CASE(tree__erase__3)
+BOOST_AUTO_TEST_CASE(tree_erase_3)
 {
 	using namespace wordring;
 
@@ -739,7 +828,7 @@ BOOST_AUTO_TEST_CASE(tree__erase__3)
 /*
 削除で単独になる子の前を削除
 */
-BOOST_AUTO_TEST_CASE(tree__erase__4)
+BOOST_AUTO_TEST_CASE(tree_erase_4)
 {
 	using namespace wordring;
 
@@ -768,7 +857,7 @@ BOOST_AUTO_TEST_CASE(tree__erase__4)
 /*
 終端の前を削除
 */
-BOOST_AUTO_TEST_CASE(tree__erase__5)
+BOOST_AUTO_TEST_CASE(tree_erase_5)
 {
 	using namespace wordring;
 
@@ -801,7 +890,7 @@ BOOST_AUTO_TEST_CASE(tree__erase__5)
 /*
 削除で単独になる子の終端の前を削除
 */
-BOOST_AUTO_TEST_CASE(tree__erase__6)
+BOOST_AUTO_TEST_CASE(tree_erase_6)
 {
 	using namespace wordring;
 
@@ -830,7 +919,7 @@ BOOST_AUTO_TEST_CASE(tree__erase__6)
 /*
 子孫削除
 */
-BOOST_AUTO_TEST_CASE(tree__erase__7)
+BOOST_AUTO_TEST_CASE(tree_erase_7)
 {
 	using namespace wordring;
 
@@ -858,7 +947,7 @@ index_type allocate()
 
 未使用ノードが無い状態から、ノードを確保する
 */
-BOOST_AUTO_TEST_CASE(tree__allocate__1)
+BOOST_AUTO_TEST_CASE(tree_allocate_1)
 {
 	using namespace wordring;
 
@@ -878,7 +967,7 @@ BOOST_AUTO_TEST_CASE(tree__allocate__1)
 /*
 [0]に関連するよう、ノードを確保する
 */
-BOOST_AUTO_TEST_CASE(tree__allocate__2)
+BOOST_AUTO_TEST_CASE(tree_allocate_2)
 {
 	using namespace wordring;
 
@@ -898,7 +987,7 @@ BOOST_AUTO_TEST_CASE(tree__allocate__2)
 /*
 後ろに未使用ノードが有る状態から、ノードを確保する
 */
-BOOST_AUTO_TEST_CASE(tree__allocate__3)
+BOOST_AUTO_TEST_CASE(tree_allocate_3)
 {
 	using namespace wordring;
 
@@ -923,7 +1012,7 @@ void free(index_type idx)
 
 未使用ノードが無い状態から、使用済みノードを開放する
 */
-BOOST_AUTO_TEST_CASE(tree__free__1)
+BOOST_AUTO_TEST_CASE(tree_free_1)
 {
 	using namespace wordring;
 
@@ -939,7 +1028,7 @@ BOOST_AUTO_TEST_CASE(tree__free__1)
 /*
 前に未使用ノードが有り、後ろに未使用ノードが無い状態から、使用済みノードを開放する
 */
-BOOST_AUTO_TEST_CASE(tree__free__2)
+BOOST_AUTO_TEST_CASE(tree_free_2)
 {
 	using namespace wordring;
 
@@ -961,7 +1050,7 @@ BOOST_AUTO_TEST_CASE(tree__free__2)
 /*
 前に未使用ノードが無く、後ろに未使用ノードが有る状態から、使用済みノードを開放する
 */
-BOOST_AUTO_TEST_CASE(tree__free__3)
+BOOST_AUTO_TEST_CASE(tree_free_3)
 {
 	using namespace wordring;
 
@@ -983,7 +1072,7 @@ BOOST_AUTO_TEST_CASE(tree__free__3)
 /*
 前後に未使用ノードが有る状態から、使用済みノードを開放する
 */
-BOOST_AUTO_TEST_CASE(tree__free__4)
+BOOST_AUTO_TEST_CASE(tree_free_4)
 {
 	using namespace wordring;
 

@@ -1,0 +1,270 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::string_matcher&lt; String &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="classwordring_1_1string__matcher.html">string_matcher</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">クラス</a> &#124;
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="classwordring_1_1string__matcher-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::string_matcher&lt; String &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>プッシュ型文字列マッチャー  
+ <a href="classwordring_1_1string__matcher.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="matcher_8hpp_source.html">matcher.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+クラス</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1string__matcher_1_1container__entry.html">container_entry</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a0b965bc190817bc4815ff7cf25b2ceca"><td class="memItemLeft" align="right" valign="top"><a id="a0b965bc190817bc4815ff7cf25b2ceca"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>match_result</b> : std::uint32_t { <b>partial</b> = 1, 
+<b>succeed</b>, 
+<b>failed</b>
+ }</td></tr>
+<tr class="separator:a0b965bc190817bc4815ff7cf25b2ceca"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a21c82b07b69c47f5e1591766852e97f5"><td class="memItemLeft" align="right" valign="top"><a id="a21c82b07b69c47f5e1591766852e97f5"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = String</td></tr>
+<tr class="separator:a21c82b07b69c47f5e1591766852e97f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1341f29b0e1c8129f7f412634776ecab"><td class="memItemLeft" align="right" valign="top"><a id="a1341f29b0e1c8129f7f412634776ecab"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>character</b> = typename string_type::value_type</td></tr>
+<tr class="separator:a1341f29b0e1c8129f7f412634776ecab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83363087ee7688077953e3596c4341f3"><td class="memItemLeft" align="right" valign="top"><a id="a83363087ee7688077953e3596c4341f3"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = std::vector&lt; <a class="el" href="structwordring_1_1string__matcher_1_1container__entry.html">container_entry</a> &gt;</td></tr>
+<tr class="separator:a83363087ee7688077953e3596c4341f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:ac87c0e12828c4a3cae0f8d39678a6bbf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1string__matcher.html#ac87c0e12828c4a3cae0f8d39678a6bbf">string_matcher</a> (std::initializer_list&lt; string_type &gt; il)</td></tr>
+<tr class="memdesc:ac87c0e12828c4a3cae0f8d39678a6bbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">複数の文字列を指定してマッチャーを構築する  <a href="classwordring_1_1string__matcher.html#ac87c0e12828c4a3cae0f8d39678a6bbf">[詳解]</a><br /></td></tr>
+<tr class="separator:ac87c0e12828c4a3cae0f8d39678a6bbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acec65d47082de852755284fb32aaf6cc"><td class="memItemLeft" align="right" valign="top">string_type const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1string__matcher.html#acec65d47082de852755284fb32aaf6cc">data</a> () const</td></tr>
+<tr class="memdesc:acec65d47082de852755284fb32aaf6cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">これまでに入力された文字のリストを返す  <a href="classwordring_1_1string__matcher.html#acec65d47082de852755284fb32aaf6cc">[詳解]</a><br /></td></tr>
+<tr class="separator:acec65d47082de852755284fb32aaf6cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7941ec6f9cba85b5c73ef0e9d0efc86e"><td class="memItemLeft" align="right" valign="top">auto&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1string__matcher.html#a7941ec6f9cba85b5c73ef0e9d0efc86e">size</a> () const</td></tr>
+<tr class="memdesc:a7941ec6f9cba85b5c73ef0e9d0efc86e"><td class="mdescLeft">&#160;</td><td class="mdescRight">これまでに入力された文字数を返す  <a href="classwordring_1_1string__matcher.html#a7941ec6f9cba85b5c73ef0e9d0efc86e">[詳解]</a><br /></td></tr>
+<tr class="separator:a7941ec6f9cba85b5c73ef0e9d0efc86e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acef5669e41669293439a0f8565e7379a"><td class="memItemLeft" align="right" valign="top"><a id="acef5669e41669293439a0f8565e7379a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1string__matcher.html#acef5669e41669293439a0f8565e7379a">clear</a> ()</td></tr>
+<tr class="memdesc:acef5669e41669293439a0f8565e7379a"><td class="mdescLeft">&#160;</td><td class="mdescRight">マッチャーを初期化する <br /></td></tr>
+<tr class="separator:acef5669e41669293439a0f8565e7379a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fa0b8bce153938e1a59343044ccfacf"><td class="memItemLeft" align="right" valign="top">match_result&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1string__matcher.html#a5fa0b8bce153938e1a59343044ccfacf">push_back</a> (character ch)</td></tr>
+<tr class="memdesc:a5fa0b8bce153938e1a59343044ccfacf"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字を追加する  <a href="classwordring_1_1string__matcher.html#a5fa0b8bce153938e1a59343044ccfacf">[詳解]</a><br /></td></tr>
+<tr class="separator:a5fa0b8bce153938e1a59343044ccfacf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:a15bf2a9764e39d274d2c29ca67dde99f"><td class="memItemLeft" align="right" valign="top"><a id="a15bf2a9764e39d274d2c29ca67dde99f"></a>
+container&#160;</td><td class="memItemRight" valign="bottom"><b>m_c</b></td></tr>
+<tr class="separator:a15bf2a9764e39d274d2c29ca67dde99f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a495325a96d50dfc4785bb92276df50b9"><td class="memItemLeft" align="right" valign="top"><a id="a495325a96d50dfc4785bb92276df50b9"></a>
+string_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_s</b></td></tr>
+<tr class="separator:a495325a96d50dfc4785bb92276df50b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename String&gt;<br />
+class wordring::string_matcher&lt; String &gt;</h3>
+
+<p>プッシュ型文字列マッチャー </p>
+<dl class="tparams"><dt>テンプレート引数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">String</td><td>対象とする文字列型</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>現在の実装は最短マッチしか提供しない。 </p>
+</div><h2 class="groupheader">構築子と解体子</h2>
+<a id="ac87c0e12828c4a3cae0f8d39678a6bbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac87c0e12828c4a3cae0f8d39678a6bbf">&#9670;&nbsp;</a></span>string_matcher()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classwordring_1_1string__matcher.html">wordring::string_matcher</a>&lt; String &gt;::<a class="el" href="classwordring_1_1string__matcher.html">string_matcher</a> </td>
+          <td>(</td>
+          <td class="paramtype">std::initializer_list&lt; string_type &gt;&#160;</td>
+          <td class="paramname"><em>il</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>複数の文字列を指定してマッチャーを構築する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">il</td><td>[in] 文字列のリスト </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">関数詳解</h2>
+<a id="acec65d47082de852755284fb32aaf6cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acec65d47082de852755284fb32aaf6cc">&#9670;&nbsp;</a></span>data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string_type const&amp; <a class="el" href="classwordring_1_1string__matcher.html">wordring::string_matcher</a>&lt; String &gt;::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>これまでに入力された文字のリストを返す </p>
+<dl class="section return"><dt>戻り値</dt><dd>文字列 </dd></dl>
+
+</div>
+</div>
+<a id="a7941ec6f9cba85b5c73ef0e9d0efc86e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7941ec6f9cba85b5c73ef0e9d0efc86e">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">auto <a class="el" href="classwordring_1_1string__matcher.html">wordring::string_matcher</a>&lt; String &gt;::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>これまでに入力された文字数を返す </p>
+<dl class="section return"><dt>戻り値</dt><dd>文字数 </dd></dl>
+
+</div>
+</div>
+<a id="a5fa0b8bce153938e1a59343044ccfacf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fa0b8bce153938e1a59343044ccfacf">&#9670;&nbsp;</a></span>push_back()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">match_result <a class="el" href="classwordring_1_1string__matcher.html">wordring::string_matcher</a>&lt; String &gt;::push_back </td>
+          <td>(</td>
+          <td class="paramtype">character&#160;</td>
+          <td class="paramname"><em>ch</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字を追加する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ch</td><td>文字</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>内蔵する文字列のいずれかにマッチした場合 match_result::succeed 、マッチが完全に失敗した場合 match_result::failed 、 マッチする可能性のある文字列が残っている場合 match_result::partial を返す。</dd></dl>
+<p>match_result::partial 以外を返した場合、clear() を呼び出すまで、このメンバを呼び出してはならない。 </p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="matcher_8hpp_source.html">matcher.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>
