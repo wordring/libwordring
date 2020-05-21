@@ -3,6 +3,7 @@
 // https://html.spec.whatwg.org/multipage/parsing.html
 // https://triple-underscore.github.io/HTML-parsing-ja.html
 
+#include <wordring/whatwg/html/simple_node.hpp>
 #include <wordring/whatwg/html/simple_policy.hpp>
 
 //#include <wordring/whatwg/encoding/encoding.hpp>
@@ -64,55 +65,6 @@ namespace wordring::whatwg::html
 			m_temporary = m_c.insert(m_c.end(), node_type());
 		}
 
-		// ----------------------------------------------------------------------------------------
-		// 木
-		// ----------------------------------------------------------------------------------------
-
-		node_pointer temp()
-		{
-
-		}
-		// ----------------------------------------------------------------------------------------
-		// ノード
-		// ----------------------------------------------------------------------------------------
-
-		//bool is_document(node_pointer it) const { return std::holds_alternative<document_type>(*it); }
-
-		//bool is_document_type(node_pointer it) const { return std::holds_alternative<document_type_type>(*it); }
-
-		//bool is_document_fragment(node_pointer it) const { return std::holds_alternative<document_fragment_type>(*it); }
-
-		//bool is_element(node_pointer it) const { return std::holds_alternative<element_type>(*it); }
-
-		bool is_text(node_pointer it) const { return std::holds_alternative<text_type>(*it); }
-
-		//bool is_processing_instruction(node_pointer it) const { return std::holds_alternative<processing_instruction_type>(*it); }
-
-		//bool is_comment(node_pointer it) const { return std::holds_alternative<comment_type>(*it); }
-
-		//document_type* to_document(node_pointer it) { return std::get_if<document_type>(std::addressof(*it)); }
-
-		//document_type_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_type>(std::addressof(*it)); }
-
-		//document_fragment_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_type>(std::addressof(*it)); }
-
-		//element_type const* to_element(node_pointer it) const { return std::get_if<element_type>(std::addressof(*it)); }
-
-		//text_type* to_text(node_pointer it) { return std::get_if<text_type>(std::addressof(*it)); }
-
-		//processing_instruction_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_type>(std::addressof(*it)); }
-
-		//comment_type const* to_comment(node_pointer it) const { return std::get_if<comment_type>(std::addressof(*it)); }
-
-		/*! @brief ノードを挿入する
-		*/
-		/*
-		template <typename Node>
-		node_pointer insert_(node_pointer pos, Node node)
-		{
-			return m_c.insert(pos, std::forward<Node>(node));
-		}
-		*/
 		// ----------------------------------------------------------------------------------------
 		// 文書
 		// ----------------------------------------------------------------------------------------
@@ -315,20 +267,8 @@ namespace wordring::whatwg::html
 
 		bool contains(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name)
 		{
-			return find(*it, ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name)) != wordring::whatwg::html::end(*it);
+			return wordring::whatwg::html::find(*it, ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name)) != wordring::whatwg::html::end(*it);
 		}
-
-		/*
-		attribute_pointer null_attribute(node_pointer it) const
-		{
-			return end(*it);
-		}
-
-		attribute_pointer find_attribute(node_pointer it, attribute_name name) const
-		{
-			return find(*it, name);
-		}
-		*/
 
 		// ----------------------------------------------------------------------------------------
 		// テキスト
@@ -350,6 +290,8 @@ namespace wordring::whatwg::html
 		{
 			return m_c.insert(pos, std::move(text));
 		}
+
+		bool is_text(node_pointer it) const { return std::holds_alternative<text_type>(*it); }
 
 		// ----------------------------------------------------------------------------------------
 		// コメント
@@ -376,45 +318,9 @@ namespace wordring::whatwg::html
 			return node_pointer();
 		}
 
-		// ノード作成 ----------------------------------------------------------
-
-
-		document_fragment_type create_document_fragment() {}
-
-
-		processing_instruction_type create_processing_instruction() {}
-
-
-
-		// 
-
-
-		/*void insert_comment(node_pointer pos, comment_token& comment)
-		{
-			m_c.insert(pos, comment_type(comment.m_data));
-		}*/
-
-		/*! @brief 与えられたノードがHTML名前空間に属するか調べる
-		*/
-		/*bool in_html_namespace(node_pointer it) const
-		{
-			if (std::holds_alternative<element_type>(*it))
-			{
-				element_type const& elm = std::get<element_type>(*it);
-				return elm.namespace_uri_atom() == ns_name::HTML;
-			}
-
-			return false;
-		}*/
-
-
-		//void change_encoding(wordring::whatwg::encoding::name name) {}
-
 		void on_report_error(parsing::error_name e) {}
 
 	protected:
-
-		//encoding_confidence m_confidence;
 
 		std::uint32_t m_script_nesting_level;
 		bool m_parser_pause_flag;

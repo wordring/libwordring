@@ -636,9 +636,20 @@ namespace wordring::whatwg::html
 	// ---------------------------------------------------------------------------------------------
 
 	template <typename String>
-	using simple_node = std::variant<simple_document<String>, simple_document_type<String>,
-		simple_document_fragment<String>, simple_element<String>, simple_text<String>,
-		simple_processing_instruction<String>, simple_comment<String>>;
+	using simple_node = std::variant<
+		std::monostate,
+		simple_element<String>,                // 1.
+		std::monostate,
+		simple_text<String>,                   // 3.
+		std::monostate,
+		std::monostate,
+		std::monostate,
+		simple_processing_instruction<String>, // 7.
+		simple_comment<String>,                // 8.
+		simple_document<String>,               // 9.
+		simple_document_type<String>,          // 10.
+		simple_document_fragment<String>,      // 11.
+		std::monostate>;
 
 	/*! @brief ノードの文字列データを参照する
 	*/

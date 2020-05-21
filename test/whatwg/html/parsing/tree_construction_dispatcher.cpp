@@ -259,7 +259,6 @@ BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_4)
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_head_insertion_mode);
 }
 
-
 // ------------------------------------------------------------------------------------------------
 // スタック
 //
@@ -885,10 +884,28 @@ BOOST_AUTO_TEST_CASE(dispatcher_abort_parser_1)
 	p.abort_parser();
 }
 
-/*
-BOOST_AUTO_TEST_CASE(dispatcher__1)
+// ------------------------------------------------------------------------------------------------
+// 12.2.9.1 Misnested tags: <b><i></b></i>
+//
+// https://html.spec.whatwg.org/multipage/parsing.html#misnested-tags:-b-i-/b-/i
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(dispatcher_misnested_tags_1)
 {
+	using namespace wordring::whatwg::html;
+	using namespace wordring::whatwg::html::parsing;
+
+	test_parser p;
+	std::u32string s = U"<p>1<b>2<i>3";
+	for (char32_t cp : s) p.push_code_point(cp);
+	s = U"</b>4</i>5</p>";
+	for (char32_t cp : s) p.push_code_point(cp);
+	p.push_eof();
+
+	//BOOST_CHECK(data(*p.document().begin()) == " Comment ");
 }
+
+/*
 BOOST_AUTO_TEST_CASE(dispatcher__1)
 {
 }

@@ -18,6 +18,10 @@
 非公開の名前空間。
 */
 
+/*! @namespace wordring::whatwg::html::parsing
+非公開の名前空間。
+*/
+
 /*! @namespace wordring::whatwg::url
 非公開の名前空間。
 */

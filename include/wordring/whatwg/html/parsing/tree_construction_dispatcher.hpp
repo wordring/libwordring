@@ -215,6 +215,13 @@ namespace wordring::whatwg::html::parsing
 		}
 
 		/*! 要素が指定のHTML要素であることを調べる
+
+		@param [in] it  要素を指すポインタあるいはイテレータ
+		@param [in] tag タグ名
+
+		@return it が tag を名前として持つHTML要素である場合 true 、そうでない場合、 false を返す
+
+		このメンバは規格に無い。
 		*/
 		bool is_html_element_of(node_pointer it, tag_name tag) const
 		{
@@ -223,6 +230,15 @@ namespace wordring::whatwg::html::parsing
 			return P->get_namespace_uri_id(it) == ns_name::HTML && P->get_local_name_id(it) == tag;
 		}
 
+		/*! 要素が指定のHTML要素であることを調べる
+
+		@param [in] it  要素を指すポインタあるいはイテレータ
+		@param [in] tag タグ名
+
+		@return it が tag を名前として持つHTML要素である場合 true 、そうでない場合、 false を返す
+
+		このメンバは規格に無い。
+		*/
 		bool is_html_element_of(node_pointer it, std::u32string const& tag) const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
@@ -230,6 +246,16 @@ namespace wordring::whatwg::html::parsing
 			return P->get_namespace_uri_id(it) == ns_name::HTML && P->get_local_name(it) == tag;
 		}
 
+		/*! 要素が指定の要素であることを調べる
+
+		@param [in] it  要素を指すポインタあるいはイテレータ
+		@param [in] ns  名前空間名
+		@param [in] tag タグ名
+
+		@return it が ns 名前空間の tag を名前として持つ要素である場合 true 、そうでない場合、 false を返す
+
+		このメンバは規格に無い。
+		*/
 		bool is_element_of(node_pointer it, ns_name ns, tag_name tag) const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
@@ -244,6 +270,8 @@ namespace wordring::whatwg::html::parsing
 		// https://html.spec.whatwg.org/multipage/parsing.html#the-insertion-mode
 		// ----------------------------------------------------------------------------------------
 
+		/*! @brief 挿入モードを設定する
+		*/
 		void insertion_mode(mode_name mode)
 		{
 			m_insertion_mode = mode;
@@ -254,6 +282,11 @@ namespace wordring::whatwg::html::parsing
 			return m_template_insertion_mode_stack.back();
 		}
 
+		/*! @brief 挿入モードを適切に設定し直す
+
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#reset-the-insertion-mode-appropriately
+		- https://html.spec.whatwg.org/multipage/parsing.html#reset-the-insertion-mode-appropriately
+		*/
 		void reset_insertion_mode_appropriately()
 		{
 			assert(!m_stack.empty());
@@ -344,6 +377,13 @@ namespace wordring::whatwg::html::parsing
 		// ----------------------------------------------------------------------------------------
 
 		/*! @brief スタックに指定されたタグが有るか調べる
+
+		@param [in] ns  名前空間名
+		@param [in] tag タグ名
+
+		@return スタック内に名前空間とタグ名が一致する要素が存在する場合 true 、そうでない場合 false を返す
+
+		このメンバは規格に無い。
 		*/
 		bool contains(ns_name ns, tag_name tag) const
 		{
@@ -355,6 +395,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
+		/*! @brief スタックに指定されたタグが有るか調べる
+
+		@param [in] tag タグ名
+
+		@return スタック内にタグ名が一致するHTML要素が存在する場合 true 、そうでない場合 false を返す
+
+		このメンバは規格に無い。
+		*/
 		bool contains(tag_name name) const
 		{
 			for (stack_entry const& se : m_stack)
@@ -365,16 +413,34 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
+		/*! @brief スタックに指定されたポインタが有るか調べる
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		@return スタック内に一致するポインタが存在する場合 true 、そうでない場合 false を返す
+
+		このメンバは規格に無い。
+		*/
 		bool contains(node_pointer it) const
 		{
 			for (stack_entry const& se : m_stack) { if (se.m_it == it) return true; }
 			return false;
 		}
 
+		/*! @brief 現在のノードを返す
+		
+		- https://html.spec.whatwg.org/multipage/parsing.html#current-node
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#current-node
+		*/
 		stack_entry& current_node() { return m_stack.back(); }
 
 		stack_entry const& current_node() const { return m_stack.back(); }
 
+		/*! @brief 現在の調整済みノードを返す
+		
+		- https://html.spec.whatwg.org/multipage/parsing.html#adjusted-current-node
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#adjusted-current-node
+		*/
 		stack_entry& adjusted_current_node()
 		{
 			if constexpr (is_fragments_parser) { if (m_stack.size() == 1) return m_context_entry; }
@@ -387,8 +453,14 @@ namespace wordring::whatwg::html::parsing
 			return current_node();
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#special
+		/*! @brief 特別な要素か調べる
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		@return it が特別な要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#special
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#special
 		*/
 		bool is_special(node_pointer it) const
 		{
@@ -441,8 +513,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#formatting
+		/*! @brief 整形要素か調べる
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		@return it が整形要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#formatting
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#formatting
 		*/
 		bool is_formatting(node_pointer it) const
 		{
@@ -463,8 +541,35 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-the-specific-scope
+		/*! @brief 要素が特定の視野内（スコープ内）にあるか調べる
+
+		@param [in] s スコープ
+		@param [in] target ターゲット条件
+
+		@return 視野内にある場合 true を返す
+
+		スコープに指定する値は以下の通り。
+		- default_scope
+		- list_item_scope
+		- button_scope
+		- table_scope
+		- select_scope
+
+		ターゲット条件に指定する型は以下の通り。
+		- std::pair<ns_name, tag_name>
+			+ 名前空間とタグ名のペア
+		- tag_name
+			+ タグ名
+		- std::u32string
+			+ タグ名
+		- std::array<tag_name, n>
+			+ タグ名の配列
+		- node_pointer
+			+ 要素へのポインタあるいはイテレータ
+		.
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-the-specific-scope
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#has-an-element-in-the-specific-scope
 		*/
 		template <typename Scope, typename Target>
 		bool in_specific_scope(Scope s, Target const& target) const
@@ -507,8 +612,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-scope
+		/*! @brief デフォルトのスコープ内の特定な要素か調べる
+
+		@param [in] 要素を指すポインタあるいはイテレータ
+
+		@return 要素が特定な要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-scope
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#has-an-element-in-scope
 		*/
 		bool is_default_scope(node_pointer it) const
 		{
@@ -551,8 +662,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-list-item-scope
+		/*! @brief リスト・アイテムのスコープ内の特定な要素か調べる
+
+		@param [in] 要素を指すポインタあるいはイテレータ
+
+		@return 要素が特定な要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-list-item-scope
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#has-an-element-in-list-item-scope
 		*/
 		bool is_list_item_scope(node_pointer it) const
 		{
@@ -562,8 +679,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-button-scope
+		/*! @brief ボタンのスコープ内の特定な要素か調べる
+
+		@param [in] 要素を指すポインタあるいはイテレータ
+
+		@return 要素が特定な要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-button-scope
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#has-an-element-in-button-scope
 		*/
 		bool is_button_scope(node_pointer it) const
 		{
@@ -573,8 +696,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-table-scope
+		/*! @brief テーブルのスコープ内の特定な要素か調べる
+
+		@param [in] 要素を指すポインタあるいはイテレータ
+
+		@return 要素が特定な要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-table-scope
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#has-an-element-in-table-scope
 		*/
 		bool is_table_scope(node_pointer it) const
 		{
@@ -585,8 +714,14 @@ namespace wordring::whatwg::html::parsing
 			return false;
 		}
 
-		/*
-		https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-select-scope
+		/*! @brief セレクトのスコープ内の特定な要素か調べる
+
+		@param [in] 要素を指すポインタあるいはイテレータ
+
+		@return 要素が特定な要素の場合 true を返す
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#has-an-element-in-select-scope
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#has-an-element-in-select-scope
 		*/
 		bool is_select_scope(node_pointer it) const
 		{
@@ -603,9 +738,14 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief スタックから指定のタグが現れるまでPOPする
 
-		https://triple-underscore.github.io/HTML-parsing-ja.html#_pop-until
-		*/
+		@param [in] ns  名前空間
+		@param [in] tag タグ名
 
+		指定のタグ名を持つ項目自身もPOPされる。
+		このメンバは規格に無い。
+
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#_pop-until
+		*/
 		void pop_until(ns_name ns, tag_name tag)
 		{
 			while (!m_stack.empty())
@@ -616,6 +756,19 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
+		/*! @brief スタックから指定のタグが現れるまでPOPする
+
+		@param [in] ns         名前空間
+		@param [in] conditions タグ名の配列
+
+		タグ名の配列に指定する型は以下の通り。
+		- std::array<tag_name, n>
+
+		指定のタグ名を持つ項目自身もPOPされる。
+		このメンバは規格に無い。
+
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#_pop-until
+		*/
 		template <typename T1>
 		void pop_until(ns_name ns, T1 conditions)
 		{
@@ -630,6 +783,15 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
+		/*! @brief スタックから指定の要素が現れるまでPOPする
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		指定の要素を持つ項目自身もPOPされる。
+		このメンバは規格に無い。
+
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#_pop-until
+		*/
 		void pop_until(node_pointer it)
 		{
 			while (!m_stack.empty())
@@ -640,6 +802,14 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
+		/*! @brief スタックから指定の要素を持つ項目を検索する
+		
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		@return スタック内で指定の要素を持つ項目を指すイテレータ
+
+		このメンバは規格に無い。
+		*/
 		auto find(node_pointer it)
 		{
 			auto it1 = m_stack.begin();
@@ -653,7 +823,11 @@ namespace wordring::whatwg::html::parsing
 			return it1;
 		}
 
-		/*! @brief スタックから指定の項目を除去する
+		/*! @brief スタックから指定の要素を持つ項目を除去する
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		このメンバは規格に無い。
 		*/
 		void remove(node_pointer it)
 		{
@@ -672,12 +846,17 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief 整形要素リストへ整形要素を挿入する
 
+		@param [in] it 整形要素を指すポインタあるいはイテレータ
+		@param [in] token 整形要素を作成するために使われた開始タグ・トークン
+
+		- https://html.spec.whatwg.org/multipage/parsing.html#push-onto-the-list-of-active-formatting-elements
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#push-onto-the-list-of-active-formatting-elements
+
 		@todo
 			要素が作成されたときと同じ比較とは、ケース・インセンシティブ、名前空間接頭辞の分離前の比較を意味するかもしれない。
 			あるいは、実際にトークンと比較するのかもしれない。
 			この実装は、スクリプトをサポートしないため、トークンと要素の属性は違いが無い。
 			したがって、要素同士を比較している。
-		- https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
 		*/
 		void push_formatting_element_list(node_pointer it, start_tag_token const& token)
 		{
@@ -706,7 +885,8 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief アクティブ整形要素リストへマーカーを挿入する
 
-		https://html.spec.whatwg.org/multipage/parsing.html#the-list-of-active-formatting-elements
+		- https://html.spec.whatwg.org/multipage/parsing.html#push-onto-the-list-of-active-formatting-elements
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#push-onto-the-list-of-active-formatting-elements
 		*/
 		void push_formatting_element_list()
 		{
@@ -715,7 +895,8 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief アクティブ整形要素リストを再構築する
 
-		https://html.spec.whatwg.org/multipage/parsing.html#reconstruct-the-active-formatting-elements
+		- https://html.spec.whatwg.org/multipage/parsing.html#reconstruct-the-active-formatting-elements
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#reconstruct-the-active-formatting-elements
 		*/
 		void reconstruct_formatting_element_list()
 		{
@@ -748,7 +929,8 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief アクティブ整形要素リストをマーカーまでクリアする
 		
-		https://html.spec.whatwg.org/multipage/parsing.html#clear-the-list-of-active-formatting-elements-up-to-the-last-marker
+		- https://html.spec.whatwg.org/multipage/parsing.html#clear-the-list-of-active-formatting-elements-up-to-the-last-marker
+		- https://triple-underscore.github.io/HTML-parsing-ja.html#clear-the-list-of-active-formatting-elements-up-to-the-last-marker
 		*/
 		void clear_formatting_element_list()
 		{
@@ -760,6 +942,14 @@ namespace wordring::whatwg::html::parsing
 			}
 		}
 
+		/*! @brief リストから指定の要素を持つ項目を検索する
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		@return リスト内で指定の要素を持つ項目を指すイテレータ
+
+		このメンバは規格に無い。
+		*/
 		auto find_from_list(node_pointer it)
 		{
 			auto it1 = m_list.begin();
@@ -773,7 +963,11 @@ namespace wordring::whatwg::html::parsing
 			return it1;
 		}
 
-		/*! @brief 整形要素リストから指定の要素を削除する
+		/*! @brief 整形要素リストから指定の要素を持つ項目を削除する
+
+		@param [in] it 要素を指すポインタあるいはイテレータ
+
+		このメンバは規格に無い。
 		*/
 		void remove_from_list(node_pointer it)
 		{
@@ -1890,7 +2084,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Head) f = true;
 			}
-			if constexpr (std::is_same_v<start_tag_token, Token>) f = true;
+			if constexpr (std::is_same_v<end_tag_token, Token>) f = true;
 
 			if (f)
 			{
@@ -2000,20 +2194,21 @@ namespace wordring::whatwg::html::parsing
 				{
 					report_error();
 					if (m_stack.size() == 1
-					 || is_html_element_of(m_stack[1].m_it, tag_name::Body)
-					 || contains(ns_name::HTML, tag_name::Template)) return;
-				}
-				m_frameset_ok_flag = false;
-				node_pointer it = m_stack[1].m_it;
-				for (token_attribute const& a : token)
-				{
-					if (a.m_omitted) continue;
-					if (!P->contains(it, a.m_namespace, a.m_prefix, a.m_name))
+						|| is_html_element_of(m_stack[1].m_it, tag_name::Body)
+						|| contains(ns_name::HTML, tag_name::Template)) return;
+
+					m_frameset_ok_flag = false;
+					node_pointer it = m_stack[1].m_it;
+					for (token_attribute const& a : token)
 					{
-						P->append_attribute(it, a.m_namespace, a.m_prefix, a.m_name, a.m_value);
+						if (a.m_omitted) continue;
+						if (!P->contains(it, a.m_namespace, a.m_prefix, a.m_name))
+						{
+							P->append_attribute(it, a.m_namespace, a.m_prefix, a.m_name, a.m_value);
+						}
 					}
+					return;
 				}
-				return;
 			}
 
 			if constexpr (std::is_same_v<start_tag_token, Token>)
