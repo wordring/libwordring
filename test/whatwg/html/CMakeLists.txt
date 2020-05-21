@@ -1,4 +1,4 @@
-﻿# wordring_cpp/test/whatwg/html/parsing/
+﻿# wordring_cpp/test/whatwg/html/
 #
 # このプロジェクトはwhatwg/htmlのテストを作成します。
 #
@@ -35,9 +35,6 @@ add_executable(
 		parsing/tokenization.cpp
 		parsing/tree_construction_dispatcher.cpp
 		parsing/on_initial_insertion_mode.cpp
-		simple_node.cpp
-		simple_parser.cpp
-		simple_policy.cpp
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})

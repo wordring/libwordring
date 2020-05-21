@@ -2,9 +2,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/whatwg/html/simple_node.hpp>
-#include <wordring/whatwg/html/simple_parser.hpp>
-#include <wordring/whatwg/html/simple_policy.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_parser.hpp>
+#include <wordring/html/simple_policy.hpp>
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
@@ -18,7 +18,8 @@
 
 namespace
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
+	using namespace wordring::html::parsing;
 	using namespace wordring::whatwg::html::parsing;
 
 	using node_type   = simple_node<std::string>;
@@ -26,10 +27,10 @@ namespace
 	using policy_type = simple_policy<std::string, tree>;
 
 
-	class test_parser : public simple_parser<test_parser, std::string, tree>
+	class test_parser : public simple_parser_base<test_parser, std::string, tree>
 	{
 	public:
-		using base_type = simple_parser<test_parser, std::string, tree>;
+		using base_type = simple_parser_base<test_parser, std::string, tree>;
 
 	public:
 		using document_type               = typename policy_type::document_type;
@@ -49,7 +50,7 @@ namespace
 		using base_type::push_code_point;
 
 		using base_type::insertion_mode;
-		using base_type::reset_insertion_mode_appropriately;
+		//using base_type::reset_insertion_mode_appropriately;
 		using base_type::current_node;
 		using base_type::adjusted_current_node;
 		using base_type::is_special;

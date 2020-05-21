@@ -3,31 +3,38 @@
 // https://html.spec.whatwg.org/multipage/parsing.html
 // https://triple-underscore.github.io/HTML-parsing-ja.html
 
-#include <wordring/whatwg/html/simple_node.hpp>
-#include <wordring/whatwg/html/simple_policy.hpp>
+#include <wordring/html/html_defs.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_policy.hpp>
 
-//#include <wordring/whatwg/encoding/encoding.hpp>
-
-#include <wordring/whatwg/html/parsing/token.hpp>
-//#include <wordring/whatwg/html/parsing/atom_tbl.hpp>
-//#include <wordring/whatwg/html/parsing/input_stream.hpp>
-#include <wordring/whatwg/html/parsing/parser_defs.hpp>
-//#include <wordring/whatwg/html/parsing/tokenization.hpp>
 #include <wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp>
+
+#include <wordring/encoding/encoding.hpp>
 
 #include <cassert>
 #include <iterator>
 #include <variant>
 
-namespace wordring::whatwg::html
+namespace wordring::html
 {
+	/*! @class simple_parser_base simple_parser.hpp wordring/html/simple_parser.hpp
+	
+	@brief simple_node 用の HTML5 パーサー
+
+	@tparam T                 CRTP に基づく派生クラス
+	@tparam String            文字列型
+	@tparam Container         Tree コンテナ
+	@tparam IsFragmentsParser HTML フラグメント・パーサーの場合 true
+
+
+	*/
 	template <typename T, typename String, typename Container, bool IsFragmentsParser = false>
-	class simple_parser : public parsing::tree_construction_dispatcher<T, simple_policy<String, Container, IsFragmentsParser>>
+	class simple_parser_base : public wordring::whatwg::html::parsing::tree_construction_dispatcher<T, simple_policy<String, Container, IsFragmentsParser>>
 	{
 	public:
 		using policy = simple_policy<String, Container, IsFragmentsParser>;
 
-		using base_type = parsing::tree_construction_dispatcher<T, policy>;
+		using base_type = wordring::whatwg::html::parsing::tree_construction_dispatcher<T, policy>;
 		using this_type = T;
 
 		using string_type  = typename policy::string_type;
@@ -57,9 +64,9 @@ namespace wordring::whatwg::html
 		using typename base_type::mode_name;
 
 	public:
-		simple_parser()
-			: m_script_nesting_level(0)
-			, m_parser_pause_flag(false)
+		simple_parser_base()
+			//: m_script_nesting_level(0)
+			//, m_parser_pause_flag(false)
 		{
 			m_document  = m_c.insert(m_c.end(), document_type());
 			m_temporary = m_c.insert(m_c.end(), node_type());
@@ -68,7 +75,7 @@ namespace wordring::whatwg::html
 		// ----------------------------------------------------------------------------------------
 		// 文書
 		// ----------------------------------------------------------------------------------------
-
+		
 		/*! @brief 文書ノードを返す
 
 		パーサ構築時に文書ノードが挿入される。
@@ -103,7 +110,7 @@ namespace wordring::whatwg::html
 		void set_current_document_readiness(std::u32string const& rediness)
 		{
 		}
-
+		
 		// ----------------------------------------------------------------------------------------
 		// 文書型
 		// ----------------------------------------------------------------------------------------
@@ -267,7 +274,7 @@ namespace wordring::whatwg::html
 
 		bool contains(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name)
 		{
-			return wordring::whatwg::html::find(*it, ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name)) != wordring::whatwg::html::end(*it);
+			return wordring::html::find(*it, ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name)) != wordring::html::end(*it);
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -307,26 +314,20 @@ namespace wordring::whatwg::html
 			return m_c.insert(pos, std::move(comment));
 		}
 
-		// ----------------------------------------------------------------------------------------
-		// ノード
-		// ----------------------------------------------------------------------------------------
-
-		/*! @brief NULLで初期化された空のポインタを作成する
-		*/
-		node_pointer create_pointer_() const
-		{
-			return node_pointer();
-		}
-
 		void on_report_error(parsing::error_name e) {}
 
 	protected:
 
-		std::uint32_t m_script_nesting_level;
-		bool m_parser_pause_flag;
+		//std::uint32_t m_script_nesting_level;
+		//bool m_parser_pause_flag;
 
 		container    m_c;
 		node_pointer m_document;
 		node_pointer m_temporary;
+	};
+
+	template <typename String, typename Container, bool IsFragmentsParser = false>
+	class simple_parser : public simple_parser_base<simple_parser<String, Container, IsFragmentsParser>, String, Container, IsFragmentsParser>
+	{
 	};
 }

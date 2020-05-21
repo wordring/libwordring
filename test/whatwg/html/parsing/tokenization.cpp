@@ -2,8 +2,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/whatwg/html/simple_node.hpp>
-#include <wordring/whatwg/html/simple_policy.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_policy.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
 #include <wordring/whatwg/html/parsing/tokenization.hpp>
 
@@ -14,7 +14,7 @@
 
 namespace
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 	using namespace wordring::whatwg::html::parsing;
 
 	using node_type = simple_node<std::u32string>;

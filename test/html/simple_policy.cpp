@@ -4,16 +4,16 @@
 
 #include <wordring/tree/tree.hpp>
 
-#include <wordring/whatwg/html/simple_node.hpp>
-#include <wordring/whatwg/html/simple_policy.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_policy.hpp>
 
 namespace
 {
-	using node_type = wordring::whatwg::html::simple_node<std::u32string>;
+	using node_type = wordring::html::simple_node<std::u32string>;
 
 	using tree = wordring::tree<node_type>;
 
-	using policy = wordring::whatwg::html::simple_policy<std::u32string, tree>;
+	using policy = wordring::html::simple_policy<std::u32string, tree>;
 
 	struct test_policy : policy
 	{

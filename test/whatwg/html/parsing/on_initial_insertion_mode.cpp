@@ -3,9 +3,9 @@
 #include <boost/test/unit_test.hpp>
 
 
-#include <wordring/whatwg/html/simple_node.hpp>
-#include <wordring/whatwg/html/simple_parser.hpp>
-#include <wordring/whatwg/html/simple_policy.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_parser.hpp>
+#include <wordring/html/simple_policy.hpp>
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
@@ -19,8 +19,8 @@
 
 namespace
 {
-	using namespace wordring::whatwg::html;
-	using namespace wordring::whatwg::html::parsing;
+	using namespace wordring::html;
+	using namespace wordring::html::parsing;
 
 	using node_type   = simple_node<std::string>;
 	using tree        = wordring::tree<node_type>;
@@ -34,14 +34,14 @@ namespace
 	using processing_instruction_type = typename policy_type::processing_instruction_type;
 	using comment_type                = typename policy_type::comment_type;
 
-	struct test_parser : public simple_parser<test_parser, std::string, tree>
+	struct test_parser : public simple_parser_base<test_parser, std::string, tree>
 	{
 	public:
-		using base_type = simple_parser<test_parser, std::string, tree>;
+		using base_type = simple_parser_base<test_parser, std::string, tree>;
 
 		using base_type::mode_name;
 
-		using base_type::m_insertion_mode;
+		//using base_type::m_insertion_mode;
 	};
 }
 

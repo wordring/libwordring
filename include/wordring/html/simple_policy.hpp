@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-//#include <wordring/whatwg/html/parsing/token.hpp>
-#include <wordring/whatwg/html/simple_node.hpp>
+#include <wordring/html/simple_node.hpp>
 
-namespace wordring::whatwg::html
+namespace wordring::html
 {
 	template <typename String, typename Container, bool IsFragmentsParser = false>
 	class simple_policy

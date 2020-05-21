@@ -297,7 +297,7 @@ $(function() {
 <div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    };</div>
 <div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
 <div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Label1, <span class="keyword">typename</span> Base1&gt;</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(const_trie_iterator&lt;Label1, Base1&gt; <span class="keyword">const</span>&amp; lhs, const_trie_iterator&lt;Label1, Base1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(const_trie_iterator&lt;Label1, Base1&gt; <span class="keyword">const</span>&amp; lhs, const_trie_iterator&lt;Label1, Base1&gt; <span class="keyword">const</span>&amp; rhs)</div>
 <div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    {</div>
 <div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        assert(lhs.m_c == rhs.m_c);</div>
 <div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        <span class="keywordflow">return</span> lhs.m_index == rhs.m_index;</div>
@@ -321,6 +321,7 @@ $(function() {
 <div class="ttc" id="aclasswordring_1_1basic__trie_html_a283334d4fda1dfcae58bdae1d4e9976d"><div class="ttname"><a href="classwordring_1_1basic__trie.html#a283334d4fda1dfcae58bdae1d4e9976d">wordring::basic_trie::begin</a></div><div class="ttdeci">const_iterator begin() const noexcept</div><div class="ttdoc">根を指すイテレータを返す</div><div class="ttdef"><b>Definition:</b> trie.hpp:567</div></div>
 <div class="ttc" id="anamespacewordring_1_1detail_html"><div class="ttname"><a href="namespacewordring_1_1detail.html">wordring::detail</a></div></div>
 <div class="ttc" id="aclasswordring_1_1detail_1_1const__trie__iterator_html_a8201a28624dd0670b265c342926489a0"><div class="ttname"><a href="classwordring_1_1detail_1_1const__trie__iterator.html#a8201a28624dd0670b265c342926489a0">wordring::detail::const_trie_iterator::operator[]</a></div><div class="ttdeci">const_trie_iterator operator[](value_type label) const</div><div class="ttdoc">ラベルで遷移できる子を返す</div><div class="ttdef"><b>Definition:</b> trie_iterator.hpp:141</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_a945d4e00d79e600a9c748342b5113d95"><div class="ttname"><a href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">wordring::html::operator==</a></div><div class="ttdeci">bool operator==(simple_attr&lt; String1 &gt; const &amp;lhs, simple_attr&lt; String1 &gt; const &amp;rhs)</div><div class="ttdoc">名前空間、接頭辞、ローカル名が一致する場合、true を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:140</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

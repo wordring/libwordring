@@ -1,8 +1,8 @@
-﻿// test/whatwg/html/simple_node.cpp
+﻿// test/html/simple_node.cpp
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/whatwg/html/simple_node.hpp>
+#include <wordring/html/simple_node.hpp>
 
 #include <wordring/compatibility.hpp>
 
@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_SUITE(simple_node_test)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_attr_equal_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_attr<std::u8string> ba(u8"href");
 
@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_attr_equal_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_construct_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> be1, be2;
 
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_construct_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> be;
 	be.namespace_uri(u8"http://www.w3.org/1999/xhtml");
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_2)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u16string> be;
 	be.namespace_uri(u"http://www.w3.org/1999/xhtml");
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_2)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_3)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u32string> be;
 	be.namespace_uri(U"http://www.w3.org/1999/xhtml");
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_3)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_local_name_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> be;
 	be.local_name(u8"head");
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_local_name_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_push_back_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> be;
 	simple_attr<std::u8string> ba;
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_push_back_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_find_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> be;
 	simple_attr<std::u8string> ba(u8"href");
@@ -99,7 +99,7 @@ String const& data(simple_node<String> const& node)
 */
 BOOST_AUTO_TEST_CASE(simple_node_data_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_node<std::u8string> sn = simple_text<std::u8string>(u8"text");
 
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_CASE(simple_node_data_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_data_2)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_node<std::u8string> sn = simple_comment<std::u8string>(u8"text");
 
@@ -121,7 +121,7 @@ BOOST_AUTO_TEST_CASE(simple_node_data_2)
 
 BOOST_AUTO_TEST_CASE(simple_node_data_3)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_node<std::u8string> const sn = simple_text<std::u8string>(u8"text");
 
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(simple_node_data_3)
 
 BOOST_AUTO_TEST_CASE(simple_node_data_4)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_node<std::u8string> const sn = simple_comment<std::u8string>(u8"text");
 
@@ -148,7 +148,7 @@ typename simple_element<String>::const_iterator end(simple_node<String> const& n
 */
 BOOST_AUTO_TEST_CASE(simple_node_begin_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	el.push_back({ u8"a1", u8"v1" });
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(simple_node_begin_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_begin_2)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	el.push_back({ attribute_name::Abbr, u8"v1" });
@@ -174,7 +174,7 @@ BOOST_AUTO_TEST_CASE(simple_node_begin_2)
 
 BOOST_AUTO_TEST_CASE(simple_node_end_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	el.push_back({ u8"a1", u8"v1" });
@@ -193,7 +193,7 @@ void push_back(simple_node<String> const& node, simple_attr<String> const& attr)
 */
 BOOST_AUTO_TEST_CASE(simple_node_push_back_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
@@ -210,7 +210,7 @@ typename simple_element<String>::const_iterator find(simple_node<String> const& 
 */
 BOOST_AUTO_TEST_CASE(simple_node_find_1)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_1)
 
 BOOST_AUTO_TEST_CASE(simple_node_find_2)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
@@ -240,7 +240,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_2)
 
 BOOST_AUTO_TEST_CASE(simple_node_find_3)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
@@ -255,7 +255,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_3)
 
 BOOST_AUTO_TEST_CASE(simple_node_find_4)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
@@ -270,7 +270,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_4)
 
 BOOST_AUTO_TEST_CASE(simple_node_find_5)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
@@ -285,7 +285,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_5)
 
 BOOST_AUTO_TEST_CASE(simple_node_find_6)
 {
-	using namespace wordring::whatwg::html;
+	using namespace wordring::html;
 
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;

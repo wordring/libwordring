@@ -5,7 +5,6 @@
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/input_stream.hpp>
-#include <wordring/whatwg/html/parsing/open_element_stack.hpp>
 #include <wordring/whatwg/html/parsing/parser_defs.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
 

@@ -1,14 +1,10 @@
-﻿// test/whatwg/html/simple_parser.cpp
+﻿// test/html/simple_parser.cpp
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/whatwg/html/simple_node.hpp>
-#include <wordring/whatwg/html/simple_parser.hpp>
-#include <wordring/whatwg/html/simple_policy.hpp>
-
-#include <wordring/whatwg/html/parsing/atom_tbl.hpp>
-#include <wordring/whatwg/html/parsing/tokenization.hpp>
-#include <wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_parser.hpp>
+#include <wordring/html/simple_policy.hpp>
 
 #include <wordring/tree/tree.hpp>
 
@@ -17,13 +13,15 @@
 
 namespace
 {
-	using namespace wordring::whatwg::html;
-	using namespace wordring::whatwg::html::parsing;
+	using namespace wordring::html;
+	//using namespace wordring::html::parsing;
+	//using namespace wordring::whatwg::html::parsing;
 
 	using node_type      = simple_node<std::string>;
 	using tree           = wordring::tree<node_type>;
 	using policy_type    = simple_policy<std::string, tree>;
 
+	/*
 	class test_parser : public simple_parser<test_parser, std::string, tree>
 	{
 		using base_type = simple_parser<test_parser, std::string, tree>;
@@ -126,6 +124,9 @@ namespace
 		comment_type const* to_comment(node_pointer it) const { return std::get_if<comment_type>(std::addressof(*it)); }
 
 	};
+	*/
+
+using test_parser = simple_parser<std::string, tree>;
 }
 
 BOOST_AUTO_TEST_SUITE(simple_parser_test)
@@ -137,7 +138,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_construct_1)
 	for (char32_t cp : s) p.push_code_point(cp);
 	p.push_eof();
 
-	BOOST_CHECK(p.to_comment(p.document().begin())->data() == " Comment ");
+	BOOST_CHECK(data(*p.document().begin()) == " Comment ");
 }
 
 BOOST_AUTO_TEST_CASE(simple_parser_contains_1)

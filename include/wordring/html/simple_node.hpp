@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include <wordring/whatwg/html/html_atom.hpp>
-#include <wordring/whatwg/html/html_defs.hpp>
+#include <wordring/html/html_atom.hpp>
+#include <wordring/html/html_defs.hpp>
 
 #include <wordring/whatwg/infra/infra.hpp>
 
@@ -10,12 +10,16 @@
 #include <variant>
 #include <vector>
 
-namespace wordring::whatwg::html
+namespace wordring::html
 {
 	// ---------------------------------------------------------------------------------------------
 	// 属性
 	// ---------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の属性ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_attr
 	{
@@ -198,7 +202,10 @@ namespace wordring::whatwg::html
 	// 文書
 	// --------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の Document ノード
 
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_document
 	{
@@ -255,6 +262,10 @@ namespace wordring::whatwg::html
 	// 文書型
 	// --------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の DocumentType ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_document_type
 	{
@@ -303,6 +314,10 @@ namespace wordring::whatwg::html
 	// 文書片
 	// --------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の DocumentFragment ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_document_fragment
 	{
@@ -335,6 +350,10 @@ namespace wordring::whatwg::html
 	// 要素
 	// --------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の Element ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_element
 	{
@@ -497,6 +516,10 @@ namespace wordring::whatwg::html
 	// テキスト
 	// --------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の Text ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_text
 	{
@@ -547,6 +570,10 @@ namespace wordring::whatwg::html
 	// 処理命令
 	// ---------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の ProcessingInstruction ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_processing_instruction
 	{
@@ -578,6 +605,10 @@ namespace wordring::whatwg::html
 	// コメント
 	// ---------------------------------------------------------------------------------------------
 
+	/*! @brief simple_html 用の コメント ノード
+
+	@tparam String 取り扱う文字列の型
+	*/
 	template <typename String>
 	class simple_comment
 	{
@@ -635,6 +666,12 @@ namespace wordring::whatwg::html
 	// ノード
 	// ---------------------------------------------------------------------------------------------
 
+	/*! @brief HTML のノードに相当する共用体
+
+	@tparam String 文字列の型
+
+	インデックスが規格の NodeType と一致するように並べてある。
+	*/
 	template <typename String>
 	using simple_node = std::variant<
 		std::monostate,
@@ -677,39 +714,39 @@ namespace wordring::whatwg::html
 		return std::get<simple_comment<String>>(node).data();
 	}
 
-	/*! @brief ノードを要素と解釈して属性の開始を返す
+	/*! @brief 属性の開始を返す
 	*/
 	template <typename String>
-	typename simple_element<String>::iterator begin(simple_node<String>& node)
+	auto begin(simple_node<String>& node)
 	{
 		return std::get<simple_element<String>>(node).begin();
 	}
 
-	/*! @brief ノードを要素と解釈して属性の開始を返す
+	/*! @brief 属性の開始を返す
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator begin(simple_node<String> const& node)
+	auto begin(simple_node<String> const& node)
 	{
 		return std::get<simple_element<String>>(node).begin();
 	}
 
-	/*! @brief ノードを要素と解釈して属性の終端を返す
+	/*! @brief 属性の終端を返す
 	*/
 	template <typename String>
-	typename simple_element<String>::iterator end(simple_node<String>& node)
+	auto end(simple_node<String>& node)
 	{
 		return std::get<simple_element<String>>(node).end();
 	}
 
-	/*! @brief ノードを要素と解釈して属性の終端を返す
+	/*! @brief 属性の終端を返す
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator end(simple_node<String> const& node)
+	auto end(simple_node<String> const& node)
 	{
 		return std::get<simple_element<String>>(node).end();
 	}
 
-	/*! @brief ノードを要素と解釈して属性を追加する
+	/*! @brief 属性を追加する
 	*/
 	template <typename String>
 	void push_back(simple_node<String>& node, simple_attr<String> const& attr)
@@ -723,50 +760,94 @@ namespace wordring::whatwg::html
 		return std::get<simple_element<String>>(node).push_back(std::move(attr));
 	}
 
-	/*! @brief ノードを要素と解釈して属性を検索する
+	/*! @brief 属性を検索する
+
+	@param [in] node 要素を格納するノード
+	@param [in] attr 属性
+
+	@return 属性を指すイテレータ
+
+	node に格納される要素から、attr と名前空間、接頭辞、名前が一致する属性を検索し返す。
+
+	@sa simple_element::find()
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator find(simple_node<String> const& node, simple_attr<String> const& attr)
+	auto find(simple_node<String> const& node, simple_attr<String> const& attr)
 	{
 		return std::get<simple_element<String>>(node).find(attr);
 	}
 
-	/*! @brief ノードを要素と解釈して属性を検索する
+	/*! @brief 属性を検索する
+
+	@param [in] node   要素を格納するノード
+	@param [in] ns     名前空間
+	@param [in] prefix 接頭辞
+	@param [in] name   属性名
+
+	@return 属性を指すイテレータ
+
+	node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。
+
+	@sa simple_element::find()
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator
-		find(simple_node<String> const& node, ns_name ns, String const& prefix, String const& name)
+	auto find(simple_node<String> const& node, ns_name ns, String const& prefix, String const& name)
 	{
 		return std::get<simple_element<String>>(node).find(ns, prefix, name);
 	}
 
-	/*! @brief ノードを要素と解釈して属性を検索する
+	/*! @brief 属性を検索する
 
+	@param [in] node 要素を格納するノード
+	@param [in] name 属性名
+
+	@return 属性を指すイテレータ
+
+	node に格納される要素から、名前空間がHTML、接頭辞が空、そして名前が一致する属性を検索し返す。
 	HTML要素用。
+
+	@sa simple_element::find()
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator find(simple_node<String> const& node, String const& name)
+	auto find(simple_node<String> const& node, String const& name)
 	{
 		return std::get<simple_element<String>>(node).find(name);
 	}
 
-	/*! @brief ノードを要素と解釈して属性を検索する
+	/*! @brief 属性を検索する
+
+	@param [in] node   要素を格納するノード
+	@param [in] ns     名前空間
+	@param [in] prefix 接頭辞
+	@param [in] name   属性名
+
+	@return 属性を指すイテレータ
+
+	node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。
+
+	@sa simple_element::find()
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator
-		find(simple_node<String> const& node, ns_name ns, String const& prefix, attribute_name name)
+	auto find(simple_node<String> const& node, ns_name ns, String const& prefix, attribute_name name)
 	{
 		return std::get<simple_element<String>>(node).find(ns, prefix, name);
 	}
 
-	/*! @brief ノードを要素と解釈して属性を検索する
+	/*! @brief 属性を検索する
 
+	@param [in] node 要素を格納するノード
+	@param [in] name 属性名
+
+	@return 属性を指すイテレータ
+
+	node に格納される要素から、名前空間がHTML、接頭辞が空、そして名前が一致する属性を検索し返す。
 	HTML要素用。
+
+	@sa simple_element::find()
 	*/
 	template <typename String>
 	typename simple_element<String>::const_iterator find(simple_node<String> const& node, attribute_name name)
 	{
 		return std::get<simple_element<String>>(node).find(name);
 	}
-
 }
