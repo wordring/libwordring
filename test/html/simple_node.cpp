@@ -299,4 +299,19 @@ BOOST_AUTO_TEST_CASE(simple_node_find_6)
 }
 
 
+BOOST_AUTO_TEST_CASE(simple_node_to_string_1)
+{
+	using namespace wordring::html;
+
+	simple_element<std::u8string> el;
+	simple_node<std::u8string> sn = el;
+
+	std::u8string s;
+	//to_string(sn, std::back_inserter(s));
+
+
+	int i = 0;
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -2,8 +2,9 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <wordring/html/simple_adapter.hpp>
 #include <wordring/html/simple_node.hpp>
-#include <wordring/html/simple_policy.hpp>
+
 #include <wordring/whatwg/html/parsing/token.hpp>
 #include <wordring/whatwg/html/parsing/tokenization.hpp>
 
@@ -21,7 +22,7 @@ namespace
 
 	using tree = wordring::tree<node_type>;
 
-	using test_policy = simple_policy<std::u32string, tree>;
+	using test_policy = simple_adapter<std::u32string, tree>;
 
 	struct test_tokenizer : tokenizer<test_tokenizer, test_policy>
 	{

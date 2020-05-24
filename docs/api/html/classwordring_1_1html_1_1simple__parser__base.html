@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>wordring_cpp: wordring::html::simple_parser&lt; String, Container &gt; クラステンプレート</title>
+<title>wordring_cpp: wordring::html::simple_parser_base&lt; T, String, Container &gt; クラステンプレート</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -38,87 +38,93 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1html.html">html</a></li><li class="navelem"><a class="el" href="classwordring_1_1html_1_1simple__parser.html">simple_parser</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1html.html">html</a></li><li class="navelem"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">simple_parser_base</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="classwordring_1_1html_1_1simple__parser-members.html">全メンバ一覧</a>  </div>
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="classwordring_1_1html_1_1simple__parser__base-members.html">全メンバ一覧</a>  </div>
   <div class="headertitle">
-<div class="title">wordring::html::simple_parser&lt; String, Container &gt; クラステンプレート</div>  </div>
+<div class="title">wordring::html::simple_parser_base&lt; T, String, Container &gt; クラステンプレート</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>simple_node 用の HTML5 パーサー  
+ <a href="classwordring_1_1html_1_1simple__parser__base.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="simple__parser_8hpp_source.html">wordring/html/simple_parser.hpp</a>&gt;</code></p>
 <div class="dynheader">
-wordring::html::simple_parser&lt; String, Container &gt; の継承関係図</div>
+wordring::html::simple_parser_base&lt; T, String, Container &gt; の継承関係図</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="classwordring_1_1html_1_1simple__parser.png" usemap="#wordring::html::simple_5Fparser_3C_20String_2C_20Container_20_3E_map" alt=""/>
-  <map id="wordring::html::simple_5Fparser_3C_20String_2C_20Container_20_3E_map" name="wordring::html::simple_5Fparser_3C_20String_2C_20Container_20_3E_map">
-<area href="classwordring_1_1html_1_1simple__parser__base.html" alt="wordring::html::simple_parser_base&lt; simple_parser&lt; String, Container &gt;, String, Container &gt;" shape="rect" coords="0,168,795,192"/>
-<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html" alt="wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;" shape="rect" coords="0,112,795,136"/>
-<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html" alt="wordring::whatwg::html::parsing::tokenizer&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;" shape="rect" coords="0,56,795,80"/>
-<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html" alt="wordring::whatwg::html::parsing::input_stream&lt; simple_parser&lt; String, Container &gt; &gt;" shape="rect" coords="0,0,795,24"/>
+  <img src="classwordring_1_1html_1_1simple__parser__base.png" usemap="#wordring::html::simple_5Fparser_5Fbase_3C_20T_2C_20String_2C_20Container_20_3E_map" alt=""/>
+  <map id="wordring::html::simple_5Fparser_5Fbase_3C_20T_2C_20String_2C_20Container_20_3E_map" name="wordring::html::simple_5Fparser_5Fbase_3C_20T_2C_20String_2C_20Container_20_3E_map">
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html" alt="wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_adapter&lt; String, Container &gt; &gt;" shape="rect" coords="0,112,602,136"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html" alt="wordring::whatwg::html::parsing::tokenizer&lt; T, simple_adapter&lt; String, Container &gt; &gt;" shape="rect" coords="0,56,602,80"/>
+<area href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html" title="HTML5 パーサー用のユニコード・コード・ポイント入力ストリーム" alt="wordring::whatwg::html::parsing::input_stream&lt; T &gt;" shape="rect" coords="0,0,602,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-その他の継承メンバ</h2></td></tr>
-<tr class="inherit_header pub_types_classwordring_1_1html_1_1simple__parser__base"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classwordring_1_1html_1_1simple__parser__base')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base&lt; simple_parser&lt; String, Container &gt;, String, Container &gt;</a> に属する継承公開型</td></tr>
-<tr class="memitem:a7df5d694a6ccf755ec89d6b4dc9b474e inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a7df5d694a6ccf755ec89d6b4dc9b474e"></a>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a7df5d694a6ccf755ec89d6b4dc9b474e"><td class="memItemLeft" align="right" valign="top"><a id="a7df5d694a6ccf755ec89d6b4dc9b474e"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>adapter</b> = <a class="el" href="classwordring_1_1html_1_1simple__adapter.html">simple_adapter</a>&lt; String, Container &gt;</td></tr>
-<tr class="separator:a7df5d694a6ccf755ec89d6b4dc9b474e inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c72a2de4e158f5e6eb67607efd02907 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a4c72a2de4e158f5e6eb67607efd02907"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher</a>&lt; <a class="el" href="classwordring_1_1html_1_1simple__parser.html">simple_parser</a>&lt; String, Container &gt;, <a class="el" href="classwordring_1_1html_1_1simple__adapter.html">adapter</a> &gt;</td></tr>
-<tr class="separator:a4c72a2de4e158f5e6eb67607efd02907 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44894aae864540523b4b33466f769066 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a44894aae864540523b4b33466f769066"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__parser.html">simple_parser</a>&lt; String, Container &gt;</td></tr>
-<tr class="separator:a44894aae864540523b4b33466f769066 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a543dc5fe4778a5df0f6a01d7e2d298fe inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a543dc5fe4778a5df0f6a01d7e2d298fe"></a>
+<tr class="separator:a7df5d694a6ccf755ec89d6b4dc9b474e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c72a2de4e158f5e6eb67607efd02907"><td class="memItemLeft" align="right" valign="top"><a id="a4c72a2de4e158f5e6eb67607efd02907"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher</a>&lt; T, <a class="el" href="classwordring_1_1html_1_1simple__adapter.html">adapter</a> &gt;</td></tr>
+<tr class="separator:a4c72a2de4e158f5e6eb67607efd02907"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44894aae864540523b4b33466f769066"><td class="memItemLeft" align="right" valign="top"><a id="a44894aae864540523b4b33466f769066"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = T</td></tr>
+<tr class="separator:a44894aae864540523b4b33466f769066"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a543dc5fe4778a5df0f6a01d7e2d298fe"><td class="memItemLeft" align="right" valign="top"><a id="a543dc5fe4778a5df0f6a01d7e2d298fe"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = typename adapter::string_type</td></tr>
-<tr class="separator:a543dc5fe4778a5df0f6a01d7e2d298fe inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a57e5ef1b3caff467594e620aa7bc9985 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a57e5ef1b3caff467594e620aa7bc9985"></a>
+<tr class="separator:a543dc5fe4778a5df0f6a01d7e2d298fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57e5ef1b3caff467594e620aa7bc9985"><td class="memItemLeft" align="right" valign="top"><a id="a57e5ef1b3caff467594e620aa7bc9985"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = typename adapter::container_type</td></tr>
-<tr class="separator:a57e5ef1b3caff467594e620aa7bc9985 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e094489fd82e5fa0a8783b4a63db500 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a1e094489fd82e5fa0a8783b4a63db500"></a>
+<tr class="separator:a57e5ef1b3caff467594e620aa7bc9985"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e094489fd82e5fa0a8783b4a63db500"><td class="memItemLeft" align="right" valign="top"><a id="a1e094489fd82e5fa0a8783b4a63db500"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>node_type</b> = typename adapter::node_type</td></tr>
-<tr class="separator:a1e094489fd82e5fa0a8783b4a63db500 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afed9ef62293f29325c7404d4b00969c7 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="afed9ef62293f29325c7404d4b00969c7"></a>
+<tr class="separator:a1e094489fd82e5fa0a8783b4a63db500"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afed9ef62293f29325c7404d4b00969c7"><td class="memItemLeft" align="right" valign="top"><a id="afed9ef62293f29325c7404d4b00969c7"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>node_pointer</b> = typename container::iterator</td></tr>
-<tr class="separator:afed9ef62293f29325c7404d4b00969c7 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb96b8110cce443806dad419fcd8bef0 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="adb96b8110cce443806dad419fcd8bef0"></a>
+<tr class="separator:afed9ef62293f29325c7404d4b00969c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb96b8110cce443806dad419fcd8bef0"><td class="memItemLeft" align="right" valign="top"><a id="adb96b8110cce443806dad419fcd8bef0"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__document.html">adapter::document_type</a></td></tr>
-<tr class="separator:adb96b8110cce443806dad419fcd8bef0 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe6d0aa3d6d5d61ea0aa82fea8c35596 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="abe6d0aa3d6d5d61ea0aa82fea8c35596"></a>
+<tr class="separator:adb96b8110cce443806dad419fcd8bef0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abe6d0aa3d6d5d61ea0aa82fea8c35596"><td class="memItemLeft" align="right" valign="top"><a id="abe6d0aa3d6d5d61ea0aa82fea8c35596"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__document__type.html">adapter::document_type_type</a></td></tr>
-<tr class="separator:abe6d0aa3d6d5d61ea0aa82fea8c35596 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9316798e271c770e723173636a338e14 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a9316798e271c770e723173636a338e14"></a>
+<tr class="separator:abe6d0aa3d6d5d61ea0aa82fea8c35596"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9316798e271c770e723173636a338e14"><td class="memItemLeft" align="right" valign="top"><a id="a9316798e271c770e723173636a338e14"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>document_fragment_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__document__fragment.html">adapter::document_fragment_type</a></td></tr>
-<tr class="separator:a9316798e271c770e723173636a338e14 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8d131476994fa18d8ae4d3605f97d900 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a8d131476994fa18d8ae4d3605f97d900"></a>
+<tr class="separator:a9316798e271c770e723173636a338e14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d131476994fa18d8ae4d3605f97d900"><td class="memItemLeft" align="right" valign="top"><a id="a8d131476994fa18d8ae4d3605f97d900"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>element_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__element.html">adapter::element_type</a></td></tr>
-<tr class="separator:a8d131476994fa18d8ae4d3605f97d900 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9239e553f25461e48d8c8278cd9990e0 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a9239e553f25461e48d8c8278cd9990e0"></a>
+<tr class="separator:a8d131476994fa18d8ae4d3605f97d900"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9239e553f25461e48d8c8278cd9990e0"><td class="memItemLeft" align="right" valign="top"><a id="a9239e553f25461e48d8c8278cd9990e0"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>text_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__text.html">adapter::text_type</a></td></tr>
-<tr class="separator:a9239e553f25461e48d8c8278cd9990e0 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d71e58779f4e5eaaf25c0af99edc5fe inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a1d71e58779f4e5eaaf25c0af99edc5fe"></a>
+<tr class="separator:a9239e553f25461e48d8c8278cd9990e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d71e58779f4e5eaaf25c0af99edc5fe"><td class="memItemLeft" align="right" valign="top"><a id="a1d71e58779f4e5eaaf25c0af99edc5fe"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>processing_instruction_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__processing__instruction.html">adapter::processing_instruction_type</a></td></tr>
-<tr class="separator:a1d71e58779f4e5eaaf25c0af99edc5fe inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5acaa58eeb1b511cae77a56edfe56c93 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a5acaa58eeb1b511cae77a56edfe56c93"></a>
+<tr class="separator:a1d71e58779f4e5eaaf25c0af99edc5fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5acaa58eeb1b511cae77a56edfe56c93"><td class="memItemLeft" align="right" valign="top"><a id="a5acaa58eeb1b511cae77a56edfe56c93"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>comment_type</b> = typename <a class="el" href="classwordring_1_1html_1_1simple__comment.html">adapter::comment_type</a></td></tr>
-<tr class="separator:a5acaa58eeb1b511cae77a56edfe56c93 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9909d5cfcf16cd251de2142a8a6a8fb8 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a9909d5cfcf16cd251de2142a8a6a8fb8"></a>
+<tr class="separator:a5acaa58eeb1b511cae77a56edfe56c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9909d5cfcf16cd251de2142a8a6a8fb8"><td class="memItemLeft" align="right" valign="top"><a id="a9909d5cfcf16cd251de2142a8a6a8fb8"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_type</b> = typename adapter::attribute_type</td></tr>
-<tr class="separator:a9909d5cfcf16cd251de2142a8a6a8fb8 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb805d6ebf3e9c922ab338e14e3c5068 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="acb805d6ebf3e9c922ab338e14e3c5068"></a>
+<tr class="separator:a9909d5cfcf16cd251de2142a8a6a8fb8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb805d6ebf3e9c922ab338e14e3c5068"><td class="memItemLeft" align="right" valign="top"><a id="acb805d6ebf3e9c922ab338e14e3c5068"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_pointer</b> = typename adapter::attribute_pointer</td></tr>
-<tr class="separator:acb805d6ebf3e9c922ab338e14e3c5068 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a71a97ab2f880efe6ae6568e527b45ce0 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a71a97ab2f880efe6ae6568e527b45ce0"></a>
+<tr class="separator:acb805d6ebf3e9c922ab338e14e3c5068"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71a97ab2f880efe6ae6568e527b45ce0"><td class="memItemLeft" align="right" valign="top"><a id="a71a97ab2f880efe6ae6568e527b45ce0"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>namespace_uri_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">basic_html_atom</a>&lt; string_type, ns_name &gt;</td></tr>
-<tr class="separator:a71a97ab2f880efe6ae6568e527b45ce0 inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5c2caab812359dcdfba6fc03593d2ea inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="ac5c2caab812359dcdfba6fc03593d2ea"></a>
+<tr class="separator:a71a97ab2f880efe6ae6568e527b45ce0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5c2caab812359dcdfba6fc03593d2ea"><td class="memItemLeft" align="right" valign="top"><a id="ac5c2caab812359dcdfba6fc03593d2ea"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>lacal_name_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">basic_html_atom</a>&lt; string_type, tag_name &gt;</td></tr>
-<tr class="separator:ac5c2caab812359dcdfba6fc03593d2ea inherit pub_types_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開型</td></tr>
+<tr class="separator:ac5c2caab812359dcdfba6fc03593d2ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開型</td></tr>
 <tr class="memitem:a1ad00baacc8fc01f79eb8363ab0fbbf3 inherit pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a1ad00baacc8fc01f79eb8363ab0fbbf3">mode_name</a> </td></tr>
 <tr class="memdesc:a1ad00baacc8fc01f79eb8363ab0fbbf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">挿入モード  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a1ad00baacc8fc01f79eb8363ab0fbbf3">[詳解]</a><br /></td></tr>
 <tr class="separator:a1ad00baacc8fc01f79eb8363ab0fbbf3 inherit pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,56 +134,58 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>mode_type</b> = void
 <tr class="memitem:a166f6a637dfcf49c483014b7151b5c3c inherit pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a166f6a637dfcf49c483014b7151b5c3c"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>scope_type</b> = bool(tree_construction_dispatcher::*)(node_pointer) const</td></tr>
 <tr class="separator:a166f6a637dfcf49c483014b7151b5c3c inherit pub_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classwordring_1_1html_1_1simple__parser__base"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1html_1_1simple__parser__base')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base&lt; simple_parser&lt; String, Container &gt;, String, Container &gt;</a> に属する継承公開メンバ関数</td></tr>
-<tr class="memitem:a52fb8f7da8b9a64ab84f1c95e2f949ed inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a52fb8f7da8b9a64ab84f1c95e2f949ed">get_document</a> ()</td></tr>
-<tr class="memdesc:a52fb8f7da8b9a64ab84f1c95e2f949ed inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書ノードを返す  <a href="classwordring_1_1html_1_1simple__parser__base.html#a52fb8f7da8b9a64ab84f1c95e2f949ed">[詳解]</a><br /></td></tr>
-<tr class="separator:a52fb8f7da8b9a64ab84f1c95e2f949ed inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac302458ec891d6b2b9d73c4af581bea3 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="ac302458ec891d6b2b9d73c4af581bea3"></a>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a52fb8f7da8b9a64ab84f1c95e2f949ed"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a52fb8f7da8b9a64ab84f1c95e2f949ed">get_document</a> ()</td></tr>
+<tr class="memdesc:a52fb8f7da8b9a64ab84f1c95e2f949ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書ノードを返す  <a href="classwordring_1_1html_1_1simple__parser__base.html#a52fb8f7da8b9a64ab84f1c95e2f949ed">[詳解]</a><br /></td></tr>
+<tr class="separator:a52fb8f7da8b9a64ab84f1c95e2f949ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac302458ec891d6b2b9d73c4af581bea3"><td class="memItemLeft" align="right" valign="top"><a id="ac302458ec891d6b2b9d73c4af581bea3"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_document_type</b> (node_pointer pos, document_type_type &amp;&amp;doctype)</td></tr>
-<tr class="separator:ac302458ec891d6b2b9d73c4af581bea3 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6183fb2e52b82819f479ca9e882c5a67 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a6183fb2e52b82819f479ca9e882c5a67"></a>
+<tr class="separator:ac302458ec891d6b2b9d73c4af581bea3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6183fb2e52b82819f479ca9e882c5a67"><td class="memItemLeft" align="right" valign="top"><a id="a6183fb2e52b82819f479ca9e882c5a67"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, std::u32string name, <a class="el" href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">namespace_uri_type</a> ns, std::u32string prefix)</td></tr>
-<tr class="separator:a6183fb2e52b82819f479ca9e882c5a67 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1692c2954f188c374dc7e35e3faeef9e inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a1692c2954f188c374dc7e35e3faeef9e"></a>
+<tr class="separator:a6183fb2e52b82819f479ca9e882c5a67"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1692c2954f188c374dc7e35e3faeef9e"><td class="memItemLeft" align="right" valign="top"><a id="a1692c2954f188c374dc7e35e3faeef9e"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, tag_name name, <a class="el" href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">namespace_uri_type</a> ns, std::u32string prefix)</td></tr>
-<tr class="separator:a1692c2954f188c374dc7e35e3faeef9e inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00471ed040c4bd79678ef481af3d5130 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a00471ed040c4bd79678ef481af3d5130"></a>
+<tr class="separator:a1692c2954f188c374dc7e35e3faeef9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00471ed040c4bd79678ef481af3d5130"><td class="memItemLeft" align="right" valign="top"><a id="a00471ed040c4bd79678ef481af3d5130"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, tag_name name, ns_name ns=ns_name::HTML)</td></tr>
-<tr class="separator:a00471ed040c4bd79678ef481af3d5130 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7a6564867efd48edd90348238b98a910 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a7a6564867efd48edd90348238b98a910"></a>
+<tr class="separator:a00471ed040c4bd79678ef481af3d5130"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a6564867efd48edd90348238b98a910"><td class="memItemLeft" align="right" valign="top"><a id="a7a6564867efd48edd90348238b98a910"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_element</b> (node_pointer pos, node_pointer it)</td></tr>
-<tr class="separator:a7a6564867efd48edd90348238b98a910 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa2e2122c58031a80854cfb7c795ec5ad inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="aa2e2122c58031a80854cfb7c795ec5ad"></a>
+<tr class="separator:a7a6564867efd48edd90348238b98a910"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa2e2122c58031a80854cfb7c795ec5ad"><td class="memItemLeft" align="right" valign="top"><a id="aa2e2122c58031a80854cfb7c795ec5ad"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#aa2e2122c58031a80854cfb7c795ec5ad">erase_element</a> (node_pointer it)</td></tr>
-<tr class="memdesc:aa2e2122c58031a80854cfb7c795ec5ad inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを削除する <br /></td></tr>
-<tr class="separator:aa2e2122c58031a80854cfb7c795ec5ad inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a282c5c1ad70291a1a83bea9867f47f16 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a282c5c1ad70291a1a83bea9867f47f16"></a>
+<tr class="memdesc:aa2e2122c58031a80854cfb7c795ec5ad"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを削除する <br /></td></tr>
+<tr class="separator:aa2e2122c58031a80854cfb7c795ec5ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a282c5c1ad70291a1a83bea9867f47f16"><td class="memItemLeft" align="right" valign="top"><a id="a282c5c1ad70291a1a83bea9867f47f16"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a282c5c1ad70291a1a83bea9867f47f16">move_element</a> (node_pointer pos, node_pointer it)</td></tr>
-<tr class="memdesc:a282c5c1ad70291a1a83bea9867f47f16 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを移動する <br /></td></tr>
-<tr class="separator:a282c5c1ad70291a1a83bea9867f47f16 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8053355ce4f051f10c6e381a3e77e48f inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a8053355ce4f051f10c6e381a3e77e48f"></a>
+<tr class="memdesc:a282c5c1ad70291a1a83bea9867f47f16"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを移動する <br /></td></tr>
+<tr class="separator:a282c5c1ad70291a1a83bea9867f47f16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8053355ce4f051f10c6e381a3e77e48f"><td class="memItemLeft" align="right" valign="top"><a id="a8053355ce4f051f10c6e381a3e77e48f"></a>
 attribute_type&#160;</td><td class="memItemRight" valign="bottom"><b>create_attribute</b> (node_pointer el, ns_name ns, std::u32string const &amp;prefix, std::u32string const &amp;local_name)</td></tr>
-<tr class="separator:a8053355ce4f051f10c6e381a3e77e48f inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb8f2acd1f48b27b00c559031f1ce463 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="aeb8f2acd1f48b27b00c559031f1ce463"></a>
+<tr class="separator:a8053355ce4f051f10c6e381a3e77e48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb8f2acd1f48b27b00c559031f1ce463"><td class="memItemLeft" align="right" valign="top"><a id="aeb8f2acd1f48b27b00c559031f1ce463"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#aeb8f2acd1f48b27b00c559031f1ce463">append_attribute</a> (node_pointer it, attribute_type &amp;&amp;attr)</td></tr>
-<tr class="memdesc:aeb8f2acd1f48b27b00c559031f1ce463 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素へ属性を付加する <br /></td></tr>
-<tr class="separator:aeb8f2acd1f48b27b00c559031f1ce463 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a092ac7085e4f6277c4340ccc5136dcd7 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a092ac7085e4f6277c4340ccc5136dcd7"></a>
+<tr class="memdesc:aeb8f2acd1f48b27b00c559031f1ce463"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素へ属性を付加する <br /></td></tr>
+<tr class="separator:aeb8f2acd1f48b27b00c559031f1ce463"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a092ac7085e4f6277c4340ccc5136dcd7"><td class="memItemLeft" align="right" valign="top"><a id="a092ac7085e4f6277c4340ccc5136dcd7"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>append_attribute</b> (node_pointer it, ns_name ns, std::u32string const &amp;prefix, std::u32string const &amp;name, std::u32string const &amp;value)</td></tr>
-<tr class="separator:a092ac7085e4f6277c4340ccc5136dcd7 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a44883ee3560040fec33b95015db28b5e inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a44883ee3560040fec33b95015db28b5e"></a>
+<tr class="separator:a092ac7085e4f6277c4340ccc5136dcd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44883ee3560040fec33b95015db28b5e"><td class="memItemLeft" align="right" valign="top"><a id="a44883ee3560040fec33b95015db28b5e"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (node_pointer it, ns_name ns, std::u32string const &amp;prefix, std::u32string const &amp;name)</td></tr>
-<tr class="separator:a44883ee3560040fec33b95015db28b5e inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18b38c5cacd85de7980ca965fa98c544 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a18b38c5cacd85de7980ca965fa98c544"></a>
+<tr class="separator:a44883ee3560040fec33b95015db28b5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a18b38c5cacd85de7980ca965fa98c544"><td class="memItemLeft" align="right" valign="top"><a id="a18b38c5cacd85de7980ca965fa98c544"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_text</b> (node_pointer pos, text_type &amp;&amp;text)</td></tr>
-<tr class="separator:a18b38c5cacd85de7980ca965fa98c544 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6cc2d95945718775782c3ebb22a07433 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a6cc2d95945718775782c3ebb22a07433"></a>
+<tr class="separator:a18b38c5cacd85de7980ca965fa98c544"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cc2d95945718775782c3ebb22a07433"><td class="memItemLeft" align="right" valign="top"><a id="a6cc2d95945718775782c3ebb22a07433"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_comment</b> (node_pointer pos, comment_type &amp;&amp;comment)</td></tr>
-<tr class="separator:a6cc2d95945718775782c3ebb22a07433 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e33bfaa3c8991e3285598baa4d6a7a5 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a6e33bfaa3c8991e3285598baa4d6a7a5"></a>
+<tr class="separator:a6cc2d95945718775782c3ebb22a07433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e33bfaa3c8991e3285598baa4d6a7a5"><td class="memItemLeft" align="right" valign="top"><a id="a6e33bfaa3c8991e3285598baa4d6a7a5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>on_report_error</b> (parsing::error_name e)</td></tr>
-<tr class="separator:a6e33bfaa3c8991e3285598baa4d6a7a5 inherit pub_methods_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
+<tr class="separator:a6e33bfaa3c8991e3285598baa4d6a7a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
 <tr class="memitem:a2bfc9edae6634e275cc41eb8f38c8041 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a2bfc9edae6634e275cc41eb8f38c8041"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>tree_construction_dispatcher</b> (bool fragments_parser=false)</td></tr>
 <tr class="separator:a2bfc9edae6634e275cc41eb8f38c8041 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -438,7 +446,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>on_foreign_content</b
 <tr class="memitem:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#acbf98f5ec86cf295bdb98d0ab9a59aca">eof</a> () const</td></tr>
 <tr class="memdesc:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム終端に達しているか調べる  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#acbf98f5ec86cf295bdb98d0ab9a59aca">[詳解]</a><br /></td></tr>
 <tr class="separator:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
+<tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
 <tr class="memitem:a4951ebf03ea454c80ebad0e8b427e359 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a4951ebf03ea454c80ebad0e8b427e359"></a>
 <a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1tag__token.html">tag_token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>create_start_tag_token</b> ()</td></tr>
 <tr class="separator:a4951ebf03ea454c80ebad0e8b427e359 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -669,7 +677,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>on_emit_code_point</b
 <tr class="separator:a6423e20ab8813ca33300e7c9970d6d61 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09da4658d634458fd00b8be6a1d2157b inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#a09da4658d634458fd00b8be6a1d2157b">on_numeric_character_reference_end_state</a> ()</td></tr>
 <tr class="separator:a09da4658d634458fd00b8be6a1d2157b inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; simple_parser&lt; String, Container &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
+<tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a> に属する継承公開メンバ関数</td></tr>
 <tr class="memitem:a30163f1989500e41df729c7b29102483 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="a30163f1989500e41df729c7b29102483"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a30163f1989500e41df729c7b29102483">input_stream</a> ()</td></tr>
 <tr class="memdesc:a30163f1989500e41df729c7b29102483 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="mdescLeft">&#160;</td><td class="mdescRight">空の入力ストリームを構築する <br /></td></tr>
@@ -726,7 +734,37 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () 
 <tr class="memitem:a9a5c73ac6373680a42c6855efd6081c2 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">std::array&lt; char32_t, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a9a5c73ac6373680a42c6855efd6081c2">named_character_reference</a> (std::uint32_t idx)</td></tr>
 <tr class="memdesc:a9a5c73ac6373680a42c6855efd6081c2 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前付き文字参照のコード・ポイントを取得する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a9a5c73ac6373680a42c6855efd6081c2">[詳解]</a><br /></td></tr>
 <tr class="separator:a9a5c73ac6373680a42c6855efd6081c2 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開変数類</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:ac8678163b1fa002f7c45c4b0d7f25232"><td class="memItemLeft" align="right" valign="top"><a id="ac8678163b1fa002f7c45c4b0d7f25232"></a>
+container&#160;</td><td class="memItemRight" valign="bottom"><b>m_c</b></td></tr>
+<tr class="separator:ac8678163b1fa002f7c45c4b0d7f25232"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c23351bff0440514e937a8c7083eb13"><td class="memItemLeft" align="right" valign="top"><a id="a1c23351bff0440514e937a8c7083eb13"></a>
+node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>m_document</b></td></tr>
+<tr class="separator:a1c23351bff0440514e937a8c7083eb13"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab224ab67f4affa80de43d7f992efe89a"><td class="memItemLeft" align="right" valign="top"><a id="ab224ab67f4affa80de43d7f992efe89a"></a>
+node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>m_temporary</b></td></tr>
+<tr class="separator:ab224ab67f4affa80de43d7f992efe89a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a> に属する継承限定公開変数類</td></tr>
+<tr class="memitem:a675b19e9d6da632976193d62e5bc4eaa inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">container&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a675b19e9d6da632976193d62e5bc4eaa">m_c</a></td></tr>
+<tr class="separator:a675b19e9d6da632976193d62e5bc4eaa inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a918edfb93423db29d0d6a06987331dd2 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="a918edfb93423db29d0d6a06987331dd2"></a>
+value_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_current_input_character</b></td></tr>
+<tr class="separator:a918edfb93423db29d0d6a06987331dd2 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b8c84930edd78d1d647ce684a5b4cf8 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a7b8c84930edd78d1d647ce684a5b4cf8">m_fill_length</a></td></tr>
+<tr class="separator:a7b8c84930edd78d1d647ce684a5b4cf8 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2b97fafffd069fb2363100003b94ada inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af2b97fafffd069fb2363100003b94ada">m_eof</a></td></tr>
+<tr class="separator:af2b97fafffd069fb2363100003b94ada inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab807f4a00aca7954e35c4798573d7a50 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="ab807f4a00aca7954e35c4798573d7a50"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_eof_consumed</b></td></tr>
+<tr class="separator:ab807f4a00aca7954e35c4798573d7a50 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5872d365684111b41d7644d817bb9c34 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a5872d365684111b41d7644d817bb9c34">m_cr_state</a></td></tr>
+<tr class="separator:a5872d365684111b41d7644d817bb9c34 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+その他の継承メンバ</h2></td></tr>
+<tr class="inherit_header pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開変数類</td></tr>
 <tr class="memitem:a6c779d53104a5e86417eb957de2312f3 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a6c779d53104a5e86417eb957de2312f3"></a>
 encoding_confidence_name&#160;</td><td class="memItemRight" valign="bottom"><b>m_encoding_confidence</b></td></tr>
 <tr class="separator:a6c779d53104a5e86417eb957de2312f3 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -773,7 +811,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_omit_lf</b></td></t
 <tr class="memitem:a4df05cfa654411015e194415e169863e inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a4df05cfa654411015e194415e169863e"></a>
 std::vector&lt; <a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1character__token.html">character_token</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_pending_table_character_tokens</b></td></tr>
 <tr class="separator:a4df05cfa654411015e194415e169863e inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開変数類</td></tr>
+<tr class="inherit_header pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承公開変数類</td></tr>
 <tr class="memitem:af801e374ab50590ace1f8d5d4f639d2e inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="af801e374ab50590ace1f8d5d4f639d2e"></a>
 state_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_state</b></td></tr>
 <tr class="separator:af801e374ab50590ace1f8d5d4f639d2e inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -810,7 +848,7 @@ std::u32string&#160;</td><td class="memItemRight" valign="bottom"><b>m_last_star
 <tr class="memitem:af3b0e8b2ff63b57b9843814d0cc34d31 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="af3b0e8b2ff63b57b9843814d0cc34d31"></a>
 char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_character_reference_code</b></td></tr>
 <tr class="separator:af3b0e8b2ff63b57b9843814d0cc34d31 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承静的公開変数類</td></tr>
+<tr class="inherit_header pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承静的公開変数類</td></tr>
 <tr class="memitem:a02cf23023cffd9f6d1e5f5efb1e9e197 inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a02cf23023cffd9f6d1e5f5efb1e9e197"></a>
 static constexpr scope_type&#160;</td><td class="memItemRight" valign="bottom"><b>default_scope</b></td></tr>
 <tr class="separator:a02cf23023cffd9f6d1e5f5efb1e9e197 inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -826,7 +864,7 @@ static constexpr scope_type&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a89f881bff873082e9a72aa06710f39ff inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a89f881bff873082e9a72aa06710f39ff"></a>
 static constexpr scope_type&#160;</td><td class="memItemRight" valign="bottom"><b>select_scope</b></td></tr>
 <tr class="separator:a89f881bff873082e9a72aa06710f39ff inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承静的公開変数類</td></tr>
+<tr class="inherit_header pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承静的公開変数類</td></tr>
 <tr class="memitem:ae165b423ad7ab22b98fb9b7a21f87c05 inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="ae165b423ad7ab22b98fb9b7a21f87c05"></a>
 static constexpr state_type&#160;</td><td class="memItemRight" valign="bottom"><b>data_state</b></td></tr>
 <tr class="separator:ae165b423ad7ab22b98fb9b7a21f87c05 inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1067,12 +1105,12 @@ static constexpr state_type&#160;</td><td class="memItemRight" valign="bottom"><
 <tr class="memitem:a381af776a575edf8eed5e5c6cbb48068 inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a381af776a575edf8eed5e5c6cbb48068"></a>
 static constexpr state_type&#160;</td><td class="memItemRight" valign="bottom"><b>numeric_character_reference_end_state</b></td></tr>
 <tr class="separator:a381af776a575edf8eed5e5c6cbb48068 inherit pub_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承限定公開型</td></tr>
+<tr class="inherit_header pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承限定公開型</td></tr>
 <tr class="memitem:a521681329fe98df46cd13ab7d51b2b2b inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a521681329fe98df46cd13ab7d51b2b2b"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">tokenizer</a>&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">tokenizer</a>&lt; T, simple_adapter&lt; String, Container &gt; &gt;</td></tr>
 <tr class="separator:a521681329fe98df46cd13ab7d51b2b2b inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9576bda2871d8677cf3a3b708798148c inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a9576bda2871d8677cf3a3b708798148c"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = simple_parser&lt; String, Container &gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = T</td></tr>
 <tr class="separator:a9576bda2871d8677cf3a3b708798148c inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5af27d86082919149ecebb9d5340cb3c inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a5af27d86082919149ecebb9d5340cb3c"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>adapter</b> = simple_adapter&lt; String, Container &gt;</td></tr>
@@ -1116,12 +1154,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_type</b> =
 <tr class="memitem:a2360e35606bcdb3caf4b9468ab9755e0 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a2360e35606bcdb3caf4b9468ab9755e0"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_pointer</b> = typename adapter::attribute_pointer</td></tr>
 <tr class="separator:a2360e35606bcdb3caf4b9468ab9755e0 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承限定公開型</td></tr>
+<tr class="inherit_header pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承限定公開型</td></tr>
 <tr class="memitem:a39d49488c9e44949cd3898a3d1e15994 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a39d49488c9e44949cd3898a3d1e15994"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">input_stream</a>&lt; simple_parser&lt; String, Container &gt; &gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">input_stream</a>&lt; T &gt;</td></tr>
 <tr class="separator:a39d49488c9e44949cd3898a3d1e15994 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59309851018cfb0e5c08e88fa96bca8c inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a59309851018cfb0e5c08e88fa96bca8c"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = simple_parser&lt; String, Container &gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = T</td></tr>
 <tr class="separator:a59309851018cfb0e5c08e88fa96bca8c inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14cb15042d337487a269cd08a9cc4a8a inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a14cb15042d337487a269cd08a9cc4a8a"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>adapter</b> = simple_adapter&lt; String, Container &gt;</td></tr>
@@ -1132,9 +1170,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>state_type</b> = voi
 <tr class="memitem:af7980fc6fb4eb60bcc346bda6fd18acb inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="af7980fc6fb4eb60bcc346bda6fd18acb"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>node_pointer</b> = typename adapter::node_pointer</td></tr>
 <tr class="separator:af7980fc6fb4eb60bcc346bda6fd18acb inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; simple_parser&lt; String, Container &gt; &gt;</a> に属する継承限定公開型</td></tr>
+<tr class="inherit_header pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a> に属する継承限定公開型</td></tr>
 <tr class="memitem:ab7aa6153151e53eeed1618f5c35c7ee8 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="ab7aa6153151e53eeed1618f5c35c7ee8"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = simple_parser&lt; String, Container &gt;</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>this_type</b> = T</td></tr>
 <tr class="separator:ab7aa6153151e53eeed1618f5c35c7ee8 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36c1fe20b873f637d4a44c742f5581e4 inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="a36c1fe20b873f637d4a44c742f5581e4"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = char32_t</td></tr>
@@ -1145,7 +1183,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = std:
 <tr class="memitem:aaad0a5b33c0857e24e44511de559c2cd inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="aaad0a5b33c0857e24e44511de559c2cd"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = container::const_iterator</td></tr>
 <tr class="separator:aaad0a5b33c0857e24e44511de559c2cd inherit pro_types_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; simple_parser&lt; String, Container &gt;, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承限定公開メンバ関数</td></tr>
+<tr class="inherit_header pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; T, simple_adapter&lt; String, Container &gt; &gt;</a> に属する継承限定公開メンバ関数</td></tr>
 <tr class="memitem:afa74f237691850527b543bf851ef7151 inherit pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#afa74f237691850527b543bf851ef7151">flush_code_point</a> ()</td></tr>
 <tr class="memdesc:afa74f237691850527b543bf851ef7151 inherit pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム・バッファ内のコード・ポイントをすべて発送する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#afa74f237691850527b543bf851ef7151">[詳解]</a><br /></td></tr>
 <tr class="separator:afa74f237691850527b543bf851ef7151 inherit pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1185,36 +1223,56 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () 
 <tr class="memitem:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#acbf98f5ec86cf295bdb98d0ab9a59aca">eof</a> () const</td></tr>
 <tr class="memdesc:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム終端に達しているか調べる  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#acbf98f5ec86cf295bdb98d0ab9a59aca">[詳解]</a><br /></td></tr>
 <tr class="separator:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pro_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classwordring_1_1html_1_1simple__parser__base')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base&lt; simple_parser&lt; String, Container &gt;, String, Container &gt;</a> に属する継承限定公開変数類</td></tr>
-<tr class="memitem:ac8678163b1fa002f7c45c4b0d7f25232 inherit pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="ac8678163b1fa002f7c45c4b0d7f25232"></a>
-container&#160;</td><td class="memItemRight" valign="bottom"><b>m_c</b></td></tr>
-<tr class="separator:ac8678163b1fa002f7c45c4b0d7f25232 inherit pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c23351bff0440514e937a8c7083eb13 inherit pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="a1c23351bff0440514e937a8c7083eb13"></a>
-node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>m_document</b></td></tr>
-<tr class="separator:a1c23351bff0440514e937a8c7083eb13 inherit pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab224ab67f4affa80de43d7f992efe89a inherit pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td class="memItemLeft" align="right" valign="top"><a id="ab224ab67f4affa80de43d7f992efe89a"></a>
-node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>m_temporary</b></td></tr>
-<tr class="separator:ab224ab67f4affa80de43d7f992efe89a inherit pro_attribs_classwordring_1_1html_1_1simple__parser__base"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; simple_parser&lt; String, Container &gt; &gt;</a> に属する継承限定公開変数類</td></tr>
-<tr class="memitem:a675b19e9d6da632976193d62e5bc4eaa inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">container&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a675b19e9d6da632976193d62e5bc4eaa">m_c</a></td></tr>
-<tr class="separator:a675b19e9d6da632976193d62e5bc4eaa inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a918edfb93423db29d0d6a06987331dd2 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="a918edfb93423db29d0d6a06987331dd2"></a>
-value_type&#160;</td><td class="memItemRight" valign="bottom"><b>m_current_input_character</b></td></tr>
-<tr class="separator:a918edfb93423db29d0d6a06987331dd2 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b8c84930edd78d1d647ce684a5b4cf8 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a7b8c84930edd78d1d647ce684a5b4cf8">m_fill_length</a></td></tr>
-<tr class="separator:a7b8c84930edd78d1d647ce684a5b4cf8 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af2b97fafffd069fb2363100003b94ada inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af2b97fafffd069fb2363100003b94ada">m_eof</a></td></tr>
-<tr class="separator:af2b97fafffd069fb2363100003b94ada inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab807f4a00aca7954e35c4798573d7a50 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="ab807f4a00aca7954e35c4798573d7a50"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_eof_consumed</b></td></tr>
-<tr class="separator:ab807f4a00aca7954e35c4798573d7a50 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5872d365684111b41d7644d817bb9c34 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a5872d365684111b41d7644d817bb9c34">m_cr_state</a></td></tr>
-<tr class="separator:a5872d365684111b41d7644d817bb9c34 inherit pro_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; simple_parser&lt; String, Container &gt; &gt;</a> に属する継承静的限定公開変数類</td></tr>
+<tr class="inherit_header pro_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td colspan="2" onclick="javascript:toggleInherit('pro_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a> に属する継承静的限定公開変数類</td></tr>
 <tr class="memitem:a923557921f75ef761686d1d4ab8409e0 inherit pro_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="a923557921f75ef761686d1d4ab8409e0"></a>
-static constexpr std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>null_insertion_point</b></td></tr>
+static constexpr std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>null_insertion_point</b> = std::numeric_limits&lt;std::uint32_t&gt;::max()</td></tr>
 <tr class="separator:a923557921f75ef761686d1d4ab8409e0 inherit pro_static_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename T, typename String, typename Container&gt;<br />
+class wordring::html::simple_parser_base&lt; T, String, Container &gt;</h3>
+
+<p>simple_node 用の HTML5 パーサー </p>
+<dl class="tparams"><dt>テンプレート引数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>CRTP に基づく派生クラス </td></tr>
+    <tr><td class="paramname">String</td><td>文字列型 </td></tr>
+    <tr><td class="paramname">Container</td><td>Tree コンテナ </td></tr>
+    <tr><td class="paramname">IsFragmentsParser</td><td>HTML フラグメント・パーサーの場合 true </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a52fb8f7da8b9a64ab84f1c95e2f949ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52fb8f7da8b9a64ab84f1c95e2f949ed">&#9670;&nbsp;</a></span>get_document()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename String , typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">node_pointer <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base</a>&lt; T, String, Container &gt;::get_document </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文書ノードを返す </p>
+<p>パーサ構築時に文書ノードが挿入される。 </p>
+
+</div>
+</div>
 <hr/>このクラス詳解は次のファイルから抽出されました:<ul>
 <li><a class="el" href="simple__parser_8hpp_source.html">simple_parser.hpp</a></li>
 </ul>

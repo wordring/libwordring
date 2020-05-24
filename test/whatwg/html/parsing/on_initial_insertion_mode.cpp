@@ -2,10 +2,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-
+#include <wordring/html/simple_adapter.hpp>
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
-#include <wordring/html/simple_policy.hpp>
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
@@ -20,20 +19,20 @@
 namespace
 {
 	using namespace wordring::html;
-	using namespace wordring::html::parsing;
+	//using namespace wordring::html::parsing;
 
 	using node_type   = simple_node<std::string>;
 	using tree        = wordring::tree<node_type>;
-	using policy_type = simple_policy<std::string, tree>;
-
-	using document_type               = typename policy_type::document_type;
-	using document_type_type          = typename policy_type::document_type_type;
-	using document_fragment_type      = typename policy_type::document_fragment_type;
-	using element_type                = typename policy_type::element_type;
-	using text_type                   = typename policy_type::text_type;
-	using processing_instruction_type = typename policy_type::processing_instruction_type;
-	using comment_type                = typename policy_type::comment_type;
-
+	using adapter_type = simple_adapter<std::string, tree>;
+	
+	using document_type               = typename adapter_type::document_type;
+	using document_type_type          = typename adapter_type::document_type_type;
+	using document_fragment_type      = typename adapter_type::document_fragment_type;
+	using element_type                = typename adapter_type::element_type;
+	using text_type                   = typename adapter_type::text_type;
+	using processing_instruction_type = typename adapter_type::processing_instruction_type;
+	using comment_type                = typename adapter_type::comment_type;
+	
 	struct test_parser : public simple_parser_base<test_parser, std::string, tree>
 	{
 	public:
@@ -54,7 +53,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_1)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.document()).document_mode() == document_mode_name::no_quirks);
+	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::no_quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_2)
@@ -64,7 +63,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_2)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.document()).document_mode() == document_mode_name::quirks);
+	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_3)
@@ -74,7 +73,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_3)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.document()).document_mode() == document_mode_name::quirks);
+	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_4)
@@ -84,7 +83,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_4)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.document()).document_mode() == document_mode_name::quirks);
+	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_5)
@@ -94,7 +93,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_5)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.document()).document_mode() == document_mode_name::limited_quirks);
+	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::limited_quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_6)
@@ -104,7 +103,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_6)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.document()).document_mode() == document_mode_name::limited_quirks);
+	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::limited_quirks);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

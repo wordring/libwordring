@@ -21,32 +21,42 @@
 
 namespace wordring::whatwg::html::parsing
 {
-	template <typename T, typename NodePolicy>
-	class tree_construction_dispatcher : public tokenizer<T, NodePolicy>
+	/*! @class tree_construction_dispatcher tree_construction_dispatcher.hpp wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp
+	
+	@brief HTML5 パーサーの木構築段階
+
+	@tparam T          CRTP に基づく派生クラス
+	@tparam NodePolicy CRTP において、派生クラスの情報を基本クラスへ転送するためのポリシークラス
+
+	@sa wordring::html::simple_parser_base
+	@sa wordring::html::simple_policy
+	*/
+	template <typename T, typename NodeAdapter>
+	class tree_construction_dispatcher : public tokenizer<T, NodeAdapter>
 	{
-		friend tokenizer<T, NodePolicy>;
+		friend tokenizer<T, NodeAdapter>;
 
 	protected:
-		using base_type = tokenizer<T, NodePolicy>;
+		using base_type = tokenizer<T, NodeAdapter>;
 		using this_type = T;
 
-		using policy = NodePolicy;
+		using adapter = NodeAdapter;
 
-		using string_type    = typename policy::string_type;
-		using container_type = typename policy::container_type;
-		using node_type      = typename policy::node_type;
+		using string_type    = typename adapter::string_type;
+		using container_type = typename adapter::container_type;
+		using node_type      = typename adapter::node_type;
 		using node_pointer   = typename container_type::iterator;
 
-		using document_type               = typename policy::document_type;
-		using document_type_type          = typename policy::document_type_type;
-		using document_fragment_type      = typename policy::document_fragment_type;
-		using element_type                = typename policy::element_type;
-		using text_type                   = typename policy::text_type;
-		using processing_instruction_type = typename policy::processing_instruction_type;
-		using comment_type                = typename policy::comment_type;
+		using document_type               = typename adapter::document_type;
+		using document_type_type          = typename adapter::document_type_type;
+		using document_fragment_type      = typename adapter::document_fragment_type;
+		using element_type                = typename adapter::element_type;
+		using text_type                   = typename adapter::text_type;
+		using processing_instruction_type = typename adapter::processing_instruction_type;
+		using comment_type                = typename adapter::comment_type;
 
-		using attribute_type    = typename policy::attribute_type;
-		using attribute_pointer = typename policy::attribute_pointer;
+		using attribute_type    = typename adapter::attribute_type;
+		using attribute_pointer = typename adapter::attribute_pointer;
 
 	public:
 		using base_type::report_error;
@@ -178,7 +188,7 @@ namespace wordring::whatwg::html::parsing
 		// https://html.spec.whatwg.org/multipage/parsing.html#parsing-html-fragments
 		// ----------------------------------------------------------------------------------------
 
-		static bool constexpr is_fragments_parser = policy::is_fragments_parser;
+		bool m_fragments_parser;
 
 		stack_entry m_context_entry;
 
@@ -199,19 +209,18 @@ namespace wordring::whatwg::html::parsing
 		std::vector<character_token> m_pending_table_character_tokens;
 
 	public:
-		tree_construction_dispatcher()
+		explicit tree_construction_dispatcher(bool fragments_parser = false)
 			: m_encoding_confidence(encoding_confidence_name::irrelevant)
 			, m_insertion_mode(mode_name::initial_insertion_mode)
 			, m_original_insertion_mode(static_cast<mode_name>(0))
 			, m_scripting_flag(false)
 			, m_frameset_ok_flag(true)
 			, m_foster_parenting(false)
+			, m_fragments_parser(fragments_parser)
 			, m_omit_lf(false)
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			m_head_element_pointer = P->create_pointer();
-			m_form_element_pointer = P->create_pointer();
+			m_head_element_pointer = adapter::pointer();
+			m_form_element_pointer = adapter::pointer();
 		}
 
 		/*! 要素が指定のHTML要素であることを調べる
@@ -225,9 +234,7 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_html_element_of(node_pointer it, tag_name tag) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			return P->get_namespace_uri_id(it) == ns_name::HTML && P->get_local_name_id(it) == tag;
+			return adapter::get_namespace_id(it) == ns_name::HTML && adapter::get_local_name_id(it) == tag;
 		}
 
 		/*! 要素が指定のHTML要素であることを調べる
@@ -243,7 +250,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			this_type const* P = static_cast<this_type const*>(this);
 
-			return P->get_namespace_uri_id(it) == ns_name::HTML && P->get_local_name(it) == tag;
+			return adapter::get_namespace_id(it) == ns_name::HTML && encoding_cast<std::u32string>(adapter::get_local_name(it)) == tag;
 		}
 
 		/*! 要素が指定の要素であることを調べる
@@ -258,9 +265,7 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_element_of(node_pointer it, ns_name ns, tag_name tag) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			return P->get_namespace_uri_id(it) == ns && P->get_local_name_id(it) == tag;
+			return adapter::get_namespace_id(it) == ns && adapter::get_local_name_id(it) == tag;
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -291,8 +296,6 @@ namespace wordring::whatwg::html::parsing
 		{
 			assert(!m_stack.empty());
 
-			this_type const* P = static_cast<this_type const*>(this);
-
 			bool last = false;
 			auto it = --m_stack.end();
 			node_pointer node = it->m_it;
@@ -301,7 +304,7 @@ namespace wordring::whatwg::html::parsing
 			if (it == m_stack.begin())
 			{
 				last = true;
-				if (is_fragments_parser) node = m_context_entry.m_it;
+				if (m_fragments_parser) node = m_context_entry.m_it;
 			}
 
 			// 4.
@@ -357,7 +360,7 @@ namespace wordring::whatwg::html::parsing
 			// 15.
 			if (is_html_element_of(node, tag_name::Html))
 			{
-				if (m_head_element_pointer == P->create_pointer()) return insertion_mode(mode_name::before_head_insertion_mode);
+				if (m_head_element_pointer == adapter::pointer()) return insertion_mode(mode_name::before_head_insertion_mode);
 				return insertion_mode(mode_name::after_head_insertion_mode);
 			}
 			// 16.
@@ -443,13 +446,13 @@ namespace wordring::whatwg::html::parsing
 		*/
 		stack_entry& adjusted_current_node()
 		{
-			if constexpr (is_fragments_parser) { if (m_stack.size() == 1) return m_context_entry; }
+			if (m_fragments_parser) { if (m_stack.size() == 1) return m_context_entry; }
 			return current_node();
 		}
 
 		stack_entry const& adjusted_current_node() const
 		{
-			if constexpr (is_fragments_parser) { if (m_stack.size() == 1) return m_context_entry; }
+			if (m_fragments_parser) { if (m_stack.size() == 1) return m_context_entry; }
 			return current_node();
 		}
 
@@ -464,10 +467,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_special(node_pointer it) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			ns_name  ns  = P->get_namespace_uri_id(it);
-			tag_name tag = P->get_local_name_id(it);
+			ns_name  ns  = adapter::get_namespace_id(it);
+			tag_name tag = adapter::get_local_name_id(it);
 
 			if (ns == ns_name::HTML)
 			{
@@ -524,11 +525,9 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_formatting(node_pointer it) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			if (P->get_namespace_uri_id(it) == ns_name::HTML)
+			if (adapter::get_namespace_id(it) == ns_name::HTML)
 			{
-				switch (P->get_local_name_id(it))
+				switch (adapter::get_local_name_id(it))
 				{
 				case tag_name::A: case tag_name::B:     case tag_name::Big:    case tag_name::Code:   case tag_name::Em: case tag_name::Font: case tag_name::I: case tag_name::Nobr:
 				case tag_name::S: case tag_name::Small: case tag_name::Strike: case tag_name::Strong: case tag_name::Tt: case tag_name::U:
@@ -623,9 +622,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_default_scope(node_pointer it) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-			ns_name  ns  = P->get_namespace_uri_id(it);
-			tag_name tag = P->get_local_name_id(it);
+			ns_name  ns  = adapter::get_namespace_id(it);
+			tag_name tag = adapter::get_local_name_id(it);
 
 			if (ns == ns_name::HTML)
 			{
@@ -860,8 +858,6 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void push_formatting_element_list(node_pointer it, start_tag_token const& token)
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			std::uint32_t n = 0;
 			auto pos = m_list.end();
 
@@ -871,7 +867,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				--it1;
 				if (it1->m_marker) break;
-				if (P->equals(it, it1->m_it))
+				if (adapter::equals(it, it1->m_it))
 				{
 					pos = it1;
 					++n;
@@ -985,8 +981,6 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void process_token(mode_name mode, Token& token)
 		{
-			this_type* P = static_cast<this_type*>(this);
-			
 			if constexpr (std::is_same_v<character_token, Token>)
 			{
 				if (m_omit_lf && token.m_data == U'\xA')
@@ -1009,14 +1003,14 @@ namespace wordring::whatwg::html::parsing
 			{
 				stack_entry& entry = adjusted_current_node();
 
-				if (P->get_namespace_uri_id(entry.m_it) == ns_name::HTML) goto Html;
+				if (adapter::get_namespace_id(entry.m_it) == ns_name::HTML) goto Html;
 				if constexpr (std::is_same_v<start_tag_token, Token>)
 				{
 					if (is_mathml_text_integration_point(entry)
 						&& token.m_tag_name_id != tag_name::Mglyph
 						&& token.m_tag_name_id != tag_name::Malignmark) goto Html;
 
-					if (P->get_local_name_id(entry.m_it) == tag_name::Annotation_xml
+					if (adapter::get_local_name_id(entry.m_it) == tag_name::Annotation_xml
 						&& token.m_tag_name_id == tag_name::Svg) goto Html;
 
 					if (is_html_integration_point(entry)) goto Html;
@@ -1130,11 +1124,9 @@ namespace wordring::whatwg::html::parsing
 
 		bool is_mathml_text_integration_point(stack_entry const& entry) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			if (P->get_namespace_uri_id(entry.m_it) == ns_name::MathML)
+			if (adapter::get_namespace_id(entry.m_it) == ns_name::MathML)
 			{
-				switch (P->get_local_name_id(entry.m_it))
+				switch (adapter::get_local_name_id(entry.m_it))
 				{
 				case tag_name::Mi: case tag_name::Mo: case tag_name::Mn: case tag_name::Ms: case tag_name::Mtext:
 					return true;
@@ -1148,10 +1140,8 @@ namespace wordring::whatwg::html::parsing
 
 		bool is_html_integration_point(stack_entry const& entry) const
 		{
-			this_type const* P = static_cast<this_type const*>(this);
-
-			ns_name  ns  = P->get_namespace_uri_id(entry.m_it);
-			tag_name tag = P->get_local_name_id(entry.m_it);
+			ns_name  ns  = adapter::get_namespace_id(entry.m_it);
+			tag_name tag = adapter::get_local_name_id(entry.m_it);
 
 			if (ns == ns_name::MathML && tag == tag_name::Annotation_xml)
 			{
@@ -1188,12 +1178,12 @@ namespace wordring::whatwg::html::parsing
 		{
 			this_type* P = static_cast<this_type*>(this);
 
-			node_pointer adjusted_insertion_location = P->end(target);
+			node_pointer adjusted_insertion_location = adapter::end(target);
 
-			bool f = P->get_namespace_uri_id(target) == ns_name::HTML;
+			bool f = adapter::get_namespace_id(target) == ns_name::HTML;
 			if (f)
 			{
-				switch (P->get_local_name_id(target))
+				switch (adapter::get_local_name_id(target))
 				{
 				case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Tr:
 					f = true;
@@ -1220,7 +1210,7 @@ namespace wordring::whatwg::html::parsing
 
 					if (0 < distance)
 					{
-						adjusted_insertion_location = P->end(last_template->m_it);
+						adjusted_insertion_location = adapter::end(last_template->m_it);
 						goto Abort;
 					}
 				}
@@ -1231,7 +1221,7 @@ namespace wordring::whatwg::html::parsing
 					goto Abort;
 				}
 
-				if (P->parent(last_table->m_it) != P->document())
+				if (adapter::parent(last_table->m_it) != P->get_document())
 				{
 					adjusted_insertion_location = last_table->m_it;
 					goto Abort;
@@ -1239,11 +1229,11 @@ namespace wordring::whatwg::html::parsing
 
 				// スクリプトをサポートしないため、ここに到達することはないはず。
 				// しかしテストでは通過させるため表明はしない。
-				adjusted_insertion_location = P->end((++it).base()->m_it);
+				adjusted_insertion_location = adapter::end((++it).base()->m_it);
 			}
 			else
 			{
-				adjusted_insertion_location = P->end(target);
+				adjusted_insertion_location = adapter::end(target);
 			}
 
 		Abort:
@@ -1260,8 +1250,8 @@ namespace wordring::whatwg::html::parsing
 			this_type* P = static_cast<this_type*>(this);
 
 			node_pointer el;
-			if (!token.m_tag_name.empty()) el = P->create_element(P->document(), token.m_tag_name, ns, U"");
-			else if (token.m_tag_name_id != static_cast<tag_name>(0)) el = P->create_element(P->document(), token.m_tag_name_id, ns, U"");
+			if (!token.m_tag_name.empty()) el = P->create_element(P->get_document(), token.m_tag_name, ns, U"");
+			else if (token.m_tag_name_id != static_cast<tag_name>(0)) el = P->create_element(P->get_document(), token.m_tag_name_id, ns, U"");
 			else assert(false);
 
 			for (token_attribute const& a : token)
@@ -1282,7 +1272,7 @@ namespace wordring::whatwg::html::parsing
 			this_type* P = static_cast<this_type*>(this);
 
 			node_pointer adjusted_insertion_location = appropriate_place_for_inserting_node(current_node().m_it);
-			node_pointer el = create_element_for_token(token, ns, P->parent(adjusted_insertion_location));
+			node_pointer el = create_element_for_token(token, ns, adapter::parent(adjusted_insertion_location));
 			node_pointer it;
 
 			//TODO: 要素を挿入可能か検査する機構が必要
@@ -1365,19 +1355,19 @@ namespace wordring::whatwg::html::parsing
 
 			node_pointer it1 = appropriate_place_for_inserting_node(current_node().m_it);
 
-			node_pointer parent = P->parent(it1);
-			if (parent == P->document()) return;
+			node_pointer parent = adapter::parent(it1);
+			if (parent == P->get_document()) return;
 
-			if (it1 != P->begin(parent))
+			if (it1 != adapter::begin(parent))
 			{
-				node_pointer prev = P->prev(it1);
-				if (P->is_text(prev)) P->append_text(prev, cp);
+				node_pointer prev = adapter::prev(it1);
+				if (adapter::is_text(prev)) adapter::append_text(prev, cp);
 			}
 			else
 			{
-				text_type text = P->create_text(cp);
+				text_type text = adapter::create_text(cp);
 				node_pointer it2 = P->insert_text(it1, std::move(text));
-				P->set_document(it2, P->document());
+				adapter::set_document(it2, P->get_document());
 			}
 		}
 
@@ -1388,7 +1378,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			this_type* P = static_cast<this_type*>(this);
 
-			comment_type comment = P->create_comment(token.m_data);
+			comment_type comment = adapter::create_comment(encoding_cast<string_type>(token.m_data));
 
 			P->insert_comment(pos, std::move(comment));
 		}
@@ -1440,13 +1430,11 @@ namespace wordring::whatwg::html::parsing
 		template <typename TagName>
 		void generate_implied_end_tags(TagName without)
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			while (!m_stack.empty())
 			{
 				auto it = m_stack.back().m_it;
-				tag_name tag = P->get_local_name_id(it);
-				ns_name  ns  = P->get_namespace_uri_id(it);
+				tag_name tag = adapter::get_local_name_id(it);
+				ns_name  ns  = adapter::get_namespace_id(it);
 
 				if constexpr (std::is_same_v<TagName, tag_name>)
 				{
@@ -1458,7 +1446,7 @@ namespace wordring::whatwg::html::parsing
 				}
 				if constexpr (std::is_same_v<TagName, std::pair<ns_name, std::u32string>>)
 				{
-					if (ns == without.first && P->get_local_name(it) == without.second) return;
+					if (ns == without.first && encoding_cast<std::u32string>(adapter::get_local_name(it)) == without.second) return;
 				}
 
 				if (ns != ns_name::HTML) return;
@@ -1485,13 +1473,11 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void generate_all_implied_end_tags_thoroughly()
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			while (!m_stack.empty())
 			{
 				auto it = m_stack.back().m_it;
-				tag_name tag = P->get_local_name_id(it);
-				ns_name  ns  = P->get_namespace_uri_id(it);
+				tag_name tag = adapter::get_local_name_id(it);
+				ns_name  ns  = adapter::get_namespace_id(it);
 
 				if (ns != ns_name::HTML) return;
 				switch (tag)
@@ -1526,30 +1512,32 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<comment_token, Token>)
 			{
-				insert_comment(token, P->document().end());
+				insert_comment(token, P->get_document().end());
 				return;
 			}
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				document_type_type doctype = P->create_document_type(
-					token.m_name, token.m_public_identifier, token.m_system_identifier);
-				P->insert_document_type(P->end(P->document()), std::move(doctype));
+				document_type_type doctype = adapter::create_document_type(
+					encoding_cast<string_type>(token.m_name),
+					encoding_cast<string_type>(token.m_public_identifier),
+					encoding_cast<string_type>(token.m_system_identifier));
+				P->insert_document_type(adapter::end(P->get_document()), std::move(doctype));
 
-				if (!P->is_iframe_srcdoc_document())
+				if (!adapter::is_iframe_srcdoc_document(P->get_document()))
 				{
-					if (in_quirks_condition(token)) P->set_document_mode(document_mode_name::quirks);
-					else if (in_limited_quirks_condition(token)) P->set_document_mode(document_mode_name::limited_quirks);
+					if (in_quirks_condition(token)) adapter::set_document_mode(P->get_document(), document_mode_name::quirks);
+					else if (in_limited_quirks_condition(token)) adapter::set_document_mode(P->get_document(), document_mode_name::limited_quirks);
 				}
 
 				insertion_mode(mode_name::before_html_insertion_mode);
 				return;
 			}
 
-			if (!P->is_iframe_srcdoc_document())
+			if (!adapter::is_iframe_srcdoc_document(P->get_document()))
 			{
 				P->report_error();
-				P->set_document_mode(document_mode_name::quirks);
+				adapter::set_document_mode(P->get_document(), document_mode_name::quirks);
 			}
 
 			insertion_mode(mode_name::before_html_insertion_mode);
@@ -1637,7 +1625,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<comment_token, Token>)
 			{
-				insert_comment(token, P->document().end());
+				insert_comment(token, P->get_document().end());
 				return;
 			}
 
@@ -1650,8 +1638,8 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Html)
 				{
-					node_pointer el = create_element_for_token(token, ns_name::HTML, P->document());
-					node_pointer it = P->insert_element(P->document().end(), el);
+					node_pointer el = create_element_for_token(token, ns_name::HTML, P->get_document());
+					node_pointer it = P->insert_element(P->get_document().end(), el);
 					m_stack.push_back({ token, it });
 					insertion_mode(mode_name::before_head_insertion_mode);
 
@@ -1673,9 +1661,9 @@ namespace wordring::whatwg::html::parsing
 
 			goto AnythingElse;
 		AnythingElse:
-			node_pointer el = P->create_element(P->document(), tag_name::Html);
-			node_pointer it = P->insert_element(P->document().end(), std::move(el));
-			P->set_document(it, P->document());
+			node_pointer el = P->create_element(P->get_document(), tag_name::Html);
+			node_pointer it = P->insert_element(P->get_document().end(), std::move(el));
+			adapter::set_document(it, P->get_document());
 			m_stack.push_back({ start_tag_token(), it });
 			insertion_mode(mode_name::before_head_insertion_mode);
 			reprocess_token(token);
@@ -1816,14 +1804,14 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Script:
 				{
 					node_pointer adjusted_insertion_location = appropriate_place_for_inserting_node(current_node().m_it);
-					node_pointer el = create_element_for_token(token, ns_name::HTML, P->parent(adjusted_insertion_location));
+					node_pointer el = create_element_for_token(token, ns_name::HTML, adapter::parent(adjusted_insertion_location));
 					node_pointer it = P->insert_element(adjusted_insertion_location, el);
-					P->set_document(it, P->document());
-					P->set_non_blocking_flag(it, false);
-					if (is_fragments_parser) P->set_already_started_flag(it, true);
+					adapter::set_document(it, P->get_document());
+					adapter::set_non_blocking_flag(it, false);
+					if (m_fragments_parser) adapter::set_already_started_flag(it, true);
 
 					//TODO: スクリプトの実行を防ぐを無条件に設定している
-					P->set_already_started_flag(it, true);
+					adapter::set_already_started_flag(it, true);
 					m_stack.push_back({ token, it });
 					base_type::change_state(base_type::script_data_state);
 					m_original_insertion_mode = m_insertion_mode;
@@ -2221,8 +2209,8 @@ namespace wordring::whatwg::html::parsing
 
 					if (m_frameset_ok_flag == false) return;
 
-					node_pointer it = P->parent(m_stack[1].m_it);
-					if (P->parent(it) != P->document()) P->erase_element(it);
+					node_pointer it = adapter::parent(m_stack[1].m_it);
+					if (adapter::parent(it) != P->get_document()) P->erase_element(it);
 					while (!is_html_element_of(current_node().m_it, tag_name::Html)) m_stack.pop_back();
 					insert_html_element(token);
 					insertion_mode(mode_name::in_frameset_insertion_mode);
@@ -2240,12 +2228,12 @@ namespace wordring::whatwg::html::parsing
 
 				for (stack_entry const& se : m_stack)
 				{
-					switch (P->get_local_name_id(se.m_it))
+					switch (adapter::get_local_name_id(se.m_it))
 					{
 					case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
 					case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
 					case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
-						if(P->get_namespace_uri_id(se.m_it) == ns_name::HTML) continue;
+						if(adapter::get_namespace_id(se.m_it) == ns_name::HTML) continue;
 					default:
 						report_error();
 						break;
@@ -2268,12 +2256,12 @@ namespace wordring::whatwg::html::parsing
 
 					for (stack_entry const& se : m_stack)
 					{
-						switch (P->get_local_name_id(se.m_it))
+						switch (adapter::get_local_name_id(se.m_it))
 						{
 						case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
 						case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
 						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
-							if (P->get_namespace_uri_id(se.m_it) == ns_name::HTML) continue;
+							if (adapter::get_namespace_id(se.m_it) == ns_name::HTML) continue;
 						default:
 							report_error();
 							break;
@@ -2297,12 +2285,12 @@ namespace wordring::whatwg::html::parsing
 
 					for (stack_entry const& se : m_stack)
 					{
-						switch (P->get_local_name_id(se.m_it))
+						switch (adapter::get_local_name_id(se.m_it))
 						{
 						case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
 						case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
 						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
-							if (P->get_namespace_uri_id(se.m_it) == ns_name::HTML) continue;
+							if (adapter::get_namespace_id(se.m_it) == ns_name::HTML) continue;
 						default:
 							report_error();
 							break;
@@ -2339,12 +2327,12 @@ namespace wordring::whatwg::html::parsing
 				{
 				case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
 					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
-					if (P->get_namespace_uri_id(current_node().m_it) == ns_name::HTML)
+					if (adapter::get_namespace_id(current_node().m_it) == ns_name::HTML)
 					{
-						switch (P->get_local_name_id(current_node().m_it))
+						switch (adapter::get_local_name_id(current_node().m_it))
 						{
 						case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
-							if (P->get_namespace_uri_id(current_node().m_it) == ns_name::HTML)
+							if (adapter::get_namespace_id(current_node().m_it) == ns_name::HTML)
 							{
 								report_error();
 								m_stack.pop_back();
@@ -2376,7 +2364,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Form)
 				{
-					if (P->create_pointer() != m_form_element_pointer && !contains(ns_name::HTML, tag_name::Template))
+					if (adapter::pointer() != m_form_element_pointer && !contains(ns_name::HTML, tag_name::Template))
 					{
 						report_error();
 						return;
@@ -2513,8 +2501,8 @@ namespace wordring::whatwg::html::parsing
 					if (!contains(ns_name::HTML, tag_name::Template))
 					{
 						node_pointer node = m_form_element_pointer;
-						m_form_element_pointer = P->create_pointer();
-						if (node == P->create_pointer() || !in_specific_scope(default_scope, node))
+						m_form_element_pointer = adapter::pointer();
+						if (node == adapter::pointer() || !in_specific_scope(default_scope, node))
 						{
 							report_error();
 							return;
@@ -2606,7 +2594,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::A)
 				{
-					node_pointer it = P->create_pointer();
+					node_pointer it = adapter::pointer();
 
 					auto it1 = m_list.end();
 					auto it2 = m_list.begin();
@@ -2695,7 +2683,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<end_tag_token, Token>)
 			{
-				node_pointer it = P->create_pointer();
+				node_pointer it = adapter::pointer();
 
 				switch (token.m_tag_name_id)
 				{
@@ -2707,8 +2695,8 @@ namespace wordring::whatwg::html::parsing
 					}
 					generate_implied_end_tags();
 					it = current_node().m_it;
-					if (P->get_namespace_uri_id(it) != ns_name::HTML
-						|| P->get_local_name_id(it) != token.m_tag_name_id) report_error();
+					if (adapter::get_namespace_id(it) != ns_name::HTML
+						|| adapter::get_local_name_id(it) != token.m_tag_name_id) report_error();
 					pop_until(ns_name::HTML, token.m_tag_name_id);
 					clear_formatting_element_list();
 					return;
@@ -2721,7 +2709,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Table)
 				{
-					if (P->get_document_mode() != document_mode_name::quirks
+					if (adapter::get_document_mode(P->get_document()) != document_mode_name::quirks
 						&& in_specific_scope(button_scope, tag_name::P)) close_p_element();
 					insert_html_element(token);
 					m_frameset_ok_flag = false;
@@ -3005,8 +2993,8 @@ namespace wordring::whatwg::html::parsing
 				auto it1 = --m_stack.end();
 				node_pointer node = it1->m_it;
 			Loop2:
-				if (P->get_namespace_uri_id(node) == ns_name::HTML
-					&& P->get_local_name(node) == token.m_tag_name)
+				if (adapter::get_namespace_id(node) == ns_name::HTML
+					&& encoding_cast<std::u32string>(adapter::get_local_name(node)) == token.m_tag_name)
 				{
 					generate_implied_end_tags(std::make_pair(ns_name::HTML, token.m_tag_name));
 					if (node != current_node().m_it) report_error();
@@ -3058,8 +3046,8 @@ namespace wordring::whatwg::html::parsing
 				std::u32string const& subject = token.m_tag_name;
 				// 2.
 				node_pointer it = current_node().m_it;
-				if (P->get_namespace_uri_id(it) == ns_name::HTML
-					&& P->get_local_name(it) == subject
+				if (adapter::get_namespace_id(it) == ns_name::HTML
+					&& encoding_cast<std::u32string>(adapter::get_local_name(it)) == subject
 					&& find_from_list(it) == m_list.end())
 				{
 					m_stack.pop_back();
@@ -3073,7 +3061,7 @@ namespace wordring::whatwg::html::parsing
 				// 5.
 				++outer_loop_counter;
 				// 6.
-				formatting_element = P->create_pointer();
+				formatting_element = adapter::pointer();
 				{
 					auto it1 = m_list.end();
 					auto it2 = m_list.begin();
@@ -3081,14 +3069,14 @@ namespace wordring::whatwg::html::parsing
 					{
 						--it1;
 						if (it1->m_marker) break;
-						if (P->get_local_name(it1->m_it) == subject)
+						if (encoding_cast<std::u32string>(adapter::get_local_name(it1->m_it)) == subject)
 						{
 							formatting_element = it1->m_it;
 							break;
 						}
 					}
 				}
-				if (formatting_element == P->create_pointer()) return true;
+				if (formatting_element == adapter::pointer()) return true;
 				// 7.
 				if (!contains(formatting_element))
 				{
@@ -3105,7 +3093,7 @@ namespace wordring::whatwg::html::parsing
 				// 9.
 				if (formatting_element != current_node().m_it) report_error();
 				// 10.
-				furthest_block = P->create_pointer();
+				furthest_block = adapter::pointer();
 				{
 					auto it1 = m_stack.begin();
 					auto it2 = m_stack.end();
@@ -3121,7 +3109,7 @@ namespace wordring::whatwg::html::parsing
 					}
 				}
 				// 11.
-				if (furthest_block == P->create_pointer())
+				if (furthest_block == adapter::pointer())
 				{
 					pop_until(formatting_element);
 					remove_from_list(formatting_element);
@@ -3172,7 +3160,7 @@ namespace wordring::whatwg::html::parsing
 				// 14.8.
 				if (last_node == furthest_block) bookmark = ++find_from_list(node);
 				// 14.9.
-				P->move_element(P->end(node), last_node);
+				P->move_element(adapter::end(node), last_node);
 				// 14.10.
 				last_node = node;
 				// 14.11.
@@ -3217,8 +3205,6 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void on_text_insertion_mode(Token& token)
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			if constexpr (std::is_same_v<character_token, Token>)
 			{
 				insert_character(token.m_data);
@@ -3229,7 +3215,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				report_error();
 				node_pointer it = current_node().m_it;
-				if (is_html_element_of(it, tag_name::Script)) P->set_already_started_flag(it, true);
+				if (is_html_element_of(it, tag_name::Script)) adapter::set_already_started_flag(it, true);
 				m_stack.pop_back();
 				insertion_mode(m_original_insertion_mode);
 				reprocess_token(token);
@@ -3263,15 +3249,13 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void on_in_table_insertion_mode(Token& token)
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			if constexpr (std::is_same_v<character_token, Token>)
 			{
 				node_pointer it = current_node().m_it;
-				switch (P->get_local_name_id(it))
+				switch (adapter::get_local_name_id(it))
 				{
 				case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Tr:
-					if (P->get_namespace_uri_id(it) != ns_name::HTML) break;
+					if (adapter::get_namespace_id(it) != ns_name::HTML) break;
 
 					m_pending_table_character_tokens.clear();
 					m_original_insertion_mode = m_insertion_mode;
@@ -3437,7 +3421,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					report_error();
 					if (contains(ns_name::HTML, tag_name::Template)
-						|| m_form_element_pointer != P->create_pointer()) return;
+						|| m_form_element_pointer != adapter::pointer()) return;
 					m_form_element_pointer = insert_html_element(token);
 					m_stack.pop_back();
 					return;
@@ -3463,13 +3447,11 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void clear_stack_back_to_table_context()
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			while (!m_stack.empty())
 			{
 				node_pointer it = current_node().m_it;
-				if (P->get_namespace_uri_id(it) != ns_name::HTML) return;
-				switch (P->get_local_name_id(it))
+				if (adapter::get_namespace_id(it) != ns_name::HTML) return;
+				switch (adapter::get_local_name_id(it))
 				{
 				case tag_name::Table: case tag_name::Template: case tag_name::Html:
 					return;
@@ -3809,15 +3791,13 @@ namespace wordring::whatwg::html::parsing
 
 		void clear_stack_back_to_table_body_context()
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			while (true)
 			{
 				node_pointer it = current_node().m_it;
-				switch (P->get_local_name_id(it))
+				switch (adapter::get_local_name_id(it))
 				{
 				case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Template: case tag_name::Html:
-					if (P->get_namespace_uri_id(it) == ns_name::HTML)
+					if (adapter::get_namespace_id(it) == ns_name::HTML)
 					{
 						m_stack.pop_back();
 						continue;
@@ -4378,8 +4358,6 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void on_after_body_insertion_mode(Token& token)
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			if constexpr (std::is_same_v<character_token, Token>)
 			{
 				if (is_ascii_white_space(token.m_data))
@@ -4391,7 +4369,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<comment_token, Token>)
 			{
-				insert_comment(token, P->end(m_stack.front().m_it));
+				insert_comment(token, adapter::end(m_stack.front().m_it));
 				return;
 			}
 
@@ -4414,7 +4392,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Html)
 				{
-					if constexpr (is_fragments_parser)
+					if (m_fragments_parser)
 					{
 						report_error();
 						return;
@@ -4496,7 +4474,7 @@ namespace wordring::whatwg::html::parsing
 						return;
 					}
 					m_stack.pop_back();
-					if (!is_fragments_parser && !is_html_element_of(current_node().m_it, tag_name::Frameset))
+					if (!m_fragments_parser && !is_html_element_of(current_node().m_it, tag_name::Frameset))
 					{
 						insertion_mode(mode_name::after_frameset_insertion_mode);
 					}
@@ -4614,7 +4592,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<comment_token, Token>)
 			{
-				insert_comment(token, P->end(P->document()));
+				insert_comment(token, adapter::end(P->get_document()));
 				return;
 			}
 
@@ -4662,7 +4640,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<comment_token, Token>)
 			{
-				insert_comment(token, P->end(P->document()));
+				insert_comment(token, adapter::end(P->get_document()));
 				return;
 			}
 
@@ -4729,11 +4707,9 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void stop_parsing()
 		{
-			this_type* P = static_cast<this_type*>(this);
-
-			P->set_current_document_readiness(U"interactive");
+			adapter::set_document_ready_state(encoding_cast<string_type>(U"interactive"));
 			m_stack.clear();
-			P->set_current_document_readiness(U"complete");
+			adapter::set_document_ready_state(encoding_cast<string_type>(U"complete"));
 		}
 
 		/*! @brief 構文解析を中止する
@@ -4742,13 +4718,11 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void abort_parser()
 		{
-			this_type* P = static_cast<this_type*>(this);
-
 			base_type::m_c.clear();
 
-			P->set_current_document_readiness(U"interactive");
+			adapter::set_document_ready_state(encoding_cast<string_type>(U"interactive"));
 			m_stack.clear();
-			P->set_current_document_readiness(U"complete");
+			adapter::set_document_ready_state(encoding_cast<string_type>(U"complete"));
 		}
 	};
 }

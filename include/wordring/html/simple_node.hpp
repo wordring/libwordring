@@ -279,6 +279,13 @@ namespace wordring::html
 		using string_type = String;
 
 	public:
+		simple_document_type(string_type const& name, string_type const& public_id, string_type const& system_id)
+			: m_name(name)
+			, m_public_id(public_id)
+			, m_system_id(system_id)
+		{
+		}
+
 		string_type const& name() const { return m_name; }
 
 		void name(string_type const& s) { m_name = s; }
@@ -691,7 +698,7 @@ namespace wordring::html
 	/*! @brief ノードの文字列データを参照する
 	*/
 	template <typename String>
-	String& data(simple_node<String>& node)
+	inline String& data(simple_node<String>& node)
 	{
 		if (std::holds_alternative<simple_text<String>>(node))
 		{
@@ -704,7 +711,7 @@ namespace wordring::html
 	/*! @brief ノードの文字列データを参照する
 	*/
 	template <typename String>
-	String const& data(simple_node<String> const& node)
+	inline String const& data(simple_node<String> const& node)
 	{
 		if (std::holds_alternative<simple_text<String>>(node))
 		{
@@ -717,7 +724,7 @@ namespace wordring::html
 	/*! @brief 属性の開始を返す
 	*/
 	template <typename String>
-	auto begin(simple_node<String>& node)
+	inline auto begin(simple_node<String>& node)
 	{
 		return std::get<simple_element<String>>(node).begin();
 	}
@@ -725,7 +732,7 @@ namespace wordring::html
 	/*! @brief 属性の開始を返す
 	*/
 	template <typename String>
-	auto begin(simple_node<String> const& node)
+	inline auto begin(simple_node<String> const& node)
 	{
 		return std::get<simple_element<String>>(node).begin();
 	}
@@ -733,7 +740,7 @@ namespace wordring::html
 	/*! @brief 属性の終端を返す
 	*/
 	template <typename String>
-	auto end(simple_node<String>& node)
+	inline auto end(simple_node<String>& node)
 	{
 		return std::get<simple_element<String>>(node).end();
 	}
@@ -741,7 +748,7 @@ namespace wordring::html
 	/*! @brief 属性の終端を返す
 	*/
 	template <typename String>
-	auto end(simple_node<String> const& node)
+	inline auto end(simple_node<String> const& node)
 	{
 		return std::get<simple_element<String>>(node).end();
 	}
@@ -749,13 +756,13 @@ namespace wordring::html
 	/*! @brief 属性を追加する
 	*/
 	template <typename String>
-	void push_back(simple_node<String>& node, simple_attr<String> const& attr)
+	inline void push_back(simple_node<String>& node, simple_attr<String> const& attr)
 	{
 		return std::get<simple_element<String>>(node).push_back(attr);
 	}
 
 	template <typename String>
-	void push_back(simple_node<String>& node, simple_attr<String>&& attr)
+	inline void push_back(simple_node<String>& node, simple_attr<String>&& attr)
 	{
 		return std::get<simple_element<String>>(node).push_back(std::move(attr));
 	}
@@ -772,7 +779,7 @@ namespace wordring::html
 	@sa simple_element::find()
 	*/
 	template <typename String>
-	auto find(simple_node<String> const& node, simple_attr<String> const& attr)
+	inline auto find(simple_node<String> const& node, simple_attr<String> const& attr)
 	{
 		return std::get<simple_element<String>>(node).find(attr);
 	}
@@ -791,7 +798,7 @@ namespace wordring::html
 	@sa simple_element::find()
 	*/
 	template <typename String>
-	auto find(simple_node<String> const& node, ns_name ns, String const& prefix, String const& name)
+	inline auto find(simple_node<String> const& node, ns_name ns, String const& prefix, String const& name)
 	{
 		return std::get<simple_element<String>>(node).find(ns, prefix, name);
 	}
@@ -809,7 +816,7 @@ namespace wordring::html
 	@sa simple_element::find()
 	*/
 	template <typename String>
-	auto find(simple_node<String> const& node, String const& name)
+	inline auto find(simple_node<String> const& node, String const& name)
 	{
 		return std::get<simple_element<String>>(node).find(name);
 	}
@@ -828,7 +835,7 @@ namespace wordring::html
 	@sa simple_element::find()
 	*/
 	template <typename String>
-	auto find(simple_node<String> const& node, ns_name ns, String const& prefix, attribute_name name)
+	inline auto find(simple_node<String> const& node, ns_name ns, String const& prefix, attribute_name name)
 	{
 		return std::get<simple_element<String>>(node).find(ns, prefix, name);
 	}
@@ -846,8 +853,76 @@ namespace wordring::html
 	@sa simple_element::find()
 	*/
 	template <typename String>
-	typename simple_element<String>::const_iterator find(simple_node<String> const& node, attribute_name name)
+	inline auto find(simple_node<String> const& node, attribute_name name)
 	{
 		return std::get<simple_element<String>>(node).find(name);
 	}
+
+	/*! @brief 要素の名前空間を返す
+	*/
+	template <typename String>
+	inline ns_name get_namespace_id(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).namespace_uri_id();
+	}
+
+	/*! @brief 要素のローカル名を返す
+	*/
+	template <typename String>
+	inline tag_name get_local_name_id(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).local_name_id();
+	}
+
+	template <typename String>
+	inline String get_local_name(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).local_name();
+	}
+
+	/*! @brief 文書ノードに文書形式を設定する
+
+	@param [in] node 文書ノード
+	@param [in] type 文書形式（ html あるいは xml ）
+	*/
+	template <typename String>
+	inline void set_document_type(simple_node<String>& node, document_type_name type)
+	{
+		std::get<simple_document<String>>(node).document_type(type);
+	}
+
+	template <typename String>
+	inline document_mode_name get_document_mode(simple_node<String> const& node)
+	{
+		return std::get<simple_document<String>>(node).document_mode();
+	}
+
+	/*! @brief 文書ノードに文書モードを設定する
+
+	@param [in] node 文書ノード
+	@param [in] mode 文書モード（ no_quirks、quirks、あるいは limited_quirks ）
+	*/
+	template <typename String>
+	inline void set_document_mode(simple_node<String>& node, document_mode_name mode)
+	{
+		std::get<simple_document<String>>(node).document_mode(mode);
+	}
+
+	/*
+	template <typename String, typename OutputIterator>
+	inline void to_string(simple_node<String> const& node, OutputIterator out)
+	{
+		std::visit([out](auto const& arg) mutable {
+			using T = std::decay_t<decltype(arg)>;
+			if constexpr (std::is_same_v<T, simple_element<String>>)
+			{
+				*out++ = '<';
+
+				*out++ = '>';
+			}
+			int i = 0;
+			++i;
+		}, node);
+	}
+	*/
 }

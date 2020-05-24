@@ -10,14 +10,14 @@
 
 #include <wordring/whatwg/infra/infra.hpp>
 
-#include <wordring/string/matcher.hpp>
+//#include <wordring/string/matcher.hpp>
 
 #include <type_traits>
 
 namespace wordring::whatwg::html::parsing
 {
 
-	template <typename T, typename Policy>
+	template <typename T, typename NodeAdapter>
 	class tokenizer : public input_stream<T>
 	{
 		friend input_stream<T>;
@@ -26,12 +26,13 @@ namespace wordring::whatwg::html::parsing
 		using base_type = input_stream<T>;
 		using this_type = T;
 
-		using policy = Policy;
+		using adapter = NodeAdapter;
 
 		using state_type = void(tokenizer::*)();
 
-		using node_pointer = typename policy::node_pointer;
+		using node_pointer = typename adapter::node_pointer;
 
+		
 		using base_type::flush_code_point;
 		using base_type::fill;
 		using base_type::current_input_character;
@@ -45,7 +46,7 @@ namespace wordring::whatwg::html::parsing
 
 		using base_type::report_error;
 		using base_type::eof;
-
+		
 	public:
 		state_type m_state;
 		state_type m_return_state;
@@ -164,7 +165,7 @@ namespace wordring::whatwg::html::parsing
 		bool in_html_namespace() const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
-			return P->get_namespace_uri_id(P->adjusted_current_node().m_it) == ns_name::HTML;
+			return adapter::get_namespace_id(P->adjusted_current_node().m_it) == ns_name::HTML;
 		}
 
 		/*! @brief 属性の重複を削る
