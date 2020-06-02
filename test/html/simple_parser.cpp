@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_contains_1)
 	using namespace wordring::html;
 
 	test_parser p;
-	auto el = p.create_element(p.get_document(), tag_name::P);
+	auto el = p.create_element(p.get_document(), tag_name::P, ns_name::HTML);
 	p.append_attribute(el, ns_name::HTML, U"", U"abbr", U"");
 	auto it = p.insert_element(p.get_document().end(), el);
 
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_contains_2)
 	using namespace wordring::whatwg::html::parsing;
 
 	test_parser p;
-	auto el = p.create_element(p.get_document(), tag_name::P);
+	auto el = p.create_element(p.get_document(), tag_name::P, ns_name::HTML);
 	p.append_attribute(el, ns_name::HTML, U"", U"abbr", U"");
 	auto it = p.insert_element(p.get_document().end(), el);
 
@@ -55,7 +55,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_find_attribute_1)
 	using namespace wordring::html;
 
 	test_parser p;
-	auto el = p.create_element(p.get_document(), tag_name::P);
+	auto el = p.create_element(p.get_document(), tag_name::P, ns_name::HTML);
 	p.append_attribute(el, ns_name::HTML, U"", U"attr", U"");
 	auto it = p.insert_element(p.get_document().end(), el);
 	BOOST_CHECK(it != p.get_document().end());

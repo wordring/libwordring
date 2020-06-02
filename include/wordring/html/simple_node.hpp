@@ -68,35 +68,35 @@ namespace wordring::html
 		{
 		}
 
-		simple_attr(ns_name ns, string_type const& prefix, string_type const& name, string_type const& s = string_type())
+		simple_attr(ns_name ns, string_type const& prefix, attribute_name name, string_type const& val = string_type())
 			: m_namespace_uri(ns)
 			, m_prefix(prefix)
 			, m_local_name(name)
-			, m_value(s)
+			, m_value(val)
 		{
 		}
 
-		simple_attr(string_type const& name, string_type const& s = string_type())
-			: m_namespace_uri(ns_name::HTML)
-			, m_prefix()
-			, m_local_name(name)
-			, m_value(s)
-		{
-		}
-
-		simple_attr(ns_name ns, string_type const& prefix, attribute_name name, string_type const& s = string_type())
+		simple_attr(ns_name ns, string_type const& prefix, string_type const& name, string_type const& val = string_type())
 			: m_namespace_uri(ns)
 			, m_prefix(prefix)
 			, m_local_name(name)
-			, m_value(s)
+			, m_value(val)
 		{
 		}
 
-		simple_attr(attribute_name name, string_type const& s = string_type())
+		simple_attr(attribute_name name, string_type const& val = string_type())
 			: m_namespace_uri(ns_name::HTML)
 			, m_prefix()
 			, m_local_name(name)
-			, m_value(s)
+			, m_value(val)
+		{
+		}
+
+		simple_attr(string_type const& name, string_type const& val = string_type())
+			: m_namespace_uri(ns_name::HTML)
+			, m_prefix()
+			, m_local_name(name)
+			, m_value(val)
 		{
 		}
 
@@ -400,6 +400,14 @@ namespace wordring::html
 		}
 
 		simple_element(string_type const& ns, string_type const& prefix, string_type const& name)
+			: m_namespace_uri(ns)
+			, m_namespace_prefix(prefix)
+			, m_local_name(name)
+			, m_attributes()
+		{
+		}
+
+		simple_element(ns_name ns, string_type const& prefix, string_type const& name)
 			: m_namespace_uri(ns)
 			, m_namespace_prefix(prefix)
 			, m_local_name(name)

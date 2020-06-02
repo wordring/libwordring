@@ -8,9 +8,17 @@
 #include <wordring/compatibility.hpp>
 #include <wordring/tree/tree.hpp>
 
+#include <iterator>
+#include <string>
+#include <variant>
+
 namespace wordring::html
 {
 	/*! @class simple_node_traits simple_node_traits.hpp wordring/html/simple_node_traits.hpp
+
+	@brief node_traits のテンプレート特殊化
+
+	@sa node_traits
 	*/
 	template <typename NodeIterator>
 	struct simple_node_traits
@@ -263,11 +271,6 @@ namespace wordring::html
 			string_type const& name, string_type const& public_id, string_type const& system_id)
 		{
 			return document_type_type(name, public_id, system_id);
-		}
-
-		static string_type get_name()
-		{
-
 		}
 	};
 

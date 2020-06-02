@@ -10,8 +10,8 @@
 
 #include <wordring/whatwg/infra/infra.hpp>
 
-//#include <wordring/string/matcher.hpp>
-
+#include <cassert>
+#include <string>
 #include <type_traits>
 
 namespace wordring::whatwg::html::parsing
@@ -192,16 +192,6 @@ namespace wordring::whatwg::html::parsing
 				auto tag_it = tag_atom_tbl.find(t.m_tag_name);
 				t.m_tag_name_id = (tag_it == tag_atom_tbl.end()) ? static_cast<tag_name>(0) : tag_it->second;
 
-				/*
-				auto it1 = t.begin();
-				auto it2 = t.end();
-				while (it1 != it2)
-				{
-					auto attr_it = attribute_atom_tbl.find(it1->m_name);
-					it1->m_name_id = (attr_it == attribute_atom_tbl.end()) ? static_cast<attribute_name>(0) : attr_it->second;
-					++it1;
-				}
-				*/
 				if (m_current_tag_token_id == 2)
 				{
 					m_last_start_tag_name = m_start_tag_token.m_tag_name;
@@ -211,6 +201,7 @@ namespace wordring::whatwg::html::parsing
 			}
 			else static_cast<this_type*>(this)->on_emit_token(token);
 
+			// トークンが木構築段階で処理された後のチェック
 			if constexpr (std::is_same_v<Token, start_tag_token>)
 			{
 				if (token.m_self_closing_flag && !token.m_acknowledged_self_closing_flag)

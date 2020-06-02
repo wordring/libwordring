@@ -234,7 +234,7 @@ namespace wordring::whatwg::html
 					case tag_name::Style:   case tag_name::Script:   case tag_name::Xmp:       case tag_name::Iframe:
 					case tag_name::Noembed: case tag_name::Noframes: case tag_name::Plaintext:
 						encoding_cast(traits::data(current_node), out);
-						return;
+						continue;
 					default:
 						break;
 					}

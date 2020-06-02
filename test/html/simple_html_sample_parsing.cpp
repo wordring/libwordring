@@ -26,10 +26,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_1)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body>&lt;42&gt;<!--42--></body></html>";
+	std::u8string s = u8"<html><head></head><body>&lt;42&gt;<!--42--></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -49,10 +49,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_2)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><div><span></span><span></span></div></body></html>";
+	std::u8string s = u8"<html><head></head><body><div><span></span><span></span></div></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -72,10 +72,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_3)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><div foo<div=\"\"></div></body></html>";
+	std::u8string s = u8"<html><head></head><body><div foo<div=\"\"></div></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -89,10 +89,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_4)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><div id'bar'=\"\"></div></body></html>";
+	std::u8string s = u8"<html><head></head><body><div id'bar'=\"\"></div></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -112,13 +112,13 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_5)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
 	// Chromeは属性値内の単引用符を&#39;に置き換えているが本実装は仕様通りの動作としている。
 	// 【参考】Chromeの出力
 	// <html><head></head><body><div foo=\"b&#39;ar&#39;\"></div></body></html>
-	std::string s = "<html><head></head><body><div foo=\"b'ar'\"></div></body></html>";
+	std::u8string s = u8"<html><head></head><body><div foo=\"b'ar'\"></div></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -138,10 +138,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_6)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><div foo=\"bar\" =\"baz\"=\"\"></div></body></html>";
+	std::u8string s = u8"<html><head></head><body><div foo=\"bar\" =\"baz\"=\"\"></div></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -161,13 +161,13 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_7)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
 	// 仕様によると、文書直下のコメントは許される。
 	// https://triple-underscore.github.io/HTML-writing-ja.html#writing
 	// しかしながら、Chromeではコメントは消去されていた。
-	std::string s = "<!--?xml-stylesheet type=\"text / css\" href=\"style.css\"?--><html><head></head><body></body></html>";
+	std::u8string s = u8"<!--?xml-stylesheet type=\"text / css\" href=\"style.css\"?--><html><head></head><body></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -187,10 +187,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_8)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body>ABCD<table><tbody><tr></tr></tbody></table></body></html>";
+	std::u8string s = u8"<html><head></head><body>ABCD<table><tbody><tr></tr></tbody></table></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -204,10 +204,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_9)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body>A B C<table><tbody><tr></tr></tbody></table></body></html>";
+	std::u8string s = u8"<html><head></head><body>A B C<table><tbody><tr></tr></tbody></table></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -221,10 +221,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_10)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body>A BC<table><tbody><tr></tr> </tbody></table></body></html>";
+	std::u8string s = u8"<html><head></head><body>A BC<table><tbody><tr></tr> </tbody></table></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -244,10 +244,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_11)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><a href=\"a\">a<a href=\"b\">b</a><table></table></a><a href=\"b\">x</a></body></html>";
+	std::u8string s = u8"<html><head></head><body><a href=\"a\">a<a href=\"b\">b</a><table></table></a><a href=\"b\">x</a></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -267,10 +267,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_12)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><p>1<b>2<i>3</i></b><i>4</i>5</p></body></html>";
+	std::u8string s = u8"<html><head></head><body><p>1<b>2<i>3</i></b><i>4</i>5</p></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -290,10 +290,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_13)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><b>1</b><p><b>2</b>3</p></body></html>";
+	std::u8string s = u8"<html><head></head><body><b>1</b><p><b>2</b>3</p></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -313,10 +313,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_14)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<html><head></head><body><b></b><b>bbb</b><table><tbody><tr><td>aaa</td></tr></tbody></table><b>ccc</b></body></html>";
+	std::u8string s = u8"<html><head></head><body><b></b><b>bbb</b><table><tbody><tr><td>aaa</td></tr></tbody></table><b>ccc</b></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -341,14 +341,14 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_15)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<!DOCTYPE html><html><head></head><body><p><b class=\"x\"><b class=\"x\"><b><b class=\"x\"><b class=\"x\"><b>X\n"
-		"</b></b></b></b></b></b></p><p><b class=\"x\"><b><b class=\"x\"><b class=\"x\"><b>X\n"
-		"</b></b></b></b></b></p><p><b class=\"x\"><b><b class=\"x\"><b class=\"x\"><b><b><b class=\"x\"><b>X\n"
-		"</b></b></b></b></b></b></b></b></p><p>X</p></body></html>";
+	std::u8string s =
+		u8"<!DOCTYPE html><html><head></head><body><p><b class=\"x\"><b class=\"x\"><b><b class=\"x\"><b class=\"x\"><b>X\n"
+		u8"</b></b></b></b></b></b></p><p><b class=\"x\"><b><b class=\"x\"><b class=\"x\"><b>X\n"
+		u8"</b></b></b></b></b></p><p><b class=\"x\"><b><b class=\"x\"><b class=\"x\"><b><b><b class=\"x\"><b>X\n"
+		u8"</b></b></b></b></b></b></b></b></p><p>X</p></body></html>";
 
 	BOOST_CHECK(out == s);
 }

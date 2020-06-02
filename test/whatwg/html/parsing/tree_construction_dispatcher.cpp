@@ -19,7 +19,6 @@
 namespace
 {
 	using namespace wordring::html;
-	//using namespace wordring::html::parsing;
 	using namespace wordring::whatwg::html::parsing;
 
 	using tree = wordring::tree<simple_node<std::string>>;
@@ -31,133 +30,7 @@ namespace
 		using traits = node_traits<typename tree::iterator>;
 
 	public:
-		/*
-		using document_type               = typename traits::document_type;
-		using document_type_type          = typename traits::document_type_type;
-		using document_fragment_type      = typename traits::document_fragment_type;
-		using element_type                = typename traits::element_type;
-		using text_type                   = typename traits::text_type;
-		using processing_instruction_type = typename traits::processing_instruction_type;
-		using comment_type                = typename traits::comment_type;
-
-		using base_type::mode_type;
-		using base_type::stack_entry;
-
-		using base_type::mode_name;
-		*/
-	public:
-		/*
-		using base_type::push_code_point;
-
-		using base_type::insertion_mode;
-		//using base_type::reset_insertion_mode_appropriately;
-		using base_type::current_node;
-		using base_type::adjusted_current_node;
-		using base_type::is_special;
-		using base_type::is_formatting;
-		using base_type::in_specific_scope;
-		using base_type::is_default_scope;
-		using base_type::is_list_item_scope;
-		using base_type::is_button_scope;
-		using base_type::is_table_scope;
-		using base_type::is_select_scope;
-		using base_type::pop_until;
-
-		using base_type::push_formatting_element_list;
-		using base_type::reconstruct_formatting_element_list;
-		using base_type::clear_formatting_element_list;
-
-		using base_type::process_token;
-		using base_type::reprocess_token;
-		using base_type::on_emit_token;
-		using base_type::is_mathml_text_integration_point;
-		using base_type::is_html_integration_point;
-
-		using base_type::appropriate_place_for_inserting_node;
-		using base_type::create_element_for_token;
-		using base_type::insert_foreign_element;
-		using base_type::insert_html_element;
-		using base_type::adjust_mathml_attributes;
-		using base_type::adjust_svg_attributes;
-		using base_type::adjust_foreign_attributes;
-
-		using base_type::insert_character;
-		using base_type::insert_comment;
-
-		using base_type::parse_generic_raw_text_element;
-		using base_type::parse_generic_raw_rcdata_element;
-		using base_type::generate_implied_end_tags;
-		using base_type::generate_all_implied_end_tags_thoroughly;
-
-		using base_type::on_initial_insertion_mode;
-		using base_type::in_quirks_condition;
-		using base_type::in_limited_quirks_condition;
-		using base_type::on_before_html_insertion_mode;
-		using base_type::on_before_head_insertion_mode;
-		using base_type::on_in_head_insertion_mode;
-		using base_type::on_in_head_noscript_insertion_mode;
-		using base_type::on_after_head_insertion_mode;
-		using base_type::on_in_body_insertion_mode;
-		using base_type::on_text_insertion_mode;
-		using base_type::on_in_table_insertion_mode;
-		using base_type::on_in_table_text_insertion_mode;
-		using base_type::on_in_caption_insertion_mode;
-		using base_type::on_in_column_group_insertion_mode;
-		using base_type::on_in_table_body_insertion_mode;
-		using base_type::on_in_row_insertion_mode;
-		using base_type::on_in_cell_insertion_mode;
-		using base_type::on_in_select_insertion_mode;
-		using base_type::on_in_select_in_table_insertion_mode;
-		using base_type::on_in_template_insertion_mode;
-		using base_type::on_after_body_insertion_mode;
-		using base_type::on_in_frameset_insertion_mode;
-		using base_type::on_after_frameset_insertion_mode;
-		using base_type::on_after_after_body_insertion_mode;
-		using base_type::on_after_after_frameset_insertion_mode;
-		using base_type::on_foreign_content;
-
-		using base_type::default_scope;
-		using base_type::list_item_scope;
-		using base_type::button_scope;
-		using base_type::table_scope;
-		using base_type::select_scope;
-
-		using base_type::m_insertion_mode;
-
-		using base_type::m_stack;
-		using base_type::m_list;
-		using base_type::m_foster_parenting;
-
-		//using base_type::to_document;
-		//using base_type::to_document_type;
-		//using base_type::to_document_fragment;
-		//using base_type::to_element;
-		//using base_type::to_text;
-		//using base_type::to_processing_instruction;
-		//using base_type::to_comment;
-
-		using base_type::get_namespace_uri_id;
-		using base_type::get_local_name_id;
-
-		using base_type::insert_element;
-		*/
 		using base_type::m_c;
-
-		/*
-		document_type* to_document(node_pointer it) { return std::get_if<document_type>(std::addressof(*it)); }
-
-		document_type_type const* to_document_type(node_pointer it) const { return std::get_if<document_type_type>(std::addressof(*it)); }
-
-		document_fragment_type const* to_document_fragment(node_pointer it) const { return std::get_if<document_fragment_type>(std::addressof(*it)); }
-
-		element_type const* to_element(node_pointer it) const { return std::get_if<element_type>(std::addressof(*it)); }
-
-		text_type* to_text(node_pointer it) { return std::get_if<text_type>(std::addressof(*it)); }
-
-		processing_instruction_type const* to_processing_instruction(node_pointer it) const { return std::get_if<processing_instruction_type>(std::addressof(*it)); }
-
-		comment_type const* to_comment(node_pointer it) const { return std::get_if<comment_type>(std::addressof(*it)); }
-		*/
 
 		void on_report_error(error_name ec) { ++m_error_count; }
 
@@ -195,9 +68,9 @@ BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_1)
 
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto TABLE = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML, U""));
-	auto SELECT = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::Select, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto TABLE = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML));
+	auto SELECT = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::Select, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), HTML });
 	p.m_stack.push_back({ start_tag_token(), TABLE });
 	p.m_stack.push_back({ start_tag_token(), SELECT });
@@ -211,10 +84,10 @@ BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_2)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto TABLE = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML, U""));
-	auto TEMPLATE = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::Template, ns_name::HTML, U""));
-	auto SELECT = p.insert_element(TEMPLATE.end(), p.create_element(document.end(), tag_name::Select, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto TABLE = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML));
+	auto TEMPLATE = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::Template, ns_name::HTML));
+	auto SELECT = p.insert_element(TEMPLATE.end(), p.create_element(document.end(), tag_name::Select, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), HTML });
 	p.m_stack.push_back({ start_tag_token(), TABLE });
 	p.m_stack.push_back({ start_tag_token(), TEMPLATE });
@@ -229,9 +102,9 @@ BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_3)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto HEAD = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Head, ns_name::HTML, U""));
-	auto A = p.insert_element(HEAD.end(), p.create_element(document.end(), tag_name::A, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto HEAD = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Head, ns_name::HTML));
+	auto A = p.insert_element(HEAD.end(), p.create_element(document.end(), tag_name::A, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), HTML });
 	p.m_stack.push_back({ start_tag_token(), HEAD });
 	p.m_stack.push_back({ start_tag_token(), A });
@@ -245,9 +118,9 @@ BOOST_AUTO_TEST_CASE(dispatcher_reset_insertion_mode_appropriately_4)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto HTML2 = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto A = p.insert_element(HTML2.end(), p.create_element(document.end(), tag_name::A, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto HTML2 = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto A = p.insert_element(HTML2.end(), p.create_element(document.end(), tag_name::A, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), HTML });
 	p.m_stack.push_back({ start_tag_token(), HTML2 });
 	p.m_stack.push_back({ start_tag_token(), A });
@@ -433,9 +306,9 @@ BOOST_AUTO_TEST_CASE(dispatcher_push_formatting_element_list_2)
 BOOST_AUTO_TEST_CASE(dispatcher_reconstruct_formatting_element_list_1)
 {
 	test_parser p;
-	auto HTML = p.insert_element(p.get_document().end(), p.create_element(p.get_document(), tag_name::Html, ns_name::HTML, U""));
-	auto A1 = p.insert_element(HTML.end(), p.create_element(p.get_document(), tag_name::A, ns_name::HTML, U""));
-	auto A2 = p.insert_element(A1.end(), p.create_element(p.get_document(), tag_name::A, ns_name::HTML, U""));
+	auto HTML = p.insert_element(p.get_document().end(), p.create_element(p.get_document(), tag_name::Html, ns_name::HTML));
+	auto A1 = p.insert_element(HTML.end(), p.create_element(p.get_document(), tag_name::A, ns_name::HTML));
+	auto A2 = p.insert_element(A1.end(), p.create_element(p.get_document(), tag_name::A, ns_name::HTML));
 	BOOST_CHECK(p.m_c.size() == 5);
 	start_tag_token token1;
 	token1.m_tag_name = U"A";
@@ -486,7 +359,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_clear_formatting_element_list_1)
 BOOST_AUTO_TEST_CASE(dispatcher_is_mathml_text_integration_point_1)
 {
 	test_parser p;
-	auto it = p.insert_element(p.get_document().end(), p.create_element(p.get_document(), tag_name::Mtext, ns_name::MathML, U""));
+	auto it = p.insert_element(p.get_document().end(), p.create_element(p.get_document(), tag_name::Mtext, ns_name::MathML));
 	start_tag_token token;
 	token.m_tag_name_id = tag_name::Mtext;
 	test_parser::stack_entry entry{ token, it };
@@ -497,7 +370,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_is_mathml_text_integration_point_1)
 BOOST_AUTO_TEST_CASE(dispatcher_is_html_integration_point_1)
 {
 	test_parser p;
-	auto it = p.insert_element(p.get_document().end(), p.create_element(p.get_document(), tag_name::Annotation_xml, ns_name::MathML, U""));
+	auto it = p.insert_element(p.get_document().end(), p.create_element(p.get_document(), tag_name::Annotation_xml, ns_name::MathML));
 	start_tag_token token;
 	token.m_tag_name_id = tag_name::Annotation_xml;
 	auto& attr = token.m_attributes.create();
@@ -539,9 +412,9 @@ BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_2)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto P = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::P, ns_name::HTML, U""));
-	auto TABLE = p.insert_element(P.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto P = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::P, ns_name::HTML));
+	auto TABLE = p.insert_element(P.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), HTML });
 	p.m_stack.push_back({ start_tag_token(), P });
 	p.m_foster_parenting = true;
@@ -555,9 +428,9 @@ BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_3)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
-	auto TEMPLATE = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Template, ns_name::HTML, U""));
-	auto TABLE = p.insert_element(TEMPLATE.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
+	auto TEMPLATE = p.insert_element(HTML.end(), p.create_element(document.end(), tag_name::Template, ns_name::HTML));
+	auto TABLE = p.insert_element(TEMPLATE.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), HTML });
 	p.m_stack.push_back({ start_tag_token(), TEMPLATE });
 	p.m_stack.push_back({ start_tag_token(), TABLE });
@@ -572,8 +445,8 @@ BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_4)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto TABLE = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML, U""));
-	auto P = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::P, ns_name::HTML, U""));
+	auto TABLE = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML));
+	auto P = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::P, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), P });
 	p.m_stack.push_back({ start_tag_token(), TABLE });
 	p.m_foster_parenting = true;
@@ -587,8 +460,8 @@ BOOST_AUTO_TEST_CASE(dispatcher_appropriate_place_for_inserting_node_5)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto TABLE = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML, U""));
-	auto P = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::P, ns_name::HTML, U""));
+	auto TABLE = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Table, ns_name::HTML));
+	auto P = p.insert_element(TABLE.end(), p.create_element(document.end(), tag_name::P, ns_name::HTML));
 	p.m_stack.push_back({ start_tag_token(), P });
 	p.m_stack.push_back({ start_tag_token(), TABLE });
 
@@ -604,7 +477,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_create_element_for_token_1)
 {
 	test_parser p;
 	auto document = p.get_document();
-	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML, U""));
+	auto HTML = p.insert_element(document.end(), p.create_element(document.end(), tag_name::Html, ns_name::HTML));
 	start_tag_token token;
 	token.m_tag_name = U"body";
 	p.create_element_for_token(token, ns_name::HTML, HTML);
@@ -881,35 +754,5 @@ BOOST_AUTO_TEST_CASE(dispatcher_abort_parser_1)
 	test_parser p;
 	p.abort_parser();
 }
-
-// ------------------------------------------------------------------------------------------------
-// 12.2.9.1 Misnested tags: <b><i></b></i>
-//
-// https://html.spec.whatwg.org/multipage/parsing.html#misnested-tags:-b-i-/b-/i
-// ------------------------------------------------------------------------------------------------
-
-BOOST_AUTO_TEST_CASE(dispatcher_misnested_tags_1)
-{
-	test_parser p;
-	std::u32string s = U"<p>1<b>2<i>3";
-	for (char32_t cp : s) p.push_code_point(cp);
-	s = U"</b>4</i>5</p>";
-	for (char32_t cp : s) p.push_code_point(cp);
-	p.push_eof();
-
-	//BOOST_CHECK(data(*p.get_document().begin()) == " Comment ");
-}
-
-/*
-BOOST_AUTO_TEST_CASE(dispatcher__1)
-{
-}
-BOOST_AUTO_TEST_CASE(dispatcher__1)
-{
-}
-BOOST_AUTO_TEST_CASE(dispatcher__1)
-{
-}
-*/
 
 BOOST_AUTO_TEST_SUITE_END()

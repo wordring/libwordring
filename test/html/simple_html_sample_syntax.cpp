@@ -4,6 +4,7 @@
 
 #include <wordring/html/simple_html.hpp>
 
+#include <wordring/compatibility.hpp>
 #include <wordring/tree/tree.hpp>
 
 #include <iterator>
@@ -34,20 +35,20 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_1)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
 	// 出力を見やすくコピーしただけで、規格上正しいのか不明。
-	std::string s =
-		"<html><head></head><body><p>\n"
-		" <svg>\n"
-		"  <metadata>\n"
-		"   <!-- this is invalid -->\n"
-		"   <cdr:license xmlns:cdr=\"https://www.example.com/cdr/metadata\" name=\"MIT\"></cdr:license>\n"
-		"  </metadata>\n"
-		" </svg>\n"
-		"</p>\n"
-		"</body></html>";
+	std::u8string s =
+		u8"<html><head></head><body><p>\n"
+		u8" <svg>\n"
+		u8"  <metadata>\n"
+		u8"   <!-- this is invalid -->\n"
+		u8"   <cdr:license xmlns:cdr=\"https://www.example.com/cdr/metadata\" name=\"MIT\"></cdr:license>\n"
+		u8"  </metadata>\n"
+		u8" </svg>\n"
+		u8"</p>\n"
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -76,7 +77,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_2)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
 	// 仕様において、<head>の前までは改行などの空白文字が無視される。
@@ -84,15 +85,15 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_2)
 	// 仕様において、</body>あるいは</html>の後は、文字の挿入位置が変更されない。
 	// したがって、</body>の後の改行と</html>の後の改行が<body>内の末尾に挿入されている。
 	// Chromeも本実装と同様の挿入位置となっている。
-	std::string s =
-		"<!DOCTYPE html><html><head>\n"
-		"    <title>Hello</title>\n"
-		"  </head>\n"
-		"  <body>\n"
-		"    <p>Welcome to this example.</p>\n"
-		"  \n" // </body>の後の改行
-		"\n"   // </html>の後の改行
-		"</body></html>";
+	std::u8string s =
+		u8"<!DOCTYPE html><html><head>\n"
+		u8"    <title>Hello</title>\n"
+		u8"  </head>\n"
+		u8"  <body>\n"
+		u8"    <p>Welcome to this example.</p>\n"
+		u8"  \n" // </body>の後の改行
+		u8"\n"   // </html>の後の改行
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -113,18 +114,18 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_3)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<!DOCTYPE html><html><head>\n"
-		"    <title>Hello</title>\n"
-		"  </head>\n"
-		"  <body>\n"
-		"    <p>Welcome to this example.</p>\n"
-		"  \n" // </body>の後の改行
-		"\n"   // </html>の後の改行
-		"</body></html>";
+	std::u8string s =
+		u8"<!DOCTYPE html><html><head>\n"
+		u8"    <title>Hello</title>\n"
+		u8"  </head>\n"
+		u8"  <body>\n"
+		u8"    <p>Welcome to this example.</p>\n"
+		u8"  \n" // </body>の後の改行
+		u8"\n"   // </html>の後の改行
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -133,7 +134,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_4)
 {
 	using namespace wordring::html;
 
-	// <html>を除去しない場合のコメント位置を確認。
+	// <html>を省略しない場合のコメント位置を確認。
 	std::u32string in =
 		U"<!DOCTYPE HTML>\n"
 		U"<html>\n"
@@ -149,18 +150,18 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_4)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<!DOCTYPE html><html><!-- where is this comment in the DOM? --><head>\n"
-		"    <title>Hello</title>\n"
-		"  </head>\n"
-		"  <body>\n"
-		"    <p>Welcome to this example.</p>\n"
-		"  \n" // </body>の後の改行
-		"\n"   // </html>の後の改行
-		"</body></html>";
+	std::u8string s =
+		u8"<!DOCTYPE html><html><!-- where is this comment in the DOM? --><head>\n"
+		u8"    <title>Hello</title>\n"
+		u8"  </head>\n"
+		u8"  <body>\n"
+		u8"    <p>Welcome to this example.</p>\n"
+		u8"  \n" // </body>の後の改行
+		u8"\n"   // </html>の後の改行
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -185,18 +186,18 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_5)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<!DOCTYPE html><!-- where is this comment in the DOM? --><html><head>\n"
-		"    <title>Hello</title>\n"
-		"  </head>\n"
-		"  <body>\n"
-		"    <p>Welcome to this example.</p>\n"
-		"  \n" // </body>の後の改行
-		"\n"   // </html>の後の改行
-		"</body></html>";
+	std::u8string s =
+		u8"<!DOCTYPE html><!-- where is this comment in the DOM? --><html><head>\n"
+		u8"    <title>Hello</title>\n"
+		u8"  </head>\n"
+		u8"  <body>\n"
+		u8"    <p>Welcome to this example.</p>\n"
+		u8"  \n" // </body>の後の改行
+		u8"\n"   // </html>の後の改行
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -210,10 +211,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_6)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<!DOCTYPE html><html><head><title>Hello</title></head><body><p>Welcome to this example.</p></body></html>";
+	std::u8string s = u8"<!DOCTYPE html><html><head><title>Hello</title></head><body><p>Welcome to this example.</p></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -224,18 +225,18 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_7)
 
 	std::u32string in =
 		U"<!DOCTYPE HTML>\n"
-		"<title>Hello</title>\n"
-		"<p>Welcome to this example.</p>";
+		U"<title>Hello</title>\n"
+		U"<p>Welcome to this example.</p>";
 
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<!DOCTYPE html><html><head><title>Hello</title>\n"
-		"</head><body><p>Welcome to this example.</p></body></html>";
+	std::u8string s =
+		u8"<!DOCTYPE html><html><head><title>Hello</title>\n"
+		u8"</head><body><p>Welcome to this example.</p></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -249,10 +250,10 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_8)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s = "<!DOCTYPE html><html><head><title>Hello</title></head><body><p>Welcome to this example.</p></body></html>";
+	std::u8string s = u8"<!DOCTYPE html><html><head><title>Hello</title></head><body><p>Welcome to this example.</p></body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -296,41 +297,45 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_9)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<html><head></head><body><table>\n"
-		" <caption>37547 TEE Electric Powered Rail Car Train Functions (Abbreviated)\n"
-		" </caption><colgroup><col><col><col>\n"
-		" </colgroup><thead>\n"
-		"  <tr>\n"
-		"   <th>Function\n"
-		"   </th><th>Control Unit\n"
-		"   </th><th>Central Station\n"
-		" </th></tr></thead><tbody>\n"
-		"  <tr>\n"
-		"   <td>Headlights\n"
-		"   </td><td>✔\n"
-		"   </td><td>✔\n"
-		"  </td></tr><tr>\n"
-		"   <td>Interior Lights\n"
-		"   </td><td>✔\n"
-		"   </td><td>✔\n"
-		"  </td></tr><tr>\n"
-		"   <td>Electric locomotive operating sounds\n"
-		"   </td><td>✔\n"
-		"   </td><td>✔\n"
-		"  </td></tr><tr>\n"
-		"   <td>Engineer's cab lighting\n"
-		"   </td><td>\n"
-		"   </td><td>✔\n"
-		"  </td></tr><tr>\n"
-		"   <td>Station Announcements - Swiss\n"
-		"   </td><td>\n"
-		"   </td><td>✔\n"
-		"</td></tr></tbody></table>\n"
-		"</body></html>";
+	std::u8string s =
+		u8"<html><head></head><body><table>\n"
+		u8" <caption>37547 TEE Electric Powered Rail Car Train Functions (Abbreviated)\n"
+		u8" </caption><colgroup><col><col><col>\n"
+		u8" </colgroup><thead>\n"
+		u8"  <tr>\n"
+		u8"   <th>Function\n"
+		u8"   </th><th>Control Unit\n"
+		u8"   </th><th>Central Station\n"
+		u8" </th></tr></thead><tbody>\n"
+		u8"  <tr>\n"
+		u8"   <td>Headlights\n"
+		u8"   </td><td>✔\n"
+		u8"   </td><td>✔\n"
+		u8"  </td></tr><tr>\n"
+		u8"   <td>Interior Lights\n"
+		u8"   </td><td>✔\n"
+		u8"   </td><td>✔\n"
+		u8"  </td></tr><tr>\n"
+		u8"   <td>Electric locomotive operating sounds\n"
+		u8"   </td><td>✔\n"
+		u8"   </td><td>✔\n"
+		u8"  </td></tr><tr>\n"
+		u8"   <td>Engineer's cab lighting\n"
+		u8"   </td><td>\n"
+		u8"   </td><td>✔\n"
+		u8"  </td></tr><tr>\n"
+		u8"   <td>Station Announcements - Swiss\n"
+		u8"   </td><td>\n"
+		u8"   </td><td>✔\n"
+		u8"</td></tr></tbody></table>\n"
+		u8"</body></html>";
+
+	std::cout << out << std::endl;
+
+	std::cout << wordring::encoding_cast<std::u8string>(s);
 
 	BOOST_CHECK(out == s);
 }
@@ -357,23 +362,23 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_10)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
-	std::string s =
-		"<html><head></head><body><table>\n"
-		" <caption>37547 TEE Electric Powered Rail Car Train Functions (Abbreviated)\n"
-		" </caption><colgroup><col><col><col>\n"
-		" </colgroup><thead>\n"
-		"  <tr> <th>Function                              </th><th>Control Unit     </th><th>Central Station\n"
-		" </th></tr></thead><tbody>\n"
-		"  <tr> <td>Headlights                            </td><td>✔                </td><td>✔\n"
-		"  </td></tr><tr> <td>Interior Lights                       </td><td>✔                </td><td>✔\n"
-		"  </td></tr><tr> <td>Electric locomotive operating sounds  </td><td>✔                </td><td>✔\n"
-		"  </td></tr><tr> <td>Engineer's cab lighting               </td><td>                 </td><td>✔\n"
-		"  </td></tr><tr> <td>Station Announcements - Swiss         </td><td>                 </td><td>✔\n"
-		"</td></tr></tbody></table>\n"
-		"</body></html>";
+	std::u8string s =
+		u8"<html><head></head><body><table>\n"
+		u8" <caption>37547 TEE Electric Powered Rail Car Train Functions (Abbreviated)\n"
+		u8" </caption><colgroup><col><col><col>\n"
+		u8" </colgroup><thead>\n"
+		u8"  <tr> <th>Function                              </th><th>Control Unit     </th><th>Central Station\n"
+		u8" </th></tr></thead><tbody>\n"
+		u8"  <tr> <td>Headlights                            </td><td>✔                </td><td>✔\n"
+		u8"  </td></tr><tr> <td>Interior Lights                       </td><td>✔                </td><td>✔\n"
+		u8"  </td></tr><tr> <td>Electric locomotive operating sounds  </td><td>✔                </td><td>✔\n"
+		u8"  </td></tr><tr> <td>Engineer's cab lighting               </td><td>                 </td><td>✔\n"
+		u8"  </td></tr><tr> <td>Station Announcements - Swiss         </td><td>                 </td><td>✔\n"
+		u8"</td></tr></tbody></table>\n"
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -432,22 +437,22 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_12)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
 	// 仕様において外来要素内ではCDATAが使えるように書かれているが、実際にはコメント化される。
 	// トークン化がCDATAトークンをサポートせず、木構築段階でも回復する機構が無いので、正常な動作と考える。
 	// Chromeも同様の結果となる。
-	std::string s =
-		"<html><head></head><body><p>You can add a string to a number, but this stringifies the number:</p>\n"
-		"<math>\n"
-		" <ms><!--[CDATA[x<y]]--></ms>\n"
-		" <mo>+</mo>\n"
-		" <mn>3</mn>\n"
-		" <mo>=</mo>\n"
-		" <ms><!--[CDATA[x<y3]]--></ms>\n"
-		"</math>\n"
-		"</body></html>";
+	std::u8string s =
+		u8"<html><head></head><body><p>You can add a string to a number, but this stringifies the number:</p>\n"
+		u8"<math>\n"
+		u8" <ms><!--[CDATA[x<y]]--></ms>\n"
+		u8" <mo>+</mo>\n"
+		u8" <mn>3</mn>\n"
+		u8" <mo>=</mo>\n"
+		u8" <ms><!--[CDATA[x<y3]]--></ms>\n"
+		u8"</math>\n"
+		u8"</body></html>";
 
 	BOOST_CHECK(out == s);
 }
@@ -461,13 +466,13 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_13)
 	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
-	std::string out;
+	std::u8string out;
 	to_string(sp.get_document(), std::back_inserter(out));
 
 	// 仕様によると、文書直下のコメントは許される。
 	// https://triple-underscore.github.io/HTML-writing-ja.html#writing
 	// しかしながら、Chromeではコメントは消去されていた。
-	std::string s = "<!--My favorite operators are > and <!--><html><head></head><body></body></html>";
+	std::u8string s = u8"<!--My favorite operators are > and <!--><html><head></head><body></body></html>";
 
 	BOOST_CHECK(out == s);
 }

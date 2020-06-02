@@ -163,7 +163,12 @@ namespace wordring::whatwg::html::parsing
 			assert(!m_eof_consumed); // ?
 			if (m_eof_consumed) return;
 
-			while(!m_c.empty()) P->on_emit_code_point();
+			while (!m_c.empty())
+			{
+				auto i = m_c.size();
+				P->on_emit_code_point();
+				if (i == m_c.size()) return;
+			}
 
 			if(m_eof && !m_eof_consumed) P->on_emit_code_point();
 		}
@@ -346,51 +351,8 @@ namespace wordring::whatwg::html::parsing
 			}
 
 			return std::array<char32_t, 2>();
-
-			/*
-			auto r = named_character_reference_idx_tbl.lookup(m_c.begin(), m_c.end());
-			auto tail = r.first;
-			while (named_character_reference_idx_tbl.begin() != tail)
-			{
-				if (tail) break;
-				tail = tail.parent();
-			}
-
-			len = std::distance(m_c.begin(), r.second);
-
-
-			if (!m_eof && m_match_state.m_offset != m_c.size())
-			{
-				assert(m_match_state.m_offset != m_c.size());
-
-				++m_match_state.m_offset;
-
-				if (r.first)
-				{
-					if (len != m_match_state.m_last_match)
-					{
-						m_match_state.m_last_match = len;
-						return match_result::partial;
-					}
-				}
-				else if (len == m_c.size()) return match_result::partial;
-			}
-
-			if (m_match_state.m_last_match != 0)
-			{
-				auto r = named_character_reference_idx_tbl.lookup(m_c.begin(), m_c.end());
-				idx = named_character_reference_idx_tbl.at(r.first);
-				len = m_match_state.m_last_match;
-				m_match_state.clear();
-
-				return match_result::succeed;
-			}
-
-			m_match_state.clear();
-
-			return match_result::failed;
-			*/
 		}
+
 		/*! @brief 名前付き文字参照のコード・ポイントを取得する
 
 		@param [in] idx match_named_character_reference() から返される<b>マップの索引</b>
@@ -404,6 +366,5 @@ namespace wordring::whatwg::html::parsing
 		{
 			return named_character_reference_map_tbl[idx];
 		}
-
 	};
 }

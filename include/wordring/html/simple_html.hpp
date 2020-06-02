@@ -5,7 +5,15 @@
 
 #include <wordring/whatwg/html/parsing/serializing.hpp>
 
+#include <wordring/compatibility.hpp>
+
 namespace wordring::html
 {
 	using wordring::whatwg::html::to_string;
+
+
+	inline int make_simple_document()
+	{
+
+	}
 }

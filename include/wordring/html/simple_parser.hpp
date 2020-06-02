@@ -58,8 +58,6 @@ namespace wordring::html
 
 	public:
 		simple_parser_base()
-			//: m_script_nesting_level(0)
-			//, m_parser_pause_flag(false)
 		{
 			m_document  = m_c.insert(m_c.end(), document_type());
 			m_temporary = m_c.insert(m_c.end(), node_type());
@@ -74,7 +72,6 @@ namespace wordring::html
 		パーサ構築時に文書ノードが挿入される。
 		*/
 		node_pointer get_document() { return m_document; }
-
 		
 		// ----------------------------------------------------------------------------------------
 		// 文書型
@@ -94,29 +91,24 @@ namespace wordring::html
 		- https://dom.spec.whatwg.org/#concept-create-element に対応する要素作成関数
 		- https://triple-underscore.github.io/DOM4-ja.html#concept-create-element
 		*/
-		node_pointer create_element(node_pointer doc, std::u32string name, namespace_uri_type ns, std::u32string prefix)
+		node_pointer create_element(node_pointer doc, std::u32string name, ns_name ns)
 		{
-			element_type el(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name));
-			return m_c.insert(m_temporary.end(), std::move(el));
+			return m_c.insert(m_temporary.end(), element_type(ns, string_type(), encoding_cast<string_type>(name)));
 		}
 
-		node_pointer create_element(node_pointer doc, tag_name name, namespace_uri_type ns, std::u32string prefix)
-		{
-			element_type el(ns, encoding_cast<string_type>(prefix), name);
-
-			return m_c.insert(m_temporary.end(), std::move(el));
-		}
-
-		node_pointer create_element(node_pointer doc, tag_name name, ns_name ns = ns_name::HTML)
-		{
-			element_type el(ns, string_type(), name);
-
-			return m_c.insert(m_temporary.end(), std::move(el));
+		node_pointer create_element(node_pointer doc, tag_name name, ns_name ns)
+		{	
+			return m_c.insert(m_temporary.end(), element_type(ns, string_type(), name));
 		}
 
 		node_pointer insert_element(node_pointer pos, node_pointer it)
 		{
 			return m_c.move(pos, it);
+		}
+
+		node_pointer get_node_document(node_pointer it)
+		{
+			return get_document();
 		}
 
 		/*! @brief ノードを削除する
@@ -168,10 +160,6 @@ namespace wordring::html
 		void on_report_error(parsing::error_name e) {}
 
 	protected:
-
-		//std::uint32_t m_script_nesting_level;
-		//bool m_parser_pause_flag;
-
 		container    m_c;
 		node_pointer m_document;
 		node_pointer m_temporary;

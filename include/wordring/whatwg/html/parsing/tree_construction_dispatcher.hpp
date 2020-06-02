@@ -976,6 +976,7 @@ namespace wordring::whatwg::html::parsing
 					return;
 				}
 			}
+			m_omit_lf = false;
 
 			if constexpr (std::is_same_v<end_tag_token, Token>)
 			{
@@ -1229,17 +1230,24 @@ namespace wordring::whatwg::html::parsing
 
 		/*! @brief トークンから要素を作成する
 		
-		https://html.spec.whatwg.org/multipage/parsing.html#create-an-element-for-the-token
+		@sa https://html.spec.whatwg.org/multipage/parsing.html#create-an-element-for-the-token
+		@sa https://triple-underscore.github.io/HTML-parsing-ja.html#create-an-element-for-the-token
 		*/
-		node_pointer create_element_for_token(start_tag_token& token, ns_name ns, node_pointer parent)
+		node_pointer create_element_for_token(start_tag_token& token, ns_name ns, node_pointer intended_parent)
 		{
 			//TODO: 未実装
 			this_type* P = static_cast<this_type*>(this);
 
 			node_pointer el;
-			if (!token.m_tag_name.empty()) el = P->create_element(P->get_document(), token.m_tag_name, ns, U"");
-			else if (token.m_tag_name_id != static_cast<tag_name>(0)) el = P->create_element(P->get_document(), token.m_tag_name_id, ns, U"");
-			else assert(false);
+			if (token.m_tag_name_id != static_cast<tag_name>(0))
+			{
+				el = P->create_element(P->get_node_document(intended_parent), token.m_tag_name_id, ns);
+			}
+			else
+			{
+				assert(!token.m_tag_name.empty());
+				el = P->create_element(P->get_node_document(intended_parent), token.m_tag_name, ns);
+			}
 
 			for (token_attribute const& a : token)
 			{
@@ -1648,7 +1656,7 @@ namespace wordring::whatwg::html::parsing
 
 			goto AnythingElse;
 		AnythingElse:
-			node_pointer el = P->create_element(P->get_document(), tag_name::Html);
+			node_pointer el = P->create_element(P->get_document(), tag_name::Html, ns_name::HTML);
 			node_pointer it = P->insert_element(P->get_document().end(), std::move(el));
 			traits::set_document(it, P->get_document());
 			m_stack.push_back({ start_tag_token(), it });
@@ -2370,19 +2378,23 @@ namespace wordring::whatwg::html::parsing
 				if (token.m_tag_name_id == tag_name::Li)
 				{
 					m_frameset_ok_flag = false;
-					for (stack_entry& se : m_stack)
+					auto it1 = m_stack.end();
+					auto it2 = m_stack.begin();
+					while (it1 != it2)
 					{
-						if (is_html_element_of(se.m_it, tag_name::Li))
+						--it1;
+						node_pointer it = it1->m_it;
+						if (is_html_element_of(it, tag_name::Li))
 						{
 							generate_implied_end_tags(tag_name::Li);
 							if (is_html_element_of(current_node().m_it, tag_name::Li)) report_error();
 							pop_until(ns_name::HTML, tag_name::Li);
 							break;
 						}
-						if (is_special(se.m_it) &&
-								(is_html_element_of(se.m_it, tag_name::Address)
-							  || is_html_element_of(se.m_it, tag_name::Div)
-							  || is_html_element_of(se.m_it, tag_name::P))) break;
+						if (is_special(it) &&
+								(is_html_element_of(it, tag_name::Address)
+							  || is_html_element_of(it, tag_name::Div)
+							  || is_html_element_of(it, tag_name::P))) break;
 						if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
 						insert_html_element(token);
 						return;
