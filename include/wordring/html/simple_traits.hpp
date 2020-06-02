@@ -1,35 +1,36 @@
 ﻿#pragma once
 
 #include <wordring/html/simple_node.hpp>
+#include <wordring/html/html_traits.hpp>
 
 #include <wordring/encoding/encoding.hpp>
 
+#include <wordring/compatibility.hpp>
+#include <wordring/tree/tree.hpp>
+
 namespace wordring::html
 {
-	/*! @class simple_adapter simple_adapter.hpp wordring/html/simple_adapter.hpp
+	/*! @class simple_node_traits simple_node_traits.hpp wordring/html/simple_node_traits.hpp
 	*/
-	template <typename String, typename Container>
-	class simple_adapter
+	template <typename NodeIterator>
+	struct simple_node_traits
 	{
-	public:
-		using string_type    = String;
-		using container_type = Container;
+		using node_pointer = NodeIterator;
+		using node_type    = typename node_pointer::value_type;
 
-		using node_type    = simple_node<String>;
-		using node_pointer = typename container_type::iterator;
-
-		using element_type                = simple_element<string_type>;                // 1.
-		using text_type                   = simple_text<string_type>;                   // 3.
-		using processing_instruction_type = simple_processing_instruction<string_type>; // 7.
-		using comment_type                = simple_comment<string_type>;                // 8.
-		using document_type               = simple_document<string_type>;               // 9.
-		using document_type_type          = simple_document_type<string_type>;          // 10.
-		using document_fragment_type      = simple_document_fragment<string_type>;      // 11.
+		using element_type                = std::variant_alternative_t<1, node_type>;  // 1.
+		using text_type                   = std::variant_alternative_t<3, node_type>;  // 3.
+		using processing_instruction_type = std::variant_alternative_t<7, node_type>;  // 7.
+		using comment_type                = std::variant_alternative_t<8, node_type>;  // 8.
+		using document_type               = std::variant_alternative_t<9, node_type>;  // 9.
+		using document_type_type          = std::variant_alternative_t<10, node_type>; // 10.
+		using document_fragment_type      = std::variant_alternative_t<11, node_type>; // 11.
 
 		using attribute_type    = typename element_type::attribute_type;
 		using attribute_pointer = typename element_type::const_iterator;
 
-	public:
+		using string_type = typename element_type::string_type;
+
 		// ----------------------------------------------------------------------------------------
 		// Node
 		// ----------------------------------------------------------------------------------------
@@ -61,9 +62,26 @@ namespace wordring::html
 		*/
 		static node_pointer next(node_pointer it) { return ++it; }
 
+		static auto data(node_pointer it)
+		{
+			return wordring::html::data(*it);
+		}
+
+		static auto target(node_pointer it)
+		{
+			return wordring::html::target(*it);
+		}
+
+		static auto name(node_pointer it)
+		{
+			return wordring::html::name(*it);
+		}
+
 		// ----------------------------------------------------------------------------------------
 		// Element
 		// ----------------------------------------------------------------------------------------
+
+		static bool is_element(node_pointer it) { return std::holds_alternative<element_type>(*it); }
 
 		/*! @brief 要素へオーナー文書を設定する
 
@@ -90,6 +108,16 @@ namespace wordring::html
 			return wordring::html::get_local_name(*it);
 		}
 
+		static string_type get_qualified_name(node_pointer it)
+		{
+			return wordring::html::get_qualified_name(*it);
+		}
+
+		static bool is_html_element_of(node_pointer it, tag_name tag)
+		{
+			return get_namespace_id(it) == ns_name::HTML && get_local_name_id(it) == tag;
+		}
+
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる
 
 		push_active_formatting_element_list() から呼び出される。
@@ -112,6 +140,36 @@ namespace wordring::html
 		static void set_already_started_flag(node_pointer it, bool b) {}
 
 		// ----------------------------------------------------------------------------------------
+		// Attr
+		// ----------------------------------------------------------------------------------------
+
+		static auto abegin(node_pointer it) { return wordring::html::begin(*it); }
+
+		static auto aend(node_pointer it) { return wordring::html::end(*it); }
+
+		static ns_name get_namespace_id(attribute_type const& attr)
+		{
+			return wordring::html::get_namespace_id(attr);
+		}
+
+		static attribute_name get_local_name_id(attribute_type const& attr)
+		{
+			return wordring::html::get_local_name_id(attr);
+		}
+
+		static string_type get_local_name(attribute_type const& attr)
+		{
+			return wordring::html::get_local_name(attr);
+		}
+
+		static string_type get_qualified_name(attribute_type const& attr)
+		{
+			return attr.qualified_name();
+		}
+
+		static auto value(attribute_type const& attr) { return wordring::html::value(attr); }
+
+		// ----------------------------------------------------------------------------------------
 		// Text
 		// ----------------------------------------------------------------------------------------
 
@@ -120,18 +178,26 @@ namespace wordring::html
 		static text_type create_text(char32_t cp)
 		{
 			text_type text;
-			to_string(cp, std::back_inserter(text));
+			wordring::to_string(cp, std::back_inserter(text));
 			return text;
 		}
 
 		static void append_text(node_pointer it, char32_t cp)
 		{
-			to_string(cp, std::back_inserter(wordring::html::data(*it)));
+			wordring::to_string(cp, std::back_inserter(wordring::html::data(*it)));
 		}
+		
+		// ----------------------------------------------------------------------------------------
+		// ProcessingInstruction
+		// ----------------------------------------------------------------------------------------
+
+		static bool is_processing_instruction(node_pointer it) { return std::holds_alternative<processing_instruction_type>(*it); }
 
 		// ----------------------------------------------------------------------------------------
 		// Comment
 		// ----------------------------------------------------------------------------------------
+
+		static bool is_comment(node_pointer it) { return std::holds_alternative<comment_type>(*it); }
 
 		static comment_type create_comment(string_type data)
 		{
@@ -141,6 +207,8 @@ namespace wordring::html
 		// ----------------------------------------------------------------------------------------
 		// Document
 		// ----------------------------------------------------------------------------------------
+
+		static bool is_document(node_pointer it) { return std::holds_alternative<document_type>(*it); }
 
 		/*! @brief 文書ノードに文書形式を設定する
 
@@ -189,11 +257,29 @@ namespace wordring::html
 		// DocumentType
 		// ----------------------------------------------------------------------------------------
 
+		static bool is_document_type(node_pointer it) { return std::holds_alternative<document_type_type>(*it); }
+
 		static document_type_type create_document_type(
 			string_type const& name, string_type const& public_id, string_type const& system_id)
 		{
 			return document_type_type(name, public_id, system_id);
 		}
 
+		static string_type get_name()
+		{
+
+		}
 	};
+
+	template <typename String>
+	using simple_node_tree_iterator = typename wordring::tree<simple_node<String>>::iterator;
+
+	template<>
+	struct node_traits<simple_node_tree_iterator<std::u8string>> : public simple_node_traits<simple_node_tree_iterator<std::u8string>> {};
+
+	template<>
+	struct node_traits<simple_node_tree_iterator<std::u16string>> : public simple_node_traits<simple_node_tree_iterator<std::u16string>> {};
+
+	template<>
+	struct node_traits<simple_node_tree_iterator<std::u32string>> : public simple_node_traits<simple_node_tree_iterator<std::u32string>> {};
 }

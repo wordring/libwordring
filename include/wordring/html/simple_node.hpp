@@ -120,6 +120,15 @@ namespace wordring::html
 
 		void local_name_id(attribute_name name) { m_local_name = name; }
 
+		string_type qualified_name() const
+		{
+			string_type s = prefix();
+			if (!s.empty()) wordring::to_string(U':', std::back_inserter(s));
+			s.append(local_name());
+
+			return s;
+		}
+
 		string_type const& value() const { return m_value; }
 
 		void value(string_type const& s) { m_value = s; }
@@ -442,6 +451,15 @@ namespace wordring::html
 
 		void local_name_id(tag_name name) { m_local_name = name; }
 
+		string_type qualified_name() const
+		{
+			string_type s = namespace_prefix();
+			if (!s.empty()) wordring::to_string(U':', std::back_inserter(s));
+			s.append(local_name());
+			
+			return s;
+		}
+
 		// 属性
 		void push_back(attribute_type const& attr) { m_attributes.push_back(std::move(attr)); }
 
@@ -593,6 +611,26 @@ namespace wordring::html
 	public:
 		using string_type = String;
 
+	public:
+		string_type const& data() const { return m_data; }
+
+		string_type& data() { return m_data; }
+
+		void data(string_type const& s) { m_data = s; }
+
+		void data(string_type&& s) { m_data = std::move(s); }
+
+		string_type const& target() const { return m_target; }
+
+		string_type& target() { return m_target; }
+
+		void target(string_type const& s) { m_target = s; }
+
+		void target(string_type&& s) { m_target = std::move(s); }
+
+	protected:
+		string_type m_data;
+		string_type m_target;
 	};
 
 	template <typename String1>
@@ -651,7 +689,6 @@ namespace wordring::html
 
 		void data(string_type&& s) { m_data = std::move(s); }
 
-
 	protected:
 		string_type m_data;
 	};
@@ -696,6 +733,9 @@ namespace wordring::html
 		std::monostate>;
 
 	/*! @brief ノードの文字列データを参照する
+
+	@internal
+	std::back_inserterを使うには、可変な文字列コンテナへの参照が必要になる。
 	*/
 	template <typename String>
 	inline String& data(simple_node<String>& node)
@@ -704,10 +744,13 @@ namespace wordring::html
 		{
 			return std::get<simple_text<String>>(node).data();
 		}
-
-		return std::get<simple_comment<String>>(node).data();
+		else if (std::holds_alternative<simple_comment<String>>(node))
+		{
+			return std::get<simple_comment<String>>(node).data();
+		}
+		return std::get<simple_processing_instruction<String>>(node).data();
 	}
-
+	
 	/*! @brief ノードの文字列データを参照する
 	*/
 	template <typename String>
@@ -717,8 +760,23 @@ namespace wordring::html
 		{
 			return std::get<simple_text<String>>(node).data();
 		}
+		else if (std::holds_alternative<simple_comment<String>>(node))
+		{
+			return std::get<simple_comment<String>>(node).data();
+		}
+		return std::get<simple_processing_instruction<String>>(node).data();
+	}
 
-		return std::get<simple_comment<String>>(node).data();
+	template <typename String>
+	inline String const& name(simple_node<String>& node)
+	{
+		return std::get<simple_document_type<String>>(node).name();
+	}
+
+	template <typename String>
+	inline String const& target(simple_node<String>& node)
+	{
+		return std::get<simple_processing_instruction<String>>(node).target();
 	}
 
 	/*! @brief 属性の開始を返す
@@ -858,6 +916,42 @@ namespace wordring::html
 		return std::get<simple_element<String>>(node).find(name);
 	}
 
+	template <typename String>
+	inline ns_name get_namespace_id(simple_attr<String> const& attr)
+	{
+		return attr.namespace_uri_id();
+	}
+
+	template <typename String>
+	inline String get_namespace(simple_attr<String> const& attr)
+	{
+		return attr.namespace_uri();
+	}
+
+	template <typename String>
+	inline String get_local_name(simple_attr<String> const& attr)
+	{
+		return attr.local_name();
+	}
+
+	template <typename String>
+	inline attribute_name get_local_name_id(simple_attr<String> const& attr)
+	{
+		return attr.local_name_id();
+	}
+
+	template <typename String>
+	inline String get_qualified_name(simple_attr<String> const& attr)
+	{
+		return attr.local_name_id();
+	}
+	
+	template <typename String>
+	inline auto const& value(simple_attr<String> const& attr)
+	{
+		return attr.value();
+	}
+
 	/*! @brief 要素の名前空間を返す
 	*/
 	template <typename String>
@@ -878,6 +972,12 @@ namespace wordring::html
 	inline String get_local_name(simple_node<String> const& node)
 	{
 		return std::get<simple_element<String>>(node).local_name();
+	}
+
+	template <typename String>
+	inline String get_qualified_name(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).qualified_name();
 	}
 
 	/*! @brief 文書ノードに文書形式を設定する
@@ -907,22 +1007,4 @@ namespace wordring::html
 	{
 		std::get<simple_document<String>>(node).document_mode(mode);
 	}
-
-	/*
-	template <typename String, typename OutputIterator>
-	inline void to_string(simple_node<String> const& node, OutputIterator out)
-	{
-		std::visit([out](auto const& arg) mutable {
-			using T = std::decay_t<decltype(arg)>;
-			if constexpr (std::is_same_v<T, simple_element<String>>)
-			{
-				*out++ = '<';
-
-				*out++ = '>';
-			}
-			int i = 0;
-			++i;
-		}, node);
-	}
-	*/
 }

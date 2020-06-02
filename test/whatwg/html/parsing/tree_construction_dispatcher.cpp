@@ -2,9 +2,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/html/simple_adapter.hpp>
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
+#include <wordring/html/simple_traits.hpp>
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
@@ -23,28 +23,28 @@ namespace
 	using namespace wordring::whatwg::html::parsing;
 
 	using tree = wordring::tree<simple_node<std::string>>;
-	using adapter = simple_adapter<std::string, tree>;
 
-	class test_parser : public simple_parser_base<test_parser, std::string, tree>
+	class test_parser : public simple_parser_base<test_parser, tree>
 	{
 	public:
-		using base_type    = simple_parser_base<test_parser, std::string, tree>;
-		using adapter_type = simple_adapter<std::string, tree>;
+		using base_type    = simple_parser_base<test_parser, tree>;
+		using traits = node_traits<typename tree::iterator>;
 
 	public:
-		using document_type               = typename adapter_type::document_type;
-		using document_type_type          = typename adapter_type::document_type_type;
-		using document_fragment_type      = typename adapter_type::document_fragment_type;
-		using element_type                = typename adapter_type::element_type;
-		using text_type                   = typename adapter_type::text_type;
-		using processing_instruction_type = typename adapter_type::processing_instruction_type;
-		using comment_type                = typename adapter_type::comment_type;
+		/*
+		using document_type               = typename traits::document_type;
+		using document_type_type          = typename traits::document_type_type;
+		using document_fragment_type      = typename traits::document_fragment_type;
+		using element_type                = typename traits::element_type;
+		using text_type                   = typename traits::text_type;
+		using processing_instruction_type = typename traits::processing_instruction_type;
+		using comment_type                = typename traits::comment_type;
 
 		using base_type::mode_type;
 		using base_type::stack_entry;
 
 		using base_type::mode_name;
-
+		*/
 	public:
 		/*
 		using base_type::push_code_point;
@@ -329,7 +329,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_pop_until_1)
 
 	p.pop_until(ns_name::HTML, tag_name::Body);
 
-	BOOST_CHECK(adapter::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(test_parser::traits::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
 }
 
 BOOST_AUTO_TEST_CASE(dispatcher_pop_until_2)
@@ -348,7 +348,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_pop_until_2)
 	std::array<tag_name, 2> constexpr tags = { tag_name::A, tag_name::Body };
 	p.pop_until(ns_name::HTML, tags);
 
-	BOOST_CHECK(adapter::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(test_parser::traits::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
 }
 
 BOOST_AUTO_TEST_CASE(dispatcher_pop_until_3)
@@ -366,7 +366,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_pop_until_3)
 
 	p.pop_until(BODY);
 
-	BOOST_CHECK(adapter::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(test_parser::traits::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
 }
 
 // ------------------------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/html/simple_adapter.hpp>
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
+#include <wordring/html/simple_traits.hpp>
 
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/token.hpp>
@@ -23,7 +23,7 @@ namespace
 
 	using node_type   = simple_node<std::string>;
 	using tree        = wordring::tree<node_type>;
-	using adapter_type = simple_adapter<std::string, tree>;
+	using adapter_type = node_traits<typename tree::iterator>;
 	
 	using document_type               = typename adapter_type::document_type;
 	using document_type_type          = typename adapter_type::document_type_type;
@@ -33,10 +33,10 @@ namespace
 	using processing_instruction_type = typename adapter_type::processing_instruction_type;
 	using comment_type                = typename adapter_type::comment_type;
 	
-	struct test_parser : public simple_parser_base<test_parser, std::string, tree>
+	struct test_parser : public simple_parser_base<test_parser, tree>
 	{
 	public:
-		using base_type = simple_parser_base<test_parser, std::string, tree>;
+		using base_type = simple_parser_base<test_parser, tree>;
 
 		using base_type::mode_name;
 

@@ -2,8 +2,8 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/html/simple_adapter.hpp>
 #include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_traits.hpp>
 
 #include <wordring/whatwg/html/parsing/token.hpp>
 #include <wordring/whatwg/html/parsing/tokenization.hpp>
@@ -18,21 +18,13 @@ namespace
 	using namespace wordring::html;
 	using namespace wordring::whatwg::html::parsing;
 
-	using node_type = simple_node<std::u32string>;
+	using tree = wordring::tree<simple_node<std::u32string>>;
 
-	using tree = wordring::tree<node_type>;
-
-	using test_policy = simple_adapter<std::u32string, tree>;
-
-	struct test_tokenizer : tokenizer<test_tokenizer, test_policy>
+	struct test_tokenizer : tokenizer<test_tokenizer, node_traits<typename tree::iterator>>
 	{
-		using policy = test_policy;
+		using base_type = tokenizer<test_tokenizer, node_traits<typename tree::iterator>>;
 
-		using node_pointer = policy::node_pointer;
-		using element_type = typename policy::element_type;
-
-
-		using base_type = tokenizer<test_tokenizer, test_policy>;
+		using node_pointer = tree::iterator;
 
 		using base_type::m_c;
 		using base_type::m_state;
@@ -51,22 +43,10 @@ namespace
 		std::deque<stack_entry> m_stack;
 		stack_entry m_dummy_stack_entry;
 
-		error_name m_ec;
-		std::u32string m_emited_codepoints;
-
 		stack_entry const& adjusted_current_node() const { return m_dummy_stack_entry; }
-		
-		//
 
-		bool is_element(node_pointer it) const
-		{
-			return std::holds_alternative<element_type>(*it);
-		}
-
-		ns_name get_namespace_uri_id(node_pointer it) const
-		{
-			return ns_name::HTML;
-		}
+		std::u32string m_emited_codepoints;
+		error_name m_ec;
 
 		void on_report_error(error_name ec) { m_ec = ec; }
 

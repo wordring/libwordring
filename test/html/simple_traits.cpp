@@ -1,33 +1,16 @@
-﻿// test/whatwg/html/simple_adapter.cpp
+﻿// test/whatwg/html/simple_traits.cpp
 
 #include <boost/test/unit_test.hpp>
 
 #include <wordring/tree/tree.hpp>
 
 #include <wordring/html/simple_node.hpp>
-#include <wordring/html/simple_adapter.hpp>
+#include <wordring/html/simple_traits.hpp>
 
-namespace
-{
-	using node_type = wordring::html::simple_node<std::u32string>;
-
-	using tree = wordring::tree<node_type>;
-
-	using adapter = wordring::html::simple_adapter<std::u32string, tree>;
-
-	struct test_adapter : adapter
-	{
-
-	};
-}
-
-BOOST_AUTO_TEST_SUITE(whatwg_html_simple_adapter_test)
+BOOST_AUTO_TEST_SUITE(whatwg_html_simple_traits_test)
 
 BOOST_AUTO_TEST_CASE(simple_adapter__construct__1)
 {
-	//using namespace wordring::whatwg::html::parsing;
-	test_adapter tp;
-	BOOST_CHECK(true);
 }
 
 /*

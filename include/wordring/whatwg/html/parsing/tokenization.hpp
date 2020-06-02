@@ -17,7 +17,7 @@
 namespace wordring::whatwg::html::parsing
 {
 
-	template <typename T, typename NodeAdapter>
+	template <typename T, typename NodeTraits>
 	class tokenizer : public input_stream<T>
 	{
 		friend input_stream<T>;
@@ -26,12 +26,9 @@ namespace wordring::whatwg::html::parsing
 		using base_type = input_stream<T>;
 		using this_type = T;
 
-		using adapter = NodeAdapter;
+		using traits = NodeTraits;
 
 		using state_type = void(tokenizer::*)();
-
-		using node_pointer = typename adapter::node_pointer;
-
 		
 		using base_type::flush_code_point;
 		using base_type::fill;
@@ -165,7 +162,7 @@ namespace wordring::whatwg::html::parsing
 		bool in_html_namespace() const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
-			return adapter::get_namespace_id(P->adjusted_current_node().m_it) == ns_name::HTML;
+			return traits::get_namespace_id(P->adjusted_current_node().m_it) == ns_name::HTML;
 		}
 
 		/*! @brief 属性の重複を削る
@@ -1226,7 +1223,8 @@ namespace wordring::whatwg::html::parsing
 				return;
 			case U'=':
 				report_error(error_name::unexpected_equals_sign_before_attribute_name);
-				create_attribute();
+				token_attribute& attr = create_attribute();
+				attr.m_name = cp;
 				change_state(attribute_name_state);
 				return;
 			}

@@ -1,14 +1,19 @@
 ﻿#pragma once
 
-#include <wordring/whatwg/html/html_defs.hpp>
+#include <wordring/html/html_defs.hpp>
+#include <wordring/html/html_traits.hpp>
 
 namespace wordring::whatwg::html
 {
-	static bool is_void_element(ns_name ns, tag_name::tag_name tag)
+	template <typename NodePointer>
+	inline bool is_void_element(NodePointer it)
 	{
-		if (ns == ns_name::HTML)
+		using namespace wordring::html;
+		using traits = node_traits<NodePointer>;
+
+		if (traits::is_element(it) && traits::get_namespace_id(it) == ns_name::HTML)
 		{
-			switch (tag)
+			switch (traits::get_local_name_id(it))
 			{
 			case tag_name::Area:  case tag_name::Base: case tag_name::Br:    case tag_name::Col:
 			case tag_name::Embed: case tag_name::Hr:   case tag_name::Img:   case tag_name::Input:

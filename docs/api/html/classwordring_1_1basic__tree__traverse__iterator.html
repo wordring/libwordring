@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::basic_tree_traverse_iterator&lt; Iterator &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="classwordring_1_1basic__tree__traverse__iterator.html">basic_tree_traverse_iterator</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="classwordring_1_1basic__tree__traverse__iterator-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::basic_tree_traverse_iterator&lt; Iterator &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>階層の通知付きで木を走査するイテレータ・アダプター  
+ <a href="classwordring_1_1basic__tree__traverse__iterator.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="tree__traverse__iterator_8hpp_source.html">wordring/tree/tree_traverse_iterator.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a7061ca89a91f87eeb7ef71b12c003699"><td class="memItemLeft" align="right" valign="top"><a id="a7061ca89a91f87eeb7ef71b12c003699"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = Iterator</td></tr>
+<tr class="separator:a7061ca89a91f87eeb7ef71b12c003699"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:a11efead643a31ef43840ef7059fd15cd"><td class="memItemLeft" align="right" valign="top"><a id="a11efead643a31ef43840ef7059fd15cd"></a>
+std::deque&lt; base_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_x</b></td></tr>
+<tr class="separator:a11efead643a31ef43840ef7059fd15cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c8804219954d592b1b37e9acb60d01c"><td class="memItemLeft" align="right" valign="top"><a id="a2c8804219954d592b1b37e9acb60d01c"></a>
+std::deque&lt; base_type &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_y</b></td></tr>
+<tr class="separator:a2c8804219954d592b1b37e9acb60d01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename Iterator&gt;<br />
+class wordring::basic_tree_traverse_iterator&lt; Iterator &gt;</h3>
+
+<p>階層の通知付きで木を走査するイテレータ・アダプター </p>
+<dl class="tparams"><dt>テンプレート引数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Iterator</td><td>ベースとなる木のイテレータ </td></tr>
+    <tr><td class="paramname">Container</td><td><a class="el" href="classwordring_1_1detail_1_1tree__iterator__stack.html">detail::tree_iterator_stack</a> あるいは <a class="el" href="classwordring_1_1detail_1_1tree__iterator__queue.html">detail::tree_iterator_queue</a> </td></tr>
+    <tr><td class="paramname">Allocator</td><td>アロケータ</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>プレ・オーダー走査用の <b>tree_iterator</b> とレベル・オーダー走査用の <b>level_order_tree_iterator</b> が事前に定義されている。</p>
+<div class="fragment"><div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span>  Allocator = std::allocator&lt;Iterator&gt;&gt;</div>
+<div class="line"><span class="keyword">using</span> tree_iterator = basic_tree_iterator&lt;Iterator, detail::tree_iterator_stack&lt;Iterator, Allocator&gt;, Allocator&gt;;</div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span>  Allocator = std::allocator&lt;Iterator&gt;&gt;</div>
+<div class="line"><span class="keyword">using</span> level_order_tree_iterator = basic_tree_iterator&lt;Iterator, detail::tree_iterator_queue&lt;Iterator, Allocator&gt;, Allocator&gt;;</div>
+</div><!-- fragment --><p>このクラスは、道順の調査に、スタックあるいはキューを使う。 従って、コピーのコストは相応に高い。</p>
+<p><b>operator++()</b> によって、走査順に従い次の要素へ移動する。 <b>operator*()</b> によって、指している要素の逆参照を得る。 元となる木のイテレータを得るには、 <b>base()</b> を使う。</p>
+<p>走査順のイメージを以下に示す。<br  />
+※要素についている番号は移動順を示す。</p>
+<dl class="section user"><dt>プレ・オーダー</dt><dd></dd></dl>
+<div class="image">
+<object type="image/svg+xml" data="tree_traverse_pre_order.svg" style="pointer-events: none;"></object>
+</div>
+<dl class="section user"><dt>レベル・オーダー</dt><dd></dd></dl>
+<div class="image">
+<object type="image/svg+xml" data="tree_traverse_level_order.svg" style="pointer-events: none;"></object>
+</div>
+ </div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="tree__traverse__iterator_8hpp_source.html">tree_traverse_iterator.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

@@ -27,11 +27,12 @@ include_directories (
 
 add_executable(
 	${PROJECT_NAME}
-		test_module.cpp
-		simple_node.cpp
-		simple_parser.cpp
-		simple_policy.cpp
-)
+		"test_module.cpp"
+		"simple_node.cpp"
+		"simple_parser.cpp"
+		"simple_traits.cpp"
+		"simple_html_sample_parsing.cpp"
+		"simple_html_sample_syntax.cpp")
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

@@ -5,8 +5,8 @@
 
 #include <wordring/html/html_defs.hpp>
 
-#include <wordring/html/simple_adapter.hpp>
 #include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_traits.hpp>
 
 #include <wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp>
 
@@ -22,47 +22,39 @@ namespace wordring::html
 	
 	@brief simple_node 用の HTML5 パーサー
 
-	@tparam T                 CRTP に基づく派生クラス
-	@tparam String            文字列型
-	@tparam Container         Tree コンテナ
-	@tparam IsFragmentsParser HTML フラグメント・パーサーの場合 true
+	@tparam T         CRTP に基づく派生クラス
+	@tparam Container Tree コンテナ
 
 
 	*/
-	template <typename T, typename String, typename Container>
-	class simple_parser_base : public wordring::whatwg::html::parsing::tree_construction_dispatcher<T, simple_adapter<String, Container>>
+	template <typename T, typename Container>
+	class simple_parser_base : public wordring::whatwg::html::parsing::tree_construction_dispatcher<T, node_traits<typename Container::iterator>>
 	{
 	public:
-		using adapter = simple_adapter<String, Container>;
+		using traits = node_traits<typename Container::iterator>;
 
-		using base_type = wordring::whatwg::html::parsing::tree_construction_dispatcher<T, adapter>;
+		using base_type = wordring::whatwg::html::parsing::tree_construction_dispatcher<T, traits>;
 		using this_type = T;
 
-		using string_type  = typename adapter::string_type;
-		using container    = typename adapter::container_type;
-		using node_type    = typename adapter::node_type;
-		using node_pointer = typename container::iterator;
+		using container = Container;
 
-		using document_type               = typename adapter::document_type;
-		using document_type_type          = typename adapter::document_type_type;
-		using document_fragment_type      = typename adapter::document_fragment_type;
-		using element_type                = typename adapter::element_type;
-		using text_type                   = typename adapter::text_type;
-		using processing_instruction_type = typename adapter::processing_instruction_type;
-		using comment_type                = typename adapter::comment_type;
+		using string_type  = typename traits::string_type;
+		using node_type    = typename traits::node_type;
+		using node_pointer = typename traits::node_pointer;
 
-		using attribute_type    = typename adapter::attribute_type;
-		using attribute_pointer = typename adapter::attribute_pointer;
+		using document_type               = typename traits::document_type;
+		using document_type_type          = typename traits::document_type_type;
+		using document_fragment_type      = typename traits::document_fragment_type;
+		using element_type                = typename traits::element_type;
+		using text_type                   = typename traits::text_type;
+		using processing_instruction_type = typename traits::processing_instruction_type;
+		using comment_type                = typename traits::comment_type;
+
+		using attribute_type    = typename traits::attribute_type;
+		using attribute_pointer = typename traits::attribute_pointer;
 
 		using namespace_uri_type = basic_html_atom<string_type, ns_name>;
 		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
-
-		//using base_type::m_stack;
-
-		//using base_type::report_error;
-		//using base_type::eof;
-
-		//using typename base_type::mode_name;
 
 	public:
 		simple_parser_base()
@@ -136,7 +128,7 @@ namespace wordring::html
 
 		/*! @brief ノードを移動する
 		*/
-		void move_element(node_pointer pos, node_pointer it)
+		void move_node(node_pointer pos, node_pointer it)
 		{
 			m_c.move(pos, it);
 		}
@@ -145,20 +137,9 @@ namespace wordring::html
 		// 属性
 		// ----------------------------------------------------------------------------------------
 
-		attribute_type create_attribute(node_pointer el, ns_name ns, std::u32string const& prefix, std::u32string const& local_name)
-		{
-			return attribute_type(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(local_name));
-		}
-
-		/*! @brief 要素へ属性を付加する
-		*/
-		void append_attribute(node_pointer it, attribute_type&& attr)
-		{
-			push_back(*it, std::move(attr));
-		}
-
 		void append_attribute(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name, std::u32string const& value)
 		{
+			push_back(*it, attribute_type(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name), encoding_cast<string_type>(value)));
 		}
 
 		bool contains(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name)
@@ -196,8 +177,8 @@ namespace wordring::html
 		node_pointer m_temporary;
 	};
 
-	template <typename String, typename Container>
-	class simple_parser : public simple_parser_base<simple_parser<String, Container>, String, Container>
+	template <typename Container>
+	class simple_parser : public simple_parser_base<simple_parser<Container>, Container>
 	{
 	};
 }
