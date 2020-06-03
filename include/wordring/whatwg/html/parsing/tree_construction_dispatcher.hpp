@@ -329,7 +329,7 @@ namespace wordring::whatwg::html::parsing
 			// 7.
 			if (is_html_element_of(node, tag_name::Tbody)
 			 || is_html_element_of(node, tag_name::Thead)
-			 || is_html_element_of(node, tag_name::Tfoot)) return insertion_mode(mode_name::in_cell_insertion_mode);
+			 || is_html_element_of(node, tag_name::Tfoot)) return insertion_mode(mode_name::in_table_body_insertion_mode);
 			// 8.
 			if (is_html_element_of(node, tag_name::Caption)) return insertion_mode(mode_name::in_caption_insertion_mode);
 			// 9.

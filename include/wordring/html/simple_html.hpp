@@ -14,6 +14,6 @@ namespace wordring::html
 
 	inline int make_simple_document()
 	{
-
+		return 0;
 	}
 }
