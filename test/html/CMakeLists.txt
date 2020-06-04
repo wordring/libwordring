@@ -43,7 +43,7 @@ add_executable(
 #		"simple_html_sample_semantics.cpp"
 #		"simple_html_sample_syntax.cpp"
 #		"simple_html_sample_text.cpp"
-)
+ "simple_html_sample_images.cpp")
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
