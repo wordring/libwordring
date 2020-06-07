@@ -2,6 +2,8 @@
 
 #include <wordring/whatwg/html/parsing/atom_defs.hpp>
 
+#include <wordring/whatwg/encoding/encoding_defs.hpp>
+
 #include <cstdint>
 
 namespace wordring::whatwg::html
@@ -29,4 +31,5 @@ namespace wordring::whatwg::html
 		limited_quirks,
 	};
 
+	using encoding_name = wordring::whatwg::encoding::name;
 }

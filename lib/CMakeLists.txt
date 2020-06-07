@@ -1,6 +1,6 @@
 ﻿# wordring_cpp/lib
 #
-# このプロジェクトはwordring_cppライブラリを作成します。
+# This project will create a wordring_cpp library.
 #
 
 cmake_minimum_required (VERSION 3.12)

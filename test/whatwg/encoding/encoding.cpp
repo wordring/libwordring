@@ -51,10 +51,10 @@ public:
 	}
 };
 
-BOOST_AUTO_TEST_SUITE(whatwg_encoding__encoding_test)
+BOOST_AUTO_TEST_SUITE(whatwg_encoding_encoding_test)
 
 // 復号器が result_finished を返した場合
-BOOST_AUTO_TEST_CASE(process_token__decoder__0)
+BOOST_AUTO_TEST_CASE(process_token_decoder_0)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(process_token__decoder__0)
 }
 
 // 復号器が result_continue を返した場合
-BOOST_AUTO_TEST_CASE(process_token__decoder__1)
+BOOST_AUTO_TEST_CASE(process_token_decoder_1)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(process_token__decoder__1)
 }
 
 // 復号器が 1個のコードポイント を返した場合
-BOOST_AUTO_TEST_CASE(process_token__decoder__2)
+BOOST_AUTO_TEST_CASE(process_token_decoder_2)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(process_token__decoder__2)
 }
 
 // 復号器が 2個のコードポイント を返した場合
-BOOST_AUTO_TEST_CASE(process_token__decoder_3)
+BOOST_AUTO_TEST_CASE(process_token_decoder_3)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -108,7 +108,7 @@ BOOST_AUTO_TEST_CASE(process_token__decoder_3)
 }
 
 // error_mode が Replacement で復号器が result_error を返した場合
-BOOST_AUTO_TEST_CASE(process_token__decoder__8_1)
+BOOST_AUTO_TEST_CASE(process_token_decoder_8_1)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_CASE(process_token__decoder__8_1)
 }
 
 // error_mode が Fatal で復号器が result_error を返した場合
-BOOST_AUTO_TEST_CASE(process_token__decoder__8_2)
+BOOST_AUTO_TEST_CASE(process_token_decoder_8_2)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -136,7 +136,7 @@ BOOST_AUTO_TEST_CASE(process_token__decoder__8_2)
 }
 
 // 符号化器が result_finished を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder_0)
+BOOST_AUTO_TEST_CASE(process_token_encoder_0)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder_0)
 }
 
 // 符号化器が result_continue を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__1)
+BOOST_AUTO_TEST_CASE(process_token_encoder_1)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__1)
 }
 
 // 符号化器が 1個のバイト を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__4)
+BOOST_AUTO_TEST_CASE(process_token_encoder_4)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -176,7 +176,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__4)
 }
 
 // 符号化器が 2個のバイト を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__5)
+BOOST_AUTO_TEST_CASE(process_token_encoder_5)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -190,7 +190,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__5)
 }
 
 // 符号化器が 3個のバイト を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__6)
+BOOST_AUTO_TEST_CASE(process_token_encoder_6)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -204,7 +204,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__6)
 }
 
 // 符号化器が 4個のバイト を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__7)
+BOOST_AUTO_TEST_CASE(process_token_encoder_7)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__7)
 }
 
 // error_mode が Fatal で符号化器が result_error を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__8_1)
+BOOST_AUTO_TEST_CASE(process_token_encoder_8_1)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -231,7 +231,7 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__8_1)
 }
 
 // error_mode が Html で符号化器が result_error を返した場合
-BOOST_AUTO_TEST_CASE(process_token__encoder__8_2)
+BOOST_AUTO_TEST_CASE(process_token_encoder_8_2)
 {
 	namespace e = wordring::whatwg::encoding;
 
@@ -241,29 +241,32 @@ BOOST_AUTO_TEST_CASE(process_token__encoder__8_2)
 	e::stream<std::u32string::iterator> stream{ input.begin(), input.end() };
 	e::result_value r = e::process_token(stream.read(), encoder, stream, std::back_inserter(output), e::error_mode::Html);
 	BOOST_CHECK(r.index() == 1);
+	BOOST_CHECK(output == "");
+
+	while (stream) output.push_back(*stream.read());
 	BOOST_CHECK(output == "&#1234;");
 }
 
-BOOST_AUTO_TEST_CASE(get_name__1)
+BOOST_AUTO_TEST_CASE(get_name_1)
 {
 	using namespace wordring::whatwg::encoding;
 	BOOST_CHECK(get_name(U"  Unicode-1-1-utf-8  ") == name::UTF_8);
 }
 
-BOOST_AUTO_TEST_CASE(get_name__2)
+BOOST_AUTO_TEST_CASE(get_name_2)
 {
 	using namespace wordring::whatwg::encoding;
 	BOOST_CHECK(get_name(std::u8string(u8"  Unicode-1-1-utf-8  ")) == name::UTF_8);
 }
 
-BOOST_AUTO_TEST_CASE(get_name__3)
+BOOST_AUTO_TEST_CASE(get_name_3)
 {
 	using namespace wordring::whatwg::encoding;
 	BOOST_CHECK(get_name(std::u16string(u"  Unicode-1-1-utf-8  ")) == name::UTF_8);
 }
 
 // BOM UTF-8
-BOOST_AUTO_TEST_CASE(decode__1)
+BOOST_AUTO_TEST_CASE(decode_1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -275,7 +278,7 @@ BOOST_AUTO_TEST_CASE(decode__1)
 }
 
 // BOM UTF-16BE
-BOOST_AUTO_TEST_CASE(decode__2)
+BOOST_AUTO_TEST_CASE(decode_2)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -287,7 +290,7 @@ BOOST_AUTO_TEST_CASE(decode__2)
 }
 
 // BOM UTF-16LE
-BOOST_AUTO_TEST_CASE(decode__3)
+BOOST_AUTO_TEST_CASE(decode_3)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -299,7 +302,7 @@ BOOST_AUTO_TEST_CASE(decode__3)
 }
 
 // BOM 無し
-BOOST_AUTO_TEST_CASE(decode__4)
+BOOST_AUTO_TEST_CASE(decode_4)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -311,102 +314,102 @@ BOOST_AUTO_TEST_CASE(decode__4)
 }
 
 // BOM UTF-8
-BOOST_AUTO_TEST_CASE(utf_8_decode__1)
+BOOST_AUTO_TEST_CASE(utf8_decode_1)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "\xEF\xBB\xBF\xE3\x81\x82" };
 	std::u32string out{};
-	utf_8_decode(s.begin(), s.end(), std::back_inserter(out));
+	utf8_decode(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == U"あ");
 }
 
 // BOM 無し
-BOOST_AUTO_TEST_CASE(utf_8_decode__2)
+BOOST_AUTO_TEST_CASE(utf8_decode_2)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "\xE3\x81\x82" };
 	std::u32string out{};
-	utf_8_decode(s.begin(), s.end(), std::back_inserter(out));
+	utf8_decode(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == U"あ");
 }
 
-BOOST_AUTO_TEST_CASE(utf_8_decode__3)
+BOOST_AUTO_TEST_CASE(utf8_decode_3)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "a" };
 	std::u32string out{};
-	utf_8_decode(s.begin(), s.end(), std::back_inserter(out));
+	utf8_decode(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == U"a");
 }
 
-BOOST_AUTO_TEST_CASE(utf_8_decode__4)
+BOOST_AUTO_TEST_CASE(utf8_decode_4)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "abcde" };
 	std::u32string out{};
-	utf_8_decode(s.begin(), s.end(), std::back_inserter(out));
+	utf8_decode(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == U"abcde");
 }
 
 // BOM UTF-8
-BOOST_AUTO_TEST_CASE(utf_8_decode_without_bom__1)
+BOOST_AUTO_TEST_CASE(utf8_decode_without_bom_1)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "\xEF\xBB\xBF\xE3\x81\x82" };
 	std::u32string out{};
-	utf_8_decode_without_bom(s.begin(), s.end(), std::back_inserter(out));
+	utf8_decode_without_bom(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == U"\uFEFF\u3042");
 }
 
 // BOM 無し
-BOOST_AUTO_TEST_CASE(utf_8_decode_without_bom__2)
+BOOST_AUTO_TEST_CASE(utf8_decode_without_bom_2)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ u8"あ" };
 	std::u32string out{};
-	utf_8_decode_without_bom(s.begin(), s.end(), std::back_inserter(out));
+	utf8_decode_without_bom(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == U"あ");
 }
 
 // BOM UTF-8
-BOOST_AUTO_TEST_CASE(utf_8_decode_without_bom_or_fail__1)
+BOOST_AUTO_TEST_CASE(utf8_decode_without_bom_or_fail_1)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "\xEF\xBB\xBF\xE3\x81\x82" };
 	std::u32string out{};
-	bool ret = utf_8_decode_without_bom_or_fail(s.begin(), s.end(), std::back_inserter(out));
+	bool ret = utf8_decode_without_bom_or_fail(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(ret);
 	BOOST_CHECK(out == U"\uFEFF\u3042");
 }
 
 // BOM 無し 失敗させた場合
-BOOST_AUTO_TEST_CASE(utf_8_decode_without_bom_or_fail__2)
+BOOST_AUTO_TEST_CASE(utf8_decode_without_bom_or_fail_2)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::string s{ "あいうえお\xC3" };
 	std::u32string out{};
-	bool ret = utf_8_decode_without_bom_or_fail(s.begin(), s.end(), std::back_inserter(out));
+	bool ret = utf8_decode_without_bom_or_fail(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(ret == false);
 	BOOST_CHECK(out == U"");
 }
 
-BOOST_AUTO_TEST_CASE(encode__1)
+BOOST_AUTO_TEST_CASE(encode_1)
 {
 	using namespace wordring::whatwg::encoding;
 
@@ -417,13 +420,13 @@ BOOST_AUTO_TEST_CASE(encode__1)
 	BOOST_CHECK(out == u8"あいうえお");
 }
 
-BOOST_AUTO_TEST_CASE(utf_8_encode__1)
+BOOST_AUTO_TEST_CASE(utf8_encode_1)
 {
 	using namespace wordring::whatwg::encoding;
 
 	std::u32string s{ U"あいうえお" };
 	std::string out{};
-	utf_8_encode(s.begin(), s.end(), std::back_inserter(out));
+	utf8_encode(s.begin(), s.end(), std::back_inserter(out));
 
 	BOOST_CHECK(out == u8"あいうえお");
 }

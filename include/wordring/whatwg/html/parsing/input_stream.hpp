@@ -3,9 +3,11 @@
 // https://html.spec.whatwg.org/multipage/parsing.html
 // https://triple-underscore.github.io/HTML-parsing-ja.html
 
-#include <wordring/whatwg/infra/infra.hpp>
 #include <wordring/whatwg/html/parsing/atom_tbl.hpp>
 #include <wordring/whatwg/html/parsing/parser_defs.hpp>
+
+#include <wordring/whatwg/infra/infra.hpp>
+#include <wordring/whatwg/encoding/encoding_defs.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -21,16 +23,18 @@ namespace wordring::whatwg::html::parsing
 	
 	@par コールバック
 
-	- on_report_error(error err)
+	派生クラスは以下のメンバを持たなければならない。
+
+	- on_report_error(error_name e)
 	- on_emit_code_point()
 	*/
 	template <typename T>
 	class input_stream
 	{
 	protected:
-		using this_type = T;
-		using value_type = char32_t;
-		using container = std::deque<value_type>;
+		using this_type      = T;
+		using value_type     = char32_t;
+		using container      = std::deque<value_type>;
 		using const_iterator = container::const_iterator;
 
 		static std::uint32_t constexpr null_insertion_point = std::numeric_limits<std::uint32_t>::max();
@@ -55,6 +59,16 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool m_cr_state;
 
+		// ----------------------------------------------------------------------------------------
+		// 入力バイトストリーム
+		//
+		// 12.2.3 The input byte stream
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-input-byte-stream
+		// ----------------------------------------------------------------------------------------
+
+		encoding_confidence_name m_encoding_confidence;
+		encoding_name m_encoding_name;
+
 	public:
 
 		/*! @brief 空の入力ストリームを構築する
@@ -65,6 +79,7 @@ namespace wordring::whatwg::html::parsing
 			, m_eof(false)
 			, m_eof_consumed(false)
 			, m_cr_state(false)
+			, m_encoding_confidence(encoding_confidence_name::irrelevant)
 		{
 		}
 
@@ -78,7 +93,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void report_error(error_name ec = static_cast<error_name>(0))
 		{
-			static_cast<this_type*>(this)->on_report_error(ec);
+			this_type* P = static_cast<this_type*>(this);
+			P->on_report_error(ec);
 		}
 
 		/*! @brief コード・ポイントを末尾に追加する
@@ -131,7 +147,6 @@ namespace wordring::whatwg::html::parsing
 			}
 
 			P->on_emit_code_point();
-			//p->on_emit_code_point();
 		}
 
 		/*! @brief コード・ポイントを発送する

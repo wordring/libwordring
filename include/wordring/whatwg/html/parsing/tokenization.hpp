@@ -16,7 +16,15 @@
 
 namespace wordring::whatwg::html::parsing
 {
+	/*
+	@par コールバック
 
+	派生クラスは以下のメンバを持たなければならない。
+
+	- template <typename Token> void on_emit_token(Token& token)
+	- stack_entry& adjusted_current_node()
+	- std::deque<stack_entry> m_stack
+	*/
 	template <typename T, typename NodeTraits>
 	class tokenizer : public input_stream<T>
 	{
@@ -182,7 +190,7 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void emit_token(Token& token)
 		{
-			this_type* p = static_cast<this_type*>(this);
+			this_type* P = static_cast<this_type*>(this);
 
 			if constexpr (std::is_base_of_v<tag_token, Token>)
 			{
@@ -195,11 +203,11 @@ namespace wordring::whatwg::html::parsing
 				if (m_current_tag_token_id == 2)
 				{
 					m_last_start_tag_name = m_start_tag_token.m_tag_name;
-					p->on_emit_token(m_start_tag_token);
+					P->on_emit_token(m_start_tag_token);
 				}
-				else if (m_current_tag_token_id == 3) p->on_emit_token(m_end_tag_token);
+				else if (m_current_tag_token_id == 3) P->on_emit_token(m_end_tag_token);
 			}
-			else static_cast<this_type*>(this)->on_emit_token(token);
+			else P->on_emit_token(token);
 
 			// トークンが木構築段階で処理された後のチェック
 			if constexpr (std::is_same_v<Token, start_tag_token>)
@@ -213,13 +221,16 @@ namespace wordring::whatwg::html::parsing
 
 		void emit_token(char32_t cp)
 		{
+			this_type* P = static_cast<this_type*>(this);
+
 			m_character_token.m_data = cp;
-			static_cast<this_type*>(this)->on_emit_token(m_character_token);
+			P->on_emit_token(m_character_token);
 		}
 
 		void emit_token(end_of_file_token)
 		{
-			static_cast<this_type*>(this)->on_emit_token(m_end_of_file_token);
+			this_type* P = static_cast<this_type*>(this);
+			P->on_emit_token(m_end_of_file_token);
 		}
 
 		// 状態の変更 ----------------------------------------------------------

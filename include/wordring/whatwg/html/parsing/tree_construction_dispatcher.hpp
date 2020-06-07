@@ -28,7 +28,12 @@ namespace wordring::whatwg::html::parsing
 	@tparam T          CRTP に基づく派生クラス
 	@tparam NodeTraits ノードの特性
 
+	派生クラスはいくつかのメンバを持たなければならない。
+
 	@sa wordring::html::simple_parser_base
+
+	NodeTraits はノードに対する操作を行うアダプタとなる。
+
 	@sa wordring::html::simple_traits
 	*/
 	template <typename T, typename NodeTraits>
@@ -46,19 +51,6 @@ namespace wordring::whatwg::html::parsing
 		using node_pointer = typename traits::node_pointer;
 
 	public:
-		using base_type::report_error;
-		using base_type::eof;
-
-	public:
-		// ----------------------------------------------------------------------------------------
-		// 入力バイトストリーム
-		//
-		// 12.2.3 The input byte stream
-		// https://html.spec.whatwg.org/multipage/parsing.html#the-input-byte-stream
-		// ----------------------------------------------------------------------------------------
-
-		encoding_confidence_name m_encoding_confidence;
-
 		// ----------------------------------------------------------------------------------------
 		// 挿入モード
 		//
@@ -197,8 +189,7 @@ namespace wordring::whatwg::html::parsing
 
 	public:
 		explicit tree_construction_dispatcher(bool fragments_parser = false)
-			: m_encoding_confidence(encoding_confidence_name::irrelevant)
-			, m_insertion_mode(mode_name::initial_insertion_mode)
+			: m_insertion_mode(mode_name::initial_insertion_mode)
 			, m_original_insertion_mode(static_cast<mode_name>(0))
 			, m_scripting_flag(false)
 			, m_frameset_ok_flag(true)
@@ -253,6 +244,20 @@ namespace wordring::whatwg::html::parsing
 		bool is_element_of(node_pointer it, ns_name ns, tag_name tag) const
 		{
 			return traits::get_namespace_id(it) == ns && traits::get_local_name_id(it) == tag;
+		}
+
+
+		// ----------------------------------------------------------------------------------------
+		// 符号化法
+		//
+		// 12.2.3.3 Character encodings
+		// https://html.spec.whatwg.org/multipage/parsing.html#character-encodings
+		// ----------------------------------------------------------------------------------------
+
+		/*! @brief 文字エンコーディングを変更する
+		*/
+		void change_encoding(encoding_name name)
+		{
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -982,8 +987,8 @@ namespace wordring::whatwg::html::parsing
 			{
 				// https://html.spec.whatwg.org/multipage/parsing.html#tokenization
 
-				if (!token.m_attributes.empty()) report_error(error_name::end_tag_with_attributes);
-				if (token.m_self_closing_flag) report_error(error_name::end_tag_with_trailing_solidus);
+				if (!token.m_attributes.empty()) base_type::report_error(error_name::end_tag_with_attributes);
+				if (token.m_self_closing_flag) base_type::report_error(error_name::end_tag_with_trailing_solidus);
 			}
 
 			if (m_stack.empty()) goto Html;
@@ -1094,7 +1099,7 @@ namespace wordring::whatwg::html::parsing
 				// https://html.spec.whatwg.org/multipage/parsing.html#acknowledge-self-closing-flag
 
 				if(token.m_self_closing_flag && !token.m_acknowledged_self_closing_flag)
-					report_error(error_name::non_void_html_element_start_tag_with_trailing_solidus);
+					base_type::report_error(error_name::non_void_html_element_start_tag_with_trailing_solidus);
 			}
 		}
 
@@ -1614,7 +1619,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -1649,7 +1654,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Head: case tag_name::Body: case tag_name::Html: case tag_name::Br:
 					goto AnythingElse;
 				default:
-					report_error();
+					base_type::report_error();
 					return;
 				}
 			}
@@ -1686,7 +1691,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -1714,7 +1719,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Head: case tag_name::Body: case tag_name::Html: case tag_name::Br:
 					goto AnythingElse;
 				default:
-					report_error();
+					base_type::report_error();
 					return;
 				}
 			}
@@ -1757,7 +1762,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -1778,7 +1783,7 @@ namespace wordring::whatwg::html::parsing
 					insert_html_element(token);
 					m_stack.pop_back();
 					if (token.m_self_closing_flag == true) token.m_acknowledged_self_closing_flag = true;
-					if (m_encoding_confidence != encoding_confidence_name::tentative) return;
+					if (base_type::m_encoding_confidence != encoding_confidence_name::tentative) return;
 					//TODO:
 
 					return;
@@ -1855,11 +1860,11 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!contains(ns_name::HTML, tag_name::Template))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_all_implied_end_tags_thoroughly();
-					if (!is_html_element_of(current_node().m_it, tag_name::Template)) report_error();
+					if (!is_html_element_of(current_node().m_it, tag_name::Template)) base_type::report_error();
 					pop_until(ns_name::HTML, tag_name::Template);
 					clear_formatting_element_list();
 					m_template_insertion_mode_stack.pop_back();
@@ -1877,7 +1882,7 @@ namespace wordring::whatwg::html::parsing
 
 			if(f)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -1903,7 +1908,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -1974,13 +1979,13 @@ namespace wordring::whatwg::html::parsing
 
 			if (f)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
 			goto AnythingElse;
 		AnythingElse:
-			report_error();
+			base_type::report_error();
 			assert(is_html_element_of(current_node().m_it, tag_name::Noscript));
 			m_stack.pop_back();
 			assert(is_html_element_of(current_node().m_it, tag_name::Head));
@@ -2016,7 +2021,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -2039,7 +2044,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Base:     case tag_name::Basefont: case tag_name::Bgsound: case tag_name::Link:
 				case tag_name::Meta:     case tag_name::Noframes: case tag_name::Script:  case tag_name::Style:
 				case tag_name::Template: case tag_name::Title:
-					report_error();
+					base_type::report_error();
 					m_stack.push_back({ start_tag_token(), m_head_element_pointer });
 					on_in_head_insertion_mode(token);
 					m_stack.erase(std::remove_if(m_stack.begin(), m_stack.end(), [this](stack_entry const& entry) {
@@ -2073,7 +2078,7 @@ namespace wordring::whatwg::html::parsing
 
 			if (f)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -2101,7 +2106,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_data == U'\0')
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 
@@ -2126,7 +2131,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -2134,7 +2139,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Html)
 				{
-					report_error();
+					base_type::report_error();
 					if (contains(ns_name::HTML, tag_name::Template)) return;
 					node_pointer it = m_stack.front().m_it;
 					for (token_attribute const& a : token)
@@ -2177,7 +2182,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Body)
 				{
-					report_error();
+					base_type::report_error();
 					if (m_stack.size() == 1
 						|| is_html_element_of(m_stack[1].m_it, tag_name::Body)
 						|| contains(ns_name::HTML, tag_name::Template)) return;
@@ -2200,7 +2205,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Frameset)
 				{
-					report_error();
+					base_type::report_error();
 					if (m_stack.size() == 1
 					 || is_html_element_of(m_stack[1].m_it, tag_name::Body)) return;
 
@@ -2232,7 +2237,7 @@ namespace wordring::whatwg::html::parsing
 					case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
 						if(traits::get_namespace_id(se.m_it) == ns_name::HTML) continue;
 					default:
-						report_error();
+						base_type::report_error();
 						break;
 					}
 				}
@@ -2247,7 +2252,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(default_scope, tag_name::Body))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 
@@ -2260,7 +2265,7 @@ namespace wordring::whatwg::html::parsing
 						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
 							if (traits::get_namespace_id(se.m_it) == ns_name::HTML) continue;
 						default:
-							report_error();
+							base_type::report_error();
 							break;
 						}
 					}
@@ -2276,7 +2281,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(default_scope, tag_name::Body))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 
@@ -2289,7 +2294,7 @@ namespace wordring::whatwg::html::parsing
 						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
 							if (traits::get_namespace_id(se.m_it) == ns_name::HTML) continue;
 						default:
-							report_error();
+							base_type::report_error();
 							break;
 						}
 					}
@@ -2331,7 +2336,7 @@ namespace wordring::whatwg::html::parsing
 						case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
 							if (traits::get_namespace_id(current_node().m_it) == ns_name::HTML)
 							{
-								report_error();
+								base_type::report_error();
 								m_stack.pop_back();
 							}
 						default:
@@ -2363,7 +2368,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (traits::pointer() != m_form_element_pointer && !contains(ns_name::HTML, tag_name::Template))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
@@ -2387,7 +2392,7 @@ namespace wordring::whatwg::html::parsing
 						if (is_html_element_of(it, tag_name::Li))
 						{
 							generate_implied_end_tags(tag_name::Li);
-							if (is_html_element_of(current_node().m_it, tag_name::Li)) report_error();
+							if (is_html_element_of(current_node().m_it, tag_name::Li)) base_type::report_error();
 							pop_until(ns_name::HTML, tag_name::Li);
 							break;
 						}
@@ -2414,7 +2419,7 @@ namespace wordring::whatwg::html::parsing
 					if (is_html_element_of(it1->m_it, tag_name::Dd))
 					{
 						generate_implied_end_tags(tag_name::Dd);
-						if (is_html_element_of(current_node().m_it, tag_name::Dd)) report_error();
+						if (is_html_element_of(current_node().m_it, tag_name::Dd)) base_type::report_error();
 						pop_until(ns_name::HTML, tag_name::Dd);
 						goto Done;
 					}
@@ -2422,7 +2427,7 @@ namespace wordring::whatwg::html::parsing
 					if (is_html_element_of(it1->m_it, tag_name::Dt))
 					{
 						generate_implied_end_tags(tag_name::Dt);
-						if (is_html_element_of(current_node().m_it, tag_name::Dt)) report_error();
+						if (is_html_element_of(current_node().m_it, tag_name::Dt)) base_type::report_error();
 						pop_until(ns_name::HTML, tag_name::Dt);
 						goto Done;
 					}
@@ -2459,7 +2464,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (in_specific_scope(default_scope, tag_name::P))
 					{
-						report_error();
+						base_type::report_error();
 						generate_implied_end_tags();
 						pop_until(ns_name::HTML, tag_name::Button);
 					}
@@ -2483,11 +2488,11 @@ namespace wordring::whatwg::html::parsing
 					case tag_name::Summary:    case tag_name::Ul:
 						if (!in_specific_scope(default_scope, std::make_pair(ns_name::HTML, token.m_tag_name_id)))
 						{
-							report_error();
+							base_type::report_error();
 							return;
 						}
 						generate_implied_end_tags();
-						if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) report_error();
+						if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) base_type::report_error();
 						pop_until(ns_name::HTML, token.m_tag_name_id);
 						return;
 					default:
@@ -2505,22 +2510,22 @@ namespace wordring::whatwg::html::parsing
 						m_form_element_pointer = traits::pointer();
 						if (node == traits::pointer() || !in_specific_scope(default_scope, node))
 						{
-							report_error();
+							base_type::report_error();
 							return;
 						}
 						generate_implied_end_tags();
-						if (current_node().m_it != node) report_error();
+						if (current_node().m_it != node) base_type::report_error();
 						remove(node);
 						return;
 					}
 
 					if (!in_specific_scope(default_scope, tag_name::Form))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags();
-					if (!is_html_element_of(current_node().m_it, tag_name::Form)) report_error();
+					if (!is_html_element_of(current_node().m_it, tag_name::Form)) base_type::report_error();
 					pop_until(ns_name::HTML, tag_name::Form);
 					return;
 				}
@@ -2532,7 +2537,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(button_scope, tag_name::P))
 					{
-						report_error();
+						base_type::report_error();
 						start_tag_token t(tag_name::P);
 						insert_html_element(t);
 					}
@@ -2547,11 +2552,11 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(list_item_scope, tag_name::Li))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags(tag_name::Li);
-					if (!is_html_element_of(current_node().m_it, tag_name::Li)) report_error();
+					if (!is_html_element_of(current_node().m_it, tag_name::Li)) base_type::report_error();
 					pop_until(ns_name::HTML, tag_name::Li);
 					return;
 				}
@@ -2563,11 +2568,11 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(default_scope, std::make_pair(ns_name::HTML, token.m_tag_name_id)))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags(std::make_pair(ns_name::HTML, token.m_tag_name_id));
-					if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) report_error();
+					if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) base_type::report_error();
 					pop_until(ns_name::HTML, token.m_tag_name_id);
 				}
 			}
@@ -2579,11 +2584,11 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
 					if (!in_specific_scope(default_scope, std::array<tag_name, 6>({ tag_name::H1, tag_name::H2, tag_name::H3, tag_name::H4, tag_name::H5, tag_name::H6 })))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags();
-					if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) report_error();
+					if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) base_type::report_error();
 					pop_until(ns_name::HTML, std::array<tag_name, 6>({ tag_name::H1, tag_name::H2, tag_name::H3, tag_name::H4, tag_name::H5, tag_name::H6 }));
 					return;
 				default:
@@ -2606,7 +2611,7 @@ namespace wordring::whatwg::html::parsing
 						if (is_html_element_of(it1->m_it, tag_name::A))
 						{
 							it = it1->m_it;
-							report_error();
+							base_type::report_error();
 							if (run_adoption_agency_algorithm(token)) goto AnyOtherEndTag;
 							if (find_from_list(it) != m_list.end()) remove_from_list(it);
 							if (find(it) != m_stack.end()) remove(it);
@@ -2644,7 +2649,7 @@ namespace wordring::whatwg::html::parsing
 					reconstruct_formatting_element_list();
 					if (in_specific_scope(default_scope, tag_name::Nobr))
 					{
-						report_error();
+						base_type::report_error();
 						if (run_adoption_agency_algorithm(token)) goto AnyOtherEndTag;
 						reconstruct_formatting_element_list();
 					}
@@ -2691,13 +2696,13 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Applet: case tag_name::Marquee: case tag_name::Object:
 					if (!in_specific_scope(default_scope, std::make_pair(ns_name::HTML, token.m_tag_name_id)))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags();
 					it = current_node().m_it;
 					if (traits::get_namespace_id(it) != ns_name::HTML
-						|| traits::get_local_name_id(it) != token.m_tag_name_id) report_error();
+						|| traits::get_local_name_id(it) != token.m_tag_name_id) base_type::report_error();
 					pop_until(ns_name::HTML, token.m_tag_name_id);
 					clear_formatting_element_list();
 					return;
@@ -2723,7 +2728,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Br)
 				{
-					report_error();
+					base_type::report_error();
 					start_tag_token t(tag_name::Br);
 					on_emit_token(t);
 					return;
@@ -2795,7 +2800,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Image)
 				{
-					report_error();
+					base_type::report_error();
 					token.m_tag_name_id = tag_name::Img;
 					on_emit_token(token);
 					return;
@@ -2903,7 +2908,7 @@ namespace wordring::whatwg::html::parsing
 					if (in_specific_scope(default_scope, tag_name::Ruby))
 					{
 						generate_implied_end_tags();
-						if (!is_html_element_of(current_node().m_it, tag_name::Ruby)) report_error();
+						if (!is_html_element_of(current_node().m_it, tag_name::Ruby)) base_type::report_error();
 					}
 					insert_html_element(token);
 					return;
@@ -2921,7 +2926,7 @@ namespace wordring::whatwg::html::parsing
 					{
 						generate_implied_end_tags(tag_name::Rtc);
 						if (!is_html_element_of(current_node().m_it, tag_name::Rtc)
-						 && !is_html_element_of(current_node().m_it, tag_name::Ruby)) report_error();
+						 && !is_html_element_of(current_node().m_it, tag_name::Ruby)) base_type::report_error();
 					}
 					insert_html_element(token);
 					return;
@@ -2971,7 +2976,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Caption: case tag_name::Col: case tag_name::Colgroup: case tag_name::Frame: case tag_name::Head:
 				case tag_name::Tbody:   case tag_name::Td:  case tag_name::Tfoot:    case tag_name::Th:    case tag_name::Thead:
 				case tag_name::Tr:
-					report_error();
+					base_type::report_error();
 					return;
 				default:
 					break;
@@ -2998,13 +3003,13 @@ namespace wordring::whatwg::html::parsing
 					&& encoding_cast<std::u32string>(traits::get_local_name(node)) == token.m_tag_name)
 				{
 					generate_implied_end_tags(std::make_pair(ns_name::HTML, token.m_tag_name));
-					if (node != current_node().m_it) report_error();
+					if (node != current_node().m_it) base_type::report_error();
 					pop_until(node);
 					return;
 				}
 				if (is_special(node))
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 				--it1;
@@ -3018,7 +3023,7 @@ namespace wordring::whatwg::html::parsing
 		void close_p_element()
 		{
 			generate_implied_end_tags(tag_name::P);
-			if (!is_html_element_of(current_node().m_it, tag_name::P)) report_error();
+			if (!is_html_element_of(current_node().m_it, tag_name::P)) base_type::report_error();
 			pop_until(ns_name::HTML, tag_name::P);
 		}
 
@@ -3084,18 +3089,18 @@ namespace wordring::whatwg::html::parsing
 				// 7.
 				if (!contains(formatting_element))
 				{
-					report_error();
+					base_type::report_error();
 					remove_from_list(formatting_element);
 					return false;
 				}
 				// 8.
 				if (!in_specific_scope(default_scope, formatting_element))
 				{
-					report_error();
+					base_type::report_error();
 					return false;
 				}
 				// 9.
-				if (formatting_element != current_node().m_it) report_error();
+				if (formatting_element != current_node().m_it) base_type::report_error();
 				// 10.
 				furthest_block = traits::pointer();
 				{
@@ -3217,7 +3222,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<end_of_file_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				node_pointer it = current_node().m_it;
 				if (is_html_element_of(it, tag_name::Script)) traits::set_already_started_flag(it, true);
 				m_stack.pop_back();
@@ -3279,7 +3284,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -3355,7 +3360,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Table)
 				{
-					report_error();
+					base_type::report_error();
 					if (!in_specific_scope(table_scope, tag_name::Table)) return;
 					pop_until(ns_name::HTML, tag_name::Table);
 					reset_insertion_mode_appropriately();
@@ -3370,7 +3375,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(table_scope, tag_name::Table))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					pop_until(ns_name::HTML, tag_name::Table);
@@ -3385,7 +3390,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Body:  case tag_name::Caption: case tag_name::Col:   case tag_name::Colgroup: case tag_name::Html:
 				case tag_name::Tbody: case tag_name::Td:      case tag_name::Tfoot: case tag_name::Th:       case tag_name::Thead:
 				case tag_name::Tr:
-					report_error();
+					base_type::report_error();
 					return;
 				default:
 					break;
@@ -3411,7 +3416,7 @@ namespace wordring::whatwg::html::parsing
 					std::u32string_view sv(U"hidden");
 					if (it == token.end()
 						|| !is_ascii_case_insensitive_match(it->m_value.begin(), it->m_value.end(), sv.begin(), sv.end())) goto AnythingElse;
-					report_error();
+					base_type::report_error();
 					insert_html_element(token);
 					m_stack.pop_back();
 					if (token.m_self_closing_flag) token.m_acknowledged_self_closing_flag = true;
@@ -3423,7 +3428,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Form)
 				{
-					report_error();
+					base_type::report_error();
 					if (contains(ns_name::HTML, tag_name::Template)
 						|| m_form_element_pointer != traits::pointer()) return;
 					m_form_element_pointer = insert_html_element(token);
@@ -3440,7 +3445,7 @@ namespace wordring::whatwg::html::parsing
 
 			goto AnythingElse;
 		AnythingElse:
-			report_error();
+			base_type::report_error();
 			m_foster_parenting = true;
 			on_in_body_insertion_mode(token);
 			m_foster_parenting = false;
@@ -3478,7 +3483,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_data == U'\0')
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 			}
@@ -3500,10 +3505,10 @@ namespace wordring::whatwg::html::parsing
 			}
 			if (f)
 			{
-				report_error();
+				base_type::report_error();
 				for (character_token& t : m_pending_table_character_tokens)
 				{
-					report_error();
+					base_type::report_error();
 					m_foster_parenting = true;
 					on_in_body_insertion_mode(t);
 					m_foster_parenting = false;
@@ -3534,11 +3539,11 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(table_scope, tag_name::Caption))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags();
-					if (is_html_element_of(current_node().m_it, tag_name::Caption)) report_error();
+					if (is_html_element_of(current_node().m_it, tag_name::Caption)) base_type::report_error();
 					pop_until(ns_name::HTML, tag_name::Caption);
 					clear_formatting_element_list();
 					insertion_mode(mode_name::in_table_insertion_mode);
@@ -3566,11 +3571,11 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (!in_specific_scope(table_scope, tag_name::Caption))
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 				generate_implied_end_tags();
-				if (is_html_element_of(current_node().m_it, tag_name::Caption)) report_error();
+				if (is_html_element_of(current_node().m_it, tag_name::Caption)) base_type::report_error();
 				pop_until(ns_name::HTML, tag_name::Caption);
 				clear_formatting_element_list();
 				insertion_mode(mode_name::in_table_insertion_mode);
@@ -3584,7 +3589,7 @@ namespace wordring::whatwg::html::parsing
 				{
 				case tag_name::Body: case tag_name::Col:   case tag_name::Colgroup: case tag_name::Html:  case tag_name::Tbody:
 				case tag_name::Td:   case tag_name::Tfoot: case tag_name::Th:       case tag_name::Thead:
-					report_error();
+					base_type::report_error();
 					return;
 				default:
 					break;
@@ -3620,7 +3625,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -3650,7 +3655,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!is_html_element_of(current_node().m_it, tag_name::Colgroup))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					m_stack.pop_back();
@@ -3684,7 +3689,7 @@ namespace wordring::whatwg::html::parsing
 
 			if (!is_html_element_of(current_node().m_it, tag_name::Colgroup))
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 			m_stack.pop_back();
@@ -3718,7 +3723,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Th || token.m_tag_name_id == tag_name::Td)
 				{
-					report_error();
+					base_type::report_error();
 					clear_stack_back_to_table_body_context();
 					start_tag_token t(tag_name::Tr);
 					insert_html_element(t);
@@ -3735,7 +3740,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead:
 					if (!in_specific_scope(table_scope, token.m_tag_name_id))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					clear_stack_back_to_table_body_context();
@@ -3767,7 +3772,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (!in_specific_scope(table_scope, std::array<tag_name, 3>({ tag_name::Tbody, tag_name::Thead, tag_name::Tfoot })))
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 				clear_stack_back_to_table_body_context();
@@ -3783,7 +3788,7 @@ namespace wordring::whatwg::html::parsing
 				{
 				case tag_name::Body: case tag_name::Caption: case tag_name::Col: case tag_name::Colgroup: case tag_name::Html:
 				case tag_name::Td:   case tag_name::Th:      case tag_name::Tr:
-					report_error();
+					base_type::report_error();
 					return;
 				default:
 					break;
@@ -3838,7 +3843,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(table_scope, tag_name::Tr))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					clear_stack_back_to_table_row_context();
@@ -3869,7 +3874,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (!in_specific_scope(table_scope, tag_name::Tr))
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 				clear_stack_back_to_table_row_context();
@@ -3888,10 +3893,10 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(table_scope, token.m_tag_name_id))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
-					if (!in_specific_scope(table_scope, tag_name::Tr)) report_error();
+					if (!in_specific_scope(table_scope, tag_name::Tr)) base_type::report_error();
 					clear_stack_back_to_table_row_context();
 					assert(is_html_element_of(current_node().m_it, tag_name::Tr));
 					m_stack.pop_back();
@@ -3907,7 +3912,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					case tag_name::Body: case tag_name::Caption: case tag_name::Col: case tag_name::Colgroup:
 					case tag_name::Html: case tag_name::Td:      case tag_name::Th:
-						report_error();
+						base_type::report_error();
 						return;
 					default:
 						break;
@@ -3945,11 +3950,11 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(table_scope, token.m_tag_name_id))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					generate_implied_end_tags();
-					if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) report_error();
+					if (!is_html_element_of(current_node().m_it, token.m_tag_name_id)) base_type::report_error();
 					pop_until(ns_name::HTML, token.m_tag_name_id);
 					clear_formatting_element_list();
 					insertion_mode(mode_name::in_row_insertion_mode);
@@ -3965,7 +3970,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Tfoot:   case tag_name::Th:  case tag_name::Thead:    case tag_name::Tr:
 					if (!in_specific_scope(table_scope, std::array<tag_name, 2>({ tag_name::Td, tag_name::Th })))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					close_cell();
@@ -3981,7 +3986,7 @@ namespace wordring::whatwg::html::parsing
 				switch (token.m_tag_name_id)
 				{
 				case tag_name::Body: case tag_name::Caption: case tag_name::Col: case tag_name::Colgroup: case tag_name::Html:
-					report_error();
+					base_type::report_error();
 					return;
 				default:
 					break;
@@ -3995,7 +4000,7 @@ namespace wordring::whatwg::html::parsing
 				case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Tr:
 					if (!in_specific_scope(table_scope, token.m_tag_name_id))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					close_cell();
@@ -4013,7 +4018,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			generate_implied_end_tags();
 			if (!is_html_element_of(current_node().m_it, tag_name::Td)
-			 || !is_html_element_of(current_node().m_it, tag_name::Th)) report_error();
+			 || !is_html_element_of(current_node().m_it, tag_name::Th)) base_type::report_error();
 			pop_until(ns_name::HTML, std::array<tag_name, 2>({ tag_name::Td, tag_name::Th }));
 			clear_formatting_element_list();
 			insertion_mode(mode_name::in_row_insertion_mode);
@@ -4034,7 +4039,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_data == U'\0')
 				{
-					report_error();
+					base_type::report_error();
 					return;
 				}
 			}
@@ -4053,7 +4058,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -4094,7 +4099,7 @@ namespace wordring::whatwg::html::parsing
 					if (is_html_element_of(current_node().m_it, tag_name::Option)
 					 && is_html_element_of(std::prev(m_stack.end(), 2)->m_it, tag_name::Optgroup)) m_stack.pop_back();
 					if (is_html_element_of(current_node().m_it, tag_name::Optgroup)) m_stack.pop_back();
-					else report_error();
+					else base_type::report_error();
 					return;
 				}
 			}
@@ -4104,7 +4109,7 @@ namespace wordring::whatwg::html::parsing
 				if (token.m_tag_name_id == tag_name::Option)
 				{
 					if (is_html_element_of(current_node().m_it, tag_name::Option)) m_stack.pop_back();
-					else report_error();
+					else base_type::report_error();
 					return;
 				}
 			}
@@ -4115,7 +4120,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (!in_specific_scope(select_scope, tag_name::Select))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					pop_until(ns_name::HTML, tag_name::Select);
@@ -4128,7 +4133,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Select)
 				{
-					report_error();
+					base_type::report_error();
 					if (!in_specific_scope(select_scope, tag_name::Select)) return;
 					pop_until(ns_name::HTML, tag_name::Select);
 					reset_insertion_mode_appropriately();
@@ -4141,7 +4146,7 @@ namespace wordring::whatwg::html::parsing
 				switch (token.m_tag_name_id)
 				{
 				case tag_name::Input: case tag_name::Keygen: case tag_name::Textarea:
-					report_error();
+					base_type::report_error();
 					if (!in_specific_scope(select_scope, tag_name::Select)) return;
 					pop_until(ns_name::HTML, tag_name::Select);
 					reset_insertion_mode_appropriately();
@@ -4173,7 +4178,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error();
+			base_type::report_error();
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -4191,7 +4196,7 @@ namespace wordring::whatwg::html::parsing
 				{
 				case tag_name::Caption: case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead:
 				case tag_name::Tr:      case tag_name::Td:    case tag_name::Th:
-					report_error();
+					base_type::report_error();
 					pop_until(ns_name::HTML, tag_name::Select);
 					reset_insertion_mode_appropriately();
 					reprocess_token(token);
@@ -4207,7 +4212,7 @@ namespace wordring::whatwg::html::parsing
 				{
 				case tag_name::Caption: case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead:
 				case tag_name::Tr:      case tag_name::Td:    case tag_name::Th:
-					report_error();
+					base_type::report_error();
 					if (!in_specific_scope(select_scope, token.m_tag_name_id)) return;
 					pop_until(ns_name::HTML, tag_name::Select);
 					reset_insertion_mode_appropriately();
@@ -4326,7 +4331,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<end_tag_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -4337,7 +4342,7 @@ namespace wordring::whatwg::html::parsing
 					stop_parsing();
 					return;
 				}
-				report_error();
+				base_type::report_error();
 				pop_until(ns_name::HTML, tag_name::Template);
 				clear_formatting_element_list();
 				m_template_insertion_mode_stack.pop_back();
@@ -4375,7 +4380,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -4394,7 +4399,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (m_fragments_parser)
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					else
@@ -4411,7 +4416,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error();
+			base_type::report_error();
 			insertion_mode(mode_name::in_body_insertion_mode);
 			reprocess_token(token);
 		}
@@ -4442,7 +4447,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -4470,7 +4475,7 @@ namespace wordring::whatwg::html::parsing
 				{
 					if (is_html_element_of(current_node().m_it, tag_name::Html))
 					{
-						report_error();
+						base_type::report_error();
 						return;
 					}
 					m_stack.pop_back();
@@ -4504,12 +4509,12 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<end_of_file_token, Token>)
 			{
-				if (!is_html_element_of(current_node().m_it, tag_name::Html)) report_error();
+				if (!is_html_element_of(current_node().m_it, tag_name::Html)) base_type::report_error();
 				stop_parsing();
 				return;
 			}
 
-			report_error();
+			base_type::report_error();
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -4538,7 +4543,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -4575,7 +4580,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error();
+			base_type::report_error();
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -4621,7 +4626,7 @@ namespace wordring::whatwg::html::parsing
 				return;
 			}
 
-			report_error();
+			base_type::report_error();
 			insertion_mode(mode_name::in_body_insertion_mode);
 			reprocess_token(token);
 		}
@@ -4678,7 +4683,7 @@ namespace wordring::whatwg::html::parsing
 				}
 			}
 
-			report_error();
+			base_type::report_error();
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -4696,7 +4701,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_data == U'\U00000000')
 				{
-					report_error();
+					base_type::report_error();
 					insert_character(U'\U0000FFFD');
 					return;
 				}
@@ -4726,7 +4731,7 @@ namespace wordring::whatwg::html::parsing
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)
 			{
-				report_error();
+				base_type::report_error();
 				return;
 			}
 
@@ -4760,7 +4765,7 @@ namespace wordring::whatwg::html::parsing
 			}
 			if (f)
 			{
-				report_error();
+				base_type::report_error();
 				if(m_fragments_parser) goto AnyOtherStartTag;
 				m_stack.pop_back();
 				while (true)
@@ -4827,7 +4832,7 @@ namespace wordring::whatwg::html::parsing
 				auto tmp = traits::get_local_name(node->m_it);
 				std::u32string tag;
 				to_ascii_lowercase(tmp.begin(), tmp.end(), std::back_inserter(tag));
-				if (tag != token.m_tag_name) report_error();
+				if (tag != token.m_tag_name) base_type::report_error();
 				// 3.
 			Loop:
 				if (node->m_it == m_stack.front().m_it) return;

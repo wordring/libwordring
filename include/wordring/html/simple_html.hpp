@@ -3,6 +3,8 @@
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
 
+#include <wordring/html/html_defs.hpp>
+
 #include <wordring/whatwg/html/parsing/serializing.hpp>
 
 #include <wordring/compatibility.hpp>

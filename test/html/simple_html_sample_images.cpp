@@ -152,22 +152,5 @@ was an English <a href="/wiki/Music_hall">music hall</a> singer, ...</p></body><
 
 https://html.spec.whatwg.org/multipage/images.html#adaptive-images
 */
-BOOST_AUTO_TEST_CASE(simple_html_sample_images_8)
-{
-	char32_t const* in = UR"*()*";
-
-	char32_t const* s = UR"*()*";
-
-	BOOST_CHECK(parse(in) == s);
-}
-
-BOOST_AUTO_TEST_CASE(simple_html_sample_images_9)
-{
-	char32_t const* in = UR"()";
-
-	char32_t const* s = UR"()";
-
-	BOOST_CHECK(parse(in) == s);
-}
 
 BOOST_AUTO_TEST_SUITE_END()

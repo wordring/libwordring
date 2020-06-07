@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <wordring/html/html_defs.hpp>
-#include <wordring/html/html_traits.hpp>
 
 namespace wordring::whatwg::html
 {

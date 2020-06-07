@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <wordring/html/simple_node.hpp>
-#include <wordring/html/html_traits.hpp>
 
 #include <wordring/encoding/encoding.hpp>
 

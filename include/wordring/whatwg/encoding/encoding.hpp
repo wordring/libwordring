@@ -24,6 +24,7 @@ namespace wordring::whatwg::encoding
 		Token token, Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
 	{
 		result_value result = coder.run(input, token);
+
 		switch (result.index())
 		{
 		case 0: // result_finished
@@ -78,7 +79,7 @@ namespace wordring::whatwg::encoding
 
 			if (mode == error_mode::Replacement)
 			{
-				if constexpr (std::is_base_of_v<decoder, Coder>)*output++ = 0xFFFDu;
+				if constexpr (std::is_base_of_v<decoder, Coder>) *output++ = 0xFFFDu;
 			}
 			else if (mode == error_mode::Html)
 			{
@@ -87,12 +88,14 @@ namespace wordring::whatwg::encoding
 					std::array<char, 13> array{ 0x26u, 0x23u };
 					auto [p, ec] = std::to_chars(array.data() + 2, array.data() + array.size() + 2, error->code_point);
 					*p++ = 0x3Bu;
-					output = std::copy(array.data(), p, output);
+					input.prepend(array.data(), p);
+					//output = std::copy(array.data(), p, output);
 				}
 			}
 			else if (mode == error_mode::Fatal) return result;
 		}
 		}
+
 		return result_continue{};
 	}
 
@@ -572,7 +575,12 @@ namespace wordring::whatwg::encoding
 		return encoding;
 	}
 
-	// 6. Hooks for standards -------------------------------------------------
+	// ----------------------------------------------------------------------------------------
+	// 他の標準用のフック
+	//
+	// 6. Hooks for standards
+	// https://html.spec.whatwg.org/multipage/parsing.html#the-insertion-mode
+	// ----------------------------------------------------------------------------------------
 
 	template <typename InputIterator, typename OutputIterator>
 	inline void decode(InputIterator first, InputIterator last, name fallback, OutputIterator output)
@@ -607,7 +615,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename InputIterator, typename OutputIterator>
-	inline void utf_8_decode(InputIterator first, InputIterator last, OutputIterator output)
+	inline void utf8_decode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		std::string_view BOM_UTF_8{ "\xEF\xBB\xBF" };
 		stream<InputIterator> input{ first, last };
@@ -624,14 +632,14 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename InputIterator, typename OutputIterator>
-	inline void utf_8_decode_without_bom(InputIterator first, InputIterator last, OutputIterator output)
+	inline void utf8_decode_without_bom(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		stream<InputIterator> input{ first, last };
 		run_decoder(name::UTF_8, input, output);
 	}
 
 	template <typename InputIterator, typename OutputIterator>
-	inline bool utf_8_decode_without_bom_or_fail(InputIterator first, InputIterator last, OutputIterator output)
+	inline bool utf8_decode_without_bom_or_fail(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		stream<InputIterator> input{ first, last };
 		std::u32string buffer{};
@@ -654,10 +662,15 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename InputIterator, typename OutputIterator>
-	inline void utf_8_encode(InputIterator first, InputIterator last, OutputIterator output)
+	inline void utf8_encode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		encode(first, last, name::UTF_8, output);
 	}
+
+	/*! @brief BOM を探知する
+	
+	@sa https://encoding.spec.whatwg.org/#bom-sniff
+	*/
 }
 
 namespace wordring::whatwg

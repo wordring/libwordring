@@ -35,32 +35,5 @@ BOOST_AUTO_TEST_SUITE(simple_html_sample_embedded_test)
 
 https://html.spec.whatwg.org/multipage/embedded-content.html#the-picture-element
 */
-BOOST_AUTO_TEST_CASE(simple_html_sample_embedded_1)
-{
-	char32_t const* in = UR"()";
-
-	char32_t const* s = UR"()";
-
-	BOOST_CHECK(parse(in) == s);
-}
-
-BOOST_AUTO_TEST_CASE(simple_html_sample_embedded_2)
-{
-	char32_t const* in = UR"()";
-
-	char32_t const* s = UR"()";
-
-	BOOST_CHECK(parse(in) == s);
-}
-
-
-BOOST_AUTO_TEST_CASE(simple_html_sample_embedded_9)
-{
-	char32_t const* in = UR"()";
-
-	char32_t const* s = UR"()";
-
-	BOOST_CHECK(parse(in) == s);
-}
 
 BOOST_AUTO_TEST_SUITE_END()

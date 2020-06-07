@@ -13,8 +13,7 @@
 #include <wordring/encoding/encoding.hpp>
 
 #include <cassert>
-#include <iterator>
-#include <variant>
+#include <utility>
 
 namespace wordring::html
 {
@@ -24,7 +23,6 @@ namespace wordring::html
 
 	@tparam T         CRTP に基づく派生クラス
 	@tparam Container Tree コンテナ
-
 
 	*/
 	template <typename T, typename Container>
@@ -88,8 +86,8 @@ namespace wordring::html
 
 		/* @brief 要素を作成する
 
-		- https://dom.spec.whatwg.org/#concept-create-element に対応する要素作成関数
-		- https://triple-underscore.github.io/DOM4-ja.html#concept-create-element
+		@sa https://dom.spec.whatwg.org/#concept-create-element
+		@sa https://triple-underscore.github.io/DOM4-ja.html#concept-create-element
 		*/
 		node_pointer create_element(node_pointer doc, std::u32string name, ns_name ns)
 		{
@@ -157,7 +155,29 @@ namespace wordring::html
 			return m_c.insert(pos, std::move(comment));
 		}
 
-		void on_report_error(parsing::error_name e) {}
+		// ----------------------------------------------------------------------------------------
+		// 解析エラー
+		//
+		// 12.2.2 Parse errors
+		// https://html.spec.whatwg.org/multipage/parsing.html#parse-errors
+		// ----------------------------------------------------------------------------------------
+
+		/*! @brief エラーが起きた時に呼び出されるコールバック
+		*/
+		void on_report_error(error_name e) {}
+
+		// ----------------------------------------------------------------------------------------
+		// 符号化法
+		//
+		// 12.2.3.3 Character encodings
+		// https://html.spec.whatwg.org/multipage/parsing.html#character-encodings
+		// ----------------------------------------------------------------------------------------
+
+		/*! @brief 文字エンコーディングを変更する
+		*/
+		void on_change_encoding(encoding_name name)
+		{
+		}
 
 	protected:
 		container    m_c;

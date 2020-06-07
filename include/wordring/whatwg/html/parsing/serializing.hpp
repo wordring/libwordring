@@ -3,7 +3,6 @@
 #include <wordring/whatwg/html/syntax/syntax.hpp>
 
 #include <wordring/html/html_defs.hpp>
-#include <wordring/html/html_traits.hpp>
 
 #include <wordring/encoding/encoding.hpp>
 
