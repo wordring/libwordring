@@ -3,6 +3,8 @@
 #include <wordring/html/html_atom.hpp>
 #include <wordring/html/html_defs.hpp>
 
+#include <wordring/encoding/encoding.hpp>
+
 #include <wordring/whatwg/infra/infra.hpp>
 
 #include <iterator>

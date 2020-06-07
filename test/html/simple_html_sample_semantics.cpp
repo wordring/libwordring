@@ -7,6 +7,7 @@
 #include <wordring/compatibility.hpp>
 #include <wordring/tree/tree.hpp>
 
+#include <iostream>
 #include <iterator>
 #include <string>
 
