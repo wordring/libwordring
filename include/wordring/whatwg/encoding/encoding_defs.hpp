@@ -44,7 +44,7 @@ namespace wordring::whatwg::encoding
 		result_error
 	>;
 
-	enum class error_mode : uint32_t
+	enum class error_mode_name : uint32_t
 	{
 		None = 0,
 		Replacement = 1,

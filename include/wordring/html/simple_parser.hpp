@@ -24,6 +24,9 @@ namespace wordring::html
 	@tparam T         CRTP に基づく派生クラス
 	@tparam Container Tree コンテナ
 
+	このクラスは、エラー報告とエンコーディング変更の要求に対して何もしない。
+	派生クラスは、エラー処理とエンコーディング対応が可能。
+	このクラスは入力としてユニコード・コードポイントのみを受け付ける。
 	*/
 	template <typename T, typename Container>
 	class simple_parser_base : public wordring::whatwg::html::parsing::tree_construction_dispatcher<T, node_traits<typename Container::iterator>>
@@ -55,9 +58,23 @@ namespace wordring::html
 		using lacal_name_type    = basic_html_atom<string_type, tag_name>;
 
 	public:
-		simple_parser_base()
+		simple_parser_base(
+			encoding_confidence_name confidence = encoding_confidence_name::irrelevant,
+			encoding_name enc = static_cast<encoding_name>(0),
+			bool fragments_parser = false)
+				: base_type(confidence, enc, fragments_parser)
 		{
 			m_document  = m_c.insert(m_c.end(), document_type());
+			m_temporary = m_c.insert(m_c.end(), node_type());
+		}
+
+		/*! @brief 初期状態に戻し、パーサーを再利用可能とする
+		*/
+		void clear(encoding_confidence_name confidence, encoding_name enc)
+		{
+			base_type::clear(confidence, enc);
+			m_c.clear();
+			m_document = m_c.insert(m_c.end(), document_type());
 			m_temporary = m_c.insert(m_c.end(), node_type());
 		}
 
@@ -117,6 +134,8 @@ namespace wordring::html
 		}
 
 		/*! @brief ノードを移動する
+
+		adoption agency algorithm から使用される。
 		*/
 		void move_node(node_pointer pos, node_pointer it)
 		{
@@ -163,6 +182,8 @@ namespace wordring::html
 		// ----------------------------------------------------------------------------------------
 
 		/*! @brief エラーが起きた時に呼び出されるコールバック
+
+		エラー処理が必要な場合、派生クラスで実装する。
 		*/
 		void on_report_error(error_name e) {}
 
@@ -173,16 +194,94 @@ namespace wordring::html
 		// https://html.spec.whatwg.org/multipage/parsing.html#character-encodings
 		// ----------------------------------------------------------------------------------------
 
-		/*! @brief 文字エンコーディングを変更する
+		/*! @brief 文字エンコーディングを変更する時に呼び出されるコールバック
+
+		文字エンコーディングの変更が必要な場合、派生クラスで実装する。
 		*/
-		void on_change_encoding(encoding_name name)
-		{
-		}
+		void on_change_encoding(encoding_name name) {}
 
 	protected:
 		container    m_c;
 		node_pointer m_document;
 		node_pointer m_temporary;
+	};
+
+	/* @brief 文字エンコーディングに対応する HTML パーサー
+	*/
+	template <typename Container, typename BidirectionalIterator>
+	class basic_simple_parser : public simple_parser_base<basic_simple_parser<Container, BidirectionalIterator>, Container>
+	{
+	public:
+		using base_type = simple_parser_base<basic_simple_parser<Container, BidirectionalIterator>, Container>;
+		using container = Container;
+		using iterator = BidirectionalIterator;
+
+	public:
+		basic_simple_parser(
+			encoding_confidence_name confidence = encoding_confidence_name::irrelevant,
+			encoding_name enc = static_cast<encoding_name>(0),
+			bool fragments_parser = false)
+			: base_type(confidence, enc, fragments_parser)
+			, m_updated_encoding_name(static_cast<encoding_name>(0))
+		{
+		}
+
+		/*! @brief 初期状態に戻し、パーサーを再利用可能とする
+		*/
+		void clear(encoding_confidence_name confidence, encoding_name enc)
+		{
+			base_type::clear(confidence, enc);
+			m_updated_encoding_name = static_cast<encoding_name>(0);
+		}
+
+		void parse(iterator first, iterator last)
+		{
+			using namespace wordring::encoding;
+			
+			decoder dec(static_cast<encoding_name>(0), static_cast<error_mode_name>(0));
+			std::deque<uint32_t> buffer;
+			auto out = std::back_inserter(buffer);
+			iterator it1, it2;
+			result_value rv;
+
+		Start:
+			dec = decoder(base_type::m_encoding_name, error_mode_name::Replacement);
+			it1 = first;
+			it2 = last;
+			while (it1 != it2)
+			{
+				buffer.clear();
+				rv = dec.push(*it1++, out);
+				if (buffer.empty()) continue;
+
+				for (uint32_t cp : buffer)
+				{
+					base_type::push_code_point(cp);
+					if (m_updated_encoding_name != static_cast<encoding_name>(0))
+					{
+						clear(base_type::m_encoding_confidence, m_updated_encoding_name);
+						goto Start;
+					}
+				}
+			}
+		}
+
+		container get()
+		{
+			container c;
+			std::swap(base_type::m_c, c);
+			return c;
+		}
+
+		void push_back(char32_t cp) { base_type::push_code_point(cp); }
+
+		void on_change_encoding(encoding_name name)
+		{
+			m_updated_encoding_name = name;
+		}
+
+	protected:
+		encoding_name m_updated_encoding_name;
 	};
 
 	template <typename Container>

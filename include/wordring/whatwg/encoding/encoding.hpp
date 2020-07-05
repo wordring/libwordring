@@ -21,7 +21,7 @@ namespace wordring::whatwg::encoding
 
 	template <typename Token, typename Coder, typename InputStream, typename OutputIterator>
 	inline result_value process_token(
-		Token token, Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
+		Token token, Coder& coder, InputStream& input, OutputIterator output, error_mode_name mode)
 	{
 		result_value result = coder.run(input, token);
 
@@ -77,11 +77,11 @@ namespace wordring::whatwg::encoding
 			result_error* error = std::get_if<8>(&result);
 			assert(error != nullptr);
 
-			if (mode == error_mode::Replacement)
+			if (mode == error_mode_name::Replacement)
 			{
 				if constexpr (std::is_base_of_v<decoder, Coder>) *output++ = 0xFFFDu;
 			}
-			else if (mode == error_mode::Html)
+			else if (mode == error_mode_name::Html)
 			{
 				if constexpr (std::is_base_of_v<encoder, Coder>)
 				{
@@ -92,7 +92,7 @@ namespace wordring::whatwg::encoding
 					//output = std::copy(array.data(), p, output);
 				}
 			}
-			else if (mode == error_mode::Fatal) return result;
+			else if (mode == error_mode_name::Fatal) return result;
 		}
 		}
 
@@ -103,13 +103,13 @@ namespace wordring::whatwg::encoding
 	inline result_value process_token(
 		Token token, Coder& coder, InputStream& input, OutputIterator output)
 	{
-		error_mode mode{ error_mode::Replacement };
-		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
+		error_mode_name mode{ error_mode_name::Replacement };
+		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode_name::Fatal;
 		return process_token(token, coder, input, output, mode);
 	}
 
 	template <typename Coder, typename InputStream, typename OutputIterator>
-	inline result_value run(Coder& coder, InputStream& input, OutputIterator output, error_mode mode)
+	inline result_value run(Coder& coder, InputStream& input, OutputIterator output, error_mode_name mode)
 	{
 		while (true)
 		{
@@ -123,13 +123,13 @@ namespace wordring::whatwg::encoding
 	template <typename Coder, typename InputStream, typename OutputIterator>
 	inline result_value run(Coder& coder, InputStream& input, OutputIterator output)
 	{
-		error_mode mode{ error_mode::Replacement };
-		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode::Fatal;
+		error_mode_name mode{ error_mode_name::Replacement };
+		if constexpr (std::is_base_of_v<encoder, Coder>) mode = error_mode_name::Fatal;
 		return run(coder, input, output, mode);
 	}
 
 	template <typename InputStream, typename OutputIterator>
-	inline result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Replacement)
+	inline result_value run_decoder(name encoding_name, InputStream& input, OutputIterator output, error_mode_name mode = error_mode_name::Replacement)
 	{
 		switch (encoding_name)
 		{
@@ -345,7 +345,7 @@ namespace wordring::whatwg::encoding
 	}
 
 	template <typename InputStream, typename OutputIterator>
-	inline result_value run_encoder(name encoding_name, InputStream& input, OutputIterator output, error_mode mode = error_mode::Fatal)
+	inline result_value run_encoder(name encoding_name, InputStream& input, OutputIterator output, error_mode_name mode = error_mode_name::Fatal)
 	{
 		switch (encoding_name)
 		{
@@ -547,13 +547,24 @@ namespace wordring::whatwg::encoding
 		return result_error{};
 	}
 
-	// 4.2. Names and labels --------------------------------------------------
+	// --------------------------------------------------------------------------------------------
+	// 名前とラベル
+	//
+	// 4.2. Names and labels
+	// https://encoding.spec.whatwg.org/#names-and-labels
+	// https://triple-underscore.github.io/Encoding-ja.html#names-and-labels
+	// --------------------------------------------------------------------------------------------
 
+	/*! @brief ラベルからエンコーディングを取得する
+
+	@sa https://encoding.spec.whatwg.org/#concept-encoding-get
+	@sa https://triple-underscore.github.io/Encoding-ja.html#concept-encoding-get
+	*/
 	name get_name(std::u32string label);
 
 	template <typename String,
 		typename std::enable_if_t<
-			std::disjunction_v<std::is_same<typename String::value_type, char16_t>, std::is_same<typename String::value_type, char8_t>>, nullptr_t> = nullptr>
+			std::negation_v<std::is_same<String, std::u32string>>, nullptr_t> = nullptr>
 	inline name get_name(String label)
 	{
 		return get_name(encoding_cast<std::u32string>(label));
@@ -575,13 +586,18 @@ namespace wordring::whatwg::encoding
 		return encoding;
 	}
 
-	// ----------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------
 	// 他の標準用のフック
 	//
 	// 6. Hooks for standards
 	// https://html.spec.whatwg.org/multipage/parsing.html#the-insertion-mode
-	// ----------------------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------
 
+	/*! @brief Decode
+	
+	@sa https://encoding.spec.whatwg.org/#decode
+	@sa https://triple-underscore.github.io/Encoding-ja.html#decode
+	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline void decode(InputIterator first, InputIterator last, name fallback, OutputIterator output)
 	{
@@ -643,7 +659,7 @@ namespace wordring::whatwg::encoding
 	{
 		stream<InputIterator> input{ first, last };
 		std::u32string buffer{};
-		result_value ret = run_decoder(name::UTF_8, input, std::back_inserter(buffer), error_mode::Fatal);
+		result_value ret = run_decoder(name::UTF_8, input, std::back_inserter(buffer), error_mode_name::Fatal);
 		if (ret.index() == 0) std::copy(buffer.begin(), buffer.end(), output);
 		return ret.index() == 0;
 	}
@@ -658,7 +674,7 @@ namespace wordring::whatwg::encoding
 
 		stream<InputIterator> input{ first, last };
 
-		run_encoder(encoding_name, input, output, error_mode::Html);
+		run_encoder(encoding_name, input, output, error_mode_name::Html);
 	}
 
 	template <typename InputIterator, typename OutputIterator>
@@ -675,8 +691,9 @@ namespace wordring::whatwg::encoding
 
 namespace wordring::whatwg
 {
-	inline encoding_name get_encoding_name(std::u32string_view label)
+	template <typename String>
+	inline encoding_name get_encoding_name(String label)
 	{
-		return encoding::get_name(std::u32string(label));
+		return encoding::get_name(label);
 	}
 }

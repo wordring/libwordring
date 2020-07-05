@@ -55,6 +55,16 @@ BOOST_AUTO_TEST_CASE(dispatcher_construct_1)
 	BOOST_CHECK(data(*p.get_document().begin()) == " Comment ");
 }
 
+BOOST_AUTO_TEST_CASE(dispatcher_clear_1)
+{
+	test_parser tp;
+	std::u32string s = U"<!-- Comment -->";
+	for (char32_t cp : s) tp.push_code_point(cp);
+	tp.push_eof();
+
+	tp.clear(tp.m_encoding_confidence, tp.m_encoding_name);
+}
+
 // ------------------------------------------------------------------------------------------------
 // 挿入モード
 //

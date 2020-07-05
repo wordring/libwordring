@@ -7,6 +7,7 @@
 #include <wordring/whatwg/html/parsing/tokenization.hpp>
 
 #include <wordring/whatwg/html/html_defs.hpp>
+#include <wordring/whatwg/html/url.hpp>
 
 #include <wordring/whatwg/infra/infra.hpp>
 #include <wordring/whatwg/infra/unicode.hpp>
@@ -51,6 +52,16 @@ namespace wordring::whatwg::html::parsing
 		using node_pointer = typename traits::node_pointer;
 
 	public:
+		// ----------------------------------------------------------------------------------------
+		// 入力バイトストリーム
+		//
+		// 12.2.3 The input byte stream
+		// https://html.spec.whatwg.org/multipage/parsing.html#the-input-byte-stream
+		// ----------------------------------------------------------------------------------------
+
+		encoding_confidence_name m_encoding_confidence;
+		encoding_name m_encoding_name;
+
 		// ----------------------------------------------------------------------------------------
 		// 挿入モード
 		//
@@ -188,17 +199,51 @@ namespace wordring::whatwg::html::parsing
 		std::vector<character_token> m_pending_table_character_tokens;
 
 	public:
-		explicit tree_construction_dispatcher(bool fragments_parser = false)
-			: m_insertion_mode(mode_name::initial_insertion_mode)
+		tree_construction_dispatcher(encoding_confidence_name confidence, encoding_name enc, bool fragments_parser = false)
+			: m_encoding_confidence(confidence)
+			, m_encoding_name(enc)
+			, m_insertion_mode(mode_name::initial_insertion_mode)
 			, m_original_insertion_mode(static_cast<mode_name>(0))
+			, m_head_element_pointer(traits::pointer())
+			, m_form_element_pointer(traits::pointer())
 			, m_scripting_flag(false)
 			, m_frameset_ok_flag(true)
 			, m_foster_parenting(false)
 			, m_fragments_parser(fragments_parser)
 			, m_omit_lf(false)
 		{
+		}
+
+		/*! @brief 初期状態に戻し、パーサーを再利用可能とする
+		*/
+		void clear(encoding_confidence_name confidence, encoding_name enc)
+		{
+			base_type::clear();
+
+			m_encoding_confidence = confidence;
+			m_encoding_name       = enc;
+
+			m_insertion_mode          = mode_name::initial_insertion_mode;
+			m_original_insertion_mode = static_cast<mode_name>(0);
+			m_template_insertion_mode_stack.clear();
+
+			m_stack.clear();
+
+			m_list.clear();
+
 			m_head_element_pointer = traits::pointer();
 			m_form_element_pointer = traits::pointer();
+
+			m_scripting_flag   = false;
+			m_frameset_ok_flag = true;
+
+			m_foster_parenting = false;
+
+			m_context_entry = stack_entry();
+
+			m_omit_lf = false;
+
+			m_pending_table_character_tokens.clear();
 		}
 
 		/*! 要素が指定のHTML要素であることを調べる
@@ -258,6 +303,28 @@ namespace wordring::whatwg::html::parsing
 		*/
 		void change_encoding(encoding_name name)
 		{
+			this_type* P = static_cast<this_type*>(this);
+
+			// 1.
+			if (m_encoding_name == encoding_name::UTF_16BE || m_encoding_name == encoding_name::UTF_16LE)
+			{
+				m_encoding_confidence = encoding_confidence_name::certain;
+				return;
+			}
+			// 2.
+			if (name == encoding_name::UTF_16BE || name == encoding_name::UTF_16LE) name = encoding_name::UTF_8;
+			// 3.
+			if (name == encoding_name::x_user_defined) name = encoding_name::windows_1252;
+			// 4.
+			if (name == m_encoding_name)
+			{
+				m_encoding_confidence = encoding_confidence_name::certain;
+				return;
+			}
+			// 6.
+			m_encoding_confidence = encoding_confidence_name::certain;
+
+			P->on_change_encoding(name);
 		}
 
 		// ----------------------------------------------------------------------------------------
@@ -1783,8 +1850,33 @@ namespace wordring::whatwg::html::parsing
 					insert_html_element(token);
 					m_stack.pop_back();
 					if (token.m_self_closing_flag == true) token.m_acknowledged_self_closing_flag = true;
-					if (base_type::m_encoding_confidence != encoding_confidence_name::tentative) return;
-					//TODO:
+					if (m_encoding_confidence != encoding_confidence_name::tentative) return;
+
+					auto it = std::find_if(token.begin(), token.end(), [](token_attribute const& attr) { return attr.m_name == U"charset"; });
+					if (it != token.end())
+					{
+						encoding_name en = get_encoding_name(it->m_value);
+						if (en != static_cast<encoding_name>(0))
+						{
+							change_encoding(en);
+							return;
+						}
+					}
+
+					it = std::find_if(token.begin(), token.end(), [](token_attribute const& attr) { return attr.m_name == U"http-equiv"; });
+					if (it != token.end())
+					{
+						auto sv = std::u32string_view(U"Content-Type");
+						if (is_ascii_case_insensitive_match(it->m_value.begin(), it->m_value.end(), sv.begin(), sv.end()))
+						{
+							it = std::find_if(token.begin(), token.end(), [](token_attribute const& attr) { return attr.m_name == U"content"; });
+							if (it != token.end())
+							{
+								encoding_name en = extract_character_encoding_from_meta_element(it->m_value);
+								if (en != static_cast<encoding_name>(0)) change_encoding(en);
+							}
+						}
+					}
 
 					return;
 				}
@@ -1903,7 +1995,6 @@ namespace wordring::whatwg::html::parsing
 		template <typename Token>
 		void on_in_head_noscript_insertion_mode(Token& token)
 		{
-			[[maybe_unused]] this_type* P = static_cast<this_type*>(this);
 			bool f;
 
 			if constexpr (std::is_same_v<DOCTYPE_token, Token>)

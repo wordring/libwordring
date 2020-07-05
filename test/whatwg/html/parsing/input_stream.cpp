@@ -4,6 +4,8 @@
 
 #include <wordring/whatwg/html/parsing/input_stream.hpp>
 
+#include <wordring/whatwg/html/html_defs.hpp>
+
 #include <string>
 
 namespace

@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_CASE(process_token_decoder_8_2)
 	std::u32string output{};
 	std::string input{ "9" };
 	e::stream<std::string::iterator> stream{ input.begin(), input.end() };
-	e::result_value r = e::process_token(stream.read(), decoder, stream, std::back_inserter(output), e::error_mode::Fatal);
+	e::result_value r = e::process_token(stream.read(), decoder, stream, std::back_inserter(output), e::error_mode_name::Fatal);
 	BOOST_CHECK(r.index() == 8);
 	BOOST_CHECK(std::get<8>(r).code_point == U'A');
 }
@@ -239,7 +239,7 @@ BOOST_AUTO_TEST_CASE(process_token_encoder_8_2)
 	std::string output{};
 	std::u32string input{ U"9" };
 	e::stream<std::u32string::iterator> stream{ input.begin(), input.end() };
-	e::result_value r = e::process_token(stream.read(), encoder, stream, std::back_inserter(output), e::error_mode::Html);
+	e::result_value r = e::process_token(stream.read(), encoder, stream, std::back_inserter(output), e::error_mode_name::Html);
 	BOOST_CHECK(r.index() == 1);
 	BOOST_CHECK(output == "");
 

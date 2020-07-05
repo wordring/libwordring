@@ -15,11 +15,9 @@
 
 #include <string>
 
-
 namespace
 {
 	using namespace wordring::html;
-	//using namespace wordring::html::parsing;
 
 	using node_type   = simple_node<std::string>;
 	using tree        = wordring::tree<node_type>;
@@ -37,10 +35,7 @@ namespace
 	{
 	public:
 		using base_type = simple_parser_base<test_parser, tree>;
-
 		using base_type::mode_name;
-
-		//using base_type::m_insertion_mode;
 	};
 }
 

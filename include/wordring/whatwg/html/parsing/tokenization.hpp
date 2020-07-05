@@ -87,6 +87,30 @@ namespace wordring::whatwg::html::parsing
 		{
 		}
 
+		/*! @brief 初期状態に戻し、再利用可能とする
+		*/
+		void clear()
+		{
+			base_type::clear();
+
+			m_state        = data_state;
+			m_return_state = nullptr;
+			m_temporary_buffer.clear();
+
+			m_DOCTYPE_token     = DOCTYPE_token();
+			m_start_tag_token   = start_tag_token();
+			m_end_tag_token     = end_tag_token();
+			m_comment_token     = comment_token();
+			m_character_token   = character_token();
+			m_end_of_file_token = end_of_file_token();
+
+			m_current_tag_token_id = 0;
+
+			m_last_start_tag_name.clear();
+
+			m_character_reference_code = 0;
+		}
+
 		// トークン -----------------------------------------------------------
 
 		tag_token& create_start_tag_token()

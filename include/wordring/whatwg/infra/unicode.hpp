@@ -188,23 +188,37 @@ namespace wordring::whatwg
 
 	// ------------------------------------------------------------------------
 
+	template <typename InputIterator, typename OutputIterator>
+	inline void encoding_cast(InputIterator first, InputIterator last, OutputIterator out)
+	{
+		using character_type = typename std::iterator_traits<InputIterator>::value_type;
+		while (first != last)
+		{
+			char32_t cp;
+
+			if constexpr (sizeof(character_type) == sizeof(char32_t)) cp = std::make_unsigned_t<character_type>(*first++);
+			else first = to_code_point(first, last, cp);
+
+			to_string(cp, out);
+		}
+	}
+
 	template <typename String, typename Container>
 	inline void encoding_cast(String const& in, std::back_insert_iterator<Container> out)
 	{
-		auto it = std::begin(in);
-		while (it != std::end(in))
+		if constexpr (std::is_pointer_v<String>)
 		{
-			// 文字列リテラルの場合
-			if constexpr (std::is_array_v<std::remove_cv_t<std::remove_reference_t<String>>>) if (*it == 0) break;
-
-			char32_t cp;
-
-			if constexpr (std::is_same_v<std::remove_cv_t<std::remove_reference_t<String>>, std::u32string>) cp = *it++;
-			else it = to_code_point(it, std::end(in), cp);
-
-			if constexpr (std::is_same_v<Container, std::u32string>) *out++ = cp;
-			else to_string(cp, out);
+			using character_type = typename std::iterator_traits<String>::value_type;
+			auto sv = std::basic_string_view<character_type>(in);
+			return encoding_cast(sv.begin(), sv.end(), out);
 		}
+		else if constexpr (std::is_array_v<String>)
+		{
+			using character_type = std::remove_extent_t<String>;
+			auto sv = std::basic_string_view<character_type>(in);
+			return encoding_cast(sv.begin(), sv.end(), out);
+		}
+		else encoding_cast(std::begin(in), std::end(in), out);
 	}
 
 	template <typename Result, typename String, std::enable_if_t<std::negation_v<std::is_same<Result, String>>, std::nullptr_t> = nullptr>

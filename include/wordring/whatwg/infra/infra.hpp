@@ -431,7 +431,7 @@ namespace wordring::whatwg
 	}
 
 	template <typename InputIterator, typename OutputIterator, typename Condition>
-	inline InputIterator collect_a_sequence_of_code_points(
+	inline InputIterator collect_sequence_of_code_points(
 		InputIterator first, InputIterator last, OutputIterator output, Condition condition)
 	{
 		InputIterator result{ first };
@@ -469,14 +469,14 @@ namespace wordring::whatwg
 	/*! @brief 特定の区切り文字で厳密に分割する
 	*/
 	template <typename InputIterator, typename OutputIterator>
-	inline void strictly_split_on_a_particular_delimiter(
+	inline void strictly_split_on_particular_delimiter(
 		InputIterator first, InputIterator last, OutputIterator output, char32_t delimiter)
 	{
 		using char_type = typename std::iterator_traits<InputIterator>::value_type;
 		using string_type = typename std::basic_string<char_type>;
 
 		string_type token{};
-		first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)->bool { return cp != delimiter; });
+		first = collect_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)->bool { return cp != delimiter; });
 		*output++ = token;
 		token.clear();
 		while (first != last)
@@ -490,7 +490,7 @@ namespace wordring::whatwg
 
 			++first;
 			token.clear();
-			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)->bool { return cp != delimiter; });
+			first = collect_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)->bool { return cp != delimiter; });
 			*output++ = token;
 		}
 	}
@@ -506,7 +506,7 @@ namespace wordring::whatwg
 		while (first != last)
 		{
 			token.clear();
-			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [](char32_t cp)->bool { return !is_ascii_white_space(cp); });
+			first = collect_sequence_of_code_points(first, last, std::back_inserter(token), [](char32_t cp)->bool { return !is_ascii_white_space(cp); });
 			*output++ = token;
 			first = skip_ascii_whitespace(first, last);
 		}
@@ -521,7 +521,7 @@ namespace wordring::whatwg
 		while (first != last)
 		{
 			string_type tmp1{}, tmp2{};
-			first = collect_a_sequence_of_code_points(first, last, std::back_inserter(tmp1), [](char32_t cp)->bool { return cp != 0x2Cu; });
+			first = collect_sequence_of_code_points(first, last, std::back_inserter(tmp1), [](char32_t cp)->bool { return cp != 0x2Cu; });
 			strip_leading_and_trailing_ascii_whitespace(tmp1.begin(), tmp1.end(), std::back_inserter(tmp2));
 			*output++ = tmp2;
 			if (first != last)

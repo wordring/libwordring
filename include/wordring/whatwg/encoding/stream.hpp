@@ -48,7 +48,7 @@ namespace wordring::whatwg::encoding
 		void prepend(InputIterator first, InputIterator last) { m_front.insert(m_front.begin(), first, last); }
 
 		template <typename Value>
-		void prepend_of(std::initializer_list<Value> tokens) { prepend(tokens.begin(), tokens.end()); }
+		void prepend(std::initializer_list<Value> tokens) { prepend(tokens.begin(), tokens.end()); }
 
 	private:
 		std::deque<value_type> m_front;

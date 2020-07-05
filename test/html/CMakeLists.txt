@@ -28,14 +28,17 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		"test_module.cpp"
+		"simple_html.cpp"
 		"simple_node.cpp"
 		"simple_parser.cpp"
 		"simple_traits.cpp"
+#[[
 		"simple_html_sample_common.cpp"
 		"simple_html_sample_document.cpp"
 		"simple_html_sample_edits.cpp"
 		"simple_html_sample_embedded.cpp"
 		"simple_html_sample_grouping.cpp"
+		"simple_html_sample_images.cpp"
 		"simple_html_sample_introduction.cpp"
 		"simple_html_sample_links.cpp"
 		"simple_html_sample_parsing.cpp"
@@ -43,7 +46,8 @@ add_executable(
 		"simple_html_sample_semantics.cpp"
 		"simple_html_sample_syntax.cpp"
 		"simple_html_sample_text.cpp"
- "simple_html_sample_images.cpp")
+ #]]
+ )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

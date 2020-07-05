@@ -134,6 +134,21 @@ namespace wordring::html
 			return *lhs == *rhs;
 		}
 
+		/*! @brief 要素ノードから最初の属性を指すイテレータを取得する
+		*/
+		static auto abegin(node_pointer it) { return wordring::html::begin(*it); }
+
+		static auto aend(node_pointer it) { return wordring::html::end(*it); }
+
+		/*! @brief 属性を検索する
+		*/
+		/*
+		static auto find(node_pointer it, attribute_name name)
+		{
+			return wordring::html::find(*it, name);
+		}
+		*/
+
 		/*! @brief script 要素の "non-blocking" flag を設定する
 
 		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
@@ -149,10 +164,6 @@ namespace wordring::html
 		// ----------------------------------------------------------------------------------------
 		// Attr
 		// ----------------------------------------------------------------------------------------
-
-		static auto abegin(node_pointer it) { return wordring::html::begin(*it); }
-
-		static auto aend(node_pointer it) { return wordring::html::end(*it); }
 
 		static ns_name get_namespace_id(attribute_type const& attr)
 		{

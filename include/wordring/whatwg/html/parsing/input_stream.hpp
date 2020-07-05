@@ -42,9 +42,8 @@ namespace wordring::whatwg::html::parsing
 	protected:
 		/*! コード・ポイント・バッファ
 		*/
-		container m_c;
-
-		value_type    m_current_input_character;
+		container  m_c;
+		value_type m_current_input_character;
 
 		/*! バッファ埋め待ち検出用状態変数
 		*/
@@ -59,16 +58,6 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool m_cr_state;
 
-		// ----------------------------------------------------------------------------------------
-		// 入力バイトストリーム
-		//
-		// 12.2.3 The input byte stream
-		// https://html.spec.whatwg.org/multipage/parsing.html#the-input-byte-stream
-		// ----------------------------------------------------------------------------------------
-
-		encoding_confidence_name m_encoding_confidence;
-		encoding_name m_encoding_name;
-
 	public:
 
 		/*! @brief 空の入力ストリームを構築する
@@ -79,11 +68,25 @@ namespace wordring::whatwg::html::parsing
 			, m_eof(false)
 			, m_eof_consumed(false)
 			, m_cr_state(false)
-			, m_encoding_confidence(encoding_confidence_name::irrelevant)
 		{
 		}
 
 		virtual ~input_stream() = default;
+
+		/*! @brief 初期状態に戻し、再利用可能とする
+		*/
+		void clear()
+		{
+			m_c.clear();
+			m_current_input_character = 0;
+
+			m_fill_length = 0;
+
+			m_eof          = false;
+			m_eof_consumed = false;
+
+			m_cr_state = false;
+		}
 
 		/*! @brief エラー報告する
 

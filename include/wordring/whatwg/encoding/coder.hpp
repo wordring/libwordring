@@ -439,7 +439,7 @@ namespace wordring::whatwg::encoding
 			{
 				if (!(0x30u <= byte && byte <= 0x39u))
 				{
-					input.prepend_of({ static_cast<uint8_t>(gb18030_second), static_cast<uint8_t>(gb18030_third), byte });
+					input.prepend({ static_cast<uint8_t>(gb18030_second), static_cast<uint8_t>(gb18030_third), byte });
 					reset();
 					return result_error{};
 				}
@@ -459,7 +459,7 @@ namespace wordring::whatwg::encoding
 					return result_continue{};
 				}
 
-				input.prepend_of({ static_cast<uint8_t>(gb18030_second), byte });
+				input.prepend({ static_cast<uint8_t>(gb18030_second), byte });
 				gb18030_first = 0;
 				gb18030_second = 0;
 				return result_error{};
@@ -965,7 +965,7 @@ namespace wordring::whatwg::encoding
 					if (output_flag == false) return result_continue{};
 					else return result_error{};
 				}
-				input.prepend_of({ lead, byte });
+				input.prepend({ lead, byte });
 				ISO_2022_JP_output_flag = false;
 				ISO_2022_JP_decoder_state = ISO_2022_JP_decoder_output_state;
 				return result_error{};

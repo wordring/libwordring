@@ -523,14 +523,14 @@ BOOST_AUTO_TEST_CASE(strip_and_collapse_ascii_whitespace__1)
 	BOOST_CHECK(s32_result == s32_correct_2);
 }
 
-BOOST_AUTO_TEST_CASE(collect_a_sequence_of_code_points__1)
+BOOST_AUTO_TEST_CASE(collect_sequence_of_code_points__1)
 {
 	using namespace wordring::whatwg;
 
 	std::u32string const s32_original_1{ U"  ABC   123  " };
 	std::u32string const s32_correct_1{ U"  " };
 	std::u32string s32_result_1{};
-	auto it_result_1 = collect_a_sequence_of_code_points(
+	auto it_result_1 = collect_sequence_of_code_points(
 		s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result_1), is_ascii_white_space);
 	BOOST_CHECK(*it_result_1 == U'A');
 	BOOST_CHECK(s32_result_1 == s32_correct_1);
@@ -538,7 +538,7 @@ BOOST_AUTO_TEST_CASE(collect_a_sequence_of_code_points__1)
 	std::u32string const s32_original_2{ U"ABC   123  " };
 	std::u32string const s32_correct_2{ U"" };
 	std::u32string s32_result_2{};
-	auto it_result_2 = collect_a_sequence_of_code_points(
+	auto it_result_2 = collect_sequence_of_code_points(
 		s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result_2), is_ascii_white_space);
 	BOOST_CHECK(*it_result_2 == U'A');
 	BOOST_CHECK(s32_result_2 == s32_correct_2);
@@ -546,7 +546,7 @@ BOOST_AUTO_TEST_CASE(collect_a_sequence_of_code_points__1)
 	std::u32string const s32_original_3{ U"   " };
 	std::u32string const s32_correct_3{ U"   " };
 	std::u32string s32_result_3{};
-	auto it_result_3 = collect_a_sequence_of_code_points(
+	auto it_result_3 = collect_sequence_of_code_points(
 		s32_original_3.begin(), s32_original_3.end(), std::back_inserter(s32_result_3), is_ascii_white_space);
 	BOOST_CHECK(it_result_3 == s32_original_3.end());
 	BOOST_CHECK(s32_result_3 == s32_correct_3);
@@ -571,21 +571,21 @@ BOOST_AUTO_TEST_CASE(strictly_split_on_a_particular_delimiter__1)
 	std::u32string const s32_original_1{ U"ABC,DEF,GHI" };
 	std::vector<std::u32string> const s32_correct_1{ U"ABC", U"DEF", U"GHI" };
 	std::vector<std::u32string> s32_result_1{};
-	strictly_split_on_a_particular_delimiter(
+	strictly_split_on_particular_delimiter(
 		s32_original_1.begin(), s32_original_1.end(), std::back_inserter(s32_result_1), U',');
 	BOOST_CHECK(s32_result_1 == s32_correct_1);
 
 	std::u32string const s32_original_2{};
 	std::vector<std::u32string> const s32_correct_2{ std::u32string{} };
 	std::vector<std::u32string> s32_result_2{};
-	strictly_split_on_a_particular_delimiter(
+	strictly_split_on_particular_delimiter(
 		s32_original_2.begin(), s32_original_2.end(), std::back_inserter(s32_result_2), U',');
 	BOOST_CHECK(s32_result_2 == s32_correct_2);
 
 	std::u32string const s32_original_3{ U"," };
 	std::vector<std::u32string> const s32_correct_3{ std::u32string{}, std::u32string{} };
 	std::vector<std::u32string> s32_result_3{};
-	strictly_split_on_a_particular_delimiter(
+	strictly_split_on_particular_delimiter(
 		s32_original_3.begin(), s32_original_3.end(), std::back_inserter(s32_result_3), U',');
 	BOOST_CHECK(s32_result_3 == s32_correct_3);
 }

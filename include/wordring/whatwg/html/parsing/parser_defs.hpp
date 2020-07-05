@@ -66,10 +66,8 @@ namespace wordring::whatwg::html::parsing
 	
 	enum class encoding_confidence_name : std::uint32_t
 	{
-		tentative = 1,
-		certain,
-		irrelevant,
+		tentative = 1, // 暫定
+		certain,       // 確定
+		irrelevant,    // 無関係
 	};
-
-	
 }

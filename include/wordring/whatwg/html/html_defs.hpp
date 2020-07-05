@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <wordring/whatwg/html/parsing/atom_defs.hpp>
+#include <wordring/whatwg/html/parsing/parser_defs.hpp>
 
 #include <wordring/whatwg/encoding/encoding_defs.hpp>
 
@@ -12,11 +13,11 @@ namespace wordring::whatwg::html
 	using tag_name       = parsing::tag_name;
 	using attribute_name = parsing::attribute_name;
 
-	// ------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------
 	// 4.5. Interface Document
 	//
 	// https://dom.spec.whatwg.org/#interface-document
-	// ------------------------------------------------------------------------
+	// --------------------------------------------------------------------------------------------
 
 	enum class document_type_name : std::uint32_t
 	{
@@ -32,4 +33,5 @@ namespace wordring::whatwg::html
 	};
 
 	using encoding_name = wordring::whatwg::encoding::name;
+	using encoding_confidence_name = parsing::encoding_confidence_name;
 }

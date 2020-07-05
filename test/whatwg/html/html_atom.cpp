@@ -1,4 +1,4 @@
-﻿// test/whatwg/html/parsing/html_atom.cpp
+﻿// test/whatwg/html/html_atom.cpp
 
 #include <boost/test/unit_test.hpp>
 
