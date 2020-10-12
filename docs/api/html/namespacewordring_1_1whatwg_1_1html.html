@@ -75,6 +75,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>tag_name</b> = parsi
 <tr class="memitem:a4a96308064dadcc8d2db4d1e5a12e260"><td class="memItemLeft" align="right" valign="top"><a id="a4a96308064dadcc8d2db4d1e5a12e260"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_name</b> = parsing::attribute_name</td></tr>
 <tr class="separator:a4a96308064dadcc8d2db4d1e5a12e260"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a203b94e1ad6dc7dd689cb42517de7f39"><td class="memItemLeft" align="right" valign="top"><a id="a203b94e1ad6dc7dd689cb42517de7f39"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>encoding_name</b> = wordring::whatwg::encoding::name</td></tr>
+<tr class="separator:a203b94e1ad6dc7dd689cb42517de7f39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f5dea3a18addf6144b670b05fcd9c23"><td class="memItemLeft" align="right" valign="top"><a id="a8f5dea3a18addf6144b670b05fcd9c23"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>encoding_confidence_name</b> = parsing::encoding_confidence_name</td></tr>
+<tr class="separator:a8f5dea3a18addf6144b670b05fcd9c23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 列挙型</h2></td></tr>
@@ -141,6 +147,9 @@ template&lt;typename String1 , typename Name1 &gt; </td></tr>
 template&lt;typename NodePointer &gt; </td></tr>
 <tr class="memitem:ac981a1dfdb92fcf9c6af8baae54ec2e4"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>is_void_element</b> (NodePointer it)</td></tr>
 <tr class="separator:ac981a1dfdb92fcf9c6af8baae54ec2e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6b83f3be8d0fcb4aa50c50d2fc290ed"><td class="memItemLeft" align="right" valign="top">encoding_name&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg_1_1html.html#af6b83f3be8d0fcb4aa50c50d2fc290ed">extract_character_encoding_from_meta_element</a> (std::u32string const &amp;s)</td></tr>
+<tr class="memdesc:af6b83f3be8d0fcb4aa50c50d2fc290ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">meta 要素からエンコーディングを抽出する  <a href="namespacewordring_1_1whatwg_1_1html.html#af6b83f3be8d0fcb4aa50c50d2fc290ed">[詳解]</a><br /></td></tr>
+<tr class="separator:af6b83f3be8d0fcb4aa50c50d2fc290ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>非公開の名前空間。 </p>
@@ -217,6 +226,44 @@ template&lt;typename NodePointer , typename OutputIterator &gt; </div>
 <dl class="section see"><dt>参照</dt><dd><a href="https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm">https://html.spec.whatwg.org/multipage/parsing.html#html-fragment-serialisation-algorithm</a> </dd>
 <dd>
 <a href="https://triple-underscore.github.io/HTML-writing-ja.html#html-fragment-serialisation-algorithm">https://triple-underscore.github.io/HTML-writing-ja.html#html-fragment-serialisation-algorithm</a> </dd></dl>
+
+</div>
+</div>
+<a id="af6b83f3be8d0fcb4aa50c50d2fc290ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6b83f3be8d0fcb4aa50c50d2fc290ed">&#9670;&nbsp;</a></span>extract_character_encoding_from_meta_element()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">encoding_name wordring::whatwg::html::extract_character_encoding_from_meta_element </td>
+          <td>(</td>
+          <td class="paramtype">std::u32string const &amp;&#160;</td>
+          <td class="paramname"><em>s</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>meta 要素からエンコーディングを抽出する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>meta 要素の content 属性値</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>meta 要素が http-equiv="Content-Type" と content という属性を持つ時、 パーサーから content 属性の値を引数に呼び出される。</p>
+<dl class="section see"><dt>参照</dt><dd><a href="https://html.spec.whatwg.org/multipage/urls-and-fetching.html#algorithm-for-extracting-a-character-encoding-from-a-meta-element">https://html.spec.whatwg.org/multipage/urls-and-fetching.html#algorithm-for-extracting-a-character-encoding-from-a-meta-element</a> </dd>
+<dd>
+<a href="https://triple-underscore.github.io/HTML-urls-and-fetching-ja.html#algorithm-for-extracting-a-character-encoding-from-a-meta-element">https://triple-underscore.github.io/HTML-urls-and-fetching-ja.html#algorithm-for-extracting-a-character-encoding-from-a-meta-element</a> </dd></dl>
 
 </div>
 </div>

@@ -13,15 +13,17 @@
 #include <utility>
 #include <variant>
 
-namespace wordring::wwwc
+namespace wordring::wwwc::css
 {
-
 	// --------------------------------------------------------------------------------------------
 	// 4. Tokenization
 	//
 	// https://drafts.csswg.org/css-syntax-3/#tokenization
 	// https://triple-underscore.github.io/css-syntax-ja.html#tokenization
 	// --------------------------------------------------------------------------------------------
+
+	template <typename BidirectionalIterator, typename OutputIterator, typename ErrorHandler = std::nullptr_t>
+	inline void tokenize(BidirectionalIterator, BidirectionalIterator, OutputIterator output, ErrorHandler = nullptr);
 
 	/*! @brief 整数と小数を識別するためのフラグ値
 
@@ -214,8 +216,8 @@ namespace wordring::wwwc
 	// https://triple-underscore.github.io/css-syntax-ja.html#tokenizer-algorithms
 	// --------------------------------------------------------------------------------------------
 
-	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler = nullptr);
+	template <typename BidirectionalIterator, typename ErrorHandler = std::nullptr_t>
+	inline std::pair<BidirectionalIterator, css_token> consume_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler = nullptr);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
 	inline std::pair<BidirectionalIterator, css_token> consume_comments(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
@@ -355,6 +357,7 @@ namespace wordring::wwwc
 			if (is_identifier_start_code_point(cp)) return consume_ident_like_token(--it, last, handler);
 			return  { it, delim_token(cp) };
 		}
+
 		return { it, eof_token() };
 	}
 
@@ -811,4 +814,21 @@ namespace wordring::wwwc
 
 		return { first, css_token() };
 	}
+
+	// --------------------------------------------------------------------------------------------
+	// 実装
+	// --------------------------------------------------------------------------------------------
+
+	template <typename BidirectionalIterator, typename OutputIterator, typename ErrorHandler>
+	inline void tokenize(BidirectionalIterator first, BidirectionalIterator last, OutputIterator output, ErrorHandler handler)
+	{
+		while (true)
+		{
+			auto [it, tkn] = consume_token(first, last, handler);
+			if (std::holds_alternative<eof_token>(tkn)) break;
+			first = it;
+			*output++ = tkn;
+		}
+	}
+
 }

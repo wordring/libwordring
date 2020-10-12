@@ -56,7 +56,7 @@ $(function() {
 <p>HTML5 パーサー用のユニコード・コード・ポイント入力ストリーム  
  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#details">[詳解]</a></p>
 
-<p><code>#include &lt;<a class="el" href="input__stream_8hpp_source.html">input_stream.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="whatwg_2html_2parsing_2input__stream_8hpp_source.html">input_stream.hpp</a>&gt;</code></p>
 <div class="dynheader">
 wordring::whatwg::html::parsing::input_stream&lt; T &gt; の継承関係図</div>
 <div class="dyncontent">
@@ -77,6 +77,10 @@ wordring::whatwg::html::parsing::input_stream&lt; T &gt; の継承関係図</div
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a30163f1989500e41df729c7b29102483">input_stream</a> ()</td></tr>
 <tr class="memdesc:a30163f1989500e41df729c7b29102483"><td class="mdescLeft">&#160;</td><td class="mdescRight">空の入力ストリームを構築する <br /></td></tr>
 <tr class="separator:a30163f1989500e41df729c7b29102483"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3e39b2cc085fd94a490bedb08e00a84"><td class="memItemLeft" align="right" valign="top"><a id="af3e39b2cc085fd94a490bedb08e00a84"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af3e39b2cc085fd94a490bedb08e00a84">clear</a> ()</td></tr>
+<tr class="memdesc:af3e39b2cc085fd94a490bedb08e00a84"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期状態に戻し、再利用可能とする <br /></td></tr>
+<tr class="separator:af3e39b2cc085fd94a490bedb08e00a84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b471294042399219124374ec13bf1ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">report_error</a> (error_name ec=static_cast&lt; error_name &gt;(0))</td></tr>
 <tr class="memdesc:a1b471294042399219124374ec13bf1ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">エラー報告する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">[詳解]</a><br /></td></tr>
 <tr class="separator:a1b471294042399219124374ec13bf1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -174,8 +178,9 @@ class wordring::whatwg::html::parsing::input_stream&lt; T &gt;</h3>
 
 <p>HTML5 パーサー用のユニコード・コード・ポイント入力ストリーム </p>
 <dl class="section user"><dt>コールバック</dt><dd></dd></dl>
+<p>派生クラスは以下のメンバを持たなければならない。</p>
 <ul>
-<li>on_report_error(error err)</li>
+<li>on_report_error(error_name e)</li>
 <li>on_emit_code_point() </li>
 </ul>
 </div><h2 class="groupheader">関数詳解</h2>
@@ -775,7 +780,7 @@ template&lt;typename T &gt; </div>
 </div>
 </div>
 <hr/>このクラス詳解は次のファイルから抽出されました:<ul>
-<li><a class="el" href="input__stream_8hpp_source.html">input_stream.hpp</a></li>
+<li><a class="el" href="whatwg_2html_2parsing_2input__stream_8hpp_source.html">whatwg/html/parsing/input_stream.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

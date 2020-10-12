@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: parsing.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_6573f884cc9edc38c34f5e6d408c3f1c.html">wwwc</a></li><li class="navelem"><a class="el" href="dir_80060accbae6d26e4f06083aeee96763.html">css_syntax</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">parsing.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/wwwc/css_syntax/tokenization.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;variant&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>wordring::wwwc::css</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="comment">// 5. Parsing</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parsing</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parsing</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">struct </span>component_value;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">struct </span>simple_block;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classwordring_1_1wwwc_1_1css_1_1at__rule.html">   24</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1wwwc_1_1css_1_1at__rule.html">at_rule</a></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        std::u32string m_name;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        std::vector&lt;component_value&gt; m_component_values;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        std::unique_ptr&lt;simple_block&gt; m_block;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    };</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1qualified__rule__item.html">   34</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1qualified__rule__item.html">qualified_rule_item</a></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    };</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1declaration__item.html">   39</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1declaration__item.html">declaration_item</a> {};</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1preserved__tokens__item.html">   41</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1preserved__tokens__item.html">preserved_tokens_item</a> {};</div>
+<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1function__item.html">   42</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1function__item.html">function_item</a> {};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1simple__block__item.html">   44</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1simple__block__item.html">simple_block_item</a></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        css_token m_token;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    };</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1component__value__item.html">   50</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1component__value__item.html">component_value_item</a></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    };</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// </span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// </span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// </span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1function__item_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1function__item.html">wordring::wwwc::css::function_item</a></div><div class="ttdef"><b>Definition:</b> parsing.hpp:42</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1qualified__rule__item_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1qualified__rule__item.html">wordring::wwwc::css::qualified_rule_item</a></div><div class="ttdef"><b>Definition:</b> parsing.hpp:34</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1simple__block__item_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1simple__block__item.html">wordring::wwwc::css::simple_block_item</a></div><div class="ttdef"><b>Definition:</b> parsing.hpp:44</div></div>
+<div class="ttc" id="aclasswordring_1_1wwwc_1_1css_1_1at__rule_html"><div class="ttname"><a href="classwordring_1_1wwwc_1_1css_1_1at__rule.html">wordring::wwwc::css::at_rule</a></div><div class="ttdoc">@規則を表現する AST ノード</div><div class="ttdef"><b>Definition:</b> parsing.hpp:24</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1declaration__item_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1declaration__item.html">wordring::wwwc::css::declaration_item</a></div><div class="ttdef"><b>Definition:</b> parsing.hpp:39</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1preserved__tokens__item_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1preserved__tokens__item.html">wordring::wwwc::css::preserved_tokens_item</a></div><div class="ttdef"><b>Definition:</b> parsing.hpp:41</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1component__value__item_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1component__value__item.html">wordring::wwwc::css::component_value_item</a></div><div class="ttdef"><b>Definition:</b> parsing.hpp:50</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

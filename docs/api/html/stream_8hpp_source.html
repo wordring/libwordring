@@ -55,66 +55,59 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html">wordring::whatwg::encoding</a></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;{</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="comment">// 3. Terminology ---------------------------------------------------------</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIteratorT&gt;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">   13</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">stream</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> iterator_type = InputIteratorT;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">using</span> value_type = <span class="keyword">typename</span> std::iterator_traits&lt;iterator_type&gt;::value_type;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">using</span> result_type = std::optional&lt;value_type&gt;;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;    <span class="comment">// ----------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="comment">// 3. Terminology</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="comment">// https://encoding.spec.whatwg.org/#terminology</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="comment">// https://triple-underscore.github.io/Encoding-ja.html#terminology</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// ----------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIteratorT&gt;</div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">   18</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">stream</a></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    {</div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">stream</a>(iterator_type first, iterator_type last) : m_first(first), m_last(last) {}</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keywordtype">bool</span> operator !()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_front.empty() &amp;&amp; m_back.empty() &amp;&amp; m_first == m_last; }</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">using</span> iterator_type = InputIteratorT;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">using</span> value_type = <span class="keyword">typename</span> std::iterator_traits&lt;iterator_type&gt;::value_type;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        <span class="keyword">using</span> result_type = std::optional&lt;value_type&gt;;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">operator</span> bool()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !(operator!()); }</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        result_type read()</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;            <span class="keywordflow">if</span> (!m_front.empty())</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            {</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                value_type result{ m_front.front() };</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                m_front.pop_front();</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            }</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keywordflow">if</span> (m_first != m_last) <span class="keywordflow">return</span> *m_first++;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keywordflow">if</span> (!m_back.empty())</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;            {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                value_type result{ m_back.front() };</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;                m_back.pop_front();</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;                <span class="keywordflow">return</span> result;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            }</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            <span class="keywordflow">return</span> result_type{};</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        }</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordtype">void</span> prepend(value_type token) { m_front.push_front(token); }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">void</span> prepend(InputIterator first, InputIterator last) { m_front.insert(m_front.begin(), first, last); }</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value&gt;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keywordtype">void</span> prepend_of(std::initializer_list&lt;Value&gt; tokens) { prepend(tokens.begin(), tokens.end()); }</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordtype">void</span> push(value_type token) { m_back.push_back(token); }</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordtype">void</span> push(InputIterator first, InputIterator last) { m_back.insert(m_back.end(), first, last); }</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">stream</a>(iterator_type first, iterator_type last) : m_first(first), m_last(last) {}</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keywordtype">bool</span> operator !()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_front.empty() &amp;&amp; m_first == m_last; }</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">operator</span> bool()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> !(operator!()); }</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        result_type read()</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keywordflow">if</span> (!m_front.empty())</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                value_type result{ m_front.front() };</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                m_front.pop_front();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;                <span class="keywordflow">return</span> result;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            }</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keywordflow">if</span> (m_first != m_last) <span class="keywordflow">return</span> *m_first++;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            <span class="keywordflow">return</span> result_type{};</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordtype">void</span> prepend(value_type token) { m_front.push_front(token); }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">void</span> prepend(InputIterator first, InputIterator last) { m_front.insert(m_front.begin(), first, last); }</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value&gt;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keywordtype">void</span> prepend(std::initializer_list&lt;Value&gt; tokens) { prepend(tokens.begin(), tokens.end()); }</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        std::deque&lt;value_type&gt; m_front;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        iterator_type m_first;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        iterator_type m_last;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    };</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        std::deque&lt;value_type&gt; m_front;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        std::deque&lt;value_type&gt; m_back;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        iterator_type m_first;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        iterator_type m_last;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    };</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;}</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacewordring_1_1whatwg_1_1encoding_html"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1encoding.html">wordring::whatwg::encoding</a></div></div>
-<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1stream_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">wordring::whatwg::encoding::stream</a></div><div class="ttdef"><b>Definition:</b> stream.hpp:13</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1stream_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1stream.html">wordring::whatwg::encoding::stream</a></div><div class="ttdef"><b>Definition:</b> stream.hpp:18</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

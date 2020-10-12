@@ -29,3 +29,11 @@
 /*! @namespace wordring::whatwg::url
 非公開の名前空間。
 */
+
+/*! @namespace wordring::wwc
+非公開の名前空間。
+*/
+
+/*! @namespace wordring::wwc::css
+非公開の名前空間。
+*/

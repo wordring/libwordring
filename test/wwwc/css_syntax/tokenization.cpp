@@ -5,6 +5,8 @@
 #include <wordring/wwwc/css_syntax/tokenization.hpp>
 
 #include <cmath>
+#include <iterator>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(css_syntax_tokenization_test)
 
@@ -15,13 +17,24 @@ BOOST_AUTO_TEST_SUITE(css_syntax_tokenization_test)
 // https://triple-underscore.github.io/css-syntax-ja.html#consume-token
 // ------------------------------------------------------------------------------------------------
 
+// トークン化
+BOOST_AUTO_TEST_CASE(tokenization_tokenize_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string in = UR"*( p { color: red; } )*";
+
+	std::vector<css_token> ret;
+	tokenize(in.begin(), in.end(), std::back_inserter(ret));
+}
+
 // コメントを除去出来るか検査
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(/*ABC*/   )*";
-	auto [it, token] = consume_token(in.begin(), in.end(), 1);
+	auto [it, token] = consume_token(in.begin(), in.end());
 
 	BOOST_CHECK(it == in.end());
 	BOOST_CHECK(std::holds_alternative<whitespace_token>(token));
@@ -30,7 +43,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_1)
 // 空白文字
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(   )*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -42,7 +55,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_2)
 // 「"」に囲まれた文字列
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*("ABC")*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -56,7 +69,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_3)
 // #ID
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(#ID)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -70,7 +83,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_5)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(#+)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -84,7 +97,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_5)
 // 「'」に囲まれた文字列
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_6)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*('ABC')*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -98,7 +111,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_6)
 // (
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_7)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(()*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -110,7 +123,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_7)
 // )
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_8)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*())*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -122,7 +135,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_8)
 // +
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_9)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(+10)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -136,7 +149,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_9)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_10)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(++)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -150,7 +163,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_10)
 // ,
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_11)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(,)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -162,7 +175,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_11)
 // -
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_12)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-10)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -176,7 +189,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_12)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_13)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-->)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -187,7 +200,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_13)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_14)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-A)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -200,7 +213,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_14)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_15)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-+)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -214,7 +227,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_15)
 // .
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_16)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(.1)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -228,7 +241,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_16)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_17)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(.+)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -242,7 +255,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_17)
 // :
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_18)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(:)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -254,7 +267,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_18)
 // ;
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_19)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(;)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -266,7 +279,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_19)
 // <
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_20)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(<!--)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -277,7 +290,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_20)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_21)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(<)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -291,7 +304,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_21)
 // @
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_22)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(@ABC)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -304,7 +317,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_22)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_23)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(@+)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -318,7 +331,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_23)
 // [
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_24)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*([)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -330,7 +343,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_24)
 // REVERSE SOLIDUS
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_25)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(\1234)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -343,7 +356,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_25)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_26)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = U"\\\n";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -357,7 +370,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_26)
 // ]
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_27)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(])*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -369,7 +382,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_27)
 // {
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_28)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*({)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -381,7 +394,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_28)
 // }
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_29)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(})*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -393,7 +406,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_29)
 // 数字
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_30)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(30)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -408,7 +421,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_30)
 // 識別子
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_31)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(ABC)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -422,7 +435,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_31)
 // EOF
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_32)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*()*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -434,7 +447,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_32)
 // etc.
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_33)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(=)*";
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
@@ -454,7 +467,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_33)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_comments_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(/*あいうえお*/)*";
 	auto [it, token] = consume_comments(in.begin(), in.end(), 1);
@@ -464,7 +477,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_comments_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_comments_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(/**/)*";
 	auto [it, token] = consume_comments(in.begin(), in.end(), 1);
@@ -474,7 +487,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_comments_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_comments_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	bool e = false;
 	std::u32string in = UR"*(/*)*";
@@ -486,7 +499,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_comments_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_comments_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(/*あいうえお*/かきくけこ)*";
 	auto [it, token] = consume_comments(in.begin(), in.end(), 1);
@@ -503,7 +516,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_comments_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(123.45)*";
 	auto [it, token] = consume_numeric_token(in.begin(), in.end(), 1);
@@ -516,7 +529,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(33.3%)*";
 	auto [it, token] = consume_numeric_token(in.begin(), in.end(), 1);
@@ -528,7 +541,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(1.5em)*";
 	auto [it, token] = consume_numeric_token(in.begin(), in.end(), 1);
@@ -548,7 +561,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(auto)*";
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
@@ -560,7 +573,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(calc()*";
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
@@ -572,7 +585,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(url(example.png))*";
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
@@ -584,7 +597,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(url(+ +)*";
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
@@ -602,7 +615,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(ABC")*";
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
@@ -614,7 +627,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(ABC)*";
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
@@ -626,7 +639,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = U"ABC\n";
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
@@ -637,7 +650,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(\41)*";
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
@@ -656,7 +669,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(example.png))*";
 	auto [it, token] = consume_url_token(in.begin(), in.end(), 1);
@@ -668,7 +681,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(example.png)*";
 	auto [it, token] = consume_url_token(in.begin(), in.end(), 1);
@@ -680,7 +693,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(example.png")*";
 	auto [it, token] = consume_url_token(in.begin(), in.end(), 1);
@@ -698,7 +711,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_escaped_code_point_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(12345)*";
 	auto [it, cp] = consume_escaped_code_point(in.begin(), in.end(), 1);
@@ -709,7 +722,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_escaped_code_point_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_escaped_code_point_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(G)*";
 	auto [it, cp] = consume_escaped_code_point(in.begin(), in.end(), 1);
@@ -720,7 +733,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_escaped_code_point_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_escaped_code_point_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(0)*";
 	auto [it, cp] = consume_escaped_code_point(in.begin(), in.end(), 1);
@@ -738,7 +751,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_escaped_code_point_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_valid_escape_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(\A)*";
 	bool f = starts_with_valid_escape(in.begin(), in.end());
@@ -748,7 +761,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_valid_escape_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_valid_escape_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = U"\\\xA";
 	bool f = starts_with_valid_escape(in.begin(), in.end());
@@ -765,7 +778,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_valid_escape_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-A)*";
 	bool f = starts_with_identifier(in.begin(), in.end());
@@ -775,7 +788,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(--)*";
 	bool f = starts_with_identifier(in.begin(), in.end());
@@ -785,7 +798,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-\A)*";
 	bool f = starts_with_identifier(in.begin(), in.end());
@@ -795,7 +808,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(A)*";
 	bool f = starts_with_identifier(in.begin(), in.end());
@@ -805,7 +818,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_5)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(\A)*";
 	bool f = starts_with_identifier(in.begin(), in.end());
@@ -815,7 +828,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_5)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_6)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(0)*";
 	bool f = starts_with_identifier(in.begin(), in.end());
@@ -832,7 +845,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_identifier_6)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(+0)*";
 	bool f = starts_with_number(in.begin(), in.end());
@@ -842,7 +855,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-0)*";
 	bool f = starts_with_number(in.begin(), in.end());
@@ -852,7 +865,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(+.0)*";
 	bool f = starts_with_number(in.begin(), in.end());
@@ -862,7 +875,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(.0)*";
 	bool f = starts_with_number(in.begin(), in.end());
@@ -872,7 +885,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_5)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(0)*";
 	bool f = starts_with_number(in.begin(), in.end());
@@ -882,7 +895,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_5)
 
 BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_6)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(A)*";
 	bool f = starts_with_number(in.begin(), in.end());
@@ -899,7 +912,7 @@ BOOST_AUTO_TEST_CASE(tokenization_starts_with_number_6)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_identifier_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(A\41)*";
 	auto [it, s] = consume_identifier(in.begin(), in.end(), 1);
@@ -910,7 +923,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_identifier_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_identifier_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(A\41+)*";
 	auto [it, s] = consume_identifier(in.begin(), in.end(), 1);
@@ -928,7 +941,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_identifier_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_number_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(+1)*";
 	auto [it, num, flg] = consume_number(in.begin(), in.end(), 1);
@@ -940,7 +953,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_number_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_number_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-2)*";
 	auto [it, num, flg] = consume_number(in.begin(), in.end(), 1);
@@ -952,7 +965,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_number_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_number_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(+.3)*";
 	auto [it, num, flg] = consume_number(in.begin(), in.end(), 1);
@@ -964,7 +977,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_number_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_number_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-.4)*";
 	auto [it, num, flg] = consume_number(in.begin(), in.end(), 1);
@@ -976,7 +989,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_number_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_number_5)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(.5)*";
 	auto [it, num, flg] = consume_number(in.begin(), in.end(), 1);
@@ -988,7 +1001,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_number_5)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_number_6)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(6)*";
 	auto [it, num, flg] = consume_number(in.begin(), in.end(), 1);
@@ -1009,7 +1022,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_number_6)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(10)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1019,7 +1032,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(4.01)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1029,7 +1042,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_2)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_3)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-456.8)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1039,7 +1052,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_3)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_4)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(0.0)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1049,7 +1062,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_4)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_5)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(+0.0)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1059,7 +1072,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_5)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_6)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-0.0)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1069,7 +1082,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_6)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_7)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(.60)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1079,7 +1092,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_7)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_8)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(10e3)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1089,7 +1102,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_8)
 
 BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_9)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(-3.4e-2)*";
 	double d = convert_string_to_number(in.begin(), in.end());
@@ -1106,7 +1119,7 @@ BOOST_AUTO_TEST_CASE(tokenization_convert_string_to_number_9)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_remnants_of_bad_url_1)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(ABC))*";
 	auto [it, token] = consume_remnants_of_bad_url(in.begin(), in.end(), 1);
@@ -1117,7 +1130,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_remnants_of_bad_url_1)
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_remnants_of_bad_url_2)
 {
-	using namespace wordring::wwwc;
+	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*(ABC\)))*";
 	auto [it, token] = consume_remnants_of_bad_url(in.begin(), in.end(), 1);

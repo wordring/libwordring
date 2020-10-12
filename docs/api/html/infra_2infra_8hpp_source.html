@@ -428,7 +428,7 @@ $(function() {
 <div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    }</div>
 <div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160; </div>
 <div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator, <span class="keyword">typename</span> OutputIterator, <span class="keyword">typename</span> Condition&gt;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keyword">inline</span> InputIterator collect_a_sequence_of_code_points(</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keyword">inline</span> InputIterator collect_sequence_of_code_points(</div>
 <div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;        InputIterator first, InputIterator last, OutputIterator output, Condition condition)</div>
 <div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    {</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;        InputIterator result{ first };</div>
@@ -464,14 +464,14 @@ $(function() {
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    }</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160; </div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator, <span class="keyword">typename</span> OutputIterator&gt;</div>
-<div class="line"><a name="l00472"></a><span class="lineno"><a class="line" href="namespacewordring_1_1whatwg.html#aa19dd68dee0d603bb24af573a508c997">  472</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1whatwg.html#aa19dd68dee0d603bb24af573a508c997">strictly_split_on_a_particular_delimiter</a>(</div>
+<div class="line"><a name="l00472"></a><span class="lineno"><a class="line" href="namespacewordring_1_1whatwg.html#a224445d0f043c8ce06e7a75f93394ddd">  472</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1whatwg.html#a224445d0f043c8ce06e7a75f93394ddd">strictly_split_on_particular_delimiter</a>(</div>
 <div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        InputIterator first, InputIterator last, OutputIterator output, char32_t delimiter)</div>
 <div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;    {</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;        <span class="keyword">using</span> char_type = <span class="keyword">typename</span> std::iterator_traits&lt;InputIterator&gt;::value_type;</div>
 <div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;        <span class="keyword">using</span> string_type = <span class="keyword">typename</span> std::basic_string&lt;char_type&gt;;</div>
 <div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
 <div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        string_type token{};</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> cp != delimiter; });</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;        first = collect_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> cp != delimiter; });</div>
 <div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        *output++ = token;</div>
 <div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;        token.clear();</div>
 <div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;        <span class="keywordflow">while</span> (first != last)</div>
@@ -485,7 +485,7 @@ $(function() {
 <div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
 <div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            ++first;</div>
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            token.clear();</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;            first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> cp != delimiter; });</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;            first = collect_sequence_of_code_points(first, last, std::back_inserter(token), [delimiter](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> cp != delimiter; });</div>
 <div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;            *output++ = token;</div>
 <div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        }</div>
 <div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;    }</div>
@@ -501,7 +501,7 @@ $(function() {
 <div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;        <span class="keywordflow">while</span> (first != last)</div>
 <div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;        {</div>
 <div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;            token.clear();</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;            first = collect_a_sequence_of_code_points(first, last, std::back_inserter(token), [](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> !is_ascii_white_space(cp); });</div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;            first = collect_sequence_of_code_points(first, last, std::back_inserter(token), [](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> !is_ascii_white_space(cp); });</div>
 <div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;            *output++ = token;</div>
 <div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;            first = skip_ascii_whitespace(first, last);</div>
 <div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;        }</div>
@@ -516,7 +516,7 @@ $(function() {
 <div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        <span class="keywordflow">while</span> (first != last)</div>
 <div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;        {</div>
 <div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;            string_type tmp1{}, tmp2{};</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;            first = collect_a_sequence_of_code_points(first, last, std::back_inserter(tmp1), [](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> cp != 0x2Cu; });</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;            first = collect_sequence_of_code_points(first, last, std::back_inserter(tmp1), [](char32_t cp)-&gt;<span class="keywordtype">bool</span> { <span class="keywordflow">return</span> cp != 0x2Cu; });</div>
 <div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;            <a class="code" href="namespacewordring_1_1whatwg.html#a6f10201d1f5fd35bb5654025aa4d5699">strip_leading_and_trailing_ascii_whitespace</a>(tmp1.begin(), tmp1.end(), std::back_inserter(tmp2));</div>
 <div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            *output++ = tmp2;</div>
 <div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;            <span class="keywordflow">if</span> (first != last)</div>
@@ -538,7 +538,7 @@ $(function() {
 <div class="ttc" id="anamespacewordring_1_1whatwg_html_a4800e6adac0a273fe98bff54d85b3dfc"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#a4800e6adac0a273fe98bff54d85b3dfc">wordring::whatwg::to_ascii_uppercase</a></div><div class="ttdeci">void to_ascii_uppercase(InputIterator first, InputIterator last, OutputIterator output)</div><div class="ttdoc">大文字化する</div><div class="ttdef"><b>Definition:</b> infra/infra.hpp:267</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html_ae85acd3ee50f37265a50f668490bc83f"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#ae85acd3ee50f37265a50f668490bc83f">wordring::whatwg::normalize_newlines</a></div><div class="ttdeci">void normalize_newlines(InputIterator first, InputIterator last, OutputIterator output)</div><div class="ttdoc">改行を正規化する</div><div class="ttdef"><b>Definition:</b> infra/infra.hpp:337</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html"><div class="ttname"><a href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div></div>
-<div class="ttc" id="anamespacewordring_1_1whatwg_html_aa19dd68dee0d603bb24af573a508c997"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#aa19dd68dee0d603bb24af573a508c997">wordring::whatwg::strictly_split_on_a_particular_delimiter</a></div><div class="ttdeci">void strictly_split_on_a_particular_delimiter(InputIterator first, InputIterator last, OutputIterator output, char32_t delimiter)</div><div class="ttdoc">特定の区切り文字で厳密に分割する</div><div class="ttdef"><b>Definition:</b> infra/infra.hpp:472</div></div>
+<div class="ttc" id="anamespacewordring_1_1whatwg_html_a224445d0f043c8ce06e7a75f93394ddd"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#a224445d0f043c8ce06e7a75f93394ddd">wordring::whatwg::strictly_split_on_particular_delimiter</a></div><div class="ttdeci">void strictly_split_on_particular_delimiter(InputIterator first, InputIterator last, OutputIterator output, char32_t delimiter)</div><div class="ttdoc">特定の区切り文字で厳密に分割する</div><div class="ttdef"><b>Definition:</b> infra/infra.hpp:472</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html_adbac9e245b7ac908078713d03cb5585c"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#adbac9e245b7ac908078713d03cb5585c">wordring::whatwg::to_string</a></div><div class="ttdeci">void to_string(char32_t ch, OutputIterator output)</div><div class="ttdoc">ユニコード・コードポイントから文字列に変換する。</div><div class="ttdef"><b>Definition:</b> unicode.hpp:138</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html_a1258213090187f044307917bebda5dee"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#a1258213090187f044307917bebda5dee">wordring::whatwg::to_code_point</a></div><div class="ttdeci">InputIterator to_code_point(InputIterator first, InputIterator last, char32_t &amp;output)</div><div class="ttdoc">文字列からコードポイントを一つ読み取る。</div><div class="ttdef"><b>Definition:</b> unicode.hpp:41</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html_afd62748f902e7b7bc4a3858d779a9698"><div class="ttname"><a href="namespacewordring_1_1whatwg.html#afd62748f902e7b7bc4a3858d779a9698">wordring::whatwg::is_byte_case_insensitive_match</a></div><div class="ttdeci">bool is_byte_case_insensitive_match(InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, InputIterator2 last2)</div><div class="ttdoc">大文字と小文字を区別しないで比較する</div><div class="ttdef"><b>Definition:</b> infra/infra.hpp:81</div></div>

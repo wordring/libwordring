@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(input_stream_decode_2)
 {
 	using namespace wordring::wwwc;
 
-	std::string in = "\xEF\xBB\xBF@charset \"shift-jis\";あいうえお";
+	std::string in = "\xEF\xBB\xBF@charset \"shift-jis\";\xE3\x81\x82\xE3\x81\x84\xE3\x81\x86\xE3\x81\x88\xE3\x81\x8A";
 	std::u32string s = U"@charset \"shift-jis\";あいうえお";
 	std::u32string out;
 

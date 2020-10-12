@@ -29,8 +29,9 @@ add_executable(
 	${PROJECT_NAME}
 		"test_module.cpp"
 		"input_stream.cpp"
+		"parsing.cpp"
 		"tokenization.cpp"
-)
+ )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

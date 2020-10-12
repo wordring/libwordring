@@ -137,31 +137,37 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>scope_type</b> = boo
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
+<tr class="memitem:a270cb7996b65548fdf059267305fa7f9"><td class="memItemLeft" align="right" valign="top"><a id="a270cb7996b65548fdf059267305fa7f9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_parser_base</b> (encoding_confidence_name confidence=encoding_confidence_name::irrelevant, encoding_name enc=static_cast&lt; encoding_name &gt;(0), bool fragments_parser=false)</td></tr>
+<tr class="separator:a270cb7996b65548fdf059267305fa7f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c2d35a9e086023cc401897690ea61ec"><td class="memItemLeft" align="right" valign="top"><a id="a9c2d35a9e086023cc401897690ea61ec"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a9c2d35a9e086023cc401897690ea61ec">clear</a> (encoding_confidence_name confidence, encoding_name enc)</td></tr>
+<tr class="memdesc:a9c2d35a9e086023cc401897690ea61ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期状態に戻し、パーサーを再利用可能とする <br /></td></tr>
+<tr class="separator:a9c2d35a9e086023cc401897690ea61ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00d74e5ebfa684597a9492674f73ce06"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a00d74e5ebfa684597a9492674f73ce06">get_document</a> ()</td></tr>
 <tr class="memdesc:a00d74e5ebfa684597a9492674f73ce06"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書ノードを返す  <a href="classwordring_1_1html_1_1simple__parser__base.html#a00d74e5ebfa684597a9492674f73ce06">[詳解]</a><br /></td></tr>
 <tr class="separator:a00d74e5ebfa684597a9492674f73ce06"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adf94d39d36d3aca3d2116fee824ff1d1"><td class="memItemLeft" align="right" valign="top"><a id="adf94d39d36d3aca3d2116fee824ff1d1"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_document_type</b> (node_pointer pos, document_type_type &amp;&amp;doctype)</td></tr>
 <tr class="separator:adf94d39d36d3aca3d2116fee824ff1d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac9f91c0ff933b0578a165c81509aa3d2"><td class="memItemLeft" align="right" valign="top"><a id="ac9f91c0ff933b0578a165c81509aa3d2"></a>
-node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, std::u32string name, <a class="el" href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">namespace_uri_type</a> ns, std::u32string prefix)</td></tr>
-<tr class="separator:ac9f91c0ff933b0578a165c81509aa3d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa9ae3892505b0ef44f45c8280550270"><td class="memItemLeft" align="right" valign="top"><a id="aaa9ae3892505b0ef44f45c8280550270"></a>
-node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, tag_name name, <a class="el" href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">namespace_uri_type</a> ns, std::u32string prefix)</td></tr>
-<tr class="separator:aaa9ae3892505b0ef44f45c8280550270"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5767bd6e151f0e23c38779d4cfcabf9"><td class="memItemLeft" align="right" valign="top"><a id="ad5767bd6e151f0e23c38779d4cfcabf9"></a>
-node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, tag_name name, ns_name ns=ns_name::HTML)</td></tr>
-<tr class="separator:ad5767bd6e151f0e23c38779d4cfcabf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a210e241506f3d35bed1b583c364265b2"><td class="memItemLeft" align="right" valign="top"><a id="a210e241506f3d35bed1b583c364265b2"></a>
+node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, std::u32string name, ns_name ns)</td></tr>
+<tr class="separator:a210e241506f3d35bed1b583c364265b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ce07e1fd158cbe7a35a6304a55b69b1"><td class="memItemLeft" align="right" valign="top"><a id="a6ce07e1fd158cbe7a35a6304a55b69b1"></a>
+node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>create_element</b> (node_pointer doc, tag_name name, ns_name ns)</td></tr>
+<tr class="separator:a6ce07e1fd158cbe7a35a6304a55b69b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a66b2e694108f0157509d31a9e77a24b5"><td class="memItemLeft" align="right" valign="top"><a id="a66b2e694108f0157509d31a9e77a24b5"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_element</b> (node_pointer pos, node_pointer it)</td></tr>
 <tr class="separator:a66b2e694108f0157509d31a9e77a24b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdf86c6e46902ed0c701b8ae0c45dbec"><td class="memItemLeft" align="right" valign="top"><a id="afdf86c6e46902ed0c701b8ae0c45dbec"></a>
+node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>get_node_document</b> (node_pointer it)</td></tr>
+<tr class="separator:afdf86c6e46902ed0c701b8ae0c45dbec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5908903b5f88a4f28c9cc808c22732ed"><td class="memItemLeft" align="right" valign="top"><a id="a5908903b5f88a4f28c9cc808c22732ed"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a5908903b5f88a4f28c9cc808c22732ed">erase_element</a> (node_pointer it)</td></tr>
 <tr class="memdesc:a5908903b5f88a4f28c9cc808c22732ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを削除する <br /></td></tr>
 <tr class="separator:a5908903b5f88a4f28c9cc808c22732ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf8ec8f9cbbd8b90f0797866e7a8f8a2"><td class="memItemLeft" align="right" valign="top"><a id="abf8ec8f9cbbd8b90f0797866e7a8f8a2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#abf8ec8f9cbbd8b90f0797866e7a8f8a2">move_node</a> (node_pointer pos, node_pointer it)</td></tr>
-<tr class="memdesc:abf8ec8f9cbbd8b90f0797866e7a8f8a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを移動する <br /></td></tr>
+<tr class="memitem:abf8ec8f9cbbd8b90f0797866e7a8f8a2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#abf8ec8f9cbbd8b90f0797866e7a8f8a2">move_node</a> (node_pointer pos, node_pointer it)</td></tr>
+<tr class="memdesc:abf8ec8f9cbbd8b90f0797866e7a8f8a2"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードを移動する  <a href="classwordring_1_1html_1_1simple__parser__base.html#abf8ec8f9cbbd8b90f0797866e7a8f8a2">[詳解]</a><br /></td></tr>
 <tr class="separator:abf8ec8f9cbbd8b90f0797866e7a8f8a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a37c10feafeba818770660a5724464a49"><td class="memItemLeft" align="right" valign="top"><a id="a37c10feafeba818770660a5724464a49"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>append_attribute</b> (node_pointer it, ns_name ns, std::u32string const &amp;prefix, std::u32string const &amp;name, std::u32string const &amp;value)</td></tr>
@@ -175,19 +181,30 @@ node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_text</
 <tr class="memitem:a74705ba6e0e4c6867a93fcbe9a85925b"><td class="memItemLeft" align="right" valign="top"><a id="a74705ba6e0e4c6867a93fcbe9a85925b"></a>
 node_pointer&#160;</td><td class="memItemRight" valign="bottom"><b>insert_comment</b> (node_pointer pos, comment_type &amp;&amp;comment)</td></tr>
 <tr class="separator:a74705ba6e0e4c6867a93fcbe9a85925b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3a0df9617a9aaa5889b45dbc9656b040"><td class="memItemLeft" align="right" valign="top"><a id="a3a0df9617a9aaa5889b45dbc9656b040"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>on_report_error</b> (parsing::error_name e)</td></tr>
-<tr class="separator:a3a0df9617a9aaa5889b45dbc9656b040"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b96eb5c1c17789dddd7d4c9aa044431"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#a3b96eb5c1c17789dddd7d4c9aa044431">on_report_error</a> (error_name e)</td></tr>
+<tr class="memdesc:a3b96eb5c1c17789dddd7d4c9aa044431"><td class="mdescLeft">&#160;</td><td class="mdescRight">エラーが起きた時に呼び出されるコールバック  <a href="classwordring_1_1html_1_1simple__parser__base.html#a3b96eb5c1c17789dddd7d4c9aa044431">[詳解]</a><br /></td></tr>
+<tr class="separator:a3b96eb5c1c17789dddd7d4c9aa044431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0a7168025b697585bc19c94728b0ea4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__parser__base.html#ab0a7168025b697585bc19c94728b0ea4">on_change_encoding</a> (encoding_name name)</td></tr>
+<tr class="memdesc:ab0a7168025b697585bc19c94728b0ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字エンコーディングを変更する時に呼び出されるコールバック  <a href="classwordring_1_1html_1_1simple__parser__base.html#ab0a7168025b697585bc19c94728b0ea4">[詳解]</a><br /></td></tr>
+<tr class="separator:ab0a7168025b697585bc19c94728b0ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, node_traits&lt; Container::iterator &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
-<tr class="memitem:a2d4cfb92b9ccb3dba2fd6593b31ccc8f inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a2d4cfb92b9ccb3dba2fd6593b31ccc8f"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>tree_construction_dispatcher</b> (bool fragments_parser=false)</td></tr>
-<tr class="separator:a2d4cfb92b9ccb3dba2fd6593b31ccc8f inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a00b568fc868585651cd1245c5ca94d1a inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a00b568fc868585651cd1245c5ca94d1a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>tree_construction_dispatcher</b> (encoding_confidence_name confidence, encoding_name enc, bool fragments_parser=false)</td></tr>
+<tr class="separator:a00b568fc868585651cd1245c5ca94d1a inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40d1a8b06b357695caa104cfcc2d0f5e inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a40d1a8b06b357695caa104cfcc2d0f5e"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a40d1a8b06b357695caa104cfcc2d0f5e">clear</a> (encoding_confidence_name confidence, encoding_name enc)</td></tr>
+<tr class="memdesc:a40d1a8b06b357695caa104cfcc2d0f5e inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期状態に戻し、パーサーを再利用可能とする <br /></td></tr>
+<tr class="separator:a40d1a8b06b357695caa104cfcc2d0f5e inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a012c7d1bdb49cd9b3886021af7f7dee7 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a012c7d1bdb49cd9b3886021af7f7dee7">is_html_element_of</a> (node_pointer it, tag_name tag) const</td></tr>
 <tr class="separator:a012c7d1bdb49cd9b3886021af7f7dee7 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5d9a5779c6125df3bdf018a2d3530244 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a5d9a5779c6125df3bdf018a2d3530244">is_html_element_of</a> (node_pointer it, std::u32string const &amp;tag) const</td></tr>
 <tr class="separator:a5d9a5779c6125df3bdf018a2d3530244 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae2e3e140dee68626c094689bcc8854f5 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ae2e3e140dee68626c094689bcc8854f5">is_element_of</a> (node_pointer it, ns_name ns, tag_name tag) const</td></tr>
 <tr class="separator:ae2e3e140dee68626c094689bcc8854f5 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32c111d56325425f256b2655b9aad4d6 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a32c111d56325425f256b2655b9aad4d6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a32c111d56325425f256b2655b9aad4d6">change_encoding</a> (encoding_name name)</td></tr>
+<tr class="memdesc:a32c111d56325425f256b2655b9aad4d6 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字エンコーディングを変更する <br /></td></tr>
+<tr class="separator:a32c111d56325425f256b2655b9aad4d6 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a438bd1b673217dc4583524c6092d8bfa inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a438bd1b673217dc4583524c6092d8bfa"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a438bd1b673217dc4583524c6092d8bfa">insertion_mode</a> (<a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a1ad00baacc8fc01f79eb8363ab0fbbf3">mode_name</a> mode)</td></tr>
 <tr class="memdesc:a438bd1b673217dc4583524c6092d8bfa inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">挿入モードを設定する <br /></td></tr>
@@ -294,9 +311,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_html_integration_p
 <tr class="memitem:a09a7d802a3f71044f0166084a4a414b8 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a09a7d802a3f71044f0166084a4a414b8">appropriate_place_for_inserting_node</a> (node_pointer target)</td></tr>
 <tr class="memdesc:a09a7d802a3f71044f0166084a4a414b8 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">妥当なノード挿入先を調べる  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a09a7d802a3f71044f0166084a4a414b8">[詳解]</a><br /></td></tr>
 <tr class="separator:a09a7d802a3f71044f0166084a4a414b8 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ec2e27c2185d2917b2703fb52ee92af inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a6ec2e27c2185d2917b2703fb52ee92af">create_element_for_token</a> (<a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">start_tag_token</a> &amp;token, ns_name ns, node_pointer parent)</td></tr>
-<tr class="memdesc:a6ec2e27c2185d2917b2703fb52ee92af inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">トークンから要素を作成する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a6ec2e27c2185d2917b2703fb52ee92af">[詳解]</a><br /></td></tr>
-<tr class="separator:a6ec2e27c2185d2917b2703fb52ee92af inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4b94a5700754c3a85f058ef8a87d11b inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ad4b94a5700754c3a85f058ef8a87d11b">create_element_for_token</a> (<a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">start_tag_token</a> &amp;token, ns_name ns, node_pointer intended_parent)</td></tr>
+<tr class="memdesc:ad4b94a5700754c3a85f058ef8a87d11b inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">トークンから要素を作成する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ad4b94a5700754c3a85f058ef8a87d11b">[詳解]</a><br /></td></tr>
+<tr class="separator:ad4b94a5700754c3a85f058ef8a87d11b inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aefd5a540d99312abc3a1f26c810a0f1a inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#aefd5a540d99312abc3a1f26c810a0f1a">insert_foreign_element</a> (<a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">start_tag_token</a> &amp;token, ns_name ns)</td></tr>
 <tr class="separator:aefd5a540d99312abc3a1f26c810a0f1a inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ff01b5ba1596c32a056715c09402cb3 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a3ff01b5ba1596c32a056715c09402cb3">insert_html_element</a> (<a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">start_tag_token</a> &amp;token)</td></tr>
@@ -433,13 +450,11 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>on_foreign_content</b
 <tr class="memitem:a3295c942bb988e296e4cfc3882d5a147 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a3295c942bb988e296e4cfc3882d5a147">abort_parser</a> ()</td></tr>
 <tr class="memdesc:a3295c942bb988e296e4cfc3882d5a147 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">構文解析を中止する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a3295c942bb988e296e4cfc3882d5a147">[詳解]</a><br /></td></tr>
 <tr class="separator:a3295c942bb988e296e4cfc3882d5a147 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b471294042399219124374ec13bf1ce inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a1b471294042399219124374ec13bf1ce">report_error</a> (error_name ec=static_cast&lt; error_name &gt;(0))</td></tr>
-<tr class="memdesc:a1b471294042399219124374ec13bf1ce inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">エラー報告する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a1b471294042399219124374ec13bf1ce">[詳解]</a><br /></td></tr>
-<tr class="separator:a1b471294042399219124374ec13bf1ce inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#acbf98f5ec86cf295bdb98d0ab9a59aca">eof</a> () const</td></tr>
-<tr class="memdesc:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="mdescLeft">&#160;</td><td class="mdescRight">ストリーム終端に達しているか調べる  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#acbf98f5ec86cf295bdb98d0ab9a59aca">[詳解]</a><br /></td></tr>
-<tr class="separator:acbf98f5ec86cf295bdb98d0ab9a59aca inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html">wordring::whatwg::html::parsing::tokenizer&lt; T, node_traits&lt; Container::iterator &gt; &gt;</a> に属する継承公開メンバ関数</td></tr>
+<tr class="memitem:a33aef7ed937980270e2e85805f33a4ad inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a33aef7ed937980270e2e85805f33a4ad"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#a33aef7ed937980270e2e85805f33a4ad">clear</a> ()</td></tr>
+<tr class="memdesc:a33aef7ed937980270e2e85805f33a4ad inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期状態に戻し、再利用可能とする <br /></td></tr>
+<tr class="separator:a33aef7ed937980270e2e85805f33a4ad inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a33b729237963a2047d575ae31f69391f inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memItemLeft" align="right" valign="top"><a id="a33b729237963a2047d575ae31f69391f"></a>
 <a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1tag__token.html">tag_token</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>create_start_tag_token</b> ()</td></tr>
 <tr class="separator:a33b729237963a2047d575ae31f69391f inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -675,6 +690,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>on_emit_code_point</b
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a30163f1989500e41df729c7b29102483">input_stream</a> ()</td></tr>
 <tr class="memdesc:a30163f1989500e41df729c7b29102483 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="mdescLeft">&#160;</td><td class="mdescRight">空の入力ストリームを構築する <br /></td></tr>
 <tr class="separator:a30163f1989500e41df729c7b29102483 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3e39b2cc085fd94a490bedb08e00a84 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top"><a id="af3e39b2cc085fd94a490bedb08e00a84"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af3e39b2cc085fd94a490bedb08e00a84">clear</a> ()</td></tr>
+<tr class="memdesc:af3e39b2cc085fd94a490bedb08e00a84 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="mdescLeft">&#160;</td><td class="mdescRight">初期状態に戻し、再利用可能とする <br /></td></tr>
+<tr class="separator:af3e39b2cc085fd94a490bedb08e00a84 inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b471294042399219124374ec13bf1ce inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">report_error</a> (error_name ec=static_cast&lt; error_name &gt;(0))</td></tr>
 <tr class="memdesc:a1b471294042399219124374ec13bf1ce inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="mdescLeft">&#160;</td><td class="mdescRight">エラー報告する  <a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">[詳解]</a><br /></td></tr>
 <tr class="separator:a1b471294042399219124374ec13bf1ce inherit pub_methods_classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -761,6 +780,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>m_eof_consumed</b></t
 <tr class="memitem:a6beca5008a4d7986f1f3efcd29b325e4 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a6beca5008a4d7986f1f3efcd29b325e4"></a>
 encoding_confidence_name&#160;</td><td class="memItemRight" valign="bottom"><b>m_encoding_confidence</b></td></tr>
 <tr class="separator:a6beca5008a4d7986f1f3efcd29b325e4 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07a14e072352d5b0f8ff6ecf32093832 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a07a14e072352d5b0f8ff6ecf32093832"></a>
+encoding_name&#160;</td><td class="memItemRight" valign="bottom"><b>m_encoding_name</b></td></tr>
+<tr class="separator:a07a14e072352d5b0f8ff6ecf32093832 inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ed0971e39a26ec2d92af14dab54140d inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memItemLeft" align="right" valign="top"><a id="a7ed0971e39a26ec2d92af14dab54140d"></a>
 <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a1ad00baacc8fc01f79eb8363ab0fbbf3">mode_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_insertion_mode</b></td></tr>
 <tr class="separator:a7ed0971e39a26ec2d92af14dab54140d inherit pub_attribs_classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1193,10 +1215,11 @@ class wordring::html::simple_parser_base&lt; T, Container &gt;</h3>
 <dl class="tparams"><dt>テンプレート引数</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>CRTP に基づく派生クラス </td></tr>
-    <tr><td class="paramname">Container</td><td>Tree コンテナ </td></tr>
+    <tr><td class="paramname">Container</td><td>Tree コンテナ</td></tr>
   </table>
   </dd>
 </dl>
+<p>このクラスは、エラー報告とエンコーディング変更の要求に対して何もしない。 派生クラスは、エラー処理とエンコーディング対応が可能。 このクラスは入力としてユニコード・コードポイントのみを受け付ける。 </p>
 </div><h2 class="groupheader">関数詳解</h2>
 <a id="a00d74e5ebfa684597a9492674f73ce06"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a00d74e5ebfa684597a9492674f73ce06">&#9670;&nbsp;</a></span>get_document()</h2>
@@ -1225,6 +1248,109 @@ template&lt;typename T , typename Container &gt; </div>
 
 <p>文書ノードを返す </p>
 <p>パーサ構築時に文書ノードが挿入される。 </p>
+
+</div>
+</div>
+<a id="abf8ec8f9cbbd8b90f0797866e7a8f8a2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abf8ec8f9cbbd8b90f0797866e7a8f8a2">&#9670;&nbsp;</a></span>move_node()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base</a>&lt; T, Container &gt;::move_node </td>
+          <td>(</td>
+          <td class="paramtype">node_pointer&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">node_pointer&#160;</td>
+          <td class="paramname"><em>it</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードを移動する </p>
+<p>adoption agency algorithm から使用される。 </p>
+
+</div>
+</div>
+<a id="a3b96eb5c1c17789dddd7d4c9aa044431"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b96eb5c1c17789dddd7d4c9aa044431">&#9670;&nbsp;</a></span>on_report_error()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base</a>&lt; T, Container &gt;::on_report_error </td>
+          <td>(</td>
+          <td class="paramtype">error_name&#160;</td>
+          <td class="paramname"><em>e</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>エラーが起きた時に呼び出されるコールバック </p>
+<p>エラー処理が必要な場合、派生クラスで実装する。 </p>
+
+</div>
+</div>
+<a id="ab0a7168025b697585bc19c94728b0ea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0a7168025b697585bc19c94728b0ea4">&#9670;&nbsp;</a></span>on_change_encoding()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , typename Container &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1html_1_1simple__parser__base.html">wordring::html::simple_parser_base</a>&lt; T, Container &gt;::on_change_encoding </td>
+          <td>(</td>
+          <td class="paramtype">encoding_name&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文字エンコーディングを変更する時に呼び出されるコールバック </p>
+<p>文字エンコーディングの変更が必要な場合、派生クラスで実装する。 </p>
 
 </div>
 </div>

@@ -317,12 +317,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>result_value</b> = s
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 列挙型</h2></td></tr>
-<tr class="memitem:a4759698118c9d5650962141eb19aedf5"><td class="memItemLeft" align="right" valign="top"><a id="a4759698118c9d5650962141eb19aedf5"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>error_mode</b> : uint32_t { <b>None</b> = 0, 
+<tr class="memitem:a2bf0bfc5598e69a83bd30d73117f5662"><td class="memItemLeft" align="right" valign="top"><a id="a2bf0bfc5598e69a83bd30d73117f5662"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>error_mode_name</b> : uint32_t { <b>None</b> = 0, 
 <b>Replacement</b> = 1, 
 <b>Fatal</b> = 2, 
 <b>Html</b> = 3
  }</td></tr>
-<tr class="separator:a4759698118c9d5650962141eb19aedf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a2bf0bfc5598e69a83bd30d73117f5662"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aae6bd7563f7e44cadf5d5b6ba1f5310d"><td class="memItemLeft" align="right" valign="top"><a id="aae6bd7563f7e44cadf5d5b6ba1f5310d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>name</b> : uint32_t { <br />
 &#160;&#160;<b>UTF_8</b> = 1, 
 <b>IBM866</b>, 
@@ -398,64 +398,64 @@ std::optional&lt; uint16_t &gt;&#160;</td><td class="memItemRight" valign="botto
 <tr class="memitem:afd9b92400d2fb27feda777a06b2d10b7"><td class="memItemLeft" align="right" valign="top"><a id="afd9b92400d2fb27feda777a06b2d10b7"></a>
 std::optional&lt; uint16_t &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>get_index_big5_pointer</b> (uint32_t code_point)</td></tr>
 <tr class="separator:afd9b92400d2fb27feda777a06b2d10b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a56b2e20e2fd9d0c13a3bd66a93fffe1a"><td class="memTemplParams" colspan="2"><a id="a56b2e20e2fd9d0c13a3bd66a93fffe1a"></a>
+<tr class="memitem:a5f771cfb533806ee4f79af397d4ca034"><td class="memTemplParams" colspan="2"><a id="a5f771cfb533806ee4f79af397d4ca034"></a>
 template&lt;typename Token , typename Coder , typename InputStream , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:a56b2e20e2fd9d0c13a3bd66a93fffe1a"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process_token</b> (Token token, Coder &amp;coder, InputStream &amp;input, OutputIterator output, error_mode mode)</td></tr>
-<tr class="separator:a56b2e20e2fd9d0c13a3bd66a93fffe1a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f771cfb533806ee4f79af397d4ca034"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process_token</b> (Token token, Coder &amp;coder, InputStream &amp;input, OutputIterator output, error_mode_name mode)</td></tr>
+<tr class="separator:a5f771cfb533806ee4f79af397d4ca034"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae06673df13b1cfdd3160d94d838defd1"><td class="memTemplParams" colspan="2"><a id="ae06673df13b1cfdd3160d94d838defd1"></a>
 template&lt;typename Token , typename Coder , typename InputStream , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:ae06673df13b1cfdd3160d94d838defd1"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>process_token</b> (Token token, Coder &amp;coder, InputStream &amp;input, OutputIterator output)</td></tr>
 <tr class="separator:ae06673df13b1cfdd3160d94d838defd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af67a1a29674d3597acd7bf9f77b68ff9"><td class="memTemplParams" colspan="2"><a id="af67a1a29674d3597acd7bf9f77b68ff9"></a>
+<tr class="memitem:af88712d86d0fa7b73d2e0872ee77f14e"><td class="memTemplParams" colspan="2"><a id="af88712d86d0fa7b73d2e0872ee77f14e"></a>
 template&lt;typename Coder , typename InputStream , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:af67a1a29674d3597acd7bf9f77b68ff9"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run</b> (Coder &amp;coder, InputStream &amp;input, OutputIterator output, error_mode mode)</td></tr>
-<tr class="separator:af67a1a29674d3597acd7bf9f77b68ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af88712d86d0fa7b73d2e0872ee77f14e"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run</b> (Coder &amp;coder, InputStream &amp;input, OutputIterator output, error_mode_name mode)</td></tr>
+<tr class="separator:af88712d86d0fa7b73d2e0872ee77f14e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add93b715388e33c24a49ac184b2d0805"><td class="memTemplParams" colspan="2"><a id="add93b715388e33c24a49ac184b2d0805"></a>
 template&lt;typename Coder , typename InputStream , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:add93b715388e33c24a49ac184b2d0805"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run</b> (Coder &amp;coder, InputStream &amp;input, OutputIterator output)</td></tr>
 <tr class="separator:add93b715388e33c24a49ac184b2d0805"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada974c4b5a5b623c322c4863286051d8"><td class="memTemplParams" colspan="2"><a id="ada974c4b5a5b623c322c4863286051d8"></a>
+<tr class="memitem:a69b71fff0eacc4c9fca963daffae73d2"><td class="memTemplParams" colspan="2"><a id="a69b71fff0eacc4c9fca963daffae73d2"></a>
 template&lt;typename InputStream , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:ada974c4b5a5b623c322c4863286051d8"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run_decoder</b> (name encoding_name, InputStream &amp;input, OutputIterator output, error_mode mode=error_mode::Replacement)</td></tr>
-<tr class="separator:ada974c4b5a5b623c322c4863286051d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac618093d8013442073075e5ee277442b"><td class="memTemplParams" colspan="2"><a id="ac618093d8013442073075e5ee277442b"></a>
+<tr class="memitem:a69b71fff0eacc4c9fca963daffae73d2"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run_decoder</b> (name encoding_name, InputStream &amp;input, OutputIterator output, error_mode_name mode=error_mode_name::Replacement)</td></tr>
+<tr class="separator:a69b71fff0eacc4c9fca963daffae73d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0de6987129d257bd47703d0945990b60"><td class="memTemplParams" colspan="2"><a id="a0de6987129d257bd47703d0945990b60"></a>
 template&lt;typename InputStream , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:ac618093d8013442073075e5ee277442b"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run_encoder</b> (name encoding_name, InputStream &amp;input, OutputIterator output, error_mode mode=error_mode::Fatal)</td></tr>
-<tr class="separator:ac618093d8013442073075e5ee277442b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2bac16814d10fdf2645f77a5a8d776f5"><td class="memItemLeft" align="right" valign="top"><a id="a2bac16814d10fdf2645f77a5a8d776f5"></a>
-name&#160;</td><td class="memItemRight" valign="bottom"><b>get_name</b> (std::u32string label)</td></tr>
+<tr class="memitem:a0de6987129d257bd47703d0945990b60"><td class="memTemplItemLeft" align="right" valign="top">result_value&#160;</td><td class="memTemplItemRight" valign="bottom"><b>run_encoder</b> (name encoding_name, InputStream &amp;input, OutputIterator output, error_mode_name mode=error_mode_name::Fatal)</td></tr>
+<tr class="separator:a0de6987129d257bd47703d0945990b60"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2bac16814d10fdf2645f77a5a8d776f5"><td class="memItemLeft" align="right" valign="top">name&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg_1_1encoding.html#a2bac16814d10fdf2645f77a5a8d776f5">get_name</a> (std::u32string label)</td></tr>
+<tr class="memdesc:a2bac16814d10fdf2645f77a5a8d776f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">ラベルからエンコーディングを取得する  <a href="namespacewordring_1_1whatwg_1_1encoding.html#a2bac16814d10fdf2645f77a5a8d776f5">[詳解]</a><br /></td></tr>
 <tr class="separator:a2bac16814d10fdf2645f77a5a8d776f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb88c90d4ea3ca7b51b60f98c3417f79"><td class="memTemplParams" colspan="2"><a id="adb88c90d4ea3ca7b51b60f98c3417f79"></a>
-template&lt;typename String , typename std::enable_if_t&lt; std::disjunction_v&lt; std::is_same&lt; typename String::value_type, char16_t &gt;, std::is_same&lt; typename String::value_type, char8_t &gt;&gt;, nullptr_t &gt;  = nullptr&gt; </td></tr>
+template&lt;typename String , typename std::enable_if_t&lt; std::negation_v&lt; std::is_same&lt; String, std::u32string &gt;&gt;, nullptr_t &gt;  = nullptr&gt; </td></tr>
 <tr class="memitem:adb88c90d4ea3ca7b51b60f98c3417f79"><td class="memTemplItemLeft" align="right" valign="top">name&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_name</b> (String label)</td></tr>
 <tr class="separator:adb88c90d4ea3ca7b51b60f98c3417f79"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a344782bd74cfca76df996e2971ee76c0"><td class="memItemLeft" align="right" valign="top"><a id="a344782bd74cfca76df996e2971ee76c0"></a>
 name&#160;</td><td class="memItemRight" valign="bottom"><b>get_output_encoding</b> (name encoding)</td></tr>
 <tr class="separator:a344782bd74cfca76df996e2971ee76c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3990feea7b7a9c682d7a4da10876aa8a"><td class="memTemplParams" colspan="2"><a id="a3990feea7b7a9c682d7a4da10876aa8a"></a>
-template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:a3990feea7b7a9c682d7a4da10876aa8a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>decode</b> (InputIterator first, InputIterator last, name fallback, OutputIterator output)</td></tr>
+<tr class="memitem:a3990feea7b7a9c682d7a4da10876aa8a"><td class="memTemplParams" colspan="2">template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
+<tr class="memitem:a3990feea7b7a9c682d7a4da10876aa8a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1whatwg_1_1encoding.html#a3990feea7b7a9c682d7a4da10876aa8a">decode</a> (InputIterator first, InputIterator last, name fallback, OutputIterator output)</td></tr>
+<tr class="memdesc:a3990feea7b7a9c682d7a4da10876aa8a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Decode  <a href="namespacewordring_1_1whatwg_1_1encoding.html#a3990feea7b7a9c682d7a4da10876aa8a">[詳解]</a><br /></td></tr>
 <tr class="separator:a3990feea7b7a9c682d7a4da10876aa8a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a394c6f41cd0899c9316da0f2eca0bc39"><td class="memTemplParams" colspan="2"><a id="a394c6f41cd0899c9316da0f2eca0bc39"></a>
+<tr class="memitem:afd8d7ba2b034e5071bde44caa94c1697"><td class="memTemplParams" colspan="2"><a id="afd8d7ba2b034e5071bde44caa94c1697"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:a394c6f41cd0899c9316da0f2eca0bc39"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf_8_decode</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
-<tr class="separator:a394c6f41cd0899c9316da0f2eca0bc39"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a472d50ab2e335f599f46b8cdf9549425"><td class="memTemplParams" colspan="2"><a id="a472d50ab2e335f599f46b8cdf9549425"></a>
+<tr class="memitem:afd8d7ba2b034e5071bde44caa94c1697"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf8_decode</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
+<tr class="separator:afd8d7ba2b034e5071bde44caa94c1697"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78bde0fddfdc36c9646d8ff3eb71e70e"><td class="memTemplParams" colspan="2"><a id="a78bde0fddfdc36c9646d8ff3eb71e70e"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:a472d50ab2e335f599f46b8cdf9549425"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf_8_decode_without_bom</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
-<tr class="separator:a472d50ab2e335f599f46b8cdf9549425"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afaffdf0574e6fbace26bcba3100feba5"><td class="memTemplParams" colspan="2"><a id="afaffdf0574e6fbace26bcba3100feba5"></a>
+<tr class="memitem:a78bde0fddfdc36c9646d8ff3eb71e70e"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf8_decode_without_bom</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
+<tr class="separator:a78bde0fddfdc36c9646d8ff3eb71e70e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a664bc01b56fc9559bd3cbde3d5f51b2a"><td class="memTemplParams" colspan="2"><a id="a664bc01b56fc9559bd3cbde3d5f51b2a"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:afaffdf0574e6fbace26bcba3100feba5"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf_8_decode_without_bom_or_fail</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
-<tr class="separator:afaffdf0574e6fbace26bcba3100feba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a664bc01b56fc9559bd3cbde3d5f51b2a"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf8_decode_without_bom_or_fail</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
+<tr class="separator:a664bc01b56fc9559bd3cbde3d5f51b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a593f642b1205989d5f075b1e88f93057"><td class="memTemplParams" colspan="2"><a id="a593f642b1205989d5f075b1e88f93057"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
 <tr class="memitem:a593f642b1205989d5f075b1e88f93057"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>encode</b> (InputIterator first, InputIterator last, name encoding_name, OutputIterator output)</td></tr>
 <tr class="separator:a593f642b1205989d5f075b1e88f93057"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6f1ad7b3769dc325293fa3622207b7fe"><td class="memTemplParams" colspan="2"><a id="a6f1ad7b3769dc325293fa3622207b7fe"></a>
+<tr class="memitem:a3c7e60362ecd6a4bc574db9db4aeaa91"><td class="memTemplParams" colspan="2"><a id="a3c7e60362ecd6a4bc574db9db4aeaa91"></a>
 template&lt;typename InputIterator , typename OutputIterator &gt; </td></tr>
-<tr class="memitem:a6f1ad7b3769dc325293fa3622207b7fe"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf_8_encode</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
-<tr class="separator:a6f1ad7b3769dc325293fa3622207b7fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c7e60362ecd6a4bc574db9db4aeaa91"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>utf8_encode</b> (InputIterator first, InputIterator last, OutputIterator output)</td></tr>
+<tr class="separator:a3c7e60362ecd6a4bc574db9db4aeaa91"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 変数</h2></td></tr>
@@ -796,6 +796,84 @@ const std::vector&lt; uint16_t &gt;&#160;</td><td class="memItemRight" valign="b
 </table>
 </div><div class="memdoc">
 <p>ranges_pointerに限り32ビットの戻り値が必要。 </p>
+
+</div>
+</div>
+<a id="a2bac16814d10fdf2645f77a5a8d776f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2bac16814d10fdf2645f77a5a8d776f5">&#9670;&nbsp;</a></span>get_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">name wordring::whatwg::encoding::get_name </td>
+          <td>(</td>
+          <td class="paramtype">std::u32string&#160;</td>
+          <td class="paramname"><em>label</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ラベルからエンコーディングを取得する </p>
+<dl class="section see"><dt>参照</dt><dd><a href="https://encoding.spec.whatwg.org/#concept-encoding-get">https://encoding.spec.whatwg.org/#concept-encoding-get</a> </dd>
+<dd>
+<a href="https://triple-underscore.github.io/Encoding-ja.html#concept-encoding-get">https://triple-underscore.github.io/Encoding-ja.html#concept-encoding-get</a> </dd></dl>
+
+</div>
+</div>
+<a id="a3990feea7b7a9c682d7a4da10876aa8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3990feea7b7a9c682d7a4da10876aa8a">&#9670;&nbsp;</a></span>decode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename InputIterator , typename OutputIterator &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::whatwg::encoding::decode </td>
+          <td>(</td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>first</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">InputIterator&#160;</td>
+          <td class="paramname"><em>last</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">name&#160;</td>
+          <td class="paramname"><em>fallback</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">OutputIterator&#160;</td>
+          <td class="paramname"><em>output</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Decode </p>
+<dl class="section see"><dt>参照</dt><dd><a href="https://encoding.spec.whatwg.org/#decode">https://encoding.spec.whatwg.org/#decode</a> </dd>
+<dd>
+<a href="https://triple-underscore.github.io/Encoding-ja.html#decode">https://triple-underscore.github.io/Encoding-ja.html#decode</a> </dd></dl>
 
 </div>
 </div>

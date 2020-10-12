@@ -13,7 +13,7 @@
 
 namespace wordring::html
 {
-	/*! @class simple_node_traits simple_node_traits.hpp wordring/html/simple_node_traits.hpp
+	/*! @class simple_node_traits simple_traits.hpp wordring/html/simple_traits.hpp
 
 	@brief node_traits のテンプレート特殊化
 
