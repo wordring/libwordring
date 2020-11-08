@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <iterator>
+#include <typeinfo>
 #include <vector>
 
 BOOST_AUTO_TEST_SUITE(css_syntax_tokenization_test)
@@ -37,7 +38,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_1)
 	auto [it, token] = consume_token(in.begin(), in.end());
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<whitespace_token>(token));
+	BOOST_CHECK(token.type() == typeid(whitespace_token));
 }
 
 // 空白文字
@@ -49,7 +50,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_2)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<whitespace_token>(token));
+	BOOST_CHECK(token.type() == typeid(whitespace_token));
 }
 
 // 「"」に囲まれた文字列
@@ -61,8 +62,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_3)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<string_token>(token));
-	auto tkn = std::get<string_token>(token);
+	BOOST_CHECK(token.type() == typeid(string_token));
+	auto tkn = std::any_cast<string_token>(token);
 	BOOST_CHECK(tkn.m_value == U"ABC");
 }
 
@@ -75,8 +76,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_4)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<hash_token>(token));
-	auto tkn = std::get<hash_token>(token);
+	BOOST_CHECK(token.type() == typeid(hash_token));
+	auto tkn = std::any_cast<hash_token>(token);
 	BOOST_CHECK(tkn.m_type_flag == hash_token::type_flag_name::id);
 	BOOST_CHECK(tkn.m_value == U"ID");
 }
@@ -89,8 +90,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_5)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'#');
 }
 
@@ -103,8 +104,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_6)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<string_token>(token));
-	auto tkn = std::get<string_token>(token);
+	BOOST_CHECK(token.type() == typeid(string_token));
+	auto tkn = std::any_cast<string_token>(token);
 	BOOST_CHECK(tkn.m_value == U"ABC");
 }
 
@@ -117,7 +118,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_7)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<open_paren_token>(token));
+	BOOST_CHECK(token.type() == typeid(open_paren_token));
 }
 
 // )
@@ -129,7 +130,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_8)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<close_paren_token>(token));
+	BOOST_CHECK(token.type() == typeid(close_paren_token));
 }
 
 // +
@@ -141,8 +142,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_9)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<number_token>(token));
-	auto tkn = std::get<number_token>(token);
+	BOOST_CHECK(token.type() == typeid(number_token));
+	auto tkn = std::any_cast<number_token>(token);
 	BOOST_CHECK(std::abs(tkn.m_value - 10) < std::numeric_limits<double>::epsilon());
 	BOOST_CHECK(tkn.m_type_flag == number_type_flag_name::integer);
 }
@@ -155,8 +156,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_10)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'+');
 }
 
@@ -169,7 +170,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_11)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<comma_token>(token));
+	BOOST_CHECK(token.type() == typeid(comma_token));
 }
 
 // -
@@ -181,8 +182,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_12)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<number_token>(token));
-	auto tkn = std::get<number_token>(token);
+	BOOST_CHECK(token.type() == typeid(number_token));
+	auto tkn = std::any_cast<number_token>(token);
 	BOOST_CHECK(std::abs(tkn.m_value + 10) < std::numeric_limits<double>::epsilon());
 	BOOST_CHECK(tkn.m_type_flag == number_type_flag_name::integer);
 }
@@ -195,7 +196,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_13)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<CDC_token>(token));
+	BOOST_CHECK(token.type() == typeid(CDC_token));
 }
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_14)
@@ -206,8 +207,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_14)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<ident_token>(token));
-	auto tkn = std::get<ident_token>(token);
+	BOOST_CHECK(token.type() == typeid(ident_token));
+	auto tkn = std::any_cast<ident_token>(token);
 	BOOST_CHECK(tkn.m_value == U"-A");
 }
 
@@ -219,8 +220,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_15)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'-');
 }
 
@@ -233,8 +234,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_16)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<number_token>(token));
-	auto tkn = std::get<number_token>(token);
+	BOOST_CHECK(token.type() == typeid(number_token));
+	auto tkn = std::any_cast<number_token>(token);
 	BOOST_CHECK(std::abs(tkn.m_value - 0.1) < std::numeric_limits<double>::epsilon());
 	BOOST_CHECK(tkn.m_type_flag == number_type_flag_name::number);
 }
@@ -247,8 +248,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_17)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'.');
 }
 
@@ -261,7 +262,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_18)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<colon_token>(token));
+	BOOST_CHECK(token.type() == typeid(colon_token));
 }
 
 // ;
@@ -273,7 +274,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_19)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<semicolon_token>(token));
+	BOOST_CHECK(token.type() == typeid(semicolon_token));
 }
 
 // <
@@ -285,7 +286,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_20)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<CDO_token>(token));
+	BOOST_CHECK(token.type() == typeid(CDO_token));
 }
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_token_21)
@@ -296,8 +297,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_21)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'<');
 }
 
@@ -310,8 +311,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_22)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<at_keyword_token>(token));
-	auto tkn = std::get<at_keyword_token>(token);
+	BOOST_CHECK(token.type() == typeid(at_keyword_token));
+	auto tkn = std::any_cast<at_keyword_token>(token);
 	BOOST_CHECK(tkn.m_value == U"ABC");
 }
 
@@ -323,8 +324,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_23)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'@');
 }
 
@@ -337,7 +338,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_24)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<open_square_token>(token));
+	BOOST_CHECK(token.type() == typeid(open_square_token));
 }
 
 // REVERSE SOLIDUS
@@ -349,8 +350,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_25)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<ident_token>(token));
-	auto tkn = std::get<ident_token>(token);
+	BOOST_CHECK(token.type() == typeid(ident_token));
+	auto tkn = std::any_cast<ident_token>(token);
 	BOOST_CHECK(tkn.m_value == U"\x1234");
 }
 
@@ -362,8 +363,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_26)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'\\');
 }
 
@@ -376,7 +377,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_27)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<close_square_token>(token));
+	BOOST_CHECK(token.type() == typeid(close_square_token));
 }
 
 // {
@@ -388,7 +389,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_28)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<open_curly_token>(token));
+	BOOST_CHECK(token.type() == typeid(open_curly_token));
 }
 
 // }
@@ -400,7 +401,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_29)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<close_curly_token>(token));
+	BOOST_CHECK(token.type() == typeid(close_curly_token));
 }
 
 // 数字
@@ -412,8 +413,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_30)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<number_token>(token));
-	auto tkn = std::get<number_token>(token);
+	BOOST_CHECK(token.type() == typeid(number_token));
+	auto tkn = std::any_cast<number_token>(token);
 	BOOST_CHECK(std::abs(tkn.m_value - 30) < std::numeric_limits<double>::epsilon());
 	BOOST_CHECK(tkn.m_type_flag == number_type_flag_name::integer);
 }
@@ -427,8 +428,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_31)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<ident_token>(token));
-	auto tkn = std::get<ident_token>(token);
+	BOOST_CHECK(token.type() == typeid(ident_token));
+	auto tkn = std::any_cast<ident_token>(token);
 	BOOST_CHECK(tkn.m_value == U"ABC");
 }
 
@@ -441,7 +442,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_32)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<eof_token>(token));
+	BOOST_CHECK(token.type() == typeid(eof_token));
 }
 
 // etc.
@@ -453,8 +454,8 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_33)
 	auto [it, token] = consume_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<delim_token>(token));
-	auto tkn = std::get<delim_token>(token);
+	BOOST_CHECK(token.type() == typeid(delim_token));
+	auto tkn = std::any_cast<delim_token>(token);
 	BOOST_CHECK(tkn.m_value == U'=');
 }
 
@@ -464,6 +465,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_token_33)
 // https://drafts.csswg.org/css-syntax-3/#consume-comment
 // https://triple-underscore.github.io/css-syntax-ja.html#consume-comments
 // ------------------------------------------------------------------------------------------------
+
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_comments_1)
 {
@@ -522,7 +524,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_1)
 	auto [it, token] = consume_numeric_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<number_token>(token);
+	auto tkn = std::any_cast<number_token>(token);
 	BOOST_CHECK(tkn.m_type_flag == number_type_flag_name::number);
 	BOOST_CHECK(tkn.m_value == 123.45);
 }
@@ -535,7 +537,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_2)
 	auto [it, token] = consume_numeric_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<percentage_token>(token);
+	auto tkn = std::any_cast<percentage_token>(token);
 	BOOST_CHECK(tkn.m_value == 33.3);
 }
 
@@ -547,7 +549,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_numeric_token_3)
 	auto [it, token] = consume_numeric_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<dimension_token>(token);
+	auto tkn = std::any_cast<dimension_token>(token);
 	BOOST_CHECK(tkn.m_value == 1.5);
 	BOOST_CHECK(tkn.m_unit == U"em");
 }
@@ -567,7 +569,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_1)
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<ident_token>(token);
+	auto tkn = std::any_cast<ident_token>(token);
 	BOOST_CHECK(tkn.m_value == U"auto");
 }
 
@@ -579,7 +581,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_2)
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<function_token>(token);
+	auto tkn = std::any_cast<function_token>(token);
 	BOOST_CHECK(tkn.m_value == U"calc");
 }
 
@@ -591,7 +593,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_3)
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<url_token>(token);
+	auto tkn = std::any_cast<url_token>(token);
 	BOOST_CHECK(tkn.m_value == U"example.png");
 }
 
@@ -603,7 +605,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_ident_like_token_4)
 	auto [it, token] = consume_ident_like_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK_NO_THROW([[maybe_unused]] auto r = std::get<bad_url_token>(token));
+	BOOST_CHECK_NO_THROW([[maybe_unused]] auto r = std::any_cast<bad_url_token>(token));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -621,7 +623,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_1)
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<string_token>(token);
+	auto tkn = std::any_cast<string_token>(token);
 	BOOST_CHECK(tkn.m_value == U"ABC");
 }
 
@@ -633,7 +635,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_2)
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<string_token>(token);
+	auto tkn = std::any_cast<string_token>(token);
 	BOOST_CHECK(tkn.m_value == U"ABC");
 }
 
@@ -645,7 +647,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_3)
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
 
 	BOOST_CHECK(++it == in.end());
-	BOOST_CHECK_NO_THROW([[maybe_unused]] auto r = std::get<bad_string_token>(token));
+	BOOST_CHECK_NO_THROW([[maybe_unused]] auto r = std::any_cast<bad_string_token>(token));
 }
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_4)
@@ -656,7 +658,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_string_token_4)
 	auto [it, token] = consume_string_token(in.begin(), in.end(), U'"', 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<string_token>(token);
+	auto tkn = std::any_cast<string_token>(token);
 	BOOST_CHECK(tkn.m_value == U"A");
 }
 
@@ -675,7 +677,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_1)
 	auto [it, token] = consume_url_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<url_token>(token);
+	auto tkn = std::any_cast<url_token>(token);
 	BOOST_CHECK(tkn.m_value == U"example.png");
 }
 
@@ -687,7 +689,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_2)
 	auto [it, token] = consume_url_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	auto tkn = std::get<url_token>(token);
+	auto tkn = std::any_cast<url_token>(token);
 	BOOST_CHECK(tkn.m_value == U"example.png");
 }
 
@@ -699,7 +701,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_url_token_3)
 	auto [it, token] = consume_url_token(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK_NO_THROW([[maybe_unused]] auto r = std::get<bad_url_token>(token));
+	BOOST_CHECK_NO_THROW([[maybe_unused]] auto r = std::any_cast<bad_url_token>(token));
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -1125,7 +1127,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_remnants_of_bad_url_1)
 	auto [it, token] = consume_remnants_of_bad_url(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<std::monostate>(token));
+	BOOST_CHECK(token.has_value() == false);
 }
 
 BOOST_AUTO_TEST_CASE(tokenization_consume_remnants_of_bad_url_2)
@@ -1136,7 +1138,7 @@ BOOST_AUTO_TEST_CASE(tokenization_consume_remnants_of_bad_url_2)
 	auto [it, token] = consume_remnants_of_bad_url(in.begin(), in.end(), 1);
 
 	BOOST_CHECK(it == in.end());
-	BOOST_CHECK(std::holds_alternative<std::monostate>(token));
+	BOOST_CHECK(token.has_value() == false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

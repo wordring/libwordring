@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <wordring/wwwc/css_syntax/input_stream.hpp>
 #include <wordring/wwwc/css_syntax/tokenization.hpp>
 
 #include <any>

@@ -3,6 +3,7 @@
 #include <wordring/whatwg/infra/infra.hpp>
 
 #include <algorithm>
+#include <any>
 #include <charconv>
 #include <cmath>
 #include <cstdint>
@@ -11,7 +12,7 @@
 #include <string_view>
 #include <tuple>
 #include <utility>
-#include <variant>
+//#include <variant>
 
 namespace wordring::wwwc::css
 {
@@ -138,7 +139,7 @@ namespace wordring::wwwc::css
 	struct close_curly_token {};
 	struct eof_token {};
 
-	using css_token = std::variant<
+/*	using css_token_ = std::variant<
 		std::monostate,
 		ident_token,
 		function_token,
@@ -165,6 +166,9 @@ namespace wordring::wwwc::css
 		open_curly_token,
 		close_curly_token,
 		eof_token>;
+*/
+
+	using css_token = std::any;
 
 	// --------------------------------------------------------------------------------------------
 	// 4.2. Definitions
@@ -825,7 +829,7 @@ namespace wordring::wwwc::css
 		while (true)
 		{
 			auto [it, tkn] = consume_token(first, last, handler);
-			if (std::holds_alternative<eof_token>(tkn)) break;
+			if (tkn.type() == typeid(eof_token)) break;
 			first = it;
 			*output++ = tkn;
 		}
