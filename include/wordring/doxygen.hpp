@@ -30,10 +30,10 @@
 非公開の名前空間。
 */
 
-/*! @namespace wordring::wwc
+/*! @namespace wordring::wwwc
 非公開の名前空間。
 */
 
-/*! @namespace wordring::wwc::css
+/*! @namespace wordring::wwwc::css
 非公開の名前空間。
 */

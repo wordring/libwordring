@@ -12,6 +12,43 @@
 BOOST_AUTO_TEST_SUITE(css_syntax_tokenization_test)
 
 // ------------------------------------------------------------------------------------------------
+// 4. Tokenization
+//
+// https://drafts.csswg.org/css-syntax-3/#tokenization
+// https://triple-underscore.github.io/css-syntax-ja.html#tokenization
+// ------------------------------------------------------------------------------------------------
+
+// inline bool is_ident_token(std::any const& val)
+BOOST_AUTO_TEST_CASE(tokenization_is_ident_token_1)
+{
+	using namespace wordring::wwwc::css;
+
+	BOOST_CHECK(is_ident_token(std::make_any<ident_token>(U"")));
+}
+
+BOOST_AUTO_TEST_CASE(tokenization_is_ident_token_2)
+{
+	using namespace wordring::wwwc::css;
+
+	BOOST_CHECK(is_ident_token(std::make_any<eof_token>()) == false);
+}
+
+// inline bool is_css_token(std::any const& val)
+BOOST_AUTO_TEST_CASE(tokenization_is_css_token_1)
+{
+	using namespace wordring::wwwc::css;
+
+	BOOST_CHECK(is_css_token(std::make_any<eof_token>()));
+}
+
+BOOST_AUTO_TEST_CASE(tokenization_is_css_token_2)
+{
+	using namespace wordring::wwwc::css;
+
+	BOOST_CHECK(is_css_token(std::make_any<int>()) == false);
+}
+
+// ------------------------------------------------------------------------------------------------
 // 4.3.1. Consume a token
 //
 // https://drafts.csswg.org/css-syntax-3/#consume-token

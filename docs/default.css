@@ -26,24 +26,28 @@ table {
 
 }
 
-    table th {
-        background-color: #fff;
-    }
+table caption {
+  font-weight: bold;
+}
 
-    table tr:nth-child(odd) {
-        background-color: #f0f5f5;
-    }
+table th {
+  background-color: #fff;
+}
 
-    table th, table td {
-        padding: 0.5em 0.5em;
-        border-color: #cfcdcc;
-    }
+table tr:nth-child(odd) {
+  background-color: #f0f5f5;
+}
 
-    .cpp .kw {
-        color: blue;
-    }
+table th, table td {
+  padding: 0.5em 0.5em;
+  border-color: #cfcdcc;
+}
 
-    .cpp .tn {
-        color: cadetblue;
-    }
+.cpp .kw {
+  color: blue;
+}
+
+.cpp .tn {
+  color: cadetblue;
+}
 

@@ -28,6 +28,7 @@ var menudata={children:[
 {text:"名前空間メンバ",url:"namespacemembers.html",children:[
 {text:"全て",url:"namespacemembers.html",children:[
 {text:"b",url:"namespacemembers.html#index_b"},
+{text:"c",url:"namespacemembers.html#index_c"},
 {text:"d",url:"namespacemembers.html#index_d"},
 {text:"e",url:"namespacemembers.html#index_e"},
 {text:"f",url:"namespacemembers.html#index_f"},
@@ -41,6 +42,7 @@ var menudata={children:[
 {text:"u",url:"namespacemembers.html#index_u"}]},
 {text:"関数",url:"namespacemembers_func.html",children:[
 {text:"b",url:"namespacemembers_func.html#index_b"},
+{text:"c",url:"namespacemembers_func.html#index_c"},
 {text:"d",url:"namespacemembers_func.html#index_d"},
 {text:"e",url:"namespacemembers_func.html#index_e"},
 {text:"f",url:"namespacemembers_func.html#index_f"},
@@ -52,7 +54,8 @@ var menudata={children:[
 {text:"s",url:"namespacemembers_func.html#index_s"},
 {text:"t",url:"namespacemembers_func.html#index_t"},
 {text:"u",url:"namespacemembers_func.html#index_u"}]},
-{text:"型定義",url:"namespacemembers_type.html"}]}]},
+{text:"型定義",url:"namespacemembers_type.html"},
+{text:"列挙型",url:"namespacemembers_enum.html"}]}]},
 {text:"クラス",url:"annotated.html",children:[
 {text:"クラス一覧",url:"annotated.html"},
 {text:"クラス索引",url:"classes.html"},

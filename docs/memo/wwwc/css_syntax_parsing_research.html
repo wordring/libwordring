@@ -7,15 +7,308 @@
   </head>
   <body><a href="../index.html"><img src="../../up.svg" alt=""></a>
     <h1>CSS構文解析の調査</h1>
+    <h2>参考</h2>
+    <ul>
+      <li><a href="https://github.com/tabatkins/parse-css/blob/master/parse-css.js">https://github.com/tabatkins/parse-css/blob/master/parse-css.js</a></li>
+    </ul>
     <h2>トークン化</h2>
     <ul>
       <li>規格上、トークン化の入力は、コードポイントのストリームと定義される。</li>
       <li>規格上、トークン化の出力は、トークンのリストである。</li>
     </ul>
     <h2>構文解析</h2>
+    <h3>プリミティブ</h3>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/css-syntax-ja.html#at-rule">at-rule</a>
+            <a href="https://triple-underscore.github.io/css-syntax-ja.html#at-rule">[日]</a></td>
+          <td>
+            <pre>@import "my-styles.css";</pre>
+            <pre>@page :left {
+	margin-left: 4cm;
+  margin-right: 3cm;
+}</pre>
+            <pre>@media print {
+	body { font-size: 10pt }
+}</pre>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#qualified-rule">qualified
+              rule</a> <a href="https://triple-underscore.github.io/css-syntax-ja.html#qualified-rule">[日]</a></td>
+          <td>
+            <pre>p &gt; a {
+	color: blue;
+	text-decoration: underline;
+}</pre>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#declaration">declaration</a>
+            <a href="https://triple-underscore.github.io/css-syntax-ja.html#declaration">
+              [日]</a></td>
+          <td>
+            <pre>background-color: red;</pre>
+            <pre>color: blue !important;</pre>
+          </td>
+          <td><a href="https://developer.mozilla.org/ja/docs/Web/CSS/Syntax#CSS_declarations">CSS
+              の宣言</a><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#component-value">component
+              value</a> <a href="https://triple-underscore.github.io/css-syntax-ja.html#component-value">[日]</a></td>
+          <td><br>
+          </td>
+          <td>
+            <ul>
+              <li> preserved tokens</li>
+              <li>function</li>
+              <li>simple block</li>
+            </ul>
+            ・・・のいずれか </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#preserved-tokens">preserved
+              tokens</a> <a href="https://triple-underscore.github.io/css-syntax-ja.html#preserved-tokens">[日]</a></td>
+          <td><br>
+          </td>
+          <td>パーサが補足しない任意のトークン<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#function">function</a>
+            <a href="https://triple-underscore.github.io/css-syntax-ja.html#function">[日]</a></td>
+          <td>
+            <pre>opacity(50%);</pre>
+          </td>
+          <td><a href="https://developer.mozilla.org/ja/docs/Web/CSS/CSS_Functions">CSS
+              関数表記法</a><br>
+          </td>
+        </tr>
+        <tr>
+          <td> <a href="https://drafts.csswg.org/css-syntax-3/#simple-block">simple
+              block</a> <a href="https://triple-underscore.github.io/css-syntax-ja.html#simple-block">[日]</a></td>
+          <td><br>
+          </td>
+          <td>{}、[]、()　で囲まれた任意のプリミティブのリスト<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <h3>入出力</h3>
     <ul>
-      <li>規格上、構文解析の入力は、トークンのリスト、あるいはCSS成分値のリストである。</li>
-      <li>規格上、構文解析の出力は、</li>
+      <li>規格上、構文解析の入力は、トークンのリスト、あるいはCSSコンポーネント値のリストである。</li>
+      <li>CSSコンポーネント値を含め、構文解析器の出力は、リストあるいは単独のオブジェクトの形であっても、実質ある種の木である。</li>
+    </ul>
+    <table style="width: 100%" border="1">
+      <caption>構文解析器の入出力</caption>
+      <tbody>
+        <tr>
+          <th>項目<br>
+          </th>
+          <th>出力<br>
+          </th>
+          <th>入力途中でのリターン<br>
+          </th>
+          <th>例</th>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-grammar">5.3.1.
+              Parse something according to a CSS grammar</a><br>
+          </td>
+          <td>「Component value あるいは failure」のリスト </td>
+          <td>無し<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-comma-list">5.3.2.
+              Parse A Comma-Separated List According To A CSS Grammar</a><br>
+          </td>
+          <td>「「Component value あるいは failure」のリスト」のリスト</td>
+          <td>無し<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-stylesheet">5.3.3.
+              Parse a stylesheet</a><br>
+          </td>
+          <td>At-rule・Qualified rule の混在リスト </td>
+          <td>無し<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-list-of-rules">5.3.4.
+              Parse a list of rules</a><br>
+          </td>
+          <td>At-rule・Qualified rule の混在リスト </td>
+          <td>無し<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-rule">5.3.5.
+              Parse a rule</a><br>
+          </td>
+          <td>failure あるいは At-rule あるいは Qualified rule</td>
+          <td>有り（エラーの場合）<br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-declaration">5.3.6.
+              Parse a declaration</a></td>
+          <td>failure あるいは Declaration</td>
+          <td>有り</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-list-of-declarations">5.3.7.
+              Parse a list of declarations</a></td>
+          <td>Declaration のリスト</td>
+          <td>無し</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-component-value">5.3.8.
+              Parse a component value</a></td>
+          <td>failure あるいは Component value</td>
+          <td>有り</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-list-of-component-values">5.3.9.
+              Parse a list of component values</a></td>
+          <td>Component value のリスト</td>
+          <td>無し</td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values">5.3.10.
+              Parse a comma-separated list of component values</a></td>
+          <td>Component value のリストのリスト </td>
+          <td>無し</td>
+          <td> <a href="https://triple-underscore.github.io/selectors4-ja.html#grouping">セ
+              レクタのリスト</a>
+            <pre>p, div, span</pre>
+            <a href="https://triple-underscore.github.io/selectors4-ja.html#attribute-selectors">属
+              性セレクタ※</a>
+            <pre>[rel ~=next, prev, up, first, last]</pre>
+            <a href="https://triple-underscore.github.io/selectors4-ja.html#the-lang-pseudo">関
+              数の引数※</a><span style="color: #0000ee;"><br>
+            </span>※現在はまだ仕様化されていないが、言及されている。<br>
+            <a href="https://triple-underscore.github.io/selectors4-ja.html#the-lang-pseudo">
+            </a></td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <ul>
+    </ul>
+    <table style="width: 100%" border="1">
+      <caption>構文解析アルゴリズムの入出力</caption>
+      <tbody>
+        <tr>
+          <th>項目<br>
+          </th>
+          <th>出力<br>
+          </th>
+          <th>入力の中途でリターン<br>
+          </th>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-rules">5.4.1.
+              Consume a list of rules</a><br>
+          </td>
+          <td>At-rule・Qualified rule の混在リスト<br>
+          </td>
+          <td>無し<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-at-rule">5.4.2.
+              Consume an at-rule</a><br>
+          </td>
+          <td>At-rule </td>
+          <td>有り<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-qualified-rule">5.4.3.
+              Consume a qualified rule</a></td>
+          <td>Qualified rule あるいは何も返さない</td>
+          <td>有り<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-list-of-declarations">5.4.4.
+              Consume a list of declarations</a><br>
+          </td>
+          <td>Declaration あるいは&nbsp; @-rule の混在リスト<br>
+          </td>
+          <td>無し<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-declaration">5.4.5.
+              Consume a declaration</a><br>
+          </td>
+          <td>Declaration あるいは何も返さない</td>
+          <td>有り<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-component-value">5.4.6.
+              Consume a component value</a><br>
+          </td>
+          <td>Component value<br>
+            つまり・・・<br>
+            <ul>
+              <li>simple block</li>
+              <li>function</li>
+              <li>トークン</li>
+            </ul>
+            <p>・・・のいずれか</p>
+          </td>
+          <td>有り<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-simple-block">5.4.7.
+              Consume a simple block</a></td>
+          <td>simple block</td>
+          <td>有り</td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#consume-function">5.4.8.
+              Consume a function</a></td>
+          <td>function</td>
+          <td>有り</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>構文解析アルゴリズムの入力は、「トークンあるいはComponent value」列となる。 </p>
+    <ul>
     </ul>
     <p> </p>
   </body>

@@ -55,83 +55,81 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;string_view&gt;</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span>wordring::wwwc</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1wwwc.html">wordring::wwwc</a></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// 3.2. The input byte stream</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#input-byte-stream</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#input-byte-stream</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator&gt;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">inline</span> encoding_name determine_fallback_encoding(ForwardIterator first, ForwardIterator last, encoding_name fallback = <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0));</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator, <span class="keyword">typename</span> OutputIterator&gt;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html#a3990feea7b7a9c682d7a4da10876aa8a">decode</a>(ForwardIterator first, ForwardIterator last, OutputIterator out, encoding_name fallback = <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0))</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        static_assert(<span class="keyword">sizeof</span>(decltype(*first)) == <span class="keyword">sizeof</span>(std::uint8_t));</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        fallback = determine_fallback_encoding(first, last, fallback);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html#a3990feea7b7a9c682d7a4da10876aa8a">wordring::whatwg::encoding::decode</a>(first, last, fallback, out);</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator&gt;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">inline</span> encoding_name determine_fallback_encoding(ForwardIterator first, ForwardIterator last, encoding_name fallback)</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        static_assert(<span class="keyword">sizeof</span>(decltype(*first)) == <span class="keyword">sizeof</span>(std::uint8_t));</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        std::uint32_t state = 0;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        std::string label;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="comment">// 1.</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">if</span> (fallback != <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0)) <span class="keywordflow">return</span> fallback;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="comment">// 2.</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        std::string_view sv = <span class="stringliteral">&quot;@charset \&quot;&quot;</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">for</span> (std::uint32_t i = 0; first != last &amp;&amp; i &lt; sv.size(); ++i) { <span class="keywordflow">if</span> (sv[i] != *first++) <span class="keywordflow">goto</span> Abort; }</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">for</span> (std::uint32_t i = 0; first != last &amp;&amp; i &lt;= 1014; ++i)</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            std::uint8_t ch = *first++;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">switch</span> (state)</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            <span class="keywordflow">case</span> 0:</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                <span class="keywordflow">if</span> ((0 &lt;= ch &amp;&amp; ch &lt;= 0x21) || (0x23 &lt;= ch &amp;&amp; ch &lt;= 0x7F))</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                {</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                    label.push_back(ch);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                    <span class="keywordflow">continue</span>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="keywordflow">if</span> (ch != <span class="charliteral">&#39;\&quot;&#39;</span>) <span class="keywordflow">goto</span> Abort;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                state = 1;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            <span class="keywordflow">case</span> 1:</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                <span class="keywordflow">if</span> (ch == <span class="charliteral">&#39;;&#39;</span>)</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                {</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    encoding_name enc = get_encoding_name(label);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                    <span class="keywordflow">if</span> (enc == <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0)) <span class="keywordflow">goto</span> Abort;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                    <span class="keywordflow">return</span> enc;</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                }</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                label.push_back(<span class="charliteral">&#39;\&quot;&#39;</span>);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                label.push_back(ch);</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                state = 0;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            }</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        }</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="comment">// 4.</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    Abort:</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">return</span> encoding_name::UTF_8;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="comment">// 3.3. Preprocessing the input stream</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#input-preprocessing</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#input-byte-stream</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="comment">// 3.2. The input byte stream</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#input-byte-stream</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#input-byte-stream</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator&gt;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">inline</span> encoding_name <a class="code" href="namespacewordring_1_1wwwc.html#a9d0c46535ae9eefd2a508c32a9cf690c">determine_fallback_encoding</a>(ForwardIterator first, ForwardIterator last, encoding_name fallback = <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0));</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator, <span class="keyword">typename</span> OutputIterator&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="namespacewordring_1_1wwwc.html#abc8e673b6a2e940923a29e63de80d04a">   28</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1wwwc.html#abc8e673b6a2e940923a29e63de80d04a">decode</a>(ForwardIterator first, ForwardIterator last, OutputIterator out, encoding_name fallback = <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0))</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        static_assert(<span class="keyword">sizeof</span>(decltype(*first)) == <span class="keyword">sizeof</span>(std::uint8_t));</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        fallback = <a class="code" href="namespacewordring_1_1wwwc.html#a9d0c46535ae9eefd2a508c32a9cf690c">determine_fallback_encoding</a>(first, last, fallback);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html#a3990feea7b7a9c682d7a4da10876aa8a">wordring::whatwg::encoding::decode</a>(first, last, fallback, out);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    }</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator&gt;</div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="namespacewordring_1_1wwwc.html#a9d0c46535ae9eefd2a508c32a9cf690c">   48</a></span>&#160;    <span class="keyword">inline</span> encoding_name <a class="code" href="namespacewordring_1_1wwwc.html#a9d0c46535ae9eefd2a508c32a9cf690c">determine_fallback_encoding</a>(ForwardIterator first, ForwardIterator last, encoding_name fallback)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        static_assert(<span class="keyword">sizeof</span>(decltype(*first)) == <span class="keyword">sizeof</span>(std::uint8_t));</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        std::uint32_t state = 0;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        std::string label;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="comment">// 1.</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">if</span> (fallback != <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0)) <span class="keywordflow">return</span> fallback;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="comment">// 2.</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        std::string_view sv = <span class="stringliteral">&quot;@charset \&quot;&quot;</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">for</span> (std::uint32_t i = 0; first != last &amp;&amp; i &lt; sv.size(); ++i) { <span class="keywordflow">if</span> (sv[i] != *first++) <span class="keywordflow">goto</span> Abort; }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keywordflow">for</span> (std::uint32_t i = 0; first != last &amp;&amp; i &lt;= 1014; ++i)</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        {</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            std::uint8_t ch = *first++;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            <span class="keywordflow">switch</span> (state)</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;            {</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">case</span> 0:</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                <span class="keywordflow">if</span> ((0 &lt;= ch &amp;&amp; ch &lt;= 0x21) || (0x23 &lt;= ch &amp;&amp; ch &lt;= 0x7F))</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                {</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                    label.push_back(ch);</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                    <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                }</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                <span class="keywordflow">if</span> (ch != <span class="charliteral">&#39;\&quot;&#39;</span>) <span class="keywordflow">goto</span> Abort;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                state = 1;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">case</span> 1:</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                <span class="keywordflow">if</span> (ch == <span class="charliteral">&#39;;&#39;</span>)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                    encoding_name enc = get_encoding_name(label);</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                    <span class="keywordflow">if</span> (enc == <span class="keyword">static_cast&lt;</span>encoding_name<span class="keyword">&gt;</span>(0)) <span class="keywordflow">goto</span> Abort;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                    <span class="keywordflow">return</span> enc;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                }</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                label.push_back(<span class="charliteral">&#39;\&quot;&#39;</span>);</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                label.push_back(ch);</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                state = 0;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="comment">// 4.</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    Abort:</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">return</span> encoding_name::UTF_8;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="comment">// 3.3. Preprocessing the input stream</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#input-preprocessing</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#input-byte-stream</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ForwardIterator&gt;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    ForwardIterator filter_code_points(ForwardIterator first, ForwardIterator last)</div>
+<div class="line"><a name="l00114"></a><span class="lineno"><a class="line" href="namespacewordring_1_1wwwc.html#a895714442f2b099162865889eeffac9d">  114</a></span>&#160;    ForwardIterator <a class="code" href="namespacewordring_1_1wwwc.html#a895714442f2b099162865889eeffac9d">filter_code_points</a>(ForwardIterator first, ForwardIterator last)</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    {</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        static_assert(<span class="keyword">sizeof</span>(decltype(*first)) == <span class="keyword">sizeof</span>(char32_t));</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
@@ -161,7 +159,11 @@ $(function() {
 <div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    }</div>
 <div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="anamespacewordring_1_1wwwc_html_a9d0c46535ae9eefd2a508c32a9cf690c"><div class="ttname"><a href="namespacewordring_1_1wwwc.html#a9d0c46535ae9eefd2a508c32a9cf690c">wordring::wwwc::determine_fallback_encoding</a></div><div class="ttdeci">encoding_name determine_fallback_encoding(ForwardIterator first, ForwardIterator last, encoding_name fallback=static_cast&lt; encoding_name &gt;(0))</div><div class="ttdoc">代替エンコーディングを決定する</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/input_stream.hpp:48</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_html"><div class="ttname"><a href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_html_a895714442f2b099162865889eeffac9d"><div class="ttname"><a href="namespacewordring_1_1wwwc.html#a895714442f2b099162865889eeffac9d">wordring::wwwc::filter_code_points</a></div><div class="ttdeci">ForwardIterator filter_code_points(ForwardIterator first, ForwardIterator last)</div><div class="ttdoc">コード・ポイント列をフィルタする</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/input_stream.hpp:114</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_html_abc8e673b6a2e940923a29e63de80d04a"><div class="ttname"><a href="namespacewordring_1_1wwwc.html#abc8e673b6a2e940923a29e63de80d04a">wordring::wwwc::decode</a></div><div class="ttdeci">void decode(ForwardIterator first, ForwardIterator last, OutputIterator out, encoding_name fallback=static_cast&lt; encoding_name &gt;(0))</div><div class="ttdoc">バイト列を復号する</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/input_stream.hpp:28</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_html"><div class="ttname"><a href="namespacewordring_1_1wwwc.html">wordring::wwwc</a></div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_1_1encoding_html_a3990feea7b7a9c682d7a4da10876aa8a"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1encoding.html#a3990feea7b7a9c682d7a4da10876aa8a">wordring::whatwg::encoding::decode</a></div><div class="ttdeci">void decode(InputIterator first, InputIterator last, name fallback, OutputIterator output)</div><div class="ttdoc">Decode</div><div class="ttdef"><b>Definition:</b> whatwg/encoding/encoding.hpp:602</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

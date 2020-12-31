@@ -96,13 +96,15 @@ namespace wordring::wwwc
 	// https://triple-underscore.github.io/css-syntax-ja.html#input-byte-stream
 	// --------------------------------------------------------------------------------------------
 
-	/*! @brief コード・ポイントをフィルタする
+	/*! @brief コード・ポイント列をフィルタする
 	
 	@param [in] first 文字列の先頭を指すイテレータ
 	@param [in] last  文字列の終端を指すイテレータ
 
 	@return フィルター後の文字列終端を指すイテレータ
 
+	この関数は、CR、LF、FF、NULL、サロゲートを適切に置き換えする。
+	STLのミュータブルなアルゴリズムのように、コンテナを変更する。
 	返されたイテレータより後ろをコンテナからeraseする必要が有る。
 
 	@sa https://drafts.csswg.org/css-syntax-3/#css-filter-code-points

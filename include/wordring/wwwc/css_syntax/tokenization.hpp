@@ -11,6 +11,7 @@
 #include <string>
 #include <string_view>
 #include <tuple>
+#include <typeindex>
 #include <utility>
 //#include <variant>
 
@@ -139,36 +140,193 @@ namespace wordring::wwwc::css
 	struct close_curly_token {};
 	struct eof_token {};
 
-/*	using css_token_ = std::variant<
-		std::monostate,
-		ident_token,
-		function_token,
-		at_keyword_token,
-		hash_token,
-		string_token,
-		bad_string_token,
-		url_token,
-		bad_url_token,
-		delim_token,
-		number_token,
-		percentage_token,
-		dimension_token,
-		whitespace_token,
-		CDO_token,
-		CDC_token,
-		colon_token,
-		semicolon_token,
-		comma_token,
-		open_square_token,
-		close_square_token,
-		open_paren_token,
-		close_paren_token,
-		open_curly_token,
-		close_curly_token,
-		eof_token>;
-*/
-
+	/*! @brief CSSトークン
+	
+	- ident_token
+	- function_token
+	- at_keyword_token
+	- hash_token
+	- string_token
+	- bad_string_token
+	- url_token
+	- bad_url_token
+	- delim_token
+	- number_token
+	- percentage_token
+	- dimension_token
+	- whitespace_token
+	- CDO_token
+	- CDC_token
+	- colon_token
+	- semicolon_token
+	- comma_token
+	- open_square_token
+	- close_square_token
+	- open_paren_token
+	- close_paren_token
+	- open_curly_token
+	- close_curly_token
+	- eof_token
+	*/
 	using css_token = std::any;
+
+	inline bool is_ident_token(std::any const& val)
+	{
+		return val.type() == typeid(ident_token const);
+	}
+
+	inline bool is_function_token(std::any const& val)
+	{
+		return val.type() == typeid(function_token const);
+	}
+
+	inline bool is_at_keyword_token(std::any const& val)
+	{
+		return val.type() == typeid(at_keyword_token const);
+	}
+
+	inline bool is_hash_token(std::any const& val)
+	{
+		return val.type() == typeid(hash_token const);
+	}
+
+	inline bool is_string_token(std::any const& val)
+	{
+		return val.type() == typeid(string_token const);
+	}
+
+	inline bool is_bad_string_token(std::any const& val)
+	{
+		return val.type() == typeid(bad_string_token const);
+	}
+
+	inline bool is_url_token(std::any const& val)
+	{
+		return val.type() == typeid(url_token const);
+	}
+
+	inline bool is_bad_url_token(std::any const& val)
+	{
+		return val.type() == typeid(bad_url_token const);
+	}
+
+	inline bool is_delim_token(std::any const& val)
+	{
+		return val.type() == typeid(delim_token const);
+	}
+
+	inline bool is_number_token(std::any const& val)
+	{
+		return val.type() == typeid(number_token const);
+	}
+
+	inline bool is_percentage_token(std::any const& val)
+	{
+		return val.type() == typeid(percentage_token const);
+	}
+
+	inline bool is_dimension_token(std::any const& val)
+	{
+		return val.type() == typeid(dimension_token const);
+	}
+
+	inline bool is_whitespace_token(std::any const& val)
+	{
+		return val.type() == typeid(whitespace_token const);
+	}
+
+	inline bool is_CDO_token(std::any const& val)
+	{
+		return val.type() == typeid(CDO_token const);
+	}
+
+	inline bool is_CDC_token(std::any const& val)
+	{
+		return val.type() == typeid(CDC_token const);
+	}
+
+	inline bool is_colon_token(std::any const& val)
+	{
+		return val.type() == typeid(colon_token const);
+	}
+
+	inline bool is_semicolon_token(std::any const& val)
+	{
+		return val.type() == typeid(semicolon_token const);
+	}
+
+	inline bool is_comma_token(std::any const& val)
+	{
+		return val.type() == typeid(comma_token const);
+	}
+
+	inline bool is_open_square_token(std::any const& val)
+	{
+		return val.type() == typeid(open_square_token const);
+	}
+
+	inline bool is_close_square_token(std::any const& val)
+	{
+		return val.type() == typeid(close_square_token const);
+	}
+
+	inline bool is_open_paren_token(std::any const& val)
+	{
+		return val.type() == typeid(open_paren_token const);
+	}
+
+	inline bool is_close_paren_token(std::any const& val)
+	{
+		return val.type() == typeid(close_paren_token const);
+	}
+
+	/*! @brief 引数が {-token の場合、true を返す
+	*/
+	inline bool is_open_curly_token(std::any const& val)
+	{
+		return val.type() == typeid(open_curly_token const);
+	}
+
+	inline bool is_close_curly_token(std::any const& val)
+	{
+		return val.type() == typeid(close_curly_token const);
+	}
+
+	inline bool is_eof_token(std::any const& val)
+	{
+		return val.type() == typeid(eof_token const);
+	}
+
+	inline bool is_css_token(std::any const& val)
+	{
+		std::type_info const& id = val.type();
+
+		return id == typeid(ident_token        const)
+			|| id == typeid(function_token     const)
+			|| id == typeid(at_keyword_token   const)
+			|| id == typeid(hash_token         const)
+			|| id == typeid(string_token       const)
+			|| id == typeid(bad_string_token   const)
+			|| id == typeid(url_token          const)
+			|| id == typeid(bad_url_token      const)
+			|| id == typeid(delim_token        const)
+			|| id == typeid(number_token       const)
+			|| id == typeid(percentage_token   const)
+			|| id == typeid(dimension_token    const)
+			|| id == typeid(whitespace_token   const)
+			|| id == typeid(CDO_token          const)
+			|| id == typeid(CDC_token          const)
+			|| id == typeid(colon_token        const)
+			|| id == typeid(semicolon_token    const)
+			|| id == typeid(comma_token        const)
+			|| id == typeid(open_square_token  const)
+			|| id == typeid(close_square_token const)
+			|| id == typeid(open_paren_token   const)
+			|| id == typeid(close_paren_token  const)
+			|| id == typeid(open_curly_token   const)
+			|| id == typeid(close_curly_token  const)
+			|| id == typeid(eof_token          const);
+	}
 
 	// --------------------------------------------------------------------------------------------
 	// 4.2. Definitions

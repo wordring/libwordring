@@ -1,0 +1,605 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: E:/source/repos/wordring_cpp/include/wordring/wwwc/css_syntax/parsing.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">E:/source/repos/wordring_cpp/include/wordring/wwwc/css_syntax/parsing.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<p><b>@規則</b>を表現する AST ノード</p><div class="fragment"><div class="line">@<span class="keyword">import</span> <span class="stringliteral">&quot;my-styles.css&quot;</span>;</div>
+</div><!-- fragment --><div class="fragment"><div class="line"><span class="preprocessor">#pragma once</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;wordring/wwwc/css_syntax/input_stream.hpp&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;wordring/wwwc/css_syntax/tokenization.hpp&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;any&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"> </div>
+<div class="line"><span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div>
+<div class="line">{</div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 前方宣言</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> Syntax, <span class="keyword">typename</span> ErrorHandler = std::<span class="keywordtype">nullptr</span>_t&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a0"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a7b769f9c59928d30d0d166cd2bb0cfe8">parse_list</a>(Input&amp;&amp; in, Syntax s, ErrorHandler handler = <span class="keyword">nullptr</span>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler = std::<span class="keywordtype">nullptr</span>_t&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a1"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#af1c6cdfcbf696db1b812d420cec4f196">parse_list_of_component_values</a>(Input&amp;&amp; in, ErrorHandler handler = <span class="keyword">nullptr</span>);</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5. Parsing</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parsing</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parsing</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">using</span> css_component = std::any;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">using</span> <a name="a2"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> = std::any;</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">struct </span>function</div>
+<div class="line">    {</div>
+<div class="line">        std::u32string m_name;</div>
+<div class="line">        std::vector&lt;component_value&gt; m_value;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">struct </span>simple_block</div>
+<div class="line">    {</div>
+<div class="line">        <a name="a3"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> m_associated_token;</div>
+<div class="line">        std::vector&lt;component_value&gt; m_value;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">struct </span>at_rule</div>
+<div class="line">    {</div>
+<div class="line">        std::u32string m_name;</div>
+<div class="line">        std::vector&lt;component_value&gt; m_prelude;</div>
+<div class="line">        std::optional&lt;simple_block&gt; m_block;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">struct </span>qualified_rule</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;component_value&gt; m_prelude;</div>
+<div class="line">        simple_block m_block;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">struct </span>declaration</div>
+<div class="line">    {</div>
+<div class="line">        declaration() : m_important_flag(<span class="keyword">false</span>) {}</div>
+<div class="line"> </div>
+<div class="line">        std::u32string m_name;</div>
+<div class="line">        std::vector&lt;component_value&gt; m_value;</div>
+<div class="line">        <span class="keywordtype">bool</span> m_important_flag;</div>
+<div class="line">    };</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_at_rule(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> val.type() == <span class="keyword">typeid</span>(at_rule <span class="keyword">const</span>);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_qualified_rule(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> val.type() == <span class="keyword">typeid</span>(qualified_rule <span class="keyword">const</span>);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_declaration(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> val.type() == <span class="keyword">typeid</span>(declaration <span class="keyword">const</span>);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_function(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> val.type() == <span class="keyword">typeid</span>(<span class="keyword">function</span> <span class="keyword">const</span>);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_simple_block(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> val.type() == <span class="keyword">typeid</span>(simple_block <span class="keyword">const</span>);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_preserved_token(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> is_css_token(val)</div>
+<div class="line">            &amp;&amp; !(  is_function_token(val)</div>
+<div class="line">                || is_open_curly_token(val)</div>
+<div class="line">                || is_open_paren_token(val)</div>
+<div class="line">                || is_open_square_token(val));</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">bool</span> is_component_value(std::any <span class="keyword">const</span>&amp; val)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> is_preserved_token(val) || is_function(val) || is_simple_block(val);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.2. Definitions</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parser-definitions</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parser-definitions</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3. Parser Entry Points</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parser-entry-points</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parser-entry-points</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ErrorHandler = std::<span class="keywordtype">nullptr</span>_t&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a4"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::vector&lt;std::any&gt;&amp;&amp; in, ErrorHandler handler = <span class="keyword">nullptr</span>)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="keywordflow">return</span> std::move(in);</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ErrorHandler = std::<span class="keywordtype">nullptr</span>_t&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::u32string&amp;&amp; in, ErrorHandler handler = <span class="keyword">nullptr</span>)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; out;</div>
+<div class="line"> </div>
+<div class="line">        in.erase(<a name="a5"></a><a class="code" href="namespacewordring_1_1wwwc.html#a895714442f2b099162865889eeffac9d">filter_code_points</a>(in.begin(), in.end()), in.end());</div>
+<div class="line">        tokenize(in.begin(), in.end(), std::back_inserter(out), handler);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> out;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.1. Parse something according to a CSS grammar</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-grammar</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-grammar</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> Syntax, <span class="keyword">typename</span> ErrorHandler = std::<span class="keywordtype">nullptr</span>_t&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a6"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#aa2f5beaff2d53e8908406e9cf761576a">parse_grammar</a>(Input&amp;&amp; in, Syntax s, ErrorHandler handler = <span class="keyword">nullptr</span>)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#af1c6cdfcbf696db1b812d420cec4f196">parse_list_of_component_values</a>(<a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler), handler);</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">if</span> (s(v) == <span class="keyword">false</span>) v.clear();</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.2. Parse A Comma-Separated List According To A CSS Grammar</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-comma-list</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-comma-list</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> Syntax, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a7b769f9c59928d30d0d166cd2bb0cfe8">parse_list</a>(Input&amp;&amp; in, Syntax s, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#af1c6cdfcbf696db1b812d420cec4f196">parse_list_of_component_values</a>(<a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler));</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">for</span>(<span class="keyword">auto</span> &amp; c : v) <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#aa2f5beaff2d53e8908406e9cf761576a">parse_grammar</a>()</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.3. Parse a stylesheet</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-stylesheet</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-stylesheet</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a7"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ae15fa1b4ee2cfd5b5e7e9192d1124d72">parse_stylesheet</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::u32string s;</div>
+<div class="line">        std::vector&lt;std::any&gt; v;</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">if</span> constexpr (<span class="keyword">sizeof</span>(decltype(*in)) == <span class="keyword">sizeof</span>(std::char8_t)) <a name="a8"></a><a class="code" href="namespacewordring_1_1wwwc.html#abc8e673b6a2e940923a29e63de80d04a">wordring::wwwc::decode</a>(in.begin(), in.end(), std::back_inserter(s));</div>
+<div class="line">        <span class="comment">//else;</span></div>
+<div class="line"> </div>
+<div class="line">        v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.4. Parse a list of rules</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-list-of-rules</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-list-of-rules</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a9"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a5b7ad548fa114731f73a7a2519215712">parse_list_of_rules</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.5. Parse a rule</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-rule</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-rule</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a10"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a7d26b673953d1f30a348740a57fb35ad">parse_rule</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.6. Parse a declaration</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-declaration</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-declaration</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a11"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a9c7b580339d677d5c57f6df93f90b7f0">parse_declaration</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.7. Parse a list of declarations</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-list-of-declarations</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-list-of-declarations</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a12"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#af433a2fefe80bf479edd92ccf42b6742">parse_list_of_declarations</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.8. Parse a component value</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-component-value</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-component-value</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a name="a13"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a820da32203765ad2c9da09e8b78dc604">parse_component_value</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;std::any&gt; v = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="keywordflow">return</span> v;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.9. Parse a list of component values</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-list-of-component-values</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parse-list-of-component-values</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::any&gt; <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#af1c6cdfcbf696db1b812d420cec4f196">parse_list_of_component_values</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="comment">// 1.</span></div>
+<div class="line">        std::vector&lt;std::any&gt; input = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="comment">// 2.</span></div>
+<div class="line">        std::vector&lt;std::any&gt; list;</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div>
+<div class="line">        {</div>
+<div class="line">            std::any c = 0;</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> input;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.3.10. Parse a comma-separated list of component values</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Input, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;std::vector&lt;std::any&gt;&gt; <a name="a14"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ad9b33aebb94663a9552b96e5ae6218b2">parse_comma_separated_list_of_component_values</a>(Input&amp;&amp; in, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        <span class="comment">// 1.</span></div>
+<div class="line">        std::vector&lt;std::any&gt; input = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">normalize_into_token_stream</a>(std::move(in), handler);</div>
+<div class="line">        <span class="comment">// 2.</span></div>
+<div class="line">        std::vector&lt;std::vector&lt;std::any&gt;&gt; lists;</div>
+<div class="line">        <span class="comment">// 3.</span></div>
+<div class="line">        <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div>
+<div class="line">        {</div>
+<div class="line">            std::vector&lt;std::any&gt; l;</div>
+<div class="line">            std::any c = 0;</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> ret;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4. Parser Algorithms</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#parser-algorithms</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#parser-algorithms</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.1. Consume a list of rules</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-list-of-rules</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#consume-list-of-rules</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::vector&lt;css_component&gt; <a name="a15"></a><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ae910ee7b3703c6df67ffbb4a71a69efb">consume_list_of_rules</a>(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, <span class="keywordtype">bool</span> top_level = <span class="keyword">false</span>, ErrorHandler handler = <span class="keyword">nullptr</span>)</div>
+<div class="line">    {</div>
+<div class="line">        std::vector&lt;css_component&gt; rules;</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">while</span> (first != last)</div>
+<div class="line">        {</div>
+<div class="line">            std::any tkn = *first++;</div>
+<div class="line"> </div>
+<div class="line">            <span class="keywordflow">if</span> (is_whitespace_token(tkn)) <span class="keywordflow">continue</span>;</div>
+<div class="line">            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (is_CDC_token(tkn) || is_CDC_token(tkn))</div>
+<div class="line">            {</div>
+<div class="line">                <span class="keywordflow">if</span> (top_level) <span class="keywordflow">continue</span>;</div>
+<div class="line">                <span class="keywordflow">else</span></div>
+<div class="line">                {</div>
+<div class="line">                    --first;</div>
+<div class="line">                    <span class="keyword">auto</span> [it, rule] = consume_qualified_rule(first, last, handler);</div>
+<div class="line">                    first = it;</div>
+<div class="line">                    <span class="keywordflow">if</span> (rule.has_value()) rules.push_back(*rule);</div>
+<div class="line">                }</div>
+<div class="line">            }</div>
+<div class="line">            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (is_at_keyword_token(tkn))</div>
+<div class="line">            {</div>
+<div class="line">                --first;</div>
+<div class="line">                <span class="keyword">auto</span> [it, rule] = consume_at_rule(first, last, handler);</div>
+<div class="line">                first = it;</div>
+<div class="line">                rules.push_back(rule);</div>
+<div class="line">            }</div>
+<div class="line">            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (is_eof_token(tkn))</div>
+<div class="line">            {</div>
+<div class="line">                assert(<span class="keyword">false</span>);</div>
+<div class="line">                <span class="keywordflow">break</span>;</div>
+<div class="line">            }</div>
+<div class="line">            <span class="keywordflow">else</span></div>
+<div class="line">            {</div>
+<div class="line">                --first;</div>
+<div class="line">                <span class="keyword">auto</span> [it, rule] = consume_qualified_rule(first, last, handler);</div>
+<div class="line">                first = it;</div>
+<div class="line">                <span class="keywordflow">if</span> (rule.has_value()) rules.push_back(*rule);</div>
+<div class="line">            }</div>
+<div class="line">        }</div>
+<div class="line"> </div>
+<div class="line">        <span class="keywordflow">return</span> rules;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.2. Consume an at-rule</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-at-rule</span></div>
+<div class="line">    <span class="comment">// https://triple-underscore.github.io/css-syntax-ja.html#consume-at-rule</span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::pair&lt;BidirectionalIterator, at_rule&gt; consume_at_rule(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line">        std::any tkn = *first++;</div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.3. Consume a qualified rule</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-qualified-rule</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::pair&lt;BidirectionalIterator, std::optional&lt;qualified_rule&gt;&gt; consume_qualified_rule(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line"> </div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.4. Consume a list of declarations</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-list-of-declarations</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> OutputIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> <span class="keywordtype">void</span> consume_list_of_declarations(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, OutputIterator out, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line"> </div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.5. Consume a declaration</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-declaration</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::pair&lt;BidirectionalIterator, declaration&gt; consume_declaration(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line"> </div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.6. Consume a component value</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-component-value</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::pair&lt;BidirectionalIterator, component_value&gt; consume_component_value(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line"> </div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.7. Consume a simple block</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-simple-block</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::pair&lt;BidirectionalIterator, simple_block&gt; consume_simple_block(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line"> </div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// 5.4.8. Consume a function</span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// https://drafts.csswg.org/css-syntax-3/#consume-function</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> B<span class="keywordtype">id</span>irectionalIterator, <span class="keyword">typename</span> ErrorHandler&gt;</div>
+<div class="line">    <span class="keyword">inline</span> std::pair&lt;BidirectionalIterator, function&gt; consume_function(</div>
+<div class="line">        BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)</div>
+<div class="line">    {</div>
+<div class="line"> </div>
+<div class="line">    }</div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"> </div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">//</span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// </span></div>
+<div class="line">    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line">}</div>
+</div><!-- fragment --> </div><!-- contents -->
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a9c7b580339d677d5c57f6df93f90b7f0"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a9c7b580339d677d5c57f6df93f90b7f0">wordring::wwwc::css::parse_declaration</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_declaration(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">宣言を構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:397</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a5b7ad548fa114731f73a7a2519215712"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a5b7ad548fa114731f73a7a2519215712">wordring::wwwc::css::parse_list_of_rules</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_list_of_rules(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">規則リストを構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:341</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a7b769f9c59928d30d0d166cd2bb0cfe8"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a7b769f9c59928d30d0d166cd2bb0cfe8">wordring::wwwc::css::parse_list</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_list(Input &amp;&amp;in, Syntax s, ErrorHandler handler=nullptr)</div><div class="ttdoc">カンマ区切りのリストをCSS文法に沿って構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:275</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a2cb050b63677be3955ba8815a8f8c56c"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">wordring::wwwc::css::css_token</a></div><div class="ttdeci">std::any css_token</div><div class="ttdoc">CSSトークン</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:171</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_aa2f5beaff2d53e8908406e9cf761576a"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#aa2f5beaff2d53e8908406e9cf761576a">wordring::wwwc::css::parse_grammar</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_grammar(Input &amp;&amp;in, Syntax s, ErrorHandler handler=nullptr)</div><div class="ttdoc">CSS文法に沿って解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:242</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_af1c6cdfcbf696db1b812d420cec4f196"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#af1c6cdfcbf696db1b812d420cec4f196">wordring::wwwc::css::parse_list_of_component_values</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_list_of_component_values(Input &amp;&amp;in, ErrorHandler handler=nullptr)</div><div class="ttdoc">コンポーネント値のリストを構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:487</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ad9b33aebb94663a9552b96e5ae6218b2"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ad9b33aebb94663a9552b96e5ae6218b2">wordring::wwwc::css::parse_comma_separated_list_of_component_values</a></div><div class="ttdeci">std::vector&lt; std::vector&lt; std::any &gt; &gt; parse_comma_separated_list_of_component_values(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">コンマ区切りのコンポーネント値のリストを構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:530</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_html_a895714442f2b099162865889eeffac9d"><div class="ttname"><a href="namespacewordring_1_1wwwc.html#a895714442f2b099162865889eeffac9d">wordring::wwwc::filter_code_points</a></div><div class="ttdeci">ForwardIterator filter_code_points(ForwardIterator first, ForwardIterator last)</div><div class="ttdoc">コード・ポイント列をフィルタする</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/input_stream.hpp:114</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_html_abc8e673b6a2e940923a29e63de80d04a"><div class="ttname"><a href="namespacewordring_1_1wwwc.html#abc8e673b6a2e940923a29e63de80d04a">wordring::wwwc::decode</a></div><div class="ttdeci">void decode(ForwardIterator first, ForwardIterator last, OutputIterator out, encoding_name fallback=static_cast&lt; encoding_name &gt;(0))</div><div class="ttdoc">バイト列を復号する</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/input_stream.hpp:28</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a7d26b673953d1f30a348740a57fb35ad"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a7d26b673953d1f30a348740a57fb35ad">wordring::wwwc::css::parse_rule</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_rule(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">規則を構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:369</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a820da32203765ad2c9da09e8b78dc604"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a820da32203765ad2c9da09e8b78dc604">wordring::wwwc::css::parse_component_value</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_component_value(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">成分値を構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:453</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ababb2f19ef8552b63ddd1610b0f34fb6"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ababb2f19ef8552b63ddd1610b0f34fb6">wordring::wwwc::css::normalize_into_token_stream</a></div><div class="ttdeci">std::vector&lt; std::any &gt; normalize_into_token_stream(std::vector&lt; std::any &gt; &amp;&amp;in, ErrorHandler handler=nullptr)</div><div class="ttdoc">入力をトークン列へ正規化する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:171</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ab25276c47a7604f21625953e207ade96"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">wordring::wwwc::css::component_value</a></div><div class="ttdeci">std::any component_value</div><div class="ttdoc">CSSコンポーネント値を表現する AST ノード</div><div class="ttdef"><b>Definition:</b> parsing.hpp:41</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ae15fa1b4ee2cfd5b5e7e9192d1124d72"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ae15fa1b4ee2cfd5b5e7e9192d1124d72">wordring::wwwc::css::parse_stylesheet</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_stylesheet(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">スタイルシートを構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:307</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_af433a2fefe80bf479edd92ccf42b6742"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#af433a2fefe80bf479edd92ccf42b6742">wordring::wwwc::css::parse_list_of_declarations</a></div><div class="ttdeci">std::vector&lt; std::any &gt; parse_list_of_declarations(Input &amp;&amp;in, ErrorHandler handler)</div><div class="ttdoc">宣言リストを構文解析する</div><div class="ttdef"><b>Definition:</b> parsing.hpp:425</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ae910ee7b3703c6df67ffbb4a71a69efb"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ae910ee7b3703c6df67ffbb4a71a69efb">wordring::wwwc::css::consume_list_of_rules</a></div><div class="ttdeci">std::vector&lt; css_component &gt; consume_list_of_rules(BidirectionalIterator first, BidirectionalIterator last, bool top_level=false, ErrorHandler handler=nullptr)</div><div class="ttdef"><b>Definition:</b> parsing.hpp:566</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>
