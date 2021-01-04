@@ -108,7 +108,7 @@
       <li>規格上、構文解析の入力は、トークンのリスト、あるいはCSSコンポーネント値のリストである。</li>
       <li>CSSコンポーネント値を含め、構文解析器の出力は、リストあるいは単独のオブジェクトの形であっても、実質ある種の木である。</li>
     </ul>
-    <table style="width: 100%" border="1">
+    <table style="width: 980px; height: 1068px;" border="1">
       <caption>構文解析器の入出力</caption>
       <tbody>
         <tr>
@@ -124,7 +124,7 @@
           <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-grammar">5.3.1.
               Parse something according to a CSS grammar</a><br>
           </td>
-          <td>「Component value あるいは failure」のリスト </td>
+          <td>「Component value のリスト」 あるいは failure</td>
           <td>無し<br>
           </td>
           <td><br>
@@ -134,7 +134,7 @@
           <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-comma-list">5.3.2.
               Parse A Comma-Separated List According To A CSS Grammar</a><br>
           </td>
-          <td>「「Component value あるいは failure」のリスト」のリスト</td>
+          <td>「「 Component value のリスト」あるいは failure 」のリスト</td>
           <td>無し<br>
           </td>
           <td><br>
@@ -223,6 +223,123 @@
     </table>
     <p><br>
     </p>
+    <table border="1">
+      <tbody>
+        <tr>
+          <th>項目<br>
+          </th>
+          <th>参照元</th>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-grammar">5.3.1.
+              Parse something according to a CSS grammar</a><br>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/cssom-ja.html#parse-a-group-of-selectors">[CSSOM]
+                  選択子リストとして構文解析する</a></li>
+              <li><a href="https://triple-underscore.github.io/cssom-ja.html#serialize-a-css-value">[CSSOM]
+                  CSS 値を直列化する</a></li>
+              <li><a href="https://triple-underscore.github.io/cssom-ja.html#dom-window-getcomputedstyle">[CSSOM]
+                  getComputedStyle(elt, pseudoElt) メソッド手続き</a></li>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#grammar">[selectors]
+                  17. 文法</a></li>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#parse-a-selector">[selectors]
+                  選択子として構文解析する</a></li>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#parse-a-relative-selector">[selectors]
+                  相対選択子として構文解析する</a></li>
+              <li><br>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-comma-list">5.3.2.
+              Parse A Comma-Separated List According To A CSS Grammar</a><br>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#parse-as-a-forgiving-selector-list">[selectors]
+                  forgiving 選択子リストとして構文解析する</a></li>
+              <li><br>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-stylesheet">5.3.3.
+              Parse a stylesheet</a><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-list-of-rules">5.3.4.
+              Parse a list of rules</a><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-rule">5.3.5.
+              Parse a rule</a><br>
+          </td>
+          <td>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/cssom-ja.html#parse-a-css-rule">[CSSOM]
+                  CSS 規則として構文解析する</a></li>
+              <li><br>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-declaration">5.3.6.
+              Parse a declaration</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-list-of-declarations">5.3.7.
+              Parse a list of declarations</a></td>
+          <td>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/cssom-ja.html#parse-a-css-declaration-block">[CSSOM]
+                  CSS 宣言ブロックとして構文解析する</a></li>
+              <li><span style="color: #0000ee;"><span style="color: #333333;"></span></span><br>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-component-value">5.3.8.
+              Parse a component value</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-list-of-component-values">5.3.9.
+              Parse a list of component values</a></td>
+          <td>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/cssom-ja.html#parse-a-css-value">[CSSOM]
+                  CSS 値として構文解析する</a></li>
+              <li><br>
+              </li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values">5.3.10.
+              Parse a comma-separated list of component values</a></td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p> </p>
     <ul>
     </ul>
     <table style="width: 100%" border="1">

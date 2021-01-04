@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>CSSセレクタの調査</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body><a href="../index.html"><img src="../../up.svg" alt=""></a>
+    <h1>CSSセレクタの調査</h1>
+    <h2>参考</h2>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <th>ページ<br>
+          </th>
+          <th>説明<br>
+          </th>
+        </tr>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/DOM4-ja.html#dom-parentnode-queryselector">querySelector(selectors)
+              メソッド手続き</a> </td>
+          <td>[DOM4] CSS セレクタと照合する手続き<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/antlr/grammars-v4/blob/master/css3/css3.g4">antlr/grammars-v4/css3/css3.g4</a>
+          </td>
+          <td>ANTLR 用 CSS3 文法（あまり参考にならない）<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://www.w3.org/TR/selectors-3/#grammar">The grammar
+              of Selectors</a><br>
+          </td>
+          <td>[selector3] 旧 CSS selector 文法<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/selectors4-ja.html#grammar">17.
+              文法</a><br>
+          </td>
+          <td>[selector4] 最新 CSS selector 文法 </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.h;l=27;bpv=1;bpt=1">CSSSelectorParser::ParseSelector()</a><br>
+          </td>
+          <td>Chromium の CSS selector パーサー実装　※行番号にリンクしているので、関数からずれるかも。<br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>感想<br>
+    </h2>
+    <ul>
+      <li>selector3 の文法は、 YACC で定義されている。　全体的には LL(1) 、部分的には LL(2) と規格で示されている。</li>
+      <li>selector4 の文法は、 EBNF で定義されている。　文法のクラスは規格で示されていない。　Bison （ LALR(1)
+        ）で解析したところ、シフト・還元コンフリクトが 43 、還元・還元コンフリクトが 11 発見された。　Bison は GLR
+        パーサーも構成できるが、 詳しい分析は出来なかった。ANTLRで調べたところ、左再帰は発見されなかった。</li>
+    </ul>
+    <ul>
+    </ul>
+    <p> </p>
+  </body>
+</html>

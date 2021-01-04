@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Chromium の CSS 回りを調査</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body><a href="../index.html"><img src="../../up.svg" alt=""></a>
+    <h1>Chromium の CSS 回りを調査</h1>
+    <p> </p>
+    <ul>
+      <li>当初は Flex/Bison
+        で書かれていたパーサーが、現在は手書きに代わっている。　生成規則と対応する関数群をトップレベルから呼び出していくので、おそらく再帰下降あるいはそれに近い方式と思
+        わ れる。</li>
+    </ul>
+    <h2>参考</h2>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <th>ページ<br>
+          </th>
+          <th>説明<br>
+          </th>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.h;l=27;bpv=1;bpt=1">CSSSelectorParser</a><br>
+          </td>
+          <td>Blink の CSS selector パーサー実装<br>
+          </td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>class CSSSelectorParser の調査</h2>
+    <h3>公開メンバ</h3>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.h;l=27;bpv=1;bpt=1">ParseSelector()</a></td>
+          <td>ConsumeComplexSelectorList()を呼ぶ。</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=60?gsn=ConsumeSelector&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23UUekeJt0IDX3-8F2ajF2GldWhRkemYJ85xhkQB95d6w&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23QXkkD2XL5tdycbDoF1UHkyS9UJE98D17h06IN-gbpf4">ConsumeSelector()</a></td>
+          <td>ConsumeComplexSelector()を呼ぶ。</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=858?gsn=ConsumeANPlusB&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23aB8AREoBbm1IhyDTS_xWvN65qJjlz49Hy6r0kmLawUE&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23BFvlW0HKWb-S3GHmAtkFLem_o3l_sCrmxziYKA_2uwA">ConsumeANPlusB()</a></td>
+          <td> <a href="https://triple-underscore.github.io/css-syntax-ja.html#anb-production">&lt;an+b&gt;</a>
+            を消費する。<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=73?gsn=SupportsComplexSelector&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%232d_-1Gx6GfLXc0IclEwip4SQ8XtQAtgWPdERv_mZQMQ&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23So7jWdaPiYQLfbsX-NXjgSGLWCoVksUKKMTovNLvr_I">SupportsComplexSelector()</a><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h3>非公開メンバ</h3>
+    <table style="width: 100%" border="1">
+      <caption>トークンを消費するメンバ関数</caption>
+      <tbody>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=92?gsn=ConsumeComplexSelectorList&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23d84BTNnKD73N0NTp9EP_eLG6yYT2HDrUQUhoCjBn_1k&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23u278-NWKJeH1kZMNb-6nJ5dlTpT8AqRYbESiwvQZ7wI">ConsumeComplexSelectorList()</a></td>
+          <td><a href="https://drafts.csswg.org/selectors-4/#typedef-complex-selector-list">&lt;complex-selector-list&gt;</a></td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=113?gsn=ConsumeComplexSelectorList&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23kQmnlyJuewqN8GX091EaBCDOL4YWTZw7idb7yXaoKR0&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23q9rHs5ByULbGDg1XCv78xvjgsiLxS5SXR-ZhfmVHbUM">ConsumeCompoundSelectorList()</a></td>
+          <td><a href="https://drafts.csswg.org/selectors-4/#typedef-compound-selector-list">&lt;compound-selector-list&gt;</a></td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=169?gsn=ConsumeNestedSelectorList&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23lT_Q-SopWEQfyEFrodt6XCjEs_xOw7-Z_5RkdxYseGw&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23IC8-Xrp4xD0Zyl2SL1e0ijE1Ms4G9ne7NmcqAQh3xh4">ConsumeNestedSelectorList()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=176?gsn=ConsumeForgivingNestedSelectorList&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23OpPvO6x8ZSDSmpscpqeKMb0uYVeuP_s5S5UYLc2LiZw&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23hjESeyTcnjvmXQpJmZl-acd9zCJ_4INuO3HBs1ShSoY">ConsumeForgivingNestedSelectorList()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=183?gsn=ConsumeForgivingComplexSelectorList&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23ByvsKtSq0tXaB2uZYbICiWd1qBOo31jOl_Se5XBGUUk&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23UuIVFkhGMH8_mQoBMm-VxCr_z89AyGQPoDQcBlTfgiU">ConsumeForgivingComplexSelectorList()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=205?gsn=ConsumeForgivingCompoundSelectorList&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23bFoAoDB6ABxzNxacUjkpRUsclesOETMeqdjYemkggzw&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23feNOV88-EOXt_KBJ5DbcyQKiQzGZotmBYnVURjWTfwA">ConsumeForgivingCompoundSelectorList()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=250?gsn=ConsumeComplexSelector&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23rhR1dJb_9CuGbTePZLKJ41XOAMQvks-BOHvP6cArekA&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%230lt0MDx6uwxj8oRhwx0K2P1vmby4yjZ2KK2LN0fzyTk">ConsumeComplexSelector()</a></td>
+          <td>&lt;complex-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=390?gsn=ConsumeCompoundSelector&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23hsuJwldRAxDXpVAhdOfQMaNQyMYEr-nzoM2uMW1xXc0&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23f63Xn6-2nomlGCmMUSXWhHqeeIhiSKMX7SQIin0_m1k">ConsumeCompoundSelector()</a></td>
+          <td>&lt;compound-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=457?gsn=ConsumeSimpleSelector&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23AZZfMjZOr_fyiCSySoqlE14zVm0lDADhMDfbhIpmA7w&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23byi3qmSunwvO1YKAabrH_rSrihEYYuC8RyJ6jVPwKDc">ConsumeSimpleSelector()</a></td>
+          <td>&lt;simple-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=483?gsn=ConsumeName&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23cjkPSce24YK8dN7iXszOvMygbdpj_ZF77_KoHR5vhI0&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%2394oVSH2KK0vbjX8LdmUgcoD2s6kGjEdb62VyRcvszWc">ConsumeName()</a></td>
+          <td>&lt;type-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=528?gsn=ConsumeId&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%237zK8HmxXWw-EEaaMFiGMMXMXhUrQMVOhH2ySb5XVnbo&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23jtqoH_lNVfQ5H_rxufSvhguZD8pVEYyf1-WnP-GBKbM">ConsumeId()</a></td>
+          <td>&lt;id-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=542?gsn=ConsumeClass&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%230DlHPF3gHPjOb7tzQNx9V6WdBQBbyqjESNjeVF65Mdk&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23Hvb34stCwGkb2z0AbQ0JApmDIu-EI7H_fo1NLoUPgF0">ConsumeClass()</a></td>
+          <td>&lt;class-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=610?gsn=ConsumePseudo&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%2340yhLLO7A0mDURzckGn85IWF9nnsqKBgnW-xZsiu3rI&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23wtqO8neXl9p0McDI6t9D_yECGnZZCNdlEJFSmBn-06Q">ConsumePseudo()</a></td>
+          <td>&lt;pseudo-class-selector&gt;<br>
+            &lt;pseudo-element-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=558?gsn=ConsumeAttribute&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23zWvt7EtTO12WANl1LbB6yI8CcCHE9SuL2Z8s4bwsfkk&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23yHR5CmRDI2jUQ_c_hAep3UtsZCc4jnf0UHsZNwg_APU">ConsumeAttribute()</a></td>
+          <td>&lt;attribute-selector&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=793?gsn=ConsumeCombinator&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23R0oDWdMr_kcvS289_uxybROs9ysOUOq_jHvMyEOy0Nc&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23n4Tf1H6Z6ML4Ln3rIsewN5mOHSWZT2gxbt4nJJCcTnA">ConsumeCombinator()</a></td>
+          <td>&lt;combinator&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=823?gsn=ConsumeAttributeMatch&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23-0Hi7If_fzfHywfR8-CEy3WbkTdV4PVadgzdmhkwBGg&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23QrFUNRkO6iR1rDXHtEUum-3QN_EPgtuF1VLifSTWbX4">ConsumeAttributeMatch()</a></td>
+          <td>&lt;attr-matcher&gt;</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=847?gsn=ConsumeAttributeFlags&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23pUiDU78ZVLO7qRUlzZJq3DVkIq0Rn-zuMDys0jB1CfE&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23mnkfXO-55mZNKFNT-Th4YLtx2tDQSIrNOoMrQRZIm5U">ConsumeAttributeFlags()</a></td>
+          <td>&lt;attr-modifier&gt;</td>
+        </tr>
+      </tbody>
+    </table>
+    <br>
+    <table style="width: 100%" border="1">
+      <caption>生成規則と対応しないメンバ関数</caption>
+      <tbody>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=945?gsn=DefaultNamespace&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23-MH-99OZrCqjziCVLy-yEA3QR0PUJlsU2nEi3QhYQkg&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23ZD2xW5bNMGfV7kRYy_Sz2LFvst43dBHFesLlXiVXxKo">DefaultNamespace()</a></td>
+          <td>***<br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=951?gsn=DetermineNamespace&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23veY2UDA62L_hM4uFTqQJE72UYP0xMQ51vxX4X19QQHA&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23EZmLvL7XjFfP2Mvu3X558nW6l1FpSYT2H8nQbtgtAAc">DetermineNamespace()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=966?gsn=PrependTypeSelectorIfNeeded&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23wcO8SQL_JWZVv77F9VyuQBLix_tnubZVc4VbIHLc1O0&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23FhMFxOWUr14tYjOkP0hlDnaG3h5kgIQUo6Xq4sFZOoY">PrependTypeSelectorIfNeeded()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=1010?gsn=AddSimpleSelectorToCompound&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23XF9bE2rghbaTiZeKWELJqsyTbtSat1i8S7ILPho05P4&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%237LK2tl9u4Ps8XFnjpdjYTOyFOHhPq-DNpirHtL7cmUY">AddSimpleSelectorToCompound()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=1019?gsn=SplitCompoundAtImplicitShadowCrossingCombinator&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%232c6FN6YVBAwKgIxbl8OIhPVHxlx3w-3YZJrHsyWw7lU&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23HOHMs0vjr4hpxDR73FvlDL5w6uwr4mUEqc877OY9aF0">SplitCompoundAtImplicitShadowCrossingCombinator()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=1198?gsn=RecordUsageAndDeprecations&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%233TZ2zjONLOZOf-jRUFp2MjVKGzZ4_YWozsTeMMUilmI&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23aYVh56MeJlg4dgFPLViy9ujqurtboUlsskzHRPyFhtU">RecordUsageAndDeprecations()</a></td>
+          <td><br>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=1291?gsn=ContainsUnknownWebkitPseudoElements&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23WSQ88QBzCztcTvoB64iTYaG1Jrm9gTBViEfLvGUC7p4&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23fWaPcL9CpQ26sX4hs2eVKOPYAax9qUme2UzzBTH3ID0">ContainsUnknownWebkitPseudoElements()</a></td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <span style="color: #505050;"></span>
+    <h3><span style="color: #505050;">メンバとして実装されなかった生成規則</span></h3>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td>&lt;selector-list&gt;</td>
+          <td>規則のどこからも参照されていない。つまり、根となる予定の規則。</td>
+        </tr>
+        <tr>
+          <td>&lt;simple-selector-list&gt;</td>
+          <td>規則のどこからも参照されていない。つまり、根となる予定の規則。</td>
+        </tr>
+        <tr>
+          <td>&lt;relative-selector-list&gt;</td>
+          <td>規則のどこからも参照されていない。つまり、根となる予定の規則。</td>
+        </tr>
+        <tr>
+          <td>&lt;relative-selector&gt;</td>
+          <td>相対セレクタ。　引数として渡される scope: 要素があるため、セレクタ文字列が '&gt;'、'+'、'~' から始まる。</td>
+        </tr>
+        <tr>
+          <td>&lt;ns-prefix&gt;</td>
+          <td>&lt;type-selector&gt; 相当の関数内に直接実装される。関数に分離していない。</td>
+        </tr>
+        <tr>
+          <td>&lt;wq-name&gt;</td>
+          <td>&lt;type-selector&gt; と &lt;attribute-selector&gt;
+            相当の関数内に直接実装される。関 数に分離していない。</td>
+        </tr>
+        <tr>
+          <td>&lt;subclass-selector&gt;</td>
+          <td>&lt;type-selector&gt; 以外の simple セレクタ。</td>
+        </tr>
+        <tr>
+          <td><br>
+          </td>
+          <td><br>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p><br>
+    </p>
+    <p> </p>
+  </body>
+</html>

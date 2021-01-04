@@ -4,6 +4,7 @@
 #include <wordring/wwwc/css_syntax/tokenization.hpp>
 
 #include <wordring/compatibility.hpp>
+#include <wordring/whatwg/infra/infra.hpp>
 
 #include <algorithm>
 #include <any>
@@ -120,7 +121,81 @@ namespace wordring::wwwc::css
 
 	/*! @brief 構文エラー
 	*/
-	struct syntax_error {};
+	//struct syntax_error {};
+
+	/*! @brief 構文解析の結果
+	
+	結果の値あるいは失敗を表すクラス。
+	*/
+	template <typename T>
+	class parse_result
+	{
+	public:
+		using value_type = T;
+
+	public:
+		parse_result() : m_failure(true) {}
+
+		parse_result(value_type const& value)
+			: m_value(value)
+			, m_failure(false)
+		{
+		}
+
+		parse_result(value_type&& value)
+			: m_value(std::move(value))
+			, m_failure(false)
+		{
+		}
+
+		parse_result(parse_result&&) = default;
+		parse_result(parse_result const&) = default;
+
+		void operator =(value_type const& value)
+		{
+			m_value = value;
+			m_failure = false;
+		}
+
+		void operator =(value_type&& value)
+		{
+			m_value = std::move(value);
+			m_failure = false;
+		}
+
+		operator bool() const { return !m_failure; }
+
+		bool operator !() const { return m_failure; }
+
+		value_type const& operator *() const
+		{
+			assert(!m_failure);
+			return m_value;
+		}
+
+		value_type& operator *()
+		{
+			assert(!m_failure);
+			return m_value;
+		}
+
+		value_type const* operator ->() const
+		{
+			assert(!m_failure);
+			return &m_value;
+		}
+
+		value_type* operator ->()
+		{
+			assert(!m_failure);
+			return &m_value;
+		}
+
+
+	private:
+		value_type m_value;
+		bool m_failure;
+	};
 
 	inline bool is_at_rule(std::any const& val)
 	{
@@ -179,10 +254,10 @@ namespace wordring::wwwc::css
 		return is_preserved_token(val) || is_function(val) || is_simple_block(val);
 	}
 
-	bool is_syntax_error(std::any const& val)
+	/*inline bool is_syntax_error(std::any const& val)
 	{
 		return val.type() == typeid(syntax_error);
-	}
+	}*/
 
 	// --------------------------------------------------------------------------------------------
 	// 5.2. Definitions
@@ -201,55 +276,43 @@ namespace wordring::wwwc::css
 	class token_stream
 	{
 	public:
-		using container = std::vector<css_token> const;
+		using container = std::vector<css_token>;
 		using const_iterator = typename container::const_iterator;
 
 	public:
 		token_stream(container&& c)
 			: m_v(std::move(c))
-			, m_it()
-			, m_eof(eof_token())
-			, m_reconsume_flag(true)
+			, m_i(-1)
 		{
-			m_it = m_v.cbegin();
+			m_v.push_back(eof_token());
 		}
 
 		css_token const& current_input_token()
 		{
-			return m_it != m_v.cend() ? *m_it : m_eof;
+			if (!(0 <= m_i && m_i < m_v.size())) return m_v.back();
+			return m_v[m_i];
 		}
 
 		css_token const& next_input_token()
 		{
-			if (m_it == m_v.cend()) return m_eof;
-
-			const_iterator it = std::next(m_it);
-
-			return it != m_v.cend() ? *it : m_eof;
+			assert(m_i < int(m_v.size()) - 1);
+			return m_v[m_i + 1];
 		}
 
 		css_token const& consume()
 		{
-			if (m_reconsume_flag) m_reconsume_flag = false;
-			else if (m_it != m_v.cend()) ++m_it;
-
+			++m_i;
 			return current_input_token();
 		}
 
 		void reconsume()
 		{
-			assert(m_reconsume_flag == false);
-
-			m_reconsume_flag = true;
+			--m_i;
 		}
 
 	private:
 		container m_v;
-		const_iterator m_it;
-
-		std::any m_eof;
-
-		bool m_reconsume_flag;
+		std::int32_t m_i;
 	};
 
 	// --------------------------------------------------------------------------------------------
@@ -259,8 +322,9 @@ namespace wordring::wwwc::css
 	// https://triple-underscore.github.io/css-syntax-ja.html#parser-entry-points
 	// --------------------------------------------------------------------------------------------
 
-	template <typename Input, typename Syntax, typename ErrorHandler = std::nullptr_t>
-	inline std::vector<std::any> parse_list(Input&& in, Syntax s, ErrorHandler handler = nullptr);
+	template <typename Syntax, typename ErrorHandler = std::nullptr_t>
+	inline std::vector<parse_result<std::vector<component_value>>>
+		parse_comma_list(token_stream& in, Syntax s, ErrorHandler handler = nullptr);
 
 	template <typename Input, typename ErrorHandler = std::nullptr_t>
 	inline std::vector<std::any> parse_list_of_component_values(Input&& in, ErrorHandler handler = nullptr);
@@ -329,15 +393,15 @@ namespace wordring::wwwc::css
 	@param [in] s       各種CSS規格で定義される文法
 	@param [in] handler エラーハンドラ
 	
-	@return コンポーネント値のリスト、あるいは失敗を表す空のリスト
+	@return コンポーネント値のリスト（std::vector<component_value>）、あるいは失敗。
 	
 	入力をコンポーネント値のリストへ解析する。
 
-	引数sで供給される文法にマッチしない場合、戻り値は空となる。
+	引数sで供給される文法にマッチしない場合、戻り値は failure 状態となる。
 	文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。
 	文法のシグネチャは以下の通り。
 	@code
-		bool syntax(std::vector<std::any> const& v);
+		bool syntax(std::vector<component_value> const& v);
 	@endcode
 
 	エラーハンドラが供給された場合、エラーを報告するために、
@@ -350,30 +414,31 @@ namespace wordring::wwwc::css
 
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
 
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	@sa parse_result
 
 	@sa https://drafts.csswg.org/css-syntax-3/#css-parse-something-according-to-a-css-grammar
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-something-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler = std::nullptr_t>
-	inline std::vector<component_value> parse_grammar(token_stream& in, Syntax syntax, ErrorHandler handler = nullptr)
+	inline parse_result<std::vector<component_value>>
+		parse_grammar(token_stream& in, Syntax syntax, ErrorHandler handler = nullptr)
 	{
+		using result_type = parse_result<std::vector<component_value>>;
+
 		std::vector<component_value> v = parse_list_of_component_values(in, handler);
 
-		if (syntax(v) == false) v.clear();
-
-		return v;
+		return syntax(v) ? result_type(std::move(v)) : result_type();
 	}
 
 	template <typename Syntax>
-	inline std::vector<component_value> parse_grammar(std::vector<css_token>&& in, Syntax syntax)
+	inline parse_result<std::vector<component_value>> parse_grammar(std::vector<css_token>&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_grammar(s, syntax, nullptr);
 	}
 
 	template <typename Syntax>
-	inline std::vector<component_value> parse_grammar(std::u32string&& in, Syntax syntax)
+	inline parse_result<std::vector<component_value>> parse_grammar(std::u32string&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_grammar(s, syntax, nullptr);
@@ -392,10 +457,16 @@ namespace wordring::wwwc::css
 	@param [in] s       各種CSS規格で定義される文法
 	@param [in] handler エラーハンドラ
 	
-	@return コンポーネント値のリスト、あるいは失敗を表す空のリスト
+	@return 「コンポーネント値のリスト（std::vector<component_value>）、あるいは失敗」のリスト
 	
-	入力をコンポーネント値のリストへ解析する。
+	入力をコンポーネント値のリストのリストへ解析する。
 	文法の検査も行う。
+
+	文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。
+	文法のシグネチャは以下の通り。
+	@code
+		bool syntax(std::vector<component_value> const& v);
+	@endcode
 
 	エラーハンドラが供給された場合、エラーを報告するために、
 	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
@@ -407,41 +478,46 @@ namespace wordring::wwwc::css
 
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
 
+	@sa parse_result
 	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
 
 	@sa https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler>
-	inline std::vector<component_value> parse_comma_list(token_stream& in, Syntax syntax, ErrorHandler handler)
+	inline std::vector<parse_result<std::vector<component_value>>>
+		parse_comma_list(token_stream& in, Syntax syntax, ErrorHandler handler)
 	{
-		std::vector<std::vector<component_value>> v = parse_comma_separated_list_of_component_values(in, handler);
+		using result_type = std::vector<parse_result<std::vector<component_value>>>;
 
+		result_type result;
+
+		std::vector<std::vector<component_value>> v = parse_comma_separated_list_of_component_values(in, handler);
 		auto it1 = v.begin();
 		auto it2 = v.end();
 		while (it1 != it2)
 		{
 			std::vector<component_value> tmp;
-			std::swap(*it1, tmp);
+			std::swap(*it1++, tmp);
 			token_stream s(std::move(tmp));
-			*it1 = parse_grammar(s, syntax, handler);
+			result.emplace_back(parse_grammar(s, syntax, handler));
 		}
 
-		return v;
+		return result;
 	}
 
 	template <typename Syntax>
-	inline std::vector<component_value> parse_comma_list(std::vector<css_token>&& in, Syntax syntax)
+	inline std::vector<parse_result<std::vector<component_value>>> parse_comma_list(std::vector<css_token>&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
-		return parse_list(s, syntax, nullptr);
+		return parse_comma_list(s, syntax, nullptr);
 	}
 
 	template <typename Syntax>
-	inline std::vector<component_value> parse_comma_list(std::u32string&& in, Syntax syntax)
+	inline std::vector<parse_result<std::vector<component_value>>> parse_comma_list(std::u32string&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
-		return parse_list(s, syntax, nullptr);
+		return parse_comma_list(s, syntax, nullptr);
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -456,9 +532,9 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return コンポーネント値のリスト、あるいは失敗を表す空のリスト
+	@return 規則のリスト
 
-	入力をコンポーネント値のリストへ解析する。
+	入力を規則のリストへ解析する。
 
 	エラーハンドラが供給された場合、エラーを報告するために、
 	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
@@ -489,14 +565,26 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief スタイルシートを構文解析する
-
-	この関数は、コード・ポイント列やトークン列の他に、任意のバイト列を入力として受け付ける。
-	エンコーディングを自動決定することが出来る。
 	
 	*/
 	inline std::vector<component_value> parse_stylesheet(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
+		return parse_stylesheet(s, nullptr);
+	}
+
+	/*! @brief スタイルシートを構文解析する
+
+	この関数は、8bit文字列を入力として受け付ける。
+	エンコーディングを自動決定することが出来る。
+
+	*/
+	inline std::vector<component_value>
+		parse_stylesheet(std::string const& in, encoding_name fallback = static_cast<encoding_name>(0))
+	{
+		std::u32string buf;
+		decode(in.begin(), in.end(), std::back_inserter(buf), fallback);
+		token_stream s(normalize_into_token_stream(std::move(buf), nullptr));
 		return parse_stylesheet(s, nullptr);
 	}
 
@@ -512,9 +600,9 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return 規則のリスト、あるいは失敗を表す syntax_error
+	@return 規則のリスト
 
-	入力をコンポーネント値のリストへ解析する。
+	入力を規則のリストへ解析する。
 
 	エラーハンドラが供給された場合、エラーを報告するために、
 	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
@@ -562,7 +650,7 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return 規則、あるいは失敗を表す syntax_error
+	@return 規則、あるいは失敗
 
 	入力を規則へ解析する。
 
@@ -582,10 +670,12 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-rule
 	*/
 	template <typename ErrorHandler>
-	inline css_component parse_rule(token_stream& in, ErrorHandler handler)
+	inline parse_result<css_component> parse_rule(token_stream& in, ErrorHandler handler)
 	{
+		using result_type = parse_result<css_component>;
+
 		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return syntax_error();
+		if (is_eof_token(in.next_input_token())) return result_type();
 
 		css_component rule;
 		if (is_at_keyword_token(in.next_input_token()))
@@ -595,23 +685,23 @@ namespace wordring::wwwc::css
 		else
 		{
 			std::optional<qualified_rule> q = consume_qualified_rule(in, handler);
-			if (!q) return syntax_error();
+			if (!q) return result_type();
 			rule = std::move(*q);
 		}
 
 		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return rule;
+		if (is_eof_token(in.next_input_token())) return result_type(std::move(rule));
 
-		return syntax_error();
+		return result_type();
 	}
 
-	inline css_component parse_rule(std::vector<css_token>&& in)
+	inline parse_result<css_component> parse_rule(std::vector<css_token>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_rule(s, nullptr);
 	}
 
-	inline css_component parse_rule(std::u32string&& in)
+	inline parse_result<css_component> parse_rule(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_rule(s, nullptr);
@@ -629,7 +719,7 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return 宣言、あるいは失敗を表す syntax_error
+	@return 宣言、あるいは失敗
 
 	入力をコンポーネント値のリストへ解析する。
 
@@ -649,24 +739,27 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-declaration
 	*/
 	template <typename ErrorHandler>
-	inline component_value parse_declaration(token_stream& in, ErrorHandler handler)
+	inline parse_result<component_value>
+		parse_declaration(token_stream& in, ErrorHandler handler)
 	{
+		using result_type = parse_result<component_value>;
+
 		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (!is_ident_token(in.next_input_token())) return syntax_error();
+		if (!is_ident_token(in.next_input_token())) return result_type();
 
 		std::optional<declaration> decl = consume_declaration(in, handler);
-		if (decl) return decl;
+		if (decl) return result_type(std::move(*decl));
 
-		return syntax_error();
+		return result_type();
 	}
 
-	inline component_value parse_declaration(std::vector<css_token>&& in)
+	inline parse_result<component_value> parse_declaration(std::vector<css_token>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_declaration(s, nullptr);
 	}
 
-	inline component_value parse_declaration(std::u32string&& in)
+	inline parse_result<component_value> parse_declaration(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_declaration(s, nullptr);
@@ -684,7 +777,7 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return 宣言リスト、あるいは失敗を表す syntax_error
+	@return 宣言リスト
 
 	入力を宣言リストへ解析する。
 
@@ -704,7 +797,7 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-declarations
 	*/
 	template <typename ErrorHandler>
-	inline std::vector<std::any> parse_list_of_declarations(token_stream& in, ErrorHandler handler)
+	inline std::vector<component_value> parse_list_of_declarations(token_stream& in, ErrorHandler handler)
 	{
 		return consume_list_of_declarations(in, handler);
 	}
@@ -733,7 +826,7 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return コンポーネント値、あるいは失敗を表す syntax_error
+	@return コンポーネント値、あるいは失敗
 
 	入力をコンポーネント値へ解析する。
 
@@ -753,26 +846,28 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-component-value
 	*/
 	template <typename ErrorHandler>
-	inline component_value parse_component_value(token_stream& in, ErrorHandler handler)
+	inline parse_result<component_value> parse_component_value(token_stream& in, ErrorHandler handler)
 	{
+		using result_type = parse_result<component_value>;
+
 		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return syntax_error();
+		if (is_eof_token(in.next_input_token())) return result_type();
 
 		component_value c = consume_component_value(in, handler);
 
 		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return c;
+		if (is_eof_token(in.next_input_token())) return result_type(std::move(c));
 
-		return syntax_error();
+		return result_type();
 	}
 
-	inline component_value parse_component_value(std::vector<css_token>&& in)
+	inline parse_result<component_value> parse_component_value(std::vector<css_token>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_component_value(s, nullptr);
 	}
 
-	inline component_value parse_component_value(std::u32string&& in)
+	inline parse_result<component_value> parse_component_value(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_component_value(s, nullptr);
@@ -873,16 +968,28 @@ namespace wordring::wwwc::css
 	{
 		std::vector<std::vector<component_value>> lists;
 
-		while (!is_eof_token(in.current_input_token()))
+		//while (!is_eof_token(in.current_input_token()))
+		while(true)
 		{
 			std::vector<component_value> v;
 			while (true)
 			{
 				component_value c = consume_component_value(in, handler);
-				if (is_eof_token(c) || is_comma_token(c)) break;
-				v.push_back(c);
+				if (is_eof_token(c))
+				{
+					lists.push_back(v);
+					return lists;
+				}
+				else if (is_comma_token(c))
+				{
+					lists.push_back(v);
+					break;
+				}
+				else
+				{
+					v.push_back(c);
+				}
 			}
-			lists.push_back(v);
 		}
 
 		return lists;
@@ -1155,6 +1262,12 @@ namespace wordring::wwwc::css
 
 	@return 「 Declaration あるいは  @-rule 」の混在リスト
 
+	@par 入力例
+	@code
+		background-color: red;
+		color: blue !important;
+	@endcode
+
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
 
 	@sa declaration
@@ -1226,6 +1339,52 @@ namespace wordring::wwwc::css
 	// https://drafts.csswg.org/css-syntax-3/#consume-declaration
 	// https://triple-underscore.github.io/css-syntax-ja.html#consume-declaration
 	// --------------------------------------------------------------------------------------------
+	
+	/*! 末尾の !important を削除する
+	
+	@return 削除した場合、 true を返す
+
+	consume_declaration() から呼び出される。
+
+	@sa consume_declaration()
+	*/
+	inline bool process_important(std::vector<component_value>& v)
+	{
+		std::u32string_view const sv = U"important";
+
+		std::uint32_t st = 0;
+		for (std::uint32_t i = v.size() - 1; 0 <= i; --i)
+		{
+			using wordring::whatwg::is_ascii_case_insensitive_match;
+
+			if (is_whitespace_token(v[i]))
+			{
+				continue;
+			}
+			else if (st == 0 && is_ident_token(v[i]))
+			{
+				ident_token const& tkn = std::any_cast<ident_token>(v[i]);
+				if (is_ascii_case_insensitive_match(tkn.m_value.begin(), tkn.m_value.end(), sv.begin(), sv.end()))
+				{
+					st = 1;
+				}
+				else break;
+			}
+			else if (st == 1 && is_delim_token(v[i]))
+			{
+				delim_token const& tkn = std::any_cast<delim_token>(v[i]);
+				if (tkn.m_value == U'!')
+				{
+					v.erase(std::next(v.begin(), i), v.end());
+					return true;
+				}
+				else break;
+			}
+			else break;
+		}
+
+		return false;
+	}
 
 	/*! @brief 入力から declaration を消費する
 
@@ -1267,9 +1426,10 @@ namespace wordring::wwwc::css
 		}
 
 		std::vector<component_value>& v = decl.m_value;
-
-
-		// TODO
+		if (process_important(v))
+		{
+			decl.m_important_flag = true;
+		}
 
 		while (!v.empty() && is_whitespace_token(v.back())) v.pop_back();
 

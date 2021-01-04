@@ -1,0 +1,17 @@
+﻿
+open_square_token  '['
+close_square_token ']'
+colon_token        ':'
+close_paren_token  ')'
+comma_token        ','
+
+delim_gt_token       greater-than sign '>'
+delim_plus_token     Plus sign         '+'
+delim_tilde_token    Tilde             '~'
+delim_vertical_token Vertical bar      '|'
+delim_caret_token    Caret             '^'
+delim_dollar_token   Dollar sign       '$'
+delim_asterisk_token Asterisk          '*'
+delim_equal_token    Equals sign       '='
+string_i_token                         'i'
+string_s_token                         's'

@@ -105,7 +105,7 @@ namespace
 		out += in.m_name;
 		out += U":";
 		for(component_value const& c : in.m_value) out += print(c);
-		if (in.m_important_flag) out += U"!important";
+		if (in.m_important_flag) out += U"!IMPORTANT";
 
 		return out;
 	}
@@ -171,6 +171,13 @@ namespace
 		else if (i == typeid(at_rule)       ) out += print(std::any_cast<at_rule>(c));
 		else if (i == typeid(qualified_rule)) out += print(std::any_cast<qualified_rule>(c));
 		else if (i == typeid(declaration)   ) out += print(std::any_cast<declaration>(c));
+
+		else if (i == typeid(parse_result<component_value>))
+		{
+			auto const& pr = std::any_cast<parse_result<component_value>>(c);
+			if (pr) out += print(*pr);
+			else out += U"FAILURE";
+		}
 
 		else
 		{
@@ -275,7 +282,7 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_current_input_token_1)
 	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
 
 	token_stream in(std::move(tokens));
-
+	in.consume();
 	BOOST_CHECK(print(in.current_input_token()) == U"p");
 }
 
@@ -290,7 +297,7 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_current_input_token_2)
 	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
 
 	token_stream in(std::move(tokens));
-
+	in.consume();
 	BOOST_CHECK(print(in.current_input_token()) == U"EOF_TOKEN");
 }
 
@@ -304,7 +311,7 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_next_input_token_1)
 	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
 
 	token_stream in(std::move(tokens));
-
+	in.consume();
 	BOOST_CHECK(print(in.next_input_token()) == U"{");
 }
 
@@ -319,7 +326,7 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_next_input_token_2)
 	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
 
 	token_stream in(std::move(tokens));
-
+	in.consume();
 	BOOST_CHECK(print(in.next_input_token()) == U"EOF_TOKEN");
 }
 
@@ -426,21 +433,220 @@ BOOST_AUTO_TEST_CASE(parsing_parse_grammar_1)
 {
 	using namespace wordring::wwwc::css;
 
-	std::u32string in = UR"*( p { color: red; } )*";
-	/*
-	auto v1 = parse_grammar(std::u32string(in), [](auto const& c) { return true; });
-	auto v2 = normalize_into_token_stream(std::u32string(in));
+	std::u32string css = U" p { color: red; } ";
+	parse_result<std::vector<component_value>> v = parse_grammar(std::move(css), [](component_value)->bool { return true; });
 
-	BOOST_CHECK(print(v1) == print(v2));
-	*/
+	BOOST_CHECK(v);
+	std::u32string s = print(*v);
+	BOOST_CHECK(s == U" p { color: red; } ");
 }
 
-// --------------------------------------------------------------------------------------------
+BOOST_AUTO_TEST_CASE(parsing_parse_grammar_2)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U" p { color: red; } ";
+	parse_result<std::vector<component_value>> v = parse_grammar(std::move(css), [](component_value)->bool { return false; });
+
+	BOOST_CHECK(!v);
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.2. Parse A Comma-Separated List According To A CSS Grammar
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-comma-list
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-comma-list
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_comma_list_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"a, p h1";
+	std::vector<parse_result<std::vector<component_value>>> v = parse_comma_list(std::move(css), [](component_value)->bool { return true; });
+
+	std::u32string s;
+	for (auto const& c : v)
+	{
+		auto const& v = std::any_cast<parse_result<std::vector<component_value>>>(c);
+		if(v) s += print(*v);
+	}
+
+	BOOST_CHECK(s == U"a p h1");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.3. Parse a stylesheet
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-stylesheet
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-stylesheet
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_stylesheet_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::string css =
+		"@import \"my-styles.css\";"
+		"p > a { color: blue; }";
+	std::vector<component_value> v = parse_stylesheet(css);
+
+	std::u32string s = print(v);
+	BOOST_CHECK(s == U"@import my-styles.cssp > a { color: blue; }");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.4. Parse a list of rules
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-list-of-rules
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-list-of-rules
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_list_of_rules_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css =
+		U"@import \"my-styles.css\";"
+		U"p > a { color: blue; }";
+	std::vector<component_value> v = parse_list_of_rules(std::move(css));
+
+	std::u32string s = print(v);
+	BOOST_CHECK(s == U"@import my-styles.cssp > a { color: blue; }");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.5. Parse a rule
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-rule
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-rule
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_rule_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"@import \"my-styles.css\" ; ";
+	parse_result<css_component> c = parse_rule(std::move(css));
+
+	BOOST_CHECK(c);
+	std::u32string s = print(*c);
+	BOOST_CHECK(s == U"@import my-styles.css ");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.6. Parse a declaration
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-declaration
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-declaration
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_declaration_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"background-color: red;";
+	parse_result<component_value> c = parse_declaration(std::move(css));
+
+	BOOST_CHECK(c);
+	std::u32string s = print(*c);
+	BOOST_CHECK(s == U"background-color:red;");
+}
+
+// 失敗させてみる
+BOOST_AUTO_TEST_CASE(parsing_parse_declaration_2)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"a, p h1";
+	parse_result<component_value> c = parse_declaration(std::move(css));
+
+	BOOST_CHECK(!c);
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.7. Parse a list of declarations
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-list-of-declarations
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-list-of-declarations
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_list_of_declarations_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css =
+		U"background-color: red;"
+		U"color: blue !important;";
+	std::vector<component_value> v = parse_list_of_declarations(std::move(css));
+
+	std::u32string s = print(v);
+	BOOST_CHECK(s == U"background-color:redcolor:blue!IMPORTANT");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.8. Parse a component value
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-component-value
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-component-value
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_component_value_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"a";
+	parse_result<component_value> c = parse_component_value(std::move(css));
+
+	BOOST_CHECK(c);
+	std::u32string s = print(*c);
+	BOOST_CHECK(s == U"a");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.9. Parse a list of component values
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-list-of-component-values
+// https://triple-underscore.github.io/css-syntax-ja.html#parse-list-of-component-values
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_list_of_component_values_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"a, p h1";
+	std::vector<component_value> v = parse_list_of_component_values(std::move(css));
+
+	std::u32string s = print(v);
+	BOOST_CHECK(s == U"a, p h1");
+}
+
+// ------------------------------------------------------------------------------------------------
+// 5.3.10. Parse a comma-separated list of component values
+//
+// https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values
+// 
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(parsing_parse_comma_separated_list_of_component_values_1)
+{
+	using namespace wordring::wwwc::css;
+
+	std::u32string css = U"a, p h1";
+	std::vector<std::vector<component_value>> v = parse_comma_separated_list_of_component_values(std::move(css));
+
+	std::u32string s;
+	for (auto const& x : v) s += print(x);
+
+	BOOST_CHECK(s == U"a p h1");
+}
+
+// ------------------------------------------------------------------------------------------------
 // 5.4.1. Consume a list of rules
 //
 // https://drafts.csswg.org/css-syntax-3/#consume-list-of-rules
 // https://triple-underscore.github.io/css-syntax-ja.html#consume-list-of-rules
-// --------------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------------------------
 
 BOOST_AUTO_TEST_CASE(parsing_consume_list_of_rules_1)
 {
@@ -475,7 +681,7 @@ BOOST_AUTO_TEST_CASE(parsing_consume_at_rule_1)
 	std::u32string css = UR"*(@import "my-styles.css";)*";
 	token_stream in(normalize_into_token_stream(std::move(css), 0));
 
-	BOOST_CHECK(is_at_keyword_token(in.current_input_token()));
+	//BOOST_CHECK(is_at_keyword_token(in.current_input_token()));
 	at_rule rule = consume_at_rule(in, nullptr);
 	std::u32string s = print(rule);
 	BOOST_CHECK(print(rule.m_prelude.back()) == U"my-styles.css");
@@ -492,7 +698,7 @@ BOOST_AUTO_TEST_CASE(parsing_consume_at_rule_2)
 		U"}";
 	token_stream in(normalize_into_token_stream(std::move(css), 0));
 
-	BOOST_CHECK(is_at_keyword_token(in.current_input_token()));
+	//BOOST_CHECK(is_at_keyword_token(in.current_input_token()));
 	at_rule rule = consume_at_rule(in, nullptr);
 	std::u32string s = print(rule);
 	BOOST_CHECK(s == U"@page :left { margin-left: 4cm; margin-right: 3cm; }");
@@ -508,7 +714,7 @@ BOOST_AUTO_TEST_CASE(parsing_consume_at_rule_3)
 		U"}\r\n";
 	token_stream in(normalize_into_token_stream(std::move(css), 0));
 
-	BOOST_CHECK(is_at_keyword_token(in.current_input_token()));
+	//BOOST_CHECK(is_at_keyword_token(in.current_input_token()));
 	at_rule rule = consume_at_rule(in, nullptr);
 	std::u32string s = print(rule);
 	BOOST_CHECK(s == U"@media print { body{ font - size: 10pt } }");
@@ -555,7 +761,7 @@ BOOST_AUTO_TEST_CASE(parsing_consume_list_of_declarations_1)
 
 	std::vector<css_component> decl = consume_list_of_declarations(in, nullptr);
 	std::u32string s = print(decl);
-	BOOST_CHECK(s == U"color:bluetext-decoration:underline !important");
+	BOOST_CHECK(s == U"color:bluetext-decoration:underline!IMPORTANT");
 }
 
 // ------------------------------------------------------------------------------------------------

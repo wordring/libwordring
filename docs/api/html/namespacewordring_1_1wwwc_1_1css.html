@@ -104,6 +104,9 @@ $(function() {
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1open__square__token.html">open_square_token</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">構文エラー  <a href="classwordring_1_1wwwc_1_1css_1_1parse__result.html#details">[詳解]</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1percentage__token.html">percentage_token</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1qualified__rule.html">qualified_rule</a></td></tr>
@@ -115,9 +118,6 @@ $(function() {
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><b>単純ブロック</b>を表現する AST ノード  <a href="structwordring_1_1wwwc_1_1css_1_1simple__block.html#details">[詳解]</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1string__token.html">string_token</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html">syntax_error</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">構文エラー  <a href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html#details">[詳解]</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">トークン列をストリームとしてアクセスするためのアダプタ  <a href="classwordring_1_1wwwc_1_1css_1_1token__stream.html#details">[詳解]</a><br /></td></tr>
@@ -182,13 +182,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_preserved_token</b
 <tr class="memitem:a20171bd90df3321f20248b8d70bf6820"><td class="memItemLeft" align="right" valign="top"><a id="a20171bd90df3321f20248b8d70bf6820"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_component_value</b> (std::any const &amp;val)</td></tr>
 <tr class="separator:a20171bd90df3321f20248b8d70bf6820"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cffa51a43812cdbc65d80ede70ea017"><td class="memItemLeft" align="right" valign="top"><a id="a4cffa51a43812cdbc65d80ede70ea017"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_syntax_error</b> (std::any const &amp;val)</td></tr>
-<tr class="separator:a4cffa51a43812cdbc65d80ede70ea017"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaef34dcb7db4ccac06ac7c8ad2e074b3"><td class="memTemplParams" colspan="2"><a id="aaef34dcb7db4ccac06ac7c8ad2e074b3"></a>
-template&lt;typename Input , typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </td></tr>
-<tr class="memitem:aaef34dcb7db4ccac06ac7c8ad2e074b3"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::any &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_list</b> (Input &amp;&amp;in, Syntax s, ErrorHandler handler=nullptr)</td></tr>
-<tr class="separator:aaef34dcb7db4ccac06ac7c8ad2e074b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83e4fe6460e5e5a7853fd45b12599a25"><td class="memTemplParams" colspan="2">template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </td></tr>
+<tr class="memitem:a83e4fe6460e5e5a7853fd45b12599a25"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a83e4fe6460e5e5a7853fd45b12599a25">parse_comma_list</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, Syntax syntax, ErrorHandler handler)</td></tr>
+<tr class="memdesc:a83e4fe6460e5e5a7853fd45b12599a25"><td class="mdescLeft">&#160;</td><td class="mdescRight">カンマ区切りのリストをCSS文法に沿って構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a83e4fe6460e5e5a7853fd45b12599a25">[詳解]</a><br /></td></tr>
+<tr class="separator:a83e4fe6460e5e5a7853fd45b12599a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a697c180b255cf25a55b1e2718bb0fb0b"><td class="memTemplParams" colspan="2"><a id="a697c180b255cf25a55b1e2718bb0fb0b"></a>
 template&lt;typename Input , typename ErrorHandler  = std::nullptr_t&gt; </td></tr>
 <tr class="memitem:a697c180b255cf25a55b1e2718bb0fb0b"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::any &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_list_of_component_values</b> (Input &amp;&amp;in, ErrorHandler handler=nullptr)</td></tr>
@@ -201,30 +198,26 @@ template&lt;typename Input , typename ErrorHandler  = std::nullptr_t&gt; </td></
 <tr class="memitem:a2a315fe300244977b77271b6bcf9919d"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2a315fe300244977b77271b6bcf9919d">normalize_into_token_stream</a> (std::u32string &amp;&amp;in, ErrorHandler handler=nullptr)</td></tr>
 <tr class="memdesc:a2a315fe300244977b77271b6bcf9919d"><td class="mdescLeft">&#160;</td><td class="mdescRight">入力をトークン列へ正規化する  <a href="namespacewordring_1_1wwwc_1_1css.html#a2a315fe300244977b77271b6bcf9919d">[詳解]</a><br /></td></tr>
 <tr class="separator:a2a315fe300244977b77271b6bcf9919d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65ef91c1812a8d1129ff4ae7d9e8a85f"><td class="memTemplParams" colspan="2">template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </td></tr>
-<tr class="memitem:a65ef91c1812a8d1129ff4ae7d9e8a85f"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f">parse_grammar</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, Syntax syntax, ErrorHandler handler=nullptr)</td></tr>
-<tr class="memdesc:a65ef91c1812a8d1129ff4ae7d9e8a85f"><td class="mdescLeft">&#160;</td><td class="mdescRight">CSS文法に沿って解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f">[詳解]</a><br /></td></tr>
-<tr class="separator:a65ef91c1812a8d1129ff4ae7d9e8a85f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9c4ec00c0def7d0784727a933dc2bb76"><td class="memTemplParams" colspan="2"><a id="a9c4ec00c0def7d0784727a933dc2bb76"></a>
+<tr class="memitem:aaa0495277f0ff68c043c037cb0f432b8"><td class="memTemplParams" colspan="2">template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </td></tr>
+<tr class="memitem:aaa0495277f0ff68c043c037cb0f432b8"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8">parse_grammar</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, Syntax syntax, ErrorHandler handler=nullptr)</td></tr>
+<tr class="memdesc:aaa0495277f0ff68c043c037cb0f432b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">CSS文法に沿って解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8">[詳解]</a><br /></td></tr>
+<tr class="separator:aaa0495277f0ff68c043c037cb0f432b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48fa5c036e559a6bb66d4b3da6b40ef6"><td class="memTemplParams" colspan="2"><a id="a48fa5c036e559a6bb66d4b3da6b40ef6"></a>
 template&lt;typename Syntax &gt; </td></tr>
-<tr class="memitem:a9c4ec00c0def7d0784727a933dc2bb76"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_grammar</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in, Syntax syntax)</td></tr>
-<tr class="separator:a9c4ec00c0def7d0784727a933dc2bb76"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78c054137039b0a257a0e4aa2a1f617f"><td class="memTemplParams" colspan="2"><a id="a78c054137039b0a257a0e4aa2a1f617f"></a>
+<tr class="memitem:a48fa5c036e559a6bb66d4b3da6b40ef6"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_grammar</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in, Syntax syntax)</td></tr>
+<tr class="separator:a48fa5c036e559a6bb66d4b3da6b40ef6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac9d504899ceec0f1accbb4195c9ab8be"><td class="memTemplParams" colspan="2"><a id="ac9d504899ceec0f1accbb4195c9ab8be"></a>
 template&lt;typename Syntax &gt; </td></tr>
-<tr class="memitem:a78c054137039b0a257a0e4aa2a1f617f"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_grammar</b> (std::u32string &amp;&amp;in, Syntax syntax)</td></tr>
-<tr class="separator:a78c054137039b0a257a0e4aa2a1f617f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91b03e69c82bff1d6f51da94d0416922"><td class="memTemplParams" colspan="2">template&lt;typename Syntax , typename ErrorHandler &gt; </td></tr>
-<tr class="memitem:a91b03e69c82bff1d6f51da94d0416922"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a91b03e69c82bff1d6f51da94d0416922">parse_comma_list</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, Syntax syntax, ErrorHandler handler)</td></tr>
-<tr class="memdesc:a91b03e69c82bff1d6f51da94d0416922"><td class="mdescLeft">&#160;</td><td class="mdescRight">カンマ区切りのリストをCSS文法に沿って構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a91b03e69c82bff1d6f51da94d0416922">[詳解]</a><br /></td></tr>
-<tr class="separator:a91b03e69c82bff1d6f51da94d0416922"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a541bf6d5634e56270e3f5dbed97ae799"><td class="memTemplParams" colspan="2"><a id="a541bf6d5634e56270e3f5dbed97ae799"></a>
+<tr class="memitem:ac9d504899ceec0f1accbb4195c9ab8be"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_grammar</b> (std::u32string &amp;&amp;in, Syntax syntax)</td></tr>
+<tr class="separator:ac9d504899ceec0f1accbb4195c9ab8be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a782aa2d8b337aff820b45ba270e600b0"><td class="memTemplParams" colspan="2"><a id="a782aa2d8b337aff820b45ba270e600b0"></a>
 template&lt;typename Syntax &gt; </td></tr>
-<tr class="memitem:a541bf6d5634e56270e3f5dbed97ae799"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_comma_list</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in, Syntax syntax)</td></tr>
-<tr class="separator:a541bf6d5634e56270e3f5dbed97ae799"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6eff5459f7fa8a165b5f7e877287e332"><td class="memTemplParams" colspan="2"><a id="a6eff5459f7fa8a165b5f7e877287e332"></a>
+<tr class="memitem:a782aa2d8b337aff820b45ba270e600b0"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_comma_list</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in, Syntax syntax)</td></tr>
+<tr class="separator:a782aa2d8b337aff820b45ba270e600b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83abbca07a73a18e6e71f7d1b5b4fda5"><td class="memTemplParams" colspan="2"><a id="a83abbca07a73a18e6e71f7d1b5b4fda5"></a>
 template&lt;typename Syntax &gt; </td></tr>
-<tr class="memitem:a6eff5459f7fa8a165b5f7e877287e332"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_comma_list</b> (std::u32string &amp;&amp;in, Syntax syntax)</td></tr>
-<tr class="separator:a6eff5459f7fa8a165b5f7e877287e332"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a83abbca07a73a18e6e71f7d1b5b4fda5"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>parse_comma_list</b> (std::u32string &amp;&amp;in, Syntax syntax)</td></tr>
+<tr class="separator:a83abbca07a73a18e6e71f7d1b5b4fda5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ded615c3ae534a4183838d5486ccf3c"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
 <tr class="memitem:a5ded615c3ae534a4183838d5486ccf3c"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a5ded615c3ae534a4183838d5486ccf3c">parse_stylesheet</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
 <tr class="memdesc:a5ded615c3ae534a4183838d5486ccf3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">スタイルシートを構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a5ded615c3ae534a4183838d5486ccf3c">[詳解]</a><br /></td></tr>
@@ -235,6 +228,9 @@ std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab2527
 <tr class="memitem:a01ebe850b191f8d807914a99b5b1fd8d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a01ebe850b191f8d807914a99b5b1fd8d">parse_stylesheet</a> (std::u32string &amp;&amp;in)</td></tr>
 <tr class="memdesc:a01ebe850b191f8d807914a99b5b1fd8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">スタイルシートを構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a01ebe850b191f8d807914a99b5b1fd8d">[詳解]</a><br /></td></tr>
 <tr class="separator:a01ebe850b191f8d807914a99b5b1fd8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40aa811342bf1a3b8bda58dfd71829b7"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a40aa811342bf1a3b8bda58dfd71829b7">parse_stylesheet</a> (std::string const &amp;in, encoding_name fallback=static_cast&lt; encoding_name &gt;(0))</td></tr>
+<tr class="memdesc:a40aa811342bf1a3b8bda58dfd71829b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">スタイルシートを構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a40aa811342bf1a3b8bda58dfd71829b7">[詳解]</a><br /></td></tr>
+<tr class="separator:a40aa811342bf1a3b8bda58dfd71829b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af8c9ff58b7d17ffc15e8c2ee2302a487"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
 <tr class="memitem:af8c9ff58b7d17ffc15e8c2ee2302a487"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#af8c9ff58b7d17ffc15e8c2ee2302a487">parse_list_of_rules</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
 <tr class="memdesc:af8c9ff58b7d17ffc15e8c2ee2302a487"><td class="mdescLeft">&#160;</td><td class="mdescRight">規則リストを構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#af8c9ff58b7d17ffc15e8c2ee2302a487">[詳解]</a><br /></td></tr>
@@ -245,26 +241,26 @@ std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab2527
 <tr class="memitem:afa453ce516cb3b2edf134bc01bd46a5d"><td class="memItemLeft" align="right" valign="top"><a id="afa453ce516cb3b2edf134bc01bd46a5d"></a>
 std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parse_list_of_rules</b> (std::u32string &amp;&amp;in)</td></tr>
 <tr class="separator:afa453ce516cb3b2edf134bc01bd46a5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9cf2e0d0a1f2e98dd12c1305c43a88f6"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
-<tr class="memitem:a9cf2e0d0a1f2e98dd12c1305c43a88f6"><td class="memTemplItemLeft" align="right" valign="top">css_component&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a9cf2e0d0a1f2e98dd12c1305c43a88f6">parse_rule</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
-<tr class="memdesc:a9cf2e0d0a1f2e98dd12c1305c43a88f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">規則を構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a9cf2e0d0a1f2e98dd12c1305c43a88f6">[詳解]</a><br /></td></tr>
-<tr class="separator:a9cf2e0d0a1f2e98dd12c1305c43a88f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac6ebb1e88f3f286e550091838c1537d9"><td class="memItemLeft" align="right" valign="top"><a id="ac6ebb1e88f3f286e550091838c1537d9"></a>
-css_component&#160;</td><td class="memItemRight" valign="bottom"><b>parse_rule</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in)</td></tr>
-<tr class="separator:ac6ebb1e88f3f286e550091838c1537d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae72c25e9360386548827517bb9ce8f89"><td class="memItemLeft" align="right" valign="top"><a id="ae72c25e9360386548827517bb9ce8f89"></a>
-css_component&#160;</td><td class="memItemRight" valign="bottom"><b>parse_rule</b> (std::u32string &amp;&amp;in)</td></tr>
-<tr class="separator:ae72c25e9360386548827517bb9ce8f89"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfa4abae84aea0626f8ab3b0c49b0fbb"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
-<tr class="memitem:abfa4abae84aea0626f8ab3b0c49b0fbb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#abfa4abae84aea0626f8ab3b0c49b0fbb">parse_declaration</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
-<tr class="memdesc:abfa4abae84aea0626f8ab3b0c49b0fbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">宣言を構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#abfa4abae84aea0626f8ab3b0c49b0fbb">[詳解]</a><br /></td></tr>
-<tr class="separator:abfa4abae84aea0626f8ab3b0c49b0fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a673767bae88fd2bb4c225317c608a8c5"><td class="memItemLeft" align="right" valign="top"><a id="a673767bae88fd2bb4c225317c608a8c5"></a>
-<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parse_declaration</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in)</td></tr>
-<tr class="separator:a673767bae88fd2bb4c225317c608a8c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e27035a89da97ea421e952206a84b5c"><td class="memItemLeft" align="right" valign="top"><a id="a2e27035a89da97ea421e952206a84b5c"></a>
-<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parse_declaration</b> (std::u32string &amp;&amp;in)</td></tr>
-<tr class="separator:a2e27035a89da97ea421e952206a84b5c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55187b8817078c85e9e6fd0dbca1ee05"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
+<tr class="memitem:a55187b8817078c85e9e6fd0dbca1ee05"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; css_component &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a55187b8817078c85e9e6fd0dbca1ee05">parse_rule</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
+<tr class="memdesc:a55187b8817078c85e9e6fd0dbca1ee05"><td class="mdescLeft">&#160;</td><td class="mdescRight">規則を構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a55187b8817078c85e9e6fd0dbca1ee05">[詳解]</a><br /></td></tr>
+<tr class="separator:a55187b8817078c85e9e6fd0dbca1ee05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a818223f9bc7adebf284b57e34b9ac4a8"><td class="memItemLeft" align="right" valign="top"><a id="a818223f9bc7adebf284b57e34b9ac4a8"></a>
+<a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; css_component &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parse_rule</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in)</td></tr>
+<tr class="separator:a818223f9bc7adebf284b57e34b9ac4a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac53551808a4c2073f9b3de089361e55c"><td class="memItemLeft" align="right" valign="top"><a id="ac53551808a4c2073f9b3de089361e55c"></a>
+<a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; css_component &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parse_rule</b> (std::u32string &amp;&amp;in)</td></tr>
+<tr class="separator:ac53551808a4c2073f9b3de089361e55c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac91d3ad6832c08dc01cd94d076cd17cb"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
+<tr class="memitem:ac91d3ad6832c08dc01cd94d076cd17cb"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ac91d3ad6832c08dc01cd94d076cd17cb">parse_declaration</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
+<tr class="memdesc:ac91d3ad6832c08dc01cd94d076cd17cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">宣言を構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#ac91d3ad6832c08dc01cd94d076cd17cb">[詳解]</a><br /></td></tr>
+<tr class="separator:ac91d3ad6832c08dc01cd94d076cd17cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c916069b0dd0b3b56b1ff9d2189b772"><td class="memItemLeft" align="right" valign="top"><a id="a9c916069b0dd0b3b56b1ff9d2189b772"></a>
+<a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parse_declaration</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in)</td></tr>
+<tr class="separator:a9c916069b0dd0b3b56b1ff9d2189b772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb87d2df4dfecbd1ba7a7a37802172aa"><td class="memItemLeft" align="right" valign="top"><a id="acb87d2df4dfecbd1ba7a7a37802172aa"></a>
+<a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parse_declaration</b> (std::u32string &amp;&amp;in)</td></tr>
+<tr class="separator:acb87d2df4dfecbd1ba7a7a37802172aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac04e08aec61ef40b2b37851a1ee06ba6"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
 <tr class="memitem:ac04e08aec61ef40b2b37851a1ee06ba6"><td class="memTemplItemLeft" align="right" valign="top">std::vector&lt; std::any &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ac04e08aec61ef40b2b37851a1ee06ba6">parse_list_of_declarations</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
 <tr class="memdesc:ac04e08aec61ef40b2b37851a1ee06ba6"><td class="mdescLeft">&#160;</td><td class="mdescRight">宣言リストを構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#ac04e08aec61ef40b2b37851a1ee06ba6">[詳解]</a><br /></td></tr>
@@ -275,10 +271,10 @@ std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab2527
 <tr class="memitem:ab53d5313ef8dbeb6d0e1ac9837bd7bba"><td class="memItemLeft" align="right" valign="top"><a id="ab53d5313ef8dbeb6d0e1ac9837bd7bba"></a>
 std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>parse_list_of_declarations</b> (std::u32string &amp;&amp;in)</td></tr>
 <tr class="separator:ab53d5313ef8dbeb6d0e1ac9837bd7bba"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a104c9772c94a76318be34a2279ca381f"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
-<tr class="memitem:a104c9772c94a76318be34a2279ca381f"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a104c9772c94a76318be34a2279ca381f">parse_component_value</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
-<tr class="memdesc:a104c9772c94a76318be34a2279ca381f"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンポーネント値を構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a104c9772c94a76318be34a2279ca381f">[詳解]</a><br /></td></tr>
-<tr class="separator:a104c9772c94a76318be34a2279ca381f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ca98c1fe9a098303b9641fab1fb0d08"><td class="memTemplParams" colspan="2">template&lt;typename ErrorHandler &gt; </td></tr>
+<tr class="memitem:a7ca98c1fe9a098303b9641fab1fb0d08"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a7ca98c1fe9a098303b9641fab1fb0d08">parse_component_value</a> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;in, ErrorHandler handler)</td></tr>
+<tr class="memdesc:a7ca98c1fe9a098303b9641fab1fb0d08"><td class="mdescLeft">&#160;</td><td class="mdescRight">コンポーネント値を構文解析する  <a href="namespacewordring_1_1wwwc_1_1css.html#a7ca98c1fe9a098303b9641fab1fb0d08">[詳解]</a><br /></td></tr>
+<tr class="separator:a7ca98c1fe9a098303b9641fab1fb0d08"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25c0e462777b3d34178586186e33da05"><td class="memItemLeft" align="right" valign="top"><a id="a25c0e462777b3d34178586186e33da05"></a>
 <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&#160;</td><td class="memItemRight" valign="bottom"><b>parse_component_value</b> (std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a2cb050b63677be3955ba8815a8f8c56c">css_token</a> &gt; &amp;&amp;in)</td></tr>
 <tr class="separator:a25c0e462777b3d34178586186e33da05"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -612,6 +608,73 @@ constexpr char32_t&#160;</td><td class="memItemRight" valign="bottom"><b>maximum
 </div>
 </div>
 <h2 class="groupheader">関数詳解</h2>
+<a id="a83e4fe6460e5e5a7853fd45b12599a25"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a83e4fe6460e5e5a7853fd45b12599a25">&#9670;&nbsp;</a></span>parse_comma_list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt; std::vector&lt; <a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> &gt; &gt; &gt; wordring::wwwc::css::parse_comma_list </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Syntax&#160;</td>
+          <td class="paramname"><em>syntax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ErrorHandler&#160;</td>
+          <td class="paramname"><em>handler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>カンマ区切りのリストをCSS文法に沿って構文解析する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">in</td><td>入力ストリーム </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>各種CSS規格で定義される文法 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>エラーハンドラ</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>「コンポーネント値のリスト（std::vector&lt;component_value&gt;）、あるいは失敗」のリスト</dd></dl>
+<p>入力をコンポーネント値のリストのリストへ解析する。 文法の検査も行う。</p>
+<p>文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。 文法のシグネチャは以下の通り。 </p><div class="fragment"><div class="line"><span class="keywordtype">bool</span> syntax(std::vector&lt;component_value&gt; <span class="keyword">const</span>&amp; v);</div>
+</div><!-- fragment --><p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
+</div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html" title="構文エラー">parse_result</a> </dd>
+<dd>
+<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dd>
+<a href="https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar">https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar</a> </dd>
+<dd>
+<a href="https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar">https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar</a> </dd></dl>
+
+</div>
+</div>
 <a id="a3cc0e183f2cb50806e4e7218df9e1020"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3cc0e183f2cb50806e4e7218df9e1020">&#9670;&nbsp;</a></span>normalize_into_token_stream() <span class="overload">[1/2]</span></h2>
 
@@ -717,8 +780,8 @@ template&lt;typename ErrorHandler  = std::nullptr_t&gt; </div>
 
 </div>
 </div>
-<a id="a65ef91c1812a8d1129ff4ae7d9e8a85f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a65ef91c1812a8d1129ff4ae7d9e8a85f">&#9670;&nbsp;</a></span>parse_grammar()</h2>
+<a id="aaa0495277f0ff68c043c037cb0f432b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa0495277f0ff68c043c037cb0f432b8">&#9670;&nbsp;</a></span>parse_grammar()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -729,7 +792,7 @@ template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&gt; wordring::wwwc::css::parse_grammar </td>
+          <td class="memname"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt;std::vector&lt;<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&gt; &gt; wordring::wwwc::css::parse_grammar </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -768,13 +831,13 @@ template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>コンポーネント値のリスト、あるいは失敗を表す空のリスト</dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>コンポーネント値のリスト（std::vector&lt;component_value&gt;）、あるいは失敗。</dd></dl>
 <p>入力をコンポーネント値のリストへ解析する。</p>
-<p>引数sで供給される文法にマッチしない場合、戻り値は空となる。 文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。 文法のシグネチャは以下の通り。 </p><div class="fragment"><div class="line"><span class="keywordtype">bool</span> syntax(std::vector&lt;std::any&gt; <span class="keyword">const</span>&amp; v);</div>
+<p>引数sで供給される文法にマッチしない場合、戻り値は failure 状態となる。 文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。 文法のシグネチャは以下の通り。 </p><div class="fragment"><div class="line"><span class="keywordtype">bool</span> syntax(std::vector&lt;component_value&gt; <span class="keyword">const</span>&amp; v);</div>
 </div><!-- fragment --><p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html" title="構文エラー">parse_result</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#css-parse-something-according-to-a-css-grammar">https://drafts.csswg.org/css-syntax-3/#css-parse-something-according-to-a-css-grammar</a> </dd>
 <dd>
@@ -782,72 +845,8 @@ template&lt;typename Syntax , typename ErrorHandler  = std::nullptr_t&gt; </div>
 
 </div>
 </div>
-<a id="a91b03e69c82bff1d6f51da94d0416922"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a91b03e69c82bff1d6f51da94d0416922">&#9670;&nbsp;</a></span>parse_comma_list()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Syntax , typename ErrorHandler &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&gt; wordring::wwwc::css::parse_comma_list </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;&#160;</td>
-          <td class="paramname"><em>in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Syntax&#160;</td>
-          <td class="paramname"><em>syntax</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">ErrorHandler&#160;</td>
-          <td class="paramname"><em>handler</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>カンマ区切りのリストをCSS文法に沿って構文解析する </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">in</td><td>入力ストリーム </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">s</td><td>各種CSS規格で定義される文法 </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">handler</td><td>エラーハンドラ</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>コンポーネント値のリスト、あるいは失敗を表す空のリスト</dd></dl>
-<p>入力をコンポーネント値のリストへ解析する。 文法の検査も行う。</p>
-<p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
-<div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
-</div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
-<dd>
-<a href="https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar">https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar</a> </dd>
-<dd>
-<a href="https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar">https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar</a> </dd></dl>
-
-</div>
-</div>
 <a id="a5ded615c3ae534a4183838d5486ccf3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5ded615c3ae534a4183838d5486ccf3c">&#9670;&nbsp;</a></span>parse_stylesheet() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ded615c3ae534a4183838d5486ccf3c">&#9670;&nbsp;</a></span>parse_stylesheet() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -890,12 +889,12 @@ template&lt;typename ErrorHandler &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>コンポーネント値のリスト、あるいは失敗を表す空のリスト</dd></dl>
-<p>入力をコンポーネント値のリストへ解析する。</p>
+<dl class="section return"><dt>戻り値</dt><dd>規則のリスト</dd></dl>
+<p>入力を規則のリストへ解析する。</p>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-stylesheet">https://drafts.csswg.org/css-syntax-3/#parse-a-stylesheet</a> </dd>
 <dd>
@@ -904,7 +903,7 @@ template&lt;typename ErrorHandler &gt; </div>
 </div>
 </div>
 <a id="a01ebe850b191f8d807914a99b5b1fd8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a01ebe850b191f8d807914a99b5b1fd8d">&#9670;&nbsp;</a></span>parse_stylesheet() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a01ebe850b191f8d807914a99b5b1fd8d">&#9670;&nbsp;</a></span>parse_stylesheet() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -928,7 +927,45 @@ template&lt;typename ErrorHandler &gt; </div>
 </div><div class="memdoc">
 
 <p>スタイルシートを構文解析する </p>
-<p>この関数は、コード・ポイント列やトークン列の他に、任意のバイト列を入力として受け付ける。 エンコーディングを自動決定することが出来る。 </p>
+
+</div>
+</div>
+<a id="a40aa811342bf1a3b8bda58dfd71829b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40aa811342bf1a3b8bda58dfd71829b7">&#9670;&nbsp;</a></span>parse_stylesheet() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&gt; wordring::wwwc::css::parse_stylesheet </td>
+          <td>(</td>
+          <td class="paramtype">std::string const &amp;&#160;</td>
+          <td class="paramname"><em>in</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">encoding_name&#160;</td>
+          <td class="paramname"><em>fallback</em> = <code>static_cast&lt;encoding_name&gt;(0)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>スタイルシートを構文解析する </p>
+<p>この関数は、8bit文字列を入力として受け付ける。 エンコーディングを自動決定することが出来る。 </p>
 
 </div>
 </div>
@@ -976,12 +1013,12 @@ template&lt;typename ErrorHandler &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>規則のリスト、あるいは失敗を表す <a class="el" href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html" title="構文エラー">syntax_error</a></dd></dl>
-<p>入力をコンポーネント値のリストへ解析する。</p>
+<dl class="section return"><dt>戻り値</dt><dd>規則のリスト</dd></dl>
+<p>入力を規則のリストへ解析する。</p>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-rules">https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-rules</a> </dd>
 <dd>
@@ -989,8 +1026,8 @@ template&lt;typename ErrorHandler &gt; </div>
 
 </div>
 </div>
-<a id="a9cf2e0d0a1f2e98dd12c1305c43a88f6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9cf2e0d0a1f2e98dd12c1305c43a88f6">&#9670;&nbsp;</a></span>parse_rule()</h2>
+<a id="a55187b8817078c85e9e6fd0dbca1ee05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55187b8817078c85e9e6fd0dbca1ee05">&#9670;&nbsp;</a></span>parse_rule()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1001,7 +1038,7 @@ template&lt;typename ErrorHandler &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">css_component wordring::wwwc::css::parse_rule </td>
+          <td class="memname"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt;css_component&gt; wordring::wwwc::css::parse_rule </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -1033,12 +1070,12 @@ template&lt;typename ErrorHandler &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>規則、あるいは失敗を表す <a class="el" href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html" title="構文エラー">syntax_error</a></dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>規則、あるいは失敗</dd></dl>
 <p>入力を規則へ解析する。</p>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-rule">https://drafts.csswg.org/css-syntax-3/#parse-a-rule</a> </dd>
 <dd>
@@ -1046,8 +1083,8 @@ template&lt;typename ErrorHandler &gt; </div>
 
 </div>
 </div>
-<a id="abfa4abae84aea0626f8ab3b0c49b0fbb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfa4abae84aea0626f8ab3b0c49b0fbb">&#9670;&nbsp;</a></span>parse_declaration()</h2>
+<a id="ac91d3ad6832c08dc01cd94d076cd17cb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac91d3ad6832c08dc01cd94d076cd17cb">&#9670;&nbsp;</a></span>parse_declaration()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1058,7 +1095,7 @@ template&lt;typename ErrorHandler &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> wordring::wwwc::css::parse_declaration </td>
+          <td class="memname"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt;<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&gt; wordring::wwwc::css::parse_declaration </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -1090,12 +1127,12 @@ template&lt;typename ErrorHandler &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>宣言、あるいは失敗を表す <a class="el" href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html" title="構文エラー">syntax_error</a></dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>宣言、あるいは失敗</dd></dl>
 <p>入力をコンポーネント値のリストへ解析する。</p>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-declaration">https://drafts.csswg.org/css-syntax-3/#parse-a-declaration</a> </dd>
 <dd>
@@ -1147,12 +1184,12 @@ template&lt;typename ErrorHandler &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>宣言リスト、あるいは失敗を表す <a class="el" href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html" title="構文エラー">syntax_error</a></dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>宣言リスト</dd></dl>
 <p>入力を宣言リストへ解析する。</p>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-declarations">https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-declarations</a> </dd>
 <dd>
@@ -1160,8 +1197,8 @@ template&lt;typename ErrorHandler &gt; </div>
 
 </div>
 </div>
-<a id="a104c9772c94a76318be34a2279ca381f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a104c9772c94a76318be34a2279ca381f">&#9670;&nbsp;</a></span>parse_component_value()</h2>
+<a id="a7ca98c1fe9a098303b9641fab1fb0d08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ca98c1fe9a098303b9641fab1fb0d08">&#9670;&nbsp;</a></span>parse_component_value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1172,7 +1209,7 @@ template&lt;typename ErrorHandler &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a> wordring::wwwc::css::parse_component_value </td>
+          <td class="memname"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1parse__result.html">parse_result</a>&lt;<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ab25276c47a7604f21625953e207ade96">component_value</a>&gt; wordring::wwwc::css::parse_component_value </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html">token_stream</a> &amp;&#160;</td>
           <td class="paramname"><em>in</em>, </td>
@@ -1204,12 +1241,12 @@ template&lt;typename ErrorHandler &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>戻り値</dt><dd>コンポーネント値、あるいは失敗を表す <a class="el" href="structwordring_1_1wwwc_1_1css_1_1syntax__error.html" title="構文エラー">syntax_error</a></dd></dl>
+<dl class="section return"><dt>戻り値</dt><dd>コンポーネント値、あるいは失敗</dd></dl>
 <p>入力をコンポーネント値へ解析する。</p>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-component-value">https://drafts.csswg.org/css-syntax-3/#parse-a-component-value</a> </dd>
 <dd>
@@ -1266,7 +1303,7 @@ template&lt;typename ErrorHandler &gt; </div>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-component-values">https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-component-values</a> </dd>
 <dd>
@@ -1323,7 +1360,7 @@ template&lt;typename ErrorHandler &gt; </div>
 <p>エラーハンドラが供給された場合、エラーを報告するために、 発生個所を指す <a class="el" href="classwordring_1_1wwwc_1_1css_1_1token__stream.html" title="トークン列をストリームとしてアクセスするためのアダプタ">token_stream</a> を引数にエラーハンドラーが呼び出される。 エラーハンドラは、以下の通り。</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> handler(token_stream <span class="keyword">const</span>&amp; s);</div>
 </div><!-- fragment --><p>この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。</p>
-<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#a65ef91c1812a8d1129ff4ae7d9e8a85f" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="namespacewordring_1_1wwwc_1_1css.html#aaa0495277f0ff68c043c037cb0f432b8" title="CSS文法に沿って解析する">parse_grammar(token_stream&amp;, Syntax, ErrorHandler)</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values">https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values</a> </dd>
 <dd>

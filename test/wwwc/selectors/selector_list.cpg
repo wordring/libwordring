@@ -1,0 +1,122 @@
+﻿%token HASH_TOKEN<hash_token>;
+%token IDENT_TOKEN<ident_token>;
+%token STRING_TOKEN<string_token>;
+%token FUNCTION_TOKEN<function_token>;
+
+
+%token OPEN_SQUARE_TOKEN<open_square_token>;
+%token CLOSE_SQUARE_TOKEN<close_square_token>;
+%token COLON_TOKEN<colon_token>;
+%token CLOSE_PAREN_TOKEN<close_paren_token>;
+%token COMMA_TOKEN<comma_token>;
+
+%token DELIM_GT_TOKEN<delim_gt_token>;
+%token DELIM_PLUS_TOKEN<delim_plus_token>;
+%token DELIM_TILDE_TOKEN<delim_tilde_token>;
+%token DELIM_VERTICAL_TOKEN<delim_vertical_token>;
+%token DELIM_CARET_TOKEN<delim_caret_token>;
+%token DELIM_DOLLAR_TOKEN<delim_dollar_token>;
+%token DELIM_ASTERISK_TOKEN<delim_asterisk_token>;
+%token DELIM_EQUAL_TOKEN<delim_equal_token>;
+%token STRING_I_TOKEN<string_i_token>;
+%token STRING_S_TOKEN<string_s_token>;
+
+%token ANY_VALUE;
+
+selector_list<int>
+	: [] complex_selector_list
+	;
+
+complex_selector_list<int>
+	: [] complex_selector complex_selector_list_1
+	;
+
+complex_selector_list_1
+	: []
+    | [] ',' 	complex_selector
+	;
+	
+//compound_selector_list : compound_selector#;
+compound_selector_list<int>
+    : compound_selector (',' compound_selector)?;
+
+//simple_selector_list : simple_selector#;
+simple_selector_list<int>
+    : simple_selector (',' simple_selector)?;
+
+//relative_selector_list : relative_selector#;
+relative_selector_list<int>
+    : relative_selector (',' relative_selector)?;
+
+
+complex_selector<int>
+    : compound_selector ( combinator? compound_selector )*;
+
+relative_selector<int> : combinator? complex_selector;
+
+//compound_selector<int> : ( type_selector? subclass_selector*
+//                        ( pseudo_element_selector pseudo_class_selector* )* )!;
+
+compound_selector<int> : compound_selector_1
+                  | compound_selector_2
+                  | compound_selector_3
+                  ;
+
+compound_selector_1<int> : type_selector subclass_selector*
+                        ( pseudo_element_selector pseudo_class_selector* )*;
+
+compound_selector_2<int> : subclass_selector+
+                        ( pseudo_element_selector pseudo_class_selector* )* ;
+
+compound_selector_3<int> : ( pseudo_element_selector pseudo_class_selector* )+;
+                        
+simple_selector<int> : type_selector
+                | subclass_selector
+                ;
+
+
+combinator<int> : DELIM_GT_TOKEN
+           | DELIM_PLUS_TOKEN
+           | DELIM_TILDE_TOKEN
+           | ( DELIM_VERTICAL_TOKEN DELIM_VERTICAL_TOKEN )
+           ;
+
+type_selector<int> : wq_name
+              | ns_prefix? DELIM_ASTERISK_TOKEN;
+
+ns_prefix<int> : ( IDENT_TOKEN | DELIM_ASTERISK_TOKEN )? DELIM_VERTICAL_TOKEN;
+
+wq_name<int> : ns_prefix? IDENT_TOKEN;
+
+subclass_selector<int> : id_selector
+                  | class_selector
+                  | attribute_selector
+                  | pseudo_class_selector
+                  ;
+
+id_selector<int> : HASH_TOKEN;
+
+class_selector<int> : '.' IDENT_TOKEN;
+
+attribute_selector<int> : '[' wq_name ']'
+                   | '[' wq_name attr_matcher ( STRING_TOKEN | IDENT_TOKEN ) attr_modifier? ']';
+
+attr_matcher<int> : ( DELIM_TILDE_TOKEN | DELIM_VERTICAL_TOKEN | DELIM_CARET_TOKEN | DELIM_DOLLAR_TOKEN | DELIM_ASTERISK_TOKEN )? DELIM_EQUAL_TOKEN;
+
+attr_modifier<int> : STRING_I_TOKEN | STRING_I_TOKEN | STRING_S_TOKEN | STRING_S_TOKEN;
+
+pseudo_class_selector<int> : ':' IDENT_TOKEN
+                      | ':' FUNCTION_TOKEN any_value ')'
+                      ;
+
+pseudo_element_selector<int> : ':' pseudo_class_selector
+                        ;
+
+
+
+
+
+
+
+
+
