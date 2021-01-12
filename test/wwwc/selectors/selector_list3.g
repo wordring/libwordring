@@ -1,11 +1,10 @@
-grammar selector_list_1;
+grammar selector_list3;
 
-selector_list_1 : complex_selector_list;
+selector_list3 : complex_selector_list;
 
 //complex_selector_list : complex_selector#;
 complex_selector_list : complex_selector (',' complex_selector)?;
 
-	
 //compound_selector_list : compound_selector#;
 compound_selector_list : compound_selector (',' compound_selector)?;
 
@@ -50,9 +49,9 @@ combinator : '>'
 type_selector : wq_name
               | ns_prefix? '*';
 
-ns_prefix : ( IDENT_TOKEN | '*' )? '|';
+ns_prefix : ( STRING_TOKEN | '*' )? '|';
 
-wq_name : ns_prefix? IDENT_TOKEN;
+wq_name : ns_prefix? STRING_TOKEN;
 
 subclass_selector : id_selector
                   | class_selector
@@ -60,19 +59,19 @@ subclass_selector : id_selector
                   | pseudo_class_selector
                   ;
 
-id_selector : HASH_TOKEN;
+id_selector : STRING_TOKEN;
 
-class_selector : '.' IDENT_TOKEN;
+class_selector : '.' STRING_TOKEN;
 
 attribute_selector : '[' wq_name ']'
-                   | '[' wq_name attr_matcher ( STRING_TOKEN | IDENT_TOKEN ) attr_modifier? ']';
+                   | '[' wq_name attr_matcher ( STRING_TOKEN | ident_token ) attr_modifier? ']';
 
 attr_matcher : ( '~' | '|' | '^' | '$' | '*' )? '=';
 
 attr_modifier : 'i' | 'I' | 's' | 'S';
 
-pseudo_class_selector : ':' IDENT_TOKEN
-                      | ':' FUNCTION_TOKEN ANY_VALUE ')'
+pseudo_class_selector : ':' STRING_TOKEN
+                      | ':' STRING_TOKEN STRING_TOKEN ')'
                       ;
 
 pseudo_element_selector : ':' pseudo_class_selector
@@ -80,19 +79,7 @@ pseudo_element_selector : ':' pseudo_class_selector
 
 // token
 
-HASH_TOKEN : '#' ('a'..'z' | 'A'..'Z')+;
-
-//IDENT_TOKEN : ('a'..'z' | 'A'..'Z')+;
-IDENT_TOKEN : ('a'..'z' | 'A'..'Z')+;
-STRING_TOKEN : IDENT_TOKEN;
-
-FUNCTION_TOKEN : IDENT_TOKEN '(' STRING_TOKEN ')';
-
-ANY_VALUE : IDENT_TOKEN;
-
-
-
-
-
+ident_token : STRING_TOKEN;
+STRING_TOKEN : '#' ('a'..'z' | 'A'..'Z' | '0'..'9')+;
 
 

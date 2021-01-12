@@ -7,7 +7,6 @@
 #include <wordring/whatwg/infra/infra.hpp>
 
 #include <algorithm>
-#include <any>
 #include <memory>
 #include <optional>
 #include <string>
@@ -24,240 +23,6 @@ namespace wordring::wwwc::css
 	// https://triple-underscore.github.io/css-syntax-ja.html#parsing
 	// --------------------------------------------------------------------------------------------
 
-	using css_component = std::any;
-
-	/*! @brief <b>CSSコンポーネント値</b>を表現する AST ノード
-	
-	- preserved tokens
-	- function
-	- simple_block
-	*/
-	using component_value = std::any;
-
-	/*! @brief <b>関数</b>を表現する AST ノード
-	*/
-	struct function
-	{
-		std::u32string m_name;
-		std::vector<component_value> m_value;
-	};
-
-	/*! @brief <b>単純ブロック</b>を表現する AST ノード
-	*/
-	struct simple_block
-	{
-		css_token m_associated_token;
-		std::vector<component_value> m_value;
-	};
-
-	/*! @brief <b>\@規則</b>を表現する AST ノード
-	
-	@par 例
-	@code
-		@import "my-styles.css";
-	@endcode
-
-	@par 例
-	@code
-		@page :left {
-			margin-left: 4cm;
-			margin-right: 3cm;
-		}
-	@endcode
-
-	@par 例
-	@code
-		@media print {
-			body { font-size: 10pt }
-		}
-	@endcode
-
-	@sa https://drafts.csswg.org/css-syntax-3/#syntax-description
-	*/
-	struct at_rule
-	{
-		std::u32string m_name;
-		std::vector<component_value> m_prelude;
-		std::optional<simple_block> m_block;
-	};
-
-	/*! @brief <b>修飾規則</b>を表現する AST ノード
-	
-	@par 例
-	@code
-		p > a {
-			color: blue;
-			text-decoration: underline;
-		}
-	@endcode
-
-	例で「p > a」の部分が m_prelude 、「{」と「}」で囲まれた部分全体が	 m_block となる。
-
-	@sa https://drafts.csswg.org/css-syntax-3/#syntax-description
-	*/
-	struct qualified_rule
-	{
-		std::vector<component_value> m_prelude;
-		simple_block m_block;
-	};
-
-	/*! @brief <b>宣言</b>を表現する AST ノード
-
-	@par 例
-	@code
-		background-color: red
-	@endcode
-
-	@sa https://developer.mozilla.org/ja/docs/Web/CSS/Syntax#CSS_declarations
-	*/
-	struct declaration
-	{
-		declaration() : m_important_flag(false) {}
-
-		std::u32string m_name;
-		std::vector<component_value> m_value;
-		bool m_important_flag;
-	};
-
-	/*! @brief 構文エラー
-	*/
-	//struct syntax_error {};
-
-	/*! @brief 構文解析の結果
-	
-	結果の値あるいは失敗を表すクラス。
-	*/
-	template <typename T>
-	class parse_result
-	{
-	public:
-		using value_type = T;
-
-	public:
-		parse_result() : m_failure(true) {}
-
-		parse_result(value_type const& value)
-			: m_value(value)
-			, m_failure(false)
-		{
-		}
-
-		parse_result(value_type&& value)
-			: m_value(std::move(value))
-			, m_failure(false)
-		{
-		}
-
-		parse_result(parse_result&&) = default;
-		parse_result(parse_result const&) = default;
-
-		void operator =(value_type const& value)
-		{
-			m_value = value;
-			m_failure = false;
-		}
-
-		void operator =(value_type&& value)
-		{
-			m_value = std::move(value);
-			m_failure = false;
-		}
-
-		operator bool() const { return !m_failure; }
-
-		bool operator !() const { return m_failure; }
-
-		value_type const& operator *() const
-		{
-			assert(!m_failure);
-			return m_value;
-		}
-
-		value_type& operator *()
-		{
-			assert(!m_failure);
-			return m_value;
-		}
-
-		value_type const* operator ->() const
-		{
-			assert(!m_failure);
-			return &m_value;
-		}
-
-		value_type* operator ->()
-		{
-			assert(!m_failure);
-			return &m_value;
-		}
-
-
-	private:
-		value_type m_value;
-		bool m_failure;
-	};
-
-	inline bool is_at_rule(std::any const& val)
-	{
-		return val.type() == typeid(at_rule const);
-	}
-
-	inline bool is_qualified_rule(std::any const& val)
-	{
-		return val.type() == typeid(qualified_rule const);
-	}
-
-	inline bool is_declaration(std::any const& val)
-	{
-		return val.type() == typeid(declaration const);
-	}
-
-	inline bool is_function(std::any const& val)
-	{
-		return val.type() == typeid(function const);
-	}
-
-	inline bool is_simple_block(std::any const& val)
-	{
-		return val.type() == typeid(simple_block const);
-	}
-
-	/*! @brief [-block */
-	inline bool is_open_square_block(std::any const& val)
-	{
-		return is_simple_block(val) && is_open_square_token(std::any_cast<simple_block>(&val)->m_associated_token);
-	}
-
-	/*! @brief (-block */
-	inline bool is_open_paren_block(std::any const& val)
-	{
-		return is_simple_block(val) && is_open_paren_token(std::any_cast<simple_block>(&val)->m_associated_token);
-	}
-
-	/*! @brief {-block */
-	inline bool is_open_curly_block(std::any const& val)
-	{
-		return is_simple_block(val) && is_open_curly_token(std::any_cast<simple_block>(&val)->m_associated_token);
-	}
-
-	inline bool is_preserved_token(std::any const& val)
-	{
-		return is_css_token(val)
-			&& !(  is_function_token(val)
-				|| is_open_curly_token(val)
-				|| is_open_paren_token(val)
-				|| is_open_square_token(val));
-	}
-
-	inline bool is_component_value(std::any const& val)
-	{
-		return is_preserved_token(val) || is_function(val) || is_simple_block(val);
-	}
-
-	/*inline bool is_syntax_error(std::any const& val)
-	{
-		return val.type() == typeid(syntax_error);
-	}*/
 
 	// --------------------------------------------------------------------------------------------
 	// 5.2. Definitions
@@ -276,7 +41,7 @@ namespace wordring::wwwc::css
 	class token_stream
 	{
 	public:
-		using container = std::vector<css_token>;
+		using container = std::vector<syntax_primitive>;
 		using const_iterator = typename container::const_iterator;
 
 	public:
@@ -284,22 +49,22 @@ namespace wordring::wwwc::css
 			: m_v(std::move(c))
 			, m_i(-1)
 		{
-			m_v.push_back(eof_token());
+			m_v.emplace_back(eof_token{});
 		}
 
-		css_token const& current_input_token()
+		syntax_primitive const& current_input_token()
 		{
-			if (!(0 <= m_i && m_i < m_v.size())) return m_v.back();
+			if (!(0 <= m_i && m_i < static_cast<std::int32_t>(m_v.size()))) return m_v.back();
 			return m_v[m_i];
 		}
 
-		css_token const& next_input_token()
+		syntax_primitive const& next_input_token()
 		{
 			assert(m_i < int(m_v.size()) - 1);
 			return m_v[m_i + 1];
 		}
 
-		css_token const& consume()
+		syntax_primitive const& consume()
 		{
 			++m_i;
 			return current_input_token();
@@ -322,12 +87,12 @@ namespace wordring::wwwc::css
 	// https://triple-underscore.github.io/css-syntax-ja.html#parser-entry-points
 	// --------------------------------------------------------------------------------------------
 
-	template <typename Syntax, typename ErrorHandler = std::nullptr_t>
-	inline std::vector<parse_result<std::vector<component_value>>>
-		parse_comma_list(token_stream& in, Syntax s, ErrorHandler handler = nullptr);
+	template <typename Syntax, typename ErrorHandler>
+	inline std::vector<std::optional<std::vector<syntax_primitive>>>
+		parse_comma_list(token_stream& in, Syntax s, ErrorHandler handler);
 
-	template <typename Input, typename ErrorHandler = std::nullptr_t>
-	inline std::vector<std::any> parse_list_of_component_values(Input&& in, ErrorHandler handler = nullptr);
+	template <typename ErrorHandler>
+	inline std::vector<syntax_primitive> parse_list_of_component_values(token_stream& in, ErrorHandler handler);
 
 	/*! @brief 入力をトークン列へ正規化する
 	
@@ -344,7 +109,8 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#normalize-into-a-token-stream
 	*/
 	template <typename ErrorHandler = std::nullptr_t>
-	inline std::vector<css_token> normalize_into_token_stream(std::vector<css_token>&& in, ErrorHandler handler = nullptr)
+	inline std::vector<syntax_primitive>
+		normalize_into_token_stream(std::vector<syntax_primitive>&& in, ErrorHandler handler = nullptr)
 	{
 		return std::move(in);
 	}
@@ -367,12 +133,12 @@ namespace wordring::wwwc::css
 		handler(in.begin() + n);
 	@endcode
 
-	@sa normalize_into_token_stream(std::vector<std::any>&&, ErrorHandler)
+	@sa normalize_into_token_stream(std::vector<syntax_primitive>&&, ErrorHandler)
 	*/
 	template <typename ErrorHandler = std::nullptr_t>
-	inline std::vector<css_token> normalize_into_token_stream(std::u32string&& in, ErrorHandler handler = nullptr)
+	inline std::vector<syntax_primitive> normalize_into_token_stream(std::u32string&& in, ErrorHandler handler = nullptr)
 	{
-		std::vector<css_token> out;
+		std::vector<syntax_primitive> out;
 
 		in.erase(filter_code_points(in.begin(), in.end()), in.end());
 		tokenize(in.begin(), in.end(), std::back_inserter(out), handler);
@@ -414,31 +180,31 @@ namespace wordring::wwwc::css
 
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
 
-	@sa parse_result
+	@sa std::optional
 
 	@sa https://drafts.csswg.org/css-syntax-3/#css-parse-something-according-to-a-css-grammar
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-something-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler = std::nullptr_t>
-	inline parse_result<std::vector<component_value>>
+	inline std::optional<std::vector<syntax_primitive>>
 		parse_grammar(token_stream& in, Syntax syntax, ErrorHandler handler = nullptr)
 	{
-		using result_type = parse_result<std::vector<component_value>>;
+		using result_type = std::vector<syntax_primitive>;
 
-		std::vector<component_value> v = parse_list_of_component_values(in, handler);
+		std::vector<syntax_primitive> v = parse_list_of_component_values(in, handler);
 
-		return syntax(v) ? result_type(std::move(v)) : result_type();
+		return syntax(v) ? std::make_optional<result_type>(std::move(v)) : std::optional<result_type>();
 	}
 
 	template <typename Syntax>
-	inline parse_result<std::vector<component_value>> parse_grammar(std::vector<css_token>&& in, Syntax syntax)
+	inline std::optional<std::vector<syntax_primitive>> parse_grammar(std::vector<syntax_primitive>&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_grammar(s, syntax, nullptr);
 	}
 
 	template <typename Syntax>
-	inline parse_result<std::vector<component_value>> parse_grammar(std::u32string&& in, Syntax syntax)
+	inline std::optional<std::vector<syntax_primitive>> parse_grammar(std::u32string&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_grammar(s, syntax, nullptr);
@@ -478,26 +244,26 @@ namespace wordring::wwwc::css
 
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
 
-	@sa parse_result
+	@sa std::optional
 	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
 
 	@sa https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler>
-	inline std::vector<parse_result<std::vector<component_value>>>
+	inline std::vector<std::optional<std::vector<syntax_primitive>>>
 		parse_comma_list(token_stream& in, Syntax syntax, ErrorHandler handler)
 	{
-		using result_type = std::vector<parse_result<std::vector<component_value>>>;
+		using result_type = std::vector<std::optional<std::vector<syntax_primitive>>>;
 
 		result_type result;
 
-		std::vector<std::vector<component_value>> v = parse_comma_separated_list_of_component_values(in, handler);
+		std::vector<std::vector<syntax_primitive>> v = parse_comma_separated_list_of_component_values(in, handler);
 		auto it1 = v.begin();
 		auto it2 = v.end();
 		while (it1 != it2)
 		{
-			std::vector<component_value> tmp;
+			std::vector<syntax_primitive> tmp;
 			std::swap(*it1++, tmp);
 			token_stream s(std::move(tmp));
 			result.emplace_back(parse_grammar(s, syntax, handler));
@@ -507,14 +273,16 @@ namespace wordring::wwwc::css
 	}
 
 	template <typename Syntax>
-	inline std::vector<parse_result<std::vector<component_value>>> parse_comma_list(std::vector<css_token>&& in, Syntax syntax)
+	inline std::vector<std::optional<std::vector<syntax_primitive>>>
+		parse_comma_list(std::vector<syntax_primitive>&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_comma_list(s, syntax, nullptr);
 	}
 
 	template <typename Syntax>
-	inline std::vector<parse_result<std::vector<component_value>>> parse_comma_list(std::u32string&& in, Syntax syntax)
+	inline std::vector<std::optional<std::vector<syntax_primitive>>>
+		parse_comma_list(std::u32string&& in, Syntax syntax)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_comma_list(s, syntax, nullptr);
@@ -552,13 +320,13 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-stylesheet
 	*/
 	template <typename ErrorHandler>
-	inline std::vector<component_value> parse_stylesheet(token_stream& in, ErrorHandler handler)
+	inline std::vector<syntax_primitive> parse_stylesheet(token_stream& in, ErrorHandler handler)
 	{
-		std::vector<component_value> v = consume_list_of_rules(in, true, handler);
+		std::vector<syntax_primitive> v = consume_list_of_rules(in, true, handler);
 		return v;
 	}
 
-	inline std::vector<component_value> parse_stylesheet(std::vector<css_token>&& in)
+	inline std::vector<syntax_primitive> parse_stylesheet(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_stylesheet(s, nullptr);
@@ -567,7 +335,7 @@ namespace wordring::wwwc::css
 	/*! @brief スタイルシートを構文解析する
 	
 	*/
-	inline std::vector<component_value> parse_stylesheet(std::u32string&& in)
+	inline std::vector<syntax_primitive> parse_stylesheet(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_stylesheet(s, nullptr);
@@ -579,7 +347,7 @@ namespace wordring::wwwc::css
 	エンコーディングを自動決定することが出来る。
 
 	*/
-	inline std::vector<component_value>
+	inline std::vector<syntax_primitive>
 		parse_stylesheet(std::string const& in, encoding_name fallback = static_cast<encoding_name>(0))
 	{
 		std::u32string buf;
@@ -620,19 +388,19 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-rules
 	*/
 	template <typename ErrorHandler>
-	inline std::vector<component_value> parse_list_of_rules(token_stream& in, ErrorHandler handler)
+	inline std::vector<syntax_primitive> parse_list_of_rules(token_stream& in, ErrorHandler handler)
 	{
-		std::vector<component_value> v = consume_list_of_rules(in, true, handler);
+		std::vector<syntax_primitive> v = consume_list_of_rules(in, true, handler);
 		return v;
 	}
 
-	inline std::vector<component_value> parse_list_of_rules(std::vector<css_token>&& in)
+	inline std::vector<syntax_primitive> parse_list_of_rules(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_list_of_rules(s, nullptr);
 	}
 
-	inline std::vector<component_value> parse_list_of_rules(std::u32string&& in)
+	inline std::vector<syntax_primitive> parse_list_of_rules(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_list_of_rules(s, nullptr);
@@ -670,38 +438,39 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-rule
 	*/
 	template <typename ErrorHandler>
-	inline parse_result<css_component> parse_rule(token_stream& in, ErrorHandler handler)
+	inline std::optional<syntax_primitive> parse_rule(token_stream& in, ErrorHandler handler)
 	{
-		using result_type = parse_result<css_component>;
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
+		if (in.next_input_token().type() == syntax_primitive_name::EofToken) return std::optional<syntax_primitive>();
 
-		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return result_type();
-
-		css_component rule;
-		if (is_at_keyword_token(in.next_input_token()))
+		syntax_primitive rule;
+		if (in.next_input_token().type() == syntax_primitive_name::AtKeywordToken)
 		{
 			rule = consume_at_rule(in, handler);
 		}
 		else
 		{
 			std::optional<qualified_rule> q = consume_qualified_rule(in, handler);
-			if (!q) return result_type();
+			if (!q) return std::optional<syntax_primitive>();
 			rule = std::move(*q);
 		}
 
-		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return result_type(std::move(rule));
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
+		if (in.next_input_token().type() == syntax_primitive_name::EofToken)
+		{
+			return std::make_optional<syntax_primitive>(std::move(rule));
+		}
 
-		return result_type();
+		return std::optional<syntax_primitive>();
 	}
 
-	inline parse_result<css_component> parse_rule(std::vector<css_token>&& in)
+	inline std::optional<syntax_primitive> parse_rule(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_rule(s, nullptr);
 	}
 
-	inline parse_result<css_component> parse_rule(std::u32string&& in)
+	inline std::optional<syntax_primitive> parse_rule(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_rule(s, nullptr);
@@ -739,27 +508,24 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-declaration
 	*/
 	template <typename ErrorHandler>
-	inline parse_result<component_value>
-		parse_declaration(token_stream& in, ErrorHandler handler)
+	inline std::optional<declaration> parse_declaration(token_stream& in, ErrorHandler handler)
 	{
-		using result_type = parse_result<component_value>;
-
-		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (!is_ident_token(in.next_input_token())) return result_type();
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
+		if (in.next_input_token().type() != syntax_primitive_name::IdentToken) return std::make_optional<declaration>();
 
 		std::optional<declaration> decl = consume_declaration(in, handler);
-		if (decl) return result_type(std::move(*decl));
+		if (decl) return decl;
 
-		return result_type();
+		return std::optional<declaration>();
 	}
 
-	inline parse_result<component_value> parse_declaration(std::vector<css_token>&& in)
+	inline std::optional<declaration> parse_declaration(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_declaration(s, nullptr);
 	}
 
-	inline parse_result<component_value> parse_declaration(std::u32string&& in)
+	inline std::optional<declaration> parse_declaration(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_declaration(s, nullptr);
@@ -777,7 +543,7 @@ namespace wordring::wwwc::css
 	@param [in] in      入力ストリーム
 	@param [in] handler エラーハンドラ
 
-	@return 宣言リスト
+	@return 「 Declaration あるいは  @-rule 」の混在リスト
 
 	入力を宣言リストへ解析する。
 
@@ -797,18 +563,18 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-declarations
 	*/
 	template <typename ErrorHandler>
-	inline std::vector<component_value> parse_list_of_declarations(token_stream& in, ErrorHandler handler)
+	inline std::vector<syntax_primitive> parse_list_of_declarations(token_stream& in, ErrorHandler handler)
 	{
 		return consume_list_of_declarations(in, handler);
 	}
 
-	inline std::vector<component_value> parse_list_of_declarations(std::vector<css_token>&& in)
+	inline std::vector<syntax_primitive> parse_list_of_declarations(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_list_of_declarations(s, nullptr);
 	}
 
-	inline std::vector<component_value> parse_list_of_declarations(std::u32string&& in)
+	inline std::vector<syntax_primitive> parse_list_of_declarations(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_list_of_declarations(s, nullptr);
@@ -846,28 +612,28 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-component-value
 	*/
 	template <typename ErrorHandler>
-	inline parse_result<component_value> parse_component_value(token_stream& in, ErrorHandler handler)
+	inline std::optional<component_value> parse_component_value(token_stream& in, ErrorHandler handler)
 	{
-		using result_type = parse_result<component_value>;
+		using result_type = std::optional<component_value>;
 
-		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return result_type();
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
+		if (in.next_input_token().type() == syntax_primitive_name::EofToken) return result_type();
 
 		component_value c = consume_component_value(in, handler);
 
-		while (is_whitespace_token(in.next_input_token())) in.consume();
-		if (is_eof_token(in.next_input_token())) return result_type(std::move(c));
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
+		if (in.next_input_token().type() == syntax_primitive_name::EofToken) return result_type(std::move(c));
 
 		return result_type();
 	}
 
-	inline parse_result<component_value> parse_component_value(std::vector<css_token>&& in)
+	inline std::optional<component_value> parse_component_value(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_component_value(s, nullptr);
 	}
 
-	inline parse_result<component_value> parse_component_value(std::u32string&& in)
+	inline std::optional<component_value> parse_component_value(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_component_value(s, nullptr);
@@ -905,27 +671,27 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-component-values
 	*/
 	template <typename ErrorHandler>
-	inline std::vector<component_value> parse_list_of_component_values(token_stream& in, ErrorHandler handler)
+	inline std::vector<syntax_primitive> parse_list_of_component_values(token_stream& in, ErrorHandler handler)
 	{
-		std::vector<std::any> list;
+		std::vector<syntax_primitive> list;
 
 		while (true)
 		{
 			component_value c = consume_component_value(in, handler);
-			if (is_eof_token(c)) break;
+			if (c.type() == syntax_primitive_name::EofToken) break;
 			list.push_back(c);
 		}
 
 		return list;
 	}
 
-	inline std::vector<component_value> parse_list_of_component_values(std::vector<css_token>&& in)
+	inline std::vector<syntax_primitive> parse_list_of_component_values(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_list_of_component_values(s, nullptr);
 	}
 
-	inline std::vector<component_value> parse_list_of_component_values(std::u32string&& in)
+	inline std::vector<syntax_primitive> parse_list_of_component_values(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_list_of_component_values(s, nullptr);
@@ -963,30 +729,26 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-comma-separated-list-of-component-values
 	*/
 	template <typename ErrorHandler>
-	inline std::vector<std::vector<component_value>>
+	inline std::vector<std::vector<syntax_primitive>>
 		parse_comma_separated_list_of_component_values(token_stream& in, ErrorHandler handler)
 	{
-		std::vector<std::vector<component_value>> lists;
+		std::vector<std::vector<syntax_primitive>> lists;
 
-		//while (!is_eof_token(in.current_input_token()))
 		while(true)
 		{
-			std::vector<component_value> v;
+			std::vector<syntax_primitive> v;
 			while (true)
 			{
 				component_value c = consume_component_value(in, handler);
-				if (is_eof_token(c))
+				switch (c.type())
 				{
-					lists.push_back(v);
+				case syntax_primitive_name::EofToken:
+					lists.push_back(std::move(v));
 					return lists;
-				}
-				else if (is_comma_token(c))
-				{
-					lists.push_back(v);
+				case syntax_primitive_name::CommaToken:
+					lists.push_back(std::move(v));
 					break;
-				}
-				else
-				{
+				default:
 					v.push_back(c);
 				}
 			}
@@ -1003,8 +765,8 @@ namespace wordring::wwwc::css
 
 	@sa parse_comma_separated_list_of_component_values(token_stream&, ErrorHandler)
 	*/
-	inline std::vector<std::vector<component_value>>
-		parse_comma_separated_list_of_component_values(std::vector<css_token>&& in)
+	inline std::vector<std::vector<syntax_primitive>>
+		parse_comma_separated_list_of_component_values(std::vector<syntax_primitive>&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
 		return parse_comma_separated_list_of_component_values(s, nullptr);
@@ -1018,7 +780,7 @@ namespace wordring::wwwc::css
 
 	@sa parse_comma_separated_list_of_component_values(token_stream&, ErrorHandler)
 	*/
-	inline std::vector<std::vector<component_value>>
+	inline std::vector<std::vector<syntax_primitive>>
 		parse_comma_separated_list_of_component_values(std::u32string&& in)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
@@ -1032,29 +794,29 @@ namespace wordring::wwwc::css
 	// https://triple-underscore.github.io/css-syntax-ja.html#parser-algorithms
 	// --------------------------------------------------------------------------------------------
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::vector<css_component> consume_list_of_rules(TokenStream& in, bool top_level = false, ErrorHandler handler = nullptr);
+	template <typename ErrorHandler>
+	inline std::vector<syntax_primitive> consume_list_of_rules(token_stream& in, bool top_level = false, ErrorHandler handler = nullptr);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline at_rule consume_at_rule(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline at_rule consume_at_rule(token_stream& in, ErrorHandler handler);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::optional<qualified_rule> consume_qualified_rule(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline std::optional<qualified_rule> consume_qualified_rule(token_stream& in, ErrorHandler handler);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::vector<css_component> consume_list_of_declarations(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline std::vector<syntax_primitive> consume_list_of_declarations(token_stream& in, ErrorHandler handler);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::optional<declaration> consume_declaration(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline std::optional<declaration> consume_declaration(token_stream& in, ErrorHandler handler);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline component_value consume_component_value(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline component_value consume_component_value(token_stream& in, ErrorHandler handler);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline simple_block consume_simple_block(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline simple_block consume_simple_block(token_stream& in, ErrorHandler handler);
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline function consume_function(TokenStream& in, ErrorHandler handler);
+	template <typename ErrorHandler>
+	inline function consume_function(token_stream& in, ErrorHandler handler);
 
 	// --------------------------------------------------------------------------------------------
 	// 5.4.1. Consume a list of rules
@@ -1069,36 +831,35 @@ namespace wordring::wwwc::css
 	@param [in] top_level トップレベルフラグ（規格内の呼び出し側で指定される）
 	@param [in] handler   エラー処理を行うユーザー定義の関数
 
-	@return Ruleのリスト
+	@return At-rule・Qualified rule の混在リスト
 
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
 	
 	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-rules
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-list-of-rules
 	*/
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::vector<css_component>
-		consume_list_of_rules(TokenStream& in, bool top_level, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline std::vector<syntax_primitive>
+		consume_list_of_rules(token_stream& in, bool top_level, ErrorHandler handler)
 
 	{
-		std::vector<css_component> rules;
+		std::vector<syntax_primitive> rules;
 
 		while (true)
 		{
-			css_token const& tkn = in.consume();
-			std::type_info const& type = tkn.type();
+			syntax_primitive const& tkn = in.consume();
 
-			if (type == typeid(whitespace_token))
+			switch (tkn.type())
 			{
-			}
-			else if (type == typeid(eof_token))
-			{
+			case syntax_primitive_name::WhitespaceToken:
+				continue;
+			case syntax_primitive_name::EofToken:
 				return rules;
-			}
-			else if (type == typeid(CDO_token) || type == typeid(CDC_token))
-			{
+			case syntax_primitive_name::CdoToken:
+			case syntax_primitive_name::CdcToken:
 				if (top_level)
 				{
+					continue;
 				}
 				else
 				{
@@ -1106,14 +867,11 @@ namespace wordring::wwwc::css
 					std::optional<qualified_rule> rule = consume_qualified_rule(in, handler);
 					if (rule.has_value()) rules.push_back(std::move(*rule));
 				}
-			}
-			else if (type == typeid(at_keyword_token))
-			{
+			case syntax_primitive_name::AtKeywordToken:
 				in.reconsume();
 				rules.push_back(consume_at_rule(in, handler));
-			}
-			else
-			{
+				continue;
+			default:
 				in.reconsume();
 				std::optional<qualified_rule> rule = consume_qualified_rule(in, handler);
 				if (rule.has_value()) rules.push_back(std::move(*rule));
@@ -1142,46 +900,40 @@ namespace wordring::wwwc::css
 
 	この関数は、入力の先頭が at_keyword_token と仮定している。
 
-	@sa at_rule
+	@sa At-rule
 
 	@sa https://drafts.csswg.org/css-syntax-3/#consume-an-at-rule
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-an-at-rule
 	*/
-	template <typename TokenStream, typename ErrorHandler>
-	inline at_rule consume_at_rule(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline at_rule consume_at_rule(token_stream& in, ErrorHandler handler)
 	{
-		css_token const& tkn = in.consume();
-		assert(is_at_keyword_token(in.current_input_token()));
+		syntax_primitive const& tkn = in.consume();
+		assert(in.current_input_token().type() == syntax_primitive_name::AtKeywordToken);
 
 		at_rule rule;
-		rule.m_name = std::any_cast<at_keyword_token>(&tkn)->m_value;
+		rule.m_name = tkn.get<at_keyword_token>().m_value;
 
 		while (true)
 		{
-			css_token const& tkn = in.consume();
-			std::type_info const& type = tkn.type();
-
-			if (type == typeid(semicolon_token const))
+			syntax_primitive const& tkn = in.consume();
+			switch (tkn.type())
 			{
+			case syntax_primitive_name::SemicolonToken:
 				return rule;
-			}
-			else if (type == typeid(eof_token const))
-			{
-				if constexpr (std::is_invocable_v<ErrorHandler, TokenStream&>) handler(in);
+			case syntax_primitive_name::EofToken:
+				if constexpr (std::is_invocable_v<ErrorHandler, token_stream&>) handler(in);
 				return rule;
-			}
-			else if (type == typeid(open_curly_token const))
-			{
-				rule.m_block = consume_simple_block(in, handler);
+			case syntax_primitive_name::OpenCurlyToken:
+				rule.m_block = std::make_unique<simple_block>(consume_simple_block(in, handler));
 				return rule;
-			}
-			else if (is_open_curly_block(tkn))
-			{
-				rule.m_block = std::any_cast<simple_block>(tkn);
-				return rule;
-			}
-			else
-			{
+			case syntax_primitive_name::SimpleBlock:
+				if (tkn.get<simple_block>().m_associated_token == U'{')
+				{
+					rule.m_block = std::make_unique<simple_block>(tkn.get<simple_block>());
+					return rule;
+				}
+			default:
 				in.reconsume();
 				rule.m_prelude.push_back(consume_component_value(in, handler));
 			}
@@ -1207,38 +959,34 @@ namespace wordring::wwwc::css
 
 	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
 
-	@sa qualified_rule
+	@sa Qualified rule あるいは何も返さない
 
 	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-qualified-rule
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-qualified-rule
 	*/
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::optional<qualified_rule> consume_qualified_rule(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline std::optional<qualified_rule> consume_qualified_rule(token_stream& in, ErrorHandler handler)
 	{
 		qualified_rule rule;
 
 		while (true)
 		{
-			css_token const& tkn = in.consume();
-			std::type_info const& type = tkn.type();
-
-			if (type == typeid(eof_token))
+			syntax_primitive const& tkn = in.consume();
+			switch (tkn.type())
 			{
-				if constexpr (std::is_invocable_v<ErrorHandler, TokenStream&>) handler(in);
+			case syntax_primitive_name::EofToken:
+				if constexpr (std::is_invocable_v<ErrorHandler, token_stream&>) handler(in);
 				return std::optional<qualified_rule>();
-			}
-			else if (type == typeid(open_curly_token))
-			{
+			case syntax_primitive_name::OpenCurlyToken:
 				rule.m_block = consume_simple_block(in, handler);
 				return std::make_optional(std::move(rule));
-			}
-			else if (is_open_curly_block(tkn))
-			{
-				rule.m_block = *std::any_cast<simple_block>(&tkn);
-				return std::make_optional(rule);
-			}
-			else
-			{
+			case syntax_primitive_name::SimpleBlock:
+				if (tkn.get<simple_block>().m_associated_token == U'{')
+				{
+					rule.m_block = tkn.get<simple_block>();
+					return std::make_optional(std::move(rule));
+				}
+			default:
 				in.reconsume();
 				rule.m_prelude.push_back(consume_component_value(in, handler));
 			}
@@ -1275,62 +1023,63 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-declarations
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-list-of-declarations
 	*/
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::vector<css_component> consume_list_of_declarations(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline std::vector<syntax_primitive> consume_list_of_declarations(token_stream& in, ErrorHandler handler)
 	{
-		std::vector<css_component> declarations;
+		std::vector<syntax_primitive> declarations;
 
 		while (true)
 		{
-			css_token const& tkn = in.consume();
-			std::type_info const& type = tkn.type();
-
-			if (type == typeid(whitespace_token) || type == typeid(semicolon_token))
+			syntax_primitive const& tkn = in.consume();
+			switch (tkn.type())
 			{
-			}
-			else if (type == typeid(eof_token))
-			{
+			case syntax_primitive_name::WhitespaceToken:
+			case syntax_primitive_name::SemicolonToken:
+				continue;
+			case syntax_primitive_name::EofToken:
 				return declarations;
-			}
-			else if (type == typeid(at_keyword_token))
-			{
+			case syntax_primitive_name::AtKeywordToken:
 				in.reconsume();
 				declarations.push_back(consume_at_rule(in, handler));
-			}
-			else if (type == typeid(ident_token))
+				continue;
+			case syntax_primitive_name::IdentToken:
 			{
-				std::vector<css_component> tmp(1, tkn);
+				std::vector<syntax_primitive> tmp(1, tkn);
 
 				while (true)
 				{
-					css_token const& tkn = in.next_input_token();
-					std::type_info const& type = tkn.type();
-					if (type == typeid(semicolon_token) || type == typeid(eof_token)) break;
+					syntax_primitive_name type = in.next_input_token().type();
 
+					if (type == syntax_primitive_name::SemicolonToken
+					 || type == syntax_primitive_name::EofToken) break;
+					
 					tmp.push_back(consume_component_value(in, handler));
 				}
 
 				token_stream in2(std::move(tmp));
 				std::optional<declaration> decl = consume_declaration(in2, handler);
 				if (decl.has_value()) declarations.push_back(std::move(*decl));
+
+				continue;
 			}
-			else
-			{
-				if constexpr (std::is_invocable_v<ErrorHandler, TokenStream&>) handler(in);
+			default:
+				if constexpr (std::is_invocable_v<ErrorHandler, token_stream&>) handler(in);
 				in.reconsume();
 				while (true)
 				{
-					css_token const& tkn = in.next_input_token();
-					std::type_info const& type = tkn.type();
-					if (type == typeid(semicolon_token) || type == typeid(eof_token)) break;
+					syntax_primitive_name type = in.next_input_token().type();
+
+					if (type == syntax_primitive_name::SemicolonToken
+						|| type == syntax_primitive_name::EofToken) break;
 
 					consume_component_value(in, handler);
 				}
+				continue;
 			}
 		}
 
 		assert(false);
-		return std::vector<css_component>();
+		return std::vector<syntax_primitive>();
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -1357,22 +1106,22 @@ namespace wordring::wwwc::css
 		{
 			using wordring::whatwg::is_ascii_case_insensitive_match;
 
-			if (is_whitespace_token(v[i]))
+			if (v[i].type() == syntax_primitive_name::WhitespaceToken)
 			{
 				continue;
 			}
-			else if (st == 0 && is_ident_token(v[i]))
+			else if (st == 0 && v[i].type() == syntax_primitive_name::IdentToken)
 			{
-				ident_token const& tkn = std::any_cast<ident_token>(v[i]);
+				ident_token const& tkn = v[i].get<ident_token>();
 				if (is_ascii_case_insensitive_match(tkn.m_value.begin(), tkn.m_value.end(), sv.begin(), sv.end()))
 				{
 					st = 1;
 				}
 				else break;
 			}
-			else if (st == 1 && is_delim_token(v[i]))
+			else if (st == 1 && v[i].type() == syntax_primitive_name::DelimToken)
 			{
-				delim_token const& tkn = std::any_cast<delim_token>(v[i]);
+				delim_token const& tkn = v[i].get<delim_token>();
 				if (tkn.m_value == U'!')
 				{
 					v.erase(std::next(v.begin(), i), v.end());
@@ -1400,27 +1149,27 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-declaration
 	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-declaration
 	*/
-	template <typename TokenStream, typename ErrorHandler>
-	inline std::optional<declaration> consume_declaration(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline std::optional<declaration> consume_declaration(token_stream& in, ErrorHandler handler)
 	{
 		in.consume();
-		assert(is_ident_token(in.current_input_token()));
+		assert(in.current_input_token().type() == syntax_primitive_name::IdentToken);
 		declaration decl;
-		decl.m_name = std::any_cast<ident_token>(&in.current_input_token())->m_value;
+		decl.m_name = in.current_input_token().get<ident_token>().m_value;
 
-		while (is_whitespace_token(in.next_input_token())) in.consume();
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
 
-		if (!is_colon_token(in.next_input_token()))
+		if (in.next_input_token().type() != syntax_primitive_name::ColonToken)
 		{
-			if constexpr (std::is_invocable_v<ErrorHandler, TokenStream&>) handler(in);
+			if constexpr (std::is_invocable_v<ErrorHandler, token_stream&>) handler(in);
 			return std::optional<declaration>();
 		}
 
 		in.consume();
 
-		while (is_whitespace_token(in.next_input_token())) in.consume();
+		while (in.next_input_token().type() == syntax_primitive_name::WhitespaceToken) in.consume();
 
-		while (!is_eof_token(in.next_input_token()))
+		while (in.next_input_token().type() != syntax_primitive_name::EofToken)
 		{
 			decl.m_value.push_back(consume_component_value(in, handler));
 		}
@@ -1431,7 +1180,7 @@ namespace wordring::wwwc::css
 			decl.m_important_flag = true;
 		}
 
-		while (!v.empty() && is_whitespace_token(v.back())) v.pop_back();
+		while (!v.empty() && v.back().type() == syntax_primitive_name::WhitespaceToken) v.pop_back();
 
 		return std::make_optional(std::move(decl));
 	}
@@ -1443,24 +1192,25 @@ namespace wordring::wwwc::css
 	// https://triple-underscore.github.io/css-syntax-ja.html#consume-component-value
 	// --------------------------------------------------------------------------------------------
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline component_value consume_component_value(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline component_value consume_component_value(token_stream& in, ErrorHandler handler)
 	{
 		in.consume();
 
-		css_token const& tkn = in.current_input_token();
-		std::type_info const& type = tkn.type();
-		if (type == typeid(open_curly_token) || type == typeid(open_square_token) || type == typeid(open_paren_token))
+		syntax_primitive const& tkn = in.current_input_token();
+		switch (tkn.type())
 		{
-			return std::make_any<simple_block>(consume_simple_block(in, handler));
+		case syntax_primitive_name::OpenCurlyToken:
+		case syntax_primitive_name::OpenSquareToken:
+		case syntax_primitive_name::OpenParenToken:
+			return component_value(consume_simple_block(in, handler));
+		case syntax_primitive_name::FunctionToken:
+			return component_value(consume_function(in, handler));
+		default:
+			break;
 		}
 
-		if (is_function_token(in.current_input_token()))
-		{
-			return std::make_any<function>(consume_function(in, handler));
-		}
-
-		return tkn;
+		return component_value(tkn);
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -1470,43 +1220,49 @@ namespace wordring::wwwc::css
 	// 
 	// --------------------------------------------------------------------------------------------
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline simple_block consume_simple_block(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline simple_block consume_simple_block(token_stream& in, ErrorHandler handler)
 	{
-		enum class ending_name { curly = 1, square, paren };
-
-		css_token const& tkn = in.current_input_token();
-		std::type_info const& type = tkn.type();
-
-		ending_name ending = static_cast<ending_name>(0);
-		if      (type == typeid(open_curly_token))  ending = ending_name::curly;
-		else if (type == typeid(open_square_token)) ending = ending_name::square;
-		else if (type == typeid(open_paren_token))  ending = ending_name::paren;
-
 		simple_block block;
-		block.m_associated_token = in.current_input_token();
+
+		syntax_primitive_name ending = static_cast<syntax_primitive_name>(0);
+
+		switch (in.current_input_token().type())
+		{
+		case syntax_primitive_name::OpenCurlyToken:
+			block.m_associated_token = U'{';
+			ending = syntax_primitive_name::CloseCurlyToken;
+			break;
+		case syntax_primitive_name::OpenSquareToken:
+			block.m_associated_token = U'[';
+			ending = syntax_primitive_name::CloseSquareToken;
+			break;
+		case syntax_primitive_name::OpenParenToken:
+			block.m_associated_token = U'(';
+			ending = syntax_primitive_name::CloseParenToken;
+			break;
+		default:
+			break;
+		}
 
 		while (true)
 		{
-			css_token const& tkn = in.consume();
-			std::type_info const& type = tkn.type();
+			syntax_primitive const& tkn = in.consume();
+			switch (tkn.type())
+			{
+			case syntax_primitive_name::CloseCurlyToken:
+			case syntax_primitive_name::CloseSquareToken:
+			case syntax_primitive_name::CloseParenToken:
+				if (ending == tkn.type()) return block;
+			case syntax_primitive_name::EofToken:
+				if constexpr (std::is_invocable_v<ErrorHandler, token_stream&>) handler(in);
+				return block;
+			default:
+				break;
+			}
 
-			if (( (ending == ending_name::curly ) && (type == typeid(close_curly_token)) )
-			 || ( (ending == ending_name::square) && (type == typeid(close_square_token)))
-			 || ( (ending == ending_name::paren ) && (type == typeid(close_paren_token)) ))
-			{
-				return block;
-			}
-			else if (type == typeid(eof_token))
-			{
-				if constexpr (std::is_invocable_v<ErrorHandler, TokenStream&>) handler(in);
-				return block;
-			}
-			else
-			{
-				in.reconsume();
-				block.m_value.push_back(consume_component_value(in, handler));
-			}
+			in.reconsume();
+			block.m_value.push_back(consume_component_value(in, handler));
 		}
 
 		assert(false);
@@ -1520,30 +1276,24 @@ namespace wordring::wwwc::css
 	// 
 	// --------------------------------------------------------------------------------------------
 
-	template <typename TokenStream, typename ErrorHandler>
-	inline function consume_function(TokenStream& in, ErrorHandler handler)
+	template <typename ErrorHandler>
+	inline function consume_function(token_stream& in, ErrorHandler handler)
 	{
-		assert(in.current_input_token().type() == typeid(function_token));
+		assert(in.current_input_token().type() == syntax_primitive_name::FunctionToken);
 
-		function fn;
-		fn.m_name = std::any_cast<function_token>(&in.current_input_token())->m_value;
+		function fn{ in.current_input_token().get<function_token>().m_value };
 
 		while (true)
 		{
-			css_token const& tkn = in.consume();
-			std::type_info const& type = tkn.type();
-
-			if (type == typeid(close_paren_token))
+			syntax_primitive const& tkn = in.consume();
+			switch (tkn.type())
 			{
+			case syntax_primitive_name::CloseParenToken:
 				return fn;
-			}
-			else if (type == typeid(eof_token))
-			{
-				if constexpr (std::is_invocable_v<ErrorHandler, TokenStream&>) handler(in);
+			case syntax_primitive_name::EofToken:
+				if constexpr (std::is_invocable_v<ErrorHandler, token_stream&>) handler(in);
 				return fn;
-			}
-			else
-			{
+			default:
 				in.reconsume();
 				fn.m_value.push_back(consume_component_value(in, handler));
 			}
