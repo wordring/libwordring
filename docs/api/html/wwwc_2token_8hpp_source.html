@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: token.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_6573f884cc9edc38c34f5e6d408c3f1c.html">wwwc</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">wwwc/token.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/whatwg/infra/infra.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;any&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;charconv&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;cmath&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;string_view&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;tuple&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;typeindex&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;utility&gt;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;variant&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;{</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">// css_primitive;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30ba">   24</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30ba">syntex_primitive_name</a> : std::uint32_t</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa459a6f79ad9b13cbcb5f692d2cc7a94d">Token</a> = 1,        </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa9b6bf5e430e7f924aa56f8d345255407">IdentToken</a>,       </div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baae1be428792de192f327ef2b91e8ddc37">FunctionToken</a>,    </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaea1f283f9eac902e53d3039e03d4063a">AtKeywordToken</a>,   </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa056bd17d2a8d32b8648c81e7bca26b77">HashToken</a>,        </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baae86c1edcfacb9e11f21711b6b3ada31d">StringToken</a>,      </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baac093a5b70932df06d3c17f8da0575ceb">BadStringToken</a>,   </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa969234afbce1b419f33dde47e5938333">UrlToken</a>,         </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa783ef0441876aea9a24dba296a1d6493">BadUrlToken</a>,      </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baafebdea26c305b72c5fa515677b4745ee">DelimToken</a>,       </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baab3b737b4f7ce3395552a72476a5c7389">NumberToken</a>,      </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaaa8312dc5a420b93afb54d2cddd2c175">PercentageToken</a>,  </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baad35a3165912eb5f806bb373359d1407e">DimensionToken</a>,   </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaac6dbf065a8cd6f9771ef730e6c38cab">WhitespaceToken</a>,  </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baab165ed1cb43b00231fe49497cfb85ccb">CdoToken</a>,         </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa6a30ba4c168fa869fbbedbacd7d96d0d">CdcToken</a>,         </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa45bff21d89b93c71538ca52e5ca16124">ColonToken</a>,       </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa8aedd9742c28a2498411573565728320">SemicolonToken</a>,   </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaf17b6fbd28bb7078ea20070d76e8073b">CommaToken</a>,       </div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa4d343bd779d9b15d74b6623bde932943">OpenSquareToken</a>,  </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa6333b1eb17f1d004f605541264f3f651">CloseSquareToken</a>, </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baabcda4adaa62e2095fb4a9c90eb94ba2d">OpenParenToken</a>,   </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa129082675376228e1e2693e9c5bc0ed0">CloseParenToken</a>,  </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa1742c895356a386c0aabfc78475c4a98">OpenCurlyToken</a>,   </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa1cd1307164ebd1f72dab040072ef87e1">CloseCurlyToken</a>,  </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa26e218c160523969c768f93ee8ad0597">EofToken</a>,         </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa014a6345103f65c3cdbea434dd90859c">TreeItem</a>,        </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa7f1e69c83928f7b24a35aefbbac90b43">AtRule</a>,          </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa69225d2937ac661da66fbeb38514cb41">QualifiedRule</a>,   </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa6246655a4c0a99b49f104cd87a0a7a7a">Declaration</a>,     </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baad68319f1969043ead9384301c9318dc2">ComponentValue</a>,  </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa45c3b434df0a9011f39595f408352717">PreservedTokens</a>, </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa86408593c34af77fdd90df932f8b5261">Function</a>,        </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa9fe92bdfd02b433f0437d05386445e9a">SimpleBlock</a>,     </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    };</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="namespacewordring_1_1wwwc_1_1css.html#ae624660e4e88a3fe0522e126afbb6036">   70</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ae624660e4e88a3fe0522e126afbb6036">number_type_flag_name</a> { integer = 1, number };</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">struct </span>ident_token { std::u32string <a class="code" href="structwordring_1_1wwwc_1_1css_1_1ident__token.html#aa1612645d0889a4627668adbb17f695f">m_value</a>;  };</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">struct </span>function_token { std::u32string <a class="code" href="structwordring_1_1wwwc_1_1css_1_1function__token.html#ab54681829fdc05923bbd2eadafd0f834">m_value</a>;  };</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">struct </span>at_keyword_token { std::u32string m_value;  };</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="keyword">struct </span>hash_token</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    {</div>
+<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1hash__token.html#acae872351ee02d56af8b4cf488f46385">   84</a></span>&#160;        <span class="keyword">enum class</span> <a class="code" href="structwordring_1_1wwwc_1_1css_1_1hash__token.html#acae872351ee02d56af8b4cf488f46385">type_flag_name</a></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordtype">id</span> = 1,      </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;            unrestricted </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        };</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        std::u32string m_value;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <a class="code" href="structwordring_1_1wwwc_1_1css_1_1hash__token.html#acae872351ee02d56af8b4cf488f46385">type_flag_name</a> m_type_flag = type_flag_name::unrestricted;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    };</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">struct </span>string_token { std::u32string m_value;  };</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">struct </span>bad_string_token {};</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">struct </span>url_token { std::u32string m_value;  };</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">struct </span>bad_url_token {};</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">struct </span>delim_token { char32_t m_value;  };</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keyword">struct </span>number_token</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    {</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">double</span> <a class="code" href="structwordring_1_1wwwc_1_1css_1_1number__token.html#a4c04842967a764d96908465d9740beb6">m_value</a> = 0; </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ae624660e4e88a3fe0522e126afbb6036">number_type_flag_name</a> <a class="code" href="structwordring_1_1wwwc_1_1css_1_1number__token.html#ad411c111fae02d332556e02882d1ec37">m_type_flag</a> = number_type_flag_name::integer; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    };</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">struct </span>percentage_token { <span class="keywordtype">double</span> m_value;  };</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">struct </span>dimension_token : number_token</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    {</div>
+<div class="line"><a name="l00121"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a3f479b1f054ec67cfbc51e73edd4404a">  121</a></span>&#160;        <span class="keywordtype">double</span> <a class="code" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a3f479b1f054ec67cfbc51e73edd4404a">m_value</a> = 0;    </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        std::u32string <a class="code" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#ae238ab699763a3d9fd4aecdd13ce8948">m_unit</a>; </div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a376481e16b3e65a27679c79afaf1ce51">  123</a></span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ae624660e4e88a3fe0522e126afbb6036">number_type_flag_name</a> <a class="code" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a376481e16b3e65a27679c79afaf1ce51">m_type_flag</a> = number_type_flag_name::integer; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    };</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1whitespace__token.html">whitespace_token</a> {};</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">struct </span>CDO_token {};</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">struct </span>CDC_token {};</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">struct </span>colon_token {};</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="keyword">struct </span>semicolon_token {};</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keyword">struct </span>comma_token {};</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="keyword">struct </span>open_square_token {};</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">struct </span>close_square_token {};</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">struct </span>open_paren_token {};</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keyword">struct </span>close_paren_token {};</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="comment">/* &lt; {-css_token &gt; */</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keyword">struct </span>open_curly_token {};</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="comment">/* &lt; }-css_token &gt; */</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keyword">struct </span>close_curly_token {};</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    <span class="keyword">struct </span>eof_token {};</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive.html">  167</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive.html">syntax_primitive</a></div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    {</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <a class="code" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive.html">syntax_primitive</a>()</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            : m_syntex_primitive_name(<span class="keyword">static_cast&lt;</span><a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30ba">syntex_primitive_name</a><span class="keyword">&gt;</span>(0))</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        }</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordtype">bool</span> is_token()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_syntex_primitive_name &lt; <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa014a6345103f65c3cdbea434dd90859c">syntex_primitive_name::TreeItem</a>; }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30ba">syntex_primitive_name</a> type()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_syntex_primitive_name; }</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        std::u32string m_value;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30ba">syntex_primitive_name</a> m_syntex_primitive_name;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        <span class="comment">//type_flag_name m_type_flag;</span></div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    };</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa459a6f79ad9b13cbcb5f692d2cc7a94d"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa459a6f79ad9b13cbcb5f692d2cc7a94d">wordring::wwwc::css::syntex_primitive_name::Token</a></div><div class="ttdeci">@ Token</div><div class="ttdoc">これ以降 Rule までトークン</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa1cd1307164ebd1f72dab040072ef87e1"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa1cd1307164ebd1f72dab040072ef87e1">wordring::wwwc::css::syntex_primitive_name::CloseCurlyToken</a></div><div class="ttdeci">@ CloseCurlyToken</div><div class="ttdoc">'}'</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baad68319f1969043ead9384301c9318dc2"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baad68319f1969043ead9384301c9318dc2">wordring::wwwc::css::syntex_primitive_name::ComponentValue</a></div><div class="ttdeci">@ ComponentValue</div><div class="ttdoc">component value</div></div>
+<div class="ttc" id="aclasswordring_1_1wwwc_1_1css_1_1syntax__primitive_html"><div class="ttname"><a href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive.html">wordring::wwwc::css::syntax_primitive</a></div><div class="ttdoc">トークンあるいはツリー・アイテム</div><div class="ttdef"><b>Definition:</b> wwwc/token.hpp:167</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baaaa8312dc5a420b93afb54d2cddd2c175"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaaa8312dc5a420b93afb54d2cddd2c175">wordring::wwwc::css::syntex_primitive_name::PercentageToken</a></div><div class="ttdeci">@ PercentageToken</div><div class="ttdoc">数字%</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa69225d2937ac661da66fbeb38514cb41"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa69225d2937ac661da66fbeb38514cb41">wordring::wwwc::css::syntex_primitive_name::QualifiedRule</a></div><div class="ttdeci">@ QualifiedRule</div><div class="ttdoc">qualified rule https://triple-underscore.github.io/css-syntax-ja.html#qualified-rule</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ae624660e4e88a3fe0522e126afbb6036"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ae624660e4e88a3fe0522e126afbb6036">wordring::wwwc::css::number_type_flag_name</a></div><div class="ttdeci">number_type_flag_name</div><div class="ttdoc">整数と小数を識別するためのフラグ値</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:35</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa9fe92bdfd02b433f0437d05386445e9a"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa9fe92bdfd02b433f0437d05386445e9a">wordring::wwwc::css::syntex_primitive_name::SimpleBlock</a></div><div class="ttdeci">@ SimpleBlock</div><div class="ttdoc">simple block</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa45bff21d89b93c71538ca52e5ca16124"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa45bff21d89b93c71538ca52e5ca16124">wordring::wwwc::css::syntex_primitive_name::ColonToken</a></div><div class="ttdeci">@ ColonToken</div><div class="ttdoc">':'</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa7f1e69c83928f7b24a35aefbbac90b43"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa7f1e69c83928f7b24a35aefbbac90b43">wordring::wwwc::css::syntex_primitive_name::AtRule</a></div><div class="ttdeci">@ AtRule</div><div class="ttdoc">at-rule https://triple-underscore.github.io/css-syntax-ja.html#at-rule</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa4d343bd779d9b15d74b6623bde932943"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa4d343bd779d9b15d74b6623bde932943">wordring::wwwc::css::syntex_primitive_name::OpenSquareToken</a></div><div class="ttdeci">@ OpenSquareToken</div><div class="ttdoc">'['</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1number__token_html_ad411c111fae02d332556e02882d1ec37"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1number__token.html#ad411c111fae02d332556e02882d1ec37">wordring::wwwc::css::number_token::m_type_flag</a></div><div class="ttdeci">number_type_flag_name m_type_flag</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:102</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa6246655a4c0a99b49f104cd87a0a7a7a"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa6246655a4c0a99b49f104cd87a0a7a7a">wordring::wwwc::css::syntex_primitive_name::Declaration</a></div><div class="ttdeci">@ Declaration</div><div class="ttdoc">declaration</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa86408593c34af77fdd90df932f8b5261"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa86408593c34af77fdd90df932f8b5261">wordring::wwwc::css::syntex_primitive_name::Function</a></div><div class="ttdeci">@ Function</div><div class="ttdoc">function</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30ba"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30ba">wordring::wwwc::css::syntex_primitive_name</a></div><div class="ttdeci">syntex_primitive_name</div><div class="ttdef"><b>Definition:</b> wwwc/token.hpp:24</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa783ef0441876aea9a24dba296a1d6493"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa783ef0441876aea9a24dba296a1d6493">wordring::wwwc::css::syntex_primitive_name::BadUrlToken</a></div><div class="ttdeci">@ BadUrlToken</div><div class="ttdoc">悪いURL</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baaf17b6fbd28bb7078ea20070d76e8073b"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaf17b6fbd28bb7078ea20070d76e8073b">wordring::wwwc::css::syntex_primitive_name::CommaToken</a></div><div class="ttdeci">@ CommaToken</div><div class="ttdoc">','</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baae1be428792de192f327ef2b91e8ddc37"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baae1be428792de192f327ef2b91e8ddc37">wordring::wwwc::css::syntex_primitive_name::FunctionToken</a></div><div class="ttdeci">@ FunctionToken</div><div class="ttdoc">関数</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa6a30ba4c168fa869fbbedbacd7d96d0d"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa6a30ba4c168fa869fbbedbacd7d96d0d">wordring::wwwc::css::syntex_primitive_name::CdcToken</a></div><div class="ttdeci">@ CdcToken</div><div class="ttdoc">&quot;--&gt;&quot;</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baabcda4adaa62e2095fb4a9c90eb94ba2d"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baabcda4adaa62e2095fb4a9c90eb94ba2d">wordring::wwwc::css::syntex_primitive_name::OpenParenToken</a></div><div class="ttdeci">@ OpenParenToken</div><div class="ttdoc">'('</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1whitespace__token_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1whitespace__token.html">wordring::wwwc::css::whitespace_token</a></div><div class="ttdoc">空白文字トークン</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:123</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1dimension__token_html_a376481e16b3e65a27679c79afaf1ce51"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a376481e16b3e65a27679c79afaf1ce51">wordring::wwwc::css::dimension_token::m_type_flag</a></div><div class="ttdeci">number_type_flag_name m_type_flag</div><div class="ttdef"><b>Definition:</b> wwwc/token.hpp:123</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baad35a3165912eb5f806bb373359d1407e"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baad35a3165912eb5f806bb373359d1407e">wordring::wwwc::css::syntex_primitive_name::DimensionToken</a></div><div class="ttdeci">@ DimensionToken</div><div class="ttdoc">数字 単位</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1function__token_html_ab54681829fdc05923bbd2eadafd0f834"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1function__token.html#ab54681829fdc05923bbd2eadafd0f834">wordring::wwwc::css::function_token::m_value</a></div><div class="ttdeci">std::u32string m_value</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:48</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa9b6bf5e430e7f924aa56f8d345255407"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa9b6bf5e430e7f924aa56f8d345255407">wordring::wwwc::css::syntex_primitive_name::IdentToken</a></div><div class="ttdeci">@ IdentToken</div><div class="ttdoc">識別子</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baab3b737b4f7ce3395552a72476a5c7389"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baab3b737b4f7ce3395552a72476a5c7389">wordring::wwwc::css::syntex_primitive_name::NumberToken</a></div><div class="ttdeci">@ NumberToken</div><div class="ttdoc">数字</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baaea1f283f9eac902e53d3039e03d4063a"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaea1f283f9eac902e53d3039e03d4063a">wordring::wwwc::css::syntex_primitive_name::AtKeywordToken</a></div><div class="ttdeci">@ AtKeywordToken</div><div class="ttdoc">@xxx</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1hash__token_html_acae872351ee02d56af8b4cf488f46385"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1hash__token.html#acae872351ee02d56af8b4cf488f46385">wordring::wwwc::css::hash_token::type_flag_name</a></div><div class="ttdeci">type_flag_name</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:60</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1dimension__token_html_ae238ab699763a3d9fd4aecdd13ce8948"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#ae238ab699763a3d9fd4aecdd13ce8948">wordring::wwwc::css::dimension_token::m_unit</a></div><div class="ttdeci">std::u32string m_unit</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:120</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1dimension__token_html_a3f479b1f054ec67cfbc51e73edd4404a"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a3f479b1f054ec67cfbc51e73edd4404a">wordring::wwwc::css::dimension_token::m_value</a></div><div class="ttdeci">double m_value</div><div class="ttdef"><b>Definition:</b> wwwc/token.hpp:121</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa014a6345103f65c3cdbea434dd90859c"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa014a6345103f65c3cdbea434dd90859c">wordring::wwwc::css::syntex_primitive_name::TreeItem</a></div><div class="ttdeci">@ TreeItem</div><div class="ttdoc">これ以降、ツリーに現れるアイテム</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa056bd17d2a8d32b8648c81e7bca26b77"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa056bd17d2a8d32b8648c81e7bca26b77">wordring::wwwc::css::syntex_primitive_name::HashToken</a></div><div class="ttdeci">@ HashToken</div><div class="ttdoc">#xxx</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baab165ed1cb43b00231fe49497cfb85ccb"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baab165ed1cb43b00231fe49497cfb85ccb">wordring::wwwc::css::syntex_primitive_name::CdoToken</a></div><div class="ttdeci">@ CdoToken</div><div class="ttdoc">&quot;&lt;!--&quot;</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baafebdea26c305b72c5fa515677b4745ee"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baafebdea26c305b72c5fa515677b4745ee">wordring::wwwc::css::syntex_primitive_name::DelimToken</a></div><div class="ttdeci">@ DelimToken</div><div class="ttdoc">区切り文字</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa129082675376228e1e2693e9c5bc0ed0"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa129082675376228e1e2693e9c5bc0ed0">wordring::wwwc::css::syntex_primitive_name::CloseParenToken</a></div><div class="ttdeci">@ CloseParenToken</div><div class="ttdoc">')'</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa8aedd9742c28a2498411573565728320"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa8aedd9742c28a2498411573565728320">wordring::wwwc::css::syntex_primitive_name::SemicolonToken</a></div><div class="ttdeci">@ SemicolonToken</div><div class="ttdoc">';'</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa6333b1eb17f1d004f605541264f3f651"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa6333b1eb17f1d004f605541264f3f651">wordring::wwwc::css::syntex_primitive_name::CloseSquareToken</a></div><div class="ttdeci">@ CloseSquareToken</div><div class="ttdoc">']'</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baae86c1edcfacb9e11f21711b6b3ada31d"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baae86c1edcfacb9e11f21711b6b3ada31d">wordring::wwwc::css::syntex_primitive_name::StringToken</a></div><div class="ttdeci">@ StringToken</div><div class="ttdoc">文字列</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1ident__token_html_aa1612645d0889a4627668adbb17f695f"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1ident__token.html#aa1612645d0889a4627668adbb17f695f">wordring::wwwc::css::ident_token::m_value</a></div><div class="ttdeci">std::u32string m_value</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:41</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa45c3b434df0a9011f39595f408352717"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa45c3b434df0a9011f39595f408352717">wordring::wwwc::css::syntex_primitive_name::PreservedTokens</a></div><div class="ttdeci">@ PreservedTokens</div><div class="ttdoc">preserved tokens</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baac093a5b70932df06d3c17f8da0575ceb"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baac093a5b70932df06d3c17f8da0575ceb">wordring::wwwc::css::syntex_primitive_name::BadStringToken</a></div><div class="ttdeci">@ BadStringToken</div><div class="ttdoc">悪い文字列</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1number__token_html_a4c04842967a764d96908465d9740beb6"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1number__token.html#a4c04842967a764d96908465d9740beb6">wordring::wwwc::css::number_token::m_value</a></div><div class="ttdeci">double m_value</div><div class="ttdef"><b>Definition:</b> wwwc/css_syntax/tokenization.hpp:101</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa969234afbce1b419f33dde47e5938333"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa969234afbce1b419f33dde47e5938333">wordring::wwwc::css::syntex_primitive_name::UrlToken</a></div><div class="ttdeci">@ UrlToken</div><div class="ttdoc">URL</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baaac6dbf065a8cd6f9771ef730e6c38cab"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baaac6dbf065a8cd6f9771ef730e6c38cab">wordring::wwwc::css::syntex_primitive_name::WhitespaceToken</a></div><div class="ttdeci">@ WhitespaceToken</div><div class="ttdoc">空白文字</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa1742c895356a386c0aabfc78475c4a98"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa1742c895356a386c0aabfc78475c4a98">wordring::wwwc::css::syntex_primitive_name::OpenCurlyToken</a></div><div class="ttdeci">@ OpenCurlyToken</div><div class="ttdoc">'{'</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a19b26c2c40c29296c71f4e0270ec30baa26e218c160523969c768f93ee8ad0597"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a19b26c2c40c29296c71f4e0270ec30baa26e218c160523969c768f93ee8ad0597">wordring::wwwc::css::syntex_primitive_name::EofToken</a></div><div class="ttdeci">@ EofToken</div><div class="ttdoc">EOF</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>
