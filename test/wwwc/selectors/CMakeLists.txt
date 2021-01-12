@@ -28,7 +28,8 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-)
+		"api.cpp"
+		"grammar.cpp")
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

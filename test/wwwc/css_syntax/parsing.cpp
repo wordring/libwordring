@@ -21,8 +21,10 @@ namespace
 
 	inline std::u32string print(std::vector<wordring::wwwc::css::declaration> const& in);
 
-	inline std::u32string print(std::any const& c);
-	inline std::u32string print(std::vector<std::any> const& in);
+	inline std::u32string print(wordring::wwwc::css::syntax_primitive const& c);
+	inline std::u32string print(wordring::wwwc::css::component_value const& c);
+	inline std::u32string print(std::vector<wordring::wwwc::css::syntax_primitive> const& in);
+	inline std::u32string print(std::vector<wordring::wwwc::css::component_value> const& in);
 
 	// 数値を文字列化する
 	inline std::u32string print(double i)
@@ -53,12 +55,22 @@ namespace
 		using namespace wordring::wwwc::css;
 
 		std::u32string out;
-		out += print(in.m_associated_token);
+		out += in.m_associated_token;
 		out += print(in.m_value);
-		if (is_open_curly_token(in.m_associated_token)) out += U"}";
-		if (is_open_square_token(in.m_associated_token)) out += U"]";
-		if (is_open_paren_token(in.m_associated_token)) out += U")";
-
+		switch (in.m_associated_token)
+		{
+		case U'{':
+			out += U"}";
+			break;
+		case U'[':
+			out += U"]";
+			break;
+		case U'(':
+			out += U")";
+			break;
+		default:
+			assert(false);
+		}
 		return out;
 	}
 
@@ -71,7 +83,7 @@ namespace
 		out += U"@";
 		out += in.m_name;
 		out += print(in.m_prelude);
-		if (in.m_block.has_value())
+		if (in.m_block)
 		{
 			out += print(*in.m_block);
 		}
@@ -124,71 +136,114 @@ namespace
 	}
 
 	// トークン/コンポーネント値を文字列化する
-	inline std::u32string print(std::any const& c)
+	inline std::u32string print(wordring::wwwc::css::syntax_primitive const& c)
+	{
+		using namespace wordring::wwwc::css;
+
+		switch (c.type())
+		{
+		case syntax_primitive_name::IdentToken:       return c.get<ident_token>().m_value;
+		case syntax_primitive_name::FunctionToken:    return c.get<function_token>().m_value;
+		case syntax_primitive_name::AtKeywordToken:   return c.get<at_keyword_token>().m_value;
+		case syntax_primitive_name::HashToken:        return c.get<hash_token>().m_value;
+		case syntax_primitive_name::StringToken:      return c.get<string_token>().m_value;
+		case syntax_primitive_name::BadStringToken:   return U" BAD_STRING_TOKEN ";
+		case syntax_primitive_name::UrlToken:         return c.get<url_token>().m_value;
+		case syntax_primitive_name::BadUrlToken:      return U" BAD_URL_TOKEN ";
+		case syntax_primitive_name::DelimToken:       return std::u32string(1, c.get<delim_token>().m_value);
+		case syntax_primitive_name::NumberToken:      return print(c.get<number_token>().m_value);
+		case syntax_primitive_name::PercentageToken:  return print(c.get<percentage_token>().m_value) + U"%";
+		case syntax_primitive_name::DimensionToken:
+		{
+			dimension_token const& d = c.get<dimension_token>();
+			return print(d.m_value) + d.m_unit;
+		}
+		case syntax_primitive_name::WhitespaceToken:  return U" ";
+		case syntax_primitive_name::CdoToken:         return U"<!--";
+		case syntax_primitive_name::CdcToken:         return U"-->";
+		case syntax_primitive_name::ColonToken:       return U":";
+		case syntax_primitive_name::SemicolonToken:   return U";";
+		case syntax_primitive_name::CommaToken:       return U",";
+		case syntax_primitive_name::OpenSquareToken:  return U"[";
+		case syntax_primitive_name::CloseSquareToken: return U"]";
+		case syntax_primitive_name::OpenParenToken:   return U"(";
+		case syntax_primitive_name::CloseParenToken:  return U")";
+		case syntax_primitive_name::OpenCurlyToken:   return U"{";
+		case syntax_primitive_name::CloseCurlyToken:  return U"}";
+		case syntax_primitive_name::EofToken:         return U"EOF_TOKEN";
+
+		case syntax_primitive_name::PreservedTokens: return U"PRESERVED_TOKENS";
+		case syntax_primitive_name::Function:        return print(c.get<function>());
+		case syntax_primitive_name::SimpleBlock:     return print(c.get<simple_block>());
+		case syntax_primitive_name::ComponentValue:  return print(c.get<component_value>());
+		case syntax_primitive_name::AtRule:          return print(c.get<at_rule>());
+		case syntax_primitive_name::QualifiedRule:   return print(c.get<qualified_rule>());
+		case syntax_primitive_name::Declaration:     return print(c.get<declaration>());
+
+		default:
+			break;
+		}
+
+		assert(false);
+		return U"";
+	}
+
+	inline std::u32string print(wordring::wwwc::css::component_value const& c)
+	{
+		using namespace wordring::wwwc::css;
+
+		switch (c.type())
+		{
+		case syntax_primitive_name::IdentToken:       return c.get<ident_token>().m_value;
+		//case syntax_primitive_name::FunctionToken:    return c.get<function_token>().m_value;
+		case syntax_primitive_name::AtKeywordToken:   return c.get<at_keyword_token>().m_value;
+		case syntax_primitive_name::HashToken:        return c.get<hash_token>().m_value;
+		case syntax_primitive_name::StringToken:      return c.get<string_token>().m_value;
+		case syntax_primitive_name::BadStringToken:   return U" BAD_STRING_TOKEN ";
+		case syntax_primitive_name::UrlToken:         return c.get<url_token>().m_value;
+		case syntax_primitive_name::BadUrlToken:      return U" BAD_URL_TOKEN ";
+		case syntax_primitive_name::DelimToken:       return std::u32string(1, c.get<delim_token>().m_value);
+		case syntax_primitive_name::NumberToken:      return print(c.get<number_token>().m_value);
+		case syntax_primitive_name::PercentageToken:  return print(c.get<percentage_token>().m_value) + U"%";
+		case syntax_primitive_name::DimensionToken:
+		{
+			dimension_token const& d = c.get<dimension_token>();
+			return print(d.m_value) + d.m_unit;
+		}
+		case syntax_primitive_name::WhitespaceToken:  return U" ";
+		case syntax_primitive_name::CdoToken:         return U"<!--";
+		case syntax_primitive_name::CdcToken:         return U"-->";
+		case syntax_primitive_name::ColonToken:       return U":";
+		case syntax_primitive_name::SemicolonToken:   return U";";
+		case syntax_primitive_name::CommaToken:       return U",";
+		case syntax_primitive_name::CloseSquareToken: return U"]";
+		case syntax_primitive_name::CloseParenToken:  return U")";
+		case syntax_primitive_name::CloseCurlyToken:  return U"}";
+		case syntax_primitive_name::EofToken:         return U"EOF_TOKEN";
+
+		case syntax_primitive_name::Function:        return print(c.get<function>());
+		case syntax_primitive_name::SimpleBlock:     return print(c.get<simple_block>());
+
+		default:
+			break;
+		}
+
+		assert(false);
+		return U"";
+	}
+
+	// トークン列/コンポーネント値列を文字列化する
+	inline std::u32string print(std::vector<wordring::wwwc::css::syntax_primitive> const& in)
 	{
 		using namespace wordring::wwwc::css;
 
 		std::u32string out;
 
-		auto& i = c.type();
-		if      (i == typeid(ident_token)       ) out += std::any_cast<ident_token>(c).m_value;
-		else if (i == typeid(function_token)    ) out += std::any_cast<function_token>(c).m_value;
-		else if (i == typeid(at_keyword_token)  ) out += std::any_cast<at_keyword_token>(c).m_value;
-		else if (i == typeid(hash_token)        ) out += std::any_cast<hash_token>(c).m_value;
-		else if (i == typeid(string_token)      ) out += std::any_cast<string_token>(c).m_value;
-		else if (i == typeid(bad_string_token)  ) out += U" BAD_STRING_TOKEN ";
-		else if (i == typeid(url_token)         ) out += std::any_cast<url_token>(c).m_value;
-		else if (i == typeid(bad_url_token)     ) out += U" BAD_URL_TOKEN ";
-		else if (i == typeid(delim_token)       ) out += std::any_cast<delim_token>(c).m_value;
-		else if (i == typeid(number_token)      ) out += print(std::any_cast<number_token>(c).m_value);
-		else if (i == typeid(percentage_token))
-		{
-			out += print(std::any_cast<percentage_token>(c).m_value);
-			out += U"%";
-		}
-		else if (i == typeid(dimension_token))
-		{
-			dimension_token const& d = std::any_cast<dimension_token>(c);
-			out += print(d.m_value);
-			out += d.m_unit;
-		}
-		else if (i == typeid(whitespace_token)  ) out += U" ";
-		else if (i == typeid(CDO_token)         ) out += U"<!--";
-		else if (i == typeid(CDC_token)         ) out += U"-->";
-		else if (i == typeid(colon_token)       ) out += U":";
-		else if (i == typeid(semicolon_token)   ) out += U";";
-		else if (i == typeid(comma_token)       ) out += U",";
-		else if (i == typeid(open_square_token) ) out += U"[";
-		else if (i == typeid(close_square_token)) out += U"]";
-		else if (i == typeid(open_paren_token)  ) out += U"(";
-		else if (i == typeid(close_paren_token) ) out += U")";
-		else if (i == typeid(open_curly_token)  ) out += U"{";
-		else if (i == typeid(close_curly_token) ) out += U"}";
-		else if (i == typeid(eof_token)) out += U"EOF_TOKEN";
-
-		else if (i == typeid(function)      ) out += print(std::any_cast<function>(c));
-		else if (i == typeid(simple_block)  ) out += print(std::any_cast<simple_block>(c));
-		else if (i == typeid(at_rule)       ) out += print(std::any_cast<at_rule>(c));
-		else if (i == typeid(qualified_rule)) out += print(std::any_cast<qualified_rule>(c));
-		else if (i == typeid(declaration)   ) out += print(std::any_cast<declaration>(c));
-
-		else if (i == typeid(parse_result<component_value>))
-		{
-			auto const& pr = std::any_cast<parse_result<component_value>>(c);
-			if (pr) out += print(*pr);
-			else out += U"FAILURE";
-		}
-
-		else
-		{
-			assert(false);
-		}
+		for (auto c : in) out += print(c);
 
 		return out;
 	}
-
-	// トークン列/コンポーネント値列を文字列化する
-	inline std::u32string print(std::vector<std::any> const& in)
+	inline std::u32string print(std::vector<wordring::wwwc::css::component_value> const& in)
 	{
 		using namespace wordring::wwwc::css;
 
@@ -209,62 +264,6 @@ BOOST_AUTO_TEST_SUITE(css_syntax_parsing_test)
 // https://triple-underscore.github.io/css-syntax-ja.html#parsing
 // ------------------------------------------------------------------------------------------------
 
-// inline bool is_open_square_block(std::any const& val)
-BOOST_AUTO_TEST_CASE(parsing_is_open_square_block_1)
-{
-	using namespace wordring::wwwc::css;
-
-	simple_block block{ open_square_token{} };
-	BOOST_CHECK(is_open_square_block(std::make_any<simple_block>(block)));
-}
-
-BOOST_AUTO_TEST_CASE(parsing_is_open_square_block_2)
-{
-	using namespace wordring::wwwc::css;
-
-	simple_block block{ open_paren_token{} };
-	BOOST_CHECK(is_open_square_block(std::make_any<simple_block>(block)) == false);
-}
-
-BOOST_AUTO_TEST_CASE(parsing_is_open_square_block_3)
-{
-	using namespace wordring::wwwc::css;
-
-	simple_block block;
-	BOOST_CHECK(is_open_square_block(std::make_any<simple_block>(block)) == false);
-}
-
-
-// inline bool is_preserved_token(std::any const& val)
-BOOST_AUTO_TEST_CASE(parsing_is_preserved_token_1)
-{
-	using namespace wordring::wwwc::css;
-
-	BOOST_CHECK(is_preserved_token(std::make_any<whitespace_token>()));
-}
-
-BOOST_AUTO_TEST_CASE(parsing_is_preserved_token_2)
-{
-	using namespace wordring::wwwc::css;
-
-	BOOST_CHECK(is_preserved_token(std::make_any<function_token>(U"")) == false);
-}
-
-// inline bool is_component_value(std::any const& val)
-BOOST_AUTO_TEST_CASE(parsing_is_component_value_1)
-{
-	using namespace wordring::wwwc::css;
-
-	BOOST_CHECK(is_component_value(std::make_any<function>()));
-}
-
-BOOST_AUTO_TEST_CASE(parsing_is_component_value_2)
-{
-	using namespace wordring::wwwc::css;
-
-	BOOST_CHECK(is_component_value(std::make_any<open_curly_token>()) == false);
-}
-
 // ------------------------------------------------------------------------------------------------
 // 5.2. Definitions
 //
@@ -278,8 +277,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_current_input_token_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*(p{color: red;})*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 	in.consume();
@@ -293,8 +292,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_current_input_token_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*()*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 	in.consume();
@@ -307,8 +306,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_next_input_token_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*(p{color: red;})*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 	in.consume();
@@ -322,8 +321,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_next_input_token_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*(p)*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 	in.consume();
@@ -336,8 +335,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*(p{color: red;})*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 
@@ -359,8 +358,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*()*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 
@@ -373,8 +372,8 @@ BOOST_AUTO_TEST_CASE(parsing_token_stream_reconsume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = UR"*(p{color: red;})*";
-	std::vector<css_token> tokens;
-	tokenize(css.begin(), css.end(), std::back_inserter(tokens));
+	std::vector<syntax_primitive> tokens;
+	tokenize(css.begin(), css.end(), std::back_inserter(tokens), 0);
 
 	token_stream in(std::move(tokens));
 
@@ -397,9 +396,9 @@ BOOST_AUTO_TEST_CASE(parsing_normalize_into_token_stream_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string in = UR"*( p { color: red; } )*";
-	std::vector<css_token> v, v1, v2;
+	std::vector<syntax_primitive> v, v1, v2;
 
-	tokenize(in.begin(), in.end(), std::back_inserter(v));
+	tokenize(in.begin(), in.end(), std::back_inserter(v), 0);
 
 	v1 = v;
 	v2 = normalize_into_token_stream(std::move(v));
@@ -412,12 +411,12 @@ BOOST_AUTO_TEST_CASE(parsing_normalize_into_token_stream_2)
 {
 	using namespace wordring::wwwc::css;
 
-	std::u32string in = UR"*( p { color: red; } )*";
+	std::u32string css = UR"*( p { color: red; } )*";
 
-	std::vector<std::any> v1, v2;
-	tokenize(in.begin(), in.end(), std::back_inserter(v1));
+	std::vector<syntax_primitive> v1, v2;
+	tokenize(css.begin(), css.end(), std::back_inserter(v1), 0);
 
-	v2 = normalize_into_token_stream(std::move(in));
+	v2 = normalize_into_token_stream(std::move(css));
 
 	BOOST_CHECK(print(v1) == print(v2));
 }
@@ -434,7 +433,8 @@ BOOST_AUTO_TEST_CASE(parsing_parse_grammar_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U" p { color: red; } ";
-	parse_result<std::vector<component_value>> v = parse_grammar(std::move(css), [](component_value)->bool { return true; });
+	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
+		, [](std::vector<syntax_primitive> const&)->bool { return true; });
 
 	BOOST_CHECK(v);
 	std::u32string s = print(*v);
@@ -446,7 +446,8 @@ BOOST_AUTO_TEST_CASE(parsing_parse_grammar_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U" p { color: red; } ";
-	parse_result<std::vector<component_value>> v = parse_grammar(std::move(css), [](component_value)->bool { return false; });
+	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
+		, [](std::vector<syntax_primitive> const&)->bool { return false; });
 
 	BOOST_CHECK(!v);
 }
@@ -463,13 +464,15 @@ BOOST_AUTO_TEST_CASE(parsing_parse_comma_list_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"a, p h1";
-	std::vector<parse_result<std::vector<component_value>>> v = parse_comma_list(std::move(css), [](component_value)->bool { return true; });
+	std::vector<std::optional<std::vector<syntax_primitive>>> v =
+		parse_comma_list(std::move(css)
+			, [](std::vector<syntax_primitive> const&)->bool { return true; });
 
 	std::u32string s;
 	for (auto const& c : v)
 	{
-		auto const& v = std::any_cast<parse_result<std::vector<component_value>>>(c);
-		if(v) s += print(*v);
+		auto const& v = std::any_cast<std::optional<std::vector<syntax_primitive>>>(c);
+		if (v) s += print(*v);
 	}
 
 	BOOST_CHECK(s == U"a p h1");
@@ -489,7 +492,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_stylesheet_1)
 	std::string css =
 		"@import \"my-styles.css\";"
 		"p > a { color: blue; }";
-	std::vector<component_value> v = parse_stylesheet(css);
+	std::vector<syntax_primitive> v = parse_stylesheet(css);
 
 	std::u32string s = print(v);
 	BOOST_CHECK(s == U"@import my-styles.cssp > a { color: blue; }");
@@ -509,7 +512,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_list_of_rules_1)
 	std::u32string css =
 		U"@import \"my-styles.css\";"
 		U"p > a { color: blue; }";
-	std::vector<component_value> v = parse_list_of_rules(std::move(css));
+	std::vector<syntax_primitive> v = parse_list_of_rules(std::move(css));
 
 	std::u32string s = print(v);
 	BOOST_CHECK(s == U"@import my-styles.cssp > a { color: blue; }");
@@ -527,7 +530,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_rule_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"@import \"my-styles.css\" ; ";
-	parse_result<css_component> c = parse_rule(std::move(css));
+	std::optional<syntax_primitive> c = parse_rule(std::move(css));
 
 	BOOST_CHECK(c);
 	std::u32string s = print(*c);
@@ -546,7 +549,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_declaration_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"background-color: red;";
-	parse_result<component_value> c = parse_declaration(std::move(css));
+	std::optional<declaration> c = parse_declaration(std::move(css));
 
 	BOOST_CHECK(c);
 	std::u32string s = print(*c);
@@ -559,7 +562,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_declaration_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"a, p h1";
-	parse_result<component_value> c = parse_declaration(std::move(css));
+	std::optional<declaration> c = parse_declaration(std::move(css));
 
 	BOOST_CHECK(!c);
 }
@@ -578,7 +581,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_list_of_declarations_1)
 	std::u32string css =
 		U"background-color: red;"
 		U"color: blue !important;";
-	std::vector<component_value> v = parse_list_of_declarations(std::move(css));
+	std::vector<syntax_primitive> v = parse_list_of_declarations(std::move(css));
 
 	std::u32string s = print(v);
 	BOOST_CHECK(s == U"background-color:redcolor:blue!IMPORTANT");
@@ -596,7 +599,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_component_value_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"a";
-	parse_result<component_value> c = parse_component_value(std::move(css));
+	std::optional<component_value> c = parse_component_value(std::move(css));
 
 	BOOST_CHECK(c);
 	std::u32string s = print(*c);
@@ -615,7 +618,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_list_of_component_values_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"a, p h1";
-	std::vector<component_value> v = parse_list_of_component_values(std::move(css));
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
 
 	std::u32string s = print(v);
 	BOOST_CHECK(s == U"a, p h1");
@@ -633,7 +636,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_comma_separated_list_of_component_values_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"a, p h1";
-	std::vector<std::vector<component_value>> v = parse_comma_separated_list_of_component_values(std::move(css));
+	std::vector<std::vector<syntax_primitive>> v = parse_comma_separated_list_of_component_values(std::move(css));
 
 	std::u32string s;
 	for (auto const& x : v) s += print(x);
@@ -662,7 +665,7 @@ BOOST_AUTO_TEST_CASE(parsing_consume_list_of_rules_1)
 		U"}\r\n";
 	token_stream in(normalize_into_token_stream(std::move(css), 0));
 
-	std::vector<css_component> v = consume_list_of_rules(in, false, nullptr);
+	std::vector<syntax_primitive> v = consume_list_of_rules(in, false, nullptr);
 	std::u32string s = print(v);
 	BOOST_CHECK(s == U"@media print { body{ font - size: 10pt } }p > a { color: blue; text-decoration: underline; }");
 }
@@ -759,7 +762,7 @@ BOOST_AUTO_TEST_CASE(parsing_consume_list_of_declarations_1)
 		U"	text-decoration: underline !important;";
 	token_stream in(normalize_into_token_stream(std::move(css), 0));
 
-	std::vector<css_component> decl = consume_list_of_declarations(in, nullptr);
+	std::vector<syntax_primitive> decl = consume_list_of_declarations(in, nullptr);
 	std::u32string s = print(decl);
 	BOOST_CHECK(s == U"color:bluetext-decoration:underline!IMPORTANT");
 }

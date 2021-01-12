@@ -60,6 +60,7 @@ set(INCLUDE_DIR ${Wordring_INCLUDE_DIR}/wordring)
 #add_subdirectory (tag_tree)
 #add_subdirectory (util)
 add_subdirectory (whatwg)
+add_subdirectory (wwwc)
 
 add_library (
 	${PROJECT_NAME}
@@ -70,6 +71,7 @@ add_library (
 #		$<TARGET_OBJECTS:tag_tree>
 #		$<TARGET_OBJECTS:util>
 		$<TARGET_OBJECTS:whatwg>
+		$<TARGET_OBJECTS:wwwc>
 )
 
 target_link_libraries (

@@ -47,6 +47,28 @@
           <td>Chromium の CSS selector パーサー実装　※行番号にリンクしているので、関数からずれるかも。<br>
           </td>
         </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/container_node.cc;drc=12ff706873adaea516a4d042b6d7a40d1996fff1;bpv=1;bpt=1;l=1243?gsn=QuerySelector&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fdom%2Fcontainer_node.cc%23WVEKx3IB7S9RJcS7ojTyqah50Ikt1PChFhSwGdxe2XU&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fdom%2Fcontainer_node.h%23rgj8HlLOyYsbAblt16xJc6ZFupVj-diE3AKPWUDzaE4">QuerySelector()</a></td>
+          <td>Chromium の QuerySelector() 実装。<br>
+            DOM とのマッチは <a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/selector_query.h;drc=12ff706873adaea516a4d042b6d7a40d1996fff1;bpv=1;bpt=1;l=49?gsn=SelectorQuery&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fselector_query.h%23SelectorQuery%253Ablink%2523c%2523cCn75cP9SRo&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fselector_query.h%23VQx5-1_vnAtIfUQwNDc7krh1CsZNVk878l69UO-rr_s">SelectorQuery</a>
+            クラスが行っている。</td>
+        </tr>
+        <tr>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/selector_query.h;drc=12ff706873adaea516a4d042b6d7a40d1996fff1;bpv=1;bpt=1;l=49?gsn=SelectorQuery&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fselector_query.h%23SelectorQuery%253Ablink%2523c%2523cCn75cP9SRo&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fselector_query.h%23VQx5-1_vnAtIfUQwNDc7krh1CsZNVk878l69UO-rr_s">SelectorQuery</a>
+            クラス</td>
+          <td>Chromium の CSS セレクタの実体。<br>
+            <ul>
+              <li><a href="https://dom.spec.whatwg.org/#dom-element-matches">https://dom.spec.whatwg.org/#dom-element-matches</a></li>
+              <li><a href="https://dom.spec.whatwg.org/#dom-element-closest">https://dom.spec.whatwg.org/#dom-element-closest</a></li>
+              <li><a href="https://dom.spec.whatwg.org/#dom-parentnode-queryselector">https://dom.spec.whatwg.org/#dom-parentnode-queryselector</a></li>
+            </ul>
+            <p>これらを実装している。</p>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://github.com/jquery/sizzle/wiki">sizzle</a></td>
+          <td>jQuery に採用されている CSS セレクタ実装。</td>
+        </tr>
       </tbody>
     </table>
     <h2>感想<br>
@@ -56,6 +78,203 @@
       <li>selector4 の文法は、 EBNF で定義されている。　文法のクラスは規格で示されていない。　Bison （ LALR(1)
         ）で解析したところ、シフト・還元コンフリクトが 43 、還元・還元コンフリクトが 11 発見された。　Bison は GLR
         パーサーも構成できるが、 詳しい分析は出来なかった。ANTLRで調べたところ、左再帰は発見されなかった。</li>
+      <li>Blink
+        が手書きパーサへ変更されたことを考えると、文脈自由文法は諦めるほうが良いかもしれない。個々のコンテキストを文法の方へ移動すると、文脈自由文法の範疇に収めることも
+        可能と思われるが、CSSは既にモジュール化しているので、誰かがどこかで勝手に決めた予約語を文法に組み込むと言う不毛な作業を必要とする。</li>
+    </ul>
+    <h2>構文規則</h2>
+    <ol>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-selector-list">&lt;selector-list&gt;</a>
+        = &lt;complex-selector-list&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-complex-selector-list">&lt;complex-selector-list&gt;</a>
+        = &lt;complex-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-compound-selector-list">&lt;compound-selector-list&gt;</a>
+        = &lt;compound-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-simple-selector-list">&lt;simple-selector-list&gt;</a>
+        = &lt;simple-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector-list">&lt;relative-selector-list&gt;</a>
+        = &lt;relative-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-complex-selector">&lt;complex-selector&gt;</a>
+        = &lt;compound-selector&gt; [ &lt;combinator&gt;?
+        &lt;compound-selector&gt; ]*</li>
+      <ul>
+        <li>セレクタの本丸。</li>
+      </ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector">&lt;relative-selector&gt;</a>
+        = &lt;combinator&gt;? &lt;complex-selector&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-compound-selector">&lt;compound-selector&gt;</a>
+        = [ &lt;type-selector&gt;? &lt;subclass-selector&gt;*<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        [ &lt;pseudo-element-selector&gt; &lt;pseudo-class-selector&gt;* ]* ]!</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-simple-selector">&lt;simple-selector&gt;</a>
+        = &lt;type-selector&gt; | &lt;subclass-selector&gt;</li>
+      <ul>
+        <li>要素にマッチするセレクタ。</li>
+        <li>P.my-class[attr="test"] のように間に空白文字が無い。※空白があると子孫セレクタとみなされるから。</li>
+      </ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-combinator">&lt;combinator&gt;</a>
+        = '&gt;' | '+' | '~' | [ '|' '|' ]</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-type-selector">&lt;type-selector&gt;</a>
+        = &lt;wq-name&gt; | &lt;ns-prefix&gt;? '*'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-ns-prefix">&lt;ns-prefix&gt;</a>
+        = [ &lt;ident-token&gt; | '*' ]? '|'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-wq-name">&lt;wq-name&gt;</a>
+        = &lt;ns-prefix&gt;? &lt;ident-token&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-subclass-selector">&lt;subclass-selector&gt;</a>
+        = &lt;id-selector&gt; | &lt;class-selector&gt; |<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &lt;attribute-selector&gt; | &lt;pseudo-class-selector&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-id-selector">&lt;id-selector&gt;</a>
+        = &lt;hash-token&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-class-selector">&lt;class-selector&gt;</a>
+        = '.' &lt;ident-token&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-attribute-selector">&lt;attribute-selector&gt;</a>
+        = '[' &lt;wq-name&gt; ']' |<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        '[' &lt;wq-name&gt; &lt;attr-matcher&gt; [ &lt;string-token&gt; |
+        &lt;ident-token&gt; ] &lt;attr-modifier&gt;? ']'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-attr-matcher">&lt;attr-matcher&gt;</a>
+        = [ '~' | '|' | '^' | '$' | '*' ]? '='</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-attr-modifier">&lt;attr-modifier&gt;</a>
+        = i | s</li>
+      <ul>
+        <li>Chromium では、この規則が呼び出された時点で、 i/s を格納する ident_token
+          の有無にかかわらず、文字ケースを決定している。 ident_token が無い場合と&nbsp; i 以外の場合は
+          case-sensitive 、それ以外（ s ）の場合は case-insensitive を返している。</li>
+      </ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-pseudo-class-selector"
+          id="pseudo-class-selector">&lt;pseudo-class-selector&gt;</a> = ':'
+        &lt;ident-token&gt; | ':' &lt;function-token&gt; &lt;any-value&gt; ')'</li>
+      <ul>
+        <li><a href="mailto:#pseudo-element-selector">&lt;pseudo-element-selector&gt;</a>
+          と区別するために特別な配慮が必要。</li>
+        <li>Chromium では、<a href="mailto:#pseudo-element-selector">&lt;pseudo-element-selector&gt;</a>
+          と統合されている。</li>
+      </ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-pseudo-element-selector"
+          id="pseudo-element-selector">&lt;pseudo-element-selector&gt;</a> = ':'
+        &lt;pseudo-class-selector&gt;</li>
+      <ul>
+        <li>疑似要素</li>
+        <li>「::識別子」の形だが、CSS level2 までの疑似要素については、「:識別子」の形が許される。※歴史的に使われているから。</li>
+        <li>「:識別子」の形式は、<a href="#pseudo-class-selector">&lt;pseudo-class-selector&gt;</a>と
+          区別できないため、個別の識別子名に対して場合分けが必要。</li>
+        <li>CSS Level1/2の疑似要素は「:before、 :after、 :first-line、 :first-letter」。</li>
+      </ul>
+    </ol>
+    <h2>DOM ツリーとのマッチ</h2>
+    <br>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/selectors4-ja.html#match-a-selector-against-a-tree">ツ
+              リーに対しセレクタを照合する</a></td>
+          <td>セレクタマッチングを外部から呼び出すときのエントリーポイント。</td>
+        </tr>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/selectors4-ja.html#match-a-selector-against-an-element">要
+              素に対しセレクタを照合する</a></td>
+          <td>セレクタのリストとのマッチアルゴリズム。</td>
+        </tr>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/selectors4-ja.html#match-a-complex-selector-against-an-element">要
+              素に対し Complex セレクタを照合する</a></td>
+          <td>[ 重要 ]セレクタのマッチアルゴリズム本体。<br>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#complex">Complex
+                  セレクタ</a></li>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#selector-combinator">結
+                  合子</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td><a href="https://triple-underscore.github.io/selectors4-ja.html#match-a-selector-against-a-pseudo-element">疑
+              似要素に対しセレクタを照合する</a></td>
+          <td>疑似要素に対するマッチングアルゴリズム。</td>
+        </tr>
+        <tr>
+          <td>要素にマッチするセレクタの最小単位</td>
+          <td>
+            <ul>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#simple">Simple
+                  セレクタ</a></li>
+              <li><a href="https://triple-underscore.github.io/selectors4-ja.html#compound">Compound
+                  セレクタ</a></li>
+            </ul>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>セレクタのデータ表現は、結合子を挟んだ Compound セレクタの並びとする。</li>
+      <li><br>
+      </li>
+    </ul>
+    <p><br>
+    </p>
+    <ol>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-selector-list">&lt;selector-list&gt;</a>
+        = &lt;complex-selector-list&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-complex-selector-list">&lt;complex-selector-list&gt;</a>
+        = &lt;complex-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-compound-selector-list">&lt;compound-selector-list&gt;</a>
+        = &lt;compound-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-simple-selector-list">&lt;simple-selector-list&gt;</a>
+        = &lt;simple-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector-list">&lt;relative-selector-list&gt;</a>
+        = &lt;relative-selector&gt;#</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-complex-selector">&lt;complex-selector&gt;</a>
+        = &lt;compound-selector&gt; [ &lt;combinator&gt;?
+        &lt;compound-selector&gt; ]*</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector">&lt;relative-selector&gt;</a>
+        = &lt;combinator&gt;? &lt;complex-selector&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-compound-selector">&lt;compound-selector&gt;</a>
+        = [ &lt;type-selector&gt;? &lt;subclass-selector&gt;*<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        [ &lt;pseudo-element-selector&gt; &lt;pseudo-class-selector&gt;* ]* ]!</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-simple-selector">&lt;simple-selector&gt;</a>
+        = &lt;type-selector&gt; | &lt;subclass-selector&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-combinator">&lt;combinator&gt;</a>
+        = '&gt;' | '+' | '~' | [ '|' '|' ]</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-type-selector">&lt;type-selector&gt;</a>
+        = &lt;wq-name&gt; | &lt;ns-prefix&gt;? '*'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-ns-prefix">&lt;ns-prefix&gt;</a>
+        = [ &lt;ident-token&gt; | '*' ]? '|'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-wq-name">&lt;wq-name&gt;</a>
+        = &lt;ns-prefix&gt;? &lt;ident-token&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-subclass-selector">&lt;subclass-selector&gt;</a>
+        = &lt;id-selector&gt; | &lt;class-selector&gt; |<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &lt;attribute-selector&gt; | &lt;pseudo-class-selector&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-id-selector">&lt;id-selector&gt;</a>
+        = &lt;hash-token&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-class-selector">&lt;class-selector&gt;</a>
+        = '.' &lt;ident-token&gt;</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-attribute-selector">&lt;attribute-selector&gt;</a>
+        = '[' &lt;wq-name&gt; ']' |<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        '[' &lt;wq-name&gt; &lt;attr-matcher&gt; [ &lt;string-token&gt; |
+        &lt;ident-token&gt; ] &lt;attr-modifier&gt;? ']'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-attr-matcher">&lt;attr-matcher&gt;</a>
+        = [ '~' | '|' | '^' | '$' | '*' ]? '='</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-attr-modifier">&lt;attr-modifier&gt;</a>
+        = i | s</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-pseudo-class-selector"
+          id="pseudo-class-selector">&lt;pseudo-class-selector&gt;</a> = ':'
+        &lt;ident-token&gt; | ':' &lt;function-token&gt; &lt;any-value&gt; ')'</li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-pseudo-element-selector"
+          id="pseudo-element-selector">&lt;pseudo-element-selector&gt;</a> = ':'
+        &lt;pseudo-class-selector&gt;</li>
+    </ol>
+    <p><br>
+    </p>
+    <p></p>
+    <ol>
+      <ul>
+      </ul>
+    </ol>
+    <ul>
     </ul>
     <ul>
     </ul>

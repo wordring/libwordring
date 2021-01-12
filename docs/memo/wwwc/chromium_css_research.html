@@ -12,6 +12,8 @@
       <li>当初は Flex/Bison
         で書かれていたパーサーが、現在は手書きに代わっている。　生成規則と対応する関数群をトップレベルから呼び出していくので、おそらく再帰下降あるいはそれに近い方式と思
         わ れる。</li>
+      <li><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/selector_query.h;drc=cb3ff30296f61e6f66de70fa33bd9f5169a1ff88;bpv=1;bpt=1;l=49?q=querySelector&amp;ss=chromium%2Fchromium%2Fsrc&amp;gsn=SelectorQuery&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fselector_query.h%23SelectorQuery%253Ablink%2523c%2523cCn75cP9SRo&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fselector_query.h%23VQx5-1_vnAtIfUQwNDc7krh1CsZNVk878l69UO-rr_s">SelectorQuery
+          </a>クラスがセレクタ実装の本体と思われる。</li>
     </ul>
     <h2>参考</h2>
     <table style="width: 100%" border="1">
@@ -23,7 +25,12 @@
           </th>
         </tr>
         <tr>
-          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.h;l=27;bpv=1;bpt=1">CSSSelectorParser</a><br>
+          <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_parser_token.h;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=72?gsn=CSSParserToken&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_parser_token.h%233bWSua2KSzC_Pcu6ao9JlJyUShptCJjxj5TkKXqC340&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_parser_token.h%23CSSParserToken%253Ablink%2523c%2523oyrCSoYs3NR&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_parser_token.h%23c9Kn-rVbPXuQRhhfs3mrijXrkT8YuP6qPzVL3p4_pUM&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_parser_token.h%23kjs5E4X8vtbVl1mYGXkB_0HCw-dQpIWcgKGadPmLIZU">class
+              CSSParserToken</a></td>
+          <td>メンバとして共用体を保持し、すべてのトークン種別をこのクラスで表現している。</td>
+        </tr>
+        <tr>
+          <td><a href="#css_selector_parser">class CSSSelectorParser</a><br>
           </td>
           <td>Blink の CSS selector パーサー実装<br>
           </td>
@@ -36,7 +43,13 @@
         </tr>
       </tbody>
     </table>
-    <h2>class CSSSelectorParser の調査</h2>
+    <p>&nbsp; </p>
+    <h2><a name="css_parser_token" id="css_parser_token"></a>class
+      CSSParserToken の調査</h2>
+    <p><br>
+    </p>
+    <h2><a name="css_selector_parser" id="css_selector_parser"></a>class
+      CSSSelectorParser の調査</h2>
     <h3>公開メンバ</h3>
     <table style="width: 100%" border="1">
       <tbody>
@@ -121,7 +134,10 @@
         <tr>
           <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=610?gsn=ConsumePseudo&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%2340yhLLO7A0mDURzckGn85IWF9nnsqKBgnW-xZsiu3rI&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23wtqO8neXl9p0McDI6t9D_yECGnZZCNdlEJFSmBn-06Q">ConsumePseudo()</a></td>
           <td>&lt;pseudo-class-selector&gt;<br>
-            &lt;pseudo-element-selector&gt;</td>
+            &lt;pseudo-element-selector&gt;<br>
+            規格は ::after のようにコロン二個を疑似要素とするが、歴史的に :after
+            のようにコロン一個の疑似要素も使われてきたため、コロン一個の疑似クラスとまとめたと思われる。<br>
+            Level1/2 の疑似要素「」</td>
         </tr>
         <tr>
           <td><a href="https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/parser/css_selector_parser.cc;drc=101fff3419ee1953fad49f5be70c9761cc74cd9e;bpv=1;bpt=1;l=558?gsn=ConsumeAttribute&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.cc%23zWvt7EtTO12WANl1LbB6yI8CcCHE9SuL2Z8s4bwsfkk&amp;gs=kythe%3A%2F%2Fchromium.googlesource.com%2Fchromium%2Fsrc%3Flang%3Dc%252B%252B%3Fpath%3Dsrc%2Fthird_party%2Fblink%2Frenderer%2Fcore%2Fcss%2Fparser%2Fcss_selector_parser.h%23yHR5CmRDI2jUQ_c_hAep3UtsZCc4jnf0UHsZNwg_APU">ConsumeAttribute()</a></td>
@@ -223,8 +239,8 @@
         </tr>
       </tbody>
     </table>
-    <p><br>
-    </p>
+    <h2><br>
+    </h2>
     <p> </p>
   </body>
 </html>
