@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <wordring/wwwc/css_syntax/token.hpp>
+
 #include <wordring/whatwg/infra/infra.hpp>
 
 #include <algorithm>
@@ -13,7 +15,6 @@
 #include <tuple>
 #include <typeindex>
 #include <utility>
-//#include <variant>
 
 namespace wordring::wwwc::css
 {
@@ -23,310 +24,6 @@ namespace wordring::wwwc::css
 	// https://drafts.csswg.org/css-syntax-3/#tokenization
 	// https://triple-underscore.github.io/css-syntax-ja.html#tokenization
 	// --------------------------------------------------------------------------------------------
-
-	template <typename BidirectionalIterator, typename OutputIterator, typename ErrorHandler = std::nullptr_t>
-	inline void tokenize(BidirectionalIterator, BidirectionalIterator, OutputIterator output, ErrorHandler = nullptr);
-
-	/*! @brief 整数と小数を識別するためのフラグ値
-
-	@sa number_token
-	@sa dimension_token
-	*/
-	enum class number_type_flag_name { integer = 1, number };
-
-	struct ident_token
-	{
-		ident_token(std::u32string&& id) : m_value(std::move(id)) {}
-
-		std::u32string m_value;
-	};
-
-	struct function_token
-	{
-		function_token(std::u32string&& s) : m_value(std::move(s)) {}
-
-		std::u32string m_value;
-	};
-	
-	struct at_keyword_token
-	{
-		at_keyword_token(std::u32string&& s) : m_value(std::move(s)) {}
-
-		std::u32string m_value;
-	};
-
-	struct hash_token
-	{
-		enum class type_flag_name { id = 1, unrestricted };
-
-		hash_token() : m_type_flag(type_flag_name::unrestricted) {}
-
-		type_flag_name m_type_flag;
-		std::u32string m_value;
-	};
-
-	struct string_token
-	{
-		string_token(std::u32string&& s) : m_value(std::move(s)) {}
-
-		std::u32string m_value;
-	};
-
-	struct bad_string_token {};
-
-	struct url_token
-	{
-		url_token(std::u32string&& url) : m_value(std::move(url)) {}
-
-		std::u32string m_value;
-	};
-
-	struct bad_url_token {};
-
-	struct delim_token
-	{
-		delim_token(char32_t cp) : m_value(cp) {}
-
-		char32_t m_value;
-	};
-	
-	struct number_token
-	{
-		number_token(double num, number_type_flag_name type = number_type_flag_name::integer)
-			: m_value(num)
-			, m_type_flag(type)
-		{
-		}
-
-		double m_value;
-		number_type_flag_name m_type_flag;
-	};
-
-	struct percentage_token
-	{
-		percentage_token(double num) : m_value(num) {}
-
-		double m_value;
-	};
-
-	struct dimension_token : number_token
-	{
-		dimension_token(double num, number_type_flag_name type, std::u32string&& unit)
-			: number_token(num, type)
-			, m_unit(std::move(unit))
-		{
-		}
-
-		std::u32string m_unit;
-	};
-	
-	struct whitespace_token {};
-	struct CDO_token {};
-	struct CDC_token {};
-	struct colon_token {};
-	struct semicolon_token {};
-	struct comma_token {};
-	/* < [-css_token > */
-	struct open_square_token {};
-	/* < ]-css_token > */
-	struct close_square_token {};
-	/* < (-css_token > */
-	struct open_paren_token {};
-	/* < )-css_token > */
-	struct close_paren_token {};
-	/* < {-css_token > */
-	struct open_curly_token {};
-	/* < }-css_token > */
-	struct close_curly_token {};
-	struct eof_token {};
-
-	/*! @brief CSSトークン
-	
-	- ident_token
-	- function_token
-	- at_keyword_token
-	- hash_token
-	- string_token
-	- bad_string_token
-	- url_token
-	- bad_url_token
-	- delim_token
-	- number_token
-	- percentage_token
-	- dimension_token
-	- whitespace_token
-	- CDO_token
-	- CDC_token
-	- colon_token
-	- semicolon_token
-	- comma_token
-	- open_square_token
-	- close_square_token
-	- open_paren_token
-	- close_paren_token
-	- open_curly_token
-	- close_curly_token
-	- eof_token
-	*/
-	using css_token = std::any;
-
-	inline bool is_ident_token(std::any const& val)
-	{
-		return val.type() == typeid(ident_token const);
-	}
-
-	inline bool is_function_token(std::any const& val)
-	{
-		return val.type() == typeid(function_token const);
-	}
-
-	inline bool is_at_keyword_token(std::any const& val)
-	{
-		return val.type() == typeid(at_keyword_token const);
-	}
-
-	inline bool is_hash_token(std::any const& val)
-	{
-		return val.type() == typeid(hash_token const);
-	}
-
-	inline bool is_string_token(std::any const& val)
-	{
-		return val.type() == typeid(string_token const);
-	}
-
-	inline bool is_bad_string_token(std::any const& val)
-	{
-		return val.type() == typeid(bad_string_token const);
-	}
-
-	inline bool is_url_token(std::any const& val)
-	{
-		return val.type() == typeid(url_token const);
-	}
-
-	inline bool is_bad_url_token(std::any const& val)
-	{
-		return val.type() == typeid(bad_url_token const);
-	}
-
-	inline bool is_delim_token(std::any const& val)
-	{
-		return val.type() == typeid(delim_token const);
-	}
-
-	inline bool is_number_token(std::any const& val)
-	{
-		return val.type() == typeid(number_token const);
-	}
-
-	inline bool is_percentage_token(std::any const& val)
-	{
-		return val.type() == typeid(percentage_token const);
-	}
-
-	inline bool is_dimension_token(std::any const& val)
-	{
-		return val.type() == typeid(dimension_token const);
-	}
-
-	inline bool is_whitespace_token(std::any const& val)
-	{
-		return val.type() == typeid(whitespace_token const);
-	}
-
-	inline bool is_CDO_token(std::any const& val)
-	{
-		return val.type() == typeid(CDO_token const);
-	}
-
-	inline bool is_CDC_token(std::any const& val)
-	{
-		return val.type() == typeid(CDC_token const);
-	}
-
-	inline bool is_colon_token(std::any const& val)
-	{
-		return val.type() == typeid(colon_token const);
-	}
-
-	inline bool is_semicolon_token(std::any const& val)
-	{
-		return val.type() == typeid(semicolon_token const);
-	}
-
-	inline bool is_comma_token(std::any const& val)
-	{
-		return val.type() == typeid(comma_token const);
-	}
-
-	inline bool is_open_square_token(std::any const& val)
-	{
-		return val.type() == typeid(open_square_token const);
-	}
-
-	inline bool is_close_square_token(std::any const& val)
-	{
-		return val.type() == typeid(close_square_token const);
-	}
-
-	inline bool is_open_paren_token(std::any const& val)
-	{
-		return val.type() == typeid(open_paren_token const);
-	}
-
-	inline bool is_close_paren_token(std::any const& val)
-	{
-		return val.type() == typeid(close_paren_token const);
-	}
-
-	/*! @brief 引数が {-token の場合、true を返す
-	*/
-	inline bool is_open_curly_token(std::any const& val)
-	{
-		return val.type() == typeid(open_curly_token const);
-	}
-
-	inline bool is_close_curly_token(std::any const& val)
-	{
-		return val.type() == typeid(close_curly_token const);
-	}
-
-	inline bool is_eof_token(std::any const& val)
-	{
-		return val.type() == typeid(eof_token const);
-	}
-
-	inline bool is_css_token(std::any const& val)
-	{
-		std::type_info const& id = val.type();
-
-		return id == typeid(ident_token        const)
-			|| id == typeid(function_token     const)
-			|| id == typeid(at_keyword_token   const)
-			|| id == typeid(hash_token         const)
-			|| id == typeid(string_token       const)
-			|| id == typeid(bad_string_token   const)
-			|| id == typeid(url_token          const)
-			|| id == typeid(bad_url_token      const)
-			|| id == typeid(delim_token        const)
-			|| id == typeid(number_token       const)
-			|| id == typeid(percentage_token   const)
-			|| id == typeid(dimension_token    const)
-			|| id == typeid(whitespace_token   const)
-			|| id == typeid(CDO_token          const)
-			|| id == typeid(CDC_token          const)
-			|| id == typeid(colon_token        const)
-			|| id == typeid(semicolon_token    const)
-			|| id == typeid(comma_token        const)
-			|| id == typeid(open_square_token  const)
-			|| id == typeid(close_square_token const)
-			|| id == typeid(open_paren_token   const)
-			|| id == typeid(close_paren_token  const)
-			|| id == typeid(open_curly_token   const)
-			|| id == typeid(close_curly_token  const)
-			|| id == typeid(eof_token          const);
-	}
 
 	// --------------------------------------------------------------------------------------------
 	// 4.2. Definitions
@@ -379,22 +76,22 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler = std::nullptr_t>
-	inline std::pair<BidirectionalIterator, css_token> consume_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler = nullptr);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler = nullptr);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_comments(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_comments(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_numeric_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_numeric_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_ident_like_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_ident_like_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_string_token(BidirectionalIterator first, BidirectionalIterator last, char32_t ends, ErrorHandler handler);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_string_token(BidirectionalIterator first, BidirectionalIterator last, char32_t ends, ErrorHandler handler);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_url_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_url_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
 	inline std::pair<BidirectionalIterator, char32_t> consume_escaped_code_point(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
@@ -418,7 +115,7 @@ namespace wordring::wwwc::css
 	inline double convert_string_to_number(InputIterator first, InputIterator last);
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_remnants_of_bad_url(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_remnants_of_bad_url(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler);
 
 	// --------------------------------------------------------------------------------------------
 	// 4.3.1. Consume a token
@@ -428,7 +125,7 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
 	{
 		auto [it, tkn] = consume_comments(first, last, handler);
 		while (it != last)
@@ -458,7 +155,7 @@ namespace wordring::wwwc::css
 					// 4.
 					return { it1, token };
 				}
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x27':
 				return consume_string_token(it, last, cp, handler);
 			case U'\x28':
@@ -467,7 +164,7 @@ namespace wordring::wwwc::css
 				return { it, close_paren_token() };
 			case U'\x2B':
 				if (starts_with_number(it, last)) return consume_numeric_token(--it, last, handler);
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x2C':
 				return { it, comma_token() };
 			case U'\x2D':
@@ -478,10 +175,10 @@ namespace wordring::wwwc::css
 					return { it, CDC_token() };
 				}
 				if (starts_with_identifier(it, last)) return consume_ident_like_token(--it, last, handler);
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x2E':
 				if (starts_with_number(it, last)) return consume_numeric_token(--it, last, handler);
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x3A':
 				return { it, colon_token() };
 			case U'\x3B':
@@ -492,20 +189,20 @@ namespace wordring::wwwc::css
 					std::advance(it, 3);
 					return { it, CDO_token() };
 				}
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x40':
 				if (starts_with_identifier(it, last))
 				{
 					auto [it1, str] = consume_identifier(it, last, handler);
-					return { it1, at_keyword_token(std::move(str)) };
+					return { it1, at_keyword_token{ std::move(str) } };
 				}
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x5B':
 				return { it, open_square_token() };
 			case U'\x5C':
 				if (starts_with_valid_escape(std::prev(it), last)) return consume_ident_like_token(--it, last, handler);
 				if constexpr (std::is_invocable_v<ErrorHandler, BidirectionalIterator>) handler(it);
-				return { it, delim_token(cp) };
+				return { it, delim_token{ cp } };
 			case U'\x5D':
 				return { it, close_square_token() };
 			case U'\x7B':
@@ -517,7 +214,7 @@ namespace wordring::wwwc::css
 			}
 			if (is_digit(cp)) return consume_numeric_token(--it, last, handler);
 			if (is_identifier_start_code_point(cp)) return consume_ident_like_token(--it, last, handler);
-			return  { it, delim_token(cp) };
+			return  { it, delim_token{ cp } };
 		}
 
 		return { it, eof_token() };
@@ -531,7 +228,7 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_comments(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_comments(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
 	{
 		while (2 <= std::distance(first, last) && *first == U'\x2F' && *std::next(first) == U'\x2A')
 		{
@@ -546,7 +243,7 @@ namespace wordring::wwwc::css
 			if (first == last) handler(first);
 		}
 
-		return { first, css_token() };
+		return { first, syntax_primitive{} };
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -557,19 +254,19 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_numeric_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_numeric_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
 	{
 		auto [ it, num, type ] = consume_number(first, last, handler);
 
 		if (starts_with_identifier(it, last))
 		{
 			auto [it1, unit] = consume_identifier(it, last, handler);
-			return { it1, dimension_token(num, type, std::move(unit)) };
+			return { it1, dimension_token{ num, std::move(unit), type } };
 		}
 
-		if (it != last && *it == U'\x25') return { ++it, percentage_token(num) };
+		if (it != last && *it == U'\x25') return { ++it, percentage_token{ num } };
 
-		return { it, number_token(num, type) };
+		return { it, number_token{ num, type } };
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -580,7 +277,7 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_ident_like_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_ident_like_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
 	{
 		using namespace wordring::whatwg;
 
@@ -592,13 +289,13 @@ namespace wordring::wwwc::css
 			++it;
 			while (2 <= std::distance(it, last) && is_whitespace(*it) && is_whitespace(*std::next(it))) ++it;
 			if ((it != last && (*it == U'\x22' || *it == U'\x27'))
-				|| (2 <= std::distance(it, last) && is_whitespace(*it) && (*std::next(it) == U'\x22' || *std::next(it) == U'\x27'))) return { --it, function_token(std::move(s)) };
+				|| (2 <= std::distance(it, last) && is_whitespace(*it) && (*std::next(it) == U'\x22' || *std::next(it) == U'\x27'))) return { --it, function_token{ std::move(s) } };
 			return consume_url_token(it, last, handler);
 		}
 
-		if (it != last && *it == U'\x28') return { ++it, function_token(std::move(s)) };
+		if (it != last && *it == U'\x28') return { ++it, function_token{ std::move(s) } };
 
-		return { it, ident_token(std::move(s)) };
+		return { it, ident_token{ std::move(s) } };
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -609,7 +306,7 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_string_token(BidirectionalIterator first, BidirectionalIterator last, char32_t ends, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_string_token(BidirectionalIterator first, BidirectionalIterator last, char32_t ends, ErrorHandler handler)
 	{
 		std::u32string s;
 
@@ -617,7 +314,7 @@ namespace wordring::wwwc::css
 		{
 			char32_t cp = *first++;
 
-			if (cp == ends) return { first, string_token(std::move(s)) };
+			if (cp == ends) return { first, string_token{ std::move(s) } };
 			if (is_newline(cp))
 			{
 				if constexpr (std::is_invocable_v<ErrorHandler, BidirectionalIterator>) handler(first);
@@ -642,7 +339,7 @@ namespace wordring::wwwc::css
 
 		if constexpr (std::is_invocable_v<ErrorHandler, BidirectionalIterator>) handler(first);
 
-		return { first, string_token(std::move(s)) };
+		return { first, string_token{ std::move(s) } };
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -653,7 +350,7 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_url_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_url_token(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
 	{
 		std::u32string url;
 
@@ -662,7 +359,7 @@ namespace wordring::wwwc::css
 		{
 			char32_t cp = *first++;
 
-			if(cp == U'\x29') return { first, url_token(std::move(url)) };
+			if(cp == U'\x29') return { first, url_token{ std::move(url) } };
 
 			if (is_whitespace(cp))
 			{
@@ -670,9 +367,9 @@ namespace wordring::wwwc::css
 				if (first == last)
 				{
 					if constexpr (std::is_invocable_v<ErrorHandler, BidirectionalIterator>) handler(first);
-					return { first, url_token(std::move(url)) };
+					return { first, url_token{ std::move(url) } };
 				}
-				if (*first == U'\x29') return { ++first, url_token(std::move(url)) };
+				if (*first == U'\x29') return { ++first, url_token{ std::move(url) } };
 
 				auto [it, e] = consume_remnants_of_bad_url(first, last, handler);
 				return { it, bad_url_token() };
@@ -703,7 +400,7 @@ namespace wordring::wwwc::css
 		}
 
 		if constexpr (std::is_invocable_v<ErrorHandler, BidirectionalIterator>) handler(first);
-		return { first, url_token(std::move(url)) };
+		return { first, url_token{ std::move(url) } };
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -961,12 +658,12 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename BidirectionalIterator, typename ErrorHandler>
-	inline std::pair<BidirectionalIterator, css_token> consume_remnants_of_bad_url(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
+	inline std::pair<BidirectionalIterator, syntax_primitive> consume_remnants_of_bad_url(BidirectionalIterator first, BidirectionalIterator last, ErrorHandler handler)
 	{
 		while (first != last)
 		{
 			char32_t cp = *first++;
-			if (cp == U')') return { first, css_token() };
+			if (cp == U')') return { first, syntax_primitive() };
 			if (starts_with_valid_escape(std::prev(first), last))
 			{
 				auto [it, cp] = consume_escaped_code_point(first, last, handler);
@@ -974,7 +671,7 @@ namespace wordring::wwwc::css
 			}
 		}
 
-		return { first, css_token() };
+		return { first, syntax_primitive() };
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -987,7 +684,7 @@ namespace wordring::wwwc::css
 		while (true)
 		{
 			auto [it, tkn] = consume_token(first, last, handler);
-			if (tkn.type() == typeid(eof_token)) break;
+			if (tkn.type() == syntax_primitive_name::EofToken) break;
 			first = it;
 			*output++ = tkn;
 		}

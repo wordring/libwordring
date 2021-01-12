@@ -1,0 +1,34 @@
+1,,
+2,IdentToken,¯•Êq
+3,FunctionToken,ŠÖ”
+4,AtKeywordToken,@xxx
+5,HashToken,#xxx
+6,StringToken,•¶š—ñ
+7,BadStringToken,ˆ«‚¢•¶š—ñ
+8,UrlToken,URL
+9,BadUrlToken,ˆ«‚¢URL
+10,DelimToken,‹æØ‚è•¶š
+11,NumberToken,”š
+12,PercentageToken,”š%
+13,DimensionToken,”š ’PˆÊ
+14,WhitespaceToken,‹ó”’•¶š
+15,CdoToken,<!--
+16,CdcToken,-->
+17,ColonToken,':'
+18,SemicolonToken,';'
+19,CommaToken,''
+20,OpenSquareToken,'['
+21,CloseSquareToken,']'
+22,OpenParenToken,'('
+23,CloseParenToken,')'
+24,OpenCurlyToken,'{'
+25,CloseCurlyToken,'}'
+26,EofToken,EOF
+27,,
+28,AtRule,at-rule
+29,QualifiedRule,qualified rule
+30,Declaration,declaration
+31,ComponentValue,component value
+32,PreservedTokens,preserved tokens
+33,Function,function
+34,SimpleBlock,simple block

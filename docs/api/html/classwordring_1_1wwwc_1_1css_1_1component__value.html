@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::wwwc::css::component_value クラス</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1wwwc.html">wwwc</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1wwwc_1_1css.html">css</a></li><li class="navelem"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1component__value.html">component_value</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">クラス</a> &#124;
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="classwordring_1_1wwwc_1_1css_1_1component__value-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::wwwc::css::component_value クラス</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p><b>CSSコンポーネント値</b>を表現する AST ノード  
+ <a href="classwordring_1_1wwwc_1_1css_1_1component__value.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="wwwc_2css__syntax_2token_8hpp_source.html">token.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+クラス</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1component__value_1_1container__fn.html">container_fn</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1component__value_1_1container__sb.html">container_sb</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:adc03f75f18ad35737b408281606a5f5b"><td class="memItemLeft" align="right" valign="top"><a id="adc03f75f18ad35737b408281606a5f5b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::variant&lt; std::monostate, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1ident__token.html">ident_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1at__keyword__token.html">at_keyword_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1hash__token.html">hash_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1string__token.html">string_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1bad__string__token.html">bad_string_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1url__token.html">url_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1bad__url__token.html">bad_url_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1delim__token.html">delim_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1number__token.html">number_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1percentage__token.html">percentage_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html">dimension_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1whitespace__token.html">whitespace_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1_c_d_o__token.html">CDO_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1_c_d_c__token.html">CDC_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1colon__token.html">colon_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1semicolon__token.html">semicolon_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1comma__token.html">comma_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1close__square__token.html">close_square_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1close__paren__token.html">close_paren_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1close__curly__token.html">close_curly_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1eof__token.html">eof_token</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1component__value_1_1container__fn.html">container_fn</a>, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1component__value_1_1container__sb.html">container_sb</a> &gt;</td></tr>
+<tr class="separator:adc03f75f18ad35737b408281606a5f5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a7151c2f8c8a1c4c7c9b95e46e79cbbf4"><td class="memItemLeft" align="right" valign="top"><a id="a7151c2f8c8a1c4c7c9b95e46e79cbbf4"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>component_value</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1component__value.html">component_value</a> const &amp;)=default</td></tr>
+<tr class="separator:a7151c2f8c8a1c4c7c9b95e46e79cbbf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a800b6608aec3676bbde62ce563e59ff5"><td class="memItemLeft" align="right" valign="top"><a id="a800b6608aec3676bbde62ce563e59ff5"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>component_value</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1component__value.html">component_value</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:a800b6608aec3676bbde62ce563e59ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23cc545d383e621ba0dfc7dfe612c17e"><td class="memItemLeft" align="right" valign="top"><a id="a23cc545d383e621ba0dfc7dfe612c17e"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>component_value</b> (<a class="el" href="structwordring_1_1wwwc_1_1css_1_1function.html">function</a> const &amp;value)</td></tr>
+<tr class="separator:a23cc545d383e621ba0dfc7dfe612c17e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac27d3f695d45e432a01ea9b54491e264"><td class="memItemLeft" align="right" valign="top"><a id="ac27d3f695d45e432a01ea9b54491e264"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>component_value</b> (<a class="el" href="structwordring_1_1wwwc_1_1css_1_1simple__block.html">simple_block</a> const &amp;value)</td></tr>
+<tr class="separator:ac27d3f695d45e432a01ea9b54491e264"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39c975f7d2e97e04961912b64ba4cfe0"><td class="memItemLeft" align="right" valign="top"><a id="a39c975f7d2e97e04961912b64ba4cfe0"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>component_value</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive.html">syntax_primitive</a> const &amp;value)</td></tr>
+<tr class="separator:a39c975f7d2e97e04961912b64ba4cfe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e8e3afbeb369ad77acd37e39d0c7d2a"><td class="memTemplParams" colspan="2"><a id="a6e8e3afbeb369ad77acd37e39d0c7d2a"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a6e8e3afbeb369ad77acd37e39d0c7d2a"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>component_value</b> (T const &amp;value)</td></tr>
+<tr class="separator:a6e8e3afbeb369ad77acd37e39d0c7d2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acda61fea3c38bec4d174c86b78fc5429"><td class="memItemLeft" align="right" valign="top"><a id="acda61fea3c38bec4d174c86b78fc5429"></a>
+<a class="el" href="classwordring_1_1wwwc_1_1css_1_1component__value.html">component_value</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1component__value.html">component_value</a> const &amp;)=default</td></tr>
+<tr class="separator:acda61fea3c38bec4d174c86b78fc5429"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af51d3768013c163e5cc88690c6023a4b"><td class="memItemLeft" align="right" valign="top"><a id="af51d3768013c163e5cc88690c6023a4b"></a>
+<a class="el" href="namespacewordring_1_1wwwc_1_1css.html#ad627ae5804df5b138afe90149a223ed1">syntax_primitive_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const</td></tr>
+<tr class="separator:af51d3768013c163e5cc88690c6023a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a20ab7ca67c537e5a9cfab62d1baf6dcb"><td class="memItemLeft" align="right" valign="top"><a id="a20ab7ca67c537e5a9cfab62d1baf6dcb"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>has_value</b> () const</td></tr>
+<tr class="separator:a20ab7ca67c537e5a9cfab62d1baf6dcb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6401284e8106ac1b5fdf82c8fdbfb51"><td class="memTemplParams" colspan="2"><a id="ab6401284e8106ac1b5fdf82c8fdbfb51"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ab6401284e8106ac1b5fdf82c8fdbfb51"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> ()</td></tr>
+<tr class="separator:ab6401284e8106ac1b5fdf82c8fdbfb51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5c247a82a7b202b2d2aae6e7f5c145f"><td class="memTemplParams" colspan="2"><a id="af5c247a82a7b202b2d2aae6e7f5c145f"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:af5c247a82a7b202b2d2aae6e7f5c145f"><td class="memTemplItemLeft" align="right" valign="top">T const  &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get</b> () const</td></tr>
+<tr class="separator:af5c247a82a7b202b2d2aae6e7f5c145f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p><b>CSSコンポーネント値</b>を表現する AST ノード </p>
+<ul>
+<li>preserved tokens</li>
+<li>function</li>
+<li><a class="el" href="structwordring_1_1wwwc_1_1css_1_1simple__block.html" title="単純ブロックを表現する AST ノード">simple_block</a> </li>
+</ul>
+</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="wwwc_2css__syntax_2token_8hpp_source.html">wwwc/css_syntax/token.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>
