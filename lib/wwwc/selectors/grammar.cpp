@@ -1017,15 +1017,4 @@ complex_selector_list const& selector_list::value() const
 	return m_value;
 }
 
-// ------------------------------------------------------------------------------------------------
-// 
-// ------------------------------------------------------------------------------------------------
-
-// ------------------------------------------------------------------------------------------------
-
-pseudo_class_selector selector_parser::consume_pseudo_class_selector(syntax_primitive_stream& s)
-{
-	pseudo_class_selector r;
-	return r;
-}
 
