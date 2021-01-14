@@ -12,31 +12,31 @@ using namespace wordring::whatwg;
 
 
 // ------------------------------------------------------------------------------------------------
-// class grammar
+// class selector_grammar
 // ------------------------------------------------------------------------------------------------
 
-grammar::grammar(const_iterator first, const_iterator last)
+selector_grammar::selector_grammar(const_iterator first, const_iterator last)
 	: m_first(first)
 	, m_last(last)
 {
 }
 
-grammar::operator bool() const
+selector_grammar::operator bool() const
 {
 	return m_first != m_last;
 }
 
-bool grammar::operator !() const
+bool selector_grammar::operator !() const
 {
 	return m_first == m_last;
 }
 
-grammar::const_iterator grammar::begin() const
+selector_grammar::const_iterator selector_grammar::begin() const
 {
 	return m_first;
 }
 
-grammar::const_iterator grammar::end() const
+selector_grammar::const_iterator selector_grammar::end() const
 {
 	return m_last;
 }
@@ -75,7 +75,7 @@ combinator combinator::consume(syntax_primitive_stream in)
 }
 
 combinator::combinator(const_iterator first, const_iterator last, char32_t c)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_c(c)
 {
 }
@@ -122,7 +122,7 @@ ns_prefix ns_prefix::consume(syntax_primitive_stream in)
 }
 
 ns_prefix::ns_prefix(const_iterator first, const_iterator last, std::u32string const& ns)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_ns(ns)
 {
 }
@@ -165,7 +165,7 @@ wq_name wq_name::consume(syntax_primitive_stream in)
 }
 
 wq_name::wq_name(const_iterator first, const_iterator last, std::optional<ns_prefix> ns, std::u32string const& name)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_ns(ns)
 	, m_name(name)
 {
@@ -200,7 +200,7 @@ id_selector id_selector::consume(syntax_primitive_stream in)
 }
 
 id_selector::id_selector(const_iterator first, const_iterator last, std::u32string const& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(value)
 {
 }
@@ -232,7 +232,7 @@ class_selector class_selector::consume(syntax_primitive_stream in)
 }
 
 class_selector::class_selector(const_iterator first, const_iterator last, std::u32string const& name)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_name(name)
 {
 }
@@ -277,7 +277,7 @@ attr_matcher attr_matcher::consume(syntax_primitive_stream in)
 }
 
 attr_matcher::attr_matcher(const_iterator first, const_iterator last, char32_t c)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_prefix(c)
 {
 }
@@ -312,7 +312,7 @@ attr_modifier attr_modifier::consume(syntax_primitive_stream in)
 }
 
 attr_modifier::attr_modifier(const_iterator first, const_iterator last, char32_t c)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_c(c)
 {
 }
@@ -367,19 +367,19 @@ pseudo_class_selector pseudo_class_selector::consume(syntax_primitive_stream in)
 }
 
 pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value()
 {
 }
 
 pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last, ident_token const& id)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(id)
 {
 }
 
 pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last, function const& fn)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(fn)
 {
 }
@@ -521,7 +521,7 @@ attribute_selector attribute_selector::consume(syntax_primitive_stream in1)
 }
 
 attribute_selector::attribute_selector(const_iterator first, const_iterator last, wq_name name, char32_t matcher, std::u32string const& value, char32_t modifier)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_name(name)
 	, m_matcher(matcher)
 	, m_value(value)
@@ -578,7 +578,7 @@ subclass_selector subclass_selector::consume(syntax_primitive_stream in)
 }
 
 subclass_selector::subclass_selector(const_iterator first, const_iterator last, value_type value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(value)
 {
 }
@@ -617,7 +617,7 @@ type_selector type_selector::consume(syntax_primitive_stream in)
 }
 
 type_selector::type_selector(const_iterator first, const_iterator last, value_type value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(value)
 {
 }
@@ -645,7 +645,7 @@ simple_selector simple_selector::consume(syntax_primitive_stream in)
 }
 
 simple_selector::simple_selector(const_iterator first, const_iterator last, value_type value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(value)
 {
 }
@@ -716,7 +716,7 @@ compound_selector compound_selector::consume(syntax_primitive_stream in)
 }
 
 compound_selector::compound_selector(const_iterator first, const_iterator last, std::vector<value_type>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -770,7 +770,7 @@ complex_selector complex_selector::consume(syntax_primitive_stream in)
 }
 
 complex_selector::complex_selector(const_iterator first, const_iterator last, std::vector<value_type>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -810,7 +810,7 @@ relative_selector relative_selector::consume(syntax_primitive_stream in)
 }
 
 relative_selector::relative_selector(const_iterator first, const_iterator last, std::vector<value_type>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -853,7 +853,7 @@ relative_selector_list relative_selector_list::consume(syntax_primitive_stream i
 }
 
 relative_selector_list::relative_selector_list(const_iterator first, const_iterator last, std::vector<relative_selector>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -896,7 +896,7 @@ simple_selector_list simple_selector_list::consume(syntax_primitive_stream in)
 }
 
 simple_selector_list::simple_selector_list(const_iterator first, const_iterator last, std::vector<simple_selector>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -939,7 +939,7 @@ compound_selector_list compound_selector_list::consume(syntax_primitive_stream i
 }
 
 compound_selector_list::compound_selector_list(const_iterator first, const_iterator last, std::vector<compound_selector>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -982,7 +982,7 @@ complex_selector_list complex_selector_list::consume(syntax_primitive_stream in)
 }
 
 complex_selector_list::complex_selector_list(const_iterator first, const_iterator last, std::vector<complex_selector>&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -1007,7 +1007,7 @@ selector_list selector_list::consume(syntax_primitive_stream in)
 }
 
 selector_list::selector_list(const_iterator first, const_iterator last, complex_selector_list&& value)
-	: grammar(first, last)
+	: selector_grammar(first, last)
 	, m_value(std::move(value))
 {
 }
@@ -1015,17 +1015,5 @@ selector_list::selector_list(const_iterator first, const_iterator last, complex_
 complex_selector_list const& selector_list::value() const
 {
 	return m_value;
-}
-
-// ------------------------------------------------------------------------------------------------
-// 
-// ------------------------------------------------------------------------------------------------
-
-// ------------------------------------------------------------------------------------------------
-
-pseudo_class_selector selector_parser::consume_pseudo_class_selector(syntax_primitive_stream& s)
-{
-	pseudo_class_selector r;
-	return r;
 }
 

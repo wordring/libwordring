@@ -11,5 +11,6 @@ add_library (
 	wwwc OBJECT
 # css_syntax --------------------------------------------------------------------
 		css_syntax/token.cpp
- "selectors/grammar.cpp")
+		"selectors/grammar.cpp"
+)
 

@@ -142,15 +142,14 @@ namespace wordring
 
 	public:
 		using base_type       = Iterator;
+		using container       = Container;
 		using allocator_type  = Allocator;
 
-		using value_type        = typename base_type::value_type;
-		using difference_type   = std::ptrdiff_t;
-		using reference         = value_type&;
-		using pointer           = value_type*;
+		using value_type        = typename std::iterator_traits<base_type>::value_type;
+		using difference_type   = typename std::iterator_traits<base_type>::difference_type;
+		using reference         = typename std::iterator_traits<base_type>::reference;
+		using pointer           = typename std::iterator_traits<base_type>::pointer;
 		using iterator_category = std::input_iterator_tag;
-
-		using container = Container;
 
 	public:
 		explicit basic_tree_iterator(allocator_type const& alloc = allocator_type())
@@ -190,11 +189,17 @@ namespace wordring
 
 		/*! @brief 要素の逆参照を返す
 		*/
-		reference operator*() const { return *m_c.top(); }
+		reference operator*() const
+		{
+			return const_cast<reference>(*m_c.top());
+		}
 
 		/*! @brief 要素の参照を返す
 		*/
-		pointer operator->() const { return m_c.top().operator->(); }
+		pointer operator->() const
+		{
+			return const_cast<pointer>(m_c.top().operator->());
+		}
 
 		/*! @brief イテレータを進める
 		

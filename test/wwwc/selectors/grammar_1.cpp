@@ -1,4 +1,4 @@
-﻿// test/wwwc/selectors/grammar.cpp
+﻿// test/wwwc/selectors/grammar_1.cpp
 
 #include <boost/test/unit_test.hpp>
 
@@ -13,7 +13,7 @@ namespace
 	
 
 	
-	std::u32string print(css::combinator const& c)
+	inline std::u32string print(css::combinator const& c)
 	{
 		std::u32string s;
 		if (c.type() == U'|') s += U"||";
@@ -21,12 +21,12 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::ns_prefix const& ns)
+	inline std::u32string print(css::ns_prefix const& ns)
 	{
 		return ns.nspace();
 	}
 
-	std::u32string print(css::wq_name const& name)
+	inline std::u32string print(css::wq_name const& name)
 	{
 		std::u32string s;
 		if (!name.nspace().empty())
@@ -38,21 +38,21 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::id_selector const& id)
+	inline std::u32string print(css::id_selector const& id)
 	{
 		std::u32string s(1, U'#');
 		s += id.value();
 		return s;
 	}
 
-	std::u32string print(css::class_selector const& cls)
+	inline std::u32string print(css::class_selector const& cls)
 	{
 		std::u32string s(1, U'.');
 		s += cls.name();
 		return s;
 	}
 
-	std::u32string print(css::attr_matcher const& m)
+	inline std::u32string print(css::attr_matcher const& m)
 	{
 		std::u32string s;
 		if (m.prefix() != U'\0') s.push_back(m.prefix());
@@ -60,12 +60,12 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::attr_modifier const& m)
+	inline std::u32string print(css::attr_modifier const& m)
 	{
 		return std::u32string(1, m.value());
 	}
 
-	std::u32string print(css::pseudo_class_selector const& c)
+	inline std::u32string print(css::pseudo_class_selector const& c)
 	{
 		std::u32string s(1, U':');
 		switch (c.type())
@@ -83,7 +83,7 @@ namespace
 		return s;
 	}
 	
-	std::u32string print(css::pseudo_element_selector const& elm)
+	inline std::u32string print(css::pseudo_element_selector const& elm)
 	{
 		std::u32string s(U"::");
 		switch (elm.type())
@@ -101,7 +101,7 @@ namespace
 		return s;
 	}
 	
-	std::u32string print(css::attribute_selector const& attr)
+	inline std::u32string print(css::attribute_selector const& attr)
 	{
 		std::u32string s(1, '[');
 		if (!attr.nspace().empty())
@@ -121,14 +121,14 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::subclass_selector const& sub)
+	inline std::u32string print(css::subclass_selector const& sub)
 	{
 		std::u32string s;
 		std::visit([&](auto const& x) { s += print(x); }, sub.value());
 		return s;
 	}
 	
-	std::u32string print(css::type_selector const& tag)
+	inline std::u32string print(css::type_selector const& tag)
 	{
 		std::u32string s;
 		if (tag.value().index() == 0) s += print(std::get<css::wq_name>(tag.value()));
@@ -142,20 +142,20 @@ namespace
 	}
 
 	
-	std::u32string print(std::monostate)
+	inline std::u32string print(std::monostate)
 	{
 		std::u32string s;
 		return s;
 	}
 	
-	std::u32string print(css::simple_selector const& ss)
+	inline std::u32string print(css::simple_selector const& ss)
 	{
 		std::u32string s;
 		std::visit([&](auto const& x) { s += print(x); }, ss.value());
 		return s;
 	}
 
-	std::u32string print(css::compound_selector const& cs)
+	inline std::u32string print(css::compound_selector const& cs)
 	{
 		std::u32string s;
 		std::vector<css::compound_selector::value_type> const& v = cs.value();
@@ -163,7 +163,7 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::complex_selector const& cs)
+	inline std::u32string print(css::complex_selector const& cs)
 	{
 		std::u32string s;
 		std::vector<css::complex_selector::value_type> const& v = cs.value();
@@ -196,7 +196,7 @@ namespace
 		return s;
 	}
 	
-	std::u32string print(css::relative_selector const& rs)
+	inline std::u32string print(css::relative_selector const& rs)
 	{
 		std::u32string s;
 		std::vector<css::complex_selector::value_type> const& v = rs.value();
@@ -230,7 +230,7 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::relative_selector_list const& rsl)
+	inline std::u32string print(css::relative_selector_list const& rsl)
 	{
 		bool comma = false;
 		std::u32string s;
@@ -243,7 +243,7 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::simple_selector_list const& ssl)
+	inline std::u32string print(css::simple_selector_list const& ssl)
 	{
 		bool comma = false;
 		std::u32string s;
@@ -256,7 +256,7 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::compound_selector_list const& csl)
+	inline std::u32string print(css::compound_selector_list const& csl)
 	{
 		bool comma = false;
 		std::u32string s;
@@ -269,7 +269,7 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::complex_selector_list const& csl)
+	inline std::u32string print(css::complex_selector_list const& csl)
 	{
 		bool comma = false;
 		std::u32string s;
@@ -282,13 +282,13 @@ namespace
 		return s;
 	}
 
-	std::u32string print(css::selector_list const& sl)
+	inline std::u32string print(css::selector_list const& sl)
 	{
 		return print(sl.value());
 	}
 }
 
-BOOST_AUTO_TEST_SUITE(css_selectors_grammar_test)
+BOOST_AUTO_TEST_SUITE(css_selectors_grammar_1_test)
 
 // ------------------------------------------------------------------------------------------------
 //	<combinator> = '>' | '+' | '~' | [ '|' '|' ]

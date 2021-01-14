@@ -141,7 +141,7 @@ namespace wordring::whatwg
 			return;
 		}
 		std::string tmp;
-		encoding::utf_8_encode(&cp, &cp + 1, std::back_inserter(tmp));
+		encoding::utf8_encode(&cp, &cp + 1, std::back_inserter(tmp));
 		for(uint8_t byte : tmp) percent_encode(byte, output);
 	}
 }

@@ -29,7 +29,8 @@ add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
 		tree.cpp
-#		tree_iterator.cpp   treeのコンストラクタを変更したためテストを書き直さないといけない
+		tree_iterator.cpp
+# tree_iterator.cpp treeのコンストラクタを変更したためテストを書き直さないといけない
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})

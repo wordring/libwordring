@@ -61,6 +61,7 @@ BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_1)
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::UTF_8);
+	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_2)
@@ -72,6 +73,7 @@ BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_2)
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
+	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_3)
@@ -94,6 +96,7 @@ BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_4)
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
+	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_5)
@@ -105,6 +108,7 @@ BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_5)
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
+	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
