@@ -7,6 +7,8 @@
 // https://triple-underscore.github.io/selectors4-ja.html#api-hooks
 // ------------------------------------------------------------------------------------------------
 
+#include <wordring/wwwc/selectors/grammar.hpp>
+
 #include <algorithm>
 #include <string>
 
@@ -26,7 +28,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#parse-a-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#parse-a-selector
 	*/
-	inline void parse_selector(std::string&& src)
+	inline selector_list parse_selector(std::string&& src)
 	{
 
 	}

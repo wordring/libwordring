@@ -1,43 +1,49 @@
 ﻿wordring_cpp
 ====
 
-C\++標準ライブラリとBoostに収録されていないが良く使うものをライブラリ化している。
-C\++17がベースライン。
+C++用ライブラリ。
+Linux と Windows でテストされています。
 
-文字コードのテーブルやHTMLのタグ・テーブルのためにビルドが必要です。
-普段 Visualstudio を使っているため、コマンドラインのビルドシステムは詳しくありませんが、
-Linux上で端末からビルドできることとテストが実行できることを常に確認しています。
-もちろん、Visualstudio 上でも確認しています。
+# 主な機能
 
-# 機能
-
-組み合わせて使うために STL 風のデザインとしている。
-たとえば TRIE 木はある種の木なので、（木と同様に）木操作用のイテレータ・アダプタを組み合わせて使用することもできる。
-HTML5 パーサーは、（このライブラリは単純なノード実装しか提供しないが）どのような DOM 実装とも組み合わせて使える。
-
-実装済みの代表的な機能は以下の通り。
-
-- WHATWG の HTML5 仕様を実装する HTML Parser。
-- WHATWG 仕様を実装する文字コード変換。
-- 木コンテナ、および、木走査用のイテレータ・アダプタ。
-- Double Array に基づく、イテレータ・ベースのアクセスを提供する動的TRIE木。
-- その他周辺あるいは細かな機能。
+- WHATWG HTML5 仕様の HTML Parser。
+- WHATWG Encoding 仕様の文字コード変換。
+- CSS Selectors Level 4 仕様の CSS セレクタ。
+- Tree コンテナ、および、Tree 走査用のイテレータ・アダプタ。
+- 動的 TRIE 木。
 
 # 説明
 
 プログラミング言語として C\++17 、ビルド・システムに CMake を用いる。
 テストしている環境は以下の通り。
 
-- Linux gcc7
+- Linux gcc8
 - Windows10 clang-cl
 - Windows10 cl
 
+# 使い方
+
+Widows 用、 Linux 用など、個別の環境用のパッケージは有りません。
+ヘッダーファイルと wordring_cpp ライブラリをあなたのプロジェクトへ追加してください。
+
+## CMake でプロジェクトを管理する場合
+
+1. あなたのプロジェクトの Git サブモジュールとして wordring_cpp を追加する。
+2. あなたのプロジェクトの CMakeLists.txt で add_subdirectory("submodules/wordring_cpp") する。
+3. あなたのプロジェクトの CMakeLists.txt で include_directories("submodules/wordring_cpp/include") する。
+4. あなたのプロジェクトの CMakeLists.txt で target_link_libraries("wordring_cpp") する。
+
+のが容易です。
+ライブラリのビルドは、あなたのプロジェクトのビルド時に、必要に応じて CMake が行います。
+
 ## 文書
+
 | 名前 | 説明 |
 |----|----|
 | https://wordring.github.io/wordring_cpp/ | 付属文書 |
 
 ## フォルダとファイル
+
 | 名前 | 説明 |
 |----|----|
 | docs | 文書を格納するフォルダ |
@@ -56,13 +62,16 @@ HTML5 パーサーは、（このライブラリは単純なノード実装し�
 | README.md | このファイル |
 
 ## 要求環境
+
 - C++17
-- CMake3.12以降
+- 出来るだけ新しい CMake
 
 ## 要求ライブラリ
-- Boost1.67以降
+
+- 出来るだけ新しい Boost
 
 ## 要求サブモジュール
+
 | 名前 | 説明 |
 |----|----|
 | https://github.com/publicsuffix/list | URLパーサでデータを使用 |

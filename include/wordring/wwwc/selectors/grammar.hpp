@@ -25,20 +25,20 @@ namespace wordring::wwwc::css
 	// https://triple-underscore.github.io/selectors4-ja.html#grammar
 	// --------------------------------------------------------------------------------------------
 
-	class grammar
+	class selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		grammar() = default;
-		grammar(grammar const&) = default;
-		grammar(grammar&&) = default;
+		selector_grammar() = default;
+		selector_grammar(selector_grammar const&) = default;
+		selector_grammar(selector_grammar&&) = default;
 
-		grammar(const_iterator first, const_iterator last);
+		selector_grammar(const_iterator first, const_iterator last);
 
-		grammar& operator=(grammar const&) = default;
-		grammar& operator=(grammar&&) = default;
+		selector_grammar& operator=(selector_grammar const&) = default;
+		selector_grammar& operator=(selector_grammar&&) = default;
 
 		operator bool() const;
 
@@ -63,7 +63,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-combinator
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-combinator
 	*/
-	class combinator : public grammar
+	class combinator: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -92,7 +92,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-ns-prefix
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-ns-prefix
 	*/
-	class ns_prefix : public grammar
+	class ns_prefix: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -133,7 +133,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-wq-name
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-wq-name
 	*/
-	class wq_name : public grammar
+	class wq_name: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -168,7 +168,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-id-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-id-selector
 	*/
-	class id_selector : public grammar
+	class id_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -184,6 +184,12 @@ namespace wordring::wwwc::css
 		*/
 		std::u32string const& value() const;
 
+		template <typename Node>
+		bool match(Node const& node) const
+		{
+			return true;
+		}
+
 	private:
 		std::u32string m_value;
 	};
@@ -198,7 +204,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-class-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-class-selector
 	*/
-	class class_selector : public grammar
+	class class_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -229,7 +235,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-attr-matcher
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-attr-matcher
 	*/
-	class attr_matcher : public grammar
+	class attr_matcher: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -258,7 +264,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-attr-modifier
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-attr-modifier
 	*/
-	class attr_modifier : public grammar
+	class attr_modifier: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -287,7 +293,7 @@ namespace wordring::wwwc::css
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-pseudo-class-selector
 	@sa https://drafts.csswg.org/selectors-4/#typedef-pseudo-class-selector
 	*/
-	class pseudo_class_selector : public grammar
+	class pseudo_class_selector: public selector_grammar
 	{
 	public:
 		using value_type = std::variant<std::monostate, ident_token, function>;
@@ -349,7 +355,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-attribute-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-attribute-selector
 	*/
-	class attribute_selector : public grammar
+	class attribute_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -385,7 +391,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-subclass-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-subclass-selector
 	*/
-	class subclass_selector : public grammar
+	class subclass_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -416,7 +422,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-type-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-type-selector
 	*/
-	class type_selector : public grammar
+	class type_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -446,7 +452,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-simple-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-simple-selector
 	*/
-	class simple_selector : public grammar
+	class simple_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -480,7 +486,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-compound-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-compound-selector
 	*/
-	class compound_selector : public grammar
+	class compound_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -512,7 +518,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-complex-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-complex-selector
 	*/
-	class complex_selector : public grammar
+	class complex_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -548,7 +554,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-relative-selector
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector
 	*/
-	class relative_selector : public grammar
+	class relative_selector: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -578,7 +584,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-relative-selector-list
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector-list
 	*/
-	class relative_selector_list : public grammar
+	class relative_selector_list: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -606,7 +612,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-simple-selector-list
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-simple-selector-list
 	*/
-	class simple_selector_list : public grammar
+	class simple_selector_list: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -634,7 +640,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-compound-selector-list
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-compound-selector-list
 	*/
-	class compound_selector_list : public grammar
+	class compound_selector_list: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -662,7 +668,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-complex-selector-list
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-complex-selector-list
 	*/
-	class complex_selector_list : public grammar
+	class complex_selector_list: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -691,7 +697,7 @@ namespace wordring::wwwc::css
 	@sa https://drafts.csswg.org/selectors-4/#typedef-selector-list
 	@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-selector-list
 	*/
-	class selector_list : public grammar
+	class selector_list: public selector_grammar
 	{
 	public:
 		using const_iterator = syntax_primitive_stream::const_iterator;
@@ -710,33 +716,4 @@ namespace wordring::wwwc::css
 	};
 
 
-
-
-
-
-	/*! @brief CSS セレクタのパーサ
-	*/
-	class selector_parser
-	{
-	public:
-		/*! @brief <pseudo-class-selector>
-
-		@code
-			<pseudo-class-selector>
-				= ':' <ident-token>
-				| ':' <function-token> <any-value> ')'
-		@endcode
-
-		@sa https://triple-underscore.github.io/selectors4-ja.html#typedef-pseudo-class-selector
-		@sa https://drafts.csswg.org/selectors-4/#typedef-pseudo-class-selector
-		*/
-		pseudo_class_selector consume_pseudo_class_selector(syntax_primitive_stream& s);
-	};
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
 }

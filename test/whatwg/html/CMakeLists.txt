@@ -28,6 +28,7 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		"test_module.cpp"
+		"html_atom.cpp"
 		"parsing/atom_defs.cpp"
 		"parsing/atom_tbl.cpp"
 		"parsing/input_stream.cpp"
@@ -35,8 +36,9 @@ add_executable(
 		"parsing/tree_construction_dispatcher.cpp"
 		"parsing/on_initial_insertion_mode.cpp"
 		"parsing/serializing.cpp"
-		"html_atom.cpp"
- "url.cpp" "parsing/on_in_head_insertion_mode.cpp")
+		"parsing/on_in_head_insertion_mode.cpp"
+		"url.cpp"
+)
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

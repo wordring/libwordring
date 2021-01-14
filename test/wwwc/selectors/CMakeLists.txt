@@ -29,7 +29,9 @@ add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
 		"api.cpp"
-		"grammar.cpp")
+#		"grammar_1.cpp"
+		"grammar_2.cpp"
+)
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
