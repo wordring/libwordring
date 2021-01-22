@@ -163,7 +163,10 @@
       </ul>
     </ol>
     <h2>DOM ツリーとのマッチ</h2>
-    <br>
+    <ul>
+      <li> <a href="https://triple-underscore.github.io/selectors-html-ja.html">選
+          択子と CSS による HTML 要素の照合法</a> [HTML5]</li>
+    </ul>
     <table style="width: 100%" border="1">
       <tbody>
         <tr>
@@ -206,10 +209,31 @@
         </tr>
       </tbody>
     </table>
+    <p></p>
+    <h3><span style="color: #505050;">ノード以外の情報を必要とするマッチ</span></h3>
     <ul>
-      <li>セレクタのデータ表現は、結合子を挟んだ Compound セレクタの並びとする。</li>
-      <li><br>
-      </li>
+      <li>疑似要素</li>
+      <ul>
+        <li>出自要素を必要とする。※規格で明文化されている。</li>
+      </ul>
+      <li>疑似クラス</li>
+    </ul>
+    <p><br>
+    </p>
+    <ul>
+      <li>疑似要素は&lt;compound-selector&gt; 内以外現れない。</li>
+      <li>疑似要素のマッチは、規格で項目が設けられている。</li>
+      <li>疑似クラスは</li>
+      <ul>
+        <li>&lt;simple-selector-list&gt; 内の &lt;simple-selector&gt; 内の
+          &lt;subclass-selector&gt; 、あるいは</li>
+        <li>&lt;compound-selector&gt; 内の二カ所以外現れない。</li>
+      </ul>
+      <li>&lt;simple-selector-list&gt;は、他の規則から参照されない。</li>
+      <li>疑似クラスは単体セレクタと位置付けられ、要素そのものとマッチするかのように規格で述べられている。</li>
+      <li>疑似クラスのマッチは特別な項目が設けられていない。</li>
+    </ul>
+    <ul>
     </ul>
     <p><br>
     </p>

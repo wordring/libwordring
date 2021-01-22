@@ -10,8 +10,9 @@
 namespace
 {
 	namespace css = wordring::wwwc::css;
-	
 
+	using document_type_name = wordring::html::document_type_name;
+	using document_mode_name = wordring::html::document_mode_name;
 	
 	inline std::u32string print(css::combinator const& c)
 	{
@@ -23,15 +24,15 @@ namespace
 
 	inline std::u32string print(css::ns_prefix const& ns)
 	{
-		return ns.nspace();
+		return ns.string();
 	}
 
 	inline std::u32string print(css::wq_name const& name)
 	{
 		std::u32string s;
-		if (!name.nspace().empty())
+		if (name.prefix())
 		{
-			s += name.nspace();
+			s += name.prefix()->string();
 			s.push_back(U'|');
 		}
 		s += name.name();
@@ -104,16 +105,16 @@ namespace
 	inline std::u32string print(css::attribute_selector const& attr)
 	{
 		std::u32string s(1, '[');
-		if (!attr.nspace().empty())
+		if (attr.prefix())
 		{
-			s += attr.nspace();
+			s += attr.prefix()->string();
 			s.push_back(U'|');
 		}
 		s += attr.name();
 		if (attr.matcher() != U'\0') s.push_back(attr.matcher());
 		if(!attr.value().empty())
 		{
-			s.push_back(U'=');
+			if (attr.matcher() != U'=') s.push_back(U'=');
 			s += attr.value();
 			if (attr.modifier() != U'\0') s.push_back(attr.modifier());
 		}
@@ -383,9 +384,9 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_1)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = ns_prefix::consume(in);
-	BOOST_CHECK(r);
-	BOOST_CHECK(r.nspace() == U"ns");
+	auto ns = ns_prefix::consume(in);
+	BOOST_CHECK(ns);
+	BOOST_CHECK(ns.string() == U"ns");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_2)
@@ -398,9 +399,9 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_2)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = ns_prefix::consume(in);
-	BOOST_CHECK(r);
-	BOOST_CHECK(r.nspace() == U"*");
+	auto ns = ns_prefix::consume(in);
+	BOOST_CHECK(ns);
+	BOOST_CHECK(ns.string() == U"*");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_3)
@@ -413,9 +414,9 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_3)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = ns_prefix::consume(in);
-	BOOST_CHECK(r);
-	BOOST_CHECK(r.nspace() == U"");
+	auto ns = ns_prefix::consume(in);
+	BOOST_CHECK(ns);
+	BOOST_CHECK(ns.string() == U"");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_4)
@@ -460,10 +461,10 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_1)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = wq_name::consume(in);
-	BOOST_CHECK(r);
-	BOOST_CHECK(r.nspace() == U"ns");
-	BOOST_CHECK(r.name() == U"name");
+	auto name = wq_name::consume(in);
+	BOOST_CHECK(name);
+	BOOST_CHECK(name.prefix()->string() == U"ns");
+	BOOST_CHECK(name.name() == U"name");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_2)
@@ -476,10 +477,10 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_2)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = wq_name::consume(in);
-	BOOST_CHECK(r);
-	BOOST_CHECK(r.nspace() == U"*");
-	BOOST_CHECK(r.name() == U"name");
+	auto name = wq_name::consume(in);
+	BOOST_CHECK(name);
+	BOOST_CHECK(name.prefix()->string() == U"*");
+	BOOST_CHECK(name.name() == U"name");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_3)
@@ -492,10 +493,10 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_3)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = wq_name::consume(in);
-	BOOST_CHECK(r);
-	BOOST_CHECK(r.nspace() == U"");
-	BOOST_CHECK(r.name() == U"name");
+	auto name = wq_name::consume(in);
+	BOOST_CHECK(name);
+	BOOST_CHECK(!name.prefix());
+	BOOST_CHECK(name.name() == U"name");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_4)
@@ -508,8 +509,8 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_4)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto r = wq_name::consume(in);
-	BOOST_CHECK(!r);
+	auto name = wq_name::consume(in);
+	BOOST_CHECK(!name);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -608,7 +609,7 @@ BOOST_AUTO_TEST_CASE(grammar_attr_matcher_consume_1)
 
 	auto r = attr_matcher::consume(in);
 	BOOST_CHECK(r);
-	BOOST_CHECK(r.prefix() == U'\0');
+	BOOST_CHECK(r.prefix() == U'=');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attr_matcher_consume_2)
@@ -877,13 +878,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_1)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'\0');
-	BOOST_CHECK(s.value() == U"");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'\0');
+	BOOST_CHECK(as.value() == U"");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_2)
@@ -896,13 +897,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_2)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'\0');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_3)
@@ -915,13 +916,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_3)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'~');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'~');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_4)
@@ -934,13 +935,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_4)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'|');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'|');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_5)
@@ -953,13 +954,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_5)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'^');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'^');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_6)
@@ -972,13 +973,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_6)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'$');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'$');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_7)
@@ -991,13 +992,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_7)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'*');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'\0');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'*');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_8)
@@ -1010,13 +1011,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_8)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'\0');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'i');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'i');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_9)
@@ -1029,13 +1030,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_9)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'\0');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U'i');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'i');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_10)
@@ -1048,13 +1049,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_10)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'\0');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U's');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U's');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_11)
@@ -1067,13 +1068,13 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_11)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = attribute_selector::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.nspace() == U"");
-	BOOST_CHECK(s.name() == U"attr");
-	BOOST_CHECK(s.matcher() == U'\0');
-	BOOST_CHECK(s.value() == U"val");
-	BOOST_CHECK(s.modifier() == U's');
+	auto as = attribute_selector::consume(in);
+	BOOST_CHECK(as);
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U's');
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -1127,12 +1128,12 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_3)
 	auto s = subclass_selector::consume(in);
 	BOOST_CHECK(s);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'\0');
-	BOOST_CHECK(attr.value() == U"");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(s.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'\0');
+	BOOST_CHECK(as.value() == U"");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_4)
@@ -1145,15 +1146,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_4)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'\0');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_5)
@@ -1166,15 +1167,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_5)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'~');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'~');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_6)
@@ -1187,15 +1188,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_6)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'|');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'|');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_7)
@@ -1208,15 +1209,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_7)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'^');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'^');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_8)
@@ -1229,15 +1230,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_8)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'$');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'$');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_9)
@@ -1250,15 +1251,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_9)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'*');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'*');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_10)
@@ -1271,15 +1272,15 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_10)
 	BOOST_CHECK(v);
 	syntax_primitive_stream in(*v);
 
-	auto s = subclass_selector::consume(in);
-	BOOST_CHECK(s);
+	auto ss = subclass_selector::consume(in);
+	BOOST_CHECK(ss);
 
-	attribute_selector attr = std::get<attribute_selector>(s.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'\0');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'i');
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'i');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_11)
@@ -1412,7 +1413,7 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_3)
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
-	BOOST_CHECK(name.nspace() == U"foo");
+	BOOST_CHECK(name.prefix()->string() == U"foo");
 	BOOST_CHECK(name.name() == U"h1");
 }
 
@@ -1431,7 +1432,7 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_4)
 
 	std::optional<ns_prefix> ns = std::get<std::optional<ns_prefix>>(s.value());
 	BOOST_CHECK(ns);
-	BOOST_CHECK(ns->nspace() == U"foo");
+	BOOST_CHECK(ns->string() == U"foo");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_5)
@@ -1448,7 +1449,7 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_5)
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
-	BOOST_CHECK(name.nspace() == U"");
+	BOOST_CHECK(name.prefix()->string() == U"");
 	BOOST_CHECK(name.name() == U"h1");
 }
 
@@ -1466,7 +1467,7 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_6)
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
-	BOOST_CHECK(name.nspace() == U"*");
+	BOOST_CHECK(name.prefix()->string() == U"*");
 	BOOST_CHECK(name.name() == U"h1");
 }
 
@@ -1553,7 +1554,7 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_3)
 
 	type_selector t = std::get<type_selector>(s.value());
 	wq_name name = std::get<wq_name>(t.value());
-	BOOST_CHECK(name.nspace() == U"foo");
+	BOOST_CHECK(name.prefix()->string() == U"foo");
 	BOOST_CHECK(name.name() == U"h1");
 }
 
@@ -1573,7 +1574,7 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_4)
 	type_selector t = std::get<type_selector>(s.value());
 	std::optional<ns_prefix> ns = std::get<std::optional<ns_prefix>>(t.value());
 	BOOST_CHECK(ns);
-	BOOST_CHECK(ns->nspace() == U"foo");
+	BOOST_CHECK(ns->string() == U"foo");
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_5)
@@ -1591,7 +1592,7 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_5)
 
 	type_selector t = std::get<type_selector>(s.value());
 	wq_name name = std::get<wq_name>(t.value());
-	BOOST_CHECK(name.nspace() == U"");
+	BOOST_CHECK(name.prefix()->string() == U"");
 	BOOST_CHECK(name.name() == U"h1");
 }
 
@@ -1610,7 +1611,7 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_6)
 
 	type_selector t = std::get<type_selector>(s.value());
 	wq_name name = std::get<wq_name>(t.value());
-	BOOST_CHECK(name.nspace() == U"*");
+	BOOST_CHECK(name.prefix()->string() == U"*");
 	BOOST_CHECK(name.name() == U"h1");
 }
 
@@ -1663,13 +1664,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_9)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'\0');
-	BOOST_CHECK(attr.value() == U"");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'\0');
+	BOOST_CHECK(as.value() == U"");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_10)
@@ -1685,13 +1686,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_10)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'\0');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_11)
@@ -1707,13 +1708,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_11)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'~');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'~');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_12)
@@ -1729,13 +1730,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_12)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'|');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'|');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_13)
@@ -1751,13 +1752,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_13)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'^');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'^');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_14)
@@ -1773,13 +1774,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_14)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'$');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'$');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_15)
@@ -1795,13 +1796,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_15)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'*');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'\0');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'*');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'\0');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_16)
@@ -1817,13 +1818,13 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_16)
 	auto s = simple_selector::consume(in);
 	BOOST_CHECK(s);
 
-	subclass_selector t = std::get<subclass_selector>(s.value());
-	attribute_selector attr = std::get<attribute_selector>(t.value());
-	BOOST_CHECK(attr.nspace() == U"");
-	BOOST_CHECK(attr.name() == U"attr");
-	BOOST_CHECK(attr.matcher() == U'\0');
-	BOOST_CHECK(attr.value() == U"val");
-	BOOST_CHECK(attr.modifier() == U'i');
+	subclass_selector ss = std::get<subclass_selector>(s.value());
+	attribute_selector as = std::get<attribute_selector>(ss.value());
+	BOOST_CHECK(!as.prefix());
+	BOOST_CHECK(as.name() == U"attr");
+	BOOST_CHECK(as.matcher() == U'=');
+	BOOST_CHECK(as.value() == U"val");
+	BOOST_CHECK(as.modifier() == U'i');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_17)
@@ -1955,7 +1956,7 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_consume_1)
 
 	auto s = complex_selector::consume(in);
 	BOOST_CHECK(s);
-	BOOST_CHECK(s.value().size() == 2);
+	BOOST_CHECK(s.value().size() == 3);
 
 	std::u32string sz = print(s);
 	BOOST_CHECK(sz == U"P A");
@@ -2011,7 +2012,7 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_consume_1)
 
 	auto rs = relative_selector::consume(in);
 	BOOST_CHECK(rs);
-	BOOST_CHECK(rs.value().size() == 2);
+	BOOST_CHECK(rs.value().size() == 3);
 
 	std::u32string sz = print(rs);
 	BOOST_CHECK(sz == U"P A");
@@ -2029,7 +2030,7 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_consume_2)
 
 	auto rs = relative_selector::consume(in);
 	BOOST_CHECK(rs);
-	BOOST_CHECK(rs.value().size() == 3);
+	BOOST_CHECK(rs.value().size() == 4);
 
 	std::u32string sz = print(rs);
 	BOOST_CHECK(sz == U">P A");

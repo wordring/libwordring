@@ -232,8 +232,8 @@ namespace wordring::html
 
 	public:
 		simple_document()
-			: m_document_type(document_type_name::html)
-			, m_document_mode(document_mode_name::no_quirks)
+			: m_document_type(document_type_name::Html)
+			, m_document_mode(document_mode_name::NoQuirks)
 		{
 		}
 
@@ -441,6 +441,10 @@ namespace wordring::html
 		{
 		}
 
+		/*! @brief 名前空間 URI を返す
+		 
+		@sa https://triple-underscore.github.io/DOM4-ja.html#locate-a-namespace-prefix
+		*/
 		string_type namespace_uri() const { return static_cast<string_type>(m_namespace_uri); }
 
 		void namespace_uri(string_type const& uri) { m_namespace_uri = uri; }
@@ -778,13 +782,13 @@ namespace wordring::html
 	}
 
 	template <typename String>
-	inline String const& name(simple_node<String>& node)
+	inline String const& name(simple_node<String> const& node)
 	{
 		return std::get<simple_document_type<String>>(node).name();
 	}
 
 	template <typename String>
-	inline String const& target(simple_node<String>& node)
+	inline String const& target(simple_node<String> const& node)
 	{
 		return std::get<simple_processing_instruction<String>>(node).target();
 	}
@@ -968,6 +972,14 @@ namespace wordring::html
 	inline ns_name get_namespace_id(simple_node<String> const& node)
 	{
 		return std::get<simple_element<String>>(node).namespace_uri_id();
+	}
+
+	/*! @brief 要素の名前空間を返す
+	*/
+	template <typename String>
+	inline String get_namespace(simple_node<String> const& node)
+	{
+		return std::get<simple_element<String>>(node).namespace_uri();
 	}
 
 	/*! @brief 要素のローカル名を返す

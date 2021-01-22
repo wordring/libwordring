@@ -62,27 +62,27 @@ $(function() {
 <tr class="memitem:a7af52185b879314f1be64bedf109c611"><td class="memItemLeft" align="right" valign="top"><a id="a7af52185b879314f1be64bedf109c611"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = Iterator</td></tr>
 <tr class="separator:a7af52185b879314f1be64bedf109c611"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a765a47a46b3b073e69dd5d2e5c7270c2"><td class="memItemLeft" align="right" valign="top"><a id="a765a47a46b3b073e69dd5d2e5c7270c2"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>allocator_type</b> = Allocator</td></tr>
-<tr class="separator:a765a47a46b3b073e69dd5d2e5c7270c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8c347a3678a7189a11d620df4dadfce7"><td class="memItemLeft" align="right" valign="top"><a id="a8c347a3678a7189a11d620df4dadfce7"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = typename base_type::value_type</td></tr>
-<tr class="separator:a8c347a3678a7189a11d620df4dadfce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e0c5cdf8fea67818d3528e7f7ff21e2"><td class="memItemLeft" align="right" valign="top"><a id="a1e0c5cdf8fea67818d3528e7f7ff21e2"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
-<tr class="separator:a1e0c5cdf8fea67818d3528e7f7ff21e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7211030cbdd3ce70b55ea5d68c809dfd"><td class="memItemLeft" align="right" valign="top"><a id="a7211030cbdd3ce70b55ea5d68c809dfd"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
-<tr class="separator:a7211030cbdd3ce70b55ea5d68c809dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab484f978316a39c0fb88284cdc052b21"><td class="memItemLeft" align="right" valign="top"><a id="ab484f978316a39c0fb88284cdc052b21"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
-<tr class="separator:ab484f978316a39c0fb88284cdc052b21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a630c91d72bdfa6f7961ecb3fb81033a3"><td class="memItemLeft" align="right" valign="top"><a id="a630c91d72bdfa6f7961ecb3fb81033a3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
-<tr class="separator:a630c91d72bdfa6f7961ecb3fb81033a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a39f14be637f6d2e6f83ab5c002eb2e50"><td class="memItemLeft" align="right" valign="top"><a id="a39f14be637f6d2e6f83ab5c002eb2e50"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = Container</td></tr>
 <tr class="separator:a39f14be637f6d2e6f83ab5c002eb2e50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a765a47a46b3b073e69dd5d2e5c7270c2"><td class="memItemLeft" align="right" valign="top"><a id="a765a47a46b3b073e69dd5d2e5c7270c2"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>allocator_type</b> = Allocator</td></tr>
+<tr class="separator:a765a47a46b3b073e69dd5d2e5c7270c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa984d48de296bc7e507fdf1ab6585d32"><td class="memItemLeft" align="right" valign="top"><a id="aa984d48de296bc7e507fdf1ab6585d32"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = typename std::iterator_traits&lt; base_type &gt;::value_type</td></tr>
+<tr class="separator:aa984d48de296bc7e507fdf1ab6585d32"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2adae24a2570bb96d74ead4cdad81944"><td class="memItemLeft" align="right" valign="top"><a id="a2adae24a2570bb96d74ead4cdad81944"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = typename std::iterator_traits&lt; base_type &gt;::difference_type</td></tr>
+<tr class="separator:a2adae24a2570bb96d74ead4cdad81944"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a579284b7b0dee7ff0866c130cfb1f66e"><td class="memItemLeft" align="right" valign="top"><a id="a579284b7b0dee7ff0866c130cfb1f66e"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = typename std::iterator_traits&lt; base_type &gt;::reference</td></tr>
+<tr class="separator:a579284b7b0dee7ff0866c130cfb1f66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a19599bdb3544e43fd1860f9e63af6082"><td class="memItemLeft" align="right" valign="top"><a id="a19599bdb3544e43fd1860f9e63af6082"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = typename std::iterator_traits&lt; base_type &gt;::pointer</td></tr>
+<tr class="separator:a19599bdb3544e43fd1860f9e63af6082"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630c91d72bdfa6f7961ecb3fb81033a3"><td class="memItemLeft" align="right" valign="top"><a id="a630c91d72bdfa6f7961ecb3fb81033a3"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::input_iterator_tag</td></tr>
+<tr class="separator:a630c91d72bdfa6f7961ecb3fb81033a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>

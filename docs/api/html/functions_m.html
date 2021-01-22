@@ -50,21 +50,49 @@ $(function() {
 <li>m_current_tag_token_id
 : <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tokenizer.html#af2c41d7de0d2f762668f3e067d897d5a">wordring::whatwg::html::parsing::tokenizer&lt; T, NodeTraits &gt;</a>
 </li>
+<li>m_default_namespace_uri
+: <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a46fb063dd82a264a0b379dc5741e63b2">wordring::wwwc::css::match_context&lt; NodePointer &gt;</a>
+</li>
 <li>m_eof
 : <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af2b97fafffd069fb2363100003b94ada">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a>
 </li>
 <li>m_fill_length
 : <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a7b8c84930edd78d1d647ce684a5b4cf8">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a>
 </li>
+<li>m_first
+: <a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__grammar.html#a890d2957db94fbd083fc560b060a0188">wordring::wwwc::css::selector_grammar</a>
+</li>
 <li>m_last
 : <a class="el" href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1token__attribute__list.html#a29530473412f233a0cec279e2acfce17">wordring::whatwg::html::parsing::token_attribute_list</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__grammar.html#a4d9e0ae5ba05ecc862dfb614a223ae2a">wordring::wwwc::css::selector_grammar</a>
 </li>
 <li>m_list
 : <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#adb3b0675f916bebbaf73df02164de1e8">wordring::whatwg::html::parsing::tree_construction_dispatcher&lt; T, NodeTraits &gt;</a>
 </li>
+<li>m_mode_name
+: <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a5412885088ae76fdcc42016628651721">wordring::wwwc::css::match_context&lt; NodePointer &gt;</a>
+</li>
+<li>m_namespace_enabled
+: <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#aa73da633e749c58091f5a70d78d8f8ca">wordring::wwwc::css::match_context&lt; NodePointer &gt;</a>
+</li>
+<li>m_pseudo_class_fn_name
+: <a class="el" href="classwordring_1_1wwwc_1_1css_1_1pseudo__class__selector.html#aa9394013cf2f50ed9c12d20d9b393d57">wordring::wwwc::css::pseudo_class_selector</a>
+</li>
+<li>m_pseudo_class_id_name
+: <a class="el" href="classwordring_1_1wwwc_1_1css_1_1pseudo__class__selector.html#a812bffe68cb5af6b892e2d571a89de04">wordring::wwwc::css::pseudo_class_selector</a>
+</li>
+<li>m_scope
+: <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#abbb8212807dfea8855df2a0a4265ec0e">wordring::wwwc::css::match_context&lt; NodePointer &gt;</a>
+</li>
+<li>m_scoping_root
+: <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">wordring::wwwc::css::match_context&lt; NodePointer &gt;</a>
+</li>
 <li>m_type_flag
 : <a class="el" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#a376481e16b3e65a27679c79afaf1ce51">wordring::wwwc::css::dimension_token</a>
 , <a class="el" href="structwordring_1_1wwwc_1_1css_1_1number__token.html#ad411c111fae02d332556e02882d1ec37">wordring::wwwc::css::number_token</a>
+</li>
+<li>m_type_name
+: <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#afc969ff28a553bf2045bdf9da93808e6">wordring::wwwc::css::match_context&lt; NodePointer &gt;</a>
 </li>
 <li>m_unit
 : <a class="el" href="structwordring_1_1wwwc_1_1css_1_1dimension__token.html#ae238ab699763a3d9fd4aecdd13ce8948">wordring::wwwc::css::dimension_token</a>
@@ -76,11 +104,23 @@ $(function() {
 , <a class="el" href="structwordring_1_1wwwc_1_1css_1_1ident__token.html#aa1612645d0889a4627668adbb17f695f">wordring::wwwc::css::ident_token</a>
 , <a class="el" href="structwordring_1_1wwwc_1_1css_1_1number__token.html#a4c04842967a764d96908465d9740beb6">wordring::wwwc::css::number_token</a>
 , <a class="el" href="structwordring_1_1wwwc_1_1css_1_1percentage__token.html#abe5b79b566d2cfdd2fd70dcdb7a53efd">wordring::wwwc::css::percentage_token</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1pseudo__class__selector.html#ac5ff39f71a7c0d5f93459339306e1a2e">wordring::wwwc::css::pseudo_class_selector</a>
 , <a class="el" href="structwordring_1_1wwwc_1_1css_1_1string__token.html#a4e47220d79d5035a8edca7c3316a6ab3">wordring::wwwc::css::string_token</a>
 , <a class="el" href="structwordring_1_1wwwc_1_1css_1_1url__token.html#a8d039c72a686384afdb7f14e25908c48">wordring::wwwc::css::url_token</a>
 </li>
 <li>match()
 : <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#aaf76c295be91ebd16ec9b53c19a5dfab">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1attribute__selector.html#af534d1f6a9b1ed7d90fad4b50e2b63b4">wordring::wwwc::css::attribute_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1class__selector.html#ab16a6dabae20dba740e21d2b03fe86fe">wordring::wwwc::css::class_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1complex__selector.html#a67d18624167d535777758c987a22b200">wordring::wwwc::css::complex_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1compound__selector.html#a59c62b28eefef1e1f3809685c55432b7">wordring::wwwc::css::compound_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1id__selector.html#aa60d52a894ba8fa3ea622c93581be101">wordring::wwwc::css::id_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1pseudo__class__selector.html#a5af814657e6467d097f55e35884ede3e">wordring::wwwc::css::pseudo_class_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1pseudo__element__selector.html#a65bc8732b23fb19af84e190903fcb341">wordring::wwwc::css::pseudo_element_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1relative__selector.html#aab843fd1aba29f040d2d3ffda921b20f">wordring::wwwc::css::relative_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1simple__selector.html#af2aaf84e9ab293af41fdd131bd7bd083">wordring::wwwc::css::simple_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1subclass__selector.html#aa336f841d5ea212583758bb6125dadf1">wordring::wwwc::css::subclass_selector</a>
+, <a class="el" href="classwordring_1_1wwwc_1_1css_1_1type__selector.html#a30e4a6b2b660ad1f42e18d6cebe3a5a9">wordring::wwwc::css::type_selector</a>
 </li>
 <li>match_named_character_reference()
 : <a class="el" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#af5da4ebc4f236538e6db754d3f7ea19a">wordring::whatwg::html::parsing::input_stream&lt; T &gt;</a>

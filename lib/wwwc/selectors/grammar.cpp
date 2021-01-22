@@ -121,15 +121,15 @@ ns_prefix ns_prefix::consume(syntax_primitive_stream in)
 	return ns_prefix(it0, it0, U"");
 }
 
-ns_prefix::ns_prefix(const_iterator first, const_iterator last, std::u32string const& ns)
+ns_prefix::ns_prefix(const_iterator first, const_iterator last, std::u32string const& prefix)
 	: selector_grammar(first, last)
-	, m_ns(ns)
+	, m_ns_prefix(prefix)
 {
 }
 
-std::u32string const& ns_prefix::nspace() const
+std::u32string const& ns_prefix::string() const
 {
-	return m_ns;
+	return m_ns_prefix;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -166,15 +166,14 @@ wq_name wq_name::consume(syntax_primitive_stream in)
 
 wq_name::wq_name(const_iterator first, const_iterator last, std::optional<ns_prefix> ns, std::u32string const& name)
 	: selector_grammar(first, last)
-	, m_ns(ns)
+	, m_ns_prefix(ns)
 	, m_name(name)
 {
 }
 
-std::u32string wq_name::nspace() const
+std::optional<ns_prefix> const& wq_name::prefix() const
 {
-	if (m_ns) return m_ns->nspace();
-	return U"";
+	return m_ns_prefix;
 }
 
 std::u32string const& wq_name::name() const
@@ -257,7 +256,7 @@ attr_matcher attr_matcher::consume(syntax_primitive_stream in)
 		switch (c1)
 		{
 		case U'=':
-			return attr_matcher(it0, in.begin(), U'\0');
+			return attr_matcher(it0, in.begin(), U'=');
 		case U'~':
 		case U'|':
 		case U'^':
@@ -346,19 +345,22 @@ pseudo_class_selector pseudo_class_selector::consume(syntax_primitive_stream in)
 			};
 
 			ident_token const& id = p.get<ident_token>();
-			std::u32string const& sz = id.m_value;
+			std::u32string tmp;
+			to_ascii_lowercase(id.m_value.begin(), id.m_value.end(), std::back_inserter(tmp));
 			for (std::u32string_view const& sv : a)
 			{
-				if (is_ascii_case_insensitive_match(sv.begin(), sv.end(), sz.begin(), sz.end()))
-				{
-					return { it0, it0 };
-				}
+				if (tmp == sv) return { it0, it0 };
 			}
 
-			return { it0, in.begin(), id };
+			return { it0, in.begin(), id, to_pseudo_class_id_name(tmp) };
 		}
 		case syntax_primitive_name::Function:
-			return { it0, in.begin(), p.get<function>() };
+		{
+			function const& fn = p.get<function>();
+			std::u32string tmp;
+			to_ascii_lowercase(fn.m_name.begin(), fn.m_name.end(), std::back_inserter(tmp));
+			return { it0, in.begin(), p.get<function>(), to_pseudo_class_fn_name(tmp) };
+		}
 		default:
 			break;
 		}
@@ -366,21 +368,35 @@ pseudo_class_selector pseudo_class_selector::consume(syntax_primitive_stream in)
 	return { it0, it0 };
 }
 
+pseudo_class_selector::pseudo_class_selector()
+	: selector_grammar()
+	, m_value()
+	, m_pseudo_class_id_name(static_cast<pseudo_class_id_name>(0))
+	, m_pseudo_class_fn_name(static_cast<pseudo_class_fn_name>(0))
+{
+}
+
 pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last)
 	: selector_grammar(first, last)
 	, m_value()
+	, m_pseudo_class_id_name(static_cast<pseudo_class_id_name>(0))
+	, m_pseudo_class_fn_name(static_cast<pseudo_class_fn_name>(0))
 {
 }
 
-pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last, ident_token const& id)
+pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last, ident_token const& id, pseudo_class_id_name name)
 	: selector_grammar(first, last)
 	, m_value(id)
+	, m_pseudo_class_id_name(name)
+	, m_pseudo_class_fn_name(static_cast<pseudo_class_fn_name>(0))
 {
 }
 
-pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last, function const& fn)
+pseudo_class_selector::pseudo_class_selector(const_iterator first, const_iterator last, function const& fn, pseudo_class_fn_name name)
 	: selector_grammar(first, last)
 	, m_value(fn)
+	, m_pseudo_class_id_name(static_cast<pseudo_class_id_name>(0))
+	, m_pseudo_class_fn_name(static_cast<pseudo_class_fn_name>(name))
 {
 }
 
@@ -407,13 +423,16 @@ pseudo_element_selector pseudo_element_selector::consume(syntax_primitive_stream
 
 	if (in.consume().type() == syntax_primitive_name::ColonToken)
 	{
-		pseudo_element_selector s(pseudo_class_selector::consume(in));
-		if (s)
+		pseudo_element_selector es(pseudo_class_selector::consume(in));
+		if (es)
 		{
-			s.m_first = it0;
-			return s;
+			es.m_first = it0;
+			return es; // ::pelm 形式はここで返る。
 		}
 
+		// before after first-line first-letter あるいは疑似クラスでも疑似要素でもないものがここに到達する。
+
+		// ::before 形式は、ここに到達した時点で :before になっているのでコロンを消費する。
 		if (in.current().type() == syntax_primitive_name::ColonToken) in.consume();
 
 		syntax_primitive const& p = in.consume();
@@ -428,13 +447,11 @@ pseudo_element_selector pseudo_element_selector::consume(syntax_primitive_stream
 			};
 
 			ident_token const& id = p.get<ident_token>();
-			std::u32string const& sz = id.m_value;
+			std::u32string tmp;
+			to_ascii_lowercase(id.m_value.begin(), id.m_value.end(), std::back_inserter(tmp));
 			for (std::u32string_view const& sv : a)
 			{
-				if (is_ascii_case_insensitive_match(sv.begin(), sv.end(), sz.begin(), sz.end()))
-				{
-					return { it0, in.begin(), id };
-				}
+				if (sv == tmp) return { it0, in.begin(), id, to_pseudo_element_id_name(tmp) };
 			}
 		}
 	}
@@ -444,16 +461,19 @@ pseudo_element_selector pseudo_element_selector::consume(syntax_primitive_stream
 
 pseudo_element_selector::pseudo_element_selector(pseudo_class_selector&& s)
 	: pseudo_class_selector(std::move(s))
+	, m_pseudo_element_id_name(static_cast<pseudo_element_id_name>(0))
 {
 }
 
 pseudo_element_selector::pseudo_element_selector(const_iterator first, const_iterator last)
 	: pseudo_class_selector(first, last)
+	, m_pseudo_element_id_name(static_cast<pseudo_element_id_name>(0))
 {
 }
 
-pseudo_element_selector::pseudo_element_selector(const_iterator first, const_iterator last, ident_token const& id)
-	: pseudo_class_selector(first, last, id)
+pseudo_element_selector::pseudo_element_selector(const_iterator first, const_iterator last, ident_token const& id, pseudo_element_id_name name)
+	: pseudo_class_selector(first, last, id, static_cast<pseudo_class_id_name>(0))
+	, m_pseudo_element_id_name(name)
 {
 }
 
@@ -529,9 +549,9 @@ attribute_selector::attribute_selector(const_iterator first, const_iterator last
 {
 }
 
-std::u32string attribute_selector::nspace() const
+std::optional<ns_prefix> const& attribute_selector::prefix() const
 {
-	return m_name.nspace();
+	return m_name.prefix();
 }
 
 std::u32string const& attribute_selector::name() const
@@ -635,8 +655,8 @@ simple_selector simple_selector::consume(syntax_primitive_stream in)
 {
 	const_iterator it0 = in.begin();
 
-	type_selector type = type_selector::consume(in);
-	if (type) return simple_selector(it0, type.end(), type);
+	type_selector ts = type_selector::consume(in);
+	if (ts) return simple_selector(it0, ts.end(), ts);
 
 	subclass_selector sub = subclass_selector::consume(in);
 	if (sub) return simple_selector(it0, sub.end(), sub);
@@ -666,11 +686,11 @@ compound_selector compound_selector::consume(syntax_primitive_stream in)
 
 	std::vector<value_type> v;
 
-	type_selector type = type_selector::consume(in);
-	if (type)
+	type_selector ts = type_selector::consume(in);
+	if (ts)
 	{
-		v.push_back(std::move(type));
-		in.advance(type.end());
+		v.push_back(std::move(ts));
+		in.advance(ts.end());
 	}
 
 	while (true)
@@ -711,7 +731,6 @@ compound_selector compound_selector::consume(syntax_primitive_stream in)
 	const_iterator it1;
 	std::visit([&](auto const& x) { it1 = x.end(); }, v.back());
 
-
 	return compound_selector(it0, it1, std::move(v));
 }
 
@@ -748,6 +767,7 @@ complex_selector complex_selector::consume(syntax_primitive_stream in)
 
 	while (in)
 	{
+		const_iterator it0 = in.begin(); // 空白文字の開始位置
 		bool ws = in.skip_whitespace();
 		combinator c = combinator::consume(in);
 		if (!ws && !c) break;
@@ -759,7 +779,8 @@ complex_selector complex_selector::consume(syntax_primitive_stream in)
 		if (cs) in.advance(cs.end());
 		else break;
 
-		if(c) v.push_back(std::move(c));
+		if (c) v.push_back(std::move(c)); // 空白文字以外の接合子
+		else if (ws) v.push_back(combinator(it0, in.begin(), U' ')); // 空白文字の接合子
 		v.push_back(std::move(cs));
 	}
 

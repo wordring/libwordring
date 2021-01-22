@@ -1593,8 +1593,8 @@ namespace wordring::whatwg::html::parsing
 
 				if (!traits::is_iframe_srcdoc_document(P->get_document()))
 				{
-					if (in_quirks_condition(token)) traits::set_document_mode(P->get_document(), document_mode_name::quirks);
-					else if (in_limited_quirks_condition(token)) traits::set_document_mode(P->get_document(), document_mode_name::limited_quirks);
+					if (in_quirks_condition(token)) traits::set_document_mode(P->get_document(), document_mode_name::Quirks);
+					else if (in_limited_quirks_condition(token)) traits::set_document_mode(P->get_document(), document_mode_name::LimitedQuirks);
 				}
 
 				insertion_mode(mode_name::before_html_insertion_mode);
@@ -1604,7 +1604,7 @@ namespace wordring::whatwg::html::parsing
 			if (!traits::is_iframe_srcdoc_document(P->get_document()))
 			{
 				P->report_error();
-				traits::set_document_mode(P->get_document(), document_mode_name::quirks);
+				traits::set_document_mode(P->get_document(), document_mode_name::Quirks);
 			}
 
 			insertion_mode(mode_name::before_html_insertion_mode);
@@ -2806,7 +2806,7 @@ namespace wordring::whatwg::html::parsing
 			{
 				if (token.m_tag_name_id == tag_name::Table)
 				{
-					if (traits::get_document_mode(P->get_document()) != document_mode_name::quirks
+					if (traits::get_document_mode(P->get_document()) != document_mode_name::Quirks
 						&& in_specific_scope(button_scope, tag_name::P)) close_p_element();
 					insert_html_element(token);
 					m_frameset_ok_flag = false;

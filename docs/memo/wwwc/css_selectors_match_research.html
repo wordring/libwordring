@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>セレクタの照合</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body>
+    <p><a href="../index.html"><img src="../../up.svg" alt=""></a></p>
+    <h1>セレクタの照合</h1>
+    <h2><span style="color: #505050;">属性</span></h2>
+    <p>html5 パーサーは、<a href="https://triple-underscore.github.io/HTML-parsing-ja.html#attribute-name-state">トー
+        クン化ステージで属性名を小文字化する</a>。したがって、大文字の属性名は存在しないと思われる。一方、属性セレクタは属性名を勝手に小文字化するこ
+      とは無い。</p>
+    <h3>[attr]</h3>
+    <ul>
+      <li>属性名の前後に空白文字はない。</li>
+    </ul>
+    <h3>[attr='val']</h3>
+    <h4>ブラウザの検証結果</h4>
+    <h5>console.log(document.querySelector('[attr="val"]'))</h5>
+    <ul>
+      <li>&lt;p attr&nbsp;&nbsp; =&nbsp;&nbsp; 'val'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>&lt;p attr="val"&gt;&lt;/p&gt;</li>
+        <li>属性名と属性値の間の空白は無視された。</li>
+      </ul>
+      <li>&lt;p attr='<span style="color: #999900;"> </span>val'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>null</li>
+        <li>属性値の空白文字は無視されない。</li>
+      </ul>
+      <li>&lt;p ATTR='val'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>&lt;p attr="val"&gt;&lt;/p&gt;</li>
+      </ul>
+      <li>&lt;p attr='VAL'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>null</li>
+      </ul>
+    </ul>
+    <h5>console.log(document.querySelector('[attr=" &nbsp;&nbsp; val"]'))</h5>
+    <ul>
+      <li>&lt;p attr=' &nbsp;&nbsp; val'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>&lt;p attr=" &nbsp;&nbsp; val"&gt;&lt;/p&gt;</li>
+        <li>属性値の空白文字は無視されない。</li>
+      </ul>
+    </ul>
+    <h5>console.log(document.querySelector('[attr="val1"]'))</h5>
+    <ul>
+      <li>&lt;p attr='val1' attr='val2'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>&lt;p attr="val1"&gt;&lt;/p&gt;</li>
+        <li>重複する属性値は、DOMに追加されていない。</li>
+        <li><a href="https://triple-underscore.github.io/HTML-parsing-ja.html#attribute-name-state">規
+            格で決められた動作</a>のようだ。</li>
+      </ul>
+    </ul>
+    <h3>[attr~='val1 val2']</h3>
+    <h4>ブラウザの検証結果</h4>
+    <h5>console.log(document.querySelector('[attr~="val1"]'))</h5>
+    <ul>
+      <li>&lt;p attr='&nbsp;&nbsp;&nbsp; val1&nbsp;&nbsp;&nbsp;
+        val2'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>&lt;p attr=" val1 val2"&gt;&lt;/p&gt;</li>
+        <li>属性値の空白文字はDOM内で短縮されていた。</li>
+        <li>というよりも、あらかじめ空白で区切ってリストとして保持されているのかも？</li>
+      </ul>
+      <li>&lt;p attr=&nbsp;&nbsp;&nbsp; val1&nbsp;&nbsp;&nbsp;
+        val2&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>&lt;p attr="val1" val2=""&gt;&lt;/p&gt;</li>
+        <li>引用符でくくらない場合、DOMの解釈が変わる。</li>
+      </ul>
+    </ul>
+    <h5>console.log(document.querySelector('[attr~="&nbsp;&nbsp;&nbsp; val1"]'))</h5>
+    <ul>
+      <li>&lt;p attr='&nbsp;&nbsp;&nbsp; val1&nbsp;&nbsp;&nbsp;
+        val2'&gt;&lt;/p&gt;</li>
+      <ul>
+        <li>null</li>
+        <li>セレクタ側に空白文字があると一切マッチしない。</li>
+        <li>規格にも、空白で区切っているのでマッチしないと注記がある。</li>
+      </ul>
+    </ul>
+    <h5><br>
+    </h5>
+    <h5>
+    </h5>
+    <p></p>
+  </body>
+</html>

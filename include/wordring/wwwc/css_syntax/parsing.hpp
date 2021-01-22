@@ -32,11 +32,11 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief トークン列をストリームとしてアクセスするためのアダプタ
-	
-	@tparam BidirectionalIterator
-
-	規格で明示されていないが、ストリーム構築後 consume() を呼び出した後に、最初のトークンが Current token として現れる仕様のよう。
-	
+	*
+	* @tparam BidirectionalIterator
+	*
+	* 規格で明示されていないが、ストリーム構築後 consume() を呼び出した後に、最初のトークンが
+	* Current token として現れる仕様のよう。
 	*/
 	class token_stream
 	{
@@ -95,18 +95,18 @@ namespace wordring::wwwc::css
 	inline std::vector<syntax_primitive> parse_list_of_component_values(token_stream& in, ErrorHandler handler);
 
 	/*! @brief 入力をトークン列へ正規化する
-	
-	@param [in] in      トークンあるいはコンポーネント値のリスト
-	@param [in] handler [オプション] エラーハンドラー
-
-	@return トークンあるいはコンポーネント値のリスト
-
-	入力として文字列が与えられた場合、オーバーロードが呼び出される。
-
-	オーバーロード解決に参加させるためダミーのエラーハンドラーを用意しているが、呼び出されることはない。
-
-	@sa https://drafts.csswg.org/css-syntax-3/#normalize-into-a-token-stream
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#normalize-into-a-token-stream
+	*
+	* @param [in] in      トークンあるいはコンポーネント値のリスト
+	* @param [in] handler [オプション] エラーハンドラー
+	*
+	* @return トークンあるいはコンポーネント値のリスト
+	*
+	* 入力として文字列が与えられた場合、オーバーロードが呼び出される。
+	*
+	* オーバーロード解決に参加させるためダミーのエラーハンドラーを用意しているが、呼び出されることはない。
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#normalize-into-a-token-stream
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#normalize-into-a-token-stream
 	*/
 	template <typename ErrorHandler = std::nullptr_t>
 	inline std::vector<syntax_primitive>
@@ -116,24 +116,24 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief 入力をトークン列へ正規化する
-
-	@param [in] in      スタイルシートを表すコード・ポイント列
-	@param [in] handler [オプション] エラーハンドラー
-
-	@return トークンのリスト
-
-	入力として文字列が与えられた場合、このバージョンの関数が呼び出される。
-	その他の入力が与えられた場合、オーバーロードが呼び出される。
-
-	有効なエラーハンドラが引数で供給された場合、トークン化で発生したエラーを報告するために、
-	発生個所を指すイテレータを引数にエラーハンドラーが呼び出される。
-	呼び出され方は、以下の通り。
-
-	@code
-		handler(in.begin() + n);
-	@endcode
-
-	@sa normalize_into_token_stream(std::vector<syntax_primitive>&&, ErrorHandler)
+	*
+	* @param [in] in      スタイルシートを表すコード・ポイント列
+	* @param [in] handler [オプション] エラーハンドラー
+	* 
+	* @return トークンのリスト
+	*
+	* 入力として文字列が与えられた場合、このバージョンの関数が呼び出される。
+	* その他の入力が与えられた場合、オーバーロードが呼び出される。
+	*
+	* 有効なエラーハンドラが引数で供給された場合、トークン化で発生したエラーを報告するために、
+	* 発生個所を指すイテレータを引数にエラーハンドラーが呼び出される。
+	* 呼び出され方は、以下の通り。
+	*
+	* @code
+	* 	handler(in.begin() + n);
+	* @endcode
+	*
+	* @sa normalize_into_token_stream(std::vector<syntax_primitive>&&, ErrorHandler)
 	*/
 	template <typename ErrorHandler = std::nullptr_t>
 	inline std::vector<syntax_primitive> normalize_into_token_stream(std::u32string&& in, ErrorHandler handler = nullptr)
@@ -154,36 +154,36 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief CSS文法に沿って解析する
-	
-	@param [in] in      入力ストリーム
-	@param [in] s       各種CSS規格で定義される文法
-	@param [in] handler エラーハンドラ
-	
-	@return コンポーネント値のリスト（std::vector<component_value>）、あるいは失敗。
-	
-	入力をコンポーネント値のリストへ解析する。
-
-	引数sで供給される文法にマッチしない場合、戻り値は failure 状態となる。
-	文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。
-	文法のシグネチャは以下の通り。
-	@code
-		bool syntax(std::vector<component_value> const& v);
-	@endcode
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa std::optional
-
-	@sa https://drafts.csswg.org/css-syntax-3/#css-parse-something-according-to-a-css-grammar
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-something-according-to-a-css-grammar
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] s       各種CSS規格で定義される文法
+	* @param [in] handler エラーハンドラ
+	*
+	* @return コンポーネント値のリスト（std::vector<component_value>）、あるいは失敗。
+	*
+	* 入力をコンポーネント値のリストへ解析する。
+	*
+	* 引数sで供給される文法にマッチしない場合、戻り値は failure 状態となる。
+	* 文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。
+	* 文法のシグネチャは以下の通り。
+	* @code
+	* 	bool syntax(std::vector<syntax_primitive> const& v);
+	* @endcode
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa std::optional
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#css-parse-something-according-to-a-css-grammar
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-something-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler = std::nullptr_t>
 	inline std::optional<std::vector<syntax_primitive>>
@@ -218,37 +218,37 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief カンマ区切りのリストをCSS文法に沿って構文解析する
-	
-	@param [in] in      入力ストリーム
-	@param [in] s       各種CSS規格で定義される文法
-	@param [in] handler エラーハンドラ
-	
-	@return 「コンポーネント値のリスト（std::vector<component_value>）、あるいは失敗」のリスト
-	
-	入力をコンポーネント値のリストのリストへ解析する。
-	文法の検査も行う。
-
-	文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。
-	文法のシグネチャは以下の通り。
-	@code
-		bool syntax(std::vector<component_value> const& v);
-	@endcode
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa std::optional
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] s       各種CSS規格で定義される文法
+	* @param [in] handler エラーハンドラ
+	*
+	* @return 「コンポーネント値のリスト（std::vector<syntax_primitive>）、あるいは失敗」のリスト
+	*
+	* 入力をコンポーネント値のリストのリストへ解析する。
+	* 文法の検査も行う。
+	*
+	* 文法は、コンポーネント値のリストを引数に呼び出すと、マッチするとtrueを返し、マッチしないとfalseを返す関数類。
+	* 文法のシグネチャは以下の通り。
+	* @code
+	* 	bool syntax(std::vector<component_value> const& v);
+	* @endcode
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa std::optional
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#css-parse-a-comma-separated-list-according-to-a-css-grammar
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler>
 	inline std::vector<std::optional<std::vector<syntax_primitive>>>
@@ -296,28 +296,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief スタイルシートを構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return 規則のリスト
-
-	入力を規則のリストへ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-stylesheet
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-stylesheet
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return 規則のリスト
+	*
+	* 入力を規則のリストへ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-stylesheet
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-stylesheet
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive> parse_stylesheet(token_stream& in, ErrorHandler handler)
@@ -333,7 +333,6 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief スタイルシートを構文解析する
-	
 	*/
 	inline std::vector<syntax_primitive> parse_stylesheet(std::u32string&& in)
 	{
@@ -342,10 +341,9 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief スタイルシートを構文解析する
-
-	この関数は、8bit文字列を入力として受け付ける。
-	エンコーディングを自動決定することが出来る。
-
+	*
+	* この関数は、8bit文字列を入力として受け付ける。
+	* エンコーディングを自動決定することが出来る。
 	*/
 	inline std::vector<syntax_primitive>
 		parse_stylesheet(std::string const& in, encoding_name fallback = static_cast<encoding_name>(0))
@@ -364,28 +362,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 規則リストを構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return 規則のリスト
-
-	入力を規則のリストへ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-rules
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-rules
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return 規則のリスト
+	*
+	* 入力を規則のリストへ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-rules
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-rules
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive> parse_list_of_rules(token_stream& in, ErrorHandler handler)
@@ -414,28 +412,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 規則を構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return 規則、あるいは失敗
-
-	入力を規則へ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-rule
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-rule
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return 規則、あるいは失敗
+	*
+	* 入力を規則へ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-rule
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-rule
 	*/
 	template <typename ErrorHandler>
 	inline std::optional<syntax_primitive> parse_rule(token_stream& in, ErrorHandler handler)
@@ -484,28 +482,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 宣言を構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return 宣言、あるいは失敗
-
-	入力をコンポーネント値のリストへ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-declaration
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-declaration
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return 宣言、あるいは失敗
+	*
+	* 入力をコンポーネント値のリストへ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-declaration
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-declaration
 	*/
 	template <typename ErrorHandler>
 	inline std::optional<declaration> parse_declaration(token_stream& in, ErrorHandler handler)
@@ -539,28 +537,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 宣言リストを構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return 「 Declaration あるいは  @-rule 」の混在リスト
-
-	入力を宣言リストへ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-declarations
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-declarations
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return 「 Declaration あるいは  @-rule 」の混在リスト
+	*
+	* 入力を宣言リストへ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-declarations
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-declarations
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive> parse_list_of_declarations(token_stream& in, ErrorHandler handler)
@@ -588,28 +586,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief コンポーネント値を構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return コンポーネント値、あるいは失敗
-
-	入力をコンポーネント値へ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-component-value
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-component-value
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return コンポーネント値、あるいは失敗
+	*
+	* 入力をコンポーネント値へ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-component-value
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-component-value
 	*/
 	template <typename ErrorHandler>
 	inline std::optional<component_value> parse_component_value(token_stream& in, ErrorHandler handler)
@@ -647,28 +645,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief コンポーネント値のリストを構文解析する
-	
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-	
-	@return コンポーネント値のリスト
-	
-	入力をコンポーネント値のリストへ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-component-values
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-component-values
+	* 
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	* 
+	* @return コンポーネント値のリスト
+	* 
+	* 入力をコンポーネント値のリストへ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-a-list-of-component-values
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-a-list-of-component-values
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive> parse_list_of_component_values(token_stream& in, ErrorHandler handler)
@@ -705,28 +703,28 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief コンマ区切りのコンポーネント値のリストを構文解析する
-
-	@param [in] in      入力ストリーム
-	@param [in] handler エラーハンドラ
-
-	@return コンポーネント値のリストのリスト
-
-	入力をコンポーネント値のリストのリストへ解析する。
-
-	エラーハンドラが供給された場合、エラーを報告するために、
-	発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
-	エラーハンドラは、以下の通り。
-
-	@code
-		void handler(token_stream const& s);
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
-
-	@sa parse_grammar(token_stream&, Syntax, ErrorHandler)
-
-	@sa https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#parse-comma-separated-list-of-component-values
+	*
+	* @param [in] in      入力ストリーム
+	* @param [in] handler エラーハンドラ
+	*
+	* @return コンポーネント値のリストのリスト
+	*
+	* 入力をコンポーネント値のリストのリストへ解析する。
+	*
+	* エラーハンドラが供給された場合、エラーを報告するために、
+	* 発生個所を指す token_stream を引数にエラーハンドラーが呼び出される。
+	* エラーハンドラは、以下の通り。
+	*
+	* @code
+	* 	void handler(token_stream const& s);
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定している。
+	*
+	* @sa parse_grammar(token_stream&, Syntax, ErrorHandler)
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#parse-comma-separated-list-of-component-values
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#parse-comma-separated-list-of-component-values
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<std::vector<syntax_primitive>>
@@ -758,12 +756,12 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief コンマ区切りのコンポーネント値のリストを構文解析する
-
-	@param [in] in 入力トークン列
-
-	@return コンポーネント値のリストのリスト
-
-	@sa parse_comma_separated_list_of_component_values(token_stream&, ErrorHandler)
+	*
+	* @param [in] in 入力トークン列
+	*
+	* @return コンポーネント値のリストのリスト
+	*
+	* @sa parse_comma_separated_list_of_component_values(token_stream&, ErrorHandler)
 	*/
 	inline std::vector<std::vector<syntax_primitive>>
 		parse_comma_separated_list_of_component_values(std::vector<syntax_primitive>&& in)
@@ -773,12 +771,12 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief コンマ区切りのコンポーネント値のリストを構文解析する
-
-	@param [in] in 入力文字列
-
-	@return コンポーネント値のリストのリスト
-
-	@sa parse_comma_separated_list_of_component_values(token_stream&, ErrorHandler)
+	*
+	* @param [in] in 入力文字列
+	*
+	* @return コンポーネント値のリストのリスト
+	*
+	* @sa parse_comma_separated_list_of_component_values(token_stream&, ErrorHandler)
 	*/
 	inline std::vector<std::vector<syntax_primitive>>
 		parse_comma_separated_list_of_component_values(std::u32string&& in)
@@ -826,17 +824,17 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief Ruleのリストを消費する
-	
-	@param [in] in        トークン列のストリーム
-	@param [in] top_level トップレベルフラグ（規格内の呼び出し側で指定される）
-	@param [in] handler   エラー処理を行うユーザー定義の関数
-
-	@return At-rule・Qualified rule の混在リスト
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
-	
-	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-rules
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-list-of-rules
+	* 
+	* @param [in] in        トークン列のストリーム
+	* @param [in] top_level トップレベルフラグ（規格内の呼び出し側で指定される）
+	* @param [in] handler   エラー処理を行うユーザー定義の関数
+	*
+	* @return At-rule・Qualified rule の混在リスト
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
+	* 
+	* @sa https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-rules
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-list-of-rules
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive>
@@ -890,20 +888,20 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 入力から at_rule を消費する
-	
-	@param [in] in      トークン列のストリーム
-	@param [in] handler エラー処理を行うユーザー定義の関数
-
-	@return rule
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
-
-	この関数は、入力の先頭が at_keyword_token と仮定している。
-
-	@sa At-rule
-
-	@sa https://drafts.csswg.org/css-syntax-3/#consume-an-at-rule
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-an-at-rule
+	* 
+	* @param [in] in      トークン列のストリーム
+	* @param [in] handler エラー処理を行うユーザー定義の関数
+	*
+	* @return rule
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
+	*
+	* この関数は、入力の先頭が at_keyword_token と仮定している。
+	*
+	* @sa At-rule
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#consume-an-at-rule
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#consume-an-at-rule
 	*/
 	template <typename ErrorHandler>
 	inline at_rule consume_at_rule(token_stream& in, ErrorHandler handler)
@@ -951,18 +949,18 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 入力から qualified_rule を消費する
-
-	@param [in] in      トークン列のストリーム
-	@param [in] handler エラー処理を行うユーザー定義の関数
-
-	@return rule
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
-
-	@sa Qualified rule あるいは何も返さない
-
-	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-qualified-rule
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-qualified-rule
+	*
+	* @param [in] in      トークン列のストリーム
+	* @param [in] handler エラー処理を行うユーザー定義の関数
+	*
+	* @return rule
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
+	*
+	* @sa Qualified rule あるいは何も返さない
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#consume-a-qualified-rule
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-qualified-rule
 	*/
 	template <typename ErrorHandler>
 	inline std::optional<qualified_rule> consume_qualified_rule(token_stream& in, ErrorHandler handler)
@@ -1004,24 +1002,24 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 入力から declaration のリストを消費する
-
-	@param [in] in      トークン列のストリーム
-	@param [in] handler エラー処理を行うユーザー定義の関数
-
-	@return 「 Declaration あるいは  @-rule 」の混在リスト
-
-	@par 入力例
-	@code
-		background-color: red;
-		color: blue !important;
-	@endcode
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
-
-	@sa declaration
-
-	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-declarations
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-list-of-declarations
+	*
+	* @param [in] in      トークン列のストリーム
+	* @param [in] handler エラー処理を行うユーザー定義の関数
+	*
+	* @return 「 Declaration あるいは  @-rule 」の混在リスト
+	*
+	* @par 入力例
+	* @code
+	* 	background-color: red;
+	* 	color: blue !important;
+	* @endcode
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
+	*
+	* @sa declaration
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#consume-a-list-of-declarations
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-list-of-declarations
 	*/
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive> consume_list_of_declarations(token_stream& in, ErrorHandler handler)
@@ -1090,12 +1088,12 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 	
 	/*! 末尾の !important を削除する
-	
-	@return 削除した場合、 true を返す
-
-	consume_declaration() から呼び出される。
-
-	@sa consume_declaration()
+	* 
+	* @return 削除した場合、 true を返す
+	*
+	* consume_declaration() から呼び出される。
+	*
+	* @sa consume_declaration()
 	*/
 	inline bool process_important(std::vector<component_value>& v)
 	{
@@ -1136,18 +1134,18 @@ namespace wordring::wwwc::css
 	}
 
 	/*! @brief 入力から declaration を消費する
-
-	@param [in] in      トークン列のストリーム
-	@param [in] handler エラー処理を行うユーザー定義の関数
-
-	@return declaration
-
-	この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
-
-	@sa declaration
-
-	@sa https://drafts.csswg.org/css-syntax-3/#consume-a-declaration
-	@sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-declaration
+	*
+	* @param [in] in      トークン列のストリーム
+	* @param [in] handler エラー処理を行うユーザー定義の関数
+	*
+	* @return declaration
+	*
+	* この関数は、CSS Syntax Moduleの外から呼び出されることを想定していない。
+	*
+	* @sa declaration
+	*
+	* @sa https://drafts.csswg.org/css-syntax-3/#consume-a-declaration
+	* @sa https://triple-underscore.github.io/css-syntax-ja.html#consume-a-declaration
 	*/
 	template <typename ErrorHandler>
 	inline std::optional<declaration> consume_declaration(token_stream& in, ErrorHandler handler)
@@ -1302,66 +1300,4 @@ namespace wordring::wwwc::css
 		assert(false);
 		return function();
 	}
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
-
-	// --------------------------------------------------------------------------------------------
-	// 
-	//
-	// 
-	// 
-	// --------------------------------------------------------------------------------------------
 }

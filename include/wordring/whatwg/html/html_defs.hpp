@@ -21,15 +21,15 @@ namespace wordring::whatwg::html
 
 	enum class document_type_name : std::uint32_t
 	{
-		xml = 1,
-		html,
+		Xml = 1,
+		Html,
 	};
 
 	enum class document_mode_name : std::uint32_t
 	{
-		no_quirks = 1,
-		quirks,
-		limited_quirks,
+		NoQuirks = 1,  /*!< 標準モード */
+		Quirks,        /*!< 互換モード*/
+		LimitedQuirks, /*!< 限定互換モード*/
 	};
 
 	using encoding_name = wordring::whatwg::encoding::name;

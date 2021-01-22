@@ -31,7 +31,7 @@ add_executable(
 		"api.cpp"
 #		"grammar_1.cpp"
 		"grammar_2.cpp"
-)
+		"tree_structural_pseudo_classes.cpp")
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

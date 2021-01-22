@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>セレクタにおけるケースセンシティブ</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body>
+    <p><a href="../index.html"><img src="../../up.svg" alt=""></a></p>
+    <h1>セレクタにおけるケースセンシティブ</h1>
+    <ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#pseudo-classes">疑
+          似クラスの名前は ASCII 大小無視である。</a></li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#pseudo-element-syntax">疑
+          似要素の名前は、 ASCII 大小無視である。</a></li>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#case-sensitive">す
+          べての Selectors 構文は、その制御下にない部分を除いて，ASCII 大小無視である</a></li>
+      <ul>
+        <li>例えば HTML の下では，要素名と属性名は ASCII 大小無視 であるが、 XML の下では，文字大小は区別される。</li>
+      </ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#attribute-case">既
+          定では、選択子の中の 属性名や属性値 の文字大小が区別されるかどうかは，文書言語に依存する。</a></li>
+      <ul>
+        <li>文書言語に関わらず，属性値を ASCII 大小無視で合致させるため、属性選択子の閉じ角括弧 U+005D (]) の直前に，識別子
+          U+0069 (i) を含ませる方法が用意されている。</li>
+      </ul>
+      <li><a href="https://triple-underscore.github.io/selectors4-ja.html#class-selector">過
+          去互換モードの文書に対しては、クラス名は，ASCII 大小無視で照合するものとする — 他所におけるクラス選択子は，文字大小を区別する。</a></li>
+      <li>:lang() 疑似クラス：　<a href="https://triple-underscore.github.io/selectors4-ja.html#the-lang-pseudo">こ
+          の照合は，ASCII 大小無視の下で遂行される。</a></li>
+    </ul>
+    <h2>考察</h2>
+    <ul>
+      <li>疑似クラスの名前、疑似要素の名前はASCII大小無視とあるが、これはセレクタの表現に現れる文字列である。</li>
+      <li>属性名、属性値のASCII大小無視は、文書言語（HTML/XML）依存とあるが、これはDOMに現れる文字列である。</li>
+      <li>クラス名はASCII大小を区別するとあるが、これはDOMに現れる文字列である。</li>
+      <ul>
+        <li>クラス名は、属性名「class」の属性値であるが、他の属性と明確に区別される。</li>
+      </ul>
+    </ul>
+    <p>セレクタに現れる文字列は、文書言語や文書モードによらずASCII大小の区別が一定である。したがって、構文解析時に文書言語や文書モードを気にかける必
+      要はなく、マッチング時に気にかける必要が有ると思われる。</p>
+    <ul>
+      <ul>
+      </ul>
+    </ul>
+  </body>
+</html>

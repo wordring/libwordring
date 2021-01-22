@@ -67,6 +67,12 @@ $(function() {
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1node__traits.html">node_traits</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">HTMLノードへの操作を仲介するアダプタ  <a href="structwordring_1_1html_1_1node__traits.html#details">[詳解]</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1node__traits_3_01const__simple__node__tree__iterator_3_01std_1_1u16string_01_4_01_4.html">node_traits&lt; const_simple_node_tree_iterator&lt; std::u16string &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1node__traits_3_01const__simple__node__tree__iterator_3_01std_1_1u32string_01_4_01_4.html">node_traits&lt; const_simple_node_tree_iterator&lt; std::u32string &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1node__traits_3_01const__simple__node__tree__iterator_3_01std_1_1u8string_01_4_01_4.html">node_traits&lt; const_simple_node_tree_iterator&lt; std::u8string &gt; &gt;</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1node__traits_3_01simple__node__tree__iterator_3_01std_1_1u16string_01_4_01_4.html">node_traits&lt; simple_node_tree_iterator&lt; std::u16string &gt; &gt;</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1node__traits_3_01simple__node__tree__iterator_3_01std_1_1u32string_01_4_01_4.html">node_traits&lt; simple_node_tree_iterator&lt; std::u32string &gt; &gt;</a></td></tr>
@@ -125,7 +131,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_name</b> =
 using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type_name</b> = wordring::whatwg::html::document_type_name</td></tr>
 <tr class="separator:a58225f50c4466bac741f3f54cd0b33b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab3be382cff65a4a26e749540a1702afa"><td class="memItemLeft" align="right" valign="top"><a id="ab3be382cff65a4a26e749540a1702afa"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>document_mode_name</b> = wordring::whatwg::html::document_mode_name</td></tr>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_mode_name</b> = <a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::whatwg::html::document_mode_name</a></td></tr>
 <tr class="separator:ab3be382cff65a4a26e749540a1702afa"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a362e305fd266346998593720f9ed25c5"><td class="memItemLeft" align="right" valign="top"><a id="a362e305fd266346998593720f9ed25c5"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>error_name</b> = wordring::whatwg::html::parsing::error_name</td></tr>
@@ -159,6 +165,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>u32simple_tree</b> =
 template&lt;typename String &gt; </td></tr>
 <tr class="memitem:a458ecfd9329f4e05e53f5efe25fdc202"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>simple_node_tree_iterator</b> = typename <a class="el" href="classwordring_1_1tree.html">wordring::tree</a>&lt; <a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &gt;::iterator</td></tr>
 <tr class="separator:a458ecfd9329f4e05e53f5efe25fdc202"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45accb1d26a736cfd878d9da09b57710"><td class="memTemplParams" colspan="2"><a id="a45accb1d26a736cfd878d9da09b57710"></a>
+template&lt;typename String &gt; </td></tr>
+<tr class="memitem:a45accb1d26a736cfd878d9da09b57710"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>const_simple_node_tree_iterator</b> = typename <a class="el" href="classwordring_1_1tree.html">wordring::tree</a>&lt; <a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &gt;::const_iterator</td></tr>
+<tr class="separator:a45accb1d26a736cfd878d9da09b57710"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
@@ -271,14 +281,14 @@ template&lt;typename String &gt; </td></tr>
 <tr class="memitem:a1b3d15f44199ce9fe27be9fc717d36a1"><td class="memTemplItemLeft" align="right" valign="top">String const  &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a1b3d15f44199ce9fe27be9fc717d36a1">data</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
 <tr class="memdesc:a1b3d15f44199ce9fe27be9fc717d36a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードの文字列データを参照する <br /></td></tr>
 <tr class="separator:a1b3d15f44199ce9fe27be9fc717d36a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53fed080e2609007a675663a761ad15c"><td class="memTemplParams" colspan="2"><a id="a53fed080e2609007a675663a761ad15c"></a>
+<tr class="memitem:afa0d706095fe6b797c1c81ce302f9763"><td class="memTemplParams" colspan="2"><a id="afa0d706095fe6b797c1c81ce302f9763"></a>
 template&lt;typename String &gt; </td></tr>
-<tr class="memitem:a53fed080e2609007a675663a761ad15c"><td class="memTemplItemLeft" align="right" valign="top">String const  &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>name</b> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &amp;node)</td></tr>
-<tr class="separator:a53fed080e2609007a675663a761ad15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40614752771ac50c98158a8aad927b3e"><td class="memTemplParams" colspan="2"><a id="a40614752771ac50c98158a8aad927b3e"></a>
+<tr class="memitem:afa0d706095fe6b797c1c81ce302f9763"><td class="memTemplItemLeft" align="right" valign="top">String const  &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>name</b> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
+<tr class="separator:afa0d706095fe6b797c1c81ce302f9763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d3fb19f997c47e504fc3d9fc6a1fddc"><td class="memTemplParams" colspan="2"><a id="a6d3fb19f997c47e504fc3d9fc6a1fddc"></a>
 template&lt;typename String &gt; </td></tr>
-<tr class="memitem:a40614752771ac50c98158a8aad927b3e"><td class="memTemplItemLeft" align="right" valign="top">String const  &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>target</b> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &amp;node)</td></tr>
-<tr class="separator:a40614752771ac50c98158a8aad927b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d3fb19f997c47e504fc3d9fc6a1fddc"><td class="memTemplItemLeft" align="right" valign="top">String const  &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>target</b> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
+<tr class="separator:a6d3fb19f997c47e504fc3d9fc6a1fddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade43f92de5684975a7d8a86c24ae4de1"><td class="memTemplParams" colspan="2"><a id="ade43f92de5684975a7d8a86c24ae4de1"></a>
 template&lt;typename String &gt; </td></tr>
 <tr class="memitem:ade43f92de5684975a7d8a86c24ae4de1"><td class="memTemplItemLeft" align="right" valign="top">auto&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &amp;node)</td></tr>
@@ -357,6 +367,11 @@ template&lt;typename String &gt; </td></tr>
 <tr class="memitem:a8b4b992a4a027946b3f77a0daa20e2dc"><td class="memTemplItemLeft" align="right" valign="top">ns_name&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a8b4b992a4a027946b3f77a0daa20e2dc">get_namespace_id</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
 <tr class="memdesc:a8b4b992a4a027946b3f77a0daa20e2dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素の名前空間を返す <br /></td></tr>
 <tr class="separator:a8b4b992a4a027946b3f77a0daa20e2dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d8fc8f2310383538f4f25fe06ea1931"><td class="memTemplParams" colspan="2"><a id="a8d8fc8f2310383538f4f25fe06ea1931"></a>
+template&lt;typename String &gt; </td></tr>
+<tr class="memitem:a8d8fc8f2310383538f4f25fe06ea1931"><td class="memTemplItemLeft" align="right" valign="top">String&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a8d8fc8f2310383538f4f25fe06ea1931">get_namespace</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
+<tr class="memdesc:a8d8fc8f2310383538f4f25fe06ea1931"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素の名前空間を返す <br /></td></tr>
+<tr class="separator:a8d8fc8f2310383538f4f25fe06ea1931"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a14a9a691f9b1fff9e349cb7304c7f449"><td class="memTemplParams" colspan="2"><a id="a14a9a691f9b1fff9e349cb7304c7f449"></a>
 template&lt;typename String &gt; </td></tr>
 <tr class="memitem:a14a9a691f9b1fff9e349cb7304c7f449"><td class="memTemplItemLeft" align="right" valign="top">tag_name&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a14a9a691f9b1fff9e349cb7304c7f449">get_local_name_id</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
@@ -376,10 +391,10 @@ template&lt;typename String &gt; </td></tr>
 <tr class="separator:a083a700a01525cb956478d6cf0d54541"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af551321679011d10fb6fd3b1313aad75"><td class="memTemplParams" colspan="2"><a id="af551321679011d10fb6fd3b1313aad75"></a>
 template&lt;typename String &gt; </td></tr>
-<tr class="memitem:af551321679011d10fb6fd3b1313aad75"><td class="memTemplItemLeft" align="right" valign="top">document_mode_name&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_document_mode</b> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
+<tr class="memitem:af551321679011d10fb6fd3b1313aad75"><td class="memTemplItemLeft" align="right" valign="top"><a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a>&#160;</td><td class="memTemplItemRight" valign="bottom"><b>get_document_mode</b> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; const &amp;node)</td></tr>
 <tr class="separator:af551321679011d10fb6fd3b1313aad75"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a128239fff1cf0bca1d3219882765622a"><td class="memTemplParams" colspan="2">template&lt;typename String &gt; </td></tr>
-<tr class="memitem:a128239fff1cf0bca1d3219882765622a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">set_document_mode</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &amp;node, document_mode_name mode)</td></tr>
+<tr class="memitem:a128239fff1cf0bca1d3219882765622a"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">set_document_mode</a> (<a class="el" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a>&lt; String &gt; &amp;node, <a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a> mode)</td></tr>
 <tr class="memdesc:a128239fff1cf0bca1d3219882765622a"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書ノードに文書モードを設定する  <a href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">[詳解]</a><br /></td></tr>
 <tr class="separator:a128239fff1cf0bca1d3219882765622a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -836,7 +851,7 @@ template&lt;typename String &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">document_mode_name&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a>&#160;</td>
           <td class="paramname"><em>mode</em>&#160;</td>
         </tr>
         <tr>

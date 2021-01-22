@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>HTML5 設計ノート</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body>
+    <p><a href="../index.html"><img src="../../up.svg" alt=""></a></p>
+    <h1>HTML5 設計ノート</h1>
+    <h2>DOM</h2>
+    <p>wordring_cpp は特定の DOM 実装を想定しない。DOM 操作は、<b> node_traits&lt;&gt;</b>
+      テンプレートクラスを通して行われる。node_traits&lt;&gt; の特殊化を用意することで、どのような DOM 実装にも対応が可能となる。</p>
+    <h3>要素名、属性名、名前空間接頭辞</h3>
+    <p>HTML5 パーサー内で既知のタグ名や属性名を整数として扱う。整数化によって switch
+      文の利用を可能とし、コンパイラによる最適化を支援する。そのために以下の列挙体を用意した。</p>
+    <ul>
+      <li>ns_name</li>
+      <li>tag_name</li>
+      <li>attribute_name</li>
+    </ul>
+    <p>node_traits&lt;&gt; は、ノードから整数を返す関数が必須となる。</p>
+    <ul>
+      <li>static <b>ns_name</b> get_namespace_id(node_pointer it)</li>
+      <li>static <b>tag_name</b> get_local_name_id(node_pointer it)</li>
+      <li>static <b>ns_name</b> get_namespace_id(attribute_type const&amp;
+        attr)</li>
+      <li>static <b>attribute_name</b> get_local_name_id(attribute_type
+        const&amp; attr)</li>
+    </ul>
+    <p><br>
+    </p>
+    <p></p>
+  </body>
+</html>

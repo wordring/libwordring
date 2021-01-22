@@ -49,7 +49,7 @@ namespace wordring::html
 		/*! @brief 親要素を返す
 
 		根に親は無い。
-		この場合、create_pointer() が返すものと同一のポインタを返す。
+		この場合、pointer() が返すものと同一のポインタを返す。
 		*/
 		static node_pointer parent(node_pointer it) { return it.parent(); }
 
@@ -101,6 +101,11 @@ namespace wordring::html
 		static ns_name get_namespace_id(node_pointer it)
 		{
 			return wordring::html::get_namespace_id(*it);
+		}
+
+		static string_type get_namespace(node_pointer it)
+		{
+			return wordring::html::get_namespace(*it);
 		}
 
 		/*! @brief 要素のローカル名を返す
@@ -168,6 +173,11 @@ namespace wordring::html
 		static ns_name get_namespace_id(attribute_type const& attr)
 		{
 			return wordring::html::get_namespace_id(attr);
+		}
+
+		static string_type get_namespace(attribute_type const& attr)
+		{
+			return wordring::html::get_namespace(attr);
 		}
 
 		static attribute_name get_local_name_id(attribute_type const& attr)
@@ -282,6 +292,15 @@ namespace wordring::html
 		{
 			return document_type_type(name, public_id, system_id);
 		}
+
+		// ----------------------------------------------------------------------------------------
+		// CSS Support
+		// ----------------------------------------------------------------------------------------
+
+		static bool is_root(node_pointer it)
+		{
+			return is_element(it) && is_html_element_of(it, tag_name::Html);
+		}
 	};
 
 	template <typename String>
@@ -295,4 +314,18 @@ namespace wordring::html
 
 	template<>
 	struct node_traits<simple_node_tree_iterator<std::u32string>> : public simple_node_traits<simple_node_tree_iterator<std::u32string>> {};
+
+	template <typename String>
+	using const_simple_node_tree_iterator = typename wordring::tree<simple_node<String>>::const_iterator;
+
+	template<>
+	struct node_traits<const_simple_node_tree_iterator<std::u8string>> : public simple_node_traits<const_simple_node_tree_iterator<std::u8string>> {};
+
+	template<>
+	struct node_traits<const_simple_node_tree_iterator<std::u16string>> : public simple_node_traits<const_simple_node_tree_iterator<std::u16string>> {};
+
+	template<>
+	struct node_traits<const_simple_node_tree_iterator<std::u32string>> : public simple_node_traits<const_simple_node_tree_iterator<std::u32string>> {};
+
+
 }
