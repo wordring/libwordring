@@ -38,6 +38,24 @@ Windows 用、 Linux 用など、個別の環境用のパッケージは有り�
 
 # wordrng_cpp ライブラリのビルド
 
+## 要求環境
+
+- C++17
+- 出来るだけ新しい CMake
+
+## 要求ライブラリ
+
+- 出来るだけ新しい Boost
+
+## 要求サブモジュール
+
+| 名前 | 説明 |
+|----|----|
+| https://github.com/publicsuffix/list | URLパーサでデータを使用 |
+| https://github.com/whatwg/encoding | HTML5パーサでデータを使用 |
+| https://github.com/dwyl/english-words | TRIE用単体テストでデータを使用 |
+| https://github.com/hingston/japanese | TRIE用単体テストでデータを使用 |
+
 ## Ubuntu20.04 (WSL) のメモ
 
 - sudo apt install build-essential cmake ninja-build libboost-all-dev
@@ -60,13 +78,13 @@ CMake がパッケージを見つけられない理由の大部分は、別の�
 Windows 用に CMake プロジェクトをビルドするのはフォルダを開いてボタンを押すだけですが、ライブラリの用意は非常に大変です。
 そこで、 VCPKG の利用をお勧めします。
 
-## 文書
+# 文書
 
 | 名前 | 説明 |
 |----|----|
 | https://wordring.github.io/wordring_cpp/ | 付属文書 |
 
-## フォルダとファイル
+# フォルダとファイル
 
 | 名前 | 説明 |
 |----|----|
@@ -84,21 +102,3 @@ Windows 用に CMake プロジェクトをビルドするのはフォルダを�
 | CMakeSettings.json | Visual studio用のCMake環境設定ファイル |
 | LICENSE | パブリック・ドメインであることを明示するライセンス・ファイル |
 | README.md | このファイル |
-
-## 要求環境
-
-- C++17
-- 出来るだけ新しい CMake
-
-## 要求ライブラリ
-
-- 出来るだけ新しい Boost
-
-## 要求サブモジュール
-
-| 名前 | 説明 |
-|----|----|
-| https://github.com/publicsuffix/list | URLパーサでデータを使用 |
-| https://github.com/whatwg/encoding | HTML5パーサでデータを使用 |
-| https://github.com/dwyl/english-words | TRIE用単体テストでデータを使用 |
-| https://github.com/hingston/japanese | TRIE用単体テストでデータを使用 |
