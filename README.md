@@ -17,7 +17,7 @@ Linux と Windows でテストされています。
 プログラミング言語として C\++17 、ビルド・システムに CMake を用いる。
 テストしている環境は以下の通り。
 
-- Linux gcc8
+- Linux gcc9
 - Windows10 clang-cl
 - Windows10 cl
 
@@ -35,6 +35,28 @@ Windows 用、 Linux 用など、個別の環境用のパッケージは有り�
 
 のが容易です。
 ライブラリのビルドは、あなたのプロジェクトのビルド時に、必要に応じて CMake が行います。
+
+## Ubuntu20.04 (WSL) の手順
+
+- sudo apt install build-essential cmake ninja-build libboost-all-dev
+
+## Debian 10 buster のメモ
+
+標準の C++ コンパイラが gcc-8 です。
+このコンパイラは、 c\++17 への対応が弱いです。
+もう少しで Debian 11 bullseye が出荷されると　gcc-10 になるので対応を行っていません。
+具体的には、　CMakeLists.txt に -lstdc++fs を含めると gcc-8 でビルドできます。
+
+## Visualstudio 2019 のメモ
+
+Visualstudio 2019 から WSL 上の Linux コマンドを直接呼び出しビルドすることが出来ます。
+しかし、 WSL 上で複数のディストリビューションを切り替えて使う場合は、注意が必要です。
+Visualstudio の作業ディレクトリに CMake のキャッシュが残っているからです。
+デフォルトのディストリビューションを切り替えた時は、メニューバーの「プロジェクト」から CMake キャッシュを削除してください。
+CMake がパッケージを見つけられない理由の大部分は、別のディストリで使ったキャッシュが残っているからです。
+
+Windows10 で CMake プロジェクトをビルドするのはフォルダ開いてボタンを押すだけですが、ライブラリの用意は非常に大変です。
+そこで、 VCPKG の利用をお勧めします。
 
 ## 文書
 

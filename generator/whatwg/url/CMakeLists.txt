@@ -13,9 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package (
 	Boost 1.67 REQUIRED
-	COMPONENTS
-		system
-		filesystem
 )
 
 include_directories (
@@ -30,9 +27,3 @@ add_executable(
 add_definitions(-DPSL_DATA_PATH=${Wordring_DIR}/submodules/publicsuffix/list/public_suffix_list.dat)
 add_definitions(-DPSL_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/encoding/indexes.hpp)
 add_definitions(-DPSL_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_code_point.cpp)
-
-target_link_libraries(
-	public_suffix_list
-		${Boost_FILESYSTEM_LIBRARY}
-		${Boost_SYSTEM_LIBRARY}
-)

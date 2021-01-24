@@ -26,17 +26,6 @@ namespace
 	using const_iterator = html::u8simple_tree::const_iterator;
 	using tree_iterator = wordring::tree_iterator<html::u8simple_tree::const_iterator>;
 
-	std::vector<css::syntax_primitive> s_primitives;
-
-	inline css::syntax_primitive_stream stream(std::u32string in)
-	{
-		std::optional<std::vector<css::syntax_primitive>> v = css::parse_grammar(std::move(in)
-			, [](std::vector<css::syntax_primitive> const&)->bool { return true; });
-
-		s_primitives = std::move(*v);
-		return css::syntax_primitive_stream(s_primitives);
-	}
-
 	inline html::u8simple_tree parse(std::u8string html)
 	{
 		return html::make_document<html::u8simple_tree>(html.begin(), html.end());
@@ -56,7 +45,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_1)
 	auto tree = parse(u8"<p id='test'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -81,7 +71,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_2)
 	auto tree = parse(u8"<p ID='TEST'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -99,7 +90,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_3)
 	auto tree = parse(u8"<p ID='test'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -118,7 +110,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_4)
 	auto tree = parse(u8"<p ID='TEST'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::LimitedQuirks };
@@ -137,7 +130,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_5)
 	auto tree = parse(u8"<p ID>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -156,7 +150,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_6)
 	auto tree = parse(u8"<p ID=''>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -174,7 +169,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_7)
 	auto tree = parse(u8"<p id='test'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Xml, document_mode_name::NoQuirks };
@@ -194,7 +190,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_8)
 	auto tree = parse(u8"<p ID='test'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Xml, document_mode_name::NoQuirks };
@@ -215,7 +212,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_9)
 	auto tree = parse(u8"<p id='TEST'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = id_selector::consume(stream(U"#test"));
+	parse_context pc;
+	auto m = css::parse_grammar<id_selector>(U"#test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Xml, document_mode_name::NoQuirks };
@@ -237,7 +235,8 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_match_1)
 	auto tree = parse(u8"<p class='test1'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = class_selector::consume(stream(U".test1"));
+	parse_context pc;
+	auto m = css::parse_grammar<class_selector>(U".test1", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::NoQuirks };
@@ -258,7 +257,8 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_match_2)
 	auto tree = parse(u8"<p CLASS='test1 test2 TEST3'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = class_selector::consume(stream(U".test3"));
+	parse_context pc;
+	auto m = css::parse_grammar<class_selector>(U".test3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -277,7 +277,8 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_match_3)
 	auto tree = parse(u8"<p CLASS='test1 test2 TEST3'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = class_selector::consume(stream(U".test3"));
+	parse_context pc;
+	auto m = css::parse_grammar<class_selector>(U".test3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::LimitedQuirks };
@@ -296,7 +297,8 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_match_4)
 	auto tree = parse(u8"<p CLASS>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = class_selector::consume(stream(U".test"));
+	parse_context pc;
+	auto m = css::parse_grammar<class_selector>(U".test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -315,7 +317,8 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_match_5)
 	auto tree = parse(u8"<p CLASS=''>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = class_selector::consume(stream(U".test"));
+	parse_context pc;
+	auto m = css::parse_grammar<class_selector>(U".test", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -337,7 +340,8 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_class_selector_match_1)
 	auto tree = parse(u8"<p>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = pseudo_class_selector::consume(stream(U":root"));
+	parse_context pc;
+	auto m = css::parse_grammar<pseudo_class_selector>(U":root", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -369,7 +373,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_1)
 	auto tree = parse(u8"<p attr>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[ attr ]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[ attr ]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -390,7 +395,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_2)
 	auto tree = parse(u8"<p ATTR>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -407,7 +413,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_3)
 	auto tree = parse(u8"<p attr>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[ATTR]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[ATTR]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -425,7 +432,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_4)
 	auto tree = parse(u8"<p attr>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[ATTR]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[ATTR]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Xml, document_mode_name::NoQuirks };
@@ -443,7 +451,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_5)
 	auto tree = parse(u8"<p attr='val'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr='val']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr='val']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -460,7 +469,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_6)
 	auto tree = parse(u8"<p attr='  val  '>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr='  val  ']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr='  val  ']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -477,7 +487,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_7)
 	auto tree = parse(u8"<p attr='VAL'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr='val'i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr='val'i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -494,7 +505,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_8)
 	auto tree = parse(u8"<p attr='VAL'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr='val's]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr='val's]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -512,7 +524,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_9)
 	auto tree = parse(u8"<p attr='val'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr~='val']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr~='val']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -529,7 +542,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_10)
 	auto tree = parse(u8"<p attr='val1 val2 val3'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr~='val3']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr~='val3']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -546,7 +560,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_11)
 	auto tree = parse(u8"<p attr='val1 val2 val3'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr~='VAL3' i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr~='VAL3' i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -563,7 +578,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_12)
 	auto tree = parse(u8"<p attr='val1 val2 val3'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr~='VAL3']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr~='VAL3']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -581,7 +597,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_13)
 	auto tree = parse(u8"<p attr='val-'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr|='val']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr|='val']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -598,7 +615,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_14)
 	auto tree = parse(u8"<p attr='va-'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr|='val']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr|='val']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -615,7 +633,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_15)
 	auto tree = parse(u8"<p attr='val'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr|='val']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr|='val']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -632,7 +651,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_16)
 	auto tree = parse(u8"<p attr='val'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr|='VAL'i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr|='VAL'i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -649,7 +669,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_17)
 	auto tree = parse(u8"<p attr='va-'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr|='VAL'i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr|='VAL'i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -667,7 +688,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_18)
 	auto tree = parse(u8"<p attr='valval'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr^='val']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr^='val']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -684,7 +706,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_19)
 	auto tree = parse(u8"<p attr='valval'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr^='VAL'i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr^='VAL'i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -701,7 +724,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_20)
 	auto tree = parse(u8"<p attr='valval'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr^='VAL']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr^='VAL']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -719,7 +743,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_21)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr$='bar']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr$='bar']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -736,7 +761,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_22)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr$='BAR'i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr$='BAR'i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -753,7 +779,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_23)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr$='BAR']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr$='BAR']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -771,7 +798,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_24)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr*='foo']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr*='foo']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -788,7 +816,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_25)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr*='oob']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr*='oob']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -805,7 +834,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_26)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr*='bar']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr*='bar']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -822,7 +852,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_27)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr*='OOB'i]"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr*='OOB'i]", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -839,7 +870,8 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_28)
 	auto tree = parse(u8"<p attr='foobar'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = attribute_selector::consume(stream(U"[attr*='FOO']"));
+	parse_context pc;
+	auto m = css::parse_grammar<attribute_selector>(U"[attr*='FOO']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -860,7 +892,8 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_match_1)
 	auto tree = parse(u8"<p attr='foo'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = subclass_selector::consume(stream(U"[attr='foo']"));
+	parse_context pc;
+	auto m = css::parse_grammar<subclass_selector>(U"[attr='foo']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -877,7 +910,8 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_match_2)
 	auto tree = parse(u8"<p attr='foo'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = subclass_selector::consume(stream(U"[attr='FOO']"));
+	parse_context pc;
+	auto m = css::parse_grammar<subclass_selector>(U"[attr='FOO']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -898,7 +932,8 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_match_1)
 	auto tree = parse(u8"<p>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = type_selector::consume(stream(U"p"));
+	parse_context pc;
+	auto m = css::parse_grammar<type_selector>(U"p", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -918,7 +953,8 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_match_2)
 	auto tree = parse(u8"<p>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = type_selector::consume(stream(U"p"));
+	parse_context pc;
+	auto m = css::parse_grammar<type_selector>(U"p", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -942,7 +978,8 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_match_1)
 	auto tree = parse(u8"<p>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = simple_selector::consume(stream(U"p"));
+	parse_context pc;
+	auto m = css::parse_grammar<simple_selector>(U"p", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -962,7 +999,8 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_match_2)
 	auto tree = parse(u8"<p attr='foo'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = simple_selector::consume(stream(U"[attr='foo']"));
+	parse_context pc;
+	auto m = css::parse_grammar<simple_selector>(U"[attr='foo']", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -979,7 +1017,8 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_match_3)
 	auto tree = parse(u8"<p attr='foo'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = simple_selector::consume(stream(U"h1"));
+	parse_context pc;
+	auto m = css::parse_grammar<simple_selector>(U"h1", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1001,7 +1040,8 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_match_1)
 	auto tree = parse(u8"<p id='id1' class='cls1 cls2'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = compound_selector::consume(stream(U"p#id1.cls2"));
+	parse_context pc;
+	auto m = css::parse_grammar<compound_selector>(U"p#id1.cls2", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1021,7 +1061,8 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_match_2)
 	auto tree = parse(u8"<p id='id1' class='cls1 cls2'>paragraph</p>");
 	tree_iterator it(tree.begin());
 
-	auto m = compound_selector::consume(stream(U"p#id1.cls3"));
+	parse_context pc;
+	auto m = css::parse_grammar<compound_selector>(U"p#id1.cls3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1043,7 +1084,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_1)
 	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"div span"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"div span", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1063,7 +1105,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_2)
 	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"p span"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"p span", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1080,7 +1123,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_3)
 	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"div p"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"div p", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1097,7 +1141,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_4)
 	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"span p"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"span p", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1115,7 +1160,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_6)
 	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"div>p"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"div>p", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1132,7 +1178,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_7)
 	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"p>div"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"p>div", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1150,7 +1197,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_8)
 	auto tree = parse(u8"<div><p><h1></h1><h2>h2!</h2><h3></h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h1+h2"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h1+h2", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1170,7 +1218,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_9)
 	auto tree = parse(u8"<div><p><h1></h1>text1<!-- Comment --><h2></h2><h3></h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h1+h2"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h1+h2", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1187,7 +1236,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_10)
 	auto tree = parse(u8"<div><p><h1></h1><h2></h2><h3></h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h1+h3"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h1+h3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1205,7 +1255,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_11)
 	auto tree = parse(u8"<div><p><h1></h1><h2></h2><h3>h3!</h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h1~h3"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h1~h3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1225,7 +1276,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_12)
 	auto tree = parse(u8"<div><p><h1></h1>text1<!-- Comment --><h2></h2>text1<!-- Comment --><h3></h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h1~h3"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h1~h3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1242,7 +1294,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_13)
 	auto tree = parse(u8"<div><p><h1></h1><h2></h2><h3></h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h2~h3"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h2~h3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1259,7 +1312,8 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_14)
 	auto tree = parse(u8"<div><p><h1></h1><h2></h2><h3></h3></p></div>");
 	tree_iterator it(tree.begin());
 
-	auto m = complex_selector::consume(stream(U"h3~h3"));
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector>(U"h3~h3", pc);
 	while (it != tree_iterator())
 	{
 		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
@@ -1279,7 +1333,9 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_match_1)
 
 	auto tree = parse(u8"<div><p><h1></h1><h2></h2><h3>h3!</h3></p></div>");
 	tree_iterator it1(tree.begin());
-	auto m1 = type_selector::consume(stream(U"div"));
+
+	parse_context pc;
+	auto m1 = css::parse_grammar<type_selector>(U"div", pc);
 
 	match_context<const_iterator> ctx1{ document_type_name::Html, document_mode_name::Quirks };
 	while (it1 != tree_iterator())
@@ -1289,19 +1345,9 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_match_1)
 	}
 	auto div = it1.base();
 
-	auto m2 = relative_selector::consume(stream(U"p > h1"));
+	auto m2 = css::parse_grammar<relative_selector>(U"p > h1", pc);
 	match_context<const_iterator> ctx2{ document_type_name::Html, document_mode_name::Quirks };
 	m2.absolutize(ctx2);
 }
-
-
-// ------------------------------------------------------------------------------------------------
-// 
-// ------------------------------------------------------------------------------------------------
-
-// ------------------------------------------------------------------------------------------------
-// 
-// ------------------------------------------------------------------------------------------------
-
 
 BOOST_AUTO_TEST_SUITE_END()

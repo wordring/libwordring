@@ -11,12 +11,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+set(Boost_USE_STATIC_LIBS ON)
 find_package (
 	Boost 1.67 REQUIRED
-	COMPONENTS
-		system
-		filesystem
-#		unit_test_framework
 )
 
 #find_library (
@@ -45,39 +42,18 @@ find_package (
 #)
 
 include_directories (
-#	${Gumbo_INCLUDE_DIR}
 	${Boost_INCLUDE_DIRS}
-#	${ICU_INCLUDE_DIR}
 	${Wordring_INCLUDE_DIR}
 )
 
 set(INCLUDE_DIR ${Wordring_INCLUDE_DIR}/wordring)
 
-#add_subdirectory (html)
-#add_subdirectory (lang)
-#add_subdirectory (sqlite)
-#add_subdirectory (string)
-#add_subdirectory (tag_tree)
-#add_subdirectory (util)
 add_subdirectory (whatwg)
 add_subdirectory (wwwc)
 
 add_library (
 	${PROJECT_NAME}
-#		$<TARGET_OBJECTS:html>
-#		$<TARGET_OBJECTS:lang>
-#		$<TARGET_OBJECTS:sqlite>
-#		$<TARGET_OBJECTS:string>
-#		$<TARGET_OBJECTS:tag_tree>
-#		$<TARGET_OBJECTS:util>
 		$<TARGET_OBJECTS:whatwg>
 		$<TARGET_OBJECTS:wwwc>
-)
-
-target_link_libraries (
-	${PROJECT_NAME}
-#		${Gumbo_static_LIBRARY}
-#		${ICU_LIBRARIES}
-#		sqlite3
 )
 

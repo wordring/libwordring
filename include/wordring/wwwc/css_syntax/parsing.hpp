@@ -3,6 +3,8 @@
 #include <wordring/wwwc/css_syntax/input_stream.hpp>
 #include <wordring/wwwc/css_syntax/tokenization.hpp>
 
+#include <wordring/wwwc/css_defs.hpp>
+
 #include <wordring/compatibility.hpp>
 #include <wordring/whatwg/infra/infra.hpp>
 
@@ -88,8 +90,7 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	template <typename Syntax, typename ErrorHandler>
-	inline std::vector<std::optional<std::vector<syntax_primitive>>>
-		parse_comma_list(token_stream& in, Syntax s, ErrorHandler handler);
+	inline std::vector<Syntax> parse_comma_list(token_stream& in, parse_context& ctx, ErrorHandler handler);
 
 	template <typename ErrorHandler>
 	inline std::vector<syntax_primitive> parse_list_of_component_values(token_stream& in, ErrorHandler handler);
@@ -156,8 +157,8 @@ namespace wordring::wwwc::css
 	/*! @brief CSS文法に沿って解析する
 	*
 	* @param [in] in      入力ストリーム
-	* @param [in] s       各種CSS規格で定義される文法
-	* @param [in] handler エラーハンドラ
+	* @param [in] ctx     パーサー・コンテキスト
+	* @param [in] handler エラー・ハンドラ
 	*
 	* @return コンポーネント値のリスト（std::vector<component_value>）、あるいは失敗。
 	*
@@ -186,28 +187,25 @@ namespace wordring::wwwc::css
 	* @sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-something-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler = std::nullptr_t>
-	inline std::optional<std::vector<syntax_primitive>>
-		parse_grammar(token_stream& in, Syntax syntax, ErrorHandler handler = nullptr)
+	inline Syntax parse_grammar(token_stream& in, parse_context& ctx, ErrorHandler handler = nullptr)
 	{
-		using result_type = std::vector<syntax_primitive>;
-
 		std::vector<syntax_primitive> v = parse_list_of_component_values(in, handler);
-
-		return syntax(v) ? std::make_optional<result_type>(std::move(v)) : std::optional<result_type>();
+		syntax_primitive_stream s(v);
+		return Syntax::consume(s, ctx);
 	}
 
 	template <typename Syntax>
-	inline std::optional<std::vector<syntax_primitive>> parse_grammar(std::vector<syntax_primitive>&& in, Syntax syntax)
+	inline Syntax parse_grammar(std::vector<syntax_primitive>&& in, parse_context& ctx)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
-		return parse_grammar(s, syntax, nullptr);
+		return parse_grammar<Syntax>(s, ctx, nullptr);
 	}
 
 	template <typename Syntax>
-	inline std::optional<std::vector<syntax_primitive>> parse_grammar(std::u32string&& in, Syntax syntax)
+	inline Syntax parse_grammar(std::u32string&& in, parse_context& ctx)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
-		return parse_grammar(s, syntax, nullptr);
+		return parse_grammar<Syntax>(s, ctx, nullptr);
 	}
 
 	// --------------------------------------------------------------------------------------------
@@ -220,8 +218,8 @@ namespace wordring::wwwc::css
 	/*! @brief カンマ区切りのリストをCSS文法に沿って構文解析する
 	*
 	* @param [in] in      入力ストリーム
-	* @param [in] s       各種CSS規格で定義される文法
-	* @param [in] handler エラーハンドラ
+	* @param [in] ctx     パーサー・コンテキスト
+	* @param [in] handler エラー・ハンドラ
 	*
 	* @return 「コンポーネント値のリスト（std::vector<syntax_primitive>）、あるいは失敗」のリスト
 	*
@@ -251,12 +249,9 @@ namespace wordring::wwwc::css
 	* @sa https://triple-underscore.github.io/css-syntax-ja.html#css-parse-a-comma-separated-list-according-to-a-css-grammar
 	*/
 	template <typename Syntax, typename ErrorHandler>
-	inline std::vector<std::optional<std::vector<syntax_primitive>>>
-		parse_comma_list(token_stream& in, Syntax syntax, ErrorHandler handler)
+	inline std::vector<Syntax> parse_comma_list(token_stream& in, parse_context& ctx, ErrorHandler handler)
 	{
-		using result_type = std::vector<std::optional<std::vector<syntax_primitive>>>;
-
-		result_type result;
+		std::vector<Syntax> result;
 
 		std::vector<std::vector<syntax_primitive>> v = parse_comma_separated_list_of_component_values(in, handler);
 		auto it1 = v.begin();
@@ -266,26 +261,24 @@ namespace wordring::wwwc::css
 			std::vector<syntax_primitive> tmp;
 			std::swap(*it1++, tmp);
 			token_stream s(std::move(tmp));
-			result.emplace_back(parse_grammar(s, syntax, handler));
+			result.emplace_back(parse_grammar<Syntax>(s, ctx, handler));
 		}
 
 		return result;
 	}
 
 	template <typename Syntax>
-	inline std::vector<std::optional<std::vector<syntax_primitive>>>
-		parse_comma_list(std::vector<syntax_primitive>&& in, Syntax syntax)
+	inline std::vector<Syntax> parse_comma_list(std::vector<syntax_primitive>&& in, parse_context& ctx)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
-		return parse_comma_list(s, syntax, nullptr);
+		return parse_comma_list<Syntax>(s, ctx, nullptr);
 	}
 
 	template <typename Syntax>
-	inline std::vector<std::optional<std::vector<syntax_primitive>>>
-		parse_comma_list(std::u32string&& in, Syntax syntax)
+	inline std::vector<Syntax> parse_comma_list(std::u32string&& in, parse_context& ctx)
 	{
 		token_stream s(normalize_into_token_stream(std::move(in), nullptr));
-		return parse_comma_list(s, syntax, nullptr);
+		return parse_comma_list<Syntax>(s, ctx, nullptr);
 	}
 
 	// --------------------------------------------------------------------------------------------

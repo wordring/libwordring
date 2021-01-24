@@ -137,9 +137,9 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静的公開メンバ関数</h2></td></tr>
-<tr class="memitem:a72371a086004039a4a751d28ac8188b1"><td class="memItemLeft" align="right" valign="top"><a id="a72371a086004039a4a751d28ac8188b1"></a>
-static <a class="el" href="classwordring_1_1wwwc_1_1css_1_1attribute__selector.html">attribute_selector</a>&#160;</td><td class="memItemRight" valign="bottom"><b>consume</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive__stream.html">syntax_primitive_stream</a> in)</td></tr>
-<tr class="separator:a72371a086004039a4a751d28ac8188b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c585e2d7b1a7e36a43024b7deca45c1"><td class="memItemLeft" align="right" valign="top"><a id="a2c585e2d7b1a7e36a43024b7deca45c1"></a>
+static <a class="el" href="classwordring_1_1wwwc_1_1css_1_1attribute__selector.html">attribute_selector</a>&#160;</td><td class="memItemRight" valign="bottom"><b>consume</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive__stream.html">syntax_primitive_stream</a> in, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">parse_context</a> &amp;ctx)</td></tr>
+<tr class="separator:a2c585e2d7b1a7e36a43024b7deca45c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 その他の継承メンバ</h2></td></tr>
@@ -157,7 +157,7 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" 
 <div class="textblock"><p>&lt;attribute-selector&gt; </p>
 <div class="fragment"><div class="line">&lt;attribute-selector&gt; = <span class="charliteral">&#39;[&#39;</span> &lt;wq-name&gt; <span class="charliteral">&#39;]&#39;</span> |</div>
 <div class="line">    <span class="charliteral">&#39;[&#39;</span> &lt;wq-name&gt; &lt;attr-matcher&gt; [ &lt;<span class="keywordtype">string</span>-token&gt; | &lt;ident-token&gt; ] &lt;attr-modifier&gt;? <span class="charliteral">&#39;]&#39;</span></div>
-</div><!-- fragment --><dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__list.html" title="&lt;selector-list&gt;">selector_list</a> </dd>
+</div><!-- fragment --><dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__list.html" title="&lt;selector-list&gt;">selector_list</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/selectors-4/#typedef-attribute-selector">https://drafts.csswg.org/selectors-4/#typedef-attribute-selector</a> </dd>
 <dd>
@@ -203,7 +203,7 @@ template&lt;typename NodePointer &gt; </div>
 <p>名前空間をサポートしないcontextで、名前空間を指定したセレクタは無効なセレクタとなり何にもマッチしない。</p>
 <dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1id__selector.html#aa60d52a894ba8fa3ea622c93581be101" title="ノードにマッチするか検査する">id_selector::match()</a></dd></dl>
 <hr  />
- <p>同一要素内で属性名の重複は、HTML5はトークン化ステージで後ろの属性が捨てられ、XMLはエラーとなる。 したがって、属性名の重複は考慮しなくて良い。</p>
+<p>同一要素内で属性名の重複は、HTML5はトークン化ステージで後ろの属性が捨てられ、XMLはエラーとなる。 したがって、属性名の重複は考慮しなくて良い。</p>
 <p>HTML 下では、要素名属性名はASCII大小無視で照合される。 XML 下では、要素名属性名はASCII大小区別される。 HTML5 パーサーはトークン化ステージですでに属性名を小文字化して格納する。</p>
 <p>属性値はASCII大小区別される。 [課題] 属性名「 class 」のASCII大小をどう扱うか？</p>
 <dl class="section user"><dt>名前空間</dt><dd></dd></dl>

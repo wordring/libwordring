@@ -1,5 +1,6 @@
-﻿#include <algorithm>
-//#include <filesystem>
+﻿
+#include <algorithm>
+#include <filesystem>
 #include <fstream>
 #include <map>
 #include <set>
@@ -8,7 +9,7 @@
 #include <vector>
 
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+//#include <boost/filesystem.hpp>
 
 #include <iostream>
 
@@ -21,8 +22,8 @@ int main()
 	std::set<std::vector<uint16_t>> positive_list{}, negative_list{};
 
 	{
-		//std::filesystem::path data_path{ TO_STRING(PSL_DATA_PATH) };
-		boost::filesystem::path data_path{ TO_STRING(PSL_DATA_PATH) };
+		std::filesystem::path data_path{ TO_STRING(PSL_DATA_PATH) };
+		//boost::filesystem::path data_path{ TO_STRING(PSL_DATA_PATH) };
 		std::ifstream in{ data_path.c_str() };
 		assert(!in.fail());
 

@@ -2,12 +2,32 @@
 
 #include <wordring/html/html_defs.hpp>
 
+#include <map>
 #include <optional>
+#include <string>
 #include <vector>
 
 namespace wordring::wwwc::css
 {
-	/*! @brief セレクタとノードの照合に使われるcontext
+	/*! @brief CSS の構文解析に使われるコンテキスト
+	* 
+	* 構文規則を表現する複数のクラスを横断して情報を引き継ぐ必要が有るため、コンテキスト・クラスを作った。
+	* 例えば、 @namespace によって定義される名前空間は、後続の構文規則内で使われる。
+	* CSS は CFG でないため、構文解析中に意味解析を必要とする場合がある。
+	* 
+	* 名前空間のようなノードとの照合に使われるフィールドは照合時に引数の match_context へコピーする必要が有る。
+	* 
+	* 構文解析の時点で文書形式に依存させないために、 match_context と別のクラスを設けた。
+	* つまり、一つのセレクタで HTML と XHTML の両方に対応できることを明確に示す。
+	*/
+	struct parse_context
+	{
+		/*! @brief 名前空間接頭辞 : 名前空間 URI のマップ
+		*/
+		std::map<std::u32string, std::u32string> m_namespace_uris;
+	};
+
+	/*! @brief CSS セレクタとノードの照合に使われるコンテキスト
 	*/
 	template <typename NodePointer>
 	struct match_context
@@ -32,14 +52,11 @@ namespace wordring::wwwc::css
 		*/
 		document_mode_name m_mode_name = static_cast<document_mode_name>(0);
 
-		/*! @brief 名前空間をサポートするかを示すフラグ
+		/*! @brief 名前空間接頭辞 : 名前空間 URI のマップ
 		* 
-		* スタイルシートのセレクタとしてマッチする場合、名前空間をサポートする必要が有る。
-		* querySelector() としてマッチする場合、名前空間のサポートは無い。
-		*
-		* wordring_cpp は、まだスタイルシートを実装していないので、常に false 。
+		* 既定の名前空間は空（U""）の接頭辞で表現する。
 		*/
-		bool m_namespace_enabled = false;
+		std::map<std::u32string, std::u32string> m_namespace_uris;
 
 		/*! @brief root 要素
 		*
@@ -57,33 +74,6 @@ namespace wordring::wwwc::css
 		* @sa https://triple-underscore.github.io/selectors4-ja.html#scope-element
 		*/
 		std::vector<node_pointer> m_scope_elements;
-
-		/*! @brief 既定の名前空間 URI
-		*
-		* CSS スタイルシートは以下の形式で規定の名前空間を指定できる。
-		* @code
-		* 	@namespace "http://wordring.net/foo";
-		* @endcode
-		*
-		* 既定の名前空間は、型セレクタのマッチに使われる。
-		*/
-		std::u32string m_default_namespace_uri;
-
-		/*! @brief 名前空間接頭辞から名前空間 URI を検索する
-		*
-		* @param [in] prefix 名前空間接頭辞
-		*
-		* @return 名前空間 URI
-		*
-		* スタイルシートは @namespace で名前空間を設定できる。
-		* この関数は、名前空間接頭辞を引数に指定して、スタイルシートから名前空間 URI を検索する。
-		*
-		* @internal
-		* <hr>
-		* 現在、スタイルシートの実装が無いため、URI を返せない。
-		* querySelector() は名前空間をサポートしないので、スタイルシートが実装されるまで、この関数の実装も必要とされない。
-		*/
-		std::u32string const* get_namespace(std::u32string const& prefix) const { return nullptr; }
 	};
 
 }

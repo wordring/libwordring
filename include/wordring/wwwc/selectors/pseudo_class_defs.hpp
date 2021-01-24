@@ -35,9 +35,9 @@ namespace wordring::wwwc::css
 	// --------------------------------------------------------------------------------------------
 
 	/*! @brief 疑似要素を区別する列挙体
-	
-	@sa https://drafts.csswg.org/css-pseudo-4/
-	@sa https://triple-underscore.github.io/css-pseudo-ja.html
+	*
+	* @sa https://drafts.csswg.org/css-pseudo-4/
+	* @sa https://triple-underscore.github.io/css-pseudo-ja.html
 	*/
 	enum class pseudo_element_id_name : std::uint32_t
 	{

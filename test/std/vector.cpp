@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_SUITE(std_vector__test)
 BOOST_AUTO_TEST_CASE(std__vector__copy_1)
 {
 #ifdef NDEBUG
-	std::uint32_t n = 100 * 1024 * 1024;
+	std::uint32_t n = 10 * 1024 * 1024;
 #else
 	std::uint32_t n = 1024;
 #endif

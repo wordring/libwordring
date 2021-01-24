@@ -97,7 +97,7 @@ $(function() {
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                uint8_t val{};</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                <span class="keywordtype">char</span> bytes[3]{};</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                <span class="keywordflow">for</span> (uint32_t i = 0; i &lt; 3; i++) bytes[i] = static_cast&lt;unsigned char&gt;(*first++);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                std::from_chars_result ret = std::from_chars(bytes + 1, bytes + 3, val, 16);</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                [[maybe_unused]] std::from_chars_result ret = std::from_chars(bytes + 1, bytes + 3, val, 16);</div>
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;                assert(ret.ec == std::errc{});</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;                *output++ = val;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                <span class="keywordflow">continue</span>;</div>
@@ -110,7 +110,7 @@ $(function() {
 <div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="namespacewordring_1_1whatwg.html#ae91f558a964ae8f6d6c5fcce8e6b0699">   72</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1whatwg.html#ae91f558a964ae8f6d6c5fcce8e6b0699">string_percent_decode</a>(InputIterator first, InputIterator last, OutputIterator output)</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    {</div>
 <div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        std::u8string tmp{};</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        encoding::utf_8_encode(first, last, std::back_inserter(tmp));</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        encoding::utf8_encode(first, last, std::back_inserter(tmp));</div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <a class="code" href="namespacewordring_1_1whatwg.html#ac285ec629850476c28b2fbb88ed62dd0">percent_decode</a>(tmp.begin(), tmp.end(), output);</div>
 <div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>

@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: css_defs.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_6573f884cc9edc38c34f5e6d408c3f1c.html">wwwc</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">css_defs.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/html/html_defs.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;map&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
+<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">   23</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">parse_context</a></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    {</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html#aac26684f4ea3aaee4d303bb8673418a7">   27</a></span>&#160;        std::map&lt;std::u32string, std::u32string&gt; <a class="code" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html#aac26684f4ea3aaee4d303bb8673418a7">m_namespace_uris</a>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    };</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> NodePo<span class="keywordtype">int</span>er&gt;</div>
+<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">   33</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">match_context</a></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">using</span> document_type_name = wordring::html::document_type_name;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">using</span> <a class="code" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a> = <a class="code" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::html::document_mode_name</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">using</span> node_pointer = NodePointer;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">using</span> traits = <span class="keyword">typename</span> <a class="code" href="structwordring_1_1html_1_1node__traits.html">wordring::html::node_traits&lt;node_pointer&gt;</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00046"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#afc969ff28a553bf2045bdf9da93808e6">   46</a></span>&#160;        document_type_name <a class="code" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#afc969ff28a553bf2045bdf9da93808e6">m_type_name</a> = <span class="keyword">static_cast&lt;</span>document_type_name<span class="keyword">&gt;</span>(0);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a5412885088ae76fdcc42016628651721">   53</a></span>&#160;        <a class="code" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a> <a class="code" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a5412885088ae76fdcc42016628651721">m_mode_name</a> = <span class="keyword">static_cast&lt;</span><a class="code" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a><span class="keyword">&gt;</span>(0);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac4bb576ec07d9b72470cb3fb9aa9cfe9">   59</a></span>&#160;        std::map&lt;std::u32string, std::u32string&gt; <a class="code" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac4bb576ec07d9b72470cb3fb9aa9cfe9">m_namespace_uris</a>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">   69</a></span>&#160;        node_pointer <a class="code" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">m_scoping_root</a> = traits::pointer();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ab253610ed5978fd170f2467cc17b324b">   76</a></span>&#160;        std::vector&lt;node_pointer&gt; <a class="code" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ab253610ed5978fd170f2467cc17b324b">m_scope_elements</a>;</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    };</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1match__context_html_ac4bb576ec07d9b72470cb3fb9aa9cfe9"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac4bb576ec07d9b72470cb3fb9aa9cfe9">wordring::wwwc::css::match_context::m_namespace_uris</a></div><div class="ttdeci">std::map&lt; std::u32string, std::u32string &gt; m_namespace_uris</div><div class="ttdoc">名前空間接頭辞 : 名前空間 URI のマップ</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:59</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1match__context_html_a5412885088ae76fdcc42016628651721"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a5412885088ae76fdcc42016628651721">wordring::wwwc::css::match_context::m_mode_name</a></div><div class="ttdeci">document_mode_name m_mode_name</div><div class="ttdoc">文書モード</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:53</div></div>
+<div class="ttc" id="astructwordring_1_1html_1_1node__traits_html"><div class="ttname"><a href="structwordring_1_1html_1_1node__traits.html">wordring::html::node_traits</a></div><div class="ttdoc">HTMLノードへの操作を仲介するアダプタ</div><div class="ttdef"><b>Definition:</b> html/html_defs.hpp:29</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1parse__context_html_aac26684f4ea3aaee4d303bb8673418a7"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1parse__context.html#aac26684f4ea3aaee4d303bb8673418a7">wordring::wwwc::css::parse_context::m_namespace_uris</a></div><div class="ttdeci">std::map&lt; std::u32string, std::u32string &gt; m_namespace_uris</div><div class="ttdoc">名前空間接頭辞 : 名前空間 URI のマップ</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:27</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1match__context_html_ab253610ed5978fd170f2467cc17b324b"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ab253610ed5978fd170f2467cc17b324b">wordring::wwwc::css::match_context::m_scope_elements</a></div><div class="ttdeci">std::vector&lt; node_pointer &gt; m_scope_elements</div><div class="ttdoc">scope 要素</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:76</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1match__context_html_afc969ff28a553bf2045bdf9da93808e6"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#afc969ff28a553bf2045bdf9da93808e6">wordring::wwwc::css::match_context::m_type_name</a></div><div class="ttdeci">document_type_name m_type_name</div><div class="ttdoc">文書型</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:46</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1match__context_html_ac663ca5049ce090e2ee0806db435f465"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">wordring::wwwc::css::match_context::m_scoping_root</a></div><div class="ttdeci">node_pointer m_scoping_root</div><div class="ttdoc">root 要素</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:69</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1match__context_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a></div><div class="ttdoc">CSS セレクタとノードの照合に使われるコンテキスト</div><div class="ttdef"><b>Definition:</b> css_defs.hpp:33</div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1parse__context_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">wordring::wwwc::css::parse_context</a></div><div class="ttdef"><b>Definition:</b> css_defs.hpp:23</div></div>
+<div class="ttc" id="anamespacewordring_1_1whatwg_1_1html_html_aea9b1b94762f60c970ed2c951b1e5808"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::whatwg::html::document_mode_name</a></div><div class="ttdeci">document_mode_name</div><div class="ttdef"><b>Definition:</b> whatwg/html/html_defs.hpp:28</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

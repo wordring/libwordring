@@ -44,7 +44,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-types">公開型</a> &#124;
-<a href="#pub-methods">公開メンバ関数</a> &#124;
 <a href="#pub-attribs">公開変数類</a> &#124;
 <a href="structwordring_1_1wwwc_1_1css_1_1match__context-members.html">全メンバ一覧</a>  </div>
   <div class="headertitle">
@@ -52,10 +51,10 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>セレクタとノードの照合に使われるcontext  
+<p>CSS セレクタとノードの照合に使われるコンテキスト  
  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#details">[詳解]</a></p>
 
-<p><code>#include &lt;<a class="el" href="selectors__defs_8hpp_source.html">selectors_defs.hpp</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="css__defs_8hpp_source.html">css_defs.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 公開型</h2></td></tr>
@@ -68,12 +67,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>document_mode_name</
 <tr class="memitem:af44c69f7b624c1e7bc505fdec05d0203"><td class="memItemLeft" align="right" valign="top"><a id="af44c69f7b624c1e7bc505fdec05d0203"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>node_pointer</b> = NodePointer</td></tr>
 <tr class="separator:af44c69f7b624c1e7bc505fdec05d0203"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-公開メンバ関数</h2></td></tr>
-<tr class="memitem:a0398b806b5e6ca8fae241207824db07c"><td class="memItemLeft" align="right" valign="top"><a id="a0398b806b5e6ca8fae241207824db07c"></a>
-std::u32string const  *&#160;</td><td class="memItemRight" valign="bottom"><b>get_namespace</b> (std::u32string const &amp;prefix) const</td></tr>
-<tr class="separator:a0398b806b5e6ca8fae241207824db07c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab47c07f325499934d7f1301b51def5ec"><td class="memItemLeft" align="right" valign="top"><a id="ab47c07f325499934d7f1301b51def5ec"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>traits</b> = typename <a class="el" href="structwordring_1_1html_1_1node__traits.html">wordring::html::node_traits</a>&lt; node_pointer &gt;</td></tr>
+<tr class="separator:ab47c07f325499934d7f1301b51def5ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 公開変数類</h2></td></tr>
@@ -83,23 +79,21 @@ std::u32string const  *&#160;</td><td class="memItemRight" valign="bottom"><b>ge
 <tr class="memitem:a5412885088ae76fdcc42016628651721"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a5412885088ae76fdcc42016628651721">m_mode_name</a> = static_cast&lt;<a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a>&gt;(0)</td></tr>
 <tr class="memdesc:a5412885088ae76fdcc42016628651721"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書モード  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a5412885088ae76fdcc42016628651721">[詳解]</a><br /></td></tr>
 <tr class="separator:a5412885088ae76fdcc42016628651721"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa73da633e749c58091f5a70d78d8f8ca"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#aa73da633e749c58091f5a70d78d8f8ca">m_namespace_enabled</a> = false</td></tr>
-<tr class="memdesc:aa73da633e749c58091f5a70d78d8f8ca"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前空間をサポートするかを示すフラグ  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#aa73da633e749c58091f5a70d78d8f8ca">[詳解]</a><br /></td></tr>
-<tr class="separator:aa73da633e749c58091f5a70d78d8f8ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46fb063dd82a264a0b379dc5741e63b2"><td class="memItemLeft" align="right" valign="top">std::u32string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a46fb063dd82a264a0b379dc5741e63b2">m_default_namespace_uri</a></td></tr>
-<tr class="memdesc:a46fb063dd82a264a0b379dc5741e63b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">既定の名前空間 URI  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#a46fb063dd82a264a0b379dc5741e63b2">[詳解]</a><br /></td></tr>
-<tr class="separator:a46fb063dd82a264a0b379dc5741e63b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac663ca5049ce090e2ee0806db435f465"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">m_scoping_root</a></td></tr>
+<tr class="memitem:ac4bb576ec07d9b72470cb3fb9aa9cfe9"><td class="memItemLeft" align="right" valign="top">std::map&lt; std::u32string, std::u32string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac4bb576ec07d9b72470cb3fb9aa9cfe9">m_namespace_uris</a></td></tr>
+<tr class="memdesc:ac4bb576ec07d9b72470cb3fb9aa9cfe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前空間接頭辞 : 名前空間 URI のマップ  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac4bb576ec07d9b72470cb3fb9aa9cfe9">[詳解]</a><br /></td></tr>
+<tr class="separator:ac4bb576ec07d9b72470cb3fb9aa9cfe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac663ca5049ce090e2ee0806db435f465"><td class="memItemLeft" align="right" valign="top">node_pointer&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">m_scoping_root</a> = traits::pointer()</td></tr>
+<tr class="memdesc:ac663ca5049ce090e2ee0806db435f465"><td class="mdescLeft">&#160;</td><td class="mdescRight">root 要素  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ac663ca5049ce090e2ee0806db435f465">[詳解]</a><br /></td></tr>
 <tr class="separator:ac663ca5049ce090e2ee0806db435f465"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbb8212807dfea8855df2a0a4265ec0e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; node_pointer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#abbb8212807dfea8855df2a0a4265ec0e">m_scope</a></td></tr>
-<tr class="memdesc:abbb8212807dfea8855df2a0a4265ec0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">:scope 疑似クラスの起点となる要素集合  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#abbb8212807dfea8855df2a0a4265ec0e">[詳解]</a><br /></td></tr>
-<tr class="separator:abbb8212807dfea8855df2a0a4265ec0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab253610ed5978fd170f2467cc17b324b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; node_pointer &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ab253610ed5978fd170f2467cc17b324b">m_scope_elements</a></td></tr>
+<tr class="memdesc:ab253610ed5978fd170f2467cc17b324b"><td class="mdescLeft">&#160;</td><td class="mdescRight">scope 要素  <a href="structwordring_1_1wwwc_1_1css_1_1match__context.html#ab253610ed5978fd170f2467cc17b324b">[詳解]</a><br /></td></tr>
+<tr class="separator:ab253610ed5978fd170f2467cc17b324b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><h3>template&lt;typename NodePointer&gt;<br />
 struct wordring::wwwc::css::match_context&lt; NodePointer &gt;</h3>
 
-<p>セレクタとノードの照合に使われるcontext </p>
+<p>CSS セレクタとノードの照合に使われるコンテキスト </p>
 </div><h2 class="groupheader">メンバ詳解</h2>
 <a id="afc969ff28a553bf2045bdf9da93808e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afc969ff28a553bf2045bdf9da93808e6">&#9670;&nbsp;</a></span>m_type_name</h2>
@@ -139,8 +133,8 @@ template&lt;typename NodePointer &gt; </div>
 
 </div>
 </div>
-<a id="aa73da633e749c58091f5a70d78d8f8ca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa73da633e749c58091f5a70d78d8f8ca">&#9670;&nbsp;</a></span>m_namespace_enabled</h2>
+<a id="ac4bb576ec07d9b72470cb3fb9aa9cfe9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac4bb576ec07d9b72470cb3fb9aa9cfe9">&#9670;&nbsp;</a></span>m_namespace_uris</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,34 +142,13 @@ template&lt;typename NodePointer &gt; </div>
 template&lt;typename NodePointer &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_namespace_enabled = false</td>
+          <td class="memname">std::map&lt;std::u32string, std::u32string&gt; <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_namespace_uris</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>名前空間をサポートするかを示すフラグ </p>
-<p>スタイルシートのセレクタとしてマッチする場合、名前空間をサポートする必要が有る。 querySelector() としてマッチする場合、名前空間のサポートは無い。</p>
-<p>wordring_cpp は、まだスタイルシートを実装していないので、常に false 。 </p>
-
-</div>
-</div>
-<a id="a46fb063dd82a264a0b379dc5741e63b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46fb063dd82a264a0b379dc5741e63b2">&#9670;&nbsp;</a></span>m_default_namespace_uri</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename NodePointer &gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">std::u32string <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_default_namespace_uri</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>既定の名前空間 URI </p>
-<p>CSS スタイルシートは以下の形式で規定の名前空間を指定できる。 </p><div class="fragment"><div class="line">@<span class="keyword">namespace </span>&quot;http:<span class="comment">//wordring.net/foo&quot;;</span></div>
-</div><!-- fragment --><p>既定の名前空間は、型セレクタのマッチに使われる。 </p>
+<p>名前空間接頭辞 : 名前空間 URI のマップ </p>
+<p>既定の名前空間は空（U""）の接頭辞で表現する。 </p>
 
 </div>
 </div>
@@ -188,17 +161,20 @@ template&lt;typename NodePointer &gt; </div>
 template&lt;typename NodePointer &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">node_pointer <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_scoping_root</td>
+          <td class="memname">node_pointer <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_scoping_root = traits::pointer()</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>ノードのマッチに使われる根ノード</p>
-<p>指定されない場合、 </p>
+
+<p>root 要素 </p>
+<p>HTML 要素のような実際の root 要素の場合と、DocumentFragment のような仮の root の場合がある。</p>
+<p>指定されない場合、 :root と等価の要素となる。</p>
+<dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/selectors4-ja.html#scoping-root">https://triple-underscore.github.io/selectors4-ja.html#scoping-root</a> </dd></dl>
 
 </div>
 </div>
-<a id="abbb8212807dfea8855df2a0a4265ec0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbb8212807dfea8855df2a0a4265ec0e">&#9670;&nbsp;</a></span>m_scope</h2>
+<a id="ab253610ed5978fd170f2467cc17b324b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab253610ed5978fd170f2467cc17b324b">&#9670;&nbsp;</a></span>m_scope_elements</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -206,18 +182,18 @@ template&lt;typename NodePointer &gt; </div>
 template&lt;typename NodePointer &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt;node_pointer&gt; <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_scope</td>
+          <td class="memname">std::vector&lt;node_pointer&gt; <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">wordring::wwwc::css::match_context</a>&lt; NodePointer &gt;::m_scope_elements</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>:scope 疑似クラスの起点となる要素集合 </p>
-<p>指定されない場合、 :root と等価の要素となる。 </p><dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/selectors4-ja.html#the-scope-pseudo">https://triple-underscore.github.io/selectors4-ja.html#the-scope-pseudo</a> </dd></dl>
+<p>scope 要素 </p>
+<p>このフィールドが空の場合において、 m_scoping_root が存在する場合それ、存在しないない場合 :root と等価の要素となる。 </p><dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/selectors4-ja.html#scope-element">https://triple-underscore.github.io/selectors4-ja.html#scope-element</a> </dd></dl>
 
 </div>
 </div>
 <hr/>この構造体詳解は次のファイルから抽出されました:<ul>
-<li><a class="el" href="selectors__defs_8hpp_source.html">selectors_defs.hpp</a></li>
+<li><a class="el" href="css__defs_8hpp_source.html">css_defs.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

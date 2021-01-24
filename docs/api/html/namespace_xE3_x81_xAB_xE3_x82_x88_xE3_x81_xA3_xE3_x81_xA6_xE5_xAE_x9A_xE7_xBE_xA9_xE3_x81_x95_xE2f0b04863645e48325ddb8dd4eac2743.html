@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>wordring_cpp: wordring ディレクトリリファレンス</title>
+<title>wordring_cpp: によって定義される名前空間は、後続の構文規則内で使われる。 名前空間</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,23 +36,21 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li>  </ul>
-</div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">wordring ディレクトリリファレンス</div>  </div>
+<div class="title">によって定義される名前空間は、後続の構文規則内で使われる。 名前空間</div>  </div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="subdirs"></a>
-ディレクトリ</h2></td></tr>
-<tr class="memitem:dir_60775d12a87b61a33d2f427675caa884"><td class="memItemLeft" align="right" valign="top">ディレクトリ &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dir_60775d12a87b61a33d2f427675caa884.html">whatwg</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+
+<p>CSS の構文解析に使われるコンテキスト  
+<a href="namespace_xE3_x81_xAB_xE3_x82_x88_xE3_x81_xA3_xE3_x81_xA6_xE5_xAE_x9A_xE7_xBE_xA9_xE3_x81_x95_xE2f0b04863645e48325ddb8dd4eac2743.html#details">[詳解]</a></p>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>CSS の構文解析に使われるコンテキスト </p>
+<p>構文規則を表現する複数のクラスを横断して情報を引き継ぐ必要が有るため、コンテキスト・クラスを作った。 例えば、 CSS は CFG でないため、構文解析中に意味解析を必要とする場合がある。</p>
+<p>名前空間のようなノードとの照合に使われるフィールドは照合時に引数の match_context へコピーする必要が有る。</p>
+<p>構文解析の時点で文書形式に依存させないために、 match_context と別のクラスを設けた。 つまり、一つのセレクタで HTML と XHTML の両方に対応できることを明確に示す。 </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

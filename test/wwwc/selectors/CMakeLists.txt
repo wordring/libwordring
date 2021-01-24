@@ -15,8 +15,6 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package (
 	Boost 1.67 REQUIRED
 	COMPONENTS
-		system
-		filesystem
 		unit_test_framework
 )
 
@@ -29,7 +27,7 @@ add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
 		"api.cpp"
-#		"grammar_1.cpp"
+		"grammar_1.cpp"
 		"grammar_2.cpp"
 		"tree_structural_pseudo_classes.cpp")
 
@@ -38,7 +36,6 @@ add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(
 	${PROJECT_NAME}
 		wordring_cpp
-		${Boost_FILESYSTEM_LIBRARY}
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

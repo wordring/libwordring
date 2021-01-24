@@ -13,9 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package (
 	Boost 1.67 REQUIRED
-	COMPONENTS
-		system
-		filesystem
 )
 
 include_directories (
@@ -34,7 +31,6 @@ add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/i
 
 target_link_libraries(
 	index_table
-		${Boost_FILESYSTEM_LIBRARY}
 )
 
 add_executable(
@@ -49,5 +45,4 @@ add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/i
 
 target_link_libraries(
 	gb18030_test_data
-		${Boost_FILESYSTEM_LIBRARY}
 )

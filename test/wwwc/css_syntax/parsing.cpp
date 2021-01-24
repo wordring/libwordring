@@ -4,6 +4,8 @@
 
 #include <wordring/wwwc/css_syntax/parsing.hpp>
 
+#include <wordring/wwwc/selectors/grammar.hpp>
+
 #include <algorithm>
 #include <any>
 #include <iterator>
@@ -432,24 +434,9 @@ BOOST_AUTO_TEST_CASE(parsing_parse_grammar_1)
 {
 	using namespace wordring::wwwc::css;
 
-	std::u32string css = U" p { color: red; } ";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-
-	BOOST_CHECK(v);
-	std::u32string s = print(*v);
-	BOOST_CHECK(s == U" p { color: red; } ");
-}
-
-BOOST_AUTO_TEST_CASE(parsing_parse_grammar_2)
-{
-	using namespace wordring::wwwc::css;
-
-	std::u32string css = U" p { color: red; } ";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return false; });
-
-	BOOST_CHECK(!v);
+	parse_context pc;
+	auto m = parse_grammar<complex_selector>(U"div span", pc);
+	BOOST_CHECK(m);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -463,6 +450,7 @@ BOOST_AUTO_TEST_CASE(parsing_parse_comma_list_1)
 {
 	using namespace wordring::wwwc::css;
 
+	/*
 	std::u32string css = U"a, p h1";
 	std::vector<std::optional<std::vector<syntax_primitive>>> v =
 		parse_comma_list(std::move(css)
@@ -476,6 +464,8 @@ BOOST_AUTO_TEST_CASE(parsing_parse_comma_list_1)
 	}
 
 	BOOST_CHECK(s == U"a p h1");
+	*/
+	BOOST_CHECK(false);
 }
 
 // ------------------------------------------------------------------------------------------------

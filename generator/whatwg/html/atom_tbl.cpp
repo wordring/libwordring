@@ -4,11 +4,11 @@
 #include <wordring/whatwg/infra/unicode.hpp>
 
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
+//#include <boost/filesystem.hpp>
 
 #include <algorithm>
 #include <array>
-//#include <filesystem>
+#include <filesystem>
 #include <fstream>
 
 #include <iostream>
@@ -20,15 +20,17 @@
 #define STRING(str) #str
 #define TO_STRING(str) STRING(str)
 
-// std::filesystem::path data_path{ TO_STRING(DATA_PATH) };
-// std::filesystem::path atom_hpp_path{ TO_STRING(ATOM_HPP_PATH) };
-// std::filesystem::path atom_defs_hpp_path{ TO_STRING(ATOM_DEFS_HPP_PATH) };
-// std::filesystem::path atom_cpp_path{ TO_STRING(ATOM_CPP_PATH) };
+std::filesystem::path data_path{ TO_STRING(DATA_PATH) };
+std::filesystem::path atom_hpp_path{ TO_STRING(ATOM_HPP_PATH) };
+std::filesystem::path atom_defs_hpp_path{ TO_STRING(ATOM_DEFS_HPP_PATH) };
+std::filesystem::path atom_cpp_path{ TO_STRING(ATOM_CPP_PATH) };
 
+/*
 boost::filesystem::path data_path{ TO_STRING(DATA_PATH) };
 boost::filesystem::path atom_hpp_path{ TO_STRING(ATOM_HPP_PATH) };
 boost::filesystem::path atom_defs_hpp_path{ TO_STRING(ATOM_DEFS_HPP_PATH) };
 boost::filesystem::path atom_cpp_path{ TO_STRING(ATOM_CPP_PATH) };
+*/
 
 /*
 引数で指定されたファイルを読み込み、行で分割して配列として返す
@@ -36,7 +38,7 @@ boost::filesystem::path atom_cpp_path{ TO_STRING(ATOM_CPP_PATH) };
 テンプレート引数　Container 配列の配列が渡された場合、行をさらにタブ基準で分割し、格納する
 */
 template <typename Container = std::vector<std::u32string>>
-Container read(boost::filesystem::path const& path)
+Container read(std::filesystem::path const& path)
 {
 	using namespace wordring::whatwg;
 

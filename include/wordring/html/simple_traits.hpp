@@ -238,6 +238,13 @@ namespace wordring::html
 
 		static bool is_document(node_pointer it) { return std::holds_alternative<document_type>(*it); }
 
+		/*! @brief 文書ノードから文書形式を取得する
+		*/
+		static document_type_name get_document_type(node_pointer it)
+		{
+			return wordring::html::get_document_type(*it);
+		}
+
 		/*! @brief 文書ノードに文書形式を設定する
 
 		@param [in] node 文書ノード

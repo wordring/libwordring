@@ -11,14 +11,12 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(Boost_USE_STATIC_LIBS ON)
 find_package (
 	Boost 1.67 REQUIRED
 	COMPONENTS
-		system
-		filesystem
 		unit_test_framework
 )
+
 
 include_directories (
 	${Boost_INCLUDE_DIRS}
@@ -54,7 +52,6 @@ add_definitions(-DJAPANESE_WORDS_PATH=${Wordring_DIR}/submodules/hingston/japane
 target_link_libraries(
 	${PROJECT_NAME}
 		wordring_cpp
-		${Boost_FILESYSTEM_LIBRARY}
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

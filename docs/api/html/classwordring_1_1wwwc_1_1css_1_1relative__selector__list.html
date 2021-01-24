@@ -90,6 +90,10 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>document_mode_name</
 <tr class="memitem:a995c30ddb05f82d6d7316c040c876ab0"><td class="memItemLeft" align="right" valign="top"><a id="a995c30ddb05f82d6d7316c040c876ab0"></a>
 std::vector&lt; <a class="el" href="classwordring_1_1wwwc_1_1css_1_1relative__selector.html">relative_selector</a> &gt; const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>value</b> () const</td></tr>
 <tr class="separator:a995c30ddb05f82d6d7316c040c876ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0529c41c4d9e833ae53891752f941865"><td class="memTemplParams" colspan="2">template&lt;typename NodePointer &gt; </td></tr>
+<tr class="memitem:a0529c41c4d9e833ae53891752f941865"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classwordring_1_1wwwc_1_1css_1_1relative__selector__list.html#a0529c41c4d9e833ae53891752f941865">absolutize</a> (<a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">match_context</a>&lt; NodePointer &gt; const &amp;ctx)</td></tr>
+<tr class="memdesc:a0529c41c4d9e833ae53891752f941865"><td class="mdescLeft">&#160;</td><td class="mdescRight">相対セレクタを絶対化する  <a href="classwordring_1_1wwwc_1_1css_1_1relative__selector__list.html#a0529c41c4d9e833ae53891752f941865">[詳解]</a><br /></td></tr>
+<tr class="separator:a0529c41c4d9e833ae53891752f941865"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classwordring_1_1wwwc_1_1css_1_1selector__grammar"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwordring_1_1wwwc_1_1css_1_1selector__grammar')"><img src="closed.png" alt="-"/>&#160;基底クラス <a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__grammar.html">wordring::wwwc::css::selector_grammar</a> に属する継承公開メンバ関数</td></tr>
 <tr class="memitem:a0e69a368920237c06974421396b8725a inherit pub_methods_classwordring_1_1wwwc_1_1css_1_1selector__grammar"><td class="memItemLeft" align="right" valign="top"><a id="a0e69a368920237c06974421396b8725a"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>selector_grammar</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__grammar.html">selector_grammar</a> const &amp;)=default</td></tr>
@@ -121,9 +125,9 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静的公開メンバ関数</h2></td></tr>
-<tr class="memitem:ac481de59da10347b919b9bfe106ec336"><td class="memItemLeft" align="right" valign="top"><a id="ac481de59da10347b919b9bfe106ec336"></a>
-static <a class="el" href="classwordring_1_1wwwc_1_1css_1_1relative__selector__list.html">relative_selector_list</a>&#160;</td><td class="memItemRight" valign="bottom"><b>consume</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive__stream.html">syntax_primitive_stream</a> in)</td></tr>
-<tr class="separator:ac481de59da10347b919b9bfe106ec336"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaf7cce9526a2c6f96a22eab1d8f5685"><td class="memItemLeft" align="right" valign="top"><a id="acaf7cce9526a2c6f96a22eab1d8f5685"></a>
+static <a class="el" href="classwordring_1_1wwwc_1_1css_1_1relative__selector__list.html">relative_selector_list</a>&#160;</td><td class="memItemRight" valign="bottom"><b>consume</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive__stream.html">syntax_primitive_stream</a> in, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">parse_context</a> &amp;ctx)</td></tr>
+<tr class="separator:acaf7cce9526a2c6f96a22eab1d8f5685"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 その他の継承メンバ</h2></td></tr>
@@ -140,12 +144,45 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" 
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
 <div class="textblock"><p>&lt;relative-selector-list&gt; </p>
 <div class="fragment"><div class="line">&lt;relative-selector-list&gt; = &lt;relative-selector&gt;#</div>
-</div><!-- fragment --><dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__list.html" title="&lt;selector-list&gt;">selector_list</a> </dd>
+</div><!-- fragment --><dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1wwwc_1_1css_1_1selector__list.html" title="&lt;selector-list&gt;">selector_list</a></dd>
 <dd>
 <a href="https://drafts.csswg.org/selectors-4/#typedef-relative-selector-list">https://drafts.csswg.org/selectors-4/#typedef-relative-selector-list</a> </dd>
 <dd>
 <a href="https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector-list">https://triple-underscore.github.io/selectors4-ja.html#typedef-relative-selector-list</a> </dd></dl>
-</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+</div><h2 class="groupheader">関数詳解</h2>
+<a id="a0529c41c4d9e833ae53891752f941865"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0529c41c4d9e833ae53891752f941865">&#9670;&nbsp;</a></span>absolutize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename NodePointer &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void wordring::wwwc::css::relative_selector_list::absolutize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html">match_context</a>&lt; NodePointer &gt; const &amp;&#160;</td>
+          <td class="paramname"><em>ctx</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>相対セレクタを絶対化する </p>
+<p>未実装。</p>
+<dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/selectors4-ja.html#absolutize-list">https://triple-underscore.github.io/selectors4-ja.html#absolutize-list</a> </dd></dl>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
 <li><a class="el" href="grammar_8hpp_source.html">grammar.hpp</a></li>
 </ul>
 </div><!-- contents -->

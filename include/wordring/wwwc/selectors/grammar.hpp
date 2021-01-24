@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------------------------------
 
 #include <wordring/wwwc/selectors/pseudo_class_defs.hpp>
-#include <wordring/wwwc/selectors/selectors_defs.hpp>
+#include <wordring/wwwc/css_defs.hpp>
 #include <wordring/wwwc/selectors/tree_structural_pseudo_classes.hpp>
 
 #include <wordring/wwwc/css_syntax/parsing.hpp>
@@ -97,7 +97,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static combinator consume(syntax_primitive_stream in);
+		static combinator consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		combinator() = default;
@@ -126,7 +126,12 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static ns_prefix consume(syntax_primitive_stream in);
+		/*! @brief 構文規則と合致する場合、入力から合致部分を消費する
+		* 
+		* 宣言されていない名前空間接頭辞が現れた場合、エラーとする。
+		* 宣言済みの名前空間接頭辞は、 ctx 内に保持されているはずである。
+		*/
+		static ns_prefix consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		ns_prefix() = default;
@@ -168,7 +173,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static wq_name consume(syntax_primitive_stream in);
+		static wq_name consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		wq_name() = default;
@@ -211,7 +216,7 @@ namespace wordring::wwwc::css
 		using document_mode_name = wordring::html::document_mode_name;
 
 	public:
-		static id_selector consume(syntax_primitive_stream in);
+		static id_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		id_selector() = default;
@@ -232,18 +237,23 @@ namespace wordring::wwwc::css
 		* 
 		* @param [in] np HTML ノードを指すイテレータあるいはポインタ
 		* 
+		* @internal
+		* <hr>
+		* 
 		* - HTML では属性名「 id 」をASCII大小無視で照合する。
 		* - XML では属性名「 id 」は小文字。
 		* - quirks モードでは ID 値を大小無視で照合する。
 		* - それ以外のモードでは ID 値を大小区別して照合する。
-		*
-		* @sa https://triple-underscore.github.io/selectors4-ja.html#id-selector
+		* - 要素が複数の ID 属性を持つ場合、それらすべてを要素の ID として取り扱う。
+		*   （HTML5 では後続の重複する属性名は切り捨てられるが）
+		* 
 		* @sa https://triple-underscore.github.io/selectors4-ja.html#case-sensitive
+		* @sa https://triple-underscore.github.io/selectors4-ja.html#id-selector
 		*/
 		template <typename NodePointer>
 		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 			
 			assert(!(ctx.m_type_name == document_type_name::Xml
 				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
@@ -307,7 +317,7 @@ namespace wordring::wwwc::css
 		using document_mode_name = wordring::html::document_mode_name;
 
 	public:
-		static class_selector consume(syntax_primitive_stream in);
+		static class_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		class_selector() = default;
@@ -340,7 +350,7 @@ namespace wordring::wwwc::css
 		template <typename NodePointer>
 		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 
 			assert(!(ctx.m_type_name == document_type_name::Xml
 				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
@@ -409,7 +419,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static attr_matcher consume(syntax_primitive_stream in);
+		static attr_matcher consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		attr_matcher() = default;
@@ -444,7 +454,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static attr_modifier consume(syntax_primitive_stream in);
+		static attr_modifier consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		attr_modifier() = default;
@@ -485,7 +495,7 @@ namespace wordring::wwwc::css
 		* - 他の規格から参照される場合に備えて、サポートしない疑似クラス名であっても、即座にエラーとはしない。
 		* - pseudo_element_selector::consume() からも利用される。
 		*/
-		static pseudo_class_selector consume(syntax_primitive_stream in);
+		static pseudo_class_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		pseudo_class_selector();
@@ -520,7 +530,7 @@ namespace wordring::wwwc::css
 			case pseudo_class_id_name::Root: // :root
 				return root_pseudo_class::match(np, ctx);
 			default:
-				break;
+				return false;
 			}
 
 			// 関数型の疑似クラスはこちら
@@ -569,7 +579,7 @@ namespace wordring::wwwc::css
 		*   https://triple-underscore.github.io/selectors4-ja.html#pseudo-element-states \n
 		*   疑似要素に疑似クラスが続くのは、 <compound-selector> 構文規則のみなので、そこでエラーを補足すると良い。
 		*/
-		static pseudo_element_selector consume(syntax_primitive_stream in);
+		static pseudo_element_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		explicit pseudo_element_selector(pseudo_class_selector&& s);
@@ -617,7 +627,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static attribute_selector consume(syntax_primitive_stream in);
+		static attribute_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		attribute_selector() = default;
@@ -681,7 +691,7 @@ namespace wordring::wwwc::css
 		template <typename NodePointer>
 		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 			using wordring::whatwg::is_ascii_case_insensitive_match;
 			using wordring::whatwg::split_on_ascii_whitespace;
 			using wordring::encoding_cast;
@@ -699,39 +709,31 @@ namespace wordring::wwwc::css
 			while (it1 != it2)
 			{
 				// 名前空間接頭辞
-				if (m_name.prefix())
+				if (m_name.prefix()) // セレクタが名前空間接頭辞を含んでいる
 				{
-					if (ctx.m_namespace_enabled)
-					{
-						std::u32string const& prefix1 = m_name.prefix()->string();
-						std::u32string uri2 = encoding_cast<std::u32string>(traits::get_namespace(*it1));
+					std::u32string const& prefix1 = m_name.prefix()->string();
+					std::u32string uri2 = encoding_cast<std::u32string>(traits::get_namespace(*it1));
 
-						if (prefix1 == U"*"); // 接頭辞を持たない属性を含めて全てにマッチ
-						else if (prefix1 == U"" && !uri2.empty())
+					if (prefix1 == U"*");    // 接頭辞を持たない属性を含めて全てにマッチ
+					else if (prefix1 == U"") // 接頭辞を持たない属性にマッチ
+					{
+						if (!uri2.empty())
 						{
 							++it1;
 							continue;
 						}
-						else
-						{
-							std::u32string const* uri1 = ctx.get_namespace(prefix1);
-							if (uri1 == nullptr || *uri1 != uri2)
-							{
-								++it1;
-								continue;
-							}
-						}
 					}
 					else
 					{
-						// 名前空間をサポートしないにもかかわらず、セレクタで名前空間が指定された。
-						// TOTO: ワイルドカード、空の接頭辞も無効なセレクタとして何にもマッチしないことにしているが、
-						// どうすべきか？
-						++it1;
-						continue;
+						auto it = ctx.m_namespace_uris.find(prefix1);
+						if (it == ctx.m_namespace_uris.end() || it->second != uri2)
+						{
+							++it1;
+							continue;
+						}
 					}
 				}
-				else
+				else // セレクタが名前空間接頭辞を含まない（名前空間付きの属性にマッチしない）
 				{
 					if (!traits::get_namespace(*it1).empty())
 					{
@@ -884,7 +886,7 @@ namespace wordring::wwwc::css
 		using value_type = std::variant<id_selector, class_selector, attribute_selector, pseudo_class_selector>;
 
 	public:
-		static subclass_selector consume(syntax_primitive_stream in);
+		static subclass_selector consume(syntax_primitive_stream in, parse_context& ctx);
 	public:
 		subclass_selector() = default;
 		subclass_selector(const_iterator first, const_iterator last, value_type value);
@@ -929,7 +931,7 @@ namespace wordring::wwwc::css
 		using value_type = std::variant<wq_name, std::optional<ns_prefix>>;
 
 	public:
-		static type_selector consume(syntax_primitive_stream in);
+		static type_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		type_selector() = default;
@@ -948,7 +950,7 @@ namespace wordring::wwwc::css
 		template <typename NodePointer>
 		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 			using wordring::whatwg::is_ascii_case_insensitive_match;
 			using wordring::encoding_cast;
 
@@ -962,38 +964,30 @@ namespace wordring::wwwc::css
 			std::optional<ns_prefix> const& opt = (m_value.index() == 0)
 				? std::get_if<wq_name>(&m_value)->prefix()
 				: **std::get_if<std::optional<ns_prefix>>(&m_value);
-	
-			if (opt)
-			{
-				if (ctx.m_namespace_enabled)
-				{
-					std::u32string const& prefix1 = opt->string();
-					std::u32string uri2 = encoding_cast<std::u32string>(traits::get_namespace(np));
 
-					if (prefix1 == U"*"); // 接頭辞を持たない要素を含めて全てにマッチ
-					else if (prefix1 == U"" && !uri2.empty()) return false;
-					else
-					{
-						std::u32string const* uri1 = ctx.get_namespace(prefix1);
-						if (uri1 == nullptr || *uri1 != uri2) return false;
-					}
+			std::u32string uri2 = encoding_cast<std::u32string>(traits::get_namespace(np));
+
+			if (opt) // セレクタに名前空間接頭辞アリ
+			{
+				std::u32string const& prefix1 = opt->string();
+				if (prefix1 == U"*");    // 接頭辞を持たない要素を含めて全てにマッチ
+				else if (prefix1 == U"") // 接頭辞を持たない要素にマッチ
+				{
+					if (!uri2.empty()) return false;
 				}
 				else
 				{
-					// 名前空間をサポートしないにもかかわらず、セレクタで名前空間が指定された。
-					// TODO: ワイルドカード、空の接頭辞も無効なセレクタとして何にもマッチしないことにしているが、
-					// どうすべきか？
-					return false;
+					auto it = ctx.m_namespace_uris.find(prefix1);
+					if (it == ctx.m_namespace_uris.end() || it->second != uri2) return false;
 				}
 			}
-			else
+			else // セレクタに名前空間接頭辞ナシ
 			{
-				if (ctx.m_default_namespace_uri.empty());
-				else if (ctx.m_namespace_enabled)
+				auto it = ctx.m_namespace_uris.find(U""); // 既定の名前空間を検索
+				if (it == ctx.m_namespace_uris.end()); // 既定の名前空間が無い場合全てにマッチ
+				else                                   // あれば既定の名前空間にマッチ
 				{
-					std::u32string const* uri1 = ctx.get_namespace(ctx.m_default_namespace_uri);
-					std::u32string uri2 = encoding_cast<std::u32string>(traits::get_namespace(np));
-					if (uri1 == nullptr || *uri1 != uri2) return false;
+					if (it->second != uri2) return false;
 				}
 			}
 
@@ -1040,7 +1034,7 @@ namespace wordring::wwwc::css
 		using value_type = std::variant<std::monostate, type_selector, subclass_selector>;
 
 	public:
-		static simple_selector consume(syntax_primitive_stream in);
+		static simple_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		simple_selector() = default;
@@ -1091,7 +1085,7 @@ namespace wordring::wwwc::css
 		using value_type = std::variant<type_selector, subclass_selector, pseudo_element_selector, pseudo_class_selector>;
 
 	public:
-		static compound_selector consume(syntax_primitive_stream in);
+		static compound_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		compound_selector() = default;
@@ -1142,7 +1136,7 @@ namespace wordring::wwwc::css
 		using value_type = std::variant<compound_selector, combinator>;
 		using reverse_iterator = std::vector<value_type>::const_reverse_iterator;
 	public:
-		static complex_selector consume(syntax_primitive_stream in);
+		static complex_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	private:
 		/*! @brief ノードにマッチするか検査する
@@ -1160,7 +1154,7 @@ namespace wordring::wwwc::css
 		template <typename NodePointer>
 		bool match(reverse_iterator it, NodePointer const& np, match_context<NodePointer> const& ctx) const
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 
 			if (!std::get_if<compound_selector>(&*it)->match(np, ctx)) return false;
 			++it;
@@ -1266,7 +1260,7 @@ namespace wordring::wwwc::css
 		using value_type = std::variant<compound_selector, combinator>;
 
 	public:
-		static relative_selector consume(syntax_primitive_stream in);
+		static relative_selector consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		relative_selector() = default;
@@ -1276,12 +1270,14 @@ namespace wordring::wwwc::css
 
 		/*! @brief ノードにマッチするか検査する
 		*
+		* 未実装。
+		* 
 		* @sa id_selector::match()
 		*/
 		template <typename NodePointer>
 		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 			using ns_name = wordring::html::ns_name;
 			using wordring::whatwg::is_ascii_case_insensitive_match;
 			using wordring::encoding_cast;
@@ -1294,18 +1290,19 @@ namespace wordring::wwwc::css
 
 		/*! @brief 相対セレクタを絶対化する
 		* 
+		* 未実装。
+		* 
 		* @sa https://triple-underscore.github.io/selectors4-ja.html#absolutize
 		*/
 		template <typename NodePointer>
 		void absolutize(match_context<NodePointer> const& ctx)
 		{
-			using traits = typename wordring::html::node_traits<NodePointer>;
+			using traits = wordring::html::node_traits<NodePointer>;
 
 			if (ctx.m_scope_elements.empty()
 				&& (ctx.m_scoping_root == traits::pointer() || !traits::is_element(ctx.m_scoping_root)));
 			else
 			{
-				;
 			}
 		}
 
@@ -1330,13 +1327,25 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static relative_selector_list consume(syntax_primitive_stream in);
+		static relative_selector_list consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		relative_selector_list() = default;
 		relative_selector_list(const_iterator first, const_iterator last, std::vector<relative_selector>&& value);
 
 		std::vector<relative_selector> const& value() const;
+
+		/*! @brief 相対セレクタを絶対化する
+		*
+		* 未実装。
+		*
+		* @sa https://triple-underscore.github.io/selectors4-ja.html#absolutize-list
+		*/
+		template <typename NodePointer>
+		void absolutize(match_context<NodePointer> const& ctx)
+		{
+			for (relative_selector& rs : m_value) rs.absolutize(ctx);
+		}
 
 	private:
 		std::vector<relative_selector> m_value;
@@ -1359,7 +1368,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static simple_selector_list consume(syntax_primitive_stream in);
+		static simple_selector_list consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		simple_selector_list() = default;
@@ -1388,7 +1397,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static compound_selector_list consume(syntax_primitive_stream in);
+		static compound_selector_list consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		compound_selector_list() = default;
@@ -1417,7 +1426,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static complex_selector_list consume(syntax_primitive_stream in);
+		static complex_selector_list consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		complex_selector_list() = default;
@@ -1447,7 +1456,7 @@ namespace wordring::wwwc::css
 		using const_iterator = syntax_primitive_stream::const_iterator;
 
 	public:
-		static selector_list consume(syntax_primitive_stream in);
+		static selector_list consume(syntax_primitive_stream in, parse_context& ctx);
 
 	public:
 		selector_list() = default;

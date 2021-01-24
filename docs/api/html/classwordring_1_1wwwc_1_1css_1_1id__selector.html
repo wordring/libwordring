@@ -131,9 +131,9 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () 
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 静的公開メンバ関数</h2></td></tr>
-<tr class="memitem:ab4ac5554712bba3d9698385cbfa25d1f"><td class="memItemLeft" align="right" valign="top"><a id="ab4ac5554712bba3d9698385cbfa25d1f"></a>
-static <a class="el" href="classwordring_1_1wwwc_1_1css_1_1id__selector.html">id_selector</a>&#160;</td><td class="memItemRight" valign="bottom"><b>consume</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive__stream.html">syntax_primitive_stream</a> in)</td></tr>
-<tr class="separator:ab4ac5554712bba3d9698385cbfa25d1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63b8c5692e94057fb68d87e212664e52"><td class="memItemLeft" align="right" valign="top"><a id="a63b8c5692e94057fb68d87e212664e52"></a>
+static <a class="el" href="classwordring_1_1wwwc_1_1css_1_1id__selector.html">id_selector</a>&#160;</td><td class="memItemRight" valign="bottom"><b>consume</b> (<a class="el" href="classwordring_1_1wwwc_1_1css_1_1syntax__primitive__stream.html">syntax_primitive_stream</a> in, <a class="el" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">parse_context</a> &amp;ctx)</td></tr>
+<tr class="separator:a63b8c5692e94057fb68d87e212664e52"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 その他の継承メンバ</h2></td></tr>
@@ -244,15 +244,17 @@ template&lt;typename NodePointer &gt; </div>
   </table>
   </dd>
 </dl>
+<hr  />
 <ul>
 <li>HTML では属性名「 id 」をASCII大小無視で照合する。</li>
 <li>XML では属性名「 id 」は小文字。</li>
 <li>quirks モードでは ID 値を大小無視で照合する。</li>
 <li>それ以外のモードでは ID 値を大小区別して照合する。</li>
+<li>要素が複数の ID 属性を持つ場合、それらすべてを要素の ID として取り扱う。 （HTML5 では後続の重複する属性名は切り捨てられるが）</li>
 </ul>
-<dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/selectors4-ja.html#id-selector">https://triple-underscore.github.io/selectors4-ja.html#id-selector</a> </dd>
+<dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/selectors4-ja.html#case-sensitive">https://triple-underscore.github.io/selectors4-ja.html#case-sensitive</a> </dd>
 <dd>
-<a href="https://triple-underscore.github.io/selectors4-ja.html#case-sensitive">https://triple-underscore.github.io/selectors4-ja.html#case-sensitive</a> </dd></dl>
+<a href="https://triple-underscore.github.io/selectors4-ja.html#id-selector">https://triple-underscore.github.io/selectors4-ja.html#id-selector</a> </dd></dl>
 
 </div>
 </div>

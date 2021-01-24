@@ -45,7 +45,7 @@ selector_grammar::const_iterator selector_grammar::end() const
 // <combinator> = '>' | '+' | '~' | [ '|' '|' ]
 // ------------------------------------------------------------------------------------------------
 
-combinator combinator::consume(syntax_primitive_stream in)
+combinator combinator::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -89,7 +89,7 @@ char32_t combinator::type() const
 // <ns-prefix> = [ <ident-token> | '*' ]? '|'
 // ------------------------------------------------------------------------------------------------
 
-ns_prefix ns_prefix::consume(syntax_primitive_stream in)
+ns_prefix ns_prefix::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -115,7 +115,10 @@ ns_prefix ns_prefix::consume(syntax_primitive_stream in)
 	syntax_primitive const& p2 = in.consume();
 	if (p2.type() == syntax_primitive_name::DelimToken && p2.get<delim_token>().m_value == U'|')
 	{
-		return ns_prefix(it0, in.begin(), s);
+		if (ctx.m_namespace_uris.find(s) != ctx.m_namespace_uris.end() || s == U"*" || s.empty())
+		{
+			return ns_prefix(it0, in.begin(), s);
+		}
 	}
 
 	return ns_prefix(it0, it0, U"");
@@ -136,12 +139,12 @@ std::u32string const& ns_prefix::string() const
 // <wq-name> = <ns-prefix>? <ident-token>
 // ------------------------------------------------------------------------------------------------
 
-wq_name wq_name::consume(syntax_primitive_stream in)
+wq_name wq_name::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::optional<ns_prefix> opt;
-	ns_prefix ns = ns_prefix::consume(in);
+	ns_prefix ns = ns_prefix::consume(in, ctx);
 	in.advance(ns.end());
 
 	syntax_primitive const& p1 = in.current();
@@ -185,7 +188,7 @@ std::u32string const& wq_name::name() const
 // <id-selector> = <hash-token>
 // ------------------------------------------------------------------------------------------------
 
-id_selector id_selector::consume(syntax_primitive_stream in)
+id_selector id_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -213,7 +216,7 @@ std::u32string const& id_selector::value() const
 // <class-selector> = '.' <ident-token>
 // ------------------------------------------------------------------------------------------------
 
-class_selector class_selector::consume(syntax_primitive_stream in)
+class_selector class_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -245,7 +248,7 @@ std::u32string const& class_selector::name() const
 // <attr-matcher> = [ '~' | '|' | '^' | '$' | '*' ]? '='
 // ------------------------------------------------------------------------------------------------
 
-attr_matcher attr_matcher::consume(syntax_primitive_stream in)
+attr_matcher attr_matcher::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -290,7 +293,7 @@ char32_t attr_matcher::prefix() const
 // <attr-modifier> = i | s
 // ------------------------------------------------------------------------------------------------
 
-attr_modifier attr_modifier::consume(syntax_primitive_stream in)
+attr_modifier attr_modifier::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -325,7 +328,7 @@ char32_t attr_modifier::value() const
 // <pseudo-class-selector>	= ':' <ident-token> | ':' <function-token> <any-value> ')'
 // ------------------------------------------------------------------------------------------------
 
-pseudo_class_selector pseudo_class_selector::consume(syntax_primitive_stream in)
+pseudo_class_selector pseudo_class_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
@@ -417,13 +420,13 @@ syntax_primitive_name pseudo_class_selector::type() const
 // <pseudo-element-selector> = ':' <pseudo-class-selector>
 // ------------------------------------------------------------------------------------------------
 
-pseudo_element_selector pseudo_element_selector::consume(syntax_primitive_stream in)
+pseudo_element_selector pseudo_element_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	if (in.consume().type() == syntax_primitive_name::ColonToken)
 	{
-		pseudo_element_selector es(pseudo_class_selector::consume(in));
+		pseudo_element_selector es(pseudo_class_selector::consume(in, ctx));
 		if (es)
 		{
 			es.m_first = it0;
@@ -483,7 +486,7 @@ pseudo_element_selector::pseudo_element_selector(const_iterator first, const_ite
 //		'[' <wq-name> <attr-matcher> [ <string-token> | <ident-token> ] <attr-modifier>? ']'
 // ------------------------------------------------------------------------------------------------
 
-attribute_selector attribute_selector::consume(syntax_primitive_stream in1)
+attribute_selector attribute_selector::consume(syntax_primitive_stream in1, parse_context& ctx)
 {
 	const_iterator it0 = in1.begin();
 
@@ -498,12 +501,12 @@ attribute_selector attribute_selector::consume(syntax_primitive_stream in1)
 		syntax_primitive_stream in2(v);
 
 		in2.skip_whitespace();
-		wq_name name = wq_name::consume(in2);
+		wq_name name = wq_name::consume(in2, ctx);
 		if (!name) return attribute_selector(it0, it0, wq_name(), U'\0', U"", U'\0');
 
 		in2.advance(name.end());
 		in2.skip_whitespace();
-		attr_matcher matcher = attr_matcher::consume(in2);
+		attr_matcher matcher = attr_matcher::consume(in2, ctx);
 		if (matcher)
 		{
 			std::u32string value;
@@ -526,7 +529,7 @@ attribute_selector attribute_selector::consume(syntax_primitive_stream in1)
 
 			char32_t modifier = U'\0';
 			in2.skip_whitespace();
-			attr_modifier m = attr_modifier::consume(in2);
+			attr_modifier m = attr_modifier::consume(in2, ctx);
 			if (m)
 			{
 				in2.advance(m.end());
@@ -578,20 +581,20 @@ char32_t attribute_selector::modifier() const
 // <subclass-selector> = <id-selector> | <class-selector> | <attribute-selector> | <pseudo-class-selector>
 // ------------------------------------------------------------------------------------------------
 
-subclass_selector subclass_selector::consume(syntax_primitive_stream in)
+subclass_selector subclass_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
-	id_selector id = id_selector::consume(in);
+	id_selector id = id_selector::consume(in, ctx);
 	if (id) return subclass_selector(it0, id.end(), id);
 
-	class_selector cls = class_selector::consume(in);
+	class_selector cls = class_selector::consume(in, ctx);
 	if(cls) return subclass_selector(it0, cls.end(), cls);
 
-	attribute_selector attr = attribute_selector::consume(in);
+	attribute_selector attr = attribute_selector::consume(in, ctx);
 	if(attr) return subclass_selector(it0, attr.end(), attr);
 
-	pseudo_class_selector pcls = pseudo_class_selector::consume(in);
+	pseudo_class_selector pcls = pseudo_class_selector::consume(in, ctx);
 	if(pcls) return subclass_selector(it0, pcls.end(), pcls);
 
 	return subclass_selector();
@@ -612,15 +615,15 @@ subclass_selector::value_type const& subclass_selector::value() const
 // <type-selector> = <wq-name> | <ns-prefix>? '*'
 // ------------------------------------------------------------------------------------------------
 
-type_selector type_selector::consume(syntax_primitive_stream in)
+type_selector type_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
-	wq_name name = wq_name::consume(in);
+	wq_name name = wq_name::consume(in, ctx);
 	if (name) return type_selector(it0, name.end(), name);
 
 	std::optional<ns_prefix> opt;
-	ns_prefix ns = ns_prefix::consume(in);
+	ns_prefix ns = ns_prefix::consume(in, ctx);
 	if (ns)
 	{
 		opt = std::make_optional<ns_prefix>(std::move(ns));
@@ -651,14 +654,14 @@ type_selector::value_type const& type_selector::value() const
 // <simple-selector> = <type-selector> | <subclass-selector>
 // ------------------------------------------------------------------------------------------------
 
-simple_selector simple_selector::consume(syntax_primitive_stream in)
+simple_selector simple_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
-	type_selector ts = type_selector::consume(in);
+	type_selector ts = type_selector::consume(in, ctx);
 	if (ts) return simple_selector(it0, ts.end(), ts);
 
-	subclass_selector sub = subclass_selector::consume(in);
+	subclass_selector sub = subclass_selector::consume(in, ctx);
 	if (sub) return simple_selector(it0, sub.end(), sub);
 
 	return simple_selector(it0, it0, std::monostate{});
@@ -680,13 +683,13 @@ simple_selector::value_type const& simple_selector::value() const
 //							[ <pseudo-element-selector> <pseudo-class-selector>* ]* ]!
 // ------------------------------------------------------------------------------------------------
 
-compound_selector compound_selector::consume(syntax_primitive_stream in)
+compound_selector compound_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<value_type> v;
 
-	type_selector ts = type_selector::consume(in);
+	type_selector ts = type_selector::consume(in, ctx);
 	if (ts)
 	{
 		v.push_back(std::move(ts));
@@ -695,7 +698,7 @@ compound_selector compound_selector::consume(syntax_primitive_stream in)
 
 	while (true)
 	{
-		subclass_selector sub = subclass_selector::consume(in);
+		subclass_selector sub = subclass_selector::consume(in, ctx);
 		if (sub)
 		{
 			v.push_back(sub);
@@ -706,7 +709,7 @@ compound_selector compound_selector::consume(syntax_primitive_stream in)
 
 	while(true)
 	{
-		pseudo_element_selector pe = pseudo_element_selector::consume(in);
+		pseudo_element_selector pe = pseudo_element_selector::consume(in, ctx);
 		if (pe)
 		{
 			v.push_back(pe);
@@ -716,7 +719,7 @@ compound_selector compound_selector::consume(syntax_primitive_stream in)
 
 		while (true)
 		{
-			pseudo_class_selector pc = pseudo_class_selector::consume(in);
+			pseudo_class_selector pc = pseudo_class_selector::consume(in, ctx);
 			if (pc)
 			{
 				v.push_back(pc);
@@ -749,13 +752,13 @@ std::vector<compound_selector::value_type> const& compound_selector::value() con
 // <complex-selector> = <compound-selector> [ <combinator>? <compound-selector> ]*
 // ------------------------------------------------------------------------------------------------
 
-complex_selector complex_selector::consume(syntax_primitive_stream in)
+complex_selector complex_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<std::variant<compound_selector, combinator>> v;
 
-	if (compound_selector cs = compound_selector::consume(in))
+	if (compound_selector cs = compound_selector::consume(in, ctx))
 	{
 		in.advance(cs.end());
 		v.push_back(std::move(cs));
@@ -769,13 +772,13 @@ complex_selector complex_selector::consume(syntax_primitive_stream in)
 	{
 		const_iterator it0 = in.begin(); // 空白文字の開始位置
 		bool ws = in.skip_whitespace();
-		combinator c = combinator::consume(in);
+		combinator c = combinator::consume(in, ctx);
 		if (!ws && !c) break;
 
 		if (c) in.advance(c.end());
 
 		in.skip_whitespace();
-		compound_selector cs = compound_selector::consume(in);
+		compound_selector cs = compound_selector::consume(in, ctx);
 		if (cs) in.advance(cs.end());
 		else break;
 
@@ -805,20 +808,20 @@ std::vector<complex_selector::value_type> const& complex_selector::value() const
 // <relative-selector> = <combinator>? <complex-selector>
 // ------------------------------------------------------------------------------------------------
 
-relative_selector relative_selector::consume(syntax_primitive_stream in)
+relative_selector relative_selector::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<std::variant<compound_selector, combinator>> v;
 
-	combinator c = combinator::consume(in);
+	combinator c = combinator::consume(in, ctx);
 	if (c)
 	{
 		in.advance(c.end());
 		v.push_back(std::move(c));
 	}
 
-	complex_selector cs = complex_selector::consume(in);
+	complex_selector cs = complex_selector::consume(in, ctx);
 	if (cs)
 	{
 		in.advance(cs.end());
@@ -845,13 +848,13 @@ std::vector<relative_selector::value_type> const& relative_selector::value() con
 // <relative-selector-list> = <relative-selector>#
 // ------------------------------------------------------------------------------------------------
 
-relative_selector_list relative_selector_list::consume(syntax_primitive_stream in)
+relative_selector_list relative_selector_list::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<relative_selector> v;
 
-	relative_selector rs = relative_selector::consume(in);
+	relative_selector rs = relative_selector::consume(in, ctx);
 	if (!rs) return relative_selector_list(it0, it0, std::vector<relative_selector>());
 
 	in.advance(rs.end());
@@ -864,7 +867,7 @@ relative_selector_list relative_selector_list::consume(syntax_primitive_stream i
 
 		in.consume();
 		in.skip_whitespace();
-		relative_selector rs = relative_selector::consume(in);
+		relative_selector rs = relative_selector::consume(in, ctx);
 		if (!rs) return relative_selector_list(it0, it0, std::vector<relative_selector>());
 		in.advance(rs.end());
 		v.push_back(std::move(rs));
@@ -888,13 +891,13 @@ std::vector<relative_selector> const& relative_selector_list::value() const
 // <simple-selector-list> = <simple-selector>#
 // ------------------------------------------------------------------------------------------------
 
-simple_selector_list simple_selector_list::consume(syntax_primitive_stream in)
+simple_selector_list simple_selector_list::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<simple_selector> v;
 
-	simple_selector rs = simple_selector::consume(in);
+	simple_selector rs = simple_selector::consume(in, ctx);
 	if (!rs) return simple_selector_list(it0, it0, std::vector<simple_selector>());
 
 	in.advance(rs.end());
@@ -907,7 +910,7 @@ simple_selector_list simple_selector_list::consume(syntax_primitive_stream in)
 
 		in.consume();
 		in.skip_whitespace();
-		simple_selector rs = simple_selector::consume(in);
+		simple_selector rs = simple_selector::consume(in, ctx);
 		if (!rs) return simple_selector_list(it0, it0, std::vector<simple_selector>());
 		in.advance(rs.end());
 		v.push_back(std::move(rs));
@@ -931,13 +934,13 @@ std::vector<simple_selector> const& simple_selector_list::value() const
 // <compound-selector-list> = <compound-selector>#
 // ------------------------------------------------------------------------------------------------
 
-compound_selector_list compound_selector_list::consume(syntax_primitive_stream in)
+compound_selector_list compound_selector_list::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<compound_selector> v;
 
-	compound_selector rs = compound_selector::consume(in);
+	compound_selector rs = compound_selector::consume(in, ctx);
 	if (!rs) return compound_selector_list(it0, it0, std::vector<compound_selector>());
 
 	in.advance(rs.end());
@@ -950,7 +953,7 @@ compound_selector_list compound_selector_list::consume(syntax_primitive_stream i
 
 		in.consume();
 		in.skip_whitespace();
-		compound_selector rs = compound_selector::consume(in);
+		compound_selector rs = compound_selector::consume(in, ctx);
 		if (!rs) return compound_selector_list(it0, it0, std::vector<compound_selector>());
 		in.advance(rs.end());
 		v.push_back(std::move(rs));
@@ -974,13 +977,13 @@ std::vector<compound_selector> const& compound_selector_list::value() const
 // <complex-selector-list> = <complex-selector>#
 // ------------------------------------------------------------------------------------------------
 
-complex_selector_list complex_selector_list::consume(syntax_primitive_stream in)
+complex_selector_list complex_selector_list::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
 	std::vector<complex_selector> v;
 
-	complex_selector rs = complex_selector::consume(in);
+	complex_selector rs = complex_selector::consume(in, ctx);
 	if (!rs) return complex_selector_list(it0, it0, std::vector<complex_selector>());
 
 	in.advance(rs.end());
@@ -993,7 +996,7 @@ complex_selector_list complex_selector_list::consume(syntax_primitive_stream in)
 
 		in.consume();
 		in.skip_whitespace();
-		complex_selector rs = complex_selector::consume(in);
+		complex_selector rs = complex_selector::consume(in, ctx);
 		if (!rs) return complex_selector_list(it0, it0, std::vector<complex_selector>());
 		in.advance(rs.end());
 		v.push_back(std::move(rs));
@@ -1017,11 +1020,11 @@ std::vector<complex_selector> const& complex_selector_list::value() const
 // <selector-list> = <complex-selector-list>
 // ------------------------------------------------------------------------------------------------
 
-selector_list selector_list::consume(syntax_primitive_stream in)
+selector_list selector_list::consume(syntax_primitive_stream in, parse_context& ctx)
 {
 	const_iterator it0 = in.begin();
 
-	complex_selector_list csl = complex_selector_list::consume(in);
+	complex_selector_list csl = complex_selector_list::consume(in, ctx);
 	if (csl) return selector_list(it0, csl.end(), std::move(csl));
 
 	return selector_list(it0, it0, complex_selector_list());

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>wordring_cpp: wordring ディレクトリリファレンス</title>
+<title>wordring_cpp: README</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -36,23 +36,18 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
-<div id="nav-path" class="navpath">
-  <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li>  </ul>
-</div>
 </div><!-- top -->
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">wordring ディレクトリリファレンス</div>  </div>
+<div class="title">README </div>  </div>
 </div><!--header-->
 <div class="contents">
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="subdirs"></a>
-ディレクトリ</h2></td></tr>
-<tr class="memitem:dir_60775d12a87b61a33d2f427675caa884"><td class="memItemLeft" align="right" valign="top">ディレクトリ &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="dir_60775d12a87b61a33d2f427675caa884.html">whatwg</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
-</div><!-- contents -->
+<div class="textblock"><ul>
+<li>CSS パーサーへの入力文字列が右辺値参照である理由は、解析前にコードポイントをフィルタリングするため、 バッファの一部を消去する可能性があるから。</li>
+<li>CSS 規格は文書に対して CSS が読み込まれ構文解析される前提を持つが、 wordring_cpp は文書と無関係に CSS セレクタが構文解析され、複数の文書で同じセレクタを使いまわす前提がある。 そのため、規格と実装の間に些細な違いが生まれてしまった。 </li>
+</ul>
+</div></div><!-- contents -->
+</div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

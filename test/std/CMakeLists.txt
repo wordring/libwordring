@@ -15,8 +15,6 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package (
 	Boost 1.67 REQUIRED
 	COMPONENTS
-		system
-		filesystem
 		unit_test_framework
 )
 
@@ -41,7 +39,6 @@ add_definitions(-DCURRENT_BINARY_PATH=${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}
-		${Boost_FILESYSTEM_LIBRARY}
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

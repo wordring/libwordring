@@ -13,9 +13,6 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package (
 	Boost 1.67 REQUIRED
-	COMPONENTS
-		system
-		filesystem
 )
 
 include_directories (
@@ -33,10 +30,3 @@ add_definitions(-DDATA_PATH=${CMAKE_CURRENT_SOURCE_DIR}/data/)
 add_definitions(-DATOM_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/html/parsing/atom_tbl.hpp)
 add_definitions(-DATOM_DEFS_HPP_PATH=${Wordring_INCLUDE_DIR}/wordring/whatwg/html/parsing/atom_defs.hpp)
 add_definitions(-DATOM_CPP_PATH=${Wordring_DIR}/lib/whatwg/html/parsing/atom_tbl.cpp)
-
-target_link_libraries(
-	atom_tbl
-		${Boost_FILESYSTEM_LIBRARY}
-		${Boost_SYSTEM_LIBRARY}
-)
-#${CMAKE_CURRENT_SOURCE_DIR}

@@ -300,12 +300,11 @@ BOOST_AUTO_TEST_CASE(grammar_combinator_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U">";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = combinator::consume(in);
+	parse_context pc;
+	auto r = combinator::consume(s, pc);
 	BOOST_CHECK(r);
 	BOOST_CHECK(r.type() == U'>');
 }
@@ -315,12 +314,11 @@ BOOST_AUTO_TEST_CASE(grammar_combinator_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"||";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = combinator::consume(in);
+	parse_context pc;
+	auto r = combinator::consume(s, pc);
 	BOOST_CHECK(r);
 	BOOST_CHECK(r.type() == U'|');
 }
@@ -330,12 +328,11 @@ BOOST_AUTO_TEST_CASE(grammar_combinator_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = combinator::consume(in);
+	parse_context pc;
+	auto r = combinator::consume(s, pc);
 	BOOST_CHECK(!r);
 	BOOST_CHECK(r.type() == U'\0');
 }
@@ -345,12 +342,11 @@ BOOST_AUTO_TEST_CASE(grammar_combinator_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"|";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = combinator::consume(in);
+	parse_context pc;
+	auto r = combinator::consume(s, pc);
 	BOOST_CHECK(!r);
 	BOOST_CHECK(r.type() == U'\0');
 }
@@ -360,12 +356,11 @@ BOOST_AUTO_TEST_CASE(grammar_combinator_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = combinator::consume(in);
+	parse_context pc;
+	auto r = combinator::consume(s, pc);
 	BOOST_CHECK(!r);
 	BOOST_CHECK(r.type() == U'\0');
 }
@@ -379,12 +374,12 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"ns|";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto ns = ns_prefix::consume(in);
+	parse_context pc;
+	pc.m_namespace_uris[ U"ns" ] = U"";
+	auto ns = ns_prefix::consume(s, pc);
 	BOOST_CHECK(ns);
 	BOOST_CHECK(ns.string() == U"ns");
 }
@@ -394,12 +389,11 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*|";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto ns = ns_prefix::consume(in);
+	parse_context pc;
+	auto ns = ns_prefix::consume(s, pc);
 	BOOST_CHECK(ns);
 	BOOST_CHECK(ns.string() == U"*");
 }
@@ -409,12 +403,11 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"|";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto ns = ns_prefix::consume(in);
+	parse_context pc;
+	auto ns = ns_prefix::consume(s, pc);
 	BOOST_CHECK(ns);
 	BOOST_CHECK(ns.string() == U"");
 }
@@ -424,12 +417,11 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"ns";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = ns_prefix::consume(in);
+	parse_context pc;
+	auto r = ns_prefix::consume(s, pc);
 	BOOST_CHECK(!r);
 }
 
@@ -438,12 +430,11 @@ BOOST_AUTO_TEST_CASE(grammar_ns_prefix_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = ns_prefix::consume(in);
+	parse_context pc;
+	auto r = ns_prefix::consume(s, pc);
 	BOOST_CHECK(!r);
 }
 
@@ -456,12 +447,12 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"ns|name";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto name = wq_name::consume(in);
+	parse_context pc;
+	pc.m_namespace_uris[U"ns"] = U"";
+	auto name = wq_name::consume(s, pc);
 	BOOST_CHECK(name);
 	BOOST_CHECK(name.prefix()->string() == U"ns");
 	BOOST_CHECK(name.name() == U"name");
@@ -472,12 +463,11 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*|name";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto name = wq_name::consume(in);
+	parse_context pc;
+	auto name = wq_name::consume(s, pc);
 	BOOST_CHECK(name);
 	BOOST_CHECK(name.prefix()->string() == U"*");
 	BOOST_CHECK(name.name() == U"name");
@@ -488,12 +478,11 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"name";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto name = wq_name::consume(in);
+	parse_context pc;
+	auto name = wq_name::consume(s, pc);
 	BOOST_CHECK(name);
 	BOOST_CHECK(!name.prefix());
 	BOOST_CHECK(name.name() == U"name");
@@ -504,12 +493,11 @@ BOOST_AUTO_TEST_CASE(grammar_wq_name_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto name = wq_name::consume(in);
+	parse_context pc;
+	auto name = wq_name::consume(s, pc);
 	BOOST_CHECK(!name);
 }
 
@@ -522,12 +510,11 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"#id";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = id_selector::consume(in);
+	parse_context pc;
+	auto r = id_selector::consume(s, pc);
 	BOOST_CHECK(r);
 	BOOST_CHECK(r.value() == U"id");
 }
@@ -537,12 +524,11 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U".id";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = id_selector::consume(in);
+	parse_context pc;
+	auto r = id_selector::consume(s, pc);
 	BOOST_CHECK(!r);
 }
 
@@ -551,12 +537,11 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = id_selector::consume(in);
+	parse_context pc;
+	auto r = id_selector::consume(s, pc);
 	BOOST_CHECK(!r);
 }
 
@@ -569,12 +554,11 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U".class";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = class_selector::consume(in);
+	parse_context pc;
+	auto r = class_selector::consume(s, pc);
 	BOOST_CHECK(r);
 	BOOST_CHECK(r.name() == U"class");
 }
@@ -584,12 +568,11 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"class";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = class_selector::consume(in);
+	parse_context pc;
+	auto r = class_selector::consume(s, pc);
 	BOOST_CHECK(!r);
 }
 
@@ -602,12 +585,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_matcher_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"=";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = attr_matcher::consume(in);
+	parse_context pc;
+	auto r = attr_matcher::consume(s, pc);
 	BOOST_CHECK(r);
 	BOOST_CHECK(r.prefix() == U'=');
 }
@@ -617,12 +599,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_matcher_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"~=";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = attr_matcher::consume(in);
+	parse_context pc;
+	auto r = attr_matcher::consume(s, pc);
 	BOOST_CHECK(r);
 	BOOST_CHECK(r.prefix() == U'~');
 }
@@ -632,12 +613,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_matcher_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"~~";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = attr_matcher::consume(in);
+	parse_context pc;
+	auto r = attr_matcher::consume(s, pc);
 	BOOST_CHECK(!r);
 	BOOST_CHECK(r.prefix() == U'\0');
 }
@@ -647,12 +627,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_matcher_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto r = attr_matcher::consume(in);
+	parse_context pc;
+	auto r = attr_matcher::consume(s, pc);
 	BOOST_CHECK(!r);
 	BOOST_CHECK(r.prefix() == U'\0');
 }
@@ -666,14 +645,13 @@ BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"i";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto s = attr_modifier::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.value() == U'i');
+	parse_context pc;
+	auto am = attr_modifier::consume(s, pc);
+	BOOST_CHECK(am);
+	BOOST_CHECK(am.value() == U'i');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_2)
@@ -681,14 +659,13 @@ BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"I";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto s = attr_modifier::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.value() == U'i');
+	parse_context pc;
+	auto am = attr_modifier::consume(s, pc);
+	BOOST_CHECK(am);
+	BOOST_CHECK(am.value() == U'i');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_3)
@@ -696,14 +673,13 @@ BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"s";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream s(v);
 
-	auto s = attr_modifier::consume(in);
-	BOOST_CHECK(s);
-	BOOST_CHECK(s.value() == U's');
+	parse_context pc;
+	auto am = attr_modifier::consume(s, pc);
+	BOOST_CHECK(am);
+	BOOST_CHECK(am.value() == U's');
 }
 
 BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_4)
@@ -711,12 +687,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"S";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = attr_modifier::consume(in);
+	parse_context pc;
+	auto s = attr_modifier::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.value() == U's');
 }
@@ -726,12 +701,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"a";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = attr_modifier::consume(in);
+	parse_context pc;
+	auto s = attr_modifier::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -740,12 +714,11 @@ BOOST_AUTO_TEST_CASE(grammar_attr_modifier_consume_6)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = attr_modifier::consume(in);
+	parse_context pc;
+	auto s = attr_modifier::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -758,12 +731,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_class_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":any-link";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_class_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_class_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.get<ident_token>().m_value == U"any-link");
 }
@@ -773,12 +745,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_class_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":is(ul, ol, .list)";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_class_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_class_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.type() == syntax_primitive_name::Function);
 }
@@ -788,12 +759,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_class_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":before";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_class_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_class_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -806,12 +776,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_element_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"::before";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_element_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_element_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.type() == syntax_primitive_name::IdentToken);
 	BOOST_CHECK(s.get<ident_token>().m_value == U"before");
@@ -822,12 +791,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_element_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":before";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_element_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_element_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.type() == syntax_primitive_name::IdentToken);
 	BOOST_CHECK(s.get<ident_token>().m_value == U"before");
@@ -838,12 +806,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_element_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"::part()";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_element_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_element_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.type() == syntax_primitive_name::Function);
 	BOOST_CHECK(s.get<function>().m_name == U"part");
@@ -854,12 +821,11 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_element_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":any-link";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = pseudo_element_selector::consume(in);
+	parse_context pc;
+	auto s = pseudo_element_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -873,12 +839,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -892,12 +857,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr = val ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -911,12 +875,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr ~= val ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -930,12 +893,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr |=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -949,12 +911,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr^=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -968,12 +929,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_6)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr$=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -987,12 +947,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_7)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr*=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -1006,12 +965,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_8)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr=val i]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -1025,12 +983,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_9)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr=val I]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -1044,12 +1001,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_10)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr=val s]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -1063,12 +1019,11 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_consume_11)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr=val S ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto as = attribute_selector::consume(in);
+	parse_context pc;
+	auto as = attribute_selector::consume(in, pc);
 	BOOST_CHECK(as);
 	BOOST_CHECK(!as.prefix());
 	BOOST_CHECK(as.name() == U"attr");
@@ -1086,12 +1041,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"#id";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	id_selector id = std::get<id_selector>(s.value());
@@ -1103,12 +1057,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U".cls";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	class_selector cls = std::get<class_selector>(s.value());
@@ -1120,12 +1073,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	attribute_selector as = std::get<attribute_selector>(s.value());
@@ -1141,12 +1093,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr = val ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1162,12 +1113,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr ~= val ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1183,12 +1133,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_6)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr |=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1204,12 +1153,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_7)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr^=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1225,12 +1173,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_8)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr$=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1246,12 +1193,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_9)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr*=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1267,12 +1213,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_10)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr=val i]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto ss = subclass_selector::consume(in);
+	parse_context pc;
+	auto ss = subclass_selector::consume(in, pc);
 	BOOST_CHECK(ss);
 
 	attribute_selector as = std::get<attribute_selector>(ss.value());
@@ -1288,12 +1233,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_11)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":any-link";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	pseudo_class_selector pcls = std::get<pseudo_class_selector>(s.value());
@@ -1306,12 +1250,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_12)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":is(ul, ol, .list)";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	pseudo_class_selector pcls = std::get<pseudo_class_selector>(s.value());
@@ -1324,12 +1267,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_13)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":before";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -1338,12 +1280,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_14)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -1352,12 +1293,11 @@ BOOST_AUTO_TEST_CASE(grammar_subclass_selector_consume_15)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = subclass_selector::consume(in);
+	parse_context pc;
+	auto s = subclass_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -1370,12 +1310,11 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
@@ -1387,12 +1326,11 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	std::optional<ns_prefix> ns = std::get<std::optional<ns_prefix>>(s.value());
@@ -1404,12 +1342,12 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"foo|h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	pc.m_namespace_uris[U"foo"] = U"";
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
@@ -1422,12 +1360,12 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"foo|*";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	pc.m_namespace_uris[U"foo"] = U"";
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	std::optional<ns_prefix> ns = std::get<std::optional<ns_prefix>>(s.value());
@@ -1440,12 +1378,11 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"|h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
@@ -1458,12 +1395,11 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_6)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*|h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	wq_name name = std::get<wq_name>(s.value());
@@ -1476,12 +1412,11 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_7)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U".cls";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -1490,12 +1425,11 @@ BOOST_AUTO_TEST_CASE(grammar_type_selector_consume_8)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = type_selector::consume(in);
+	parse_context pc;
+	auto s = type_selector::consume(in, pc);
 	BOOST_CHECK(!s);
 }
 
@@ -1508,12 +1442,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	type_selector t = std::get<type_selector>(s.value());
@@ -1526,12 +1459,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	type_selector t = std::get<type_selector>(s.value());
@@ -1544,12 +1476,12 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"foo|h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	pc.m_namespace_uris[U"foo"] = U"";
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	type_selector t = std::get<type_selector>(s.value());
@@ -1563,12 +1495,12 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"foo|*";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	pc.m_namespace_uris[U"foo"] = U"";
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	type_selector t = std::get<type_selector>(s.value());
@@ -1582,12 +1514,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_5)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"|h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	type_selector t = std::get<type_selector>(s.value());
@@ -1601,12 +1532,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_6)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"*|h1";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	type_selector t = std::get<type_selector>(s.value());
@@ -1620,12 +1550,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_7)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"#id";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector t = std::get<subclass_selector>(s.value());
@@ -1638,12 +1567,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_8)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U".cls";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector t = std::get<subclass_selector>(s.value());
@@ -1656,12 +1584,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_9)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1678,12 +1605,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_10)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr = val ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1700,12 +1626,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_11)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr ~= val ]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1722,12 +1647,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_12)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr |=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1744,12 +1668,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_13)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr^=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1766,12 +1689,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_14)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr$=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1788,12 +1710,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_15)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr*=val]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1810,12 +1731,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_16)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[attr=val i]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector ss = std::get<subclass_selector>(s.value());
@@ -1832,12 +1752,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_17)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":any-link";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector t = std::get<subclass_selector>(s.value());
@@ -1851,12 +1770,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_consume_18)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U":is(ul, ol, .list)";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = simple_selector::consume(in);
+	parse_context pc;
+	auto s = simple_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	subclass_selector t = std::get<subclass_selector>(s.value());
@@ -1875,12 +1793,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = compound_selector::consume(in);
+	parse_context pc;
+	auto s = compound_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.value().size() == 1);
 	type_selector t = std::get<type_selector>(s.value().front());
@@ -1893,12 +1810,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"#id";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = compound_selector::consume(in);
+	parse_context pc;
+	auto s = compound_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.value().size() == 1);
 	subclass_selector t = std::get<subclass_selector>(s.value().front());
@@ -1911,12 +1827,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"::before";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = compound_selector::consume(in);
+	parse_context pc;
+	auto s = compound_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.value().size() == 1);
 	pseudo_element_selector p = std::get<pseudo_element_selector>(s.value().front());
@@ -1928,12 +1843,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"::before:hover:focus";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = compound_selector::consume(in);
+	parse_context pc;
+	auto s = compound_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.value().size() == 3);
 	pseudo_element_selector p = std::get<pseudo_element_selector>(s.value().front());
@@ -1949,12 +1863,11 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P A";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = complex_selector::consume(in);
+	parse_context pc;
+	auto s = complex_selector::consume(in, pc);
 	BOOST_CHECK(s);
 	BOOST_CHECK(s.value().size() == 3);
 
@@ -1967,12 +1880,11 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr=\"val\" ] > A";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = complex_selector::consume(in);
+	parse_context pc;
+	auto s = complex_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	std::u32string sz = print(s);
@@ -1984,12 +1896,11 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"[ attr^=val ] > A";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto s = complex_selector::consume(in);
+	parse_context pc;
+	auto s = complex_selector::consume(in, pc);
 	BOOST_CHECK(s);
 
 	std::u32string sz = print(s);
@@ -2005,12 +1916,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P  A";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rs = relative_selector::consume(in);
+	parse_context pc;
+	auto rs = relative_selector::consume(in, pc);
 	BOOST_CHECK(rs);
 	BOOST_CHECK(rs.value().size() == 3);
 
@@ -2023,12 +1933,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U">P  A";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rs = relative_selector::consume(in);
+	parse_context pc;
+	auto rs = relative_selector::consume(in, pc);
 	BOOST_CHECK(rs);
 	BOOST_CHECK(rs.value().size() == 4);
 
@@ -2041,12 +1950,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"()";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rs = relative_selector::consume(in);
+	parse_context pc;
+	auto rs = relative_selector::consume(in, pc);
 	BOOST_CHECK(!rs);
 }
 
@@ -2055,12 +1963,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rs = relative_selector::consume(in);
+	parse_context pc;
+	auto rs = relative_selector::consume(in, pc);
 	BOOST_CHECK(!rs);
 }
 
@@ -2073,12 +1980,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_list_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P  A,[attr]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = relative_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = relative_selector_list::consume(in, pc);
 	BOOST_CHECK(rsl);
 	BOOST_CHECK(rsl.value().size() == 2);
 
@@ -2091,12 +1997,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_list_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P  A , [ attr ] , A:before";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = relative_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = relative_selector_list::consume(in, pc);
 	BOOST_CHECK(rsl);
 	BOOST_CHECK(rsl.value().size() == 3);
 
@@ -2109,12 +2014,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_list_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P  A , ()";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = relative_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = relative_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2123,12 +2027,11 @@ BOOST_AUTO_TEST_CASE(grammar_relative_selector_list_consume_4)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = relative_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = relative_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2141,12 +2044,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_list_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P , #id , .cls , [attr]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = simple_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = simple_selector_list::consume(in, pc);
 	BOOST_CHECK(rsl);
 	BOOST_CHECK(rsl.value().size() == 4);
 
@@ -2159,12 +2061,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_list_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P , #id , .cls , [attr] ,()";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = simple_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = simple_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2173,12 +2074,11 @@ BOOST_AUTO_TEST_CASE(grammar_simple_selector_list_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = simple_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = simple_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2191,12 +2091,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_list_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P:before , #id , .cls , [attr]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = compound_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = compound_selector_list::consume(in, pc);
 	BOOST_CHECK(rsl);
 	BOOST_CHECK(rsl.value().size() == 4);
 
@@ -2209,12 +2108,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_list_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P:before , #id , .cls , [attr],()";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = compound_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = compound_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2223,12 +2121,11 @@ BOOST_AUTO_TEST_CASE(grammar_compound_selector_list_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = compound_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = compound_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2241,12 +2138,11 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_list_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P:before A > B , #id > A , .cls , [attr]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = complex_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = complex_selector_list::consume(in, pc);
 	BOOST_CHECK(rsl);
 	BOOST_CHECK(rsl.value().size() == 4);
 
@@ -2259,12 +2155,11 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_list_consume_2)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P:before A > B , #id > A , .cls , [attr],()";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = complex_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = complex_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2273,12 +2168,11 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_list_consume_3)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = complex_selector_list::consume(in);
+	parse_context pc;
+	auto rsl = complex_selector_list::consume(in, pc);
 	BOOST_CHECK(!rsl);
 }
 
@@ -2291,12 +2185,11 @@ BOOST_AUTO_TEST_CASE(grammar_selector_list_consume_1)
 	using namespace wordring::wwwc::css;
 
 	std::u32string css = U"P:before A > B , #id > A , .cls , [attr]";
-	std::optional<std::vector<syntax_primitive>> v = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(v);
-	syntax_primitive_stream in(*v);
+	std::vector<syntax_primitive> v = parse_list_of_component_values(std::move(css));
+	syntax_primitive_stream in(v);
 
-	auto rsl = selector_list::consume(in);
+	parse_context pc;
+	auto rsl = selector_list::consume(in, pc);
 	BOOST_CHECK(rsl);
 
 	std::u32string sz = print(rsl);
@@ -2316,39 +2209,6 @@ BOOST_AUTO_TEST_CASE(grammar_selector_list_consume_1)
 
 
 
-
-// ------------------------------------------------------------------------------------------------
-
-BOOST_AUTO_TEST_CASE(grammar_selector_parser_pseudo_class_1)
-{
-	using namespace wordring::wwwc::css;
-
-	std::u32string css = U":dir(ltr)";
-	std::optional<std::vector<syntax_primitive>> ret = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(ret);
-
-	auto const& v = *ret;
-	BOOST_CHECK(v.size() == 2);
-	BOOST_CHECK(v[0].type() == syntax_primitive_name::ColonToken);
-	BOOST_CHECK(v[1].type() == syntax_primitive_name::Function);
-}
-
-BOOST_AUTO_TEST_CASE(grammar_selector_parser_pseudo_class_2)
-{
-	using namespace wordring::wwwc::css;
-
-	std::u32string css = U"::after";
-	std::optional<std::vector<syntax_primitive>> ret = parse_grammar(std::move(css)
-		, [](std::vector<syntax_primitive> const&)->bool { return true; });
-	BOOST_CHECK(ret);
-
-	auto const& v = *ret;
-	BOOST_CHECK(v.size() == 3);
-	BOOST_CHECK(v[0].type() == syntax_primitive_name::ColonToken);
-	BOOST_CHECK(v[1].type() == syntax_primitive_name::ColonToken);
-	BOOST_CHECK(v[2].type() == syntax_primitive_name::IdentToken);
-}
 
 // ------------------------------------------------------------------------------------------------
 

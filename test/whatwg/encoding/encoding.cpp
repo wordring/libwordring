@@ -243,7 +243,7 @@ BOOST_AUTO_TEST_CASE(process_token_encoder_8_2)
 	BOOST_CHECK(r.index() == 1);
 	BOOST_CHECK(output == "");
 
-	while (stream) output.push_back(*stream.read());
+	while (stream) output.push_back(static_cast<char8_t>(*stream.read()));
 	BOOST_CHECK(output == "&#1234;");
 }
 

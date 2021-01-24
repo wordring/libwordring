@@ -57,7 +57,7 @@ namespace wordring::whatwg
 				uint8_t val{};
 				char bytes[3]{};
 				for (uint32_t i = 0; i < 3; i++) bytes[i] = static_cast<unsigned char>(*first++);
-				std::from_chars_result ret = std::from_chars(bytes + 1, bytes + 3, val, 16);
+				[[maybe_unused]] std::from_chars_result ret = std::from_chars(bytes + 1, bytes + 3, val, 16);
 				assert(ret.ec == std::errc{});
 				*output++ = val;
 				continue;
@@ -72,7 +72,7 @@ namespace wordring::whatwg
 	inline void string_percent_decode(InputIterator first, InputIterator last, OutputIterator output)
 	{
 		std::u8string tmp{};
-		encoding::utf_8_encode(first, last, std::back_inserter(tmp));
+		encoding::utf8_encode(first, last, std::back_inserter(tmp));
 		percent_decode(tmp.begin(), tmp.end(), output);
 	}
 

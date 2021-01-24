@@ -8,7 +8,7 @@
 // ------------------------------------------------------------------------------------------------
 
 #include <wordring/wwwc/selectors/pseudo_class_defs.hpp>
-#include <wordring/wwwc/selectors/selectors_defs.hpp>
+#include <wordring/wwwc/css_defs.hpp>
 
 #include <wordring/html/html_defs.hpp>
 

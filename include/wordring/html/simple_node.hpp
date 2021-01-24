@@ -1002,6 +1002,12 @@ namespace wordring::html
 		return std::get<simple_element<String>>(node).qualified_name();
 	}
 
+	template <typename String>
+	inline document_type_name get_document_type(simple_node<String> const& node)
+	{
+		return std::get<simple_document<String>>(node).document_type();
+	}
+
 	/*! @brief 文書ノードに文書形式を設定する
 
 	@param [in] node 文書ノード
