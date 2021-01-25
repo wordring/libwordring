@@ -55,9 +55,9 @@ $(function() {
 <tr class="memitem:ad55886e3ef0d4e3a3d9f217d45eebc84"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">query_selector_all</a> (NodePointer np, String const &amp;selector, OutputIterator out)</td></tr>
 <tr class="memdesc:ad55886e3ef0d4e3a3d9f217d45eebc84"><td class="mdescLeft">&#160;</td><td class="mdescRight">セレクタと合致するノードをすべて列挙する  <a href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">[詳解]</a><br /></td></tr>
 <tr class="separator:ad55886e3ef0d4e3a3d9f217d45eebc84"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa896ea4269ad4b9908a8b033b348a3da"><td class="memTemplParams" colspan="2"><a id="aa896ea4269ad4b9908a8b033b348a3da"></a>
-template&lt;typename NodePointer , typename String &gt; </td></tr>
-<tr class="memitem:aa896ea4269ad4b9908a8b033b348a3da"><td class="memTemplItemLeft" align="right" valign="top">NodePointer&#160;</td><td class="memTemplItemRight" valign="bottom"><b>query_selector</b> (NodePointer np, String const &amp;selector)</td></tr>
+<tr class="memitem:aa896ea4269ad4b9908a8b033b348a3da"><td class="memTemplParams" colspan="2">template&lt;typename NodePointer , typename String &gt; </td></tr>
+<tr class="memitem:aa896ea4269ad4b9908a8b033b348a3da"><td class="memTemplItemLeft" align="right" valign="top">NodePointer&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1css.html#aa896ea4269ad4b9908a8b033b348a3da">query_selector</a> (NodePointer np, String const &amp;selector)</td></tr>
+<tr class="memdesc:aa896ea4269ad4b9908a8b033b348a3da"><td class="mdescLeft">&#160;</td><td class="mdescRight">セレクタと合致する最初のノードを返す  <a href="namespacewordring_1_1css.html#aa896ea4269ad4b9908a8b033b348a3da">[詳解]</a><br /></td></tr>
 <tr class="separator:aa896ea4269ad4b9908a8b033b348a3da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
@@ -129,20 +129,93 @@ template&lt;typename NodePointer , typename String , typename OutputIterator &gt
 <div class="line"><span class="keyword">namespace </span>html = <a class="code" href="namespacewordring_1_1html.html">wordring::html</a>;</div>
 <div class="line"> </div>
 <div class="line">std::string_view sv = u8<span class="stringliteral">&quot;&lt;p&gt;text1&lt;/p&gt;&lt;p&gt;text2&lt;/p&gt;&quot;</span>;</div>
-<div class="line">html::u8simple_tree tree = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
+<div class="line">html::u8simple_tree doc = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
 <div class="line"> </div>
 <div class="line">std::vector&lt;html::u8simple_tree::const_iterator&gt; v;</div>
-<div class="line"><a class="code" href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">css::query_selector_all</a>(tree.begin(), u<span class="stringliteral">&quot;p&quot;</span>, std::back_inserter(v));</div>
+<div class="line"><a class="code" href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">css::query_selector_all</a>(doc.begin(), u<span class="stringliteral">&quot;p&quot;</span>, std::back_inserter(v));</div>
 <div class="line"> </div>
 <div class="line">std::u32string s;</div>
 <div class="line">html::to_string(v[0], std::back_inserter(s)); <span class="comment">// s == U&quot;text1&quot;</span></div>
-</div><!-- fragment --> </dd></dl>
+</div><!-- fragment --></dd></dl>
+<dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/DOM4-ja.html#dom-parentnode-queryselectorall">https://triple-underscore.github.io/DOM4-ja.html#dom-parentnode-queryselectorall</a> </dd>
+<dd>
+<a href="https://dom.spec.whatwg.org/#dom-parentnode-queryselectorall">https://dom.spec.whatwg.org/#dom-parentnode-queryselectorall</a> </dd></dl>
+
+</div>
+</div>
+<a id="aa896ea4269ad4b9908a8b033b348a3da"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa896ea4269ad4b9908a8b033b348a3da">&#9670;&nbsp;</a></span>query_selector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename NodePointer , typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">NodePointer wordring::css::query_selector </td>
+          <td>(</td>
+          <td class="paramtype">NodePointer&#160;</td>
+          <td class="paramname"><em>np</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">String const &amp;&#160;</td>
+          <td class="paramname"><em>selector</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>セレクタと合致する最初のノードを返す </p>
+<dl class="tparams"><dt>テンプレート引数</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">NodePointer</td><td>ノードへのポインタあるいはイテレータ </td></tr>
+    <tr><td class="paramname">String</td><td>UTF-8 UTF-16 UTF-32 といったユニコード文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">np</td><td>起点となるノードへのポインタあるいはイテレータ </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">selector</td><td>セレクタ文字列</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>起点となるノード自身はセレクタと一致しません。</p>
+<p>セレクタ文字列は UTF-8 UTF-16 UTF-32 といったユニコード文字列であれば十分であり、 HTML ノードの文字コードと一致させる必要はありません。</p>
+<dl class="section user"><dt>例</dt><dd><div class="fragment"><div class="line">  <span class="keyword">namespace </span>css = <a class="code" href="namespacewordring_1_1css.html">wordring::css</a>;</div>
+<div class="line"><span class="keyword">namespace </span>html = <a class="code" href="namespacewordring_1_1html.html">wordring::html</a>;</div>
+<div class="line"> </div>
+<div class="line">std::u32string_view sv = U<span class="stringliteral">&quot;&lt;p&gt;text1&lt;/p&gt;&lt;p&gt;text2&lt;/p&gt;&quot;</span>;</div>
+<div class="line">html::u8simple_tree tree = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
+<div class="line"> </div>
+<div class="line">html::u8simple_tree::const_iterator it = <a class="code" href="namespacewordring_1_1css.html#aa896ea4269ad4b9908a8b033b348a3da">css::query_selector</a>(tree.begin(), u<span class="stringliteral">&quot;p&quot;</span>);</div>
+<div class="line">std::u16string s;</div>
+<div class="line">html::to_string(it, std::back_inserter(s)); <span class="comment">// s == u&quot;text1&quot;</span></div>
+</div><!-- fragment --></dd></dl>
+<dl class="section see"><dt>参照</dt><dd><a href="https://triple-underscore.github.io/DOM4-ja.html#dom-parentnode-queryselector">https://triple-underscore.github.io/DOM4-ja.html#dom-parentnode-queryselector</a> </dd>
+<dd>
+<a href="https://dom.spec.whatwg.org/#dom-parentnode-queryselector">https://dom.spec.whatwg.org/#dom-parentnode-queryselector</a> </dd></dl>
 
 </div>
 </div>
 </div><!-- contents -->
+<div class="ttc" id="anamespacewordring_1_1css_html_aa896ea4269ad4b9908a8b033b348a3da"><div class="ttname"><a href="namespacewordring_1_1css.html#aa896ea4269ad4b9908a8b033b348a3da">wordring::css::query_selector</a></div><div class="ttdeci">NodePointer query_selector(NodePointer np, String const &amp;selector)</div><div class="ttdoc">セレクタと合致する最初のノードを返す</div><div class="ttdef"><b>Definition:</b> selector.hpp:87</div></div>
 <div class="ttc" id="anamespacewordring_1_1html_html"><div class="ttname"><a href="namespacewordring_1_1html.html">wordring::html</a></div></div>
-<div class="ttc" id="anamespacewordring_1_1css_html_ad55886e3ef0d4e3a3d9f217d45eebc84"><div class="ttname"><a href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">wordring::css::query_selector_all</a></div><div class="ttdeci">void query_selector_all(NodePointer np, String const &amp;selector, OutputIterator out)</div><div class="ttdoc">セレクタと合致するノードをすべて列挙する</div><div class="ttdef"><b>Definition:</b> selector.hpp:50</div></div>
+<div class="ttc" id="anamespacewordring_1_1css_html_ad55886e3ef0d4e3a3d9f217d45eebc84"><div class="ttname"><a href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">wordring::css::query_selector_all</a></div><div class="ttdeci">void query_selector_all(NodePointer np, String const &amp;selector, OutputIterator out)</div><div class="ttdoc">セレクタと合致するノードをすべて列挙する</div><div class="ttdef"><b>Definition:</b> selector.hpp:51</div></div>
 <div class="ttc" id="anamespacewordring_1_1css_html"><div class="ttname"><a href="namespacewordring_1_1css.html">wordring::css</a></div><div class="ttdef"><b>Definition:</b> selector.hpp:12</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

@@ -5,7 +5,7 @@
 
 cmake_minimum_required (VERSION 3.12)
 add_subdirectory("css")
-#[[
+
 add_subdirectory("encoding")
 add_subdirectory("html")
 add_subdirectory("serialize")
@@ -16,4 +16,3 @@ add_subdirectory("tree")
 add_subdirectory("trie")
 add_subdirectory("whatwg")
 add_subdirectory("wwwc")
-]]
