@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: infrastructure.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_60775d12a87b61a33d2f427675caa884.html">whatwg</a></li><li class="navelem"><a class="el" href="dir_f1cc13af8efc061bcdf218682c7ecc5f.html">dom</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">infrastructure.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">// ------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">// 1. Infrastructure</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment">// @sa https://dom.spec.whatwg.org/#infrastructure</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment">// @sa https://triple-underscore.github.io/DOM4-ja.html#infrastructure</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment">// ------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;wordring/wwwc/selectors/api.hpp&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;wordring/wwwc/css_defs.hpp&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;wordring/html/html_defs.hpp&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">namespace </span>wordring::whatwg::dom</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="comment">// 1.3. Selectors</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="comment">// @sa https://dom.spec.whatwg.org/#selectors</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">// @sa https://triple-underscore.github.io/DOM4-ja.html#selectors</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment">// --------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> NodePo<span class="keywordtype">int</span>er, <span class="keyword">typename</span> OutputIterator&gt;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> scope_match(NodePointer np, std::u32string <span class="keyword">const</span>&amp; selector, OutputIterator out)</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        <span class="keyword">using namespace </span><a class="code" href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a>;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keyword">using namespace </span><a class="code" href="namespacewordring_1_1html.html">wordring::html</a>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keyword">using</span> traits = <a class="code" href="structwordring_1_1html_1_1node__traits.html">node_traits&lt;NodePointer&gt;</a>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="comment">// 根を探索</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        NodePointer root = traits::pointer();</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        <span class="keywordflow">if</span> (traits::is_document(np))</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        {</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            root = np;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordflow">for</span> (NodePointer p = np; p != traits::pointer(); p = traits::parent(p))</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            {</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                <span class="keywordflow">if</span> (traits::is_root(p))</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                {</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                    root = p;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                    <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                }</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            }</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        }</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="comment">// セレクタを構文解析</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">parse_context</a> pctx;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="code" href="classwordring_1_1wwwc_1_1css_1_1selector__list.html">selector_list</a> sl = <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#a82650537190c1ed5724bd1fc53b71274">parse_selector</a>(selector, pctx);</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="comment">// 照合</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="namespacewordring_1_1wwwc_1_1css.html#ab7d04e3c5f24774be42a70fe84cc46ee">match_selector</a>(sl, pctx, root, traits::next(root), out, np);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1wwwc_1_1css_1_1selector__list_html"><div class="ttname"><a href="classwordring_1_1wwwc_1_1css_1_1selector__list.html">wordring::wwwc::css::selector_list</a></div><div class="ttdoc">&lt;selector-list&gt;</div><div class="ttdef"><b>Definition:</b> grammar.hpp:1523</div></div>
+<div class="ttc" id="astructwordring_1_1html_1_1node__traits_html"><div class="ttname"><a href="structwordring_1_1html_1_1node__traits.html">wordring::html::node_traits</a></div><div class="ttdoc">HTMLノードへの操作を仲介するアダプタ</div><div class="ttdef"><b>Definition:</b> html/html_defs.hpp:29</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html">wordring::wwwc::css</a></div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_ab7d04e3c5f24774be42a70fe84cc46ee"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#ab7d04e3c5f24774be42a70fe84cc46ee">wordring::wwwc::css::match_selector</a></div><div class="ttdeci">void match_selector(Selector const &amp;s, parse_context const &amp;pctx, NodePointer first, NodePointer last, OutputIterator out, NodePointer scoping_root=wordring::html::node_traits&lt; NodePointer &gt;::pointer(), NodePointer scope_elements_first=wordring::html::node_traits&lt; NodePointer &gt;::pointer(), NodePointer scope_elements_last=wordring::html::node_traits&lt; NodePointer &gt;::pointer(), PseudoElementIterator pseudo_elements_first=nullptr, PseudoElementIterator pseudo_elements_last=nullptr)</div><div class="ttdoc">木とセレクタを照合する</div><div class="ttdef"><b>Definition:</b> api.hpp:110</div></div>
+<div class="ttc" id="anamespacewordring_1_1wwwc_1_1css_html_a82650537190c1ed5724bd1fc53b71274"><div class="ttname"><a href="namespacewordring_1_1wwwc_1_1css.html#a82650537190c1ed5724bd1fc53b71274">wordring::wwwc::css::parse_selector</a></div><div class="ttdeci">selector_list parse_selector(std::u32string const &amp;src, parse_context &amp;ctx)</div><div class="ttdoc">セレクタとして構文解析する</div><div class="ttdef"><b>Definition:</b> api.hpp:38</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html"><div class="ttname"><a href="namespacewordring_1_1html.html">wordring::html</a></div></div>
+<div class="ttc" id="astructwordring_1_1wwwc_1_1css_1_1parse__context_html"><div class="ttname"><a href="structwordring_1_1wwwc_1_1css_1_1parse__context.html">wordring::wwwc::css::parse_context</a></div><div class="ttdef"><b>Definition:</b> css_defs.hpp:23</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

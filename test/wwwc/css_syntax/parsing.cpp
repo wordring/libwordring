@@ -450,22 +450,9 @@ BOOST_AUTO_TEST_CASE(parsing_parse_comma_list_1)
 {
 	using namespace wordring::wwwc::css;
 
-	/*
-	std::u32string css = U"a, p h1";
-	std::vector<std::optional<std::vector<syntax_primitive>>> v =
-		parse_comma_list(std::move(css)
-			, [](std::vector<syntax_primitive> const&)->bool { return true; });
-
-	std::u32string s;
-	for (auto const& c : v)
-	{
-		auto const& v = std::any_cast<std::optional<std::vector<syntax_primitive>>>(c);
-		if (v) s += print(*v);
-	}
-
-	BOOST_CHECK(s == U"a p h1");
-	*/
-	BOOST_CHECK(false);
+	parse_context pc;
+	auto v = parse_comma_list<complex_selector>(U"a, p h1", pc);
+	BOOST_CHECK(v.size() == 2);
 }
 
 // ------------------------------------------------------------------------------------------------

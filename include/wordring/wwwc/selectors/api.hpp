@@ -9,6 +9,8 @@
 
 #include <wordring/wwwc/selectors/grammar.hpp>
 
+#include <wordring/wwwc/css_defs.hpp>
+
 #include <wordring/html/html_defs.hpp>
 #include <wordring/tree/tree_iterator.hpp>
 
@@ -159,18 +161,29 @@ namespace wordring::wwwc::css
 			wordring::tree_iterator<NodePointer> it1(first), it2;
 			while (it1 != it2)
 			{
+				bool is_descendants = true;
 				if (scoping_root != traits::pointer())
 				{
-					for (NodePointer p = it1.base(); p != scoping_root; p = traits::parent(p))
+					is_descendants = false;
+					// scoping_root の子孫か検査する
+					for (NodePointer p = traits::parent(it1.base()); p != traits::pointer(); p = traits::parent(p))
 					{
-						if (p == traits::pointer()) continue;
+						if (p == scoping_root)
+						{
+							is_descendants = true;
+							break;
+						}
 					}
 				}
-				// 要素と照合
-				if(s.match(it1.base(), mctx)) *out++ = it1.base();
-				// 疑似要素と照合
+
+				if (is_descendants)
 				{
-					// TODO:
+					// 要素と照合
+					if (s.match(it1.base(), mctx)) *out++ = it1.base();
+					// 疑似要素と照合
+					{
+						// TODO:
+					}
 				}
 				++it1;
 			}

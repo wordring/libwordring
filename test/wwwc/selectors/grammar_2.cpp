@@ -1325,29 +1325,207 @@ BOOST_AUTO_TEST_CASE(grammar_complex_selector_match_14)
 
 // ------------------------------------------------------------------------------------------------
 // <relative-selector> = <combinator>? <complex-selector>
+//
+// 未実装。
+// TODO:
 // ------------------------------------------------------------------------------------------------
 
-BOOST_AUTO_TEST_CASE(grammar_relative_selector_match_1)
+// ------------------------------------------------------------------------------------------------
+// <relative-selector-list> = <relative-selector>#
+//
+// 未実装。
+// TODO:
+// ------------------------------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------------------------------
+// <simple-selector-list> = <simple-selector>#
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(grammar_simple_selector_list_match_1)
 {
 	using namespace wordring::wwwc::css;
 
-	auto tree = parse(u8"<div><p><h1></h1><h2></h2><h3>h3!</h3></p></div>");
-	tree_iterator it1(tree.begin());
+	auto tree = parse(u8"<p>paragraph</p>");
+	tree_iterator it(tree.begin());
 
 	parse_context pc;
-	auto m1 = css::parse_grammar<type_selector>(U"div", pc);
-
-	match_context<const_iterator> ctx1{ document_type_name::Html, document_mode_name::Quirks };
-	while (it1 != tree_iterator())
+	auto m = css::parse_grammar<simple_selector_list>(U"A, B, P", pc);
+	while (it != tree_iterator())
 	{
-		if (m1.match(it1.base(), ctx1)) break;
-		++it1;
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
 	}
-	auto div = it1.base();
-
-	auto m2 = css::parse_grammar<relative_selector>(U"p > h1", pc);
-	match_context<const_iterator> ctx2{ document_type_name::Html, document_mode_name::Quirks };
-	m2.absolutize(ctx2);
+	BOOST_CHECK(it != tree_iterator());
+	std::u16string s;
+	html::to_string(it.base(), std::back_inserter(s)); // to_string() は子を文字列化するので、<p>タグ自身が現れない。。
+	BOOST_CHECK(s == u"paragraph");
 }
+
+BOOST_AUTO_TEST_CASE(grammar_simple_selector_list_match_2)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<p>paragraph</p>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<simple_selector_list>(U"A, B, SPAN", pc);
+	while (it != tree_iterator())
+	{
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
+	}
+	BOOST_CHECK(it == tree_iterator());
+}
+
+BOOST_AUTO_TEST_CASE(grammar_simple_selector_list_match_3)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<p>paragraph</p>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<simple_selector_list>(U"", pc);
+	BOOST_CHECK(!m);
+}
+
+// ------------------------------------------------------------------------------------------------
+// <compound-selector-list> = <compound-selector>#
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(grammar_compound_selector_list_match_1)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<p id='id1'>paragraph</p>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<compound_selector_list>(U"p#id1, p#id2", pc);
+	while (it != tree_iterator())
+	{
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
+	}
+	BOOST_CHECK(it != tree_iterator());
+	std::u16string s;
+	html::to_string(it.base(), std::back_inserter(s)); // to_string() は子を文字列化するので、<p>タグ自身が現れない。。
+	BOOST_CHECK(s == u"paragraph");
+}
+
+BOOST_AUTO_TEST_CASE(grammar_compound_selector_list_match_2)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<p id='id1'>paragraph</p>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<compound_selector_list>(U"A#id1, A#id2", pc);
+	while (it != tree_iterator())
+	{
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
+	}
+	BOOST_CHECK(it == tree_iterator());
+}
+
+BOOST_AUTO_TEST_CASE(grammar_compound_selector_list_match_3)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<p id='id1'>paragraph</p>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<compound_selector_list>(U"", pc);
+	BOOST_CHECK(!m);
+}
+
+// ------------------------------------------------------------------------------------------------
+// <complex-selector-list> = <complex-selector>#
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(grammar_complex_selector_list_match_1)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector_list>(U"div span, DIV>A", pc);
+	while (it != tree_iterator())
+	{
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
+	}
+	BOOST_CHECK(it != tree_iterator());
+	std::u16string s;
+	html::to_string(it.base(), std::back_inserter(s)); // to_string() は子を文字列化するので、<span>タグ自身が現れない。。
+	BOOST_CHECK(s == u"span!");
+}
+
+BOOST_AUTO_TEST_CASE(grammar_complex_selector_list_match_2)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector_list>(U"div>B, DIV>A", pc);
+	while (it != tree_iterator())
+	{
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
+	}
+	BOOST_CHECK(it == tree_iterator());
+}
+
+BOOST_AUTO_TEST_CASE(grammar_complex_selector_list_match_3)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<complex_selector_list>(U"", pc);
+	BOOST_CHECK(!m);
+}
+
+// ------------------------------------------------------------------------------------------------
+// <selector-list> = <complex-selector-list>
+// ------------------------------------------------------------------------------------------------
+
+BOOST_AUTO_TEST_CASE(grammar_selector_list_match_1)
+{
+	using namespace wordring::wwwc::css;
+
+	auto tree = parse(u8"<div><p><span>span!</span></p></div>");
+	tree_iterator it(tree.begin());
+
+	parse_context pc;
+	auto m = css::parse_grammar<selector_list>(U"div span, DIV>A", pc);
+	while (it != tree_iterator())
+	{
+		match_context<const_iterator> ctx{ document_type_name::Html, document_mode_name::Quirks };
+		if (m.match(it.base(), ctx)) break;
+		++it;
+	}
+	BOOST_CHECK(it != tree_iterator());
+	std::u16string s;
+	html::to_string(it.base(), std::back_inserter(s)); // to_string() は子を文字列化するので、<span>タグ自身が現れない。。
+	BOOST_CHECK(s == u"span!");
+}
+
 
 BOOST_AUTO_TEST_SUITE_END()

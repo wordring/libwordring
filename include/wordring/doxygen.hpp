@@ -6,6 +6,10 @@
 非公開の名前空間。
 */
 
+/*! @namespace wordring::css
+公開の名前空間
+*/
+
 /*! @namespace wordring::html
 公開の名前空間
 */

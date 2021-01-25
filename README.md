@@ -26,7 +26,7 @@ Linux と Windows でテストされています。
 Windows 用、 Linux 用など、個別の環境用のパッケージは有りません。
 ヘッダーファイルと wordring_cpp ライブラリをあなたのプロジェクトへ追加してください。
 
-## CMake でプロジェクトを管理する場合
+## CMake であなたのプロジェクトを管理する場合
 
 1. あなたのプロジェクトの Git サブモジュールとして wordring_cpp を追加する。
 2. あなたのプロジェクトの CMakeLists.txt で add_subdirectory("submodules/wordring_cpp") する。

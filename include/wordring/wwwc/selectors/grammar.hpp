@@ -1335,6 +1335,22 @@ namespace wordring::wwwc::css
 
 		std::vector<relative_selector> const& value() const;
 
+		/*! @brief ノードにマッチするか検査する
+		*
+		* 未実装。
+		*
+		* @sa id_selector::match()
+		*/
+		template <typename NodePointer>
+		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
+		{
+			assert(!(ctx.m_type_name == document_type_name::Xml
+				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
+
+			return false;
+		}
+
+
 		/*! @brief 相対セレクタを絶対化する
 		*
 		* 未実装。
@@ -1376,6 +1392,24 @@ namespace wordring::wwwc::css
 
 		std::vector<simple_selector> const& value() const;
 
+		/*! @brief ノードにマッチするか検査する
+		*
+		* @sa id_selector::match()
+		*/
+		template <typename NodePointer>
+		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
+		{
+			assert(!(ctx.m_type_name == document_type_name::Xml
+				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
+
+			for (simple_selector const& ss : m_value)
+			{
+				if (ss.match(np, ctx)) return true;
+			}
+
+			return false;
+		}
+
 	private:
 		std::vector<simple_selector> m_value;
 	};
@@ -1404,6 +1438,24 @@ namespace wordring::wwwc::css
 		compound_selector_list(const_iterator first, const_iterator last, std::vector<compound_selector>&& value);
 
 		std::vector<compound_selector> const& value() const;
+
+		/*! @brief ノードにマッチするか検査する
+		*
+		* @sa id_selector::match()
+		*/
+		template <typename NodePointer>
+		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
+		{
+			assert(!(ctx.m_type_name == document_type_name::Xml
+				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
+
+			for (compound_selector const& cs : m_value)
+			{
+				if (cs.match(np, ctx)) return true;
+			}
+
+			return false;
+		}
 
 	private:
 		std::vector<compound_selector> m_value;
@@ -1434,6 +1486,24 @@ namespace wordring::wwwc::css
 
 		std::vector<complex_selector> const& value() const;
 
+		/*! @brief ノードにマッチするか検査する
+		*
+		* @sa id_selector::match()
+		*/
+		template <typename NodePointer>
+		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
+		{
+			assert(!(ctx.m_type_name == document_type_name::Xml
+				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
+
+			for (complex_selector const& cs : m_value)
+			{
+				if (cs.match(np, ctx)) return true;
+			}
+
+			return false;
+		}
+
 	private:
 		std::vector<complex_selector> m_value;
 	};
@@ -1463,6 +1533,19 @@ namespace wordring::wwwc::css
 		selector_list(const_iterator first, const_iterator last, complex_selector_list&& value);
 
 		complex_selector_list const& value() const;
+
+		/*! @brief ノードにマッチするか検査する
+		*
+		* @sa id_selector::match()
+		*/
+		template <typename NodePointer>
+		bool match(NodePointer const& np, match_context<NodePointer> const& ctx) const
+		{
+			assert(!(ctx.m_type_name == document_type_name::Xml
+				&& (ctx.m_mode_name == document_mode_name::LimitedQuirks || ctx.m_mode_name == document_mode_name::Quirks)));
+
+			return m_value.match(np, ctx);
+		}
 
 	private:
 		complex_selector_list m_value;
