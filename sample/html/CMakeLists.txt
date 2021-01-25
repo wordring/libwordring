@@ -1,11 +1,11 @@
-﻿# wordring_cpp/sample/serialize
+﻿# wordring_cpp/sample/html
 #
-# このプロジェクトはtrieのサンプルを作成します。
+# このプロジェクトはhtmlのサンプルを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(serialize_sample)
+project(html_sample)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -26,7 +26,7 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
-		serialize_iterator.cpp
+		simple_html.cpp
 )
 
 target_link_libraries(
