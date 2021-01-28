@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::tag_tree&lt; Value &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#pro-methods">限定公開メンバ関数</a> &#124;
+<a href="#pro-attribs">限定公開変数類</a> &#124;
+<a href="classwordring_1_1tag__tree-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::tag_tree&lt; Value &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+
+<p>HTML/XML 用の木  
+ <a href="classwordring_1_1tag__tree.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="tag__tree_8hpp_source.html">tag_tree.hpp</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:ac9f230ad9debe1bfec4c5f41e4601ce5"><td class="memItemLeft" align="right" valign="top"><a id="ac9f230ad9debe1bfec4c5f41e4601ce5"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::remove_cv_t&lt; Value &gt;</td></tr>
+<tr class="separator:ac9f230ad9debe1bfec4c5f41e4601ce5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ea474d1d88c0a04358b10254c8b3b6b"><td class="memItemLeft" align="right" valign="top"><a id="a9ea474d1d88c0a04358b10254c8b3b6b"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>size_type</b> = std::size_t</td></tr>
+<tr class="separator:a9ea474d1d88c0a04358b10254c8b3b6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafbf9412bbce7f84ec9964224abb8642"><td class="memItemLeft" align="right" valign="top"><a id="aafbf9412bbce7f84ec9964224abb8642"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
+<tr class="separator:aafbf9412bbce7f84ec9964224abb8642"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac16955c91fb94b0eef8a8836cbf98b54"><td class="memItemLeft" align="right" valign="top"><a id="ac16955c91fb94b0eef8a8836cbf98b54"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:ac16955c91fb94b0eef8a8836cbf98b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a58f7f0baed73fa72d8d9edae2ac6e149"><td class="memItemLeft" align="right" valign="top"><a id="a58f7f0baed73fa72d8d9edae2ac6e149"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_reference</b> = value_type const  &amp;</td></tr>
+<tr class="separator:a58f7f0baed73fa72d8d9edae2ac6e149"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a982a83ce515b6553966a7023f4fab275"><td class="memItemLeft" align="right" valign="top"><a id="a982a83ce515b6553966a7023f4fab275"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:a982a83ce515b6553966a7023f4fab275"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4de3ffefc3ec4320e3bbefdb57b38505"><td class="memItemLeft" align="right" valign="top"><a id="a4de3ffefc3ec4320e3bbefdb57b38505"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_pointer</b> = value_type const  *</td></tr>
+<tr class="separator:a4de3ffefc3ec4320e3bbefdb57b38505"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6ef04d1cd751db99ad4c3ce9424af0e"><td class="memItemLeft" align="right" valign="top"><a id="af6ef04d1cd751db99ad4c3ce9424af0e"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">detail::tag_tree_iterator</a>&lt; value_type &gt;</td></tr>
+<tr class="separator:af6ef04d1cd751db99ad4c3ce9424af0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcf00ee759ed4680c0711f261189cdc0"><td class="memItemLeft" align="right" valign="top"><a id="afcf00ee759ed4680c0711f261189cdc0"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_iterator</b> = <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">detail::tag_tree_iterator</a>&lt; value_type const  &gt;</td></tr>
+<tr class="separator:afcf00ee759ed4680c0711f261189cdc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5f31185fb2a4ee90e2ff144c825e1688"><td class="memItemLeft" align="right" valign="top"><a id="a5f31185fb2a4ee90e2ff144c825e1688"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>wrapper</b> = <a class="el" href="structwordring_1_1detail_1_1tag__node.html">detail::tag_node</a>&lt; value_type &gt;</td></tr>
+<tr class="separator:a5f31185fb2a4ee90e2ff144c825e1688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd191bf415e47a612e1e4a324e8e1d99"><td class="memItemLeft" align="right" valign="top"><a id="acd191bf415e47a612e1e4a324e8e1d99"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = std::vector&lt; <a class="el" href="structwordring_1_1detail_1_1tag__node.html">wrapper</a> &gt;</td></tr>
+<tr class="separator:acd191bf415e47a612e1e4a324e8e1d99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a543250dd63f51137c4663487f8c915b8"><td class="memItemLeft" align="right" valign="top"><a id="a543250dd63f51137c4663487f8c915b8"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>node_traits</b> = <a class="el" href="structwordring_1_1html_1_1node__traits.html">html::node_traits</a>&lt; <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a> &gt;</td></tr>
+<tr class="separator:a543250dd63f51137c4663487f8c915b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73df0dc0f95e64159107c392759c5ff3"><td class="memItemLeft" align="right" valign="top"><a id="a73df0dc0f95e64159107c392759c5ff3"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>node_pointer</b> = typename node_traits::node_pointer</td></tr>
+<tr class="separator:a73df0dc0f95e64159107c392759c5ff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3292216bc04a6741732423bdc1de319f"><td class="memItemLeft" align="right" valign="top"><a id="a3292216bc04a6741732423bdc1de319f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>element_type</b> = typename node_traits::element_type</td></tr>
+<tr class="separator:a3292216bc04a6741732423bdc1de319f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adda2d2c6c8fc10c1e8879f1b3cca0063"><td class="memItemLeft" align="right" valign="top"><a id="adda2d2c6c8fc10c1e8879f1b3cca0063"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>text_type</b> = typename node_traits::text_type</td></tr>
+<tr class="separator:adda2d2c6c8fc10c1e8879f1b3cca0063"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b45e6bec3e14b209212d41ee0229687"><td class="memItemLeft" align="right" valign="top"><a id="a3b45e6bec3e14b209212d41ee0229687"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>processing_instruction_type</b> = typename node_traits::processing_instruction_type</td></tr>
+<tr class="separator:a3b45e6bec3e14b209212d41ee0229687"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0e16878a0796b938360ad698e545296"><td class="memItemLeft" align="right" valign="top"><a id="af0e16878a0796b938360ad698e545296"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>comment_type</b> = typename node_traits::comment_type</td></tr>
+<tr class="separator:af0e16878a0796b938360ad698e545296"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a506916a25637e1dfa3afc4394d7c7695"><td class="memItemLeft" align="right" valign="top"><a id="a506916a25637e1dfa3afc4394d7c7695"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type</b> = typename node_traits::document_type</td></tr>
+<tr class="separator:a506916a25637e1dfa3afc4394d7c7695"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac72dfaa6e8ca6e6bdaa4575bc7ee083d"><td class="memItemLeft" align="right" valign="top"><a id="ac72dfaa6e8ca6e6bdaa4575bc7ee083d"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type_type</b> = typename node_traits::document_type_type</td></tr>
+<tr class="separator:ac72dfaa6e8ca6e6bdaa4575bc7ee083d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb128c7a824503012f15686a71486a7a"><td class="memItemLeft" align="right" valign="top"><a id="abb128c7a824503012f15686a71486a7a"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_fragment_type</b> = typename node_traits::document_fragment_type</td></tr>
+<tr class="separator:abb128c7a824503012f15686a71486a7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5b8867d09ec11a572d1d5f6e4511e29"><td class="memItemLeft" align="right" valign="top"><a id="ab5b8867d09ec11a572d1d5f6e4511e29"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_type</b> = typename element_type::attribute_type</td></tr>
+<tr class="separator:ab5b8867d09ec11a572d1d5f6e4511e29"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae412bab87375869dbfc038eeb937d230"><td class="memItemLeft" align="right" valign="top"><a id="ae412bab87375869dbfc038eeb937d230"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_pointer</b> = typename element_type::const_iterator</td></tr>
+<tr class="separator:ae412bab87375869dbfc038eeb937d230"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba83555000628aa2843c7d5903a5c435"><td class="memItemLeft" align="right" valign="top"><a id="aba83555000628aa2843c7d5903a5c435"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = typename element_type::string_type</td></tr>
+<tr class="separator:aba83555000628aa2843c7d5903a5c435"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a748b1e835f25bfc3225acc88931b49b9"><td class="memItemLeft" align="right" valign="top"><a id="a748b1e835f25bfc3225acc88931b49b9"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>tag_tree</b> (<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> const &amp;rhs)</td></tr>
+<tr class="separator:a748b1e835f25bfc3225acc88931b49b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9552affdd356a4719b965f41faee854"><td class="memItemLeft" align="right" valign="top"><a id="af9552affdd356a4719b965f41faee854"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>tag_tree</b> (<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> &amp;&amp;rhs)</td></tr>
+<tr class="separator:af9552affdd356a4719b965f41faee854"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa49dfd8e2d5f55734f99a23426bcfa99"><td class="memItemLeft" align="right" valign="top"><a id="aa49dfd8e2d5f55734f99a23426bcfa99"></a>
+<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> const &amp;rhs)</td></tr>
+<tr class="separator:aa49dfd8e2d5f55734f99a23426bcfa99"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91161d11f6bd4bd923a795bb7fc75605"><td class="memItemLeft" align="right" valign="top"><a id="a91161d11f6bd4bd923a795bb7fc75605"></a>
+<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> &amp;&amp;rhs)</td></tr>
+<tr class="separator:a91161d11f6bd4bd923a795bb7fc75605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0baa6938e01a4a4d84d31068ddc9e125"><td class="memItemLeft" align="right" valign="top"><a id="a0baa6938e01a4a4d84d31068ddc9e125"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> ()</td></tr>
+<tr class="separator:a0baa6938e01a4a4d84d31068ddc9e125"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3aa1c1a805d96cd783b6e9ed69095acb"><td class="memItemLeft" align="right" valign="top"><a id="a3aa1c1a805d96cd783b6e9ed69095acb"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const</td></tr>
+<tr class="separator:a3aa1c1a805d96cd783b6e9ed69095acb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1574c81d155b3dba8e043cb948c446f1"><td class="memItemLeft" align="right" valign="top"><a id="a1574c81d155b3dba8e043cb948c446f1"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cbegin</b> () const</td></tr>
+<tr class="separator:a1574c81d155b3dba8e043cb948c446f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22ce073cc326ad5fd6f8e9e7a5cf7ca6"><td class="memItemLeft" align="right" valign="top"><a id="a22ce073cc326ad5fd6f8e9e7a5cf7ca6"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> ()</td></tr>
+<tr class="separator:a22ce073cc326ad5fd6f8e9e7a5cf7ca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8da03367f0957ddd9d0a5b4eb98b3619"><td class="memItemLeft" align="right" valign="top"><a id="a8da03367f0957ddd9d0a5b4eb98b3619"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td></tr>
+<tr class="separator:a8da03367f0957ddd9d0a5b4eb98b3619"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23b77266a8ae8c148837f8a35c3098a0"><td class="memItemLeft" align="right" valign="top"><a id="a23b77266a8ae8c148837f8a35c3098a0"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cend</b> () const</td></tr>
+<tr class="separator:a23b77266a8ae8c148837f8a35c3098a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a085030f141bcb3416675449c194ee0"><td class="memItemLeft" align="right" valign="top"><a id="a0a085030f141bcb3416675449c194ee0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>empty</b> () const</td></tr>
+<tr class="separator:a0a085030f141bcb3416675449c194ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab378cf1ab231fed66df32810407ae37f"><td class="memItemLeft" align="right" valign="top"><a id="ab378cf1ab231fed66df32810407ae37f"></a>
+size_type&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const</td></tr>
+<tr class="separator:ab378cf1ab231fed66df32810407ae37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac99a15ee80ec2bfcdab70a9bff85a9da"><td class="memItemLeft" align="right" valign="top"><a id="ac99a15ee80ec2bfcdab70a9bff85a9da"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>clear</b> ()</td></tr>
+<tr class="separator:ac99a15ee80ec2bfcdab70a9bff85a9da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8008bbeebf1f0b18adfe8612924a84d"><td class="memItemLeft" align="right" valign="top"><a id="ad8008bbeebf1f0b18adfe8612924a84d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>swap</b> (<a class="el" href="classwordring_1_1tag__tree.html">tag_tree</a> &amp;rhs)</td></tr>
+<tr class="separator:ad8008bbeebf1f0b18adfe8612924a84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a2c3c8bab7a6647323a7394a902c5ff"><td class="memItemLeft" align="right" valign="top"><a id="a3a2c3c8bab7a6647323a7394a902c5ff"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a> pos, value_type &amp;&amp;val)</td></tr>
+<tr class="separator:a3a2c3c8bab7a6647323a7394a902c5ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9da8fb716eec9aaf640876dfd8f2d86b"><td class="memItemLeft" align="right" valign="top"><a id="a9da8fb716eec9aaf640876dfd8f2d86b"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a> pos, value_type const &amp;val)</td></tr>
+<tr class="separator:a9da8fb716eec9aaf640876dfd8f2d86b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c6d95694456b2e12d90aec24277455a"><td class="memItemLeft" align="right" valign="top"><a id="a7c6d95694456b2e12d90aec24277455a"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>move</b> (<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a> pos, <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a> sub)</td></tr>
+<tr class="separator:a7c6d95694456b2e12d90aec24277455a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a09073c28b8c1519ac2d371ff9ca5ccba"><td class="memItemLeft" align="right" valign="top"><a id="a09073c28b8c1519ac2d371ff9ca5ccba"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>erase</b> (<a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">const_iterator</a> pos)</td></tr>
+<tr class="separator:a09073c28b8c1519ac2d371ff9ca5ccba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+限定公開メンバ関数</h2></td></tr>
+<tr class="memitem:a83e5b8b9030b90e08aad87107326c013"><td class="memItemLeft" align="right" valign="top"><a id="a83e5b8b9030b90e08aad87107326c013"></a>
+std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>allocate</b> (value_type &amp;&amp;val)</td></tr>
+<tr class="separator:a83e5b8b9030b90e08aad87107326c013"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8c0c4b2f7789aa11e4ab5ce68098a163"><td class="memItemLeft" align="right" valign="top"><a id="a8c0c4b2f7789aa11e4ab5ce68098a163"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>free</b> (std::uint32_t idx)</td></tr>
+<tr class="separator:a8c0c4b2f7789aa11e4ab5ce68098a163"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6e19492d55134475d23df18f1a3a486"><td class="memItemLeft" align="right" valign="top"><a id="ae6e19492d55134475d23df18f1a3a486"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>link</b> (std::uint32_t pos, std::uint32_t idx)</td></tr>
+<tr class="separator:ae6e19492d55134475d23df18f1a3a486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff7f1112fae0bb93f009da5946acf4e2"><td class="memItemLeft" align="right" valign="top"><a id="aff7f1112fae0bb93f009da5946acf4e2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>unlink</b> (std::uint32_t idx)</td></tr>
+<tr class="separator:aff7f1112fae0bb93f009da5946acf4e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+限定公開変数類</h2></td></tr>
+<tr class="memitem:aac3c45c7d10fc5b67bdfd274fddb9b76"><td class="memItemLeft" align="right" valign="top"><a id="aac3c45c7d10fc5b67bdfd274fddb9b76"></a>
+std::unique_ptr&lt; container &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_c</b></td></tr>
+<tr class="separator:aac3c45c7d10fc5b67bdfd274fddb9b76"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><h3>template&lt;typename Value&gt;<br />
+class wordring::tag_tree&lt; Value &gt;</h3>
+
+<p>HTML/XML 用の木 </p>
+</div><hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="tag__tree_8hpp_source.html">tag_tree.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

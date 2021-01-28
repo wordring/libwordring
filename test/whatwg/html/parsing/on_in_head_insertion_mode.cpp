@@ -3,6 +3,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <wordring/html/html_defs.hpp>
+#include <wordring/html/simple_html.hpp>
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
 #include <wordring/html/simple_traits.hpp>
@@ -13,7 +14,7 @@
 #include <wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp>
 
 #include <wordring/encoding/encoding.hpp>
-#include <wordring/tree/tree.hpp>
+#include <wordring/tag_tree/tag_tree.hpp>
 
 #include <string>
 
@@ -22,7 +23,7 @@ namespace
 	using namespace wordring::html;
 
 	using node_type = simple_node<std::string>;
-	using tree = wordring::tree<node_type>;
+	using tree = wordring::tag_tree<node_type>;
 	using adapter_type = node_traits<typename tree::iterator>;
 
 	using document_type = typename adapter_type::document_type;

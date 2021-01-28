@@ -4,6 +4,7 @@
 
 #include <wordring/whatwg/html/parsing/serializing.hpp>
 
+#include <wordring/html/simple_html.hpp>
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
 #include <wordring/tree/tree.hpp>
@@ -18,7 +19,7 @@ BOOST_AUTO_TEST_CASE(serializing_to_string_1)
 	using namespace wordring::html;
 
 	std::u32string in(U"<!DOCTYPE HTML><!-- Comment --><html><head></head><body>\r\n<p id='text1'>text&<br>text<br></p></body></html>");
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::string out;
@@ -32,7 +33,7 @@ BOOST_AUTO_TEST_CASE(serializing_to_string_2)
 	using namespace wordring::html;
 
 	std::u32string in(U"");
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::string out;
@@ -46,7 +47,7 @@ BOOST_AUTO_TEST_CASE(serializing_to_string_3)
 	using namespace wordring::html;
 
 	std::u32string in(U"<html><head></head><body><![CDATA[ text ]]></body></html>");
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::string out;

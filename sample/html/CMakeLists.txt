@@ -27,7 +27,7 @@ add_executable(
 	${PROJECT_NAME}
 		test_module.cpp
 		simple_html.cpp
-)
+ "../../test/html/character_iterator.cpp")
 
 target_link_libraries(
 	${PROJECT_NAME}

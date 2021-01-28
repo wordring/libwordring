@@ -5,9 +5,10 @@
 
 #include <wordring/html/html_defs.hpp>
 
+#include <wordring/encoding/encoding_defs.hpp>
 #include <wordring/whatwg/html/parsing/serializing.hpp>
 
-#include <wordring/tree/tree.hpp>
+#include <wordring/tag_tree/tag_tree.hpp>
 #include <wordring/compatibility.hpp>
 
 namespace wordring::html
@@ -18,9 +19,9 @@ namespace wordring::html
 	using u16simple_node = simple_node<std::u16string>;
 	using u32simple_node = simple_node<std::u32string>;
 
-	using u8simple_tree  = tree<u8simple_node>;
-	using u16simple_tree = tree<u16simple_node>;
-	using u32simple_tree = tree<u32simple_node>;
+	using u8simple_tree  = tag_tree<u8simple_node>;
+	using u16simple_tree = tag_tree<u16simple_node>;
+	using u32simple_tree = tag_tree<u32simple_node>;
 
 	template <typename T> struct is_simple_tree : std::false_type {};
 
@@ -29,6 +30,33 @@ namespace wordring::html
 	template <> struct is_simple_tree<u32simple_tree> : public std::true_type {};
 
 	template <typename T> constexpr bool is_simple_tree_v = is_simple_tree<T>::value;
+
+	template <typename String>
+	using simple_tag_tree_iterator = typename wordring::detail::tag_tree_iterator<simple_node<String>>;
+
+	template <typename String>
+	using const_simple_tag_tree_iterator = typename wordring::detail::tag_tree_iterator<simple_node<String> const>;
+
+	template<>
+	struct node_traits<simple_tag_tree_iterator<std::u8string>> : public simple_node_traits<simple_tag_tree_iterator<std::u8string>> {};
+
+	template<>
+	struct node_traits<const_simple_tag_tree_iterator<std::u8string>> : public simple_node_traits<const_simple_tag_tree_iterator<std::u8string>> {};
+
+	template<>
+	struct node_traits<simple_tag_tree_iterator<std::u16string>> : public simple_node_traits<simple_tag_tree_iterator<std::u16string>> {};
+
+	template<>
+	struct node_traits<const_simple_tag_tree_iterator<std::u16string>> : public simple_node_traits<const_simple_tag_tree_iterator<std::u16string>> {};
+
+	template<>
+	struct node_traits<simple_tag_tree_iterator<std::u32string>> : public simple_node_traits<simple_tag_tree_iterator<std::u32string>> {};
+
+	template<>
+	struct node_traits<const_simple_tag_tree_iterator<std::u32string>> : public simple_node_traits<const_simple_tag_tree_iterator<std::u32string>> {};
+
+	//template <typename String>
+	//using const_simple_node_tree_iterator = typename wordring::tree<simple_node<String>>::const_iterator;
 
 	template <typename Container, typename ForwardIterator, typename std::enable_if_t<is_simple_tree_v<Container>, std::nullptr_t> = nullptr>
 	inline Container make_document(

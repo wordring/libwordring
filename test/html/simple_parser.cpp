@@ -2,16 +2,17 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <wordring/html/simple_html.hpp>
 #include <wordring/html/simple_node.hpp>
 #include <wordring/html/simple_parser.hpp>
 #include <wordring/html/simple_traits.hpp>
 
-#include <wordring/tree/tree.hpp>
+#include <wordring/tag_tree/tag_tree.hpp>
 
 namespace
 {
-	using tree = wordring::tree<wordring::html::simple_node<std::string>>;
-	using test_parser = wordring::html::simple_parser<tree>;
+	using test_tree = wordring::tag_tree<wordring::html::simple_node<std::u8string>>;
+	using test_parser = wordring::html::basic_simple_parser<test_tree, typename test_tree::iterator>;
 }
 
 BOOST_AUTO_TEST_SUITE(simple_parser_test)

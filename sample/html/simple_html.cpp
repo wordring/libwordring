@@ -4,6 +4,7 @@
 
 #include <wordring/css/selector.hpp>
 #include <wordring/html/simple_html.hpp>
+#include <wordring/tree/tree_iterator.hpp>
 
 #include <cassert>
 #include <iterator>
@@ -146,6 +147,34 @@ BOOST_AUTO_TEST_CASE(simple_html_erase_1)
 	assert(s == u"<html><head></head><body></body></html>");
 }
 
+/*
+* tree_iterator と組み合わせる
+*/
+BOOST_AUTO_TEST_CASE(simple_html_tree_iterator_1)
+{
+	namespace html = wordring::html;
+	namespace css = wordring::css;
+
+	using tree_iterator = wordring::tree_iterator<html::u16simple_tree::const_iterator>;
+
+	// 文字列から HTML ドキュメントを作成する。
+	std::u32string_view sv = U"<p>Hello </p><p>HTML!</p>";
+	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
+
+	std::u16string s;
+
+	// 行きがかり順で木を巡回
+	auto it1 = tree_iterator(doc.begin());
+	auto it2 = tree_iterator();
+	while (it1 != it2)
+	{
+		// テキストノードなら文字列化
+		if (it1->index() == 3) s += html::data(*it1);
+		++it1;
+	}
+
+	assert(s == u"Hello HTML!");
+}
 
 
 BOOST_AUTO_TEST_SUITE_END()

@@ -729,6 +729,16 @@ namespace wordring::html
 	@tparam String 文字列の型
 
 	インデックスが規格の NodeType と一致するように並べてある。
+
+	| type                          | index |
+	|-------------------------------|-------|
+	| simple_element                | 1     |
+	| simple_text                   | 3     |
+	| simple_processing_instruction | 7     |
+	| simple_comment                | 8     |
+	| simple_document               | 9     |
+	| simple_document_type          | 10    |
+	| simple_document_fragment      | 11    |
 	*/
 	template <typename String>
 	using simple_node = std::variant<
@@ -764,7 +774,7 @@ namespace wordring::html
 		}
 		return std::get<simple_processing_instruction<String>>(node).data();
 	}
-	
+
 	/*! @brief ノードの文字列データを参照する
 	*/
 	template <typename String>

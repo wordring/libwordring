@@ -2,13 +2,14 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <wordring/html/simple_node.hpp>
-#include <wordring/html/simple_traits.hpp>
-
 #include <wordring/whatwg/html/parsing/token.hpp>
 #include <wordring/whatwg/html/parsing/tokenization.hpp>
 
-#include <wordring/tree/tree.hpp>
+#include <wordring/html/simple_html.hpp>
+#include <wordring/html/simple_node.hpp>
+#include <wordring/html/simple_traits.hpp>
+
+#include <wordring/tag_tree/tag_tree.hpp>
 
 #include <list>
 #include <string>
@@ -18,7 +19,7 @@ namespace
 	using namespace wordring::html;
 	using namespace wordring::whatwg::html::parsing;
 
-	using tree = wordring::tree<simple_node<std::u32string>>;
+	using tree = wordring::tag_tree<simple_node<std::u32string>>;
 
 	struct test_tokenizer : tokenizer<test_tokenizer, node_traits<typename tree::iterator>>
 	{

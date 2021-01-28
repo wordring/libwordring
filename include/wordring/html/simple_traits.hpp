@@ -69,7 +69,7 @@ namespace wordring::html
 		*/
 		static node_pointer next(node_pointer it) { return ++it; }
 
-		static auto data(node_pointer it)
+		static auto& data(node_pointer it)
 		{
 			return wordring::html::data(*it);
 		}
@@ -308,31 +308,23 @@ namespace wordring::html
 		{
 			return is_element(it) && is_html_element_of(it, tag_name::Html);
 		}
+
+		// ----------------------------------------------------------------------------------------
+		// tag_tree Support
+		// ----------------------------------------------------------------------------------------
+
+		static bool is_single(node_type const& node)
+		{
+			switch (node.index())
+			{
+			case 3:
+			case 8:
+			case 10:
+				return true;
+			default:
+				break;
+			}
+			return false;
+		}
 	};
-
-	template <typename String>
-	using simple_node_tree_iterator = typename wordring::tree<simple_node<String>>::iterator;
-
-	template<>
-	struct node_traits<simple_node_tree_iterator<std::u8string>> : public simple_node_traits<simple_node_tree_iterator<std::u8string>> {};
-
-	template<>
-	struct node_traits<simple_node_tree_iterator<std::u16string>> : public simple_node_traits<simple_node_tree_iterator<std::u16string>> {};
-
-	template<>
-	struct node_traits<simple_node_tree_iterator<std::u32string>> : public simple_node_traits<simple_node_tree_iterator<std::u32string>> {};
-
-	template <typename String>
-	using const_simple_node_tree_iterator = typename wordring::tree<simple_node<String>>::const_iterator;
-
-	template<>
-	struct node_traits<const_simple_node_tree_iterator<std::u8string>> : public simple_node_traits<const_simple_node_tree_iterator<std::u8string>> {};
-
-	template<>
-	struct node_traits<const_simple_node_tree_iterator<std::u16string>> : public simple_node_traits<const_simple_node_tree_iterator<std::u16string>> {};
-
-	template<>
-	struct node_traits<const_simple_node_tree_iterator<std::u32string>> : public simple_node_traits<const_simple_node_tree_iterator<std::u32string>> {};
-
-
 }

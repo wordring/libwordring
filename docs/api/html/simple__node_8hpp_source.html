@@ -188,7 +188,7 @@ $(function() {
 <div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    };</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">  151</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String1&gt;</a> <span class="keyword">const</span>&amp; lhs, <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String1&gt;</a> <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00151"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">  151</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String1&gt;</a> <span class="keyword">const</span>&amp; lhs, <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String1&gt;</a> <span class="keyword">const</span>&amp; rhs)</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    {</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        <span class="keywordflow">return</span> lhs.m_namespace_uri == rhs.m_namespace_uri</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            &amp;&amp; lhs.m_prefix == rhs.m_prefix</div>
@@ -196,25 +196,25 @@ $(function() {
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    }</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
 <div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; lhs, attribute_name local_name)</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; lhs, attribute_name local_name)</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    {</div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordflow">return</span> lhs == simple_attr&lt;String1&gt;(local_name);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;    }</div>
 <div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(attribute_name local_name, simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(attribute_name local_name, simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; rhs)</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    {</div>
 <div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordflow">return</span> simple_attr&lt;String1&gt;(local_name) == rhs;</div>
 <div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    }</div>
 <div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
 <div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; lhs, String1 <span class="keyword">const</span>&amp; local_name)</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; lhs, String1 <span class="keyword">const</span>&amp; local_name)</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    {</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordflow">return</span> lhs == simple_attr&lt;String1&gt;(local_name);</div>
 <div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    }</div>
 <div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(String1 <span class="keyword">const</span>&amp; local_name, simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(String1 <span class="keyword">const</span>&amp; local_name, simple_attr&lt;String1&gt; <span class="keyword">const</span>&amp; rhs)</div>
 <div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    {</div>
 <div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordflow">return</span> simple_attr&lt;String1&gt;(local_name) == rhs;</div>
 <div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
@@ -293,7 +293,7 @@ $(function() {
 <div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    };</div>
 <div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__document.html">simple_document&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__document.html">simple_document&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__document.html">simple_document&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__document.html">simple_document&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;    {</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        assert(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -348,7 +348,7 @@ $(function() {
 <div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    };</div>
 <div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
 <div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__document__type.html">simple_document_type&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__document__type.html">simple_document_type&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__document__type.html">simple_document_type&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__document__type.html">simple_document_type&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
 <div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;    {</div>
 <div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        assert(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -380,7 +380,7 @@ $(function() {
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    };</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
 <div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__document__fragment.html">simple_document_fragment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__document__fragment.html">simple_document_fragment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__document__fragment.html">simple_document_fragment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__document__fragment.html">simple_document_fragment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
 <div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    {</div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        assert(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -541,7 +541,7 @@ $(function() {
 <div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    };</div>
 <div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160; </div>
 <div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(simple_element&lt;String1&gt; <span class="keyword">const</span>&amp; lhs, simple_element&lt;String1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(simple_element&lt;String1&gt; <span class="keyword">const</span>&amp; lhs, simple_element&lt;String1&gt; <span class="keyword">const</span>&amp; rhs)</div>
 <div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    {</div>
 <div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;        <span class="keyword">using</span> attribute_type = <span class="keyword">typename</span> simple_element&lt;String1&gt;::attribute_type;</div>
 <div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160; </div>
@@ -569,7 +569,7 @@ $(function() {
 <div class="line"><a name="l00563"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__text.html">  563</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text</a></div>
 <div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;    {</div>
 <div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00566"></a><span class="lineno">  566</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
 <div class="line"><a name="l00567"></a><span class="lineno">  567</span>&#160; </div>
 <div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
 <div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
@@ -599,7 +599,7 @@ $(function() {
 <div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;    };</div>
 <div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160; </div>
 <div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
 <div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;    {</div>
 <div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;        assert(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -619,7 +619,7 @@ $(function() {
 <div class="line"><a name="l00617"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__processing__instruction.html">  617</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction</a></div>
 <div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;    {</div>
 <div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
 <div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
 <div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
 <div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
@@ -650,7 +650,7 @@ $(function() {
 <div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;    };</div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160; </div>
 <div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
 <div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    {</div>
 <div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;        assert(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -670,7 +670,7 @@ $(function() {
 <div class="line"><a name="l00672"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__comment.html">  672</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment</a></div>
 <div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;    {</div>
 <div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
 <div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160; </div>
 <div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
 <div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;);</div>
@@ -706,7 +706,7 @@ $(function() {
 <div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    };</div>
 <div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160; </div>
 <div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String1&gt;</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String1&gt;</a> <span class="keyword">const</span>&amp;)</div>
 <div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    {</div>
 <div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        assert(<span class="keyword">false</span>);</div>
 <div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
@@ -722,245 +722,244 @@ $(function() {
 <div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    <span class="comment">// ノード</span></div>
 <div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;    <span class="comment">// ---------------------------------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160; </div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a> = std::variant&lt;</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;        std::monostate,</div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        simple_element&lt;String&gt;,                <span class="comment">// 1.</span></div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;        std::monostate,</div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;        simple_text&lt;String&gt;,                   <span class="comment">// 3.</span></div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        std::monostate,</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;        std::monostate,</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;        std::monostate,</div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;        simple_processing_instruction&lt;String&gt;, <span class="comment">// 7.</span></div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        simple_comment&lt;String&gt;,                <span class="comment">// 8.</span></div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        simple_document&lt;String&gt;,               <span class="comment">// 9.</span></div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        simple_document_type&lt;String&gt;,          <span class="comment">// 10.</span></div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        simple_document_fragment&lt;String&gt;,      <span class="comment">// 11.</span></div>
-<div class="line"><a name="l00747"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">  747</a></span>&#160;        std::monostate&gt;;</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160; </div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00755"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">  755</a></span>&#160;    <span class="keyword">inline</span> String&amp; <a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node)</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    {</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String&gt;</a>&gt;(node))</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        {</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_text&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;        }</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String&gt;</a>&gt;(node))</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        {</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_comment&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;        }</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_processing_instruction&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    }</div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    </div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00771"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a1b3d15f44199ce9fe27be9fc717d36a1">  771</a></span>&#160;    <span class="keyword">inline</span> String <span class="keyword">const</span>&amp; <a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;    {</div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;        <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String&gt;</a>&gt;(node))</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        {</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_text&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;        }</div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String&gt;</a>&gt;(node))</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;        {</div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_comment&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;        }</div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_processing_instruction&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;    }</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160; </div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;    <span class="keyword">inline</span> String <span class="keyword">const</span>&amp; name(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;    {</div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_document_type&lt;String&gt;&gt;(node).name();</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;    }</div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160; </div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    <span class="keyword">inline</span> String <span class="keyword">const</span>&amp; target(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;    {</div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_processing_instruction&lt;String&gt;&gt;(node).target();</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    }</div>
-<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160; </div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00799"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">  799</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node)</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;    {</div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>();</div>
-<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    }</div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160; </div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00807"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ab4b21d8341bba0f052cf8c70fdd6eb2a">  807</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;    {</div>
-<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>();</div>
-<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;    }</div>
-<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160; </div>
-<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00815"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">  815</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node)</div>
-<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;    {</div>
-<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>();</div>
-<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;    }</div>
-<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160; </div>
-<div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00823"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ace3be2070d552f10d29130166f97f96e">  823</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;    {</div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>();</div>
-<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;    }</div>
-<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160; </div>
-<div class="line"><a name="l00830"></a><span class="lineno">  830</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00831"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">  831</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node, <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String&gt;</a> <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;    {</div>
-<div class="line"><a name="l00833"></a><span class="lineno">  833</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(attr);</div>
-<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;    }</div>
-<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160; </div>
-<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(simple_node&lt;String&gt;&amp; node, simple_attr&lt;String&gt;&amp;&amp; attr)</div>
-<div class="line"><a name="l00838"></a><span class="lineno">  838</span>&#160;    {</div>
-<div class="line"><a name="l00839"></a><span class="lineno">  839</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(std::move(attr));</div>
-<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;    }</div>
-<div class="line"><a name="l00841"></a><span class="lineno">  841</span>&#160; </div>
-<div class="line"><a name="l00853"></a><span class="lineno">  853</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00854"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">  854</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String&gt;</a> <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00855"></a><span class="lineno">  855</span>&#160;    {</div>
-<div class="line"><a name="l00856"></a><span class="lineno">  856</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(attr);</div>
-<div class="line"><a name="l00857"></a><span class="lineno">  857</span>&#160;    }</div>
-<div class="line"><a name="l00858"></a><span class="lineno">  858</span>&#160; </div>
-<div class="line"><a name="l00872"></a><span class="lineno">  872</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00873"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a7c82dabf96023217c16408b0455e63c1">  873</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, ns_name ns, String <span class="keyword">const</span>&amp; prefix, String <span class="keyword">const</span>&amp; name)</div>
-<div class="line"><a name="l00874"></a><span class="lineno">  874</span>&#160;    {</div>
-<div class="line"><a name="l00875"></a><span class="lineno">  875</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(ns, prefix, name);</div>
-<div class="line"><a name="l00876"></a><span class="lineno">  876</span>&#160;    }</div>
-<div class="line"><a name="l00877"></a><span class="lineno">  877</span>&#160; </div>
-<div class="line"><a name="l00890"></a><span class="lineno">  890</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00891"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a8f09077dcc81b62a90d5eb33ca1a2b64">  891</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, String <span class="keyword">const</span>&amp; name)</div>
-<div class="line"><a name="l00892"></a><span class="lineno">  892</span>&#160;    {</div>
-<div class="line"><a name="l00893"></a><span class="lineno">  893</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(name);</div>
-<div class="line"><a name="l00894"></a><span class="lineno">  894</span>&#160;    }</div>
-<div class="line"><a name="l00895"></a><span class="lineno">  895</span>&#160; </div>
-<div class="line"><a name="l00909"></a><span class="lineno">  909</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00910"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#aee3f1028b833763e4ab769c9f1065caa">  910</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, ns_name ns, String <span class="keyword">const</span>&amp; prefix, attribute_name name)</div>
-<div class="line"><a name="l00911"></a><span class="lineno">  911</span>&#160;    {</div>
-<div class="line"><a name="l00912"></a><span class="lineno">  912</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(ns, prefix, name);</div>
-<div class="line"><a name="l00913"></a><span class="lineno">  913</span>&#160;    }</div>
-<div class="line"><a name="l00914"></a><span class="lineno">  914</span>&#160; </div>
-<div class="line"><a name="l00927"></a><span class="lineno">  927</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00928"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#abe9045149e8ea599d15986573e022ffb">  928</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, attribute_name name)</div>
-<div class="line"><a name="l00929"></a><span class="lineno">  929</span>&#160;    {</div>
-<div class="line"><a name="l00930"></a><span class="lineno">  930</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(name);</div>
-<div class="line"><a name="l00931"></a><span class="lineno">  931</span>&#160;    }</div>
-<div class="line"><a name="l00932"></a><span class="lineno">  932</span>&#160; </div>
-<div class="line"><a name="l00933"></a><span class="lineno">  933</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00934"></a><span class="lineno">  934</span>&#160;    <span class="keyword">inline</span> ns_name get_namespace_id(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00935"></a><span class="lineno">  935</span>&#160;    {</div>
-<div class="line"><a name="l00936"></a><span class="lineno">  936</span>&#160;        <span class="keywordflow">return</span> attr.namespace_uri_id();</div>
-<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;    }</div>
-<div class="line"><a name="l00938"></a><span class="lineno">  938</span>&#160; </div>
-<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;    <span class="keyword">inline</span> String get_namespace(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;    {</div>
-<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160;        <span class="keywordflow">return</span> attr.namespace_uri();</div>
-<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;    }</div>
-<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160; </div>
-<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;    <span class="keyword">inline</span> String get_local_name(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;    {</div>
-<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160;        <span class="keywordflow">return</span> attr.local_name();</div>
-<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;    }</div>
-<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160; </div>
-<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;    <span class="keyword">inline</span> attribute_name get_local_name_id(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;    {</div>
-<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160;        <span class="keywordflow">return</span> attr.local_name_id();</div>
-<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;    }</div>
-<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160; </div>
-<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;    <span class="keyword">inline</span> String get_qualified_name(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;    {</div>
-<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160;        <span class="keywordflow">return</span> attr.local_name_id();</div>
-<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;    }</div>
-<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;    </div>
-<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <span class="keyword">const</span>&amp; value(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
-<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;    {</div>
-<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160;        <span class="keywordflow">return</span> attr.value();</div>
-<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;    }</div>
-<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160; </div>
-<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00972"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a8b4b992a4a027946b3f77a0daa20e2dc">  972</a></span>&#160;    <span class="keyword">inline</span> ns_name get_namespace_id(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;    {</div>
-<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).namespace_uri_id();</div>
-<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;    }</div>
-<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160; </div>
-<div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00980"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a8d8fc8f2310383538f4f25fe06ea1931">  980</a></span>&#160;    <span class="keyword">inline</span> String get_namespace(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;    {</div>
-<div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).namespace_uri();</div>
-<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;    }</div>
-<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
-<div class="line"><a name="l00987"></a><span class="lineno">  987</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00988"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a14a9a691f9b1fff9e349cb7304c7f449">  988</a></span>&#160;    <span class="keyword">inline</span> tag_name get_local_name_id(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;    {</div>
-<div class="line"><a name="l00990"></a><span class="lineno">  990</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).local_name_id();</div>
-<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;    }</div>
-<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160; </div>
-<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160;    <span class="keyword">inline</span> String get_local_name(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l00995"></a><span class="lineno">  995</span>&#160;    {</div>
-<div class="line"><a name="l00996"></a><span class="lineno">  996</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).local_name();</div>
-<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;    }</div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160; </div>
-<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;    <span class="keyword">inline</span> String get_qualified_name(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;    {</div>
-<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).qualified_name();</div>
-<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;    }</div>
-<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160; </div>
-<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;    <span class="keyword">inline</span> document_type_name get_document_type(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;    {</div>
-<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_document&lt;String&gt;&gt;(node).document_type();</div>
-<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;    }</div>
-<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160; </div>
-<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l01017"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a083a700a01525cb956478d6cf0d54541"> 1017</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a083a700a01525cb956478d6cf0d54541">set_document_type</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node, document_type_name type)</div>
-<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;    {</div>
-<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;        std::get&lt;simple_document&lt;String&gt;&gt;(node).document_type(type);</div>
-<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160;    }</div>
-<div class="line"><a name="l01021"></a><span class="lineno"> 1021</span>&#160; </div>
-<div class="line"><a name="l01022"></a><span class="lineno"> 1022</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l01023"></a><span class="lineno"> 1023</span>&#160;    <span class="keyword">inline</span> document_mode_name get_document_mode(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
-<div class="line"><a name="l01024"></a><span class="lineno"> 1024</span>&#160;    {</div>
-<div class="line"><a name="l01025"></a><span class="lineno"> 1025</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_document&lt;String&gt;&gt;(node).document_mode();</div>
-<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;    }</div>
-<div class="line"><a name="l01027"></a><span class="lineno"> 1027</span>&#160; </div>
-<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
-<div class="line"><a name="l01034"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a"> 1034</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">set_document_mode</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node, <a class="code" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a> mode)</div>
-<div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;    {</div>
-<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;        std::get&lt;simple_document&lt;String&gt;&gt;(node).document_mode(mode);</div>
-<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160;    }</div>
-<div class="line"><a name="l01038"></a><span class="lineno"> 1038</span>&#160;}</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node</a> = std::variant&lt;</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        std::monostate,</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        simple_element&lt;String&gt;,                <span class="comment">// 1.</span></div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;        std::monostate,</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        simple_text&lt;String&gt;,                   <span class="comment">// 3.</span></div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;        std::monostate,</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;        std::monostate,</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        std::monostate,</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;        simple_processing_instruction&lt;String&gt;, <span class="comment">// 7.</span></div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;        simple_comment&lt;String&gt;,                <span class="comment">// 8.</span></div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        simple_document&lt;String&gt;,               <span class="comment">// 9.</span></div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;        simple_document_type&lt;String&gt;,          <span class="comment">// 10.</span></div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;        simple_document_fragment&lt;String&gt;,      <span class="comment">// 11.</span></div>
+<div class="line"><a name="l00757"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">  757</a></span>&#160;        std::monostate&gt;;</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00765"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">  765</a></span>&#160;    <span class="keyword">inline</span> String&amp; <a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node)</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    {</div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;        <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String&gt;</a>&gt;(node))</div>
+<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;        {</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_text&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;        }</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String&gt;</a>&gt;(node))</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        {</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_comment&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;        }</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_processing_instruction&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;    }</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160; </div>
+<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00781"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a1b3d15f44199ce9fe27be9fc717d36a1">  781</a></span>&#160;    <span class="keyword">inline</span> String <span class="keyword">const</span>&amp; <a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;    {</div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;        <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__text.html">simple_text&lt;String&gt;</a>&gt;(node))</div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;        {</div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_text&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;        }</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (std::holds_alternative&lt;<a class="code" href="classwordring_1_1html_1_1simple__comment.html">simple_comment&lt;String&gt;</a>&gt;(node))</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;        {</div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;            <span class="keywordflow">return</span> std::get&lt;simple_comment&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;        }</div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_processing_instruction&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">data</a>();</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;    }</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160; </div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    <span class="keyword">inline</span> String <span class="keyword">const</span>&amp; name(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;    {</div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_document_type&lt;String&gt;&gt;(node).name();</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;    }</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160; </div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;    <span class="keyword">inline</span> String <span class="keyword">const</span>&amp; target(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;    {</div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_processing_instruction&lt;String&gt;&gt;(node).target();</div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;    }</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160; </div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00809"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">  809</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node)</div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;    {</div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>();</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;    }</div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160; </div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00817"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ab4b21d8341bba0f052cf8c70fdd6eb2a">  817</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160;    {</div>
+<div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">begin</a>();</div>
+<div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;    }</div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160; </div>
+<div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00825"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">  825</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node)</div>
+<div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;    {</div>
+<div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>();</div>
+<div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;    }</div>
+<div class="line"><a name="l00829"></a><span class="lineno">  829</span>&#160; </div>
+<div class="line"><a name="l00832"></a><span class="lineno">  832</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00833"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ace3be2070d552f10d29130166f97f96e">  833</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00834"></a><span class="lineno">  834</span>&#160;    {</div>
+<div class="line"><a name="l00835"></a><span class="lineno">  835</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">end</a>();</div>
+<div class="line"><a name="l00836"></a><span class="lineno">  836</span>&#160;    }</div>
+<div class="line"><a name="l00837"></a><span class="lineno">  837</span>&#160; </div>
+<div class="line"><a name="l00840"></a><span class="lineno">  840</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00841"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">  841</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node, <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String&gt;</a> <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00842"></a><span class="lineno">  842</span>&#160;    {</div>
+<div class="line"><a name="l00843"></a><span class="lineno">  843</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(attr);</div>
+<div class="line"><a name="l00844"></a><span class="lineno">  844</span>&#160;    }</div>
+<div class="line"><a name="l00845"></a><span class="lineno">  845</span>&#160; </div>
+<div class="line"><a name="l00846"></a><span class="lineno">  846</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00847"></a><span class="lineno">  847</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(simple_node&lt;String&gt;&amp; node, simple_attr&lt;String&gt;&amp;&amp; attr)</div>
+<div class="line"><a name="l00848"></a><span class="lineno">  848</span>&#160;    {</div>
+<div class="line"><a name="l00849"></a><span class="lineno">  849</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">push_back</a>(std::move(attr));</div>
+<div class="line"><a name="l00850"></a><span class="lineno">  850</span>&#160;    }</div>
+<div class="line"><a name="l00851"></a><span class="lineno">  851</span>&#160; </div>
+<div class="line"><a name="l00863"></a><span class="lineno">  863</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00864"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">  864</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr&lt;String&gt;</a> <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00865"></a><span class="lineno">  865</span>&#160;    {</div>
+<div class="line"><a name="l00866"></a><span class="lineno">  866</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(attr);</div>
+<div class="line"><a name="l00867"></a><span class="lineno">  867</span>&#160;    }</div>
+<div class="line"><a name="l00868"></a><span class="lineno">  868</span>&#160; </div>
+<div class="line"><a name="l00882"></a><span class="lineno">  882</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00883"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a7c82dabf96023217c16408b0455e63c1">  883</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, ns_name ns, String <span class="keyword">const</span>&amp; prefix, String <span class="keyword">const</span>&amp; name)</div>
+<div class="line"><a name="l00884"></a><span class="lineno">  884</span>&#160;    {</div>
+<div class="line"><a name="l00885"></a><span class="lineno">  885</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(ns, prefix, name);</div>
+<div class="line"><a name="l00886"></a><span class="lineno">  886</span>&#160;    }</div>
+<div class="line"><a name="l00887"></a><span class="lineno">  887</span>&#160; </div>
+<div class="line"><a name="l00900"></a><span class="lineno">  900</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00901"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a8f09077dcc81b62a90d5eb33ca1a2b64">  901</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, String <span class="keyword">const</span>&amp; name)</div>
+<div class="line"><a name="l00902"></a><span class="lineno">  902</span>&#160;    {</div>
+<div class="line"><a name="l00903"></a><span class="lineno">  903</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(name);</div>
+<div class="line"><a name="l00904"></a><span class="lineno">  904</span>&#160;    }</div>
+<div class="line"><a name="l00905"></a><span class="lineno">  905</span>&#160; </div>
+<div class="line"><a name="l00919"></a><span class="lineno">  919</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00920"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#aee3f1028b833763e4ab769c9f1065caa">  920</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, ns_name ns, String <span class="keyword">const</span>&amp; prefix, attribute_name name)</div>
+<div class="line"><a name="l00921"></a><span class="lineno">  921</span>&#160;    {</div>
+<div class="line"><a name="l00922"></a><span class="lineno">  922</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(ns, prefix, name);</div>
+<div class="line"><a name="l00923"></a><span class="lineno">  923</span>&#160;    }</div>
+<div class="line"><a name="l00924"></a><span class="lineno">  924</span>&#160; </div>
+<div class="line"><a name="l00937"></a><span class="lineno">  937</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00938"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#abe9045149e8ea599d15986573e022ffb">  938</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node, attribute_name name)</div>
+<div class="line"><a name="l00939"></a><span class="lineno">  939</span>&#160;    {</div>
+<div class="line"><a name="l00940"></a><span class="lineno">  940</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).<a class="code" href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">find</a>(name);</div>
+<div class="line"><a name="l00941"></a><span class="lineno">  941</span>&#160;    }</div>
+<div class="line"><a name="l00942"></a><span class="lineno">  942</span>&#160; </div>
+<div class="line"><a name="l00943"></a><span class="lineno">  943</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00944"></a><span class="lineno">  944</span>&#160;    <span class="keyword">inline</span> ns_name get_namespace_id(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00945"></a><span class="lineno">  945</span>&#160;    {</div>
+<div class="line"><a name="l00946"></a><span class="lineno">  946</span>&#160;        <span class="keywordflow">return</span> attr.namespace_uri_id();</div>
+<div class="line"><a name="l00947"></a><span class="lineno">  947</span>&#160;    }</div>
+<div class="line"><a name="l00948"></a><span class="lineno">  948</span>&#160; </div>
+<div class="line"><a name="l00949"></a><span class="lineno">  949</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00950"></a><span class="lineno">  950</span>&#160;    <span class="keyword">inline</span> String get_namespace(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00951"></a><span class="lineno">  951</span>&#160;    {</div>
+<div class="line"><a name="l00952"></a><span class="lineno">  952</span>&#160;        <span class="keywordflow">return</span> attr.namespace_uri();</div>
+<div class="line"><a name="l00953"></a><span class="lineno">  953</span>&#160;    }</div>
+<div class="line"><a name="l00954"></a><span class="lineno">  954</span>&#160; </div>
+<div class="line"><a name="l00955"></a><span class="lineno">  955</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00956"></a><span class="lineno">  956</span>&#160;    <span class="keyword">inline</span> String get_local_name(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00957"></a><span class="lineno">  957</span>&#160;    {</div>
+<div class="line"><a name="l00958"></a><span class="lineno">  958</span>&#160;        <span class="keywordflow">return</span> attr.local_name();</div>
+<div class="line"><a name="l00959"></a><span class="lineno">  959</span>&#160;    }</div>
+<div class="line"><a name="l00960"></a><span class="lineno">  960</span>&#160; </div>
+<div class="line"><a name="l00961"></a><span class="lineno">  961</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00962"></a><span class="lineno">  962</span>&#160;    <span class="keyword">inline</span> attribute_name get_local_name_id(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00963"></a><span class="lineno">  963</span>&#160;    {</div>
+<div class="line"><a name="l00964"></a><span class="lineno">  964</span>&#160;        <span class="keywordflow">return</span> attr.local_name_id();</div>
+<div class="line"><a name="l00965"></a><span class="lineno">  965</span>&#160;    }</div>
+<div class="line"><a name="l00966"></a><span class="lineno">  966</span>&#160; </div>
+<div class="line"><a name="l00967"></a><span class="lineno">  967</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00968"></a><span class="lineno">  968</span>&#160;    <span class="keyword">inline</span> String get_qualified_name(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00969"></a><span class="lineno">  969</span>&#160;    {</div>
+<div class="line"><a name="l00970"></a><span class="lineno">  970</span>&#160;        <span class="keywordflow">return</span> attr.local_name_id();</div>
+<div class="line"><a name="l00971"></a><span class="lineno">  971</span>&#160;    }</div>
+<div class="line"><a name="l00972"></a><span class="lineno">  972</span>&#160;    </div>
+<div class="line"><a name="l00973"></a><span class="lineno">  973</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00974"></a><span class="lineno">  974</span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <span class="keyword">const</span>&amp; value(simple_attr&lt;String&gt; <span class="keyword">const</span>&amp; attr)</div>
+<div class="line"><a name="l00975"></a><span class="lineno">  975</span>&#160;    {</div>
+<div class="line"><a name="l00976"></a><span class="lineno">  976</span>&#160;        <span class="keywordflow">return</span> attr.value();</div>
+<div class="line"><a name="l00977"></a><span class="lineno">  977</span>&#160;    }</div>
+<div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160; </div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00982"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a8b4b992a4a027946b3f77a0daa20e2dc">  982</a></span>&#160;    <span class="keyword">inline</span> ns_name get_namespace_id(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;    {</div>
+<div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).namespace_uri_id();</div>
+<div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160;    }</div>
+<div class="line"><a name="l00986"></a><span class="lineno">  986</span>&#160; </div>
+<div class="line"><a name="l00989"></a><span class="lineno">  989</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00990"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a8d8fc8f2310383538f4f25fe06ea1931">  990</a></span>&#160;    <span class="keyword">inline</span> String get_namespace(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00991"></a><span class="lineno">  991</span>&#160;    {</div>
+<div class="line"><a name="l00992"></a><span class="lineno">  992</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).namespace_uri();</div>
+<div class="line"><a name="l00993"></a><span class="lineno">  993</span>&#160;    }</div>
+<div class="line"><a name="l00994"></a><span class="lineno">  994</span>&#160; </div>
+<div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l00998"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a14a9a691f9b1fff9e349cb7304c7f449">  998</a></span>&#160;    <span class="keyword">inline</span> tag_name get_local_name_id(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a> <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;    {</div>
+<div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).local_name_id();</div>
+<div class="line"><a name="l01001"></a><span class="lineno"> 1001</span>&#160;    }</div>
+<div class="line"><a name="l01002"></a><span class="lineno"> 1002</span>&#160; </div>
+<div class="line"><a name="l01003"></a><span class="lineno"> 1003</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l01004"></a><span class="lineno"> 1004</span>&#160;    <span class="keyword">inline</span> String get_local_name(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l01005"></a><span class="lineno"> 1005</span>&#160;    {</div>
+<div class="line"><a name="l01006"></a><span class="lineno"> 1006</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).local_name();</div>
+<div class="line"><a name="l01007"></a><span class="lineno"> 1007</span>&#160;    }</div>
+<div class="line"><a name="l01008"></a><span class="lineno"> 1008</span>&#160; </div>
+<div class="line"><a name="l01009"></a><span class="lineno"> 1009</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l01010"></a><span class="lineno"> 1010</span>&#160;    <span class="keyword">inline</span> String get_qualified_name(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l01011"></a><span class="lineno"> 1011</span>&#160;    {</div>
+<div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_element&lt;String&gt;&gt;(node).qualified_name();</div>
+<div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;    }</div>
+<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160; </div>
+<div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160;    <span class="keyword">inline</span> document_type_name get_document_type(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;    {</div>
+<div class="line"><a name="l01018"></a><span class="lineno"> 1018</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_document&lt;String&gt;&gt;(node).document_type();</div>
+<div class="line"><a name="l01019"></a><span class="lineno"> 1019</span>&#160;    }</div>
+<div class="line"><a name="l01020"></a><span class="lineno"> 1020</span>&#160; </div>
+<div class="line"><a name="l01026"></a><span class="lineno"> 1026</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l01027"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a083a700a01525cb956478d6cf0d54541"> 1027</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a083a700a01525cb956478d6cf0d54541">set_document_type</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node, document_type_name type)</div>
+<div class="line"><a name="l01028"></a><span class="lineno"> 1028</span>&#160;    {</div>
+<div class="line"><a name="l01029"></a><span class="lineno"> 1029</span>&#160;        std::get&lt;simple_document&lt;String&gt;&gt;(node).document_type(type);</div>
+<div class="line"><a name="l01030"></a><span class="lineno"> 1030</span>&#160;    }</div>
+<div class="line"><a name="l01031"></a><span class="lineno"> 1031</span>&#160; </div>
+<div class="line"><a name="l01032"></a><span class="lineno"> 1032</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l01033"></a><span class="lineno"> 1033</span>&#160;    <span class="keyword">inline</span> document_mode_name get_document_mode(simple_node&lt;String&gt; <span class="keyword">const</span>&amp; node)</div>
+<div class="line"><a name="l01034"></a><span class="lineno"> 1034</span>&#160;    {</div>
+<div class="line"><a name="l01035"></a><span class="lineno"> 1035</span>&#160;        <span class="keywordflow">return</span> std::get&lt;simple_document&lt;String&gt;&gt;(node).document_mode();</div>
+<div class="line"><a name="l01036"></a><span class="lineno"> 1036</span>&#160;    }</div>
+<div class="line"><a name="l01037"></a><span class="lineno"> 1037</span>&#160; </div>
+<div class="line"><a name="l01043"></a><span class="lineno"> 1043</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;</div>
+<div class="line"><a name="l01044"></a><span class="lineno"><a class="line" href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a"> 1044</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">set_document_mode</a>(<a class="code" href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">simple_node&lt;String&gt;</a>&amp; node, <a class="code" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a> mode)</div>
+<div class="line"><a name="l01045"></a><span class="lineno"> 1045</span>&#160;    {</div>
+<div class="line"><a name="l01046"></a><span class="lineno"> 1046</span>&#160;        std::get&lt;simple_document&lt;String&gt;&gt;(node).document_mode(mode);</div>
+<div class="line"><a name="l01047"></a><span class="lineno"> 1047</span>&#160;    }</div>
+<div class="line"><a name="l01048"></a><span class="lineno"> 1048</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__document_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__document.html">wordring::html::simple_document</a></div><div class="ttdoc">simple_html 用の Document ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:221</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html_a0b6dec06d587162193c772a260bc3e85"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html#a0b6dec06d587162193c772a260bc3e85">wordring::html::simple_element::find</a></div><div class="ttdeci">const_iterator find(ns_name ns, string_type const &amp;prefix, string_type const &amp;name) const</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:497</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__document__type_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__document__type.html">wordring::html::simple_document_type</a></div><div class="ttdoc">simple_html 用の DocumentType ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:281</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__text_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__text.html">wordring::html::simple_text</a></div><div class="ttdoc">simple_html 用の Text ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:563</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html_a3d1f9894e69c5a742dbef34e0de0b887"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html#a3d1f9894e69c5a742dbef34e0de0b887">wordring::html::simple_element::find</a></div><div class="ttdeci">const_iterator find(attribute_name name) const</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:520</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_ade43f92de5684975a7d8a86c24ae4de1"><div class="ttname"><a href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">wordring::html::begin</a></div><div class="ttdeci">auto begin(simple_node&lt; String &gt; &amp;node)</div><div class="ttdoc">属性の開始を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:799</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_ade43f92de5684975a7d8a86c24ae4de1"><div class="ttname"><a href="namespacewordring_1_1html.html#ade43f92de5684975a7d8a86c24ae4de1">wordring::html::begin</a></div><div class="ttdeci">auto begin(simple_node&lt; String &gt; &amp;node)</div><div class="ttdoc">属性の開始を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:809</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__attr_html_abd630957fbd0754721447a2d06b651dd"><div class="ttname"><a href="classwordring_1_1html_1_1simple__attr.html#abd630957fbd0754721447a2d06b651dd">wordring::html::simple_attr::operator==</a></div><div class="ttdeci">friend bool operator==(simple_attr&lt; String1 &gt; const &amp;, simple_attr&lt; String1 &gt; const &amp;)</div><div class="ttdoc">名前空間、接頭辞、ローカル名が一致する場合、true を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:151</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_a128239fff1cf0bca1d3219882765622a"><div class="ttname"><a href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">wordring::html::set_document_mode</a></div><div class="ttdeci">void set_document_mode(simple_node&lt; String &gt; &amp;node, document_mode_name mode)</div><div class="ttdoc">文書ノードに文書モードを設定する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:1034</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_a118ed045e0b978791ff2da0b39904a14"><div class="ttname"><a href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">wordring::html::simple_node</a></div><div class="ttdeci">std::variant&lt; std::monostate, simple_element&lt; String &gt;, std::monostate, simple_text&lt; String &gt;, std::monostate, std::monostate, std::monostate, simple_processing_instruction&lt; String &gt;, simple_comment&lt; String &gt;, simple_document&lt; String &gt;, simple_document_type&lt; String &gt;, simple_document_fragment&lt; String &gt;, std::monostate &gt; simple_node</div><div class="ttdoc">HTML のノードに相当する共用体</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:747</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_a128239fff1cf0bca1d3219882765622a"><div class="ttname"><a href="namespacewordring_1_1html.html#a128239fff1cf0bca1d3219882765622a">wordring::html::set_document_mode</a></div><div class="ttdeci">void set_document_mode(simple_node&lt; String &gt; &amp;node, document_mode_name mode)</div><div class="ttdoc">文書ノードに文書モードを設定する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:1044</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_a118ed045e0b978791ff2da0b39904a14"><div class="ttname"><a href="namespacewordring_1_1html.html#a118ed045e0b978791ff2da0b39904a14">wordring::html::simple_node</a></div><div class="ttdeci">std::variant&lt; std::monostate, simple_element&lt; String &gt;, std::monostate, simple_text&lt; String &gt;, std::monostate, std::monostate, std::monostate, simple_processing_instruction&lt; String &gt;, simple_comment&lt; String &gt;, simple_document&lt; String &gt;, simple_document_type&lt; String &gt;, simple_document_fragment&lt; String &gt;, std::monostate &gt; simple_node</div><div class="ttdoc">HTML のノードに相当する共用体</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:757</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html">wordring::html::simple_element</a></div><div class="ttdoc">simple_html 用の Element ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:376</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_ab71d3cad4767929e418a28ffafcf45e1"><div class="ttname"><a href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">wordring::html::find</a></div><div class="ttdeci">auto find(simple_node&lt; String &gt; const &amp;node, simple_attr&lt; String &gt; const &amp;attr)</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:854</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_a99b6c8b2e0705165b10f13cde0525ffe"><div class="ttname"><a href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">wordring::html::push_back</a></div><div class="ttdeci">void push_back(simple_node&lt; String &gt; &amp;node, simple_attr&lt; String &gt; const &amp;attr)</div><div class="ttdoc">属性を追加する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:831</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_a083a700a01525cb956478d6cf0d54541"><div class="ttname"><a href="namespacewordring_1_1html.html#a083a700a01525cb956478d6cf0d54541">wordring::html::set_document_type</a></div><div class="ttdeci">void set_document_type(simple_node&lt; String &gt; &amp;node, document_type_name type)</div><div class="ttdoc">文書ノードに文書形式を設定する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:1017</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_ab71d3cad4767929e418a28ffafcf45e1"><div class="ttname"><a href="namespacewordring_1_1html.html#ab71d3cad4767929e418a28ffafcf45e1">wordring::html::find</a></div><div class="ttdeci">auto find(simple_node&lt; String &gt; const &amp;node, simple_attr&lt; String &gt; const &amp;attr)</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:864</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_a99b6c8b2e0705165b10f13cde0525ffe"><div class="ttname"><a href="namespacewordring_1_1html.html#a99b6c8b2e0705165b10f13cde0525ffe">wordring::html::push_back</a></div><div class="ttdeci">void push_back(simple_node&lt; String &gt; &amp;node, simple_attr&lt; String &gt; const &amp;attr)</div><div class="ttdoc">属性を追加する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:841</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_a083a700a01525cb956478d6cf0d54541"><div class="ttname"><a href="namespacewordring_1_1html.html#a083a700a01525cb956478d6cf0d54541">wordring::html::set_document_type</a></div><div class="ttdeci">void set_document_type(simple_node&lt; String &gt; &amp;node, document_type_name type)</div><div class="ttdoc">文書ノードに文書形式を設定する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:1027</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__processing__instruction_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__processing__instruction.html">wordring::html::simple_processing_instruction</a></div><div class="ttdoc">simple_html 用の ProcessingInstruction ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:617</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html_ac8e491a4e0138e8d71b8146cf520acdd"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html#ac8e491a4e0138e8d71b8146cf520acdd">wordring::html::simple_element::namespace_uri</a></div><div class="ttdeci">string_type namespace_uri() const</div><div class="ttdoc">名前空間 URI を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:448</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__comment_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__comment.html">wordring::html::simple_comment</a></div><div class="ttdoc">simple_html 用の コメント ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:672</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__document__fragment_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__document__fragment.html">wordring::html::simple_document_fragment</a></div><div class="ttdoc">simple_html 用の DocumentFragment ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:340</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_aa8ba516b8828f1762c1063ccb5add1e2"><div class="ttname"><a href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">wordring::html::data</a></div><div class="ttdeci">String &amp; data(simple_node&lt; String &gt; &amp;node)</div><div class="ttdoc">ノードの文字列データを参照する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:755</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_aa8ba516b8828f1762c1063ccb5add1e2"><div class="ttname"><a href="namespacewordring_1_1html.html#aa8ba516b8828f1762c1063ccb5add1e2">wordring::html::data</a></div><div class="ttdeci">String &amp; data(simple_node&lt; String &gt; &amp;node)</div><div class="ttdoc">ノードの文字列データを参照する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:765</div></div>
 <div class="ttc" id="anamespacewordring_1_1html_html"><div class="ttname"><a href="namespacewordring_1_1html.html">wordring::html</a></div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1basic__html__atom_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1basic__html__atom.html">wordring::whatwg::html::basic_html_atom</a></div><div class="ttdoc">列挙体と文字列の相互変換を行うクラス</div><div class="ttdef"><b>Definition:</b> whatwg/html/html_atom.hpp:28</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_ab77ef8f701cabfd8fc3b9e6c44378979"><div class="ttname"><a href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">wordring::html::end</a></div><div class="ttdeci">auto end(simple_node&lt; String &gt; &amp;node)</div><div class="ttdoc">属性の終端を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:815</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_ab77ef8f701cabfd8fc3b9e6c44378979"><div class="ttname"><a href="namespacewordring_1_1html.html#ab77ef8f701cabfd8fc3b9e6c44378979">wordring::html::end</a></div><div class="ttdeci">auto end(simple_node&lt; String &gt; &amp;node)</div><div class="ttdoc">属性の終端を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:825</div></div>
 <div class="ttc" id="anamespacewordring_1_1whatwg_1_1html_html_aea9b1b94762f60c970ed2c951b1e5808"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::whatwg::html::document_mode_name</a></div><div class="ttdeci">document_mode_name</div><div class="ttdef"><b>Definition:</b> whatwg/html/html_defs.hpp:28</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html_a5b2cf98535b2e06ecbf2a9ebdd6161df"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html#a5b2cf98535b2e06ecbf2a9ebdd6161df">wordring::html::simple_element::find</a></div><div class="ttdeci">const_iterator find(ns_name ns, string_type const &amp;prefix, attribute_name name) const</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:512</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html_a3441188c2bff55514ec82ed2419098db"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html#a3441188c2bff55514ec82ed2419098db">wordring::html::simple_element::find</a></div><div class="ttdeci">const_iterator find(string_type const &amp;name) const</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:505</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__attr_html"><div class="ttname"><a href="classwordring_1_1html_1_1simple__attr.html">wordring::html::simple_attr</a></div><div class="ttdoc">simple_html 用の属性ノード</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:26</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html_a945d4e00d79e600a9c748342b5113d95"><div class="ttname"><a href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">wordring::html::operator==</a></div><div class="ttdeci">bool operator==(simple_attr&lt; String1 &gt; const &amp;lhs, simple_attr&lt; String1 &gt; const &amp;rhs)</div><div class="ttdoc">名前空間、接頭辞、ローカル名が一致する場合、true を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:151</div></div>
 <div class="ttc" id="aclasswordring_1_1html_1_1simple__element_html_ae1940d7fefa2629b4fa445fecece5247"><div class="ttname"><a href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247">wordring::html::simple_element::find</a></div><div class="ttdeci">const_iterator find(attribute_type const &amp;attr) const</div><div class="ttdoc">属性を検索する</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:490</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

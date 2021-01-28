@@ -5,7 +5,6 @@
 #include <wordring/html/simple_html.hpp>
 
 #include <wordring/compatibility.hpp>
-#include <wordring/tree/tree.hpp>
 
 #include <iostream>
 #include <iterator>
@@ -33,7 +32,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_1)
 		U" </svg>\r\n"
 		U"</p>\r\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -75,7 +74,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_2)
 		U"  </body>\n"
 		U"</html>\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -112,7 +111,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_3)
 		U"  </body>\n"
 		U"</html>\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -148,7 +147,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_4)
 		U"  </body>\n"
 		U"</html>\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -184,7 +183,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_5)
 		U"  </body>\n"
 		U"</html>\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -209,7 +208,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_6)
 
 	std::u32string in = U"<!DOCTYPE HTML><title>Hello</title><p>Welcome to this example.</p>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -229,7 +228,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_7)
 		U"<title>Hello</title>\n"
 		U"<p>Welcome to this example.</p>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -248,7 +247,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_8)
 
 	std::u32string in = U"<!DOCTYPE HTML><title>Hello</title><p>Welcome to this example.";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -295,7 +294,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_9)
 		U"   <td>✔\n"
 		U"</table>\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -360,7 +359,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_10)
 		U"</table>\n";
 
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -396,7 +395,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_11)
 
 	std::u32string in1 = U"<pre>Hello </pre>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp1;
+	simple_parser<u8simple_tree> sp1;
 	for (char32_t cp : in1) sp1.push_code_point(cp);
 	sp1.push_eof();
 	std::string out1;
@@ -406,7 +405,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_11)
 		U"<pre>\n"
 		U"Hello </pre>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp2;
+	simple_parser<u8simple_tree> sp2;
 	for (char32_t cp : in2) sp2.push_code_point(cp);
 	sp2.push_eof();
 	std::string out2;
@@ -435,7 +434,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_12)
 		U" <ms><![CDATA[x<y3]]></ms>\n"
 		U"</math>\n";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -464,7 +463,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_13)
 
 	std::u32string in = U"<!--My favorite operators are > and <!-->";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<u8simple_tree> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;

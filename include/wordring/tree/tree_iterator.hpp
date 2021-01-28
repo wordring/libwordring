@@ -6,8 +6,8 @@
 namespace wordring::detail
 {
 	/*! brief プレ・オーダー走査用のコンテナ
-
-	basic_tree_iterator のコンテナとして使われる。
+	*
+	* basic_tree_iterator のコンテナとして使われる。
 	*/
 	template <typename Iterator, typename Allocator>
 	class tree_iterator_stack
@@ -48,8 +48,8 @@ namespace wordring::detail
 	};
 
 	/*! brief レベル・オーダー走査用のコンテナ
-
-	basic_tree_iterator のコンテナとして使われる。
+	*
+	* basic_tree_iterator のコンテナとして使われる。
 	*/
 	template <typename Iterator, typename Allocator>
 	class tree_iterator_queue
@@ -95,41 +95,41 @@ namespace wordring::detail
 namespace wordring
 {
 	/*! @class basic_tree_iterator tree_iterator.hpp wordring/tree/tree_iterator.hpp
-	
-	@brief プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター
-	
-	@tparam Iterator ベースとなる木のイテレータ
-	@tparam Container detail::tree_iterator_stack あるいは detail::tree_iterator_queue
-	@tparam Allocator アロケータ
-
-	プレ・オーダー走査用の <b>tree_iterator</b> とレベル・オーダー走査用の
-	<b>level_order_tree_iterator</b> が事前に定義されている。
-
-	@code
-		template <typename Iterator, typename  Allocator = std::allocator<Iterator>>
-		using tree_iterator = basic_tree_iterator<Iterator, detail::tree_iterator_stack<Iterator, Allocator>, Allocator>;
-
-		template <typename Iterator, typename  Allocator = std::allocator<Iterator>>
-		using level_order_tree_iterator = basic_tree_iterator<Iterator, detail::tree_iterator_queue<Iterator, Allocator>, Allocator>;
-	@endcode
-
-	このクラスは、道順の調査に、スタックあるいはキューを使う。
-	従って、コピーのコストは相応に高い。
-
-	<b>operator++()</b> によって、走査順に従い次の要素へ移動する。
-	<b>operator*()</b> によって、指している要素の逆参照を得る。
-	元となる木のイテレータを得るには、 <b>base()</b> を使う。
-	
-	走査順のイメージを以下に示す。\n
-	※要素についている番号は移動順を示す。
-
-	@par プレ・オーダー
-
-	@image html tree_traverse_pre_order.svg
-	
-	@par レベル・オーダー
-	
-	@image html tree_traverse_level_order.svg
+	* 
+	* @brief プレ・オーダーあるいはレベル・オーダーで木を走査するイテレータ・アダプター
+	* 
+	* @tparam Iterator ベースとなる木のイテレータ
+	* @tparam Container detail::tree_iterator_stack あるいは detail::tree_iterator_queue
+	* @tparam Allocator アロケータ
+	*
+	* プレ・オーダー走査用の <b>tree_iterator</b> とレベル・オーダー走査用の
+	* <b>level_order_tree_iterator</b> が事前に定義されている。
+	*
+	* @code
+	* 	template <typename Iterator, typename  Allocator = std::allocator<Iterator>>
+	* 	using tree_iterator = basic_tree_iterator<Iterator, detail::tree_iterator_stack<Iterator, Allocator>, Allocator>;
+	*
+	* 	template <typename Iterator, typename  Allocator = std::allocator<Iterator>>
+	* 	using level_order_tree_iterator = basic_tree_iterator<Iterator, detail::tree_iterator_queue<Iterator, Allocator>, Allocator>;
+	* @endcode
+	*
+	* このクラスは、道順の調査に、スタックあるいはキューを使う。
+	* 従って、コピーのコストは相応に高い。
+	*
+	* <b>operator++()</b> によって、走査順に従い次の要素へ移動する。
+	* <b>operator*()</b> によって、指している要素の逆参照を得る。
+	* 元となる木のイテレータを得るには、 <b>base()</b> を使う。
+	* 
+	* 走査順のイメージを以下に示す。\n
+	* ※要素についている番号は移動順を示す。
+	*
+	* @par プレ・オーダー
+	*
+	* @image html tree_traverse_pre_order.svg
+	* 
+	* @par レベル・オーダー
+	* 
+	* @image html tree_traverse_level_order.svg
 	*/
 	template <typename Iterator, typename Container, typename Allocator>
 	class basic_tree_iterator
@@ -158,11 +158,11 @@ namespace wordring
 		}
 
 		/*! @brief 親を指すイテレータを指定して構築する
-		
-		@param it 親を指すイテレータ
-		@param alloc 内部コンテナ用のアロケータ
-
-		親は任意の要素で十分であり、木の根である必要はない。
+		* 
+		* @param it 親を指すイテレータ
+		* @param alloc 内部コンテナ用のアロケータ
+		*
+		* 親は任意の要素で十分であり、木の根である必要はない。
 		*/
 		explicit basic_tree_iterator(base_type const& it, allocator_type const& alloc = allocator_type())
 			: m_c(it, alloc)
@@ -202,8 +202,8 @@ namespace wordring
 		}
 
 		/*! @brief イテレータを進める
-		
-		@return *this
+		* 
+		* @return *this
 		*/
 		basic_tree_iterator& operator++()
 		{
@@ -214,10 +214,10 @@ namespace wordring
 		}
 
 		/*! @brief イテレータを進める
-		
-		@return 進める前の位置を指す元となる木のイテレータ
-
-		この関数は、コピーのコストを避けるため basic_tree_iterator ではなく元となる木のイテレータを返す。
+		* 
+		* @return 進める前の位置を指す元となる木のイテレータ
+		*
+		* この関数は、コピーのコストを避けるため basic_tree_iterator ではなく元となる木のイテレータを返す。
 		*/
 		base_type operator++(int)
 		{

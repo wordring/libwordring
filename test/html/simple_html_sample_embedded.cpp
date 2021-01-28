@@ -5,7 +5,6 @@
 #include <wordring/html/simple_html.hpp>
 
 #include <wordring/compatibility.hpp>
-#include <wordring/tree/tree.hpp>
 
 #include <iostream>
 #include <iterator>
@@ -13,11 +12,12 @@
 
 namespace
 {
+	/*
 	inline std::u32string parse(std::u32string_view in)
 	{
 		using namespace wordring::html;
 
-		simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+		simple_parser<u8simple_tree> sp;
 		for (char32_t cp : in) sp.push_code_point(cp);
 		sp.push_eof();
 		std::u32string out;
@@ -27,6 +27,7 @@ namespace
 
 		return out;
 	}
+	*/
 }
 
 BOOST_AUTO_TEST_SUITE(simple_html_sample_embedded_test)

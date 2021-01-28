@@ -4,7 +4,7 @@
 
 #include <wordring/html/simple_html.hpp>
 
-#include <wordring/tree/tree.hpp>
+#include <wordring/tag_tree/tag_tree.hpp>
 
 #include <iterator>
 #include <string>
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_1)
 
 	std::u32string in = U"<42></42>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -46,7 +46,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_2)
 
 	std::u32string in = U"<div/><span></span><span></span>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_3)
 
 	std::u32string in = U"<div foo<div>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -86,7 +86,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_4)
 
 	std::u32string in = U"<div id'bar'>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_5)
 
 	std::u32string in = U"<div foo=b'ar'>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_6)
 
 	std::u32string in = U"<div foo=\"bar\" =\"baz\">";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -158,7 +158,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_7)
 
 	std::u32string in = U"<?xml-stylesheet type=\"text / css\" href=\"style.css\"?>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -184,7 +184,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_8)
 
 	std::u32string in = U"A<table>B<tr>C</tr>D</table>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -201,7 +201,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_9)
 
 	std::u32string in = U"A<table><tr> B</tr> C</table>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_10)
 
 	std::u32string in = U"A<table><tr> B</tr> </em>C</table>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -241,7 +241,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_11)
 
 	std::u32string in = U"<a href=\"a\">a<table><a href=\"b\">b</table>x";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -264,7 +264,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_12)
 
 	std::u32string in = U"<p>1<b>2<i>3</b>4</i>5</p>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -287,7 +287,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_13)
 
 	std::u32string in = U"<b>1<p>2</b>3</p>";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -310,7 +310,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_14)
 
 	std::u32string in = U"<table><b><tr><td>aaa</td></tr>bbb</table>ccc";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
@@ -338,7 +338,7 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_parsing_15)
 		U"<p><b><b class=x><b>X\n"
 		U"<p></b></b></b></b></b></b>X";
 
-	simple_parser<wordring::tree<simple_node<std::u8string>>> sp;
+	simple_parser<wordring::tag_tree<simple_node<std::u8string>>> sp;
 	for (char32_t cp : in) sp.push_code_point(cp);
 	sp.push_eof();
 	std::u8string out;
