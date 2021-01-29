@@ -34,10 +34,10 @@ namespace
 	using processing_instruction_type = typename adapter_type::processing_instruction_type;
 	using comment_type = typename adapter_type::comment_type;
 
-	struct test_parser : public simple_parser_base<test_parser, tree>
+	struct test_parser : public basic_simple_parser<tree, typename std::u8string::const_iterator>
 	{
 	public:
-		using base_type = simple_parser_base<test_parser, tree>;
+		using base_type = basic_simple_parser<tree, typename std::u8string::const_iterator>;
 
 		using base_type::mode_name;
 
@@ -56,33 +56,28 @@ META タグの文字エンコーディング指定
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_1)
 {
 	test_parser tp;
-	std::u32string s = UR"(<meta charset="utf-8">)";
-	for (char32_t cp : s) tp.push_code_point(cp);
-	tp.push_eof();
+	std::u8string s = u8"<meta charset='shift_jis'>";
+	tp.parse(s.begin(), s.end());
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
-	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::UTF_8);
-	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
+	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_2)
 {
 	test_parser tp;
-	std::u32string s = UR"(<meta http-equiv="Content-Type" content="text/html; charset=shift_jis">)";
-	for (char32_t cp : s) tp.push_code_point(cp);
-	tp.push_eof();
+	std::u8string s = u8"<meta http-equiv='Content-Type' content='text/html; charset=shift_jis'>";
+	tp.parse(s.begin(), s.end());
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
-	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_3)
 {
 	test_parser tp;
-	std::u32string s = UR"(<content="text/html; charset=shift_jis">)";
-	for (char32_t cp : s) tp.push_code_point(cp);
-	tp.push_eof();
+	std::u8string s = u8"<content='text/html; charset=shift_jis'>";
+	tp.parse(s.begin(), s.end());
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::tentative);
 	BOOST_CHECK(tp.m_encoding_name == static_cast<wordring::encoding_name>(0));
@@ -91,25 +86,21 @@ BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_3)
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_4)
 {
 	test_parser tp;
-	std::u32string s = UR"(<meta http-equiv="Content-Type" content=" charset=shift_jis text/html;">)";
-	for (char32_t cp : s) tp.push_code_point(cp);
-	tp.push_eof();
+	std::u8string s = u8"<meta http-equiv='Content-Type' content=' charset=shift_jis text/html;'>";
+	tp.parse(s.begin(), s.end());
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
-	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_5)
 {
 	test_parser tp;
-	std::u32string s = UR"(<meta http-equiv="Content-Type" content=" charset=shift_jis; text/html;">)";
-	for (char32_t cp : s) tp.push_code_point(cp);
-	tp.push_eof();
+	std::u8string s = u8"<meta http-equiv='Content-Type' content=' charset=shift_jis; text/html;'>";
+	tp.parse(s.begin(), s.end());
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::certain);
 	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::Shift_JIS);
-	BOOST_TEST_MESSAGE("Unimplemented, See simple_parser_base::on_change_encoding().");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

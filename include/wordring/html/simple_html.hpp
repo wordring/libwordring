@@ -11,6 +11,9 @@
 #include <wordring/tag_tree/tag_tree.hpp>
 #include <wordring/compatibility.hpp>
 
+#include <iterator>
+#include <type_traits>
+
 namespace wordring::html
 {
 	using wordring::whatwg::html::to_string;
@@ -58,15 +61,17 @@ namespace wordring::html
 	//template <typename String>
 	//using const_simple_node_tree_iterator = typename wordring::tree<simple_node<String>>::const_iterator;
 
-	template <typename Container, typename ForwardIterator, typename std::enable_if_t<is_simple_tree_v<Container>, std::nullptr_t> = nullptr>
+	template <typename Container, typename BidirectionalIterator, typename std::enable_if_t<is_simple_tree_v<Container>, std::nullptr_t> = nullptr>
 	inline Container make_document(
-		ForwardIterator first,
-		ForwardIterator last,
+		BidirectionalIterator first,
+		BidirectionalIterator last,
 		encoding_name enc = encoding_name::UTF_8,
 		encoding_confidence_name confidence = encoding_confidence_name::tentative,
 		bool fragments_parser = false)
 	{
-		auto p = basic_simple_parser<Container, ForwardIterator>(confidence, enc, fragments_parser);
+		static_assert(std::is_base_of_v<std::bidirectional_iterator_tag, typename std::iterator_traits<BidirectionalIterator>::iterator_category>);
+
+		auto p = basic_simple_parser<Container, BidirectionalIterator>(confidence, enc, fragments_parser);
 		p.parse(first, last);
 		return p.get();
 	}

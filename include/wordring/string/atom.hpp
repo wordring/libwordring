@@ -474,7 +474,7 @@ namespace wordring
 			typename base_type::node_type const* d = base_type::m_c.data();
 
 			typename base_type::index_type idx = (d + id)->m_check;
-			assert(1 < idx && idx < base_type::m_c.size());
+			assert(1 < idx && idx < static_cast<int>(base_type::m_c.size()));
 			assert((d + idx)->m_base + base_type::null_value == id);
 
 			return value_type(base_type::m_c, idx);

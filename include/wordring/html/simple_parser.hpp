@@ -13,6 +13,7 @@
 #include <wordring/encoding/encoding.hpp>
 
 #include <cassert>
+#include <type_traits>
 #include <utility>
 
 namespace wordring::html
@@ -210,6 +211,9 @@ namespace wordring::html
 	};
 
 	/* @brief 文字エンコーディングに対応する HTML パーサー
+	* 
+	* 文書内にエンコーディングの指定を発見した場合、入力文字列を最初から読み直すため、入力文字列への
+	* イテレータは双方向である必要が有ります。
 	*/
 	template <typename Container, typename BidirectionalIterator>
 	class basic_simple_parser : public simple_parser_base<basic_simple_parser<Container, BidirectionalIterator>, Container>
@@ -219,6 +223,8 @@ namespace wordring::html
 		using container = Container;
 		using iterator = BidirectionalIterator;
 
+		static_assert(std::is_base_of_v<std::bidirectional_iterator_tag, typename std::iterator_traits<iterator>::iterator_category>);
+
 	public:
 		basic_simple_parser(
 			encoding_confidence_name confidence = encoding_confidence_name::irrelevant,
@@ -226,6 +232,8 @@ namespace wordring::html
 			bool fragments_parser = false)
 			: base_type(confidence, enc, fragments_parser)
 			, m_updated_encoding_name(static_cast<encoding_name>(0))
+			, m_first()
+			, m_last()
 		{
 		}
 
@@ -239,34 +247,52 @@ namespace wordring::html
 
 		void parse(iterator first, iterator last)
 		{
-			using namespace wordring::encoding;
-			
-			decoder dec(static_cast<encoding_name>(0), static_cast<error_mode_name>(0));
-			std::deque<uint32_t> buffer;
-			auto out = std::back_inserter(buffer);
-			iterator it1, it2;
-			result_value rv;
-
-		Start:
-			dec = decoder(base_type::m_encoding_name, error_mode_name::Replacement);
-			it1 = first;
-			it2 = last;
-			while (it1 != it2)
+			if constexpr (sizeof(*first) == 4)
 			{
-				buffer.clear();
-				rv = dec.push(*it1++, out);
-				if (buffer.empty()) continue;
-
-				for (uint32_t cp : buffer)
+				while (first != last)
 				{
-					base_type::push_code_point(cp);
-					if (m_updated_encoding_name != static_cast<encoding_name>(0))
+					push_back(*first);
+					++first;
+				}
+			}
+			else if constexpr (sizeof(*first) == 2)
+			{
+				std::u32string s;
+				encoding_cast(first, last, std::back_inserter(s));
+				for (char32_t cp : s) push_back(cp);
+			}
+			else if constexpr (sizeof(*first) == 1)
+			{
+				using namespace wordring::encoding;
+
+				decoder dec(static_cast<encoding_name>(0), static_cast<error_mode_name>(0));
+				std::deque<uint32_t> buffer;
+				auto out = std::back_inserter(buffer);
+				iterator it1, it2;
+				result_value rv;
+
+			Start:
+				dec = decoder(base_type::m_encoding_name, error_mode_name::Replacement);
+				it1 = first;
+				it2 = last;
+				while (it1 != it2)
+				{
+					buffer.clear();
+					rv = dec.push(*it1++, out);
+					if (buffer.empty()) continue;
+
+					for (uint32_t cp : buffer)
 					{
-						clear(base_type::m_encoding_confidence, m_updated_encoding_name);
-						goto Start;
+						base_type::push_code_point(cp);
+						if (m_updated_encoding_name != static_cast<encoding_name>(0))
+						{
+							clear(base_type::m_encoding_confidence, m_updated_encoding_name);
+							goto Start;
+						}
 					}
 				}
 			}
+			else assert(false);
 		}
 
 		container get()
@@ -285,6 +311,9 @@ namespace wordring::html
 
 	protected:
 		encoding_name m_updated_encoding_name;
+
+		iterator m_first;
+		iterator m_last;
 	};
 
 	template <typename Container>

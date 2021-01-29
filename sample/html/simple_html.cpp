@@ -32,21 +32,43 @@ BOOST_AUTO_TEST_CASE(simple_html_make_document_1)
 }
 
 /*
-* 文字コードはユニコードであれば十分
+* 文字コードを指定してHTML木を作成
 */
 BOOST_AUTO_TEST_CASE(simple_html_encoding_1)
 {
 	namespace html = wordring::html;
 
 	// 文字列から HTML ドキュメントを作成する。
-	std::u32string_view sv = U"<p>Hello HTML!</p>";
-	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
+	std::string_view sv = "<p>\x82\xB1\x82\xF1\x82\xC9\x82\xBF\x82\xCD HTML!</p>";
+	auto doc = html::make_document<html::u8simple_tree>(sv.begin(), sv.end(), wordring::encoding_name::Shift_JIS);
 
 	// HTML を文字列化する。
 	std::u8string s;
 	html::to_string(doc.begin(), std::back_inserter(s));
 
-	assert(s == u8"<html><head></head><body><p>Hello HTML!</p></body></html>");
+	assert(s == u8"<html><head></head><body><p>こんにちは HTML!</p></body></html>");
+}
+
+/*
+* 文書内で文字コードを指定
+*/
+BOOST_AUTO_TEST_CASE(simple_html_encoding_2)
+{
+	namespace html = wordring::html;
+
+	// 文字列から HTML ドキュメントを作成する。
+	std::string_view sv =
+		"<html>"
+			"<head><meta charset='shift_jis'></head>"
+			"<body><p>\x82\xB1\x82\xF1\x82\xC9\x82\xBF\x82\xCD HTML!</p></body>"
+		"</html>";
+	auto doc = html::make_document<html::u8simple_tree>(sv.begin(), sv.end());
+
+	// HTML を文字列化する。
+	std::u8string s;
+	html::to_string(doc.begin(), std::back_inserter(s));
+
+	assert(s == u8"<html><head><meta charset=\"shift_jis\"></head><body><p>こんにちは HTML!</p></body></html>");
 }
 
 /*

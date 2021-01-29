@@ -14,10 +14,10 @@
 namespace wordring::html
 {
 	/*! @class simple_node_traits simple_traits.hpp wordring/html/simple_traits.hpp
-
-	@brief node_traits のテンプレート特殊化
-
-	@sa node_traits
+	*
+	* @brief node_traits のテンプレート特殊化
+	*
+	* @sa node_traits
 	*/
 	template <typename NodeIterator>
 	struct simple_node_traits
@@ -47,9 +47,9 @@ namespace wordring::html
 		static node_pointer pointer() { return node_pointer(); }
 
 		/*! @brief 親要素を返す
-
-		根に親は無い。
-		この場合、pointer() が返すものと同一のポインタを返す。
+		*
+		* 根に親は無い。
+		* この場合、pointer() が返すものと同一のポインタを返す。
 		*/
 		static node_pointer parent(node_pointer it) { return it.parent(); }
 
@@ -82,8 +82,8 @@ namespace wordring::html
 		static bool is_element(node_pointer it) { return it->is_element(); }
 
 		/*! @brief 要素へオーナー文書を設定する
-
-		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
+		*
+		* パーサーは呼び出すが、simple node側は実装していないので、何もしない。
 		*/
 		static void set_document(node_pointer it, node_pointer doc) {}
 
@@ -122,8 +122,8 @@ namespace wordring::html
 		}
 
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる
-
-		push_active_formatting_element_list() から呼び出される。
+		*
+		* push_active_formatting_element_list() から呼び出される。
 		*/
 		static bool equals(node_pointer lhs, node_pointer rhs)
 		{
@@ -146,14 +146,14 @@ namespace wordring::html
 		*/
 
 		/*! @brief script 要素の "non-blocking" flag を設定する
-
-		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
+		*
+		* パーサーは呼び出すが、simple node側は実装していないので、何もしない。
 		*/
 		static void set_non_blocking_flag(node_pointer it, bool b) {}
 
 		/*! @brief script 要素の "already started" flag を設定する
-
-		パーサーは呼び出すが、simple node側は実装していないので、何もしない。
+		*
+		* パーサーは呼び出すが、simple node側は実装していないので、何もしない。
 		*/
 		static void set_already_started_flag(node_pointer it, bool b) {}
 
@@ -237,9 +237,9 @@ namespace wordring::html
 		}
 
 		/*! @brief 文書ノードに文書形式を設定する
-
-		@param [in] node 文書ノード
-		@param [in] type 文書形式（ html あるいは xml ）
+		*
+		* @param [in] node 文書ノード
+		* @param [in] type 文書形式（ html あるいは xml ）
 		*/
 		static void set_document_type(node_pointer it, document_type_name type)
 		{
@@ -254,9 +254,9 @@ namespace wordring::html
 		}
 
 		/*! @brief 文書ノードに文書モードを設定する
-
-		@param [in] node 文書ノード
-		@param [in] mode 文書モード（ no_quirks、quirks、あるいは limited_quirks ）
+		*
+		* @param [in] node 文書ノード
+		* @param [in] mode 文書モード（ no_quirks、quirks、あるいは limited_quirks ）
 		*/
 		static void set_document_mode(node_pointer it, document_mode_name mode)
 		{
@@ -264,18 +264,18 @@ namespace wordring::html
 		}
 
 		/*! @brief 文書が IFRAME ソース文書か調べる
-
-		@param [in] it Document ノードを指すイテレータ
-
-		@sa https://triple-underscore.github.io/HTML-embed-ja.html#an-iframe-srcdoc-document
-		@sa https://html.spec.whatwg.org/multipage/iframe-embed-object.html#an-iframe-srcdoc-document
+		*
+		* @param [in] it Document ノードを指すイテレータ
+		*
+		* @sa https://triple-underscore.github.io/HTML-embed-ja.html#an-iframe-srcdoc-document
+		* @sa https://html.spec.whatwg.org/multipage/iframe-embed-object.html#an-iframe-srcdoc-document
 		*/
 		static bool is_iframe_srcdoc_document(node_pointer it) { return false; }
 
 		/*! 文書の準備度を設定する
-
-		@sa https://html.spec.whatwg.org/multipage/dom.html#current-document-readiness
-		@sa https://triple-underscore.github.io/HTML-dom-ja.html#current-document-readiness
+		*
+		* @sa https://html.spec.whatwg.org/multipage/dom.html#current-document-readiness
+		* @sa https://triple-underscore.github.io/HTML-dom-ja.html#current-document-readiness
 		*/
 		static void set_document_ready_state(string_type const& readiness) {}
 
