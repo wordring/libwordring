@@ -274,19 +274,19 @@ $(function() {
 <div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
 <div class="line"><a name="l00258"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a012c7d1bdb49cd9b3886021af7f7dee7">  258</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a012c7d1bdb49cd9b3886021af7f7dee7">is_html_element_of</a>(node_pointer it, tag_name tag)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keywordflow">return</span> traits::get_namespace_id(it) == ns_name::HTML &amp;&amp; traits::get_local_name_id(it) == tag;</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;            <span class="keywordflow">return</span> traits::get_namespace_name(it) == ns_name::HTML &amp;&amp; traits::get_local_name_name(it) == tag;</div>
 <div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        }</div>
 <div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
 <div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a5d9a5779c6125df3bdf018a2d3530244">  272</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a5d9a5779c6125df3bdf018a2d3530244">is_html_element_of</a>(node_pointer it, std::u32string <span class="keyword">const</span>&amp; tag)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            this_type <span class="keyword">const</span>* P = <span class="keyword">static_cast&lt;</span>this_type const*<span class="keyword">&gt;</span>(<span class="keyword">this</span>);</div>
 <div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordflow">return</span> traits::get_namespace_id(it) == ns_name::HTML &amp;&amp; encoding_cast&lt;std::u32string&gt;(traits::get_local_name(it)) == tag;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordflow">return</span> traits::get_namespace_name(it) == ns_name::HTML &amp;&amp; encoding_cast&lt;std::u32string&gt;(traits::get_local_name(it)) == tag;</div>
 <div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        }</div>
 <div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
 <div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ae2e3e140dee68626c094689bcc8854f5">  289</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ae2e3e140dee68626c094689bcc8854f5">is_element_of</a>(node_pointer it, ns_name ns, tag_name tag)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            <span class="keywordflow">return</span> traits::get_namespace_id(it) == ns &amp;&amp; traits::get_local_name_id(it) == tag;</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            <span class="keywordflow">return</span> traits::get_namespace_name(it) == ns &amp;&amp; traits::get_local_name_name(it) == tag;</div>
 <div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        }</div>
 <div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
 <div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
@@ -471,8 +471,8 @@ $(function() {
 <div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
 <div class="line"><a name="l00527"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a122c839c4708222360dbe69dec1dabf0">  527</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a122c839c4708222360dbe69dec1dabf0">is_special</a>(node_pointer it)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;            ns_name  ns  = traits::get_namespace_id(it);</div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;            tag_name tag = traits::get_local_name_id(it);</div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;            ns_name  ns  = traits::get_namespace_name(it);</div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;            tag_name tag = traits::get_local_name_name(it);</div>
 <div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160; </div>
 <div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;            <span class="keywordflow">if</span> (ns == ns_name::HTML)</div>
 <div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;            {</div>
@@ -520,9 +520,9 @@ $(function() {
 <div class="line"><a name="l00575"></a><span class="lineno">  575</span>&#160; </div>
 <div class="line"><a name="l00585"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#aad6c1d53fce351d52dad641253937ee5">  585</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#aad6c1d53fce351d52dad641253937ee5">is_formatting</a>(node_pointer it)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            <span class="keywordflow">if</span> (traits::get_namespace_id(it) == ns_name::HTML)</div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            <span class="keywordflow">if</span> (traits::get_namespace_name(it) == ns_name::HTML)</div>
 <div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;            {</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_id(it))</div>
+<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_name(it))</div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;                {</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;                <span class="keywordflow">case</span> tag_name::A: <span class="keywordflow">case</span> tag_name::B:     <span class="keywordflow">case</span> tag_name::Big:    <span class="keywordflow">case</span> tag_name::Code:   <span class="keywordflow">case</span> tag_name::Em: <span class="keywordflow">case</span> tag_name::Font: <span class="keywordflow">case</span> tag_name::I: <span class="keywordflow">case</span> tag_name::Nobr:</div>
 <div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;                <span class="keywordflow">case</span> tag_name::S: <span class="keywordflow">case</span> tag_name::Small: <span class="keywordflow">case</span> tag_name::Strike: <span class="keywordflow">case</span> tag_name::Strong: <span class="keywordflow">case</span> tag_name::Tt: <span class="keywordflow">case</span> tag_name::U:</div>
@@ -578,8 +578,8 @@ $(function() {
 <div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160; </div>
 <div class="line"><a name="l00682"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a9dd8e0e685f52726e68d57c459e92d6f">  682</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a9dd8e0e685f52726e68d57c459e92d6f">is_default_scope</a>(node_pointer it)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            ns_name  ns  = traits::get_namespace_id(it);</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            tag_name tag = traits::get_local_name_id(it);</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;            ns_name  ns  = traits::get_namespace_name(it);</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            tag_name tag = traits::get_local_name_name(it);</div>
 <div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160; </div>
 <div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;            <span class="keywordflow">if</span> (ns == ns_name::HTML)</div>
 <div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;            {</div>
@@ -835,14 +835,14 @@ $(function() {
 <div class="line"><a name="l01063"></a><span class="lineno"> 1063</span>&#160;            {</div>
 <div class="line"><a name="l01064"></a><span class="lineno"> 1064</span>&#160;                stack_entry&amp; entry = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a894e322e2c1eede7796aa1ebd10fb7d8">adjusted_current_node</a>();</div>
 <div class="line"><a name="l01065"></a><span class="lineno"> 1065</span>&#160; </div>
-<div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_id(entry.m_it) == ns_name::HTML) <span class="keywordflow">goto</span> Html;</div>
+<div class="line"><a name="l01066"></a><span class="lineno"> 1066</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_name(entry.m_it) == ns_name::HTML) <span class="keywordflow">goto</span> Html;</div>
 <div class="line"><a name="l01067"></a><span class="lineno"> 1067</span>&#160;                <span class="keywordflow">if</span> constexpr (std::is_same_v&lt;start_tag_token, Token&gt;)</div>
 <div class="line"><a name="l01068"></a><span class="lineno"> 1068</span>&#160;                {</div>
 <div class="line"><a name="l01069"></a><span class="lineno"> 1069</span>&#160;                    <span class="keywordflow">if</span> (is_mathml_text_integration_point(entry)</div>
 <div class="line"><a name="l01070"></a><span class="lineno"> 1070</span>&#160;                        &amp;&amp; token.m_tag_name_id != tag_name::Mglyph</div>
 <div class="line"><a name="l01071"></a><span class="lineno"> 1071</span>&#160;                        &amp;&amp; token.m_tag_name_id != tag_name::Malignmark) <span class="keywordflow">goto</span> Html;</div>
 <div class="line"><a name="l01072"></a><span class="lineno"> 1072</span>&#160; </div>
-<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;                    <span class="keywordflow">if</span> (traits::get_local_name_id(entry.m_it) == tag_name::Annotation_xml</div>
+<div class="line"><a name="l01073"></a><span class="lineno"> 1073</span>&#160;                    <span class="keywordflow">if</span> (traits::get_local_name_name(entry.m_it) == tag_name::Annotation_xml</div>
 <div class="line"><a name="l01074"></a><span class="lineno"> 1074</span>&#160;                        &amp;&amp; token.m_tag_name_id == tag_name::Svg) <span class="keywordflow">goto</span> Html;</div>
 <div class="line"><a name="l01075"></a><span class="lineno"> 1075</span>&#160; </div>
 <div class="line"><a name="l01076"></a><span class="lineno"> 1076</span>&#160;                    <span class="keywordflow">if</span> (is_html_integration_point(entry)) <span class="keywordflow">goto</span> Html;</div>
@@ -956,9 +956,9 @@ $(function() {
 <div class="line"><a name="l01184"></a><span class="lineno"> 1184</span>&#160; </div>
 <div class="line"><a name="l01185"></a><span class="lineno"> 1185</span>&#160;        <span class="keywordtype">bool</span> is_mathml_text_integration_point(stack_entry <span class="keyword">const</span>&amp; entry)<span class="keyword"> const</span></div>
 <div class="line"><a name="l01186"></a><span class="lineno"> 1186</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;            <span class="keywordflow">if</span> (traits::get_namespace_id(entry.m_it) == ns_name::MathML)</div>
+<div class="line"><a name="l01187"></a><span class="lineno"> 1187</span>&#160;            <span class="keywordflow">if</span> (traits::get_namespace_name(entry.m_it) == ns_name::MathML)</div>
 <div class="line"><a name="l01188"></a><span class="lineno"> 1188</span>&#160;            {</div>
-<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_id(entry.m_it))</div>
+<div class="line"><a name="l01189"></a><span class="lineno"> 1189</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_name(entry.m_it))</div>
 <div class="line"><a name="l01190"></a><span class="lineno"> 1190</span>&#160;                {</div>
 <div class="line"><a name="l01191"></a><span class="lineno"> 1191</span>&#160;                <span class="keywordflow">case</span> tag_name::Mi: <span class="keywordflow">case</span> tag_name::Mo: <span class="keywordflow">case</span> tag_name::Mn: <span class="keywordflow">case</span> tag_name::Ms: <span class="keywordflow">case</span> tag_name::Mtext:</div>
 <div class="line"><a name="l01192"></a><span class="lineno"> 1192</span>&#160;                    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
@@ -972,8 +972,8 @@ $(function() {
 <div class="line"><a name="l01200"></a><span class="lineno"> 1200</span>&#160; </div>
 <div class="line"><a name="l01201"></a><span class="lineno"> 1201</span>&#160;        <span class="keywordtype">bool</span> is_html_integration_point(stack_entry <span class="keyword">const</span>&amp; entry)<span class="keyword"> const</span></div>
 <div class="line"><a name="l01202"></a><span class="lineno"> 1202</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;            ns_name  ns  = traits::get_namespace_id(entry.m_it);</div>
-<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;            tag_name tag = traits::get_local_name_id(entry.m_it);</div>
+<div class="line"><a name="l01203"></a><span class="lineno"> 1203</span>&#160;            ns_name  ns  = traits::get_namespace_name(entry.m_it);</div>
+<div class="line"><a name="l01204"></a><span class="lineno"> 1204</span>&#160;            tag_name tag = traits::get_local_name_name(entry.m_it);</div>
 <div class="line"><a name="l01205"></a><span class="lineno"> 1205</span>&#160; </div>
 <div class="line"><a name="l01206"></a><span class="lineno"> 1206</span>&#160;            <span class="keywordflow">if</span> (ns == ns_name::MathML &amp;&amp; tag == tag_name::Annotation_xml)</div>
 <div class="line"><a name="l01207"></a><span class="lineno"> 1207</span>&#160;            {</div>
@@ -1008,10 +1008,10 @@ $(function() {
 <div class="line"><a name="l01240"></a><span class="lineno"> 1240</span>&#160; </div>
 <div class="line"><a name="l01241"></a><span class="lineno"> 1241</span>&#160;            node_pointer adjusted_insertion_location = traits::end(target);</div>
 <div class="line"><a name="l01242"></a><span class="lineno"> 1242</span>&#160; </div>
-<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;            <span class="keywordtype">bool</span> f = traits::get_namespace_id(target) == ns_name::HTML;</div>
+<div class="line"><a name="l01243"></a><span class="lineno"> 1243</span>&#160;            <span class="keywordtype">bool</span> f = traits::get_namespace_name(target) == ns_name::HTML;</div>
 <div class="line"><a name="l01244"></a><span class="lineno"> 1244</span>&#160;            <span class="keywordflow">if</span> (f)</div>
 <div class="line"><a name="l01245"></a><span class="lineno"> 1245</span>&#160;            {</div>
-<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_id(target))</div>
+<div class="line"><a name="l01246"></a><span class="lineno"> 1246</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_name(target))</div>
 <div class="line"><a name="l01247"></a><span class="lineno"> 1247</span>&#160;                {</div>
 <div class="line"><a name="l01248"></a><span class="lineno"> 1248</span>&#160;                <span class="keywordflow">case</span> tag_name::Table: <span class="keywordflow">case</span> tag_name::Tbody: <span class="keywordflow">case</span> tag_name::Tfoot: <span class="keywordflow">case</span> tag_name::Thead: <span class="keywordflow">case</span> tag_name::Tr:</div>
 <div class="line"><a name="l01249"></a><span class="lineno"> 1249</span>&#160;                    f = <span class="keyword">true</span>;</div>
@@ -1241,8 +1241,8 @@ $(function() {
 <div class="line"><a name="l01500"></a><span class="lineno"> 1500</span>&#160;            <span class="keywordflow">while</span> (!m_stack.empty())</div>
 <div class="line"><a name="l01501"></a><span class="lineno"> 1501</span>&#160;            {</div>
 <div class="line"><a name="l01502"></a><span class="lineno"> 1502</span>&#160;                <span class="keyword">auto</span> it = m_stack.back().m_it;</div>
-<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;                tag_name tag = traits::get_local_name_id(it);</div>
-<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;                ns_name  ns  = traits::get_namespace_id(it);</div>
+<div class="line"><a name="l01503"></a><span class="lineno"> 1503</span>&#160;                tag_name tag = traits::get_local_name_name(it);</div>
+<div class="line"><a name="l01504"></a><span class="lineno"> 1504</span>&#160;                ns_name  ns  = traits::get_namespace_name(it);</div>
 <div class="line"><a name="l01505"></a><span class="lineno"> 1505</span>&#160; </div>
 <div class="line"><a name="l01506"></a><span class="lineno"> 1506</span>&#160;                <span class="keywordflow">if</span> constexpr (std::is_same_v&lt;TagName, tag_name&gt;)</div>
 <div class="line"><a name="l01507"></a><span class="lineno"> 1507</span>&#160;                {</div>
@@ -1284,8 +1284,8 @@ $(function() {
 <div class="line"><a name="l01543"></a><span class="lineno"> 1543</span>&#160;            <span class="keywordflow">while</span> (!m_stack.empty())</div>
 <div class="line"><a name="l01544"></a><span class="lineno"> 1544</span>&#160;            {</div>
 <div class="line"><a name="l01545"></a><span class="lineno"> 1545</span>&#160;                <span class="keyword">auto</span> it = m_stack.back().m_it;</div>
-<div class="line"><a name="l01546"></a><span class="lineno"> 1546</span>&#160;                tag_name tag = traits::get_local_name_id(it);</div>
-<div class="line"><a name="l01547"></a><span class="lineno"> 1547</span>&#160;                ns_name  ns  = traits::get_namespace_id(it);</div>
+<div class="line"><a name="l01546"></a><span class="lineno"> 1546</span>&#160;                tag_name tag = traits::get_local_name_name(it);</div>
+<div class="line"><a name="l01547"></a><span class="lineno"> 1547</span>&#160;                ns_name  ns  = traits::get_namespace_name(it);</div>
 <div class="line"><a name="l01548"></a><span class="lineno"> 1548</span>&#160; </div>
 <div class="line"><a name="l01549"></a><span class="lineno"> 1549</span>&#160;                <span class="keywordflow">if</span> (ns != ns_name::HTML) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l01550"></a><span class="lineno"> 1550</span>&#160;                <span class="keywordflow">switch</span> (tag)</div>
@@ -2062,12 +2062,12 @@ $(function() {
 <div class="line"><a name="l02321"></a><span class="lineno"> 2321</span>&#160; </div>
 <div class="line"><a name="l02322"></a><span class="lineno"> 2322</span>&#160;                <span class="keywordflow">for</span> (stack_entry <span class="keyword">const</span>&amp; se : m_stack)</div>
 <div class="line"><a name="l02323"></a><span class="lineno"> 2323</span>&#160;                {</div>
-<div class="line"><a name="l02324"></a><span class="lineno"> 2324</span>&#160;                    <span class="keywordflow">switch</span> (traits::get_local_name_id(se.m_it))</div>
+<div class="line"><a name="l02324"></a><span class="lineno"> 2324</span>&#160;                    <span class="keywordflow">switch</span> (traits::get_local_name_name(se.m_it))</div>
 <div class="line"><a name="l02325"></a><span class="lineno"> 2325</span>&#160;                    {</div>
 <div class="line"><a name="l02326"></a><span class="lineno"> 2326</span>&#160;                    <span class="keywordflow">case</span> tag_name::Dd:    <span class="keywordflow">case</span> tag_name::Dt: <span class="keywordflow">case</span> tag_name::Li:    <span class="keywordflow">case</span> tag_name::Optgroup: <span class="keywordflow">case</span> tag_name::Option: <span class="keywordflow">case</span> tag_name::P:</div>
 <div class="line"><a name="l02327"></a><span class="lineno"> 2327</span>&#160;                    <span class="keywordflow">case</span> tag_name::Rb:    <span class="keywordflow">case</span> tag_name::Rp: <span class="keywordflow">case</span> tag_name::Rt:    <span class="keywordflow">case</span> tag_name::Rtc:      <span class="keywordflow">case</span> tag_name::Tbody:  <span class="keywordflow">case</span> tag_name::Td:</div>
 <div class="line"><a name="l02328"></a><span class="lineno"> 2328</span>&#160;                    <span class="keywordflow">case</span> tag_name::Tfoot: <span class="keywordflow">case</span> tag_name::Th: <span class="keywordflow">case</span> tag_name::Thead: <span class="keywordflow">case</span> tag_name::Tr:       <span class="keywordflow">case</span> tag_name::Body:   <span class="keywordflow">case</span> tag_name::Html:</div>
-<div class="line"><a name="l02329"></a><span class="lineno"> 2329</span>&#160;                        <span class="keywordflow">if</span>(traits::get_namespace_id(se.m_it) == ns_name::HTML) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l02329"></a><span class="lineno"> 2329</span>&#160;                        <span class="keywordflow">if</span>(traits::get_namespace_name(se.m_it) == ns_name::HTML) <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l02330"></a><span class="lineno"> 2330</span>&#160;                    <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l02331"></a><span class="lineno"> 2331</span>&#160;                        <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">base_type::report_error</a>();</div>
 <div class="line"><a name="l02332"></a><span class="lineno"> 2332</span>&#160;                        <span class="keywordflow">break</span>;</div>
@@ -2090,12 +2090,12 @@ $(function() {
 <div class="line"><a name="l02349"></a><span class="lineno"> 2349</span>&#160; </div>
 <div class="line"><a name="l02350"></a><span class="lineno"> 2350</span>&#160;                    <span class="keywordflow">for</span> (stack_entry <span class="keyword">const</span>&amp; se : m_stack)</div>
 <div class="line"><a name="l02351"></a><span class="lineno"> 2351</span>&#160;                    {</div>
-<div class="line"><a name="l02352"></a><span class="lineno"> 2352</span>&#160;                        <span class="keywordflow">switch</span> (traits::get_local_name_id(se.m_it))</div>
+<div class="line"><a name="l02352"></a><span class="lineno"> 2352</span>&#160;                        <span class="keywordflow">switch</span> (traits::get_local_name_name(se.m_it))</div>
 <div class="line"><a name="l02353"></a><span class="lineno"> 2353</span>&#160;                        {</div>
 <div class="line"><a name="l02354"></a><span class="lineno"> 2354</span>&#160;                        <span class="keywordflow">case</span> tag_name::Dd:    <span class="keywordflow">case</span> tag_name::Dt: <span class="keywordflow">case</span> tag_name::Li:    <span class="keywordflow">case</span> tag_name::Optgroup: <span class="keywordflow">case</span> tag_name::Option: <span class="keywordflow">case</span> tag_name::P:</div>
 <div class="line"><a name="l02355"></a><span class="lineno"> 2355</span>&#160;                        <span class="keywordflow">case</span> tag_name::Rb:    <span class="keywordflow">case</span> tag_name::Rp: <span class="keywordflow">case</span> tag_name::Rt:    <span class="keywordflow">case</span> tag_name::Rtc:      <span class="keywordflow">case</span> tag_name::Tbody:  <span class="keywordflow">case</span> tag_name::Td:</div>
 <div class="line"><a name="l02356"></a><span class="lineno"> 2356</span>&#160;                        <span class="keywordflow">case</span> tag_name::Tfoot: <span class="keywordflow">case</span> tag_name::Th: <span class="keywordflow">case</span> tag_name::Thead: <span class="keywordflow">case</span> tag_name::Tr:       <span class="keywordflow">case</span> tag_name::Body:   <span class="keywordflow">case</span> tag_name::Html:</div>
-<div class="line"><a name="l02357"></a><span class="lineno"> 2357</span>&#160;                            <span class="keywordflow">if</span> (traits::get_namespace_id(se.m_it) == ns_name::HTML) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l02357"></a><span class="lineno"> 2357</span>&#160;                            <span class="keywordflow">if</span> (traits::get_namespace_name(se.m_it) == ns_name::HTML) <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l02358"></a><span class="lineno"> 2358</span>&#160;                        <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l02359"></a><span class="lineno"> 2359</span>&#160;                            <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">base_type::report_error</a>();</div>
 <div class="line"><a name="l02360"></a><span class="lineno"> 2360</span>&#160;                            <span class="keywordflow">break</span>;</div>
@@ -2119,12 +2119,12 @@ $(function() {
 <div class="line"><a name="l02378"></a><span class="lineno"> 2378</span>&#160; </div>
 <div class="line"><a name="l02379"></a><span class="lineno"> 2379</span>&#160;                    <span class="keywordflow">for</span> (stack_entry <span class="keyword">const</span>&amp; se : m_stack)</div>
 <div class="line"><a name="l02380"></a><span class="lineno"> 2380</span>&#160;                    {</div>
-<div class="line"><a name="l02381"></a><span class="lineno"> 2381</span>&#160;                        <span class="keywordflow">switch</span> (traits::get_local_name_id(se.m_it))</div>
+<div class="line"><a name="l02381"></a><span class="lineno"> 2381</span>&#160;                        <span class="keywordflow">switch</span> (traits::get_local_name_name(se.m_it))</div>
 <div class="line"><a name="l02382"></a><span class="lineno"> 2382</span>&#160;                        {</div>
 <div class="line"><a name="l02383"></a><span class="lineno"> 2383</span>&#160;                        <span class="keywordflow">case</span> tag_name::Dd:    <span class="keywordflow">case</span> tag_name::Dt: <span class="keywordflow">case</span> tag_name::Li:    <span class="keywordflow">case</span> tag_name::Optgroup: <span class="keywordflow">case</span> tag_name::Option: <span class="keywordflow">case</span> tag_name::P:</div>
 <div class="line"><a name="l02384"></a><span class="lineno"> 2384</span>&#160;                        <span class="keywordflow">case</span> tag_name::Rb:    <span class="keywordflow">case</span> tag_name::Rp: <span class="keywordflow">case</span> tag_name::Rt:    <span class="keywordflow">case</span> tag_name::Rtc:      <span class="keywordflow">case</span> tag_name::Tbody:  <span class="keywordflow">case</span> tag_name::Td:</div>
 <div class="line"><a name="l02385"></a><span class="lineno"> 2385</span>&#160;                        <span class="keywordflow">case</span> tag_name::Tfoot: <span class="keywordflow">case</span> tag_name::Th: <span class="keywordflow">case</span> tag_name::Thead: <span class="keywordflow">case</span> tag_name::Tr:       <span class="keywordflow">case</span> tag_name::Body:   <span class="keywordflow">case</span> tag_name::Html:</div>
-<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;                            <span class="keywordflow">if</span> (traits::get_namespace_id(se.m_it) == ns_name::HTML) <span class="keywordflow">continue</span>;</div>
+<div class="line"><a name="l02386"></a><span class="lineno"> 2386</span>&#160;                            <span class="keywordflow">if</span> (traits::get_namespace_name(se.m_it) == ns_name::HTML) <span class="keywordflow">continue</span>;</div>
 <div class="line"><a name="l02387"></a><span class="lineno"> 2387</span>&#160;                        <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l02388"></a><span class="lineno"> 2388</span>&#160;                            <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">base_type::report_error</a>();</div>
 <div class="line"><a name="l02389"></a><span class="lineno"> 2389</span>&#160;                            <span class="keywordflow">break</span>;</div>
@@ -2161,12 +2161,12 @@ $(function() {
 <div class="line"><a name="l02420"></a><span class="lineno"> 2420</span>&#160;                {</div>
 <div class="line"><a name="l02421"></a><span class="lineno"> 2421</span>&#160;                <span class="keywordflow">case</span> tag_name::H1: <span class="keywordflow">case</span> tag_name::H2: <span class="keywordflow">case</span> tag_name::H3: <span class="keywordflow">case</span> tag_name::H4: <span class="keywordflow">case</span> tag_name::H5: <span class="keywordflow">case</span> tag_name::H6:</div>
 <div class="line"><a name="l02422"></a><span class="lineno"> 2422</span>&#160;                    <span class="keywordflow">if</span> (<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a34719242cedfc692bdb37b33dbe95f5b">in_specific_scope</a>(button_scope, tag_name::P)) close_p_element();</div>
-<div class="line"><a name="l02423"></a><span class="lineno"> 2423</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_id(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it) == ns_name::HTML)</div>
+<div class="line"><a name="l02423"></a><span class="lineno"> 2423</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_name(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it) == ns_name::HTML)</div>
 <div class="line"><a name="l02424"></a><span class="lineno"> 2424</span>&#160;                    {</div>
-<div class="line"><a name="l02425"></a><span class="lineno"> 2425</span>&#160;                        <span class="keywordflow">switch</span> (traits::get_local_name_id(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it))</div>
+<div class="line"><a name="l02425"></a><span class="lineno"> 2425</span>&#160;                        <span class="keywordflow">switch</span> (traits::get_local_name_name(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it))</div>
 <div class="line"><a name="l02426"></a><span class="lineno"> 2426</span>&#160;                        {</div>
 <div class="line"><a name="l02427"></a><span class="lineno"> 2427</span>&#160;                        <span class="keywordflow">case</span> tag_name::H1: <span class="keywordflow">case</span> tag_name::H2: <span class="keywordflow">case</span> tag_name::H3: <span class="keywordflow">case</span> tag_name::H4: <span class="keywordflow">case</span> tag_name::H5: <span class="keywordflow">case</span> tag_name::H6:</div>
-<div class="line"><a name="l02428"></a><span class="lineno"> 2428</span>&#160;                            <span class="keywordflow">if</span> (traits::get_namespace_id(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it) == ns_name::HTML)</div>
+<div class="line"><a name="l02428"></a><span class="lineno"> 2428</span>&#160;                            <span class="keywordflow">if</span> (traits::get_namespace_name(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it) == ns_name::HTML)</div>
 <div class="line"><a name="l02429"></a><span class="lineno"> 2429</span>&#160;                            {</div>
 <div class="line"><a name="l02430"></a><span class="lineno"> 2430</span>&#160;                                <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">base_type::report_error</a>();</div>
 <div class="line"><a name="l02431"></a><span class="lineno"> 2431</span>&#160;                                m_stack.pop_back();</div>
@@ -2533,8 +2533,8 @@ $(function() {
 <div class="line"><a name="l02792"></a><span class="lineno"> 2792</span>&#160;                    }</div>
 <div class="line"><a name="l02793"></a><span class="lineno"> 2793</span>&#160;                    generate_implied_end_tags();</div>
 <div class="line"><a name="l02794"></a><span class="lineno"> 2794</span>&#160;                    it = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it;</div>
-<div class="line"><a name="l02795"></a><span class="lineno"> 2795</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_id(it) != ns_name::HTML</div>
-<div class="line"><a name="l02796"></a><span class="lineno"> 2796</span>&#160;                        || traits::get_local_name_id(it) != token.m_tag_name_id) <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">base_type::report_error</a>();</div>
+<div class="line"><a name="l02795"></a><span class="lineno"> 2795</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_name(it) != ns_name::HTML</div>
+<div class="line"><a name="l02796"></a><span class="lineno"> 2796</span>&#160;                        || traits::get_local_name_name(it) != token.m_tag_name_id) <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1input__stream.html#a1b471294042399219124374ec13bf1ce">base_type::report_error</a>();</div>
 <div class="line"><a name="l02797"></a><span class="lineno"> 2797</span>&#160;                    <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a0045015c405683014a710eeed813c8f7">pop_until</a>(ns_name::HTML, token.m_tag_name_id);</div>
 <div class="line"><a name="l02798"></a><span class="lineno"> 2798</span>&#160;                    <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ad76e4a7bfd0f9e65bff9cd6e755ed994">clear_formatting_element_list</a>();</div>
 <div class="line"><a name="l02799"></a><span class="lineno"> 2799</span>&#160;                    <span class="keywordflow">return</span>;</div>
@@ -2831,7 +2831,7 @@ $(function() {
 <div class="line"><a name="l03090"></a><span class="lineno"> 3090</span>&#160;                <span class="keyword">auto</span> it1 = --m_stack.end();</div>
 <div class="line"><a name="l03091"></a><span class="lineno"> 3091</span>&#160;                node_pointer node = it1-&gt;m_it;</div>
 <div class="line"><a name="l03092"></a><span class="lineno"> 3092</span>&#160;            Loop2:</div>
-<div class="line"><a name="l03093"></a><span class="lineno"> 3093</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_id(node) == ns_name::HTML</div>
+<div class="line"><a name="l03093"></a><span class="lineno"> 3093</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_name(node) == ns_name::HTML</div>
 <div class="line"><a name="l03094"></a><span class="lineno"> 3094</span>&#160;                    &amp;&amp; encoding_cast&lt;std::u32string&gt;(traits::get_local_name(node)) == token.m_tag_name)</div>
 <div class="line"><a name="l03095"></a><span class="lineno"> 3095</span>&#160;                {</div>
 <div class="line"><a name="l03096"></a><span class="lineno"> 3096</span>&#160;                    generate_implied_end_tags(std::make_pair(ns_name::HTML, token.m_tag_name));</div>
@@ -2880,7 +2880,7 @@ $(function() {
 <div class="line"><a name="l03146"></a><span class="lineno"> 3146</span>&#160;                std::u32string <span class="keyword">const</span>&amp; subject = token.m_tag_name;</div>
 <div class="line"><a name="l03147"></a><span class="lineno"> 3147</span>&#160;                <span class="comment">// 2.</span></div>
 <div class="line"><a name="l03148"></a><span class="lineno"> 3148</span>&#160;                node_pointer it = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it;</div>
-<div class="line"><a name="l03149"></a><span class="lineno"> 3149</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_id(it) == ns_name::HTML</div>
+<div class="line"><a name="l03149"></a><span class="lineno"> 3149</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_name(it) == ns_name::HTML</div>
 <div class="line"><a name="l03150"></a><span class="lineno"> 3150</span>&#160;                    &amp;&amp; encoding_cast&lt;std::u32string&gt;(traits::get_local_name(it)) == subject</div>
 <div class="line"><a name="l03151"></a><span class="lineno"> 3151</span>&#160;                    &amp;&amp; <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a29fe65ecddbe152944b4143b2fbfc300">find_from_list</a>(it) == <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#adb3b0675f916bebbaf73df02164de1e8">m_list</a>.end())</div>
 <div class="line"><a name="l03152"></a><span class="lineno"> 3152</span>&#160;                {</div>
@@ -3086,10 +3086,10 @@ $(function() {
 <div class="line"><a name="l03352"></a><span class="lineno"> 3352</span>&#160;            <span class="keywordflow">if</span> constexpr (std::is_same_v&lt;character_token, Token&gt;)</div>
 <div class="line"><a name="l03353"></a><span class="lineno"> 3353</span>&#160;            {</div>
 <div class="line"><a name="l03354"></a><span class="lineno"> 3354</span>&#160;                node_pointer it = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it;</div>
-<div class="line"><a name="l03355"></a><span class="lineno"> 3355</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_id(it))</div>
+<div class="line"><a name="l03355"></a><span class="lineno"> 3355</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_name(it))</div>
 <div class="line"><a name="l03356"></a><span class="lineno"> 3356</span>&#160;                {</div>
 <div class="line"><a name="l03357"></a><span class="lineno"> 3357</span>&#160;                <span class="keywordflow">case</span> tag_name::Table: <span class="keywordflow">case</span> tag_name::Tbody: <span class="keywordflow">case</span> tag_name::Tfoot: <span class="keywordflow">case</span> tag_name::Thead: <span class="keywordflow">case</span> tag_name::Tr:</div>
-<div class="line"><a name="l03358"></a><span class="lineno"> 3358</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_id(it) != ns_name::HTML) <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l03358"></a><span class="lineno"> 3358</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_name(it) != ns_name::HTML) <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l03359"></a><span class="lineno"> 3359</span>&#160; </div>
 <div class="line"><a name="l03360"></a><span class="lineno"> 3360</span>&#160;                    m_pending_table_character_tokens.clear();</div>
 <div class="line"><a name="l03361"></a><span class="lineno"> 3361</span>&#160;                    m_original_insertion_mode = m_insertion_mode;</div>
@@ -3284,8 +3284,8 @@ $(function() {
 <div class="line"><a name="l03550"></a><span class="lineno"> 3550</span>&#160;            <span class="keywordflow">while</span> (!m_stack.empty())</div>
 <div class="line"><a name="l03551"></a><span class="lineno"> 3551</span>&#160;            {</div>
 <div class="line"><a name="l03552"></a><span class="lineno"> 3552</span>&#160;                node_pointer it = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it;</div>
-<div class="line"><a name="l03553"></a><span class="lineno"> 3553</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_id(it) != ns_name::HTML) <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l03554"></a><span class="lineno"> 3554</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_id(it))</div>
+<div class="line"><a name="l03553"></a><span class="lineno"> 3553</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_name(it) != ns_name::HTML) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l03554"></a><span class="lineno"> 3554</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_name(it))</div>
 <div class="line"><a name="l03555"></a><span class="lineno"> 3555</span>&#160;                {</div>
 <div class="line"><a name="l03556"></a><span class="lineno"> 3556</span>&#160;                <span class="keywordflow">case</span> tag_name::Table: <span class="keywordflow">case</span> tag_name::Template: <span class="keywordflow">case</span> tag_name::Html:</div>
 <div class="line"><a name="l03557"></a><span class="lineno"> 3557</span>&#160;                    <span class="keywordflow">return</span>;</div>
@@ -3628,10 +3628,10 @@ $(function() {
 <div class="line"><a name="l03894"></a><span class="lineno"> 3894</span>&#160;            <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div>
 <div class="line"><a name="l03895"></a><span class="lineno"> 3895</span>&#160;            {</div>
 <div class="line"><a name="l03896"></a><span class="lineno"> 3896</span>&#160;                node_pointer it = <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it;</div>
-<div class="line"><a name="l03897"></a><span class="lineno"> 3897</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_id(it))</div>
+<div class="line"><a name="l03897"></a><span class="lineno"> 3897</span>&#160;                <span class="keywordflow">switch</span> (traits::get_local_name_name(it))</div>
 <div class="line"><a name="l03898"></a><span class="lineno"> 3898</span>&#160;                {</div>
 <div class="line"><a name="l03899"></a><span class="lineno"> 3899</span>&#160;                <span class="keywordflow">case</span> tag_name::Tbody: <span class="keywordflow">case</span> tag_name::Tfoot: <span class="keywordflow">case</span> tag_name::Thead: <span class="keywordflow">case</span> tag_name::Template: <span class="keywordflow">case</span> tag_name::Html:</div>
-<div class="line"><a name="l03900"></a><span class="lineno"> 3900</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_id(it) == ns_name::HTML) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l03900"></a><span class="lineno"> 3900</span>&#160;                    <span class="keywordflow">if</span> (traits::get_namespace_name(it) == ns_name::HTML) <span class="keywordflow">return</span>;</div>
 <div class="line"><a name="l03901"></a><span class="lineno"> 3901</span>&#160;                <span class="keywordflow">default</span>:</div>
 <div class="line"><a name="l03902"></a><span class="lineno"> 3902</span>&#160;                    <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l03903"></a><span class="lineno"> 3903</span>&#160;                }</div>
@@ -4598,7 +4598,7 @@ $(function() {
 <div class="line"><a name="l04864"></a><span class="lineno"> 4864</span>&#160;                    m_stack.pop_back();</div>
 <div class="line"><a name="l04865"></a><span class="lineno"> 4865</span>&#160;                    <span class="keywordflow">if</span> (is_mathml_text_integration_point(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>())</div>
 <div class="line"><a name="l04866"></a><span class="lineno"> 4866</span>&#160;                     || is_html_integration_point(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>())</div>
-<div class="line"><a name="l04867"></a><span class="lineno"> 4867</span>&#160;                     || traits::get_namespace_id(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it) == ns_name::HTML) <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l04867"></a><span class="lineno"> 4867</span>&#160;                     || traits::get_namespace_name(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe4d876cc101daca6bdb50f08e089865">current_node</a>().m_it) == ns_name::HTML) <span class="keywordflow">break</span>;</div>
 <div class="line"><a name="l04868"></a><span class="lineno"> 4868</span>&#160;                }</div>
 <div class="line"><a name="l04869"></a><span class="lineno"> 4869</span>&#160;                reprocess_token(token);</div>
 <div class="line"><a name="l04870"></a><span class="lineno"> 4870</span>&#160;                <span class="keywordflow">return</span>;</div>
@@ -4608,7 +4608,7 @@ $(function() {
 <div class="line"><a name="l04874"></a><span class="lineno"> 4874</span>&#160;        AnyOtherStartTag:</div>
 <div class="line"><a name="l04875"></a><span class="lineno"> 4875</span>&#160;            <span class="keywordflow">if</span> constexpr (std::is_same_v&lt;start_tag_token, Token&gt;)</div>
 <div class="line"><a name="l04876"></a><span class="lineno"> 4876</span>&#160;            {</div>
-<div class="line"><a name="l04877"></a><span class="lineno"> 4877</span>&#160;                ns_name ns = traits::get_namespace_id(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a894e322e2c1eede7796aa1ebd10fb7d8">adjusted_current_node</a>().m_it);</div>
+<div class="line"><a name="l04877"></a><span class="lineno"> 4877</span>&#160;                ns_name ns = traits::get_namespace_name(<a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a894e322e2c1eede7796aa1ebd10fb7d8">adjusted_current_node</a>().m_it);</div>
 <div class="line"><a name="l04878"></a><span class="lineno"> 4878</span>&#160; </div>
 <div class="line"><a name="l04879"></a><span class="lineno"> 4879</span>&#160;                <span class="keywordflow">if</span> (ns == ns_name::MathML) <a class="code" href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#abe80e4f628549a2f9631f3a0fe0870db">adjust_mathml_attributes</a>(token);</div>
 <div class="line"><a name="l04880"></a><span class="lineno"> 4880</span>&#160;                <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ns == ns_name::SVG)</div>
@@ -4673,7 +4673,7 @@ $(function() {
 <div class="line"><a name="l04939"></a><span class="lineno"> 4939</span>&#160;                <span class="comment">// 5.</span></div>
 <div class="line"><a name="l04940"></a><span class="lineno"> 4940</span>&#160;                --node;</div>
 <div class="line"><a name="l04941"></a><span class="lineno"> 4941</span>&#160;                <span class="comment">// 6.</span></div>
-<div class="line"><a name="l04942"></a><span class="lineno"> 4942</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_id(node-&gt;m_it) != ns_name::HTML) <span class="keywordflow">goto</span> Loop;</div>
+<div class="line"><a name="l04942"></a><span class="lineno"> 4942</span>&#160;                <span class="keywordflow">if</span> (traits::get_namespace_name(node-&gt;m_it) != ns_name::HTML) <span class="keywordflow">goto</span> Loop;</div>
 <div class="line"><a name="l04943"></a><span class="lineno"> 4943</span>&#160;                <span class="comment">// 7.</span></div>
 <div class="line"><a name="l04944"></a><span class="lineno"> 4944</span>&#160;                <span class="keywordflow">switch</span> (m_insertion_mode)</div>
 <div class="line"><a name="l04945"></a><span class="lineno"> 4945</span>&#160;                {</div>
@@ -4794,7 +4794,7 @@ $(function() {
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_a2116d93ccc880fbb6bfc67738ffc97d4"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a2116d93ccc880fbb6bfc67738ffc97d4">wordring::whatwg::html::parsing::tree_construction_dispatcher::is_button_scope</a></div><div class="ttdeci">bool is_button_scope(node_pointer it) const</div><div class="ttdoc">ボタンのスコープ内の特定な要素か調べる</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:748</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_a0045015c405683014a710eeed813c8f7"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a0045015c405683014a710eeed813c8f7">wordring::whatwg::html::parsing::tree_construction_dispatcher::pop_until</a></div><div class="ttdeci">void pop_until(ns_name ns, tag_name tag)</div><div class="ttdoc">スタックから指定のタグが現れるまでPOPする</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:806</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_a48a7328d2986b7e878b1308341c647dc"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a48a7328d2986b7e878b1308341c647dc">wordring::whatwg::html::parsing::tree_construction_dispatcher::reset_insertion_mode_appropriately</a></div><div class="ttdeci">void reset_insertion_mode_appropriately()</div><div class="ttdoc">挿入モードを適切に設定し直す</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:354</div></div>
-<div class="ttc" id="astructwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token_html"><div class="ttname"><a href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">wordring::whatwg::html::parsing::start_tag_token</a></div><div class="ttdef"><b>Definition:</b> whatwg/html/parsing/token.hpp:171</div></div>
+<div class="ttc" id="astructwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token_html"><div class="ttname"><a href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1start__tag__token.html">wordring::whatwg::html::parsing::start_tag_token</a></div><div class="ttdef"><b>Definition:</b> whatwg/html/parsing/token.hpp:172</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_aad6c1d53fce351d52dad641253937ee5"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#aad6c1d53fce351d52dad641253937ee5">wordring::whatwg::html::parsing::tree_construction_dispatcher::is_formatting</a></div><div class="ttdeci">bool is_formatting(node_pointer it) const</div><div class="ttdoc">整形要素か調べる</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:585</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_a40d1a8b06b357695caa104cfcc2d0f5e"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a40d1a8b06b357695caa104cfcc2d0f5e">wordring::whatwg::html::parsing::tree_construction_dispatcher::clear</a></div><div class="ttdeci">void clear(encoding_confidence_name confidence, encoding_name enc)</div><div class="ttdoc">初期状態に戻し、パーサーを再利用可能とする</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:219</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_a3295c942bb988e296e4cfc3882d5a147"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a3295c942bb988e296e4cfc3882d5a147">wordring::whatwg::html::parsing::tree_construction_dispatcher::abort_parser</a></div><div class="ttdeci">void abort_parser()</div><div class="ttdoc">構文解析を中止する</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:5044</div></div>
@@ -4829,7 +4829,7 @@ $(function() {
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_a34719242cedfc692bdb37b33dbe95f5b"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#a34719242cedfc692bdb37b33dbe95f5b">wordring::whatwg::html::parsing::tree_construction_dispatcher::in_specific_scope</a></div><div class="ttdeci">bool in_specific_scope(Scope s, Target const &amp;target) const</div><div class="ttdoc">要素が特定の視野内（スコープ内）にあるか調べる</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:633</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html">wordring::whatwg::html::parsing::tree_construction_dispatcher</a></div><div class="ttdoc">HTML5 パーサーの木構築段階</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:41</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_ad76e4a7bfd0f9e65bff9cd6e755ed994"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ad76e4a7bfd0f9e65bff9cd6e755ed994">wordring::whatwg::html::parsing::tree_construction_dispatcher::clear_formatting_element_list</a></div><div class="ttdeci">void clear_formatting_element_list()</div><div class="ttdoc">アクティブ整形要素リストをマーカーまでクリアする</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:990</div></div>
-<div class="ttc" id="astructwordring_1_1whatwg_1_1html_1_1parsing_1_1comment__token_html"><div class="ttname"><a href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1comment__token.html">wordring::whatwg::html::parsing::comment_token</a></div><div class="ttdef"><b>Definition:</b> whatwg/html/parsing/token.hpp:204</div></div>
+<div class="ttc" id="astructwordring_1_1whatwg_1_1html_1_1parsing_1_1comment__token_html"><div class="ttname"><a href="structwordring_1_1whatwg_1_1html_1_1parsing_1_1comment__token.html">wordring::whatwg::html::parsing::comment_token</a></div><div class="ttdef"><b>Definition:</b> whatwg/html/parsing/token.hpp:205</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_ad01346475600ea28394e55c65e83cef7"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ad01346475600ea28394e55c65e83cef7">wordring::whatwg::html::parsing::tree_construction_dispatcher::pop_until</a></div><div class="ttdeci">void pop_until(node_pointer it)</div><div class="ttdoc">スタックから指定の要素が現れるまでPOPする</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:852</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_ae2e3e140dee68626c094689bcc8854f5"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#ae2e3e140dee68626c094689bcc8854f5">wordring::whatwg::html::parsing::tree_construction_dispatcher::is_element_of</a></div><div class="ttdeci">bool is_element_of(node_pointer it, ns_name ns, tag_name tag) const</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:289</div></div>
 <div class="ttc" id="aclasswordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher_html_aaf6e1c40e093db1c6087b20943ffe5ee"><div class="ttname"><a href="classwordring_1_1whatwg_1_1html_1_1parsing_1_1tree__construction__dispatcher.html#aaf6e1c40e093db1c6087b20943ffe5ee">wordring::whatwg::html::parsing::tree_construction_dispatcher::push_formatting_element_list</a></div><div class="ttdeci">void push_formatting_element_list(node_pointer it, start_tag_token const &amp;token)</div><div class="ttdoc">整形要素リストへ整形要素を挿入する</div><div class="ttdef"><b>Definition:</b> tree_construction_dispatcher.hpp:918</div></div>

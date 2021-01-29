@@ -97,6 +97,11 @@ namespace wordring::whatwg::html
 		{
 		}
 
+		/*! @brief 文字列化する
+		
+		static_cast 用の定義。
+
+		*/
 		operator string_type() const
 		{
 			using namespace wordring::whatwg::html::parsing;

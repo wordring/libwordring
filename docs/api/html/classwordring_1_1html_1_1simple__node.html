@@ -1,0 +1,489 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>wordring_cpp: wordring::html::simple_node&lt; String &gt; クラステンプレート</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">wordring_cpp
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="namespacewordring.html">wordring</a></li><li class="navelem"><a class="el" href="namespacewordring_1_1html.html">html</a></li><li class="navelem"><a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#pub-types">公開型</a> &#124;
+<a href="#pub-methods">公開メンバ関数</a> &#124;
+<a href="#friends">フレンド</a> &#124;
+<a href="classwordring_1_1html_1_1simple__node-members.html">全メンバ一覧</a>  </div>
+  <div class="headertitle">
+<div class="title">wordring::html::simple_node&lt; String &gt; クラステンプレート</div>  </div>
+</div><!--header-->
+<div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+公開型</h2></td></tr>
+<tr class="memitem:a19ebbf15e2c27972b5fe661a3b7f6f47"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a19ebbf15e2c27972b5fe661a3b7f6f47">type_name</a> : std::uint32_t { <br />
+&#160;&#160;<b>Element</b> = 1, 
+<b>Text</b> = 3, 
+<b>ProcessingInstruction</b> = 7, 
+<b>Comment</b> = 8, 
+<br />
+&#160;&#160;<b>Document</b> = 9, 
+<b>DocumentType</b> = 10, 
+<b>DocumentFragment</b> = 11
+<br />
+ }</td></tr>
+<tr class="memdesc:a19ebbf15e2c27972b5fe661a3b7f6f47"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードの型名を示す列挙体  <a href="classwordring_1_1html_1_1simple__node.html#a19ebbf15e2c27972b5fe661a3b7f6f47">[詳解]</a><br /></td></tr>
+<tr class="separator:a19ebbf15e2c27972b5fe661a3b7f6f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b228914ebd3c6a11180841d3b0da344"><td class="memItemLeft" align="right" valign="top"><a id="a9b228914ebd3c6a11180841d3b0da344"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = std::remove_cv_t&lt; String &gt;</td></tr>
+<tr class="separator:a9b228914ebd3c6a11180841d3b0da344"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62ced254a1e2fdd05ae2f32a55e58ce7"><td class="memItemLeft" align="right" valign="top"><a id="a62ced254a1e2fdd05ae2f32a55e58ce7"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>element_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__element.html">simple_element</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:a62ced254a1e2fdd05ae2f32a55e58ce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad18e316d843c2db6821c940f062e76dd"><td class="memItemLeft" align="right" valign="top"><a id="ad18e316d843c2db6821c940f062e76dd"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>text_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__text.html">simple_text</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:ad18e316d843c2db6821c940f062e76dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8dc5dccaf41e95106e2ec02065020b2"><td class="memItemLeft" align="right" valign="top"><a id="ae8dc5dccaf41e95106e2ec02065020b2"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>processing_instruction_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__processing__instruction.html">simple_processing_instruction</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:ae8dc5dccaf41e95106e2ec02065020b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c97fb83833acd14f152bae1f68c7833"><td class="memItemLeft" align="right" valign="top"><a id="a2c97fb83833acd14f152bae1f68c7833"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>comment_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__comment.html">simple_comment</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:a2c97fb83833acd14f152bae1f68c7833"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62f6dfa0f573ec55f11802cab8881a94"><td class="memItemLeft" align="right" valign="top"><a id="a62f6dfa0f573ec55f11802cab8881a94"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__document.html">simple_document</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:a62f6dfa0f573ec55f11802cab8881a94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1d01b803c8e6c383aada3307e1a196f"><td class="memItemLeft" align="right" valign="top"><a id="aa1d01b803c8e6c383aada3307e1a196f"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_type_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__document__type.html">simple_document_type</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:aa1d01b803c8e6c383aada3307e1a196f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0cc2c488850a48d0712b6e5c537ab94"><td class="memItemLeft" align="right" valign="top"><a id="af0cc2c488850a48d0712b6e5c537ab94"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>document_fragment_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__document__fragment.html">simple_document_fragment</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:af0cc2c488850a48d0712b6e5c537ab94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6004ddd3272872c771cde24d87c7851"><td class="memItemLeft" align="right" valign="top"><a id="ae6004ddd3272872c771cde24d87c7851"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_type</b> = <a class="el" href="classwordring_1_1html_1_1simple__attr.html">simple_attr</a>&lt; string_type &gt;</td></tr>
+<tr class="separator:ae6004ddd3272872c771cde24d87c7851"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57a978c296dc516648a58d78ae62474c"><td class="memItemLeft" align="right" valign="top"><a id="a57a978c296dc516648a58d78ae62474c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>attribute_iterator</b> = typename element_type::iterator</td></tr>
+<tr class="separator:a57a978c296dc516648a58d78ae62474c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef26dc0841c7ac30896cd8eb39690ddd"><td class="memItemLeft" align="right" valign="top"><a id="aef26dc0841c7ac30896cd8eb39690ddd"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>const_attribute_iterator</b> = typename element_type::const_iterator</td></tr>
+<tr class="separator:aef26dc0841c7ac30896cd8eb39690ddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0b81e676a68cf33d9391a5ef6a658f6"><td class="memItemLeft" align="right" valign="top"><a id="ac0b81e676a68cf33d9391a5ef6a658f6"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#ac0b81e676a68cf33d9391a5ef6a658f6">value_type</a> = std::variant&lt; <a class="el" href="classwordring_1_1html_1_1simple__element.html">element_type</a>, <a class="el" href="classwordring_1_1html_1_1simple__text.html">text_type</a>, <a class="el" href="classwordring_1_1html_1_1simple__processing__instruction.html">processing_instruction_type</a>, <a class="el" href="classwordring_1_1html_1_1simple__comment.html">comment_type</a>, <a class="el" href="classwordring_1_1html_1_1simple__document.html">document_type</a>, <a class="el" href="classwordring_1_1html_1_1simple__document__type.html">document_type_type</a>, <a class="el" href="classwordring_1_1html_1_1simple__document__fragment.html">document_fragment_type</a> &gt;</td></tr>
+<tr class="memdesc:ac0b81e676a68cf33d9391a5ef6a658f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">HTML のノードに相当する共用体 <br /></td></tr>
+<tr class="separator:ac0b81e676a68cf33d9391a5ef6a658f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+公開メンバ関数</h2></td></tr>
+<tr class="memitem:a4d26e8e3d97fcc8210b49820bdd0da44"><td class="memItemLeft" align="right" valign="top"><a id="a4d26e8e3d97fcc8210b49820bdd0da44"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a> const &amp;)=default</td></tr>
+<tr class="separator:a4d26e8e3d97fcc8210b49820bdd0da44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a515bc8ace3c2c1d9a002d99b9f76d6e1"><td class="memItemLeft" align="right" valign="top"><a id="a515bc8ace3c2c1d9a002d99b9f76d6e1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a> &amp;&amp;)=default</td></tr>
+<tr class="separator:a515bc8ace3c2c1d9a002d99b9f76d6e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a9b4d5e4915d6965bda02eafdd4cb4c"><td class="memItemLeft" align="right" valign="top"><a id="a0a9b4d5e4915d6965bda02eafdd4cb4c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__element.html">element_type</a> const &amp;val)</td></tr>
+<tr class="separator:a0a9b4d5e4915d6965bda02eafdd4cb4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a011617d7db511f12288ac7aca640e293"><td class="memItemLeft" align="right" valign="top"><a id="a011617d7db511f12288ac7aca640e293"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__element.html">element_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:a011617d7db511f12288ac7aca640e293"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4a9ca99881aeadb7c7a993ccd3c1b2a"><td class="memItemLeft" align="right" valign="top"><a id="ad4a9ca99881aeadb7c7a993ccd3c1b2a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__text.html">text_type</a> const &amp;val)</td></tr>
+<tr class="separator:ad4a9ca99881aeadb7c7a993ccd3c1b2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab9d3f58d7b2bcc0d043bca957b272294"><td class="memItemLeft" align="right" valign="top"><a id="ab9d3f58d7b2bcc0d043bca957b272294"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__text.html">text_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:ab9d3f58d7b2bcc0d043bca957b272294"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f295c058a254568228eaf7de03c3f47"><td class="memItemLeft" align="right" valign="top"><a id="a1f295c058a254568228eaf7de03c3f47"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__processing__instruction.html">processing_instruction_type</a> const &amp;val)</td></tr>
+<tr class="separator:a1f295c058a254568228eaf7de03c3f47"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab51d098fcd4a832ff1e675afd35df067"><td class="memItemLeft" align="right" valign="top"><a id="ab51d098fcd4a832ff1e675afd35df067"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__processing__instruction.html">processing_instruction_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:ab51d098fcd4a832ff1e675afd35df067"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcdbefc3d889c008bd5f11de7f28942c"><td class="memItemLeft" align="right" valign="top"><a id="abcdbefc3d889c008bd5f11de7f28942c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__comment.html">comment_type</a> const &amp;val)</td></tr>
+<tr class="separator:abcdbefc3d889c008bd5f11de7f28942c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ed8f0f9de62e23341d41718be431970"><td class="memItemLeft" align="right" valign="top"><a id="a0ed8f0f9de62e23341d41718be431970"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__comment.html">comment_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:a0ed8f0f9de62e23341d41718be431970"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b0150ab4d0bfbcf5c2db08ef7121885"><td class="memItemLeft" align="right" valign="top"><a id="a9b0150ab4d0bfbcf5c2db08ef7121885"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__document.html">document_type</a> const &amp;val)</td></tr>
+<tr class="separator:a9b0150ab4d0bfbcf5c2db08ef7121885"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd841031da53046e9178c9c104fed979"><td class="memItemLeft" align="right" valign="top"><a id="acd841031da53046e9178c9c104fed979"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__document.html">document_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:acd841031da53046e9178c9c104fed979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac42297eda0071e16faf31f7bbb17f192"><td class="memItemLeft" align="right" valign="top"><a id="ac42297eda0071e16faf31f7bbb17f192"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__document__type.html">document_type_type</a> const &amp;val)</td></tr>
+<tr class="separator:ac42297eda0071e16faf31f7bbb17f192"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aae2a1822197db96bda937d5e208fa63a"><td class="memItemLeft" align="right" valign="top"><a id="aae2a1822197db96bda937d5e208fa63a"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__document__type.html">document_type_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:aae2a1822197db96bda937d5e208fa63a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf9d81e545ca27b2e96d92ee8bafb15c"><td class="memItemLeft" align="right" valign="top"><a id="adf9d81e545ca27b2e96d92ee8bafb15c"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__document__fragment.html">document_fragment_type</a> const &amp;val)</td></tr>
+<tr class="separator:adf9d81e545ca27b2e96d92ee8bafb15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a677e780fc3b7b1a91d830b5cf9ac3231"><td class="memItemLeft" align="right" valign="top"><a id="a677e780fc3b7b1a91d830b5cf9ac3231"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>simple_node</b> (<a class="el" href="classwordring_1_1html_1_1simple__document__fragment.html">document_fragment_type</a> &amp;&amp;val)</td></tr>
+<tr class="separator:a677e780fc3b7b1a91d830b5cf9ac3231"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac81cd8ba84aadc6342b98de66437969c"><td class="memItemLeft" align="right" valign="top"><a id="ac81cd8ba84aadc6342b98de66437969c"></a>
+<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a> const &amp;rhs)=default</td></tr>
+<tr class="separator:ac81cd8ba84aadc6342b98de66437969c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a814e196105412e2fae7aff0427f5b64b"><td class="memItemLeft" align="right" valign="top"><a id="a814e196105412e2fae7aff0427f5b64b"></a>
+<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a> &amp;&amp;rhs)=default</td></tr>
+<tr class="separator:a814e196105412e2fae7aff0427f5b64b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66cd2095b1ad1257e9c1f076ed45f3b3"><td class="memItemLeft" align="right" valign="top"><a id="a66cd2095b1ad1257e9c1f076ed45f3b3"></a>
+<a class="el" href="classwordring_1_1html_1_1simple__node.html#a19ebbf15e2c27972b5fe661a3b7f6f47">type_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>type</b> () const</td></tr>
+<tr class="separator:a66cd2095b1ad1257e9c1f076ed45f3b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af4d3f05c0d7ba978362e1ad5b7f409a3"><td class="memItemLeft" align="right" valign="top"><a id="af4d3f05c0d7ba978362e1ad5b7f409a3"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_element</b> () const</td></tr>
+<tr class="separator:af4d3f05c0d7ba978362e1ad5b7f409a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c8bf14448a064d83c9a458d0a03a2c9"><td class="memItemLeft" align="right" valign="top"><a id="a5c8bf14448a064d83c9a458d0a03a2c9"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_text</b> () const</td></tr>
+<tr class="separator:a5c8bf14448a064d83c9a458d0a03a2c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae93aa45504da36d16074b709f07a7e68"><td class="memItemLeft" align="right" valign="top"><a id="ae93aa45504da36d16074b709f07a7e68"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_processing_instruction</b> () const</td></tr>
+<tr class="separator:ae93aa45504da36d16074b709f07a7e68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fd39fb0dcde80143f404746d4b2c270"><td class="memItemLeft" align="right" valign="top"><a id="a1fd39fb0dcde80143f404746d4b2c270"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_comment</b> () const</td></tr>
+<tr class="separator:a1fd39fb0dcde80143f404746d4b2c270"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6ddf31c7e091f0f3bc46992ec2038b6"><td class="memItemLeft" align="right" valign="top"><a id="ae6ddf31c7e091f0f3bc46992ec2038b6"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_document</b> () const</td></tr>
+<tr class="separator:ae6ddf31c7e091f0f3bc46992ec2038b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f1975b7e4159bd1c2a321ca5885acc5"><td class="memItemLeft" align="right" valign="top"><a id="a7f1975b7e4159bd1c2a321ca5885acc5"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>is_document_type</b> () const</td></tr>
+<tr class="separator:a7f1975b7e4159bd1c2a321ca5885acc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fa008962d23ce50d8c606f949bc8ccb"><td class="memItemLeft" align="right" valign="top"><a id="a0fa008962d23ce50d8c606f949bc8ccb"></a>
+ns_name&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a0fa008962d23ce50d8c606f949bc8ccb">namespace_uri_name</a> () const</td></tr>
+<tr class="memdesc:a0fa008962d23ce50d8c606f949bc8ccb"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素の名前空間 URI を返す <br /></td></tr>
+<tr class="separator:a0fa008962d23ce50d8c606f949bc8ccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1dd1651a38a69cb33d97ce95357adfcc"><td class="memItemLeft" align="right" valign="top"><a id="a1dd1651a38a69cb33d97ce95357adfcc"></a>
+string_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a1dd1651a38a69cb33d97ce95357adfcc">namespace_uri</a> () const</td></tr>
+<tr class="memdesc:a1dd1651a38a69cb33d97ce95357adfcc"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素の名前空間を返す <br /></td></tr>
+<tr class="separator:a1dd1651a38a69cb33d97ce95357adfcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e054ae2df3f42c9aefb2a8d9c1a12ec"><td class="memItemLeft" align="right" valign="top"><a id="a5e054ae2df3f42c9aefb2a8d9c1a12ec"></a>
+tag_name&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a5e054ae2df3f42c9aefb2a8d9c1a12ec">local_name_name</a> () const</td></tr>
+<tr class="memdesc:a5e054ae2df3f42c9aefb2a8d9c1a12ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素のローカル名を返す <br /></td></tr>
+<tr class="separator:a5e054ae2df3f42c9aefb2a8d9c1a12ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61d7e266f8915c01ee0504abbcd44548"><td class="memItemLeft" align="right" valign="top"><a id="a61d7e266f8915c01ee0504abbcd44548"></a>
+string_type&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a61d7e266f8915c01ee0504abbcd44548">local_name</a> () const</td></tr>
+<tr class="memdesc:a61d7e266f8915c01ee0504abbcd44548"><td class="mdescLeft">&#160;</td><td class="mdescRight">要素のローカル名を返す <br /></td></tr>
+<tr class="separator:a61d7e266f8915c01ee0504abbcd44548"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4355144ed2e94cf3671ef078b07a7090"><td class="memItemLeft" align="right" valign="top"><a id="a4355144ed2e94cf3671ef078b07a7090"></a>
+string_type&#160;</td><td class="memItemRight" valign="bottom"><b>qualified_name</b> () const</td></tr>
+<tr class="separator:a4355144ed2e94cf3671ef078b07a7090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6faf9969b786cac156c2fa8422ee6b2c"><td class="memItemLeft" align="right" valign="top"><a id="a6faf9969b786cac156c2fa8422ee6b2c"></a>
+attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a6faf9969b786cac156c2fa8422ee6b2c">begin</a> ()</td></tr>
+<tr class="memdesc:a6faf9969b786cac156c2fa8422ee6b2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性の開始を返す <br /></td></tr>
+<tr class="separator:a6faf9969b786cac156c2fa8422ee6b2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a673c8037a27bc62c65409c5318cf973f"><td class="memItemLeft" align="right" valign="top"><a id="a673c8037a27bc62c65409c5318cf973f"></a>
+const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a673c8037a27bc62c65409c5318cf973f">begin</a> () const</td></tr>
+<tr class="memdesc:a673c8037a27bc62c65409c5318cf973f"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性の開始を返す <br /></td></tr>
+<tr class="separator:a673c8037a27bc62c65409c5318cf973f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1973a2349bab924482c54c8376a5e56b"><td class="memItemLeft" align="right" valign="top"><a id="a1973a2349bab924482c54c8376a5e56b"></a>
+attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a1973a2349bab924482c54c8376a5e56b">end</a> ()</td></tr>
+<tr class="memdesc:a1973a2349bab924482c54c8376a5e56b"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性の終端を返す <br /></td></tr>
+<tr class="separator:a1973a2349bab924482c54c8376a5e56b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a903f607449d552e69460be98f53cd3"><td class="memItemLeft" align="right" valign="top"><a id="a7a903f607449d552e69460be98f53cd3"></a>
+const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a7a903f607449d552e69460be98f53cd3">end</a> () const</td></tr>
+<tr class="memdesc:a7a903f607449d552e69460be98f53cd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性の終端を返す <br /></td></tr>
+<tr class="separator:a7a903f607449d552e69460be98f53cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dfcf6c581ccd722fa670325420dade3"><td class="memItemLeft" align="right" valign="top">const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a9dfcf6c581ccd722fa670325420dade3">find</a> (ns_name ns, string_type const &amp;prefix, string_type const &amp;name) const</td></tr>
+<tr class="memdesc:a9dfcf6c581ccd722fa670325420dade3"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性を検索する  <a href="classwordring_1_1html_1_1simple__node.html#a9dfcf6c581ccd722fa670325420dade3">[詳解]</a><br /></td></tr>
+<tr class="separator:a9dfcf6c581ccd722fa670325420dade3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1228035ee882cc474bc99947248b0839"><td class="memItemLeft" align="right" valign="top"><a id="a1228035ee882cc474bc99947248b0839"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (ns_name ns, string_type const &amp;prefix, string_type const &amp;name)</td></tr>
+<tr class="separator:a1228035ee882cc474bc99947248b0839"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a290263f2823590c7b7dfda197f1207a1"><td class="memItemLeft" align="right" valign="top"><a id="a290263f2823590c7b7dfda197f1207a1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a290263f2823590c7b7dfda197f1207a1">push_back</a> (<a class="el" href="classwordring_1_1html_1_1simple__attr.html">attribute_type</a> &amp;&amp;attr)</td></tr>
+<tr class="memdesc:a290263f2823590c7b7dfda197f1207a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性を追加する <br /></td></tr>
+<tr class="separator:a290263f2823590c7b7dfda197f1207a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac7aa31b59241b9d1ae3f47ca69d6fb9c"><td class="memItemLeft" align="right" valign="top"><a id="ac7aa31b59241b9d1ae3f47ca69d6fb9c"></a>
+wordring::html::document_type_name&#160;</td><td class="memItemRight" valign="bottom"><b>document_type_name</b> () const</td></tr>
+<tr class="separator:ac7aa31b59241b9d1ae3f47ca69d6fb9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3ca05c63995cbe31ebe23868d005edd2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a3ca05c63995cbe31ebe23868d005edd2">document_type_name</a> (wordring::html::document_type_name type)</td></tr>
+<tr class="memdesc:a3ca05c63995cbe31ebe23868d005edd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書ノードに文書形式を設定する  <a href="classwordring_1_1html_1_1simple__node.html#a3ca05c63995cbe31ebe23868d005edd2">[詳解]</a><br /></td></tr>
+<tr class="separator:a3ca05c63995cbe31ebe23868d005edd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a172eb3d858396715ecdb07e56b32f1a3"><td class="memItemLeft" align="right" valign="top"><a id="a172eb3d858396715ecdb07e56b32f1a3"></a>
+<a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::html::document_mode_name</a>&#160;</td><td class="memItemRight" valign="bottom"><b>document_mode_name</b> () const</td></tr>
+<tr class="separator:a172eb3d858396715ecdb07e56b32f1a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a052685af32be8e6788c5a7e29e7cf6b9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a052685af32be8e6788c5a7e29e7cf6b9">document_mode_name</a> (<a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::html::document_mode_name</a> mode)</td></tr>
+<tr class="memdesc:a052685af32be8e6788c5a7e29e7cf6b9"><td class="mdescLeft">&#160;</td><td class="mdescRight">文書ノードに文書モードを設定する  <a href="classwordring_1_1html_1_1simple__node.html#a052685af32be8e6788c5a7e29e7cf6b9">[詳解]</a><br /></td></tr>
+<tr class="separator:a052685af32be8e6788c5a7e29e7cf6b9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac644801639a5611cd47d0c4ea2ccf09e"><td class="memItemLeft" align="right" valign="top"><a id="ac644801639a5611cd47d0c4ea2ccf09e"></a>
+string_type const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#ac644801639a5611cd47d0c4ea2ccf09e">data</a> () const</td></tr>
+<tr class="memdesc:ac644801639a5611cd47d0c4ea2ccf09e"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードの文字列データを参照する <br /></td></tr>
+<tr class="separator:ac644801639a5611cd47d0c4ea2ccf09e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ebbdac35375396dfeccd98815f78747"><td class="memItemLeft" align="right" valign="top">string_type &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a2ebbdac35375396dfeccd98815f78747">data</a> ()</td></tr>
+<tr class="memdesc:a2ebbdac35375396dfeccd98815f78747"><td class="mdescLeft">&#160;</td><td class="mdescRight">ノードの文字列データを参照する  <a href="classwordring_1_1html_1_1simple__node.html#a2ebbdac35375396dfeccd98815f78747">[詳解]</a><br /></td></tr>
+<tr class="separator:a2ebbdac35375396dfeccd98815f78747"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abaa7cddccd7416c92863457e7487574a"><td class="memItemLeft" align="right" valign="top"><a id="abaa7cddccd7416c92863457e7487574a"></a>
+string_type const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>target</b> () const</td></tr>
+<tr class="separator:abaa7cddccd7416c92863457e7487574a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a0a8e02d6d4679ec388bb577ca1ce8d"><td class="memItemLeft" align="right" valign="top"><a id="a5a0a8e02d6d4679ec388bb577ca1ce8d"></a>
+string_type const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>name</b> () const</td></tr>
+<tr class="separator:a5a0a8e02d6d4679ec388bb577ca1ce8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+フレンド</h2></td></tr>
+<tr class="memitem:ae8ffeb0392ab351e2b3e049c5d192df9"><td class="memTemplParams" colspan="2"><a id="ae8ffeb0392ab351e2b3e049c5d192df9"></a>
+template&lt;typename String1 &gt; </td></tr>
+<tr class="memitem:ae8ffeb0392ab351e2b3e049c5d192df9"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a>&lt; String1 &gt; const lhs, <a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a>&lt; String1 &gt; const &amp;rhs)</td></tr>
+<tr class="separator:ae8ffeb0392ab351e2b3e049c5d192df9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a591f51016b533a99c6db527552ebe284"><td class="memTemplParams" colspan="2"><a id="a591f51016b533a99c6db527552ebe284"></a>
+template&lt;typename String1 &gt; </td></tr>
+<tr class="memitem:a591f51016b533a99c6db527552ebe284"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a>&lt; String1 &gt; const lhs, <a class="el" href="classwordring_1_1html_1_1simple__node.html">simple_node</a>&lt; String1 &gt; const &amp;rhs)</td></tr>
+<tr class="separator:a591f51016b533a99c6db527552ebe284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">列挙型メンバ詳解</h2>
+<a id="a19ebbf15e2c27972b5fe661a3b7f6f47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a19ebbf15e2c27972b5fe661a3b7f6f47">&#9670;&nbsp;</a></span>type_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="classwordring_1_1html_1_1simple__node.html#a19ebbf15e2c27972b5fe661a3b7f6f47">wordring::html::simple_node::type_name</a> : std::uint32_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードの型名を示す列挙体 </p>
+<p>インデックスが規格の NodeType と一致するように並べてある。</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">type </th><th class="markdownTableHeadNone">index  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__element.html" title="simple_html 用の Element ノード">simple_element</a> </td><td class="markdownTableBodyNone">1  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__text.html" title="simple_html 用の Text ノード">simple_text</a> </td><td class="markdownTableBodyNone">3  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__processing__instruction.html" title="simple_html 用の ProcessingInstruction ノード">simple_processing_instruction</a> </td><td class="markdownTableBodyNone">7  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__comment.html" title="simple_html 用の コメント ノード">simple_comment</a> </td><td class="markdownTableBodyNone">8  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__document.html" title="simple_html 用の Document ノード">simple_document</a> </td><td class="markdownTableBodyNone">9  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__document__type.html" title="simple_html 用の DocumentType ノード">simple_document_type</a> </td><td class="markdownTableBodyNone">10  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><a class="el" href="classwordring_1_1html_1_1simple__document__fragment.html" title="simple_html 用の DocumentFragment ノード">simple_document_fragment</a> </td><td class="markdownTableBodyNone">11  </td></tr>
+</table>
+
+</div>
+</div>
+<h2 class="groupheader">関数詳解</h2>
+<a id="a9dfcf6c581ccd722fa670325420dade3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dfcf6c581ccd722fa670325420dade3">&#9670;&nbsp;</a></span>find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const_attribute_iterator <a class="el" href="classwordring_1_1html_1_1simple__node.html">wordring::html::simple_node</a>&lt; String &gt;::find </td>
+          <td>(</td>
+          <td class="paramtype">ns_name&#160;</td>
+          <td class="paramname"><em>ns</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string_type const &amp;&#160;</td>
+          <td class="paramname"><em>prefix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string_type const &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>属性を検索する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>名前空間接頭辞 </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>属性名</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>属性を指すイテレータ</dd></dl>
+<p>node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。</p>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247" title="属性を検索する">simple_element::find()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a3ca05c63995cbe31ebe23868d005edd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ca05c63995cbe31ebe23868d005edd2">&#9670;&nbsp;</a></span>document_type_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1html_1_1simple__node.html">wordring::html::simple_node</a>&lt; String &gt;::document_type_name </td>
+          <td>(</td>
+          <td class="paramtype">wordring::html::document_type_name&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文書ノードに文書形式を設定する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">type</td><td>文書形式（ html あるいは xml ） </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a052685af32be8e6788c5a7e29e7cf6b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a052685af32be8e6788c5a7e29e7cf6b9">&#9670;&nbsp;</a></span>document_mode_name()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classwordring_1_1html_1_1simple__node.html">wordring::html::simple_node</a>&lt; String &gt;::<a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">document_mode_name</a> </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacewordring_1_1whatwg_1_1html.html#aea9b1b94762f60c970ed2c951b1e5808">wordring::html::document_mode_name</a>&#160;</td>
+          <td class="paramname"><em>mode</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>文書ノードに文書モードを設定する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">mode</td><td>文書モード（ no_quirks、quirks、あるいは limited_quirks ） </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2ebbdac35375396dfeccd98815f78747"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ebbdac35375396dfeccd98815f78747">&#9670;&nbsp;</a></span>data()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string_type&amp; <a class="el" href="classwordring_1_1html_1_1simple__node.html">wordring::html::simple_node</a>&lt; String &gt;::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>ノードの文字列データを参照する </p>
+<p>文字列データを持つノードは</p><ul>
+<li>text_type</li>
+<li>comment_type</li>
+<li>processing_instruction_type</li>
+</ul>
+<hr  />
+<p> std::back_inserterを使うには、可変な文字列コンテナへの参照が必要になる。 </p>
+
+</div>
+</div>
+<hr/>このクラス詳解は次のファイルから抽出されました:<ul>
+<li><a class="el" href="simple__node_8hpp_source.html">simple_node.hpp</a></li>
+</ul>
+</div><!-- contents -->
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

@@ -20,7 +20,7 @@ namespace
 
 		while (it1 != it2)
 		{
-			if (std::holds_alternative<wordring::html::simple_document<std::u8string>>(*it1)) return it1.base();
+			if (it1->is_document()) return it1.base();
 			++it1;
 		}
 

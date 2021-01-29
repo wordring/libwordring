@@ -60,26 +60,6 @@ BOOST_AUTO_TEST_CASE(simple_parser_find_attribute_1)
 	p.append_attribute(el, ns_name::HTML, U"", U"attr", U"");
 	auto it = p.insert_element(p.get_document().end(), el);
 	BOOST_CHECK(it != p.get_document().end());
-	//auto attr = p.create_attribute(it, )
-
-	//BOOST_CHECK(p.find_attribute(it, attribute_name::Abbr) != it->end());
 }
-
-
-
-/*
-BOOST_AUTO_TEST_CASE(simple_parser__1)
-{
-}
-BOOST_AUTO_TEST_CASE(simple_parser__1)
-{
-}
-BOOST_AUTO_TEST_CASE(simple_parser__1)
-{
-}
-BOOST_AUTO_TEST_CASE(simple_parser__1)
-{
-}
-*/
 
 BOOST_AUTO_TEST_SUITE_END()

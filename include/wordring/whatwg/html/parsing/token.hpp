@@ -59,6 +59,7 @@ namespace wordring::whatwg::html::parsing
 
 		void clear()
 		{
+			m_namespace = static_cast<ns_name>(0);
 			m_name.clear();
 			m_value.clear();
 			m_omitted = false;

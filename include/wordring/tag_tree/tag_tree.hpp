@@ -53,10 +53,10 @@ namespace wordring::detail
 		using container = std::vector<detail::tag_node<value_type>>;
 
 	public:
-
 		tag_tree_iterator()
 			: m_c(nullptr)
 			, m_i(0) {}
+
 
 		tag_tree_iterator(container* c, std::uint32_t i)
 			: m_c(c)

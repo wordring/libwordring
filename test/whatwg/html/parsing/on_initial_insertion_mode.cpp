@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_1)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::NoQuirks);
+	BOOST_CHECK(p.get_document()->document_mode_name() == document_mode_name::NoQuirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_2)
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_2)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::Quirks);
+	BOOST_CHECK(p.get_document()->document_mode_name() == document_mode_name::Quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_3)
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_3)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::Quirks);
+	BOOST_CHECK(p.get_document()->document_mode_name() == document_mode_name::Quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_4)
@@ -79,7 +79,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_4)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::Quirks);
+	BOOST_CHECK(p.get_document()->document_mode_name() == document_mode_name::Quirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_5)
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_5)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::LimitedQuirks);
+	BOOST_CHECK(p.get_document()->document_mode_name() == document_mode_name::LimitedQuirks);
 }
 
 BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_6)
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_CASE(on_initial_insertion_mode_6)
 	for (char32_t cp : s) p.push_code_point(cp);
 
 	BOOST_CHECK(p.m_insertion_mode == test_parser::mode_name::before_html_insertion_mode);
-	BOOST_CHECK(std::get<document_type>(*p.get_document()).document_mode() == document_mode_name::LimitedQuirks);
+	BOOST_CHECK(p.get_document()->document_mode_name() == document_mode_name::LimitedQuirks);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

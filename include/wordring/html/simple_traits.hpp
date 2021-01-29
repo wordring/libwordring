@@ -25,13 +25,13 @@ namespace wordring::html
 		using node_pointer = NodeIterator;
 		using node_type    = typename node_pointer::value_type;
 
-		using element_type                = std::variant_alternative_t<1, node_type>;  // 1.
-		using text_type                   = std::variant_alternative_t<3, node_type>;  // 3.
-		using processing_instruction_type = std::variant_alternative_t<7, node_type>;  // 7.
-		using comment_type                = std::variant_alternative_t<8, node_type>;  // 8.
-		using document_type               = std::variant_alternative_t<9, node_type>;  // 9.
-		using document_type_type          = std::variant_alternative_t<10, node_type>; // 10.
-		using document_fragment_type      = std::variant_alternative_t<11, node_type>; // 11.
+		using element_type                = typename node_type::element_type;                 // 1.
+		using text_type                   = typename node_type::text_type;                    // 3.
+		using processing_instruction_type = typename node_type::processing_instruction_type;  // 7.
+		using comment_type                = typename node_type::comment_type;                 // 8.
+		using document_type               = typename node_type::document_type;                // 9.
+		using document_type_type          = typename node_type::document_type_type;           // 10.
+		using document_fragment_type      = typename node_type::document_fragment_type;       // 11.
 
 		using attribute_type    = typename element_type::attribute_type;
 		using attribute_pointer = typename element_type::const_iterator;
@@ -69,26 +69,17 @@ namespace wordring::html
 		*/
 		static node_pointer next(node_pointer it) { return ++it; }
 
-		static auto& data(node_pointer it)
-		{
-			return wordring::html::data(*it);
-		}
+		static auto& data(node_pointer it) { return it->data(); }
 
-		static auto target(node_pointer it)
-		{
-			return wordring::html::target(*it);
-		}
+		static auto target(node_pointer it) { return it->target(); }
 
-		static auto name(node_pointer it)
-		{
-			return wordring::html::name(*it);
-		}
+		static auto name(node_pointer it) { return it->name(); }
 
 		// ----------------------------------------------------------------------------------------
 		// Element
 		// ----------------------------------------------------------------------------------------
 
-		static bool is_element(node_pointer it) { return std::holds_alternative<element_type>(*it); }
+		static bool is_element(node_pointer it) { return it->is_element(); }
 
 		/*! @brief 要素へオーナー文書を設定する
 
@@ -98,36 +89,36 @@ namespace wordring::html
 
 		/*! @brief 要素の名前空間を返す
 		*/
-		static ns_name get_namespace_id(node_pointer it)
+		static ns_name get_namespace_name(node_pointer it)
 		{
-			return wordring::html::get_namespace_id(*it);
+			return it->namespace_uri_name();
 		}
 
 		static string_type get_namespace(node_pointer it)
 		{
-			return wordring::html::get_namespace(*it);
+			return it->namespace_uri();
 		}
 
 		/*! @brief 要素のローカル名を返す
 		*/
-		static tag_name get_local_name_id(node_pointer it)
+		static tag_name get_local_name_name(node_pointer it)
 		{
-			return wordring::html::get_local_name_id(*it);
+			return it->local_name_name();
 		}
 
 		static string_type get_local_name(node_pointer it)
 		{
-			return wordring::html::get_local_name(*it);
+			return it->local_name();
 		}
 
 		static string_type get_qualified_name(node_pointer it)
 		{
-			return wordring::html::get_qualified_name(*it);
+			return it->qualified_name();
 		}
 
 		static bool is_html_element_of(node_pointer it, tag_name tag)
 		{
-			return get_namespace_id(it) == ns_name::HTML && get_local_name_id(it) == tag;
+			return get_namespace_name(it) == ns_name::HTML && get_local_name_name(it) == tag;
 		}
 
 		/*! @brief 二つの要素が同じシグネチャを持つか調べる
@@ -141,9 +132,9 @@ namespace wordring::html
 
 		/*! @brief 要素ノードから最初の属性を指すイテレータを取得する
 		*/
-		static auto abegin(node_pointer it) { return wordring::html::begin(*it); }
+		static auto abegin(node_pointer it) { return it->begin(); }
 
-		static auto aend(node_pointer it) { return wordring::html::end(*it); }
+		static auto aend(node_pointer it) { return it->end(); }
 
 		/*! @brief 属性を検索する
 		*/
@@ -170,24 +161,24 @@ namespace wordring::html
 		// Attr
 		// ----------------------------------------------------------------------------------------
 
-		static ns_name get_namespace_id(attribute_type const& attr)
+		static ns_name get_namespace_name(attribute_type const& attr)
 		{
-			return wordring::html::get_namespace_id(attr);
+			return attr.namespace_uri_name();
 		}
 
 		static string_type get_namespace(attribute_type const& attr)
 		{
-			return wordring::html::get_namespace(attr);
+			return attr.namespace_uri();
 		}
 
-		static attribute_name get_local_name_id(attribute_type const& attr)
+		static attribute_name get_local_name_name(attribute_type const& attr)
 		{
-			return wordring::html::get_local_name_id(attr);
+			return attr.local_name_name();
 		}
 
 		static string_type get_local_name(attribute_type const& attr)
 		{
-			return wordring::html::get_local_name(attr);
+			return attr.local_name();
 		}
 
 		static string_type get_qualified_name(attribute_type const& attr)
@@ -195,39 +186,39 @@ namespace wordring::html
 			return attr.qualified_name();
 		}
 
-		static auto value(attribute_type const& attr) { return wordring::html::value(attr); }
+		static string_type const& value(attribute_type const& attr) { return attr.value(); }
 
 		// ----------------------------------------------------------------------------------------
 		// Text
 		// ----------------------------------------------------------------------------------------
 
-		static bool is_text(node_pointer it) { return std::holds_alternative<text_type>(*it); }
+		static bool is_text(node_pointer it) { return it->is_text(); }
 
 		static text_type create_text(char32_t cp)
 		{
-			text_type text;
-			wordring::to_string(cp, std::back_inserter(text));
-			return text;
+			string_type s;
+			wordring::to_string(cp, std::back_inserter(s));
+			return text_type(s);
 		}
 
 		static void append_text(node_pointer it, char32_t cp)
 		{
-			wordring::to_string(cp, std::back_inserter(wordring::html::data(*it)));
+			wordring::to_string(cp, std::back_inserter(it->data()));
 		}
 		
 		// ----------------------------------------------------------------------------------------
 		// ProcessingInstruction
 		// ----------------------------------------------------------------------------------------
 
-		static bool is_processing_instruction(node_pointer it) { return std::holds_alternative<processing_instruction_type>(*it); }
+		static bool is_processing_instruction(node_pointer it) { return it->is_processing_instruction(); }
 
 		// ----------------------------------------------------------------------------------------
 		// Comment
 		// ----------------------------------------------------------------------------------------
 
-		static bool is_comment(node_pointer it) { return std::holds_alternative<comment_type>(*it); }
+		static bool is_comment(node_pointer it) { return it->is_comment(); }
 
-		static comment_type create_comment(string_type data)
+		static comment_type create_comment(string_type const& data)
 		{
 			return comment_type(data);
 		}
@@ -236,13 +227,13 @@ namespace wordring::html
 		// Document
 		// ----------------------------------------------------------------------------------------
 
-		static bool is_document(node_pointer it) { return std::holds_alternative<document_type>(*it); }
+		static bool is_document(node_pointer it) { return it->is_document(); }
 
 		/*! @brief 文書ノードから文書形式を取得する
 		*/
 		static document_type_name get_document_type(node_pointer it)
 		{
-			return wordring::html::get_document_type(*it);
+			return it->document_type_name();
 		}
 
 		/*! @brief 文書ノードに文書形式を設定する
@@ -252,14 +243,14 @@ namespace wordring::html
 		*/
 		static void set_document_type(node_pointer it, document_type_name type)
 		{
-			wordring::html::set_document_type(*it, type);
+			it->document_type_name(type);
 		}
 
 		/*! @brief 文書ノードから文書形式を取得する
 		*/
 		static document_mode_name get_document_mode(node_pointer it)
 		{
-			return wordring::html::get_document_mode(*it);
+			return it->document_mode_name();
 		}
 
 		/*! @brief 文書ノードに文書モードを設定する
@@ -269,7 +260,7 @@ namespace wordring::html
 		*/
 		static void set_document_mode(node_pointer it, document_mode_name mode)
 		{
-			wordring::html::set_document_mode(*it, mode);
+			it->document_mode_name(mode);
 		}
 
 		/*! @brief 文書が IFRAME ソース文書か調べる
@@ -292,7 +283,7 @@ namespace wordring::html
 		// DocumentType
 		// ----------------------------------------------------------------------------------------
 
-		static bool is_document_type(node_pointer it) { return std::holds_alternative<document_type_type>(*it); }
+		static bool is_document_type(node_pointer it) { return it->is_document_type(); }
 
 		static document_type_type create_document_type(
 			string_type const& name, string_type const& public_id, string_type const& system_id)
@@ -315,11 +306,11 @@ namespace wordring::html
 
 		static bool is_single(node_type const& node)
 		{
-			switch (node.index())
+			switch (node.type())
 			{
-			case 3:
-			case 8:
-			case 10:
+			case node_type::type_name::Text:
+			case node_type::type_name::Comment:
+			case node_type::type_name::DocumentType:
 				return true;
 			default:
 				break;

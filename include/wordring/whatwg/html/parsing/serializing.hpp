@@ -24,9 +24,9 @@ namespace wordring::whatwg::html
 
 		if (is_void_element(it)) return true;
 
-		if (traits::is_element(it) && traits::get_namespace_id(it) == ns_name::HTML)
+		if (traits::is_element(it) && traits::get_namespace_name(it) == ns_name::HTML)
 		{
-			switch (traits::get_local_name_id(it))
+			switch (traits::get_local_name_name(it))
 			{
 			case tag_name::Basefont: case tag_name::Bgsound: case tag_name::Frame: case tag_name::Keygen:
 				return true;
@@ -47,7 +47,7 @@ namespace wordring::whatwg::html::detail
 		using node_pointer = NodePointer;
 		using traits = wordring::html::node_traits<node_pointer>;
 
-		ns_name ns = traits::get_namespace_id(it);
+		ns_name ns = traits::get_namespace_name(it);
 		if (ns == ns_name::HTML || ns == ns_name::MathML || ns == ns_name::SVG)
 		{
 			wordring::encoding_cast(traits::get_local_name(it), out);
@@ -63,7 +63,7 @@ namespace wordring::whatwg::html::detail
 	{
 		using traits = Traits;
 
-		ns_name ns = get_namespace_id(attr);
+		ns_name ns = traits::get_namespace_name(attr);
 
 		if (ns == static_cast<ns_name>(0))
 		{
@@ -78,7 +78,7 @@ namespace wordring::whatwg::html::detail
 			wordring::encoding_cast(traits::get_local_name(attr), out);
 			return;
 		case ns_name::XMLNS:
-			if (traits::get_local_name_id(attr) == attribute_name::Xmlns)
+			if (traits::get_local_name_name(attr) == attribute_name::Xmlns)
 			{
 				wordring::encoding_cast(std::u32string_view(U"xmlns"), out);
 				return;
@@ -224,8 +224,8 @@ namespace wordring::whatwg::html
 			else if (traits::is_text(current_node))
 			{
 				node_pointer parent = traits::parent(current_node);
-				ns_name  ns  = traits::get_namespace_id(parent);
-				tag_name tag = traits::get_local_name_id(parent);
+				ns_name  ns  = traits::get_namespace_name(parent);
+				tag_name tag = traits::get_local_name_name(parent);
 				if (ns == ns_name::HTML)
 				{
 					switch (tag)

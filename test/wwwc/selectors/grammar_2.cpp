@@ -54,10 +54,8 @@ BOOST_AUTO_TEST_CASE(grammar_id_selector_match_1)
 		++it;
 	}
 
-	auto tag = html::get_qualified_name(*it);
-	auto text = html::data(*it.base().begin());
-	BOOST_CHECK(tag == u8"p");
-	BOOST_CHECK(text == u8"paragraph");
+	BOOST_CHECK(it->qualified_name() == u8"p");
+	BOOST_CHECK(it.base().begin()->data() == u8"paragraph");
 
 	std::u16string s;
 	html::to_string(it.base(), std::back_inserter(s)); // to_string() は子を文字列化するので、<p>タグ自身が現れない。。
@@ -244,8 +242,8 @@ BOOST_AUTO_TEST_CASE(grammar_class_selector_match_1)
 		++it;
 	}
 
-	auto tag = html::get_qualified_name(*it);
-	auto text = html::data(*it.base().begin());
+	auto tag = it->qualified_name();
+	auto text = it.base().begin()->data();
 	BOOST_CHECK(tag == u8"p");
 	BOOST_CHECK(text == u8"paragraph");
 }
@@ -351,7 +349,7 @@ BOOST_AUTO_TEST_CASE(grammar_pseudo_class_selector_match_1)
 
 	BOOST_CHECK(it != tree_iterator());
 
-	auto tag = html::get_qualified_name(*it);
+	auto tag = it->qualified_name();
 	BOOST_CHECK(tag == u8"html");
 }
 
@@ -384,7 +382,7 @@ BOOST_AUTO_TEST_CASE(grammar_attribute_selector_match_1)
 
 	BOOST_CHECK(it != tree_iterator());
 
-	auto tag = html::get_qualified_name(*it);
+	auto tag = it->qualified_name();
 	BOOST_CHECK(tag == u8"p");
 }
 

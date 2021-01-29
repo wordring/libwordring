@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE(simple_html_tree_iterator_1)
 	while (it1 != it2)
 	{
 		// テキストノードなら文字列化
-		if (it1->index() == 3) s += html::data(*it1);
+		if (it1->is_text()) s += it1->data();
 		++it1;
 	}
 

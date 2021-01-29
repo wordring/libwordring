@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_pop_until_1)
 
 	p.pop_until(ns_name::HTML, tag_name::Body);
 
-	BOOST_CHECK(test_parser::traits::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(test_parser::traits::get_local_name_name(p.m_stack.back().m_it) == tag_name::Html);
 }
 
 BOOST_AUTO_TEST_CASE(dispatcher_pop_until_2)
@@ -232,7 +232,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_pop_until_2)
 	std::array<tag_name, 2> constexpr tags = { tag_name::A, tag_name::Body };
 	p.pop_until(ns_name::HTML, tags);
 
-	BOOST_CHECK(test_parser::traits::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(test_parser::traits::get_local_name_name(p.m_stack.back().m_it) == tag_name::Html);
 }
 
 BOOST_AUTO_TEST_CASE(dispatcher_pop_until_3)
@@ -250,7 +250,7 @@ BOOST_AUTO_TEST_CASE(dispatcher_pop_until_3)
 
 	p.pop_until(BODY);
 
-	BOOST_CHECK(test_parser::traits::get_local_name_id(p.m_stack.back().m_it) == tag_name::Html);
+	BOOST_CHECK(test_parser::traits::get_local_name_name(p.m_stack.back().m_it) == tag_name::Html);
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -551,7 +551,6 @@ BOOST_AUTO_TEST_CASE(dispatcher_adjust_foreign_attributes_1)
 
 	BOOST_CHECK(token.m_attributes.current().m_prefix == U"xlink");
 	BOOST_CHECK(token.m_attributes.current().m_name == U"actuate");
-	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XLink);
 }
 
 BOOST_AUTO_TEST_CASE(dispatcher_adjust_foreign_attributes_2)
@@ -566,7 +565,6 @@ BOOST_AUTO_TEST_CASE(dispatcher_adjust_foreign_attributes_2)
 	BOOST_CHECK(token.m_attributes.current().m_name == U"xmlns");
 	BOOST_CHECK(token.m_attributes.current().m_prefix == U"");
 	BOOST_CHECK(token.m_attributes.current().m_name == U"xmlns");
-	BOOST_CHECK(token.m_attributes.current().m_namespace == ns_name::XMLNS);
 }
 
 // ------------------------------------------------------------------------------------------------

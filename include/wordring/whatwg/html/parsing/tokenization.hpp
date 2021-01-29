@@ -194,7 +194,7 @@ namespace wordring::whatwg::html::parsing
 		bool in_html_namespace() const
 		{
 			this_type const* P = static_cast<this_type const*>(this);
-			return traits::get_namespace_id(P->adjusted_current_node().m_it) == ns_name::HTML;
+			return traits::get_namespace_name(P->adjusted_current_node().m_it) == ns_name::HTML;
 		}
 
 		/*! @brief 属性の重複を削る

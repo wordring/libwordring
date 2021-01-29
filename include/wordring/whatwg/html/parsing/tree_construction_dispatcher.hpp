@@ -257,7 +257,7 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_html_element_of(node_pointer it, tag_name tag) const
 		{
-			return traits::get_namespace_id(it) == ns_name::HTML && traits::get_local_name_id(it) == tag;
+			return traits::get_namespace_name(it) == ns_name::HTML && traits::get_local_name_name(it) == tag;
 		}
 
 		/*! 要素が指定のHTML要素であることを調べる
@@ -273,7 +273,7 @@ namespace wordring::whatwg::html::parsing
 		{
 			this_type const* P = static_cast<this_type const*>(this);
 
-			return traits::get_namespace_id(it) == ns_name::HTML && encoding_cast<std::u32string>(traits::get_local_name(it)) == tag;
+			return traits::get_namespace_name(it) == ns_name::HTML && encoding_cast<std::u32string>(traits::get_local_name(it)) == tag;
 		}
 
 		/*! 要素が指定の要素であることを調べる
@@ -288,7 +288,7 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_element_of(node_pointer it, ns_name ns, tag_name tag) const
 		{
-			return traits::get_namespace_id(it) == ns && traits::get_local_name_id(it) == tag;
+			return traits::get_namespace_name(it) == ns && traits::get_local_name_name(it) == tag;
 		}
 
 
@@ -526,8 +526,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_special(node_pointer it) const
 		{
-			ns_name  ns  = traits::get_namespace_id(it);
-			tag_name tag = traits::get_local_name_id(it);
+			ns_name  ns  = traits::get_namespace_name(it);
+			tag_name tag = traits::get_local_name_name(it);
 
 			if (ns == ns_name::HTML)
 			{
@@ -584,9 +584,9 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_formatting(node_pointer it) const
 		{
-			if (traits::get_namespace_id(it) == ns_name::HTML)
+			if (traits::get_namespace_name(it) == ns_name::HTML)
 			{
-				switch (traits::get_local_name_id(it))
+				switch (traits::get_local_name_name(it))
 				{
 				case tag_name::A: case tag_name::B:     case tag_name::Big:    case tag_name::Code:   case tag_name::Em: case tag_name::Font: case tag_name::I: case tag_name::Nobr:
 				case tag_name::S: case tag_name::Small: case tag_name::Strike: case tag_name::Strong: case tag_name::Tt: case tag_name::U:
@@ -681,8 +681,8 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool is_default_scope(node_pointer it) const
 		{
-			ns_name  ns  = traits::get_namespace_id(it);
-			tag_name tag = traits::get_local_name_id(it);
+			ns_name  ns  = traits::get_namespace_name(it);
+			tag_name tag = traits::get_local_name_name(it);
 
 			if (ns == ns_name::HTML)
 			{
@@ -1063,14 +1063,14 @@ namespace wordring::whatwg::html::parsing
 			{
 				stack_entry& entry = adjusted_current_node();
 
-				if (traits::get_namespace_id(entry.m_it) == ns_name::HTML) goto Html;
+				if (traits::get_namespace_name(entry.m_it) == ns_name::HTML) goto Html;
 				if constexpr (std::is_same_v<start_tag_token, Token>)
 				{
 					if (is_mathml_text_integration_point(entry)
 						&& token.m_tag_name_id != tag_name::Mglyph
 						&& token.m_tag_name_id != tag_name::Malignmark) goto Html;
 
-					if (traits::get_local_name_id(entry.m_it) == tag_name::Annotation_xml
+					if (traits::get_local_name_name(entry.m_it) == tag_name::Annotation_xml
 						&& token.m_tag_name_id == tag_name::Svg) goto Html;
 
 					if (is_html_integration_point(entry)) goto Html;
@@ -1184,9 +1184,9 @@ namespace wordring::whatwg::html::parsing
 
 		bool is_mathml_text_integration_point(stack_entry const& entry) const
 		{
-			if (traits::get_namespace_id(entry.m_it) == ns_name::MathML)
+			if (traits::get_namespace_name(entry.m_it) == ns_name::MathML)
 			{
-				switch (traits::get_local_name_id(entry.m_it))
+				switch (traits::get_local_name_name(entry.m_it))
 				{
 				case tag_name::Mi: case tag_name::Mo: case tag_name::Mn: case tag_name::Ms: case tag_name::Mtext:
 					return true;
@@ -1200,8 +1200,8 @@ namespace wordring::whatwg::html::parsing
 
 		bool is_html_integration_point(stack_entry const& entry) const
 		{
-			ns_name  ns  = traits::get_namespace_id(entry.m_it);
-			tag_name tag = traits::get_local_name_id(entry.m_it);
+			ns_name  ns  = traits::get_namespace_name(entry.m_it);
+			tag_name tag = traits::get_local_name_name(entry.m_it);
 
 			if (ns == ns_name::MathML && tag == tag_name::Annotation_xml)
 			{
@@ -1240,10 +1240,10 @@ namespace wordring::whatwg::html::parsing
 
 			node_pointer adjusted_insertion_location = traits::end(target);
 
-			bool f = traits::get_namespace_id(target) == ns_name::HTML;
+			bool f = traits::get_namespace_name(target) == ns_name::HTML;
 			if (f)
 			{
-				switch (traits::get_local_name_id(target))
+				switch (traits::get_local_name_name(target))
 				{
 				case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Tr:
 					f = true;
@@ -1500,8 +1500,8 @@ namespace wordring::whatwg::html::parsing
 			while (!m_stack.empty())
 			{
 				auto it = m_stack.back().m_it;
-				tag_name tag = traits::get_local_name_id(it);
-				ns_name  ns  = traits::get_namespace_id(it);
+				tag_name tag = traits::get_local_name_name(it);
+				ns_name  ns  = traits::get_namespace_name(it);
 
 				if constexpr (std::is_same_v<TagName, tag_name>)
 				{
@@ -1543,8 +1543,8 @@ namespace wordring::whatwg::html::parsing
 			while (!m_stack.empty())
 			{
 				auto it = m_stack.back().m_it;
-				tag_name tag = traits::get_local_name_id(it);
-				ns_name  ns  = traits::get_namespace_id(it);
+				tag_name tag = traits::get_local_name_name(it);
+				ns_name  ns  = traits::get_namespace_name(it);
 
 				if (ns != ns_name::HTML) return;
 				switch (tag)
@@ -2321,12 +2321,12 @@ namespace wordring::whatwg::html::parsing
 
 				for (stack_entry const& se : m_stack)
 				{
-					switch (traits::get_local_name_id(se.m_it))
+					switch (traits::get_local_name_name(se.m_it))
 					{
 					case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
 					case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
 					case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
-						if(traits::get_namespace_id(se.m_it) == ns_name::HTML) continue;
+						if(traits::get_namespace_name(se.m_it) == ns_name::HTML) continue;
 					default:
 						base_type::report_error();
 						break;
@@ -2349,12 +2349,12 @@ namespace wordring::whatwg::html::parsing
 
 					for (stack_entry const& se : m_stack)
 					{
-						switch (traits::get_local_name_id(se.m_it))
+						switch (traits::get_local_name_name(se.m_it))
 						{
 						case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
 						case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
 						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
-							if (traits::get_namespace_id(se.m_it) == ns_name::HTML) continue;
+							if (traits::get_namespace_name(se.m_it) == ns_name::HTML) continue;
 						default:
 							base_type::report_error();
 							break;
@@ -2378,12 +2378,12 @@ namespace wordring::whatwg::html::parsing
 
 					for (stack_entry const& se : m_stack)
 					{
-						switch (traits::get_local_name_id(se.m_it))
+						switch (traits::get_local_name_name(se.m_it))
 						{
 						case tag_name::Dd:    case tag_name::Dt: case tag_name::Li:    case tag_name::Optgroup: case tag_name::Option: case tag_name::P:
 						case tag_name::Rb:    case tag_name::Rp: case tag_name::Rt:    case tag_name::Rtc:      case tag_name::Tbody:  case tag_name::Td:
 						case tag_name::Tfoot: case tag_name::Th: case tag_name::Thead: case tag_name::Tr:       case tag_name::Body:   case tag_name::Html:
-							if (traits::get_namespace_id(se.m_it) == ns_name::HTML) continue;
+							if (traits::get_namespace_name(se.m_it) == ns_name::HTML) continue;
 						default:
 							base_type::report_error();
 							break;
@@ -2420,12 +2420,12 @@ namespace wordring::whatwg::html::parsing
 				{
 				case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
 					if (in_specific_scope(button_scope, tag_name::P)) close_p_element();
-					if (traits::get_namespace_id(current_node().m_it) == ns_name::HTML)
+					if (traits::get_namespace_name(current_node().m_it) == ns_name::HTML)
 					{
-						switch (traits::get_local_name_id(current_node().m_it))
+						switch (traits::get_local_name_name(current_node().m_it))
 						{
 						case tag_name::H1: case tag_name::H2: case tag_name::H3: case tag_name::H4: case tag_name::H5: case tag_name::H6:
-							if (traits::get_namespace_id(current_node().m_it) == ns_name::HTML)
+							if (traits::get_namespace_name(current_node().m_it) == ns_name::HTML)
 							{
 								base_type::report_error();
 								m_stack.pop_back();
@@ -2792,8 +2792,8 @@ namespace wordring::whatwg::html::parsing
 					}
 					generate_implied_end_tags();
 					it = current_node().m_it;
-					if (traits::get_namespace_id(it) != ns_name::HTML
-						|| traits::get_local_name_id(it) != token.m_tag_name_id) base_type::report_error();
+					if (traits::get_namespace_name(it) != ns_name::HTML
+						|| traits::get_local_name_name(it) != token.m_tag_name_id) base_type::report_error();
 					pop_until(ns_name::HTML, token.m_tag_name_id);
 					clear_formatting_element_list();
 					return;
@@ -3090,7 +3090,7 @@ namespace wordring::whatwg::html::parsing
 				auto it1 = --m_stack.end();
 				node_pointer node = it1->m_it;
 			Loop2:
-				if (traits::get_namespace_id(node) == ns_name::HTML
+				if (traits::get_namespace_name(node) == ns_name::HTML
 					&& encoding_cast<std::u32string>(traits::get_local_name(node)) == token.m_tag_name)
 				{
 					generate_implied_end_tags(std::make_pair(ns_name::HTML, token.m_tag_name));
@@ -3146,7 +3146,7 @@ namespace wordring::whatwg::html::parsing
 				std::u32string const& subject = token.m_tag_name;
 				// 2.
 				node_pointer it = current_node().m_it;
-				if (traits::get_namespace_id(it) == ns_name::HTML
+				if (traits::get_namespace_name(it) == ns_name::HTML
 					&& encoding_cast<std::u32string>(traits::get_local_name(it)) == subject
 					&& find_from_list(it) == m_list.end())
 				{
@@ -3352,10 +3352,10 @@ namespace wordring::whatwg::html::parsing
 			if constexpr (std::is_same_v<character_token, Token>)
 			{
 				node_pointer it = current_node().m_it;
-				switch (traits::get_local_name_id(it))
+				switch (traits::get_local_name_name(it))
 				{
 				case tag_name::Table: case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Tr:
-					if (traits::get_namespace_id(it) != ns_name::HTML) break;
+					if (traits::get_namespace_name(it) != ns_name::HTML) break;
 
 					m_pending_table_character_tokens.clear();
 					m_original_insertion_mode = m_insertion_mode;
@@ -3550,8 +3550,8 @@ namespace wordring::whatwg::html::parsing
 			while (!m_stack.empty())
 			{
 				node_pointer it = current_node().m_it;
-				if (traits::get_namespace_id(it) != ns_name::HTML) return;
-				switch (traits::get_local_name_id(it))
+				if (traits::get_namespace_name(it) != ns_name::HTML) return;
+				switch (traits::get_local_name_name(it))
 				{
 				case tag_name::Table: case tag_name::Template: case tag_name::Html:
 					return;
@@ -3894,10 +3894,10 @@ namespace wordring::whatwg::html::parsing
 			while (true)
 			{
 				node_pointer it = current_node().m_it;
-				switch (traits::get_local_name_id(it))
+				switch (traits::get_local_name_name(it))
 				{
 				case tag_name::Tbody: case tag_name::Tfoot: case tag_name::Thead: case tag_name::Template: case tag_name::Html:
-					if (traits::get_namespace_id(it) == ns_name::HTML) return;
+					if (traits::get_namespace_name(it) == ns_name::HTML) return;
 				default:
 					break;
 				}
@@ -4864,7 +4864,7 @@ namespace wordring::whatwg::html::parsing
 					m_stack.pop_back();
 					if (is_mathml_text_integration_point(current_node())
 					 || is_html_integration_point(current_node())
-					 || traits::get_namespace_id(current_node().m_it) == ns_name::HTML) break;
+					 || traits::get_namespace_name(current_node().m_it) == ns_name::HTML) break;
 				}
 				reprocess_token(token);
 				return;
@@ -4874,7 +4874,7 @@ namespace wordring::whatwg::html::parsing
 		AnyOtherStartTag:
 			if constexpr (std::is_same_v<start_tag_token, Token>)
 			{
-				ns_name ns = traits::get_namespace_id(adjusted_current_node().m_it);
+				ns_name ns = traits::get_namespace_name(adjusted_current_node().m_it);
 
 				if (ns == ns_name::MathML) adjust_mathml_attributes(token);
 				else if (ns == ns_name::SVG)
@@ -4939,7 +4939,7 @@ namespace wordring::whatwg::html::parsing
 				// 5.
 				--node;
 				// 6.
-				if (traits::get_namespace_id(node->m_it) != ns_name::HTML) goto Loop;
+				if (traits::get_namespace_name(node->m_it) != ns_name::HTML) goto Loop;
 				// 7.
 				switch (m_insertion_mode)
 				{

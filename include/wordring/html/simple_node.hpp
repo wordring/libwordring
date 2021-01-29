@@ -70,6 +70,13 @@ namespace wordring::html
 		{
 		}
 
+		simple_attr(simple_attr const&) = default;
+		simple_attr(simple_attr&&) = default;
+
+		/*! @brief 名前空間付き属性を構築する
+		* 
+		* 外来属性で必要となる。
+		*/
 		simple_attr(ns_name ns, string_type const& prefix, attribute_name name, string_type const& val = string_type())
 			: m_namespace_uri(ns)
 			, m_prefix(prefix)
@@ -78,6 +85,10 @@ namespace wordring::html
 		{
 		}
 
+		/*! @brief 名前空間付き属性を構築する
+		*
+		* 外来属性で必要となる。
+		*/
 		simple_attr(ns_name ns, string_type const& prefix, string_type const& name, string_type const& val = string_type())
 			: m_namespace_uri(ns)
 			, m_prefix(prefix)
@@ -102,13 +113,16 @@ namespace wordring::html
 		{
 		}
 
+		simple_attr& operator=(simple_attr const& rhs) = default;
+		simple_attr& operator=(simple_attr&& rhs) = default;
+		
 		string_type namespace_uri() const { return static_cast<string_type>(m_namespace_uri); }
 
 		void namespace_uri(string_type const& uri) { m_namespace_uri = uri; }
 
-		ns_name namespace_uri_id() const { return m_namespace_uri; }
+		ns_name namespace_uri_name() const { return m_namespace_uri; }
 
-		void namespace_uri_id(ns_name uri) { m_namespace_uri = uri; }
+		void namespace_uri_name(ns_name uri) { m_namespace_uri = uri; }
 
 		string_type const& prefix() const { return m_prefix; }
 
@@ -118,9 +132,9 @@ namespace wordring::html
 
 		void local_name(string_type const& name) { m_local_name = name; }
 
-		attribute_name local_name_id() const { return m_local_name; }
+		attribute_name local_name_name() const { return m_local_name; }
 
-		void local_name_id(attribute_name name) { m_local_name = name; }
+		void local_name_name(attribute_name name) { m_local_name = name; }
 
 		string_type qualified_name() const
 		{
@@ -140,12 +154,15 @@ namespace wordring::html
 		string_type        m_prefix;
 		local_name_type    m_local_name;
 
-		string_type        m_value;
+		string_type m_value;
 	};
+
+	static_assert(std::is_copy_constructible_v<simple_attr<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_attr<std::u32string>>);
 
 	/*! @brief 名前空間、接頭辞、ローカル名が一致する場合、true を返す
 	
-	検索用に定義した演算子のため、値を無視して比較する。
+	検索用に定義した演算子のため、属性値を無視して比較する。
 	*/
 	template <typename String1>
 	inline bool operator==(simple_attr<String1> const& lhs, simple_attr<String1> const& rhs)
@@ -228,7 +245,6 @@ namespace wordring::html
 
 	public:
 		using string_type = String;
-		using usv_string_type = std::u32string;
 
 	public:
 		simple_document()
@@ -236,6 +252,12 @@ namespace wordring::html
 			, m_document_mode(document_mode_name::NoQuirks)
 		{
 		}
+
+		simple_document(simple_document const&) = default;
+		simple_document(simple_document&&) = default;
+
+		simple_document& operator=(simple_document const&) = default;
+		simple_document& operator=(simple_document&&) = default;
 
 		document_type_name document_type() const { return m_document_type; }
 
@@ -255,6 +277,9 @@ namespace wordring::html
 		document_type_name m_document_type;
 		document_mode_name m_document_mode;
 	};
+
+	static_assert(std::is_copy_constructible_v<simple_document<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_document<std::u32string>>);
 
 	template <typename String1>
 	inline bool operator==(simple_document<String1> const&, simple_document<String1> const&)
@@ -315,6 +340,9 @@ namespace wordring::html
 		string_type m_system_id;
 	};
 
+	static_assert(std::is_copy_constructible_v<simple_document_type<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_document_type<std::u32string>>);
+
 	template <typename String1>
 	inline bool operator==(simple_document_type<String1> const&, simple_document_type<String1> const&)
 	{
@@ -347,9 +375,10 @@ namespace wordring::html
 
 	public:
 		using string_type = String;
-
-
 	};
+
+	static_assert(std::is_copy_constructible_v<simple_document_fragment<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_document_fragment<std::u32string>>);
 
 	template <typename String1>
 	inline bool operator==(simple_document_fragment<String1> const&, simple_document_fragment<String1> const&)
@@ -388,7 +417,7 @@ namespace wordring::html
 		using local_name_type    = basic_html_atom<string_type, tag_name>;
 
 		using attribute_type = simple_attr<string_type>;
-		using container      = std::vector< attribute_type>;
+		using container      = std::vector<attribute_type>;
 		using iterator       = typename container::iterator;
 		using const_iterator = typename container::const_iterator;
 
@@ -417,17 +446,17 @@ namespace wordring::html
 		{
 		}
 
-		simple_element(string_type const& name)
-			: m_namespace_uri(ns_name::HTML)
-			, m_namespace_prefix()
+		simple_element(ns_name ns, string_type const& prefix, tag_name name)
+			: m_namespace_uri(ns)
+			, m_namespace_prefix(prefix)
 			, m_local_name(name)
 			, m_attributes()
 		{
 		}
 
-		simple_element(ns_name ns, string_type const& prefix, tag_name name)
-			: m_namespace_uri(ns)
-			, m_namespace_prefix(prefix)
+		simple_element(string_type const& name)
+			: m_namespace_uri(ns_name::HTML)
+			, m_namespace_prefix()
 			, m_local_name(name)
 			, m_attributes()
 		{
@@ -449,9 +478,9 @@ namespace wordring::html
 
 		void namespace_uri(string_type const& uri) { m_namespace_uri = uri; }
 
-		ns_name  namespace_uri_id() const { return m_namespace_uri; }
+		ns_name  namespace_uri_name() const { return m_namespace_uri; }
 
-		void  namespace_uri_id(ns_name ns) { m_namespace_uri = ns; }
+		void  namespace_uri_name(ns_name ns) { m_namespace_uri = ns; }
 
 		string_type namespace_prefix() const { return m_namespace_prefix; }
 
@@ -461,9 +490,9 @@ namespace wordring::html
 
 		void local_name(string_type const& name) { m_local_name = name; }
 
-		tag_name local_name_id() const { return m_local_name; }
+		tag_name local_name_name() const { return m_local_name; }
 
-		void local_name_id(tag_name name) { m_local_name = name; }
+		void local_name_name(tag_name name) { m_local_name = name; }
 
 		string_type qualified_name() const
 		{
@@ -502,17 +531,17 @@ namespace wordring::html
 
 		/*! @brief 属性を検索する
 		*/
-		const_iterator find(string_type const& name) const
-		{
-			return find(ns_name::HTML, string_type(), name);
-		}
-
-		/*! @brief 属性を検索する
-		*/
 		const_iterator find(ns_name ns, string_type const& prefix, attribute_name name) const
 		{
 			return std::find_if(m_attributes.begin(), m_attributes.end(), [&](attribute_type const& a)->bool {
 				return a == attribute_type(ns, prefix, name); });
+		}
+
+		/*! @brief 属性を検索する
+		*/
+		const_iterator find(string_type const& name) const
+		{
+			return find(ns_name::HTML, string_type(), name);
 		}
 
 		/*! @brief 属性を検索する
@@ -529,6 +558,9 @@ namespace wordring::html
 
 		container m_attributes;
 	};
+
+	static_assert(std::is_copy_constructible_v<simple_element<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_element<std::u32string>>);
 
 	template <typename String1>
 	inline bool operator==(simple_element<String1> const& lhs, simple_element<String1> const& rhs)
@@ -582,15 +614,23 @@ namespace wordring::html
 
 		string_type const& data() const { return m_data; }
 
+		/*
+		* 文字列の編集はあらゆる方法で行われるため、生バッファを編集可能に公開する必要が有る。
+		*/
 		string_type& data() { return m_data; }
 
 		void data(string_type const& s) { m_data = s; }
 
+		/*! 消去検討
+		*/
 		void push_back(value_type ch) { m_data.push_back(ch); }
 
 	protected:
 		string_type m_data;
 	};
+
+	static_assert(std::is_copy_constructible_v<simple_text<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_text<std::u32string>>);
 
 	template <typename String1>
 	inline bool operator==(simple_text<String1> const&, simple_text<String1> const&)
@@ -646,6 +686,9 @@ namespace wordring::html
 		string_type m_data;
 		string_type m_target;
 	};
+
+	static_assert(std::is_copy_constructible_v<simple_processing_instruction<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_processing_instruction<std::u32string>>);
 
 	template <typename String1>
 	inline bool operator==(simple_processing_instruction<String1> const&, simple_processing_instruction<String1> const&)
@@ -707,6 +750,9 @@ namespace wordring::html
 		string_type m_data;
 	};
 
+	static_assert(std::is_copy_constructible_v<simple_comment<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_comment<std::u32string>>);
+
 	template <typename String1>
 	inline bool operator==(simple_comment<String1> const&, simple_comment<String1> const&)
 	{
@@ -724,325 +770,346 @@ namespace wordring::html
 	// ノード
 	// ---------------------------------------------------------------------------------------------
 
-	/*! @brief HTML のノードに相当する共用体
 
-	@tparam String 文字列の型
-
-	インデックスが規格の NodeType と一致するように並べてある。
-
-	| type                          | index |
-	|-------------------------------|-------|
-	| simple_element                | 1     |
-	| simple_text                   | 3     |
-	| simple_processing_instruction | 7     |
-	| simple_comment                | 8     |
-	| simple_document               | 9     |
-	| simple_document_type          | 10    |
-	| simple_document_fragment      | 11    |
-	*/
 	template <typename String>
-	using simple_node = std::variant<
-		std::monostate,
-		simple_element<String>,                // 1.
-		std::monostate,
-		simple_text<String>,                   // 3.
-		std::monostate,
-		std::monostate,
-		std::monostate,
-		simple_processing_instruction<String>, // 7.
-		simple_comment<String>,                // 8.
-		simple_document<String>,               // 9.
-		simple_document_type<String>,          // 10.
-		simple_document_fragment<String>,      // 11.
-		std::monostate>;
-
-	/*! @brief ノードの文字列データを参照する
-
-	@internal
-	std::back_inserterを使うには、可変な文字列コンテナへの参照が必要になる。
-	*/
-	template <typename String>
-	inline String& data(simple_node<String>& node)
+	class simple_node
 	{
-		if (std::holds_alternative<simple_text<String>>(node))
+		template <typename String1>
+		friend bool operator==(simple_node<String1> const lhs, simple_node<String1> const& rhs);
+
+		template <typename String1>
+		friend bool operator!=(simple_node<String1> const lhs, simple_node<String1> const& rhs);
+
+	public:
+		using string_type = std::remove_cv_t<String>;
+
+		using element_type                = simple_element<string_type>;
+		using text_type                   = simple_text<string_type>;
+		using processing_instruction_type = simple_processing_instruction<string_type>;
+		using comment_type                = simple_comment<string_type>;
+		using document_type               = simple_document<string_type>;
+		using document_type_type          = simple_document_type<string_type>;
+		using document_fragment_type      = simple_document_fragment<string_type>;
+
+		using attribute_type           = simple_attr<string_type>;
+		using attribute_iterator       = typename element_type::iterator;
+		using const_attribute_iterator = typename element_type::const_iterator;
+
+		/*! @brief HTML のノードに相当する共用体
+		*/
+		using value_type = std::variant<
+			element_type,                // 0
+			text_type,                   // 1
+			processing_instruction_type, // 2
+			comment_type,                // 3
+			document_type,               // 4
+			document_type_type,          // 5
+			document_fragment_type       // 6
+		>;
+
+		/*! @brief ノードの型名を示す列挙体
+		*
+		* インデックスが規格の NodeType と一致するように並べてある。
+		*
+		* | type                          | index |
+		* |-------------------------------|-------|
+		* | simple_element                | 1     |
+		* | simple_text                   | 3     |
+		* | simple_processing_instruction | 7     |
+		* | simple_comment                | 8     |
+		* | simple_document               | 9     |
+		* | simple_document_type          | 10    |
+		* | simple_document_fragment      | 11    |
+		*/
+		enum class type_name : std::uint32_t
 		{
-			return std::get<simple_text<String>>(node).data();
-		}
-		else if (std::holds_alternative<simple_comment<String>>(node))
+			Element               = 1,
+			Text                  = 3,
+			ProcessingInstruction = 7,
+			Comment               = 8,
+			Document              = 9,
+			DocumentType          = 10,
+			DocumentFragment      = 11,
+		};
+
+	public:
+		simple_node() = default;
+		simple_node(simple_node const&) = default;
+		simple_node(simple_node&&) = default;
+
+		simple_node(element_type const& val) : m_value(val) {}
+		simple_node(element_type && val) : m_value(std::move(val)) {}
+
+		simple_node(text_type const& val) : m_value(val) {}
+		simple_node(text_type && val) : m_value(std::move(val)) {}
+
+		simple_node(processing_instruction_type const& val) : m_value(val) {}
+		simple_node(processing_instruction_type && val) : m_value(std::move(val)) {}
+
+		simple_node(comment_type const& val) : m_value(val) {}
+		simple_node(comment_type && val) : m_value(std::move(val)) {}
+
+		simple_node(document_type const& val) : m_value(val) {}
+		simple_node(document_type && val) : m_value(std::move(val)) {}
+
+		simple_node(document_type_type const& val) : m_value(val) {}
+		simple_node(document_type_type && val) : m_value(std::move(val)) {}
+
+		simple_node(document_fragment_type const& val) : m_value(val) {}
+		simple_node(document_fragment_type && val) : m_value(std::move(val)) {}
+
+		simple_node& operator=(simple_node const& rhs) = default;
+		simple_node& operator=(simple_node&& rhs) = default;
+
+		type_name type() const
 		{
-			return std::get<simple_comment<String>>(node).data();
-		}
-		return std::get<simple_processing_instruction<String>>(node).data();
-	}
+			switch (m_value.index())
+			{
+			case 0: return type_name::Element;
+			case 1: return type_name::Text;
+			case 2: return type_name::ProcessingInstruction;
+			case 3: return type_name::Comment;
+			case 4: return type_name::Document;
+			case 5: return type_name::DocumentType;
+			case 6: return type_name::DocumentFragment;
+			default:
+				break;
+			}
 
-	/*! @brief ノードの文字列データを参照する
-	*/
-	template <typename String>
-	inline String const& data(simple_node<String> const& node)
-	{
-		if (std::holds_alternative<simple_text<String>>(node))
+			return static_cast<type_name>(0);
+		}
+
+		bool is_element() const { return std::holds_alternative<element_type>(m_value); }
+		bool is_text() const { return std::holds_alternative<text_type>(m_value); }
+		bool is_processing_instruction() const { return std::holds_alternative<processing_instruction_type>(m_value); }
+		bool is_comment() const { return std::holds_alternative<comment_type>(m_value); }
+		bool is_document() const { return std::holds_alternative<document_type>(m_value); }
+		bool is_document_type() const { return std::holds_alternative<document_type_type>(m_value); }
+
+		/*! @brief 要素の名前空間 URI を返す
+		*/
+		ns_name namespace_uri_name() const
 		{
-			return std::get<simple_text<String>>(node).data();
+			if (is_element()) return std::get_if<element_type>(&m_value)->namespace_uri_name();
+			assert(false);
+			return static_cast<ns_name>(0);
 		}
-		else if (std::holds_alternative<simple_comment<String>>(node))
+
+		/*! @brief 要素の名前空間を返す
+		*/
+		string_type namespace_uri() const
 		{
-			return std::get<simple_comment<String>>(node).data();
+			if (is_element()) return std::get_if<element_type>(&m_value)->namespace_uri();
+			assert(false);
+			return m_string;
 		}
-		return std::get<simple_processing_instruction<String>>(node).data();
+
+		/*! @brief 要素のローカル名を返す
+		*/
+		tag_name local_name_name() const
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->local_name_name();
+			assert(false);
+			return static_cast<tag_name>(0);
+		}
+
+		/*! @brief 要素のローカル名を返す
+		*/
+		string_type local_name() const
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->local_name();
+			assert(false);
+			return m_string;
+		}
+
+		string_type qualified_name() const
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->qualified_name();
+			assert(false);
+			return m_string;
+		}
+
+		/*! @brief 属性の開始を返す
+		*/
+		attribute_iterator begin()
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->begin();
+			assert(false);
+			return attribute_iterator();
+		}
+
+		/*! @brief 属性の開始を返す
+		*/
+		const_attribute_iterator begin() const
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->begin();
+			assert(false);
+			return attribute_iterator();
+		}
+
+		/*! @brief 属性の終端を返す
+		*/
+		attribute_iterator end()
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->end();
+			assert(false);
+			return attribute_iterator();
+		}
+
+		/*! @brief 属性の終端を返す
+		*/
+		const_attribute_iterator end() const
+		{
+			if (is_element()) return std::get_if<element_type>(&m_value)->end();
+			assert(false);
+			return attribute_iterator();
+		}
+
+		/*! @brief 属性を検索する
+		*
+		* @param [in] prefix 名前空間接頭辞
+		* @param [in] name   属性名
+		*
+		* @return 属性を指すイテレータ
+		*
+		* node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。
+		*
+		* @sa simple_element::find()
+		*/
+		const_attribute_iterator find(ns_name ns, string_type const& prefix, string_type const& name) const
+		{
+			return std::find_if(begin(), end(), [&](attribute_type const& a)->bool {
+				return a == attribute_type(ns, prefix, name); });
+		}
+
+		bool contains(ns_name ns, string_type const& prefix, string_type const& name)
+		{
+			const_attribute_iterator it = std::find_if(begin(), end(), [&](attribute_type const& a)->bool {
+				return a == attribute_type(ns, prefix, name); });
+
+			return it != end();
+		}
+
+		/*! @brief 属性を追加する
+		*/
+		void push_back(attribute_type&& attr)
+		{
+			if (is_element()) std::get_if<element_type>(&m_value)->push_back(std::move(attr));
+			else assert(false);
+		}
+
+		wordring::html::document_type_name document_type_name() const
+		{
+			if (is_document()) return std::get_if<document_type>(&m_value)->document_type();
+			assert(false);
+			return static_cast<wordring::html::document_type_name>(0);
+		}
+
+		/*! @brief 文書ノードに文書形式を設定する
+		*
+		* @param [in] type 文書形式（ html あるいは xml ）
+		*/
+		void document_type_name(wordring::html::document_type_name type)
+		{
+			if (is_document()) std::get_if<document_type>(&m_value)->document_type(type);
+			else assert(false);
+		}
+
+		wordring::html::document_mode_name document_mode_name() const
+		{
+			if (is_document()) return std::get_if<document_type>(&m_value)->document_mode();
+			assert(false);
+			return static_cast<wordring::html::document_mode_name>(0);
+		}
+
+		/*! @brief 文書ノードに文書モードを設定する
+		*
+		* @param [in] mode 文書モード（ no_quirks、quirks、あるいは limited_quirks ）
+		*/
+		void document_mode_name(wordring::html::document_mode_name mode)
+		{
+			if (is_document()) std::get_if<document_type>(&m_value)->document_mode(mode);
+			else assert(false);
+		}
+
+		/*! @brief ノードの文字列データを参照する
+		*/
+		string_type const& data() const
+		{
+			switch (type())
+			{
+			case type_name::Text:
+				return std::get_if<text_type>(&m_value)->data();
+			case type_name::Comment:
+				return std::get_if<comment_type>(&m_value)->data();
+			case type_name::ProcessingInstruction:
+				return std::get_if<processing_instruction_type>(&m_value)->data();
+			default:
+				break;
+			}
+			assert(false);
+			return m_string;
+		}
+
+		/*! @brief ノードの文字列データを参照する
+
+		文字列データを持つノードは
+		- text_type
+		- comment_type
+		- processing_instruction_type
+
+		@internal
+		<hr>
+		std::back_inserterを使うには、可変な文字列コンテナへの参照が必要になる。
+		*/
+		string_type& data()
+		{
+			switch (type())
+			{
+			case type_name::Text:
+				return std::get_if<text_type>(&m_value)->data();
+			case type_name::Comment:
+				return std::get_if<comment_type>(&m_value)->data();
+			case type_name::ProcessingInstruction:
+				return std::get_if<processing_instruction_type>(&m_value)->data();
+			default:
+				break;
+			}
+			assert(false);
+			return m_string;
+		}
+
+		string_type const& target() const
+		{
+			if (is_processing_instruction()) return std::get_if<processing_instruction_type>(&m_value)->target();
+			assert(false);
+			return m_string;
+		}
+
+		string_type const& name() const
+		{
+			if (is_document_type()) return std::get_if<document_type_type>(&m_value)->name();
+			assert(false);
+			return m_string;
+		}
+
+	private:
+		value_type  m_value;
+		string_type m_string;
+	};
+
+	static_assert(std::is_copy_constructible_v<simple_node<std::u32string>>);
+	static_assert(std::is_copy_assignable_v<simple_node<std::u32string>>);
+
+	template <typename String1>
+	inline bool operator==(simple_node<String1> const lhs, simple_node<String1> const& rhs)
+	{
+		return lhs.m_value == rhs.m_value;
 	}
 
-	template <typename String>
-	inline String const& name(simple_node<String> const& node)
+	template <typename String1>
+	inline bool operator!=(simple_node<String1> const lhs, simple_node<String1> const& rhs)
 	{
-		return std::get<simple_document_type<String>>(node).name();
-	}
-
-	template <typename String>
-	inline String const& target(simple_node<String> const& node)
-	{
-		return std::get<simple_processing_instruction<String>>(node).target();
-	}
-
-	/*! @brief 属性の開始を返す
-	*/
-	template <typename String>
-	inline auto begin(simple_node<String>& node)
-	{
-		return std::get<simple_element<String>>(node).begin();
-	}
-
-	/*! @brief 属性の開始を返す
-	*/
-	template <typename String>
-	inline auto begin(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).begin();
-	}
-
-	/*! @brief 属性の終端を返す
-	*/
-	template <typename String>
-	inline auto end(simple_node<String>& node)
-	{
-		return std::get<simple_element<String>>(node).end();
-	}
-
-	/*! @brief 属性の終端を返す
-	*/
-	template <typename String>
-	inline auto end(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).end();
-	}
-
-	/*! @brief 属性を追加する
-	*/
-	template <typename String>
-	inline void push_back(simple_node<String>& node, simple_attr<String> const& attr)
-	{
-		return std::get<simple_element<String>>(node).push_back(attr);
-	}
-
-	template <typename String>
-	inline void push_back(simple_node<String>& node, simple_attr<String>&& attr)
-	{
-		return std::get<simple_element<String>>(node).push_back(std::move(attr));
-	}
-
-	/*! @brief 属性を検索する
-
-	@param [in] node 要素を格納するノード
-	@param [in] attr 属性
-
-	@return 属性を指すイテレータ
-
-	node に格納される要素から、attr と名前空間、接頭辞、名前が一致する属性を検索し返す。
-
-	@sa simple_element::find()
-	*/
-	template <typename String>
-	inline auto find(simple_node<String> const& node, simple_attr<String> const& attr)
-	{
-		return std::get<simple_element<String>>(node).find(attr);
-	}
-
-	/*! @brief 属性を検索する
-
-	@param [in] node   要素を格納するノード
-	@param [in] ns     名前空間
-	@param [in] prefix 接頭辞
-	@param [in] name   属性名
-
-	@return 属性を指すイテレータ
-
-	node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。
-
-	@sa simple_element::find()
-	*/
-	template <typename String>
-	inline auto find(simple_node<String> const& node, ns_name ns, String const& prefix, String const& name)
-	{
-		return std::get<simple_element<String>>(node).find(ns, prefix, name);
-	}
-
-	/*! @brief 属性を検索する
-
-	@param [in] node 要素を格納するノード
-	@param [in] name 属性名
-
-	@return 属性を指すイテレータ
-
-	node に格納される要素から、名前空間がHTML、接頭辞が空、そして名前が一致する属性を検索し返す。
-	HTML要素用。
-
-	@sa simple_element::find()
-	*/
-	template <typename String>
-	inline auto find(simple_node<String> const& node, String const& name)
-	{
-		return std::get<simple_element<String>>(node).find(name);
-	}
-
-	/*! @brief 属性を検索する
-
-	@param [in] node   要素を格納するノード
-	@param [in] ns     名前空間
-	@param [in] prefix 接頭辞
-	@param [in] name   属性名
-
-	@return 属性を指すイテレータ
-
-	node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。
-
-	@sa simple_element::find()
-	*/
-	template <typename String>
-	inline auto find(simple_node<String> const& node, ns_name ns, String const& prefix, attribute_name name)
-	{
-		return std::get<simple_element<String>>(node).find(ns, prefix, name);
-	}
-
-	/*! @brief 属性を検索する
-
-	@param [in] node 要素を格納するノード
-	@param [in] name 属性名
-
-	@return 属性を指すイテレータ
-
-	node に格納される要素から、名前空間がHTML、接頭辞が空、そして名前が一致する属性を検索し返す。
-	HTML要素用。
-
-	@sa simple_element::find()
-	*/
-	template <typename String>
-	inline auto find(simple_node<String> const& node, attribute_name name)
-	{
-		return std::get<simple_element<String>>(node).find(name);
-	}
-
-	template <typename String>
-	inline ns_name get_namespace_id(simple_attr<String> const& attr)
-	{
-		return attr.namespace_uri_id();
-	}
-
-	template <typename String>
-	inline String get_namespace(simple_attr<String> const& attr)
-	{
-		return attr.namespace_uri();
-	}
-
-	template <typename String>
-	inline String get_local_name(simple_attr<String> const& attr)
-	{
-		return attr.local_name();
-	}
-
-	template <typename String>
-	inline attribute_name get_local_name_id(simple_attr<String> const& attr)
-	{
-		return attr.local_name_id();
-	}
-
-	template <typename String>
-	inline String get_qualified_name(simple_attr<String> const& attr)
-	{
-		return attr.local_name_id();
-	}
-	
-	template <typename String>
-	inline auto const& value(simple_attr<String> const& attr)
-	{
-		return attr.value();
-	}
-
-	/*! @brief 要素の名前空間を返す
-	*/
-	template <typename String>
-	inline ns_name get_namespace_id(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).namespace_uri_id();
-	}
-
-	/*! @brief 要素の名前空間を返す
-	*/
-	template <typename String>
-	inline String get_namespace(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).namespace_uri();
-	}
-
-	/*! @brief 要素のローカル名を返す
-	*/
-	template <typename String>
-	inline tag_name get_local_name_id(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).local_name_id();
-	}
-
-	template <typename String>
-	inline String get_local_name(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).local_name();
-	}
-
-	template <typename String>
-	inline String get_qualified_name(simple_node<String> const& node)
-	{
-		return std::get<simple_element<String>>(node).qualified_name();
-	}
-
-	template <typename String>
-	inline document_type_name get_document_type(simple_node<String> const& node)
-	{
-		return std::get<simple_document<String>>(node).document_type();
-	}
-
-	/*! @brief 文書ノードに文書形式を設定する
-
-	@param [in] node 文書ノード
-	@param [in] type 文書形式（ html あるいは xml ）
-	*/
-	template <typename String>
-	inline void set_document_type(simple_node<String>& node, document_type_name type)
-	{
-		std::get<simple_document<String>>(node).document_type(type);
-	}
-
-	template <typename String>
-	inline document_mode_name get_document_mode(simple_node<String> const& node)
-	{
-		return std::get<simple_document<String>>(node).document_mode();
-	}
-
-	/*! @brief 文書ノードに文書モードを設定する
-
-	@param [in] node 文書ノード
-	@param [in] mode 文書モード（ no_quirks、quirks、あるいは limited_quirks ）
-	*/
-	template <typename String>
-	inline void set_document_mode(simple_node<String>& node, document_mode_name mode)
-	{
-		std::get<simple_document<String>>(node).document_mode(mode);
+		return !(lhs == rhs);
 	}
 }

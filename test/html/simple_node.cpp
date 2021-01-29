@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_1)
 	simple_element<std::u8string> be;
 	be.namespace_uri(u8"http://www.w3.org/1999/xhtml");
 
-	BOOST_CHECK(be.namespace_uri_id() == ns_name::HTML);
+	BOOST_CHECK(be.namespace_uri_name() == ns_name::HTML);
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_2)
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_2)
 	simple_element<std::u16string> be;
 	be.namespace_uri(u"http://www.w3.org/1999/xhtml");
 
-	BOOST_CHECK(be.namespace_uri_id() == ns_name::HTML);
+	BOOST_CHECK(be.namespace_uri_name() == ns_name::HTML);
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_3)
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_namespace_uri_3)
 	simple_element<std::u32string> be;
 	be.namespace_uri(U"http://www.w3.org/1999/xhtml");
 
-	BOOST_CHECK(be.namespace_uri_id() == ns_name::HTML);
+	BOOST_CHECK(be.namespace_uri_name() == ns_name::HTML);
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_local_name_1)
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_local_name_1)
 	simple_element<std::u8string> be;
 	be.local_name(u8"head");
 
-	BOOST_CHECK(be.local_name_id() == tag_name::Head);
+	BOOST_CHECK(be.local_name_name() == tag_name::Head);
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_push_back_1)
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_push_back_1)
 	ba.local_name(u8"href");
 	be.push_back(ba);
 
-	BOOST_CHECK(ba.local_name_id() == attribute_name::Href);
+	BOOST_CHECK(ba.local_name_name() == attribute_name::Href);
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_simple_element_find_1)
@@ -88,14 +88,11 @@ BOOST_AUTO_TEST_CASE(simple_node_simple_element_find_1)
 
 	auto it = be.find(attribute_name::Href);
 
-	BOOST_CHECK(it->local_name_id() == attribute_name::Href);
+	BOOST_CHECK(it->local_name_name() == attribute_name::Href);
 }
 
 /*
 ノードの文字列データを参照する
-
-String& data(simple_node<String>& node)
-String const& data(simple_node<String> const& node)
 */
 BOOST_AUTO_TEST_CASE(simple_node_data_1)
 {
@@ -140,11 +137,6 @@ BOOST_AUTO_TEST_CASE(simple_node_data_4)
 /*
 ノードを要素と解釈して属性の開始を返す
 ノードを要素と解釈して属性の終端を返す
-
-typename simple_element<String>::iterator begin(simple_node<String>& node)
-typename simple_element<String>::const_iterator begin(simple_node<String> const& node)
-typename simple_element<String>::iterator end(simple_node<String>& node)
-typename simple_element<String>::const_iterator end(simple_node<String> const& node)
 */
 BOOST_AUTO_TEST_CASE(simple_node_begin_1)
 {
@@ -156,8 +148,8 @@ BOOST_AUTO_TEST_CASE(simple_node_begin_1)
 
 	simple_node<std::u8string> const sn = el;
 
-	BOOST_CHECK(*begin(sn) == std::u8string(u8"a1"));
-	BOOST_CHECK(*(++begin(sn)) == attribute_name::Abbr);
+	BOOST_CHECK(sn.begin()->local_name() == std::u8string(u8"a1"));
+	BOOST_CHECK((++sn.begin())->local_name_name() == attribute_name::Abbr);
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_begin_2)
@@ -168,8 +160,9 @@ BOOST_AUTO_TEST_CASE(simple_node_begin_2)
 	el.push_back({ attribute_name::Abbr, u8"v1" });
 
 	simple_node<std::u8string> sn = el;
-	*begin(sn) = simple_attr<std::u8string>(attribute_name::Accent);
-	BOOST_CHECK(*begin(sn) == std::u8string(u8"accent"));
+	sn.push_back(simple_attr<std::u8string>(attribute_name::Accent));
+
+	BOOST_CHECK((++sn.begin())->local_name() == std::u8string(u8"accent"));
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_end_1)
@@ -182,14 +175,12 @@ BOOST_AUTO_TEST_CASE(simple_node_end_1)
 
 	simple_node<std::u8string> const sn = el;
 
-	BOOST_CHECK(*begin(sn) == std::u8string(u8"a1"));
-	BOOST_CHECK(*(--end(sn)) == attribute_name::Abbr);
+	BOOST_CHECK(sn.begin()->local_name() == std::u8string(u8"a1"));
+	BOOST_CHECK((--sn.end())->local_name_name() == attribute_name::Abbr);
 }
 
 /*
 ノードを要素と解釈して属性を追加する
-
-void push_back(simple_node<String> const& node, simple_attr<String> const& attr)
 */
 BOOST_AUTO_TEST_CASE(simple_node_push_back_1)
 {
@@ -198,15 +189,13 @@ BOOST_AUTO_TEST_CASE(simple_node_push_back_1)
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
 
-	push_back(sn, { u8"a1", u8"v1" });
+	sn.push_back({ u8"a1", u8"v1" });
 
-	BOOST_CHECK(*begin(sn) == std::u8string(u8"a1"));
+	BOOST_CHECK(sn.begin()->local_name() == std::u8string(u8"a1"));
 }
 
 /*
 ノードを要素と解釈して属性を検索する
-
-typename simple_element<String>::const_iterator find(simple_node<String> const& node, simple_attr<String> const& attr)
 */
 BOOST_AUTO_TEST_CASE(simple_node_find_1)
 {
@@ -215,12 +204,12 @@ BOOST_AUTO_TEST_CASE(simple_node_find_1)
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
 
-	push_back(sn, { u8"a1", u8"v1" });
-	push_back(sn, { attribute_name::Abbr, u8"v2" });
+	sn.push_back({ u8"a1", u8"v1" });
+	sn.push_back({ attribute_name::Abbr, u8"v2" });
 
-	auto it = find(sn, simple_attr<std::u8string>(u8"abbr", u8""));
+	auto it = sn.find(ns_name::HTML, u8"", u8"abbr");
 
-	BOOST_CHECK(*it == std::u8string(u8"abbr"));
+	BOOST_CHECK(it->local_name() == std::u8string(u8"abbr"));
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_find_2)
@@ -230,12 +219,12 @@ BOOST_AUTO_TEST_CASE(simple_node_find_2)
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
 
-	push_back(sn, { u8"a1", u8"v1" });
-	push_back(sn, { u8"a2", u8"v2" });
+	sn.push_back({ u8"a1", u8"v1" });
+	sn.push_back({ u8"a2", u8"v2" });
 
-	auto it = find(sn, std::u8string(u8"a2"));
+	auto it = sn.find(ns_name::HTML, u8"", std::u8string(u8"a2"));
 
-	BOOST_CHECK(*it == std::u8string(u8"a2"));
+	BOOST_CHECK(it->local_name() == std::u8string(u8"a2"));
 }
 
 BOOST_AUTO_TEST_CASE(simple_node_find_3)
@@ -245,10 +234,10 @@ BOOST_AUTO_TEST_CASE(simple_node_find_3)
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
 
-	push_back(sn, { u8"a1", u8"v1" });
-	push_back(sn, { attribute_name::Abbr, u8"v2" });
+	sn.push_back({ u8"a1", u8"v1" });
+	sn.push_back({ attribute_name::Abbr, u8"v2" });
 
-	auto it = find(sn, std::u8string(u8"abbr"));
+	auto it = sn.find(ns_name::HTML, u8"", std::u8string(u8"abbr"));
 
 	BOOST_CHECK(*it == attribute_name::Abbr);
 }
@@ -260,42 +249,12 @@ BOOST_AUTO_TEST_CASE(simple_node_find_4)
 	simple_element<std::u8string> el;
 	simple_node<std::u8string> sn = el;
 
-	push_back(sn, { u8"a1", u8"v1" });
-	push_back(sn, { attribute_name::Abbr, u8"v2" });
+	sn.push_back({ u8"a1", u8"v1" });
+	sn.push_back({ attribute_name::Abbr, u8"v2" });
 
-	auto it = find(sn, std::u8string(u8"XXX"));
+	auto it = sn.find(ns_name::HTML, u8"", std::u8string(u8"XXX"));
 
-	BOOST_CHECK(it == end(sn));
-}
-
-BOOST_AUTO_TEST_CASE(simple_node_find_5)
-{
-	using namespace wordring::html;
-
-	simple_element<std::u8string> el;
-	simple_node<std::u8string> sn = el;
-
-	push_back(sn, { u8"a1", u8"v1" });
-	push_back(sn, { attribute_name::Abbr, u8"v2" });
-
-	auto it = find(sn, attribute_name::Abbr);
-
-	BOOST_CHECK(*it == std::u8string(u8"abbr"));
-}
-
-BOOST_AUTO_TEST_CASE(simple_node_find_6)
-{
-	using namespace wordring::html;
-
-	simple_element<std::u8string> el;
-	simple_node<std::u8string> sn = el;
-
-	push_back(sn, { u8"a1", u8"v1" });
-	push_back(sn, { attribute_name::Abbr, u8"v2" });
-
-	auto it = find(sn, static_cast<attribute_name>(0));
-
-	BOOST_CHECK(it == end(sn));
+	BOOST_CHECK(it == sn.end());
 }
 
 BOOST_AUTO_TEST_SUITE_END()

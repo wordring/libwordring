@@ -148,12 +148,15 @@ namespace wordring::html
 
 		void append_attribute(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name, std::u32string const& value)
 		{
-			push_back(*it, attribute_type(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name), encoding_cast<string_type>(value)));
+			it->push_back(attribute_type(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name), encoding_cast<string_type>(value)));
 		}
 
+		/*
+		on_in_body_insertion_mode() 内の2カ所から呼ばれている。
+		*/
 		bool contains(node_pointer it, ns_name ns, std::u32string const& prefix, std::u32string const& name)
 		{
-			return wordring::html::find(*it, ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name)) != wordring::html::end(*it);
+			return it->contains(ns, encoding_cast<string_type>(prefix), encoding_cast<string_type>(name));
 		}
 
 		// ----------------------------------------------------------------------------------------
