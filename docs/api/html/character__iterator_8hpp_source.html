@@ -38,7 +38,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_5988d8684355aeeadd3b7e97955b31ec.html">html</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_90aa4f41a12abdb3f0c7be6781ca1e9e.html">tag_tree</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -48,138 +48,143 @@ $(function() {
 <div class="contents">
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/html/html_defs.hpp&gt;</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;wordring/tag_tree/serial_iterator.hpp&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;wordring/tag_tree/tag_node.hpp&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;wordring/tag_tree/tag_tree_iterator.hpp&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;wordring/html/html_defs.hpp&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1html.html">wordring::html</a></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> Character = std::<span class="keywordtype">nullptr</span>_t&gt;</div>
-<div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1character__iterator.html">   13</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    {</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator1&gt;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator1&gt;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator&lt;Iterator1&gt;</a> <span class="keyword">const</span>&amp;);</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keywordtype">bool</span>&gt;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        <span class="keyword">struct </span>node_pointer_{ <span class="keyword">using</span> type = int; };</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">struct </span>node_pointer_&lt;T, false&gt; { <span class="keyword">using</span> type = T; };</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;cstdint&gt;</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &lt;type_traits&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring.html">wordring</a></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;{</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value&gt;</div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classwordring_1_1tag__tree.html">   16</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1tag__tree.html">tag_tree</a>;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;}</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1detail.html">wordring::detail</a></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;{</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value&gt;</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">   22</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value1&gt;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator==(<a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator&lt;Value1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator&lt;Value1&gt;</a> <span class="keyword">const</span>&amp;);</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">struct </span>node_pointer_&lt;T, true&gt; { <span class="keyword">using</span> type = <span class="keyword">typename</span> T::base_type; };</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value1&gt;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <span class="keyword">friend</span> <span class="keywordtype">bool</span> operator!=(<a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator&lt;Value1&gt;</a> <span class="keyword">const</span>&amp;, <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator&lt;Value1&gt;</a> <span class="keyword">const</span>&amp;);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">class </span>has_base</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;            <span class="keyword">template</span> &lt;<span class="keyword">typename</span> U&gt;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;            <span class="keyword">static</span> <span class="keyword">auto</span> test(U u)-&gt;decltype(u.base(), std::true_type());</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            <span class="keyword">static</span> <span class="keyword">auto</span> test(...)-&gt;decltype(std::false_type());</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            <span class="keyword">static</span> <span class="keywordtype">bool</span> constexpr value = decltype(test(std::declval&lt;T&gt;()))::value;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            <span class="keyword">using</span> type = <span class="keyword">typename</span> node_pointer_&lt;T, value&gt;::type;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        };</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">using</span> base_type    = Iterator;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">using</span> node_pointer = <span class="keyword">typename</span> has_base&lt;base_type&gt;::type;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="keyword">using</span> <a class="code" href="structwordring_1_1html_1_1node__traits.html">node_traits</a>  = <a class="code" href="structwordring_1_1html_1_1node__traits.html">wordring::html::node_traits&lt;node_pointer&gt;</a>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keyword">using</span> string_type = <span class="keyword">typename</span> node_traits::string_type;<span class="comment">// std::conditional_t&lt;std::is_const_v&lt;typename node_traits::node_type&gt;, typename node_traits::string_type const, typename node_traits::string_type&gt;;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        <span class="keyword">using</span> <a class="code" href="structwordring_1_1html_1_1node__traits.html">node_traits</a>       = <a class="code" href="structwordring_1_1html_1_1node__traits.html">html::node_traits&lt;tag_tree_iterator&lt;std::remove_cv_t&lt;Value&gt;</a>&gt;&gt;;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keyword">using</span> <a class="code" href="structwordring_1_1html_1_1node__traits.html">const_node_traits</a> = <a class="code" href="structwordring_1_1html_1_1node__traits.html">html::node_traits&lt;tag_tree_iterator&lt;std::remove_cv_t&lt;Value&gt;</a> <span class="keyword">const</span>&gt;&gt;;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="keyword">using</span> node_type         = <span class="keyword">typename</span> node_traits::node_type;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="keyword">using</span> node_pointer      = <span class="keyword">typename</span> node_traits::node_pointer;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="keyword">using</span> string_type    = <span class="keyword">typename</span> node_traits::string_type;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <span class="keyword">using</span> character_type = <span class="keyword">typename</span> string_type::value_type;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">using</span> <a class="code" href="classwordring_1_1detail_1_1tag__tree__serial__iterator.html">base_type</a> = <a class="code" href="classwordring_1_1detail_1_1tag__tree__serial__iterator.html">tag_tree_serial_iterator&lt;Value&gt;</a>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keyword">using</span> container = <span class="keyword">typename</span> base_type::container;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keyword">using</span> value_type        = std::remove_cv_t&lt;character_type&gt;;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keyword">using</span> difference_type   = std::ptrdiff_t;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="keyword">using</span> reference         = std::conditional_t&lt;std::is_const_v&lt;Value&gt;, value_type <span class="keyword">const</span>, value_type&gt;&amp;;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keyword">using</span> pointer           = std::conditional_t&lt;std::is_const_v&lt;Value&gt;, value_type <span class="keyword">const</span>, value_type&gt;*;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keyword">using</span> iterator_category = std::bidirectional_iterator_tag;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="comment">//static_assert(sizeof(character_type) == sizeof(value_type));</span></div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keyword">using</span> value_type        = <span class="keyword">typename</span> string_type::value_type;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <span class="keyword">using</span> difference_type   = <span class="keyword">typename</span> std::iterator_traits&lt;node_pointer&gt;::difference_type;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <span class="keyword">using</span> reference         = value_type&amp;;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keyword">using</span> pointer           = value_type*;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keyword">using</span> iterator_category = std::conditional_t&lt;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            std::is_base_of_v&lt;std::bidirectional_iterator_tag, typename base_type::iterator_category&gt;,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                std::bidirectional_iterator_tag, std::forward_iterator_tag&gt;;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>(base_type first, base_type last)</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;            : m_first(first)</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;            , m_last(last)</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;            , m_i(0)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;            <span class="keywordflow">while</span> (m_first != m_last &amp;&amp; !node_traits::is_text(current())) ++m_first;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        }</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a> end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> { m_last, m_last }; }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1character__iterator.html#af2b8ea33092a0604a266c3f0072c2ade">   72</a></span>&#160;        reference <a class="code" href="classwordring_1_1html_1_1character__iterator.html#af2b8ea33092a0604a266c3f0072c2ade">operator*</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">const_cast&lt;</span>reference<span class="keyword">&gt;</span>(node_traits::data(current())[m_i]);</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1character__iterator.html#a9691b1ccc19e13296afd478733d5d9e6">   81</a></span>&#160;        <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>&amp; <a class="code" href="classwordring_1_1html_1_1character__iterator.html#a9691b1ccc19e13296afd478733d5d9e6">operator++</a>()</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keywordflow">if</span> (node_traits::is_text(current()))</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            {</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                ++m_i;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                <span class="keywordflow">if</span> (m_i &lt; node_traits::data(current()).size()) <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                    ++m_first;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                    m_i = 0;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                }</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            }</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">while</span> (m_first != m_last &amp;&amp; !node_traits::is_text(current())) ++m_first;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1character__iterator.html#af2d6768d6c93828852c03f330b24090f">  102</a></span>&#160;        <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a> <a class="code" href="classwordring_1_1html_1_1character__iterator.html#af2d6768d6c93828852c03f330b24090f">operator++</a>(<span class="keywordtype">int</span>)</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        {</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <a class="code" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a> it(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            <a class="code" href="classwordring_1_1html_1_1character__iterator.html#a9691b1ccc19e13296afd478733d5d9e6">operator++</a>();</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordflow">return</span> it;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        }</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        node_pointer current()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="keywordflow">if</span> constexpr (std::is_same_v&lt;base_type, node_pointer&gt;)</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            {</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                <span class="keywordflow">return</span> m_first;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="keywordflow">return</span> m_first.base();</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        }</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>(node_pointer np)</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            : m_first(np)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;            , m_last(np.m_c, 0)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;            , m_i(0)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;            <span class="keywordflow">while</span> (m_first != m_last &amp;&amp; !node_traits::is_text(m_first)) ++m_first;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        }</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a> end()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>(); }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a21b12d0f0dfff1a51b659ea8b9af8db2">   64</a></span>&#160;        reference <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a21b12d0f0dfff1a51b659ea8b9af8db2">operator*</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">const_cast&lt;</span>reference<span class="keyword">&gt;</span>(node_traits::data(m_first)[m_i]);</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#aa2091691a8a7569fcb1b34c2384fea9a">   73</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&amp; <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#aa2091691a8a7569fcb1b34c2384fea9a">operator++</a>()</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="keywordflow">if</span> (node_traits::is_text(m_first))</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            {</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                ++m_i;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                <span class="keywordflow">if</span> (m_i &lt; node_traits::data(m_first).size()) <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                ++m_first;</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                m_i = 0;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            }</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <span class="keywordflow">while</span> (m_first != m_last &amp;&amp; !node_traits::is_text(m_first)) ++m_first;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        }</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a5ed283a9c7a075a40c5d18c3a72b7b0e">   92</a></span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a> <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a5ed283a9c7a075a40c5d18c3a72b7b0e">operator++</a>(<span class="keywordtype">int</span>)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        {</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a> it(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#aa2091691a8a7569fcb1b34c2384fea9a">operator++</a>();</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;            <span class="keywordflow">return</span> it;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        }</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <a class="code" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&amp; operator--()</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        {</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            <span class="keywordflow">if</span> (node_traits::is_text(m_first))</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            {</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                <span class="keywordflow">if</span> (m_i != 0)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                {</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    --m_i;</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                    <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                }</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                --m_first;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            }</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">while</span> (m_first != m_last &amp;&amp; !node_traits::is_text(m_first)) --m_first;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            </div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">if</span> (m_first != m_last)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            {</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                m_i = node_traits::data(m_first).size() - 1;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            }</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        base_type m_first;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        base_type m_last;</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        std::uint32_t m_i;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    };</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator&gt;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator==(character_iterator&lt;Iterator&gt; <span class="keyword">const</span>&amp; lhs, character_iterator&lt;Iterator&gt; <span class="keyword">const</span>&amp; rhs)</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    {</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordflow">return</span> lhs.m_first == rhs.m_first &amp;&amp; lhs.m_i == rhs.m_i;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    }</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Iterator&gt;</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(character_iterator&lt;Iterator&gt; <span class="keyword">const</span>&amp; lhs, character_iterator&lt;Iterator&gt; <span class="keyword">const</span>&amp; rhs)</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    {</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">return</span> !(lhs == rhs);</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;}</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordflow">return</span> *<span class="keyword">this</span>;</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        }</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        base_type     m_first;</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        base_type     m_last;</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        std::uint32_t m_i;</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    };</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value1&gt;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> <a class="code" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a>(tag_tree_character_iterator&lt;Value1&gt; <span class="keyword">const</span>&amp; lhs, tag_tree_character_iterator&lt;Value1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    {</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="keywordflow">return</span> lhs.m_first == rhs.m_first &amp;&amp; lhs.m_i == rhs.m_i;</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    }</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Value1&gt;</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> operator!=(tag_tree_character_iterator&lt;Value1&gt; <span class="keyword">const</span>&amp; lhs, tag_tree_character_iterator&lt;Value1&gt; <span class="keyword">const</span>&amp; rhs)</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="keywordflow">return</span> !(lhs == rhs);</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;    }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1tag__tree_html"><div class="ttname"><a href="classwordring_1_1tag__tree.html">wordring::tag_tree</a></div><div class="ttdoc">HTML/XML 用の木</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:16</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1tag__tree__character__iterator_html_a21b12d0f0dfff1a51b659ea8b9af8db2"><div class="ttname"><a href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a21b12d0f0dfff1a51b659ea8b9af8db2">wordring::detail::tag_tree_character_iterator::operator*</a></div><div class="ttdeci">reference operator*() const</div><div class="ttdoc">文字を返す</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:64</div></div>
 <div class="ttc" id="astructwordring_1_1html_1_1node__traits_html"><div class="ttname"><a href="structwordring_1_1html_1_1node__traits.html">wordring::html::node_traits</a></div><div class="ttdoc">HTMLノードへの操作を仲介するアダプタ</div><div class="ttdef"><b>Definition:</b> html/html_defs.hpp:29</div></div>
-<div class="ttc" id="aclasswordring_1_1html_1_1character__iterator_html_af2b8ea33092a0604a266c3f0072c2ade"><div class="ttname"><a href="classwordring_1_1html_1_1character__iterator.html#af2b8ea33092a0604a266c3f0072c2ade">wordring::html::character_iterator::operator*</a></div><div class="ttdeci">reference operator*() const</div><div class="ttdoc">文字を返す</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:72</div></div>
-<div class="ttc" id="aclasswordring_1_1html_1_1character__iterator_html_a9691b1ccc19e13296afd478733d5d9e6"><div class="ttname"><a href="classwordring_1_1html_1_1character__iterator.html#a9691b1ccc19e13296afd478733d5d9e6">wordring::html::character_iterator::operator++</a></div><div class="ttdeci">character_iterator &amp; operator++()</div><div class="ttdoc">イテレータを進める</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:81</div></div>
-<div class="ttc" id="anamespacewordring_1_1html_html"><div class="ttname"><a href="namespacewordring_1_1html.html">wordring::html</a></div></div>
-<div class="ttc" id="aclasswordring_1_1html_1_1character__iterator_html"><div class="ttname"><a href="classwordring_1_1html_1_1character__iterator.html">wordring::html::character_iterator</a></div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:13</div></div>
-<div class="ttc" id="aclasswordring_1_1html_1_1character__iterator_html_af2d6768d6c93828852c03f330b24090f"><div class="ttname"><a href="classwordring_1_1html_1_1character__iterator.html#af2d6768d6c93828852c03f330b24090f">wordring::html::character_iterator::operator++</a></div><div class="ttdeci">character_iterator operator++(int)</div><div class="ttdoc">イテレータを進める</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:102</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1tag__tree__character__iterator_html_a5ed283a9c7a075a40c5d18c3a72b7b0e"><div class="ttname"><a href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a5ed283a9c7a075a40c5d18c3a72b7b0e">wordring::detail::tag_tree_character_iterator::operator++</a></div><div class="ttdeci">tag_tree_character_iterator operator++(int)</div><div class="ttdoc">イテレータを進める</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:92</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1tag__tree__serial__iterator_html"><div class="ttname"><a href="classwordring_1_1detail_1_1tag__tree__serial__iterator.html">wordring::detail::tag_tree_serial_iterator</a></div><div class="ttdef"><b>Definition:</b> serial_iterator.hpp:15</div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1tag__tree__character__iterator_html_aa2091691a8a7569fcb1b34c2384fea9a"><div class="ttname"><a href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#aa2091691a8a7569fcb1b34c2384fea9a">wordring::detail::tag_tree_character_iterator::operator++</a></div><div class="ttdeci">tag_tree_character_iterator &amp; operator++()</div><div class="ttdoc">イテレータを進める</div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:73</div></div>
+<div class="ttc" id="anamespacewordring_html"><div class="ttname"><a href="namespacewordring.html">wordring</a></div><div class="ttdef"><b>Definition:</b> algorithm_.hpp:10</div></div>
+<div class="ttc" id="anamespacewordring_1_1detail_html"><div class="ttname"><a href="namespacewordring_1_1detail.html">wordring::detail</a></div></div>
+<div class="ttc" id="aclasswordring_1_1detail_1_1tag__tree__character__iterator_html"><div class="ttname"><a href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">wordring::detail::tag_tree_character_iterator</a></div><div class="ttdef"><b>Definition:</b> character_iterator.hpp:22</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_a945d4e00d79e600a9c748342b5113d95"><div class="ttname"><a href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">wordring::html::operator==</a></div><div class="ttdeci">bool operator==(simple_attr&lt; String1 &gt; const &amp;lhs, simple_attr&lt; String1 &gt; const &amp;rhs)</div><div class="ttdoc">名前空間、接頭辞、ローカル名が一致する場合、true を返す</div><div class="ttdef"><b>Definition:</b> simple_node.hpp:168</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

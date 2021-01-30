@@ -21,14 +21,14 @@ BOOST_AUTO_TEST_CASE(simple_html_make_document_1)
 	namespace html = wordring::html;
 
 	// 文字列から HTML ドキュメントを作成する。
-	std::u16string_view sv = u"<p>Hello HTML!</p>";
-	auto doc = html::make_document<html::u8simple_tree>(sv.begin(), sv.end());
+	std::string_view sv = "<p>Hello HTML!</p>";
+	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
 
 	// HTML を文字列化する。
-	std::u16string s;
+	std::u8string s;
 	html::to_string(doc.begin(), std::back_inserter(s));
 
-	assert(s == u"<html><head></head><body><p>Hello HTML!</p></body></html>");
+	assert(s == u8"<html><head></head><body><p>Hello HTML!</p></body></html>");
 }
 
 /*
@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(simple_html_encoding_1)
 
 	// 文字列から HTML ドキュメントを作成する。
 	std::string_view sv = "<p>\x82\xB1\x82\xF1\x82\xC9\x82\xBF\x82\xCD HTML!</p>";
-	auto doc = html::make_document<html::u8simple_tree>(sv.begin(), sv.end(), wordring::encoding_name::Shift_JIS);
+	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end(), wordring::encoding_name::Shift_JIS);
 
 	// HTML を文字列化する。
 	std::u8string s;
@@ -62,13 +62,16 @@ BOOST_AUTO_TEST_CASE(simple_html_encoding_2)
 			"<head><meta charset='shift_jis'></head>"
 			"<body><p>\x82\xB1\x82\xF1\x82\xC9\x82\xBF\x82\xCD HTML!</p></body>"
 		"</html>";
-	auto doc = html::make_document<html::u8simple_tree>(sv.begin(), sv.end());
+	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
 
 	// HTML を文字列化する。
 	std::u8string s;
 	html::to_string(doc.begin(), std::back_inserter(s));
 
-	assert(s == u8"<html><head><meta charset=\"shift_jis\"></head><body><p>こんにちは HTML!</p></body></html>");
+	assert(s == u8"<html>"
+					"<head><meta charset=\"shift_jis\"></head>"
+					"<body><p>こんにちは HTML!</p></body>"
+				"</html>");
 }
 
 /*
@@ -80,7 +83,7 @@ BOOST_AUTO_TEST_CASE(simple_html_query_selector_1)
 	namespace css  = wordring::css;
 
 	// 文字列から HTML ドキュメントを作成する。
-	std::u32string_view sv = U"<p>Hello HTML!</p>";
+	std::string_view sv = "<p>Hello HTML!</p>";
 	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
 
 	// CSS セレクタで<p>タグを検索する。
@@ -103,7 +106,7 @@ BOOST_AUTO_TEST_CASE(simple_html_insert_1)
 	namespace css = wordring::css;
 
 	// 文字列から HTML ドキュメントを作成する。
-	std::u32string_view sv = U"<p>Hello HTML!</p>";
+	std::string_view sv = "<p>Hello HTML!</p>";
 	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
 
 	// CSS セレクタで<body>タグを検索する。※パーサによって<body>タグが挿入されています。
@@ -126,7 +129,7 @@ BOOST_AUTO_TEST_CASE(simple_html_insert_2)
 	namespace css = wordring::css;
 
 	// 文字列から HTML ドキュメントを作成する。
-	std::u32string_view sv = U"<p>Hello HTML!</p>";
+	std::string_view sv = "<p>Hello HTML!</p>";
 	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
 
 	// CSS セレクタで<body>タグを検索する。※パーサによって<body>タグが挿入されています。
@@ -152,7 +155,7 @@ BOOST_AUTO_TEST_CASE(simple_html_erase_1)
 	namespace css = wordring::css;
 
 	// 文字列から HTML ドキュメントを作成する。
-	std::u32string_view sv = U"<p>Hello HTML!</p>";
+	std::string_view sv = "<p>Hello HTML!</p>";
 	auto doc = html::make_document<html::u16simple_tree>(sv.begin(), sv.end());
 
 	// CSS セレクタで<p>タグを検索する。
@@ -162,15 +165,15 @@ BOOST_AUTO_TEST_CASE(simple_html_erase_1)
 	doc.erase(p);
 
 	// 文書を文字列化する。
-	std::u16string s;
+	std::u8string s;
 	html::to_string(doc.begin(), std::back_inserter(s));
 
 	// <p> タグ以下が消えている。
-	assert(s == u"<html><head></head><body></body></html>");
+	assert(s == u8"<html><head></head><body></body></html>");
 }
 
 /*
-* tree_iterator と組み合わせる
+* tree_iterator と組み合わせる（※これは例であり、 tag_tree 自身の巡回イテレータを使うほうが効率が良いです）
 */
 BOOST_AUTO_TEST_CASE(simple_html_tree_iterator_1)
 {
@@ -197,6 +200,5 @@ BOOST_AUTO_TEST_CASE(simple_html_tree_iterator_1)
 
 	assert(s == u"Hello HTML!");
 }
-
 
 BOOST_AUTO_TEST_SUITE_END()

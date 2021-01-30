@@ -1,182 +1,16 @@
 ﻿#pragma once
 
-#include <wordring/html/simple_traits.hpp>
+#include <wordring/tag_tree/character_iterator.hpp>
+#include <wordring/tag_tree/serial_iterator.hpp>
+#include <wordring/tag_tree/tag_node.hpp>
+#include <wordring/tag_tree/tag_tree_iterator.hpp>
+
+#include <wordring/html/html_defs.hpp>
 
 #include <cassert>
 #include <memory>
 #include <utility>
 #include <vector>
-
-namespace wordring
-{
-	template <typename Value>
-	class tag_tree;
-}
-
-namespace wordring::detail
-{
-	template <typename Value>
-	struct tag_node
-	{
-		using value_type = Value;
-
-		std::uint32_t m_prev = 0;
-		std::uint32_t m_next = 0;
-
-		std::uint32_t m_head = 0;
-		std::uint32_t m_tail = 0;
-
-		value_type m_value = value_type();
-	};
-
-	template <typename Value>
-	class tag_tree_iterator
-	{
-		friend class wordring::tag_tree<std::remove_cv_t<Value>>;
-		friend class wordring::tag_tree<std::remove_cv_t<Value> const>;
-
-		template <typename Value1, typename Value2>
-		friend bool operator==(tag_tree_iterator<Value1> const&, tag_tree_iterator<Value2> const&);
-
-		template <typename Value1, typename Value2>
-		friend bool operator==(tag_tree_iterator<Value1> const&, tag_tree_iterator<Value2> const&);
-
-	public:
-		using value_type = std::remove_cv_t<Value>;
-		using wrapper    = tag_node<value_type>;
-		
-		using difference_type   = std::ptrdiff_t;
-		using reference         = std::conditional_t<std::is_const_v<Value>, value_type const&, value_type&>;
-		using pointer           = std::conditional_t<std::is_const_v<Value>, value_type const*, value_type*>;
-		using iterator_category = std::bidirectional_iterator_tag;
-
-		using container = std::vector<detail::tag_node<value_type>>;
-
-	public:
-		tag_tree_iterator()
-			: m_c(nullptr)
-			, m_i(0) {}
-
-
-		tag_tree_iterator(container* c, std::uint32_t i)
-			: m_c(c)
-			, m_i(i) {}
-
-		operator tag_tree_iterator<value_type const>() const
-		{
-			return tag_tree_iterator<value_type const>(m_c, m_i);
-		}
-
-		reference operator*() const
-		{
-			return const_cast<std::remove_cv_t<reference>>((m_c->data() + m_i)->m_value);
-		}
-
-		pointer operator->() const
-		{
-			return const_cast<std::remove_cv_t<pointer>>(&(m_c->data() + m_i)->m_value);
-		}
-
-		/*! @brief 一つ後ろの兄弟ノードを指すように進める
-		*
-		* @internal
-		* <hr>
-		* 
-		* - 対象ノードに終了タグが無ければ「TAIL」が 0 で「NEXT」が次の兄弟ノード。
-		*   終了タグがある場合、「TAIL」の「NEXT」が次の兄弟ノード。
-		*/
-		tag_tree_iterator& operator++()
-		{
-			assert(m_i != 0);
-			wrapper* d = m_c->data();
-
-			std::uint32_t tail = (d + m_i)->m_tail;
-			m_i = tail == 0 ? (d + m_i)->m_next : (d + tail)->m_next;
-			
-			return *this;
-		}
-
-		tag_tree_iterator operator++(int)
-		{
-			tag_tree_iterator it = *this;
-			operator++();
-			return it;
-		}
-
-		tag_tree_iterator& operator--()
-		{
-			wrapper* d = m_c->data();
-			std::uint32_t prev = (d + m_i)->m_prev;
-			assert(prev != 0);
-			std::uint32_t head = (d + prev)->m_head;
-			
-			m_i = head == 0 ? prev : head;
-
-			return *this;
-		}
-
-		/*! @brief 親ノードへのイテレータを返す
-		*
-		* @internal
-		* <hr>
-		*
-		* 対象ノードのひとつ前のノードが開始タグなら、その開始タグは「親ノード」。
-		* それ以外の場合、それはひとつ前の兄弟ノードの終了タグ、あるいはシングルノード。
-		* 「あれば開始タグ無ければ自身」の前のノードを対象ノードとして、開始タグが見つかるまで上のアルゴリズムを繰り返せば、
-		* いずれ、「親ノード」に行き着く。
-		* 
-		* - 開始タグは「TAIL」があるノード。
-		* - 終了タグは「HEAD」があるノード。
-		* - 根に「親ノード」は無い。
-		* - 根ノードは「PREV」が 0 のノード。
-		*/
-		tag_tree_iterator parent() const
-		{
-			wrapper* d = m_c->data();
-
-			std::uint32_t idx = (d + m_i)->m_prev;
-			while (idx != 0)
-			{
-				if ((d + idx)->m_tail != 0) return tag_tree_iterator(m_c, idx);
-
-				std::uint32_t head = (d + idx)->m_head;
-				if (head) idx = head;
-				idx = (d + idx)->m_prev;
-			}
-
-			return tag_tree_iterator();
-		}
-
-		tag_tree_iterator begin() const
-		{
-			wrapper* d = m_c->data();
-			std::uint32_t idx = (d + m_i)->m_tail == 0 ? 0 : (d + m_i)->m_next;
-			return tag_tree_iterator(m_c, idx);
-		}
-
-		tag_tree_iterator end() const
-		{
-			return tag_tree_iterator(m_c, (m_c->data() + m_i)->m_tail);
-		}
-
-	protected:
-		container*    m_c;
-		std::uint32_t m_i;
-	};
-
-	template <typename Value1, typename Value2>
-	inline bool operator==(tag_tree_iterator<Value1> const& lhs, tag_tree_iterator<Value2> const& rhs)
-	{
-		assert(lhs.m_c == nullptr || rhs.m_c == nullptr || lhs.m_c->data() == rhs.m_c->data());
-		return lhs.m_i == rhs.m_i;
-	}
-
-	template <typename Value1, typename Value2>
-	inline bool operator!=(tag_tree_iterator<Value1> const& lhs, tag_tree_iterator<Value2> const& rhs)
-	{
-		return !(lhs == rhs);
-	}
-}
 
 namespace wordring
 {
@@ -199,8 +33,9 @@ namespace wordring
 		using wrapper   = detail::tag_node<value_type>;
 		using container = std::vector<wrapper>;
 
-		using node_traits  = html::node_traits<iterator>;
-		using node_pointer = typename node_traits::node_pointer;
+		using node_traits       = html::node_traits<iterator>;
+		using const_node_traits = html::node_traits<const_iterator>;
+		using node_pointer      = typename node_traits::node_pointer;
 
 		using element_type                = typename node_traits::element_type;                 // 1.  子ノード有り
 		using text_type                   = typename node_traits::text_type;                    // 3.
@@ -215,6 +50,11 @@ namespace wordring
 
 		using string_type = typename element_type::string_type;
 
+		using serial_iterator       = detail::tag_tree_serial_iterator<value_type>;
+		using const_serial_iterator = detail::tag_tree_serial_iterator<value_type const>;
+
+		using character_iterator       = detail::tag_tree_character_iterator<value_type>;
+		using const_character_iterator = detail::tag_tree_character_iterator<value_type const>;
 
 	public:
 		tag_tree() : m_c(std::make_unique<container>(1, wrapper{ 0, 0, 0, 0 })) {}
@@ -252,6 +92,14 @@ namespace wordring
 		const_iterator end() const { return const_iterator(m_c.get(), 0); }
 
 		const_iterator cend() const { return end(); }
+
+		serial_iterator sbegin() { return serial_iterator(m_c.get(), m_c->front().m_next); }
+
+		const_serial_iterator sbegin() const { return serial_iterator(m_c.get(), m_c->front().m_next); }
+
+		serial_iterator send() { return serial_iterator(m_c.get(), 0); }
+
+		const_serial_iterator send() const { return serial_iterator(m_c.get(), 0); }
 
 		bool empty() const { return m_c->data()->m_next == 0; }
 

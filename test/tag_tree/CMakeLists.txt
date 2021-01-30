@@ -26,11 +26,13 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		"test_module.cpp"
+		"character_iterator.cpp"
 		"css_selector.cpp"
+		"serial_iterator.cpp"
 		"simple_html.cpp"
 		"tag_tree.cpp"
-		"tree_iterator.cpp"
- )
+		"tag_tree_iterator.cpp"
+		"tree_iterator.cpp")
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 

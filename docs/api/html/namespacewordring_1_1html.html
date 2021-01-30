@@ -56,8 +56,6 @@ $(function() {
 クラス</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1basic__simple__parser.html">basic_simple_parser</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1is__simple__tree.html">is_simple_tree</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structwordring_1_1html_1_1is__simple__tree_3_01u16simple__tree_01_4.html">is_simple_tree&lt; u16simple_tree &gt;</a></td></tr>
@@ -172,18 +170,10 @@ template&lt;typename String &gt; </td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 関数</h2></td></tr>
-<tr class="memitem:af3217d2ab5215eea4f7a882331472bc2"><td class="memTemplParams" colspan="2"><a id="af3217d2ab5215eea4f7a882331472bc2"></a>
-template&lt;typename Iterator &gt; </td></tr>
-<tr class="memitem:af3217d2ab5215eea4f7a882331472bc2"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>&lt; Iterator &gt; const &amp;lhs, <a class="el" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>&lt; Iterator &gt; const &amp;rhs)</td></tr>
-<tr class="separator:af3217d2ab5215eea4f7a882331472bc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68690119a61b40e525f61dc984b6d23e"><td class="memTemplParams" colspan="2"><a id="a68690119a61b40e525f61dc984b6d23e"></a>
-template&lt;typename Iterator &gt; </td></tr>
-<tr class="memitem:a68690119a61b40e525f61dc984b6d23e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>&lt; Iterator &gt; const &amp;lhs, <a class="el" href="classwordring_1_1html_1_1character__iterator.html">character_iterator</a>&lt; Iterator &gt; const &amp;rhs)</td></tr>
-<tr class="separator:a68690119a61b40e525f61dc984b6d23e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae52e0499a88c09f71b5e1341d926d216"><td class="memTemplParams" colspan="2"><a id="ae52e0499a88c09f71b5e1341d926d216"></a>
-template&lt;typename Container , typename ForwardIterator , typename std::enable_if_t&lt; is_simple_tree_v&lt; Container &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
-<tr class="memitem:ae52e0499a88c09f71b5e1341d926d216"><td class="memTemplItemLeft" align="right" valign="top">Container&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_document</b> (ForwardIterator first, ForwardIterator last, encoding_name enc=encoding_name::UTF_8, encoding_confidence_name confidence=encoding_confidence_name::tentative, bool fragments_parser=false)</td></tr>
-<tr class="separator:ae52e0499a88c09f71b5e1341d926d216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad49b344a38a0a5bbaad4826e7ddd9bad"><td class="memTemplParams" colspan="2"><a id="ad49b344a38a0a5bbaad4826e7ddd9bad"></a>
+template&lt;typename Container , typename BidirectionalIterator , typename std::enable_if_t&lt; is_simple_tree_v&lt; Container &gt;, std::nullptr_t &gt;  = nullptr&gt; </td></tr>
+<tr class="memitem:ad49b344a38a0a5bbaad4826e7ddd9bad"><td class="memTemplItemLeft" align="right" valign="top">Container&#160;</td><td class="memTemplItemRight" valign="bottom"><b>make_document</b> (BidirectionalIterator first, BidirectionalIterator last, encoding_name enc=encoding_name::UTF_8, encoding_confidence_name confidence=encoding_confidence_name::tentative, bool fragments_parser=false)</td></tr>
+<tr class="separator:ad49b344a38a0a5bbaad4826e7ddd9bad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a945d4e00d79e600a9c748342b5113d95"><td class="memTemplParams" colspan="2">template&lt;typename String1 &gt; </td></tr>
 <tr class="memitem:a945d4e00d79e600a9c748342b5113d95"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">operator==</a> (<a class="el" href="classwordring_1_1html_1_1simple__attr.html">simple_attr</a>&lt; String1 &gt; const &amp;lhs, <a class="el" href="classwordring_1_1html_1_1simple__attr.html">simple_attr</a>&lt; String1 &gt; const &amp;rhs)</td></tr>
 <tr class="memdesc:a945d4e00d79e600a9c748342b5113d95"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前空間、接頭辞、ローカル名が一致する場合、true を返す  <a href="namespacewordring_1_1html.html#a945d4e00d79e600a9c748342b5113d95">[詳解]</a><br /></td></tr>

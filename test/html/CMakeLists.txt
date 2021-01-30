@@ -26,7 +26,6 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		"test_module.cpp"
-		"character_iterator.cpp"
 		"simple_html.cpp"
 		"simple_node.cpp"
 		"simple_parser.cpp"
