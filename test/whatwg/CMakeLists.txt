@@ -1,6 +1,6 @@
-﻿# wordring_cpp/test/whatwg
+﻿# test/whatwg
 #
-# このプロジェクトはwhatwg配下のすべてのテストを作成します。
+# このプロジェクトは whatwg 配下のすべてのテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)

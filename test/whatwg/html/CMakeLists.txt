@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/whatwg/html/
+﻿# test/whatwg/html/
 #
-# このプロジェクトはwhatwg/htmlのテストを作成します。
+# このプロジェクトは whatwg/html のテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project("whatwg_html_test")
+project("whatwg-html-test")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -42,7 +42,7 @@ add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}
-		"wordring_cpp"
+		"wordring"
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

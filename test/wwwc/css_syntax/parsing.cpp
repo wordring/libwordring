@@ -128,7 +128,7 @@ namespace
 	{
 		return in.has_value() ? print(*in) : U"";
 	}
-
+/*
 	inline std::u32string print(std::vector<wordring::wwwc::css::declaration> const& in)
 	{
 		std::u32string out;
@@ -136,7 +136,7 @@ namespace
 
 		return out;
 	}
-
+*/
 	// トークン/コンポーネント値を文字列化する
 	inline std::u32string print(wordring::wwwc::css::syntax_primitive const& c)
 	{

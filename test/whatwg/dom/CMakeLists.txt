@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/whatwg/dom
+﻿# test/whatwg/dom
 #
-# このプロジェクトはwhatwg/domのテストを作成します。
+# このプロジェクトは whatwg/dom のテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project("whatwg_dom_test")
+project("whatwg-dom-test")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -33,7 +33,7 @@ add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}
-		"wordring_cpp"
+		"wordring"
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

@@ -1,11 +1,11 @@
-﻿# wordring_cpp/generator/whatwg/encoding
+﻿# generator/whatwg/encoding
 #
-# このプロジェクトはwhatwg/encoding用のソースコード生成プログラムを作成します。
+# このプロジェクトは whatwg/encoding 用のソースコード生成プログラムを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(generator__whatwg__encoding CXX)
+project("generator-whatwg-encoding" CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,8 +20,8 @@ include_directories (
 )
 
 add_executable(
-	index_table
-		index_table.cpp
+	"index-table"
+		"index_table.cpp"
 )
 
 add_definitions(-DINDEXES_JSON_PATH=${Wordring_DIR}/submodules/whatwg/encoding/indexes.json)
@@ -30,12 +30,12 @@ add_definitions(-DINDEXES_CODE_POINT_CPP_PATH=${Wordring_DIR}/lib/whatwg/encodin
 add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_pointer.cpp)
 
 target_link_libraries(
-	index_table
+	"index-table"
 )
 
 add_executable(
-	gb18030_test_data
-		gb18030_test_data.cpp
+	"gb18030-test-data"
+		"gb18030_test_data.cpp"
 )
 
 add_definitions(-DINDEXES_JSON_PATH=${Wordring_DIR}/submodules/whatwg/encoding/indexes.json)
@@ -44,5 +44,5 @@ add_definitions(-DINDEXES_CODE_POINT_CPP_PATH=${Wordring_DIR}/lib/whatwg/encodin
 add_definitions(-DINDEXES_POINTER_CPP_PATH=${Wordring_DIR}/lib/whatwg/encoding/indexes_pointer.cpp)
 
 target_link_libraries(
-	gb18030_test_data
+	"gb18030-test-data"
 )

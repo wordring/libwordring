@@ -1,6 +1,6 @@
-﻿# wordring_cpp/test/
+﻿# test/
 #
-# このプロジェクトはwordring_cppライブラリ配下のテストをすべて作成します。
+# このプロジェクトは libwordring ライブラリ配下のテストをすべて作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)

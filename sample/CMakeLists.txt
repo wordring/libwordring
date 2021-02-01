@@ -1,6 +1,6 @@
-﻿# wordring_cpp/sample/
+﻿# sample/
 #
-# このプロジェクトはwordring_cppライブラリ配下のサンプルをすべて作成します。
+# このプロジェクトは libwordring ライブラリ配下のサンプルをすべて作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)

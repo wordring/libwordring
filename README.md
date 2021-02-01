@@ -24,7 +24,7 @@ Doxygen によるリファレンスを参考にしてください。
 プログラミング言語として C\++17 、ビルド・システムに CMake を用います。
 テストしている環境は以下の通りです。
 
-- Linux gcc9
+- Linux g++9
 - Windows10 clang-cl
 - Windows10 cl
 

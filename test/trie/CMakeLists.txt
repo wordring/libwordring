@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/trie
+﻿# test/trie
 #
-# このプロジェクトはtrieのテストを作成します。
+# このプロジェクトは trie のテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(trie_test)
+project("trie-test")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,7 +14,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package (
 	Boost 1.67 REQUIRED
 	COMPONENTS
-		unit_test_framework
+		"unit_test_framework"
 )
 
 
@@ -25,23 +25,23 @@ include_directories (
 
 add_executable(
 	${PROJECT_NAME}
-		test_module.cpp
-		list_trie_iterator.cpp
-		stable_trie.cpp
-		stable_trie_benchmark.cpp
-		stable_trie_iterator.cpp
-		stable_trie_base.cpp
-		stable_trie_base_benchmark.cpp
-		stable_trie_base_iterator.cpp
-		trie.cpp
-		trie_benchmark.cpp
-		trie_base.cpp
-		trie_base_iterator.cpp
-		trie_base_benchmark.cpp
-		trie_construct_iterator.cpp
-		trie_heap.cpp
-		trie_heap_iterator.cpp
-		trie_iterator.cpp
+		"test_module.cpp"
+		"list_trie_iterator.cpp"
+		"stable_trie.cpp"
+		"stable_trie_benchmark.cpp"
+		"stable_trie_iterator.cpp"
+		"stable_trie_base.cpp"
+		"stable_trie_base_benchmark.cpp"
+		"stable_trie_base_iterator.cpp"
+		"trie.cpp"
+		"trie_benchmark.cpp"
+		"trie_base.cpp"
+		"trie_base_iterator.cpp"
+		"trie_base_benchmark.cpp"
+		"trie_construct_iterator.cpp"
+		"trie_heap.cpp"
+		"trie_heap_iterator.cpp"
+		"trie_iterator.cpp"
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
@@ -51,7 +51,7 @@ add_definitions(-DJAPANESE_WORDS_PATH=${Wordring_DIR}/submodules/hingston/japane
 
 target_link_libraries(
 	${PROJECT_NAME}
-		wordring_cpp
+		"wordring"
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

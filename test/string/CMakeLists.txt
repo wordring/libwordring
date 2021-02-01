@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/string
+﻿# test/string
 #
-# このプロジェクトはstringのテストを作成します。
+# このプロジェクトは string のテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(string_test)
+project("string-test")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,7 +15,7 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package (
 	Boost 1.67 REQUIRED
 	COMPONENTS
-		unit_test_framework
+		"unit_test_framework"
 )
 
 include_directories (
@@ -25,16 +25,16 @@ include_directories (
 
 add_executable(
 	${PROJECT_NAME}
-		test_module.cpp
-		atom.cpp
-		matcher.cpp
+		"test_module.cpp"
+		"atom.cpp"
+		"matcher.cpp"
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}
-		wordring_cpp
+		"wordring"
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

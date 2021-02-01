@@ -1,11 +1,11 @@
-﻿# wordring_cpp/generator/whatwg/html
+﻿# generator/whatwg/html
 #
-# このプロジェクトはwhatwg/html用のソースコード生成プログラムを作成します。
+# このプロジェクトは whatwg/html 用のソースコード生成プログラムを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(generator__whatwg__html CXX)
+project("generator-whatwg-html" CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -21,8 +21,8 @@ include_directories (
 )
 
 add_executable(
-	atom_tbl
-		atom_tbl.cpp
+	"atom-tbl"
+		"atom_tbl.cpp"
 )
 
 add_definitions(-DDATA_PATH=${CMAKE_CURRENT_SOURCE_DIR}/data/)

@@ -53,6 +53,7 @@ namespace
 		return s;
 	}
 
+/*
 	inline std::u32string print(css::attr_matcher const& m)
 	{
 		std::u32string s;
@@ -60,12 +61,13 @@ namespace
 		s.push_back(U'=');
 		return s;
 	}
-
+*/
+/*
 	inline std::u32string print(css::attr_modifier const& m)
 	{
 		return std::u32string(1, m.value());
 	}
-
+*/
 	inline std::u32string print(css::pseudo_class_selector const& c)
 	{
 		std::u32string s(1, U':');

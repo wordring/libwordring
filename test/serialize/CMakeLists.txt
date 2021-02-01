@@ -1,11 +1,11 @@
-﻿# wordring_cpp/test/serialize
+﻿# test/serialize
 #
-# このプロジェクトはserializeのテストを作成します。
+# このプロジェクトは serialize のテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(serialize_test)
+project("serialize-test")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -15,7 +15,7 @@ set(Boost_USE_STATIC_LIBS ON)
 find_package (
 	Boost 1.67 REQUIRED
 	COMPONENTS
-		unit_test_framework
+		"unit_test_framework"
 )
 
 include_directories (
@@ -25,16 +25,16 @@ include_directories (
 
 add_executable(
 	${PROJECT_NAME}
-		test_module.cpp
-		serialize.cpp
-		serialize_iterator.cpp
+		"test_module.cpp"
+		"serialize.cpp"
+		"serialize_iterator.cpp"
 )
 
 add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}
-		wordring_cpp
+		"wordring"
 		${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
 )
 

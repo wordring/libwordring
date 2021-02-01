@@ -1,11 +1,11 @@
-﻿# wordring_cpp/generator/whatwg/url
+﻿# generator/whatwg/url
 #
-# このプロジェクトはwhatwg/url用のソースコード生成プログラムを作成します。
+# このプロジェクトは whatwg/url 用のソースコード生成プログラムを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project(generator__whatwg__url CXX)
+project("generator-whatwg-url" CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -20,8 +20,8 @@ include_directories (
 )
 
 add_executable(
-	public_suffix_list
-		public_suffix_list.cpp
+	"public_suffix_list"
+		"public_suffix_list.cpp"
 )
 
 add_definitions(-DPSL_DATA_PATH=${Wordring_DIR}/submodules/publicsuffix/list/public_suffix_list.dat)
