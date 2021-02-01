@@ -188,6 +188,8 @@ namespace wordring::whatwg
 
 	// ------------------------------------------------------------------------
 
+	/*! @brief 文字エンコーディングを変換する便利関数
+	*/
 	template <typename InputIterator, typename OutputIterator>
 	inline void encoding_cast(InputIterator first, InputIterator last, OutputIterator out)
 	{
@@ -203,6 +205,8 @@ namespace wordring::whatwg
 		}
 	}
 
+	/*! @brief 文字エンコーディングを変換する便利関数
+	*/
 	template <typename String, typename Container>
 	inline void encoding_cast(String const& in, std::back_insert_iterator<Container> out)
 	{
@@ -221,6 +225,8 @@ namespace wordring::whatwg
 		else encoding_cast(std::begin(in), std::end(in), out);
 	}
 
+	/*! @brief 文字エンコーディングを変換する便利関数
+	*/
 	template <typename Result, typename String, std::enable_if_t<std::negation_v<std::is_same<Result, String>>, std::nullptr_t> = nullptr>
 	inline Result encoding_cast(String const& in)
 	{
@@ -229,6 +235,8 @@ namespace wordring::whatwg
 		return s;
 	}
 
+	/*! @brief 文字エンコーディングを変換する便利関数
+	*/
 	template <typename Result, typename String, std::enable_if_t<std::is_same_v<Result, String>, std::nullptr_t> = nullptr>
 	inline Result encoding_cast(String in)
 	{
