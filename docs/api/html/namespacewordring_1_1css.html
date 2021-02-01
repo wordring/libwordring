@@ -129,7 +129,7 @@ template&lt;typename NodePointer , typename String , typename OutputIterator &gt
 <div class="line"><span class="keyword">namespace </span>html = <a class="code" href="namespacewordring_1_1html.html">wordring::html</a>;</div>
 <div class="line"> </div>
 <div class="line">std::string_view sv = u8<span class="stringliteral">&quot;&lt;p&gt;text1&lt;/p&gt;&lt;p&gt;text2&lt;/p&gt;&quot;</span>;</div>
-<div class="line">html::u8simple_tree doc = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
+<div class="line"><a class="code" href="namespacewordring_1_1html.html#afad5a01e27f008c84051442f6e152868">html::u8simple_tree</a> doc = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
 <div class="line"> </div>
 <div class="line">std::vector&lt;html::u8simple_tree::const_iterator&gt; v;</div>
 <div class="line"><a class="code" href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">css::query_selector_all</a>(doc.begin(), u<span class="stringliteral">&quot;p&quot;</span>, std::back_inserter(v));</div>
@@ -200,7 +200,7 @@ template&lt;typename NodePointer , typename String &gt; </div>
 <div class="line"><span class="keyword">namespace </span>html = <a class="code" href="namespacewordring_1_1html.html">wordring::html</a>;</div>
 <div class="line"> </div>
 <div class="line">std::u32string_view sv = U<span class="stringliteral">&quot;&lt;p&gt;text1&lt;/p&gt;&lt;p&gt;text2&lt;/p&gt;&quot;</span>;</div>
-<div class="line">html::u8simple_tree tree = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
+<div class="line"><a class="code" href="namespacewordring_1_1html.html#afad5a01e27f008c84051442f6e152868">html::u8simple_tree</a> tree = html::make_document&lt;html::u8simple_tree&gt;(sv.begin(), sv.end());</div>
 <div class="line"> </div>
 <div class="line">html::u8simple_tree::const_iterator it = <a class="code" href="namespacewordring_1_1css.html#aa896ea4269ad4b9908a8b033b348a3da">css::query_selector</a>(tree.begin(), u<span class="stringliteral">&quot;p&quot;</span>);</div>
 <div class="line">std::u16string s;</div>
@@ -217,6 +217,7 @@ template&lt;typename NodePointer , typename String &gt; </div>
 <div class="ttc" id="anamespacewordring_1_1html_html"><div class="ttname"><a href="namespacewordring_1_1html.html">wordring::html</a></div></div>
 <div class="ttc" id="anamespacewordring_1_1css_html_ad55886e3ef0d4e3a3d9f217d45eebc84"><div class="ttname"><a href="namespacewordring_1_1css.html#ad55886e3ef0d4e3a3d9f217d45eebc84">wordring::css::query_selector_all</a></div><div class="ttdeci">void query_selector_all(NodePointer np, String const &amp;selector, OutputIterator out)</div><div class="ttdoc">セレクタと合致するノードをすべて列挙する</div><div class="ttdef"><b>Definition:</b> selector.hpp:51</div></div>
 <div class="ttc" id="anamespacewordring_1_1css_html"><div class="ttname"><a href="namespacewordring_1_1css.html">wordring::css</a></div><div class="ttdef"><b>Definition:</b> selector.hpp:12</div></div>
+<div class="ttc" id="anamespacewordring_1_1html_html_afad5a01e27f008c84051442f6e152868"><div class="ttname"><a href="namespacewordring_1_1html.html#afad5a01e27f008c84051442f6e152868">wordring::html::u8simple_tree</a></div><div class="ttdeci">tag_tree&lt; u8simple_node &gt; u8simple_tree</div><div class="ttdoc">文字列としてstd::u8string を使用する HTML 木コンテナ</div><div class="ttdef"><b>Definition:</b> simple_html.hpp:31</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

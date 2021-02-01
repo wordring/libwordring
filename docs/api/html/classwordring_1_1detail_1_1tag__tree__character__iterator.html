@@ -45,8 +45,6 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">公開型</a> &#124;
 <a href="#pub-methods">公開メンバ関数</a> &#124;
-<a href="#pro-attribs">限定公開変数類</a> &#124;
-<a href="#friends">フレンド</a> &#124;
 <a href="classwordring_1_1detail_1_1tag__tree__character__iterator-members.html">全メンバ一覧</a>  </div>
   <div class="headertitle">
 <div class="title">wordring::detail::tag_tree_character_iterator&lt; Value &gt; クラステンプレート</div>  </div>
@@ -55,12 +53,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 公開型</h2></td></tr>
-<tr class="memitem:aa4dd1caaa81f81b27c315c91f88618f4"><td class="memItemLeft" align="right" valign="top"><a id="aa4dd1caaa81f81b27c315c91f88618f4"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>node_traits</b> = <a class="el" href="structwordring_1_1html_1_1node__traits.html">html::node_traits</a>&lt; <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">tag_tree_iterator</a>&lt; std::remove_cv_t&lt; Value &gt; &gt;&gt;</td></tr>
-<tr class="separator:aa4dd1caaa81f81b27c315c91f88618f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae2018ed311102a5abb779d5a6e497ac3"><td class="memItemLeft" align="right" valign="top"><a id="ae2018ed311102a5abb779d5a6e497ac3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>const_node_traits</b> = <a class="el" href="structwordring_1_1html_1_1node__traits.html">html::node_traits</a>&lt; <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">tag_tree_iterator</a>&lt; std::remove_cv_t&lt; Value &gt; const  &gt; &gt;</td></tr>
-<tr class="separator:ae2018ed311102a5abb779d5a6e497ac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbc2899980dd56b1a87f521e414f8251"><td class="memItemLeft" align="right" valign="top"><a id="acbc2899980dd56b1a87f521e414f8251"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>node_traits</b> = <a class="el" href="structwordring_1_1html_1_1node__traits.html">html::node_traits</a>&lt; <a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">tag_tree_iterator</a>&lt; Value &gt; &gt;</td></tr>
+<tr class="separator:acbc2899980dd56b1a87f521e414f8251"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3baf7a35b1af69d117c897df2127fab3"><td class="memItemLeft" align="right" valign="top"><a id="a3baf7a35b1af69d117c897df2127fab3"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>node_type</b> = typename node_traits::node_type</td></tr>
 <tr class="separator:a3baf7a35b1af69d117c897df2127fab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -73,27 +68,24 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>string_type</b> = ty
 <tr class="memitem:adb602f6c4ce62029728c2721fa8833e6"><td class="memItemLeft" align="right" valign="top"><a id="adb602f6c4ce62029728c2721fa8833e6"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>character_type</b> = typename string_type::value_type</td></tr>
 <tr class="separator:adb602f6c4ce62029728c2721fa8833e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadfdf48a53b35c84d8e5dae8d1a1dfc2"><td class="memItemLeft" align="right" valign="top"><a id="aadfdf48a53b35c84d8e5dae8d1a1dfc2"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1detail_1_1tag__tree__serial__iterator.html">tag_tree_serial_iterator</a>&lt; Value &gt;</td></tr>
-<tr class="separator:aadfdf48a53b35c84d8e5dae8d1a1dfc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9137417b466eb6382fbf147cba5211d3"><td class="memItemLeft" align="right" valign="top"><a id="a9137417b466eb6382fbf147cba5211d3"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>container</b> = typename base_type::container</td></tr>
-<tr class="separator:a9137417b466eb6382fbf147cba5211d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a020a4f91510bd88ec33d6f4f78f29d3e"><td class="memItemLeft" align="right" valign="top"><a id="a020a4f91510bd88ec33d6f4f78f29d3e"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>value_type</b> = std::remove_cv_t&lt; character_type &gt;</td></tr>
 <tr class="separator:a020a4f91510bd88ec33d6f4f78f29d3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5d5b25a3bcd6596cab28c2e0d1465cf"><td class="memItemLeft" align="right" valign="top"><a id="af5d5b25a3bcd6596cab28c2e0d1465cf"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>difference_type</b> = std::ptrdiff_t</td></tr>
 <tr class="separator:af5d5b25a3bcd6596cab28c2e0d1465cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b08a64efbf8c6b3d9bcccb9a7c61e15"><td class="memItemLeft" align="right" valign="top"><a id="a1b08a64efbf8c6b3d9bcccb9a7c61e15"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = std::conditional_t&lt; std::is_const_v&lt; Value &gt;, value_type const, value_type &gt; &amp;</td></tr>
-<tr class="separator:a1b08a64efbf8c6b3d9bcccb9a7c61e15"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1cf3553cdff1facfaaee7f550815989c"><td class="memItemLeft" align="right" valign="top"><a id="a1cf3553cdff1facfaaee7f550815989c"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = std::conditional_t&lt; std::is_const_v&lt; Value &gt;, value_type const, value_type &gt; *</td></tr>
-<tr class="separator:a1cf3553cdff1facfaaee7f550815989c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a78fda8aea8c050968094421630b278ec"><td class="memItemLeft" align="right" valign="top"><a id="a78fda8aea8c050968094421630b278ec"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>reference</b> = value_type &amp;</td></tr>
+<tr class="separator:a78fda8aea8c050968094421630b278ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a71c7d1069809a5cb5b222812c87f75b6"><td class="memItemLeft" align="right" valign="top"><a id="a71c7d1069809a5cb5b222812c87f75b6"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>pointer</b> = value_type *</td></tr>
+<tr class="separator:a71c7d1069809a5cb5b222812c87f75b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff92d812a4c374090ee01573876ade72"><td class="memItemLeft" align="right" valign="top"><a id="aff92d812a4c374090ee01573876ade72"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b> = std::bidirectional_iterator_tag</td></tr>
 <tr class="separator:aff92d812a4c374090ee01573876ade72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b4cebb91519278d6fa30e6f82aecbdf"><td class="memItemLeft" align="right" valign="top"><a id="a7b4cebb91519278d6fa30e6f82aecbdf"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>base_type</b> = <a class="el" href="classwordring_1_1detail_1_1const__tag__tree__character__iterator.html">const_tag_tree_character_iterator</a>&lt; Value &gt;</td></tr>
+<tr class="separator:a7b4cebb91519278d6fa30e6f82aecbdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 公開メンバ関数</h2></td></tr>
@@ -103,10 +95,20 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>iterator_category</b
 <tr class="memitem:a54a48950a2e64125cbb0bbc55f97dce9"><td class="memItemLeft" align="right" valign="top"><a id="a54a48950a2e64125cbb0bbc55f97dce9"></a>
 <a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td></tr>
 <tr class="separator:a54a48950a2e64125cbb0bbc55f97dce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab36f907b41e59747601ae44976a586aa"><td class="memItemLeft" align="right" valign="top"><a id="ab36f907b41e59747601ae44976a586aa"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>operator base_type</b> () const</td></tr>
+<tr class="separator:ab36f907b41e59747601ae44976a586aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b1e99436b5b833e9e698605974245de"><td class="memItemLeft" align="right" valign="top"><a id="a0b1e99436b5b833e9e698605974245de"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a0b1e99436b5b833e9e698605974245de">operator tag_tree_iterator&lt; Value &gt;</a> () const</td></tr>
+<tr class="memdesc:a0b1e99436b5b833e9e698605974245de"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classwordring_1_1detail_1_1tag__tree__iterator.html">tag_tree_iterator</a> へ変換する <br /></td></tr>
+<tr class="separator:a0b1e99436b5b833e9e698605974245de"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a21b12d0f0dfff1a51b659ea8b9af8db2"><td class="memItemLeft" align="right" valign="top"><a id="a21b12d0f0dfff1a51b659ea8b9af8db2"></a>
 reference&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#a21b12d0f0dfff1a51b659ea8b9af8db2">operator*</a> () const</td></tr>
 <tr class="memdesc:a21b12d0f0dfff1a51b659ea8b9af8db2"><td class="mdescLeft">&#160;</td><td class="mdescRight">文字を返す <br /></td></tr>
 <tr class="separator:a21b12d0f0dfff1a51b659ea8b9af8db2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96bbf8cb995498c45fdc809ffc242003"><td class="memItemLeft" align="right" valign="top"><a id="a96bbf8cb995498c45fdc809ffc242003"></a>
+pointer&#160;</td><td class="memItemRight" valign="bottom"><b>operator-&gt;</b> () const</td></tr>
+<tr class="separator:a96bbf8cb995498c45fdc809ffc242003"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2091691a8a7569fcb1b34c2384fea9a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#aa2091691a8a7569fcb1b34c2384fea9a">operator++</a> ()</td></tr>
 <tr class="memdesc:aa2091691a8a7569fcb1b34c2384fea9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">イテレータを進める  <a href="classwordring_1_1detail_1_1tag__tree__character__iterator.html#aa2091691a8a7569fcb1b34c2384fea9a">[詳解]</a><br /></td></tr>
 <tr class="separator:aa2091691a8a7569fcb1b34c2384fea9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -116,29 +118,9 @@ reference&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href=
 <tr class="memitem:ae2642b107503c62e4ebf9b9cca6f8d0d"><td class="memItemLeft" align="right" valign="top"><a id="ae2642b107503c62e4ebf9b9cca6f8d0d"></a>
 <a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator--</b> ()</td></tr>
 <tr class="separator:ae2642b107503c62e4ebf9b9cca6f8d0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
-限定公開変数類</h2></td></tr>
-<tr class="memitem:a2603e26e488dae64f0a0cae46a27c4fc"><td class="memItemLeft" align="right" valign="top"><a id="a2603e26e488dae64f0a0cae46a27c4fc"></a>
-<a class="el" href="classwordring_1_1detail_1_1tag__tree__serial__iterator.html">base_type</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_first</b></td></tr>
-<tr class="separator:a2603e26e488dae64f0a0cae46a27c4fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c25f720e439710d060b1d287f173ca3"><td class="memItemLeft" align="right" valign="top"><a id="a5c25f720e439710d060b1d287f173ca3"></a>
-<a class="el" href="classwordring_1_1detail_1_1tag__tree__serial__iterator.html">base_type</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_last</b></td></tr>
-<tr class="separator:a5c25f720e439710d060b1d287f173ca3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b089723f94667aa76941b4e98e36e12"><td class="memItemLeft" align="right" valign="top"><a id="a5b089723f94667aa76941b4e98e36e12"></a>
-std::uint32_t&#160;</td><td class="memItemRight" valign="bottom"><b>m_i</b></td></tr>
-<tr class="separator:a5b089723f94667aa76941b4e98e36e12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
-フレンド</h2></td></tr>
-<tr class="memitem:af0a204cf4d1433fe2280fd607a357c21"><td class="memTemplParams" colspan="2"><a id="af0a204cf4d1433fe2280fd607a357c21"></a>
-template&lt;typename Value1 &gt; </td></tr>
-<tr class="memitem:af0a204cf4d1433fe2280fd607a357c21"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator==</b> (<a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&lt; Value1 &gt; const &amp;, <a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&lt; Value1 &gt; const &amp;)</td></tr>
-<tr class="separator:af0a204cf4d1433fe2280fd607a357c21"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afd6cf198d10311552686db4dd2e8ba68"><td class="memTemplParams" colspan="2"><a id="afd6cf198d10311552686db4dd2e8ba68"></a>
-template&lt;typename Value1 &gt; </td></tr>
-<tr class="memitem:afd6cf198d10311552686db4dd2e8ba68"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><b>operator!=</b> (<a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&lt; Value1 &gt; const &amp;, <a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&lt; Value1 &gt; const &amp;)</td></tr>
-<tr class="separator:afd6cf198d10311552686db4dd2e8ba68"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb0f6321b3661386cbbce0c815029c2e"><td class="memItemLeft" align="right" valign="top"><a id="acb0f6321b3661386cbbce0c815029c2e"></a>
+<a class="el" href="classwordring_1_1detail_1_1tag__tree__character__iterator.html">tag_tree_character_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><b>operator--</b> (int)</td></tr>
+<tr class="separator:acb0f6321b3661386cbbce0c815029c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">関数詳解</h2>
 <a id="aa2091691a8a7569fcb1b34c2384fea9a"></a>
