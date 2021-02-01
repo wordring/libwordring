@@ -1,7 +1,7 @@
-﻿wordring_cpp
+﻿libwordring
 ====
 
-C++用ライブラリ。
+C++ ライブラリ。 
 Linux と Windows でテストされています。
 
 # 主な機能
@@ -31,19 +31,19 @@ Doxygen によるリファレンスを参考にしてください。
 # 使い方
 
 Windows 用、 Linux 用など、個別の環境用のパッケージは有りません。
-ヘッダーファイルと wordring_cpp ライブラリをあなたのプロジェクトへ追加してください。
+ヘッダーファイルと libwordring ライブラリをあなたのプロジェクトへ追加してください。
 
 ## CMake であなたのプロジェクトを管理する場合
 
-1. あなたのプロジェクトの Git サブモジュールとして wordring_cpp を追加する。
-2. あなたのプロジェクトの CMakeLists.txt で add_subdirectory("submodules/wordring_cpp") する。
-3. あなたのプロジェクトの CMakeLists.txt で include_directories("submodules/wordring_cpp/include") する。
-4. あなたのプロジェクトの CMakeLists.txt で target_link_libraries("wordring_cpp") する。
+1. あなたのプロジェクトの Git サブモジュールとして libwordring を追加する。
+2. あなたのプロジェクトの CMakeLists.txt で add_subdirectory("submodules/libwordring") する。
+3. あなたのプロジェクトの CMakeLists.txt で include_directories("submodules/libwordring/include") する。
+4. あなたのプロジェクトの CMakeLists.txt で target_link_libraries("libwordring") する。
 
 のが容易です。
 ライブラリのビルドは、あなたのプロジェクトのビルド時に、必要に応じて CMake が行います。
 
-# wordrng_cpp ライブラリのビルド
+# ライブラリのビルド
 
 Github からサブモジュールを含めてクローンし、 CMake でビルドするだけです。
 CMake から要求ライブラリが見える状態が必要です。
@@ -97,7 +97,7 @@ Windows 用に CMake プロジェクトをビルドするのはフォルダを�
 
 | 名前 | 説明 |
 |----|----|
-| https://wordring.github.io/wordring_cpp/ | 付属文書 |
+| https://wordring.github.io/libwordring/ | 付属文書 |
 
 # フォルダとファイル
 

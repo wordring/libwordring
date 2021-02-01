@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>wordring_cpp: で名前空間を設定できる。 名前空間</title>
+<title>libwordring: README</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,7 +18,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">wordring_cpp
+   <div id="projectname">libwordring
    </div>
   </td>
  </tr>
@@ -37,28 +37,17 @@ $(function() {
 /* @license-end */</script>
 <div id="main-nav"></div>
 </div><!-- top -->
-<div class="header">
+<div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">で名前空間を設定できる。 名前空間</div>  </div>
+<div class="title">README </div>  </div>
 </div><!--header-->
 <div class="contents">
-
-<p>名前空間接頭辞から名前空間 URI を検索する  
-<a href="namespace_xE3_x81_xA7_xE5_x90_x8D_xE5_x89_x8D_xE7_xA9_xBA_xE9_x96_x93_xE3_x82_x92_xE8_xA8_xAD_xEa644824ba31c36a828b1a8dc352acc30.html#details">[詳解]</a></p>
-<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
-<div class="textblock"><p>名前空間接頭辞から名前空間 URI を検索する </p>
-<dl class="params"><dt>引数</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>名前空間接頭辞</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>戻り値</dt><dd>名前空間 URI</dd></dl>
-<p>スタイルシートは この関数は、名前空間接頭辞を引数に指定して、スタイルシートから名前空間 URI を検索する。</p>
-<p>検索 </p>
-<hr  />
-<p> 現在、スタイルシートの実装が無いため、URI を返せない。 querySelector() は名前空間をサポートしないので、スタイルシートが実装されるまで、この関数の実装も必要とされない。 </p>
+<div class="textblock"><ul>
+<li>CSS パーサーへの入力文字列が右辺値参照である理由は、解析前にコードポイントをフィルタリングするため、 バッファの一部を消去する可能性があるから。</li>
+<li>CSS 規格は文書に対して CSS が読み込まれ構文解析される前提を持つが、 wordring_cpp は文書と無関係に CSS セレクタが構文解析され、複数の文書で同じセレクタを使いまわす前提がある。 そのため、規格と実装の間に些細な違いが生まれてしまった。 </li>
+</ul>
 </div></div><!-- contents -->
+</div><!-- PageDoc -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>wordring_cpp: wordring::wwwc::css::parse_context 構造体</title>
+<title>libwordring: wordring::wwwc::css::parse_context 構造体</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -18,7 +18,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">wordring_cpp
+   <div id="projectname">libwordring
    </div>
   </td>
  </tr>
@@ -49,6 +49,11 @@ $(function() {
 <div class="title">wordring::wwwc::css::parse_context 構造体</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>CSS の構文解析に使われるコンテキスト  
+ <a href="structwordring_1_1wwwc_1_1css_1_1parse__context.html#details">[詳解]</a></p>
+
+<p><code>#include &lt;<a class="el" href="css__defs_8hpp_source.html">css_defs.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 公開変数類</h2></td></tr>
@@ -57,7 +62,12 @@ std::map&lt; std::u32string, std::u32string &gt;&#160;</td><td class="memItemRig
 <tr class="memdesc:aac26684f4ea3aaee4d303bb8673418a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">名前空間接頭辞 : 名前空間 URI のマップ <br /></td></tr>
 <tr class="separator:aac26684f4ea3aaee4d303bb8673418a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<hr/>この構造体詳解は次のファイルから抽出されました:<ul>
+<a name="details" id="details"></a><h2 class="groupheader">詳解</h2>
+<div class="textblock"><p>CSS の構文解析に使われるコンテキスト </p>
+<p>構文規則を表現する複数のクラスを横断して情報を引き継ぐ必要が有るため、コンテキスト・クラスを作った。 例えば、 @namespace によって定義される名前空間は、後続の構文規則内で使われる。 CSS は CFG でないため、構文解析中に意味解析を必要とする場合がある。</p>
+<p>名前空間のようなノードとの照合に使われるフィールドは照合時に引数の <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html" title="CSS セレクタとノードの照合に使われるコンテキスト">match_context</a> へコピーする必要が有る。</p>
+<p>構文解析の時点で文書形式に依存させないために、 <a class="el" href="structwordring_1_1wwwc_1_1css_1_1match__context.html" title="CSS セレクタとノードの照合に使われるコンテキスト">match_context</a> と別のクラスを設けた。 つまり、一つのセレクタで HTML と XHTML の両方に対応できることを明確に示す。 </p>
+</div><hr/>この構造体詳解は次のファイルから抽出されました:<ul>
 <li><a class="el" href="css__defs_8hpp_source.html">css_defs.hpp</a></li>
 </ul>
 </div><!-- contents -->
