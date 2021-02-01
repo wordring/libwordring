@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <wordring/tag_tree/cast_iterator.hpp>
 #include <wordring/tag_tree/character_iterator.hpp>
 #include <wordring/tag_tree/serial_iterator.hpp>
 #include <wordring/tag_tree/tag_node.hpp>
@@ -28,7 +29,7 @@ namespace wordring
 		using pointer         = value_type*;
 		using const_pointer   = value_type const*;
 		using iterator        = detail::tag_tree_iterator<value_type>;
-		using const_iterator  = detail::tag_tree_iterator<value_type const>;
+		using const_iterator  = detail::const_tag_tree_iterator<value_type>;
 
 		using wrapper   = detail::tag_node<value_type>;
 		using container = std::vector<wrapper>;
@@ -50,24 +51,46 @@ namespace wordring
 
 		using string_type = typename element_type::string_type;
 
-		using serial_iterator       = detail::tag_tree_serial_iterator<value_type>;
-		using const_serial_iterator = detail::tag_tree_serial_iterator<value_type const>;
+		/*! @brief 行きがかり順にノードを走査するイテレータ
+		* （空の値を持つ）終了タグ相当の位置へも移動します。
+		*/
+		using const_serial_iterator = detail::const_tag_tree_serial_iterator<Value>;
 
-		using character_iterator       = detail::tag_tree_character_iterator<value_type>;
-		using const_character_iterator = detail::tag_tree_character_iterator<value_type const>;
+		/*! @brief 行きがかり順にノードを走査するイテレータ
+		* （空の値を持つ）終了タグ相当の位置へも移動します。
+		*/
+		using serial_iterator = detail::tag_tree_serial_iterator<Value>;
+
+		/*! @brief 行きがかり順にテキスト・ノードの文字を走査するイテレータ
+		*/
+		using const_character_iterator = detail::const_tag_tree_character_iterator<Value>;
+
+		/*! @brief 行きがかり順にテキスト・ノードの文字を走査するイテレータ
+		*/
+		using character_iterator = detail::tag_tree_character_iterator<Value>;
+
+		/*! @brief 逆参照が wchar_t を返す、行きがかり順にテキスト・ノードの文字を走査するイテレータ
+		* std::regex で必要になり用意しました。
+		*/
+		using const_wchar_iterator = detail::const_tag_tree_cast_iterator<wchar_t, const_iterator>;
+
+		/*! @brief 逆参照が wchar_t を返す、行きがかり順にテキスト・ノードの文字を走査するイテレータ
+		* std::regex で必要になり用意しました。
+		*/
+		using wchar_iterator = detail::tag_tree_cast_iterator<wchar_t, iterator>;
 
 	public:
-		tag_tree() : m_c(std::make_unique<container>(1, wrapper{ 0, 0, 0, 0 })) {}
+		tag_tree()
+			: m_c(std::make_unique<container>(1, wrapper{ 0, 0, 0, 0 }))
+		{}
 
 		tag_tree(tag_tree const& rhs)
 			: m_c(std::make_unique<container>(*rhs.m_c))
-		{
-		}
+		{}
 
 		tag_tree(tag_tree&& rhs)
 			: m_c(std::move(rhs.m_c))
-		{
-		}
+		{}
 
 		tag_tree& operator=(tag_tree const& rhs)
 		{
@@ -292,5 +315,4 @@ namespace wordring
 	protected:
 		std::unique_ptr<container> m_c;
 	};
-
 }

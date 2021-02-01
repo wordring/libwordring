@@ -11,70 +11,67 @@ namespace wordring
 
 namespace wordring::detail
 {
+	template <typename Value> class tag_tree_serial_iterator;
+
 	template <typename Value>
-	class tag_tree_serial_iterator
+	class const_tag_tree_serial_iterator
 	{
-		friend class wordring::tag_tree<std::remove_cv_t<Value>>;
-		friend class wordring::tag_tree<std::remove_cv_t<Value> const>;
+		friend class wordring::tag_tree<Value>;
 
-		friend class tag_tree_character_iterator<std::remove_cv_t<Value>>;
-		friend class tag_tree_character_iterator<std::remove_cv_t<Value const>>;
+		friend class const_tag_tree_character_iterator<Value>;
+		friend class tag_tree_character_iterator<Value>;
 
-		template <typename Value1, typename Value2>
-		friend bool operator==(tag_tree_serial_iterator<Value1> const&, tag_tree_serial_iterator<Value2> const&);
+		friend class const_tag_tree_iterator<Value>;
+		friend class tag_tree_iterator<Value>;
 
-		template <typename Value1, typename Value2>
-		friend bool operator!=(tag_tree_serial_iterator<Value1> const&, tag_tree_serial_iterator<Value2> const&);
+		friend class tag_tree_serial_iterator<Value>;
 
 	public:
 		using value_type = std::remove_cv_t<Value>;
 		using wrapper    = tag_node<value_type>;
 		
 		using difference_type   = std::ptrdiff_t;
-		using reference         = std::conditional_t<std::is_const_v<Value>, value_type const&, value_type&>;
-		using pointer           = std::conditional_t<std::is_const_v<Value>, value_type const*, value_type*>;
+		using reference         = value_type const&;
+		using pointer           = value_type const*;
 		using iterator_category = std::bidirectional_iterator_tag;
 
 		using container = std::vector<detail::tag_node<value_type>>;
 
 	public:
-		tag_tree_serial_iterator()
+		const_tag_tree_serial_iterator()
 			: m_c(nullptr)
 			, m_i(0) {}
 
-		tag_tree_serial_iterator(tag_tree_iterator<value_type> const& x)
+		const_tag_tree_serial_iterator(const_tag_tree_iterator<Value> const& x)
 			: m_c(x.m_c)
 			, m_i(x.m_i) {}
 
-		tag_tree_serial_iterator(container* c, std::uint32_t i)
+		const_tag_tree_serial_iterator(tag_tree_iterator<Value> const& x)
+			: m_c(x.m_c)
+			, m_i(x.m_i) {}
+
+		const_tag_tree_serial_iterator(container* c, std::uint32_t i)
 			: m_c(c)
 			, m_i(i) {}
 
-		/*! @brief const_serial_iterator へ変換する
+		/*! @brief const_tag_tree_iterator へ変換する
 		*/
-		operator tag_tree_serial_iterator<value_type const>() const
+		operator const_tag_tree_iterator<Value>() const
 		{
-			return tag_tree_serial_iterator<value_type const>(m_c, m_i);
-		}
-
-		/*! @brief tag_tree_iterator へ変換する
-		*/
-		operator tag_tree_iterator<Value>() const
-		{
-			return tag_tree_iterator<Value>(m_c, m_i);
+			return const_tag_tree_iterator<Value>(m_c, m_i);
 		}
 
 		reference operator*() const
 		{
-			return const_cast<std::remove_cv_t<reference>>((m_c->data() + m_i)->m_value);
+			return (m_c->data() + m_i)->m_value;
 		}
 
 		pointer operator->() const
 		{
-			return const_cast<std::remove_cv_t<pointer>>(&(m_c->data() + m_i)->m_value);
+			return &(m_c->data() + m_i)->m_value;
 		}
 
-		tag_tree_serial_iterator& operator++()
+		const_tag_tree_serial_iterator& operator++()
 		{
 			assert(m_i != 0);
 			m_i = (m_c->data() + m_i)->m_next;
@@ -82,25 +79,36 @@ namespace wordring::detail
 			return *this;
 		}
 
-		tag_tree_serial_iterator operator++(int)
+		const_tag_tree_serial_iterator operator++(int)
 		{
 			tag_tree_iterator it = *this;
 			operator++();
 			return it;
 		}
 
-		tag_tree_serial_iterator& operator--()
+		const_tag_tree_serial_iterator& operator--()
 		{
 			m_i = (m_c->data() + m_i)->m_prev;
 
 			return *this;
 		}
 
-		tag_tree_serial_iterator operator--(int)
+		const_tag_tree_serial_iterator operator--(int)
 		{
-			tag_tree_iterator it = *this;
+			const_tag_tree_serial_iterator it = *this;
 			operator--();
 			return it;
+		}
+
+		bool operator==(const_tag_tree_serial_iterator const& x) const
+		{
+			assert(m_c == nullptr || x.m_c == nullptr || m_c->data() == x.m_c->data());
+			return m_i == x.m_i;
+		}
+
+		bool operator!=(const_tag_tree_serial_iterator const& x) const
+		{
+			return !operator==(x);
 		}
 
 		/*! @brief 開始タグか検査する
@@ -121,10 +129,10 @@ namespace wordring::detail
 		* 
 		* 要素以外を指すイテレータ上で呼び出した場合、 send() を返す。
 		*/
-		tag_tree_serial_iterator start_tag() const
+		const_tag_tree_serial_iterator start_tag() const
 		{
 			wrapper* d = m_c->data();
-			return tag_tree_serial_iterator(m_c, is_start_tag() ? m_i : (d + m_i)->m_head);
+			return const_tag_tree_serial_iterator(m_c, is_start_tag() ? m_i : (d + m_i)->m_head);
 		}
 
 		/*! @brief 終了タグを返す
@@ -133,10 +141,10 @@ namespace wordring::detail
 		* 
 		* 要素以外を指すイテレータ上で呼び出した場合、 send() を返す。
 		*/
-		tag_tree_serial_iterator end_tag() const
+		const_tag_tree_serial_iterator end_tag() const
 		{
 			wrapper* d = m_c->data();
-			return tag_tree_serial_iterator(m_c, is_end_tag() ? m_i : (d + m_i)->m_tail);
+			return const_tag_tree_serial_iterator(m_c, is_end_tag() ? m_i : (d + m_i)->m_tail);
 		}
 
 	protected:
@@ -144,16 +152,121 @@ namespace wordring::detail
 		std::uint32_t m_i;
 	};
 
-	template <typename Value1, typename Value2>
-	inline bool operator==(tag_tree_serial_iterator<Value1> const& lhs, tag_tree_serial_iterator<Value2> const& rhs)
+	template <typename Value>
+	class tag_tree_serial_iterator : public const_tag_tree_serial_iterator<Value>
 	{
-		assert(lhs.m_c == nullptr || rhs.m_c == nullptr || lhs.m_c->data() == rhs.m_c->data());
-		return lhs.m_i == rhs.m_i;
-	}
+		friend class wordring::tag_tree<Value>;
 
-	template <typename Value1, typename Value2>
-	inline bool operator!=(tag_tree_serial_iterator<Value1> const& lhs, tag_tree_serial_iterator<Value2> const& rhs)
-	{
-		return !(lhs == rhs);
-	}
+		friend class const_tag_tree_character_iterator<Value>;
+		friend class tag_tree_character_iterator<Value>;
+
+	public:
+		using value_type = std::remove_cv_t<Value>;
+		using wrapper    = tag_node<value_type>;
+
+		using difference_type   = std::ptrdiff_t;
+		using reference         = value_type&;
+		using pointer           = value_type*;
+		using iterator_category = std::bidirectional_iterator_tag;
+
+		using container = std::vector<detail::tag_node<value_type>>;
+
+		using base_type = const_tag_tree_serial_iterator<Value>;
+
+	private:
+		using base_type::m_c;
+		using base_type::m_i;
+
+	public:
+		tag_tree_serial_iterator()
+			: base_type()
+		{}
+
+		tag_tree_serial_iterator(tag_tree_iterator<Value> const& x)
+			: base_type(x)
+		{}
+
+		tag_tree_serial_iterator(container* c, std::uint32_t i)
+			: base_type(c, i)
+		{}
+
+		/*! @brief tag_tree_iterator へ変換する
+		*/
+		operator tag_tree_iterator<Value>() const
+		{
+			return tag_tree_iterator<Value>(m_c, m_i);
+		}
+
+		reference operator*() const
+		{
+			return const_cast<reference>(base_type::operator*());
+		}
+
+		pointer operator->() const
+		{
+			return const_cast<pointer>(base_type::operator->());
+		}
+
+		tag_tree_serial_iterator& operator++()
+		{
+			base_type::operator++();
+			return *this;
+		}
+
+		tag_tree_serial_iterator operator++(int)
+		{
+			tag_tree_iterator it = *this;
+			base_type::operator++();
+			return it;
+		}
+
+		tag_tree_serial_iterator& operator--()
+		{
+			base_type::operator--();
+			return *this;
+		}
+
+		tag_tree_serial_iterator operator--(int)
+		{
+			tag_tree_iterator it = *this;
+			base_type::operator--();
+			return it;
+		}
+
+		/*! @brief 開始タグか検査する
+		*
+		* @return 開始タグを指す場合、 true を返す
+		*/
+		using base_type::is_start_tag;
+
+		/*! @brief 終了タグか検査する
+		*
+		* @return 終了タグを指す場合、 true を返す
+		*/
+		using base_type::is_end_tag;
+
+		/*! @brief 開始タグを返す
+		*
+		* @return 開始タグを指すイテレータを返す
+		*
+		* 要素以外を指すイテレータ上で呼び出した場合、 send() を返す。
+		*/
+		tag_tree_serial_iterator start_tag() const
+		{
+			auto it = base_type::start_tag();
+			return tag_tree_serial_iterator(it.m_c, it.m_i);
+		}
+
+		/*! @brief 終了タグを返す
+		*
+		* @return 終了タグを指すイテレータを返す
+		*
+		* 要素以外を指すイテレータ上で呼び出した場合、 send() を返す。
+		*/
+		tag_tree_serial_iterator end_tag() const
+		{
+			auto it = base_type::end_tag();
+			return tag_tree_serial_iterator(it.m_c, it.m_i);
+		}
+	};
 }

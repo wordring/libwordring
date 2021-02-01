@@ -212,20 +212,30 @@ namespace wordring::html
 
 	/* @brief 文字エンコーディングに対応する HTML パーサー
 	* 
-	* 文書内にエンコーディングの指定を発見した場合、入力文字列を最初から読み直すため、入力文字列への
-	* イテレータは双方向である必要が有ります。
+	* @tparam Container 木コンテナ
+	* @tparam ForwardIterator 入力文字列に対するイテレータ
+	* 
+	* 木コンテナは、 wordring::tree と wordring::tag_tree でテストされています。
+	* 
+	* 文書内にエンコーディングの指定を発見した場合、入力文字列を最初から読み直します。
 	*/
-	template <typename Container, typename BidirectionalIterator>
-	class basic_simple_parser : public simple_parser_base<basic_simple_parser<Container, BidirectionalIterator>, Container>
+	template <typename Container, typename ForwardIterator>
+	class basic_simple_parser : public simple_parser_base<basic_simple_parser<Container, ForwardIterator>, Container>
 	{
 	public:
-		using base_type = simple_parser_base<basic_simple_parser<Container, BidirectionalIterator>, Container>;
+		using base_type = simple_parser_base<basic_simple_parser<Container, ForwardIterator>, Container>;
 		using container = Container;
-		using iterator = BidirectionalIterator;
+		using iterator  = ForwardIterator;
 
-		static_assert(std::is_base_of_v<std::bidirectional_iterator_tag, typename std::iterator_traits<iterator>::iterator_category>);
+		static_assert(std::is_base_of_v<std::forward_iterator_tag, typename std::iterator_traits<iterator>::iterator_category>);
 
 	public:
+		/*! @brief パーサー・インスタンスを構築する
+		*
+		* @param [in] confidence       エンコーディングの確かさ
+		* @param [in] enc              エンコーディング名
+		* @param [in] fragments_parser フラグメント・パーサーを構築する場合、 true を設定します
+		*/
 		basic_simple_parser(
 			encoding_confidence_name confidence = encoding_confidence_name::irrelevant,
 			encoding_name enc = static_cast<encoding_name>(0),
@@ -245,6 +255,13 @@ namespace wordring::html
 			m_updated_encoding_name = static_cast<encoding_name>(0);
 		}
 
+		/*! @brief 文字列を解析し、 HTML 木を作成する
+		* 
+		* @param [in] first HTML ソース文字列の最初を指すイテレータ
+		* @param [in] first HTML ソース文字列の終端を指すイテレータ
+		* 
+		* HTML 木を取り出すには、 get() を使います。
+		*/
 		void parse(iterator first, iterator last)
 		{
 			if constexpr (sizeof(*first) == 4)
@@ -297,6 +314,7 @@ namespace wordring::html
 
 		container get()
 		{
+			base_type::m_c.erase(base_type::m_temporary);
 			container c;
 			std::swap(base_type::m_c, c);
 			return c;

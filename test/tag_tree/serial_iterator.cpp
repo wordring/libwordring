@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(serial_iterator_convert_2)
 	u8simple_tree t1;
 	auto it1 = t1.insert(t1.end(), simple_element<std::u8string>(u8"p"));
 
-	tag_tree_iterator<u8simple_node const> it = it1;
+	tag_tree_iterator<u8simple_node> it = it1;
 
 	BOOST_CHECK(it->local_name() == u8"p");
 }
