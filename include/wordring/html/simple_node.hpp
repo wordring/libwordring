@@ -967,6 +967,7 @@ namespace wordring::html
 
 		/*! @brief 属性を検索する
 		*
+		* @param [in] ns     名前空間
 		* @param [in] prefix 名前空間接頭辞
 		* @param [in] name   属性名
 		*
@@ -980,6 +981,37 @@ namespace wordring::html
 		{
 			return std::find_if(begin(), end(), [&](attribute_type const& a)->bool {
 				return a == attribute_type(ns, prefix, name); });
+		}
+
+		/*! @brief 属性を検索する
+		*
+		* @param [in] name 属性名
+		*
+		* @return 属性を指すイテレータ
+		*
+		* node に格納される要素から、名前空間、接頭辞が空で、名前が一致する属性を検索し返す。
+		*
+		* @sa simple_element::find()
+		*/
+		const_attribute_iterator find(string_type const& name) const
+		{
+			return find(ns_name::HTML, string_type(), name);
+		}
+
+		/*! @brief 属性を検索する
+		*
+		* @param [in] name 属性名
+		*
+		* @return 属性を指すイテレータ
+		*
+		* node に格納される要素から、名前空間、接頭辞が空で、名前が一致する属性を検索し返す。
+		*
+		* @sa simple_element::find()
+		*/
+		const_attribute_iterator find(attribute_name name) const
+		{
+			return std::find_if(begin(), end(), [&](attribute_type const& a)->bool {
+				return a == attribute_type(ns_name::HTML, string_type(), name); });
 		}
 
 		bool contains(ns_name ns, string_type const& prefix, string_type const& name)

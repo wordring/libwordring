@@ -21,7 +21,7 @@ namespace
 	inline std::u32string print(wordring::wwwc::css::qualified_rule const& in);
 	inline std::u32string print(wordring::wwwc::css::declaration const& in);
 
-	inline std::u32string print(std::vector<wordring::wwwc::css::declaration> const& in);
+//	inline std::u32string print(std::vector<wordring::wwwc::css::declaration> const& in);
 
 	inline std::u32string print(wordring::wwwc::css::syntax_primitive const& c);
 	inline std::u32string print(wordring::wwwc::css::component_value const& c);

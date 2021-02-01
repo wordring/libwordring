@@ -220,6 +220,12 @@ const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a c
 <tr class="memitem:a9dfcf6c581ccd722fa670325420dade3"><td class="memItemLeft" align="right" valign="top">const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a9dfcf6c581ccd722fa670325420dade3">find</a> (ns_name ns, string_type const &amp;prefix, string_type const &amp;name) const</td></tr>
 <tr class="memdesc:a9dfcf6c581ccd722fa670325420dade3"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性を検索する  <a href="classwordring_1_1html_1_1simple__node.html#a9dfcf6c581ccd722fa670325420dade3">[詳解]</a><br /></td></tr>
 <tr class="separator:a9dfcf6c581ccd722fa670325420dade3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a962c32bd1e971230b45f2b338d518c4f"><td class="memItemLeft" align="right" valign="top">const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#a962c32bd1e971230b45f2b338d518c4f">find</a> (string_type const &amp;name) const</td></tr>
+<tr class="memdesc:a962c32bd1e971230b45f2b338d518c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性を検索する  <a href="classwordring_1_1html_1_1simple__node.html#a962c32bd1e971230b45f2b338d518c4f">[詳解]</a><br /></td></tr>
+<tr class="separator:a962c32bd1e971230b45f2b338d518c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae010f62fce64d1f4b66d854fdf3b8d1e"><td class="memItemLeft" align="right" valign="top">const_attribute_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwordring_1_1html_1_1simple__node.html#ae010f62fce64d1f4b66d854fdf3b8d1e">find</a> (attribute_name name) const</td></tr>
+<tr class="memdesc:ae010f62fce64d1f4b66d854fdf3b8d1e"><td class="mdescLeft">&#160;</td><td class="mdescRight">属性を検索する  <a href="classwordring_1_1html_1_1simple__node.html#ae010f62fce64d1f4b66d854fdf3b8d1e">[詳解]</a><br /></td></tr>
+<tr class="separator:ae010f62fce64d1f4b66d854fdf3b8d1e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1228035ee882cc474bc99947248b0839"><td class="memItemLeft" align="right" valign="top"><a id="a1228035ee882cc474bc99947248b0839"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (ns_name ns, string_type const &amp;prefix, string_type const &amp;name)</td></tr>
 <tr class="separator:a1228035ee882cc474bc99947248b0839"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -312,7 +318,7 @@ template&lt;typename String &gt; </div>
 </div>
 <h2 class="groupheader">関数詳解</h2>
 <a id="a9dfcf6c581ccd722fa670325420dade3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9dfcf6c581ccd722fa670325420dade3">&#9670;&nbsp;</a></span>find()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dfcf6c581ccd722fa670325420dade3">&#9670;&nbsp;</a></span>find() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -356,6 +362,7 @@ template&lt;typename String &gt; </div>
 <p>属性を検索する </p>
 <dl class="params"><dt>引数</dt><dd>
   <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ns</td><td>名前空間 </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">prefix</td><td>名前空間接頭辞 </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>属性名</td></tr>
   </table>
@@ -363,6 +370,84 @@ template&lt;typename String &gt; </div>
 </dl>
 <dl class="section return"><dt>戻り値</dt><dd>属性を指すイテレータ</dd></dl>
 <p>node に格納される要素から、名前空間、接頭辞、名前が一致する属性を検索し返す。</p>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247" title="属性を検索する">simple_element::find()</a> </dd></dl>
+
+</div>
+</div>
+<a id="a962c32bd1e971230b45f2b338d518c4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a962c32bd1e971230b45f2b338d518c4f">&#9670;&nbsp;</a></span>find() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const_attribute_iterator <a class="el" href="classwordring_1_1html_1_1simple__node.html">wordring::html::simple_node</a>&lt; String &gt;::find </td>
+          <td>(</td>
+          <td class="paramtype">string_type const &amp;&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>属性を検索する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>属性名</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>属性を指すイテレータ</dd></dl>
+<p>node に格納される要素から、名前空間、接頭辞が空で、名前が一致する属性を検索し返す。</p>
+<dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247" title="属性を検索する">simple_element::find()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ae010f62fce64d1f4b66d854fdf3b8d1e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae010f62fce64d1f4b66d854fdf3b8d1e">&#9670;&nbsp;</a></span>find() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename String &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const_attribute_iterator <a class="el" href="classwordring_1_1html_1_1simple__node.html">wordring::html::simple_node</a>&lt; String &gt;::find </td>
+          <td>(</td>
+          <td class="paramtype">attribute_name&#160;</td>
+          <td class="paramname"><em>name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>属性を検索する </p>
+<dl class="params"><dt>引数</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">name</td><td>属性名</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>戻り値</dt><dd>属性を指すイテレータ</dd></dl>
+<p>node に格納される要素から、名前空間、接頭辞が空で、名前が一致する属性を検索し返す。</p>
 <dl class="section see"><dt>参照</dt><dd><a class="el" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247" title="属性を検索する">simple_element::find()</a> </dd></dl>
 
 </div>

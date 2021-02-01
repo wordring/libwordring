@@ -257,4 +257,34 @@ BOOST_AUTO_TEST_CASE(simple_node_find_4)
 	BOOST_CHECK(it == sn.end());
 }
 
+BOOST_AUTO_TEST_CASE(simple_node_find_5)
+{
+	using namespace wordring::html;
+
+	simple_element<std::u8string> el;
+	simple_node<std::u8string> sn = el;
+
+	sn.push_back({ u8"a1", u8"v1" });
+	sn.push_back({ attribute_name::Abbr, u8"v2" });
+
+	auto it = sn.find(std::u8string(u8"abbr"));
+
+	BOOST_CHECK(it != sn.end());
+}
+
+BOOST_AUTO_TEST_CASE(simple_node_find_6)
+{
+	using namespace wordring::html;
+
+	simple_element<std::u8string> el;
+	simple_node<std::u8string> sn = el;
+
+	sn.push_back({ u8"a1", u8"v1" });
+	sn.push_back({ attribute_name::Abbr, u8"v2" });
+
+	auto it = sn.find(attribute_name::Abbr);
+
+	BOOST_CHECK(it != sn.end());
+}
+
 BOOST_AUTO_TEST_SUITE_END()
