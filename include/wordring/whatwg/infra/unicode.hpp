@@ -226,6 +226,8 @@ namespace wordring::whatwg
 	}
 
 	/*! @brief 文字エンコーディングを変換する便利関数
+	* 
+	* @tparam Result 変換先文字列
 	*/
 	template <typename Result, typename String, std::enable_if_t<std::negation_v<std::is_same<Result, String>>, std::nullptr_t> = nullptr>
 	inline Result encoding_cast(String const& in)
