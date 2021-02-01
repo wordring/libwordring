@@ -207,7 +207,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_1)
 	sn.push_back({ u8"a1", u8"v1" });
 	sn.push_back({ attribute_name::Abbr, u8"v2" });
 
-	auto it = sn.find(ns_name::HTML, u8"", u8"abbr");
+	auto it = sn.find(static_cast<ns_name>(0), u8"", u8"abbr");
 
 	BOOST_CHECK(it->local_name() == std::u8string(u8"abbr"));
 }
@@ -222,7 +222,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_2)
 	sn.push_back({ u8"a1", u8"v1" });
 	sn.push_back({ u8"a2", u8"v2" });
 
-	auto it = sn.find(ns_name::HTML, u8"", std::u8string(u8"a2"));
+	auto it = sn.find(static_cast<ns_name>(0), u8"", std::u8string(u8"a2"));
 
 	BOOST_CHECK(it->local_name() == std::u8string(u8"a2"));
 }
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE(simple_node_find_3)
 	sn.push_back({ u8"a1", u8"v1" });
 	sn.push_back({ attribute_name::Abbr, u8"v2" });
 
-	auto it = sn.find(ns_name::HTML, u8"", std::u8string(u8"abbr"));
+	auto it = sn.find(static_cast<ns_name>(0), u8"", std::u8string(u8"abbr"));
 
 	BOOST_CHECK(*it == attribute_name::Abbr);
 }

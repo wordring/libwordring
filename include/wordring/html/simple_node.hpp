@@ -98,7 +98,7 @@ namespace wordring::html
 		}
 
 		simple_attr(attribute_name name, string_type const& val = string_type())
-			: m_namespace_uri(ns_name::HTML)
+			: m_namespace_uri(static_cast<ns_name>(0))
 			, m_prefix()
 			, m_local_name(name)
 			, m_value(val)
@@ -106,7 +106,7 @@ namespace wordring::html
 		}
 
 		simple_attr(string_type const& name, string_type const& val = string_type())
-			: m_namespace_uri(ns_name::HTML)
+			: m_namespace_uri(static_cast<ns_name>(0))
 			, m_prefix()
 			, m_local_name(name)
 			, m_value(val)
@@ -541,14 +541,14 @@ namespace wordring::html
 		*/
 		const_iterator find(string_type const& name) const
 		{
-			return find(ns_name::HTML, string_type(), name);
+			return find(static_cast<ns_name>(0), string_type(), name);
 		}
 
 		/*! @brief 属性を検索する
 		*/
 		const_iterator find(attribute_name name) const
 		{
-			return find(ns_name::HTML, string_type(), name);
+			return find(static_cast<ns_name>(0), string_type(), name);
 		}
 
 	private:
@@ -995,7 +995,7 @@ namespace wordring::html
 		*/
 		const_attribute_iterator find(string_type const& name) const
 		{
-			return find(ns_name::HTML, string_type(), name);
+			return find(static_cast<ns_name>(0), string_type(), name);
 		}
 
 		/*! @brief 属性を検索する
@@ -1011,7 +1011,7 @@ namespace wordring::html
 		const_attribute_iterator find(attribute_name name) const
 		{
 			return std::find_if(begin(), end(), [&](attribute_type const& a)->bool {
-				return a == attribute_type(ns_name::HTML, string_type(), name); });
+				return a == attribute_type(static_cast<ns_name>(0), string_type(), name); });
 		}
 
 		bool contains(ns_name ns, string_type const& prefix, string_type const& name)
