@@ -9,8 +9,7 @@
 #include <wordring/html/simple_traits.hpp>
 
 #include <wordring/whatwg/html/parsing/tree_construction_dispatcher.hpp>
-
-#include <wordring/encoding/encoding.hpp>
+#include <wordring/whatwg/encoding/api.hpp>
 
 #include <cassert>
 #include <type_traits>
@@ -280,32 +279,20 @@ namespace wordring::html
 			}
 			else if constexpr (sizeof(*first) == 1)
 			{
-				using namespace wordring::encoding;
+				using namespace wordring::whatwg::encoding;
 
-				decoder dec(static_cast<encoding_name>(0), static_cast<error_mode_name>(0));
-				std::deque<uint32_t> buffer;
-				auto out = std::back_inserter(buffer);
-				iterator it1, it2;
-				result_value rv;
-
+				text_decoder dec;
 			Start:
-				dec = decoder(base_type::m_encoding_name, error_mode_name::Replacement);
-				it1 = first;
-				it2 = last;
-				while (it1 != it2)
+				if (base_type::m_encoding_name == static_cast<encoding_name>(0)) base_type::m_encoding_name = encoding_name::UTF_8;
+				dec = text_decoder(base_type::m_encoding_name, false, false);
+				std::u32string s = dec.decode(first, last);
+				for (auto cp : s)
 				{
-					buffer.clear();
-					rv = dec.push(*it1++, out);
-					if (buffer.empty()) continue;
-
-					for (uint32_t cp : buffer)
+					base_type::push_code_point(cp);
+					if (m_updated_encoding_name != static_cast<encoding_name>(0))
 					{
-						base_type::push_code_point(cp);
-						if (m_updated_encoding_name != static_cast<encoding_name>(0))
-						{
-							clear(base_type::m_encoding_confidence, m_updated_encoding_name);
-							goto Start;
-						}
+						clear(base_type::m_encoding_confidence, m_updated_encoding_name);
+						goto Start;
 					}
 				}
 			}

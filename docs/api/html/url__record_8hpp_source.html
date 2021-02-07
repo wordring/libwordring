@@ -56,33 +56,33 @@ $(function() {
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1url__record.html">   11</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1url__record.html">url_record</a></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    {</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">using</span> string_type = std::u32string;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">using</span> host_type = wordring::whatwg::host;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">using</span> port_type = std::uint16_t;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;        <span class="keyword">using</span> path_type = std::vector&lt;std::string&gt;;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">using</span> blob_type = std::vector&lt;std::uint8_t&gt;;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        std::string                m_scheme;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        std::string                m_username;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        std::string                m_password;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        std::optional&lt;host_type&gt;   m_host;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        std::optional&lt;port_type&gt;   m_port;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        path_type                  m_path;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        std::optional&lt;std::string&gt; m_query;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        std::optional&lt;std::string&gt; m_fragment;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordtype">bool</span>      cannot_be_base_url_flag = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        blob_type blob_url_entry;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    };</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <span class="comment">/*</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">    class url_record</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">    {</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">    public:</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">        using string_type = std::u32string;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">        using host_type = wordring::whatwg::host;</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="comment">        using port_type = std::uint16_t;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="comment">        using path_type = std::vector&lt;std::string&gt;;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">        using blob_type = std::vector&lt;std::uint8_t&gt;;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">    protected:</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">        std::string                m_scheme;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">        std::string                m_username;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">        std::string                m_password;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">        std::optional&lt;host_type&gt;   m_host;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">        std::optional&lt;port_type&gt;   m_port;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">        path_type                  m_path;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">        std::optional&lt;std::string&gt; m_query;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">        std::optional&lt;std::string&gt; m_fragment;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"></span> </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="comment">        bool      cannot_be_base_url_flag = false;</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="comment">        blob_type blob_url_entry;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">    };</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">    */</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacewordring_1_1whatwg_html"><div class="ttname"><a href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div></div>
-<div class="ttc" id="aclasswordring_1_1whatwg_1_1url__record_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1url__record.html">wordring::whatwg::url_record</a></div><div class="ttdef"><b>Definition:</b> url_record.hpp:11</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 構築: &#160;<a href="http://www.doxygen.org/index.html">

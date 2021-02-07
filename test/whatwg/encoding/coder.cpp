@@ -1,1552 +1,524 @@
-﻿// test/whatwg/encoding/decoder.cpp
+﻿// test/whatwg/encoding/coder.cpp
 
 #include <boost/test/unit_test.hpp>
+
+#include <wordring/whatwg/encoding/coder.hpp>
+#include <wordring/whatwg/encoding/encoding.hpp>
+#include <wordring/whatwg/encoding/terminology.hpp>
 
 #include <array>
 #include <iterator>
 #include <string>
 
-#include <wordring/whatwg/encoding/coder.hpp>
-#include <wordring/whatwg/encoding/encoding.hpp>
-#include <wordring/whatwg/encoding/stream.hpp>
+namespace
+{
+	// omit はテストデータに含まれない文字の集合
+	bool cyclic_test(wordring::whatwg::encoding::encoding_name name, std::string omit = "")
+	{
+		// 循環テスト　※本来はテスト値を用意したい
+		using namespace wordring::whatwg::encoding;
+
+		// テストデータ作成
+		io_queue<char> in_q;
+		for (std::uint16_t i = 0; i <= 0xFFu; i++)
+		{
+			if (omit.find(static_cast<std::uint8_t>(i)) != std::string::npos) continue;
+			in_q.push(static_cast<std::uint8_t>(i));
+		}
+		in_q.push(io_item<char>{ '\0', true });
+
+		// 比較用に入力を文字列化しておく
+		io_queue<char> in_tmp_q = in_q;
+		std::string s1;
+		from_io_queue_convert(in_tmp_q, std::back_inserter(s1));
+
+		// デコード
+		io_queue<char32_t> tmp_q;
+		auto rv1 = decode(in_q, name, tmp_q);
+		BOOST_CHECK(std::holds_alternative<result_finished>(rv1));
+
+		// エンコード
+		io_queue<char> out_q;
+		auto rv2 = encode(tmp_q, name, out_q);
+		BOOST_CHECK(std::holds_alternative<result_finished>(rv2));
+
+		// 比較用に出力を文字列化する
+		std::string s2;
+		from_io_queue_convert(out_q, std::back_inserter(s2));
+
+		return s1 == s2;
+	}
+
+	// data はテストデータ
+	bool cyclic_test(wordring::whatwg::encoding::encoding_name name, std::u32string data)
+	{
+		using namespace wordring::whatwg::encoding;
+
+		io_queue<char32_t> in_q = to_io_queue_convert(data.begin(), data.end());
+		in_q.push(io_item<char32_t>{ U'\0', true });
+
+		// 比較用に入力を文字列化しておく
+		io_queue<char32_t> in_tmp_q = in_q;
+		std::u32string s1;
+		from_io_queue_convert(in_tmp_q, std::back_inserter(s1));
+
+		// エンコード
+		io_queue<char> tmp_q;
+		auto rv1 = encode(in_q, name, tmp_q);
+		BOOST_CHECK(std::holds_alternative<result_finished>(rv1));
+
+		// デコード
+		io_queue<char32_t> out_q;
+		auto rv2 = decode(tmp_q, name, out_q);
+		BOOST_CHECK(std::holds_alternative<result_finished>(rv2));
+
+		// 比較用に出力を文字列化する
+		std::u32string s2;
+		from_io_queue_convert(out_q, std::back_inserter(s2));
+
+		return s1 == s2;
+	}
+}
 
 BOOST_AUTO_TEST_SUITE(coder_test)
 
-BOOST_AUTO_TEST_CASE(UTF_8_decoder__1)
+BOOST_AUTO_TEST_CASE(coder_UTF_8_decoder_1)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::u32string const correct{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-	std::string const in{ u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-	std::u32string out{};
+	// 1-4バイト迄の文字を一文字ずつ並べた。
+	std::string_view sv = "\x41\xC3\x80\xE3\x81\x82\xF0\x90\x8A\x80";
+	io_queue<char> in = to_io_queue_convert(sv.begin(), sv.end());
 
-	UTF_8_decoder coder{};
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
+	io_queue<char32_t> out;
+	auto rv = decode(in, encoding_name::UTF_8, out);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv));
 
-	run(coder, stream_8, std::back_inserter(out));
-	BOOST_CHECK(out == correct);
-
-	stream_8 = stream<std::string::const_iterator>{ in.cbegin(), in.cend() };
-	out.clear();
-	run_decoder(name::UTF_8, stream_8, std::back_inserter(out));
-	BOOST_CHECK(out == correct);
-}
-
-BOOST_AUTO_TEST_CASE(UTF_8_encoder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string const correct{ u8"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-	std::u32string const in{ U"ABCDEあいうえお𠀋𡈽𡌛𡑮𡢽AÀⱥ𐊠" };
-	std::string out{};
-
-	UTF_8_encoder coder{};
-	stream<std::u32string::const_iterator> stream_32{ in.cbegin(), in.cend() };
-
-	run(coder, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out == correct);
-
-	stream_32 = stream<std::u32string::const_iterator>{ in.cbegin(), in.cend() };
-	out.clear();
-	run_encoder(name::UTF_8, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out == correct);
-}
-
-BOOST_AUTO_TEST_CASE(single_byte_decoder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::u32string const correct{ U"ABCDE€ÿ" };
-	std::string const in{ "ABCDE\x80\xFF" };
-	std::u32string out{};
-
-	single_byte_decoder<index_code_point_windows_1252> coder{};
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-
-	run(coder, stream_8, std::back_inserter(out));
-	BOOST_CHECK(out == correct);
-}
-
-BOOST_AUTO_TEST_CASE(single_byte_encoder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string const correct{ "ABCDE\x80\xFF" };
-	std::u32string const in{ U"ABCDE€ÿ" };
-	std::string out{};
-
-	single_byte_encoder<index_pointer_windows_1252_0, index_pointer_windows_1252_1> coder{};
-	stream<std::u32string::const_iterator> stream_32{ in.cbegin(), in.cend() };
-
-	run(coder, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out == correct);
-}
-
-BOOST_AUTO_TEST_CASE(IBM866_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	IBM866_decoder decoder_0{};
-	IBM866_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(IBM866_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::IBM866, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::IBM866, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_2_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_2_decoder decoder_0{};
-	ISO_8859_2_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_2_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_2, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_2, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_3_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		switch (i)
-		{
-		case 0x80 + 37:
-		case 0x80 + 46:
-		case 0x80 + 62:
-		case 0x80 + 67:
-		case 0x80 + 80:
-		case 0x80 + 99:
-		case 0x80 + 112:
-			continue;
-		}
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	ISO_8859_3_decoder decoder_0{};
-	ISO_8859_3_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 121);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_3_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		switch (i)
-		{
-		case 0x80 + 37:
-		case 0x80 + 46:
-		case 0x80 + 62:
-		case 0x80 + 67:
-		case 0x80 + 80:
-		case 0x80 + 99:
-		case 0x80 + 112:
-			continue;
-		}
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_3, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_3, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 121);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_4_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_4_decoder decoder_0{};
-	ISO_8859_4_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_4_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_4, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_4, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_5_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_5_decoder decoder_0{};
-	ISO_8859_5_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_5_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_5, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_5, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_6_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (0x80 + 33 <= i && i <= 0x80 + 35) continue;
-		if (0x80 + 37 <= i && i <= 0x80 + 43) continue;
-		if (0x80 + 46 <= i && i <= 0x80 + 58) continue;
-		if (0x80 + 60 <= i && i <= 0x80 + 62) continue;
-		if (i == 0x80 + 64) continue;
-		if (0x80 + 91 <= i && i <= 0x80 + 95) continue;
-		if (0x80 + 115 <= i && i <= 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	ISO_8859_6_decoder decoder_0{};
-	ISO_8859_6_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 83);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_6_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (0x80 + 33 <= i && i <= 0x80 + 35) continue;
-		if (0x80 + 37 <= i && i <= 0x80 + 43) continue;
-		if (0x80 + 46 <= i && i <= 0x80 + 58) continue;
-		if (0x80 + 60 <= i && i <= 0x80 + 62) continue;
-		if (i == 0x80 + 64) continue;
-		if (0x80 + 91 <= i && i <= 0x80 + 95) continue;
-		if (0x80 + 115 <= i && i <= 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_6, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_6, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 83);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_7_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 46) continue;
-		if (i == 0x80 + 82) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	ISO_8859_7_decoder decoder_0{};
-	ISO_8859_7_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 125);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_7_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 46) continue;
-		if (i == 0x80 + 82) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_7, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_7, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 125);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_8_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 33) continue;
-		if (0x80 + 63 <= i && i <= 0x80 + 94) continue;
-		if (i == 0x80 + 123) continue;
-		if (i == 0x80 + 124) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	ISO_8859_8_decoder decoder_0{};
-	ISO_8859_8_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 92);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_8_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 33) continue;
-		if (0x80 + 63 <= i && i <= 0x80 + 94) continue;
-		if (i == 0x80 + 123) continue;
-		if (i == 0x80 + 124) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_8, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_8, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 92);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_10_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_10_decoder decoder_0{};
-	ISO_8859_10_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_10_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_10, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_10, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_13_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_13_decoder decoder_0{};
-	ISO_8859_13_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_13_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_13, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_13, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_14_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_14_decoder decoder_0{};
-	ISO_8859_14_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_14_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_14, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_14, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_15_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_15_decoder decoder_0{};
-	ISO_8859_15_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_15_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_15, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_15, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_16_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	ISO_8859_16_decoder decoder_0{};
-	ISO_8859_16_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(ISO_8859_16_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::ISO_8859_16, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::ISO_8859_16, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(KOI8_R_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	KOI8_R_decoder decoder_0{};
-	KOI8_R_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(KOI8_R_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::KOI8_R, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::KOI8_R, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::u32string s;
+	from_io_queue_convert(out, std::back_inserter(s));
+	BOOST_CHECK(s == U"\U00000041\U000000C0\U00003042\U00010280");
 }
 
-BOOST_AUTO_TEST_CASE(KOI8_U_coder__1)
+BOOST_AUTO_TEST_CASE(coder_UTF_8_encoder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	KOI8_U_decoder decoder_0{};
-	KOI8_U_encoder encoder_0{};
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(KOI8_U_run__1)
-{
-	using namespace wordring::whatwg::encoding;
+	// 1-4バイト迄の文字を一文字ずつ並べた。
+	std::u32string_view sv = U"\U00000041\U000000C0\U00003042\U00010280";
+	io_queue<char32_t> in = to_io_queue_convert(sv.begin(), sv.end());
 
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
+	io_queue<char32_t> out;
+	auto rv = encode(in, encoding_name::UTF_8, out);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::KOI8_U, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::KOI8_U, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::string s;
+	from_io_queue_convert(out, std::back_inserter(s));
+	BOOST_CHECK(s == "\x41\xC3\x80\xE3\x81\x82\xF0\x90\x8A\x80");
 }
 
-BOOST_AUTO_TEST_CASE(macintosh_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1252_decoder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
 
-	macintosh_decoder decoder_0{};
-	macintosh_encoder encoder_0{};
+	std::string_view sv = "A\x80\xFF";
+	io_queue<char> in = to_io_queue_convert(sv.begin(), sv.end());
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(macintosh_run__1)
-{
-	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
+	io_queue<char32_t> out;
+	auto rv = decode(in, encoding_name::windows_1252, out);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::macintosh, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::macintosh , stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::u32string s;
+	from_io_queue_convert(out, std::back_inserter(s));
+	BOOST_CHECK(s == U"A€ÿ");
 }
 
-BOOST_AUTO_TEST_CASE(windows_874_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1252_encoder_1)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (0x80 + 91 <= i && i <= 0x80 + 94) continue;
-		if (0x80 + 124 <= i && i <= 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
+	std::u32string_view sv = U"A€ÿ";
+	io_queue<char32_t> in = to_io_queue_convert(sv.begin(), sv.end());
 
-	windows_874_decoder decoder_0{};
-	windows_874_encoder encoder_0{};
+	io_queue<char32_t> out;
+	auto rv = encode(in, encoding_name::windows_1252, out);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv));
 
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 120);
-	BOOST_CHECK(in == out);
+	std::string s;
+	from_io_queue_convert(out, std::back_inserter(s));
+	BOOST_CHECK(s == "A\x80\xFF");
 }
 
-BOOST_AUTO_TEST_CASE(windows_874_run__1)
+BOOST_AUTO_TEST_CASE(coder_IBM866_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (0x80 + 91 <= i && i <= 0x80 + 94) continue;
-		if (0x80 + 124 <= i && i <= 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_874, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_874, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 120);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::IBM866));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1250_coder__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_2_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	windows_1250_decoder decoder_0{};
-	windows_1250_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_2));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1250_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_3_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1250, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1250, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::string omit = "\xA5\xAE\xBE\xC3\xD0\xE3\xF0"; // 0x80 + [ 37, 46, 62, 67, 80, 99, 112 ]
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_3, omit));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1251_coder__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_4_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	windows_1251_decoder decoder_0{};
-	windows_1251_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_4));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1251_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_5_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1251, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1251, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_5));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1252_coder__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_6_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	windows_1252_decoder decoder_0{};
-	windows_1252_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::string omit =
+		"\xA1\xA2\xA3\xA5\xA6\xA7\xA8\xA9\xAA\xAB\xAE\xAF\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7\xB8\xB9"
+		"\xBA\xBC\xBD\xBE\xC0\xDB\xDC\xDD\xDE\xDF\xF3\xF4\xF5\xF6\xF7\xF8\xF9\xFA\xFB\xFC\xFD\xFE"
+		"\xFF";
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_6, omit));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1252_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_7_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1252, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1252, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::string omit = "\xAE\xD2\xFF";
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_7, omit));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1253_coder__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_8_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 42) continue;
-		if (i == 0x80 + 82) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	windows_1253_decoder decoder_0{};
-	windows_1253_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 125);
-	BOOST_CHECK(in == out);
+	std::string omit = 
+		"\xA1\xBF\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF\xD0\xD1\xD2\xD3"
+		"\xD4\xD5\xD6\xD7\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xFB\xFC\xFF\x80";
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_8, omit));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1253_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_10_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 42) continue;
-		if (i == 0x80 + 82) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1253, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1253, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 125);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_10));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1254_coder__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_13_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	windows_1254_decoder decoder_0{};
-	windows_1254_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_13));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1254_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_14_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1254, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1254, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_14));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1255_coder__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_15_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (0x80 + 89 <= i && i <= 0x80 + 95) continue;
-		if (0x80 + 123 <= i && i <= 0x80 + 124) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	windows_1255_decoder decoder_0{};
-	windows_1255_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 118);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_15));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1255_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_8859_16_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (0x80 + 89 <= i && i <= 0x80 + 95) continue;
-		if (0x80 + 123 <= i && i <= 0x80 + 124) continue;
-		if (i == 0x80 + 127) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1255, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1255, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 118);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::ISO_8859_16));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1256_coder__1)
+BOOST_AUTO_TEST_CASE(coder_KOI8_R_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	windows_1256_decoder decoder_0{};
-	windows_1256_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::KOI8_R));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1256_run__1)
+BOOST_AUTO_TEST_CASE(coder_KOI8_U_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1256, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1256, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::KOI8_U));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1257_coder__1)
+BOOST_AUTO_TEST_CASE(coder_macintosh_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 33) continue;
-		if (i == 0x80 + 37) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	windows_1257_decoder decoder_0{};
-	windows_1257_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 126);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::macintosh));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1257_run__1)
+BOOST_AUTO_TEST_CASE(coder_windows_874_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++)
-	{
-		if (i == 0x80 + 33) continue;
-		if (i == 0x80 + 37) continue;
-		in.push_back(static_cast<uint8_t>(i));
-	}
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1257, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1257, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 128 + 126);
-	BOOST_CHECK(in == out);
+	std::string omit = "\xDB\xDC\xDD\xDE\xFC\xFD\xFE\xFF";
+	BOOST_CHECK(cyclic_test(encoding_name::windows_874, omit));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1258_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1250_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	windows_1258_decoder decoder_0{};
-	windows_1258_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1250));
 }
 
-BOOST_AUTO_TEST_CASE(windows_1258_run__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1251_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::windows_1258, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::windows_1258, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1251));
 }
 
-BOOST_AUTO_TEST_CASE(x_mac_cyrillic_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1252_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	x_mac_cyrillic_decoder decoder_0{};
-	x_mac_cyrillic_encoder encoder_0{};
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run(encoder_0, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1252));
 }
 
-BOOST_AUTO_TEST_CASE(x_mac_cyrillic_run__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1253_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{};
-	std::u32string u32{};
-	std::string out{};
-	for (uint16_t i = 0; i <= 0xFFu; i++) in.push_back(static_cast<uint8_t>(i));
-
-	stream<std::string::const_iterator> stream_8{ in.cbegin(), in.cend() };
-	run_decoder(name::x_mac_cyrillic, stream_8, std::back_inserter(u32));
-	stream<std::u32string::const_iterator> stream_32{ u32.cbegin(), u32.cend() };
-	run_encoder(name::x_mac_cyrillic, stream_32, std::back_inserter(out));
-	BOOST_CHECK(out.size() == 256);
-	BOOST_CHECK(in == out);
+	std::string omit = "\xAA\xD2\xFF";
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1253, omit));
 }
 
-BOOST_AUTO_TEST_CASE(gb18030_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1254_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ U"成我戒戓戔戕或戗战戙戚戛戜戝戞戟abcdefghijklmno㐀㐁㐂㐃㐄㐅㐆㐇㐈㐉㐊㐋㐌㐍㐎㐏€亐亖亗亙亜亝亞⺁⺄⺈⺋⺌⺗⺧⺪⺮⺳⺶⺷⺻⻊㖞㘚㘎⺗㥮㤘㧏㧟㩳㧐㭎㱮㳠郎凉秊裏隣兀嗀﨎﨏ⅠⅡⅢⅣⅤⅰⅱⅲⅳⅴᠠᠡᠢᠣᠤᠥᠦᠧᠨᠩꀇꀈꀉꀊꀋꀌꀍꀎꀏ༐༑༒༓༔༕༖༗༘༙بةتثجحخد狢狣狤狥狦狧狪狫㊣通桐酮瞳同铜彤童﹔﹕﹖﹗" };
-	std::string str{};
-	std::u32string out{};
-
-	gb18030_encoder encoder_0{};
-	gb18030_decoder decoder_0{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(encoder_0, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(decoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1254));
 }
 
-BOOST_AUTO_TEST_CASE(gb18030_run__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1255_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ U"成我戒戓戔戕或戗战戙戚戛戜戝戞戟abcdefghijklmno㐀㐁㐂㐃㐄㐅㐆㐇㐈㐉㐊㐋㐌㐍㐎㐏€亐亖亗亙亜亝亞⺁⺄⺈⺋⺌⺗⺧⺪⺮⺳⺶⺷⺻⻊㖞㘚㘎⺗㥮㤘㧏㧟㩳㧐㭎㱮㳠郎凉秊裏隣兀嗀﨎﨏ⅠⅡⅢⅣⅤⅰⅱⅲⅳⅴᠠᠡᠢᠣᠤᠥᠦᠧᠨᠩꀇꀈꀉꀊꀋꀌꀍꀎꀏ༐༑༒༓༔༕༖༗༘༙بةتثجحخد狢狣狤狥狦狧狪狫㊣通桐酮瞳同铜彤童﹔﹕﹖﹗" };
-	std::string str{};
-	std::u32string out{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_encoder(name::gb18030, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_decoder(name::gb18030, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	std::string omit = "\xD9\xDA\xDB\xDC\xDD\xDE\xDF\xFB\xFC\xFF";
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1255, omit));
 }
 
-BOOST_AUTO_TEST_CASE(big5_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1256_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ /*U"Ê̄Ê̌ê̄ê̌*/U"·＼ｗ一世共作杓咖昇陂拯耐哦浬虔娼毫莆婷溉詔媳睹辟愿罰劇瑾輥濃錐瞧駿鞭願護讖すЛ乂汌杙坨泒哃柜穾唊毨笄酎崰淐耞釫惲湨罦軹媷毹稛觡凘榠禗裰噚澍膞踔噳澢蕀錋檕蕷鞞璸蹛徿譑嚵鏼蠩糴讌纘" };
-	std::string str{};
-	std::u32string out{};
-
-	Big5_encoder encoder_0{};
-	Big5_decoder decoder_0{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(encoder_0, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(decoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1256));
 }
 
-BOOST_AUTO_TEST_CASE(big5_run__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1257_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ /*U"Ê̄Ê̌ê̄ê̌*/U"·＼ｗ一世共作杓咖昇陂拯耐哦浬虔娼毫莆婷溉詔媳睹辟愿罰劇瑾輥濃錐瞧駿鞭願護讖すЛ乂汌杙坨泒哃柜穾唊毨笄酎崰淐耞釫惲湨罦軹媷毹稛觡凘榠禗裰噚澍膞踔噳澢蕀錋檕蕷鞞璸蹛徿譑嚵鏼蠩糴讌纘" };
-	std::string str{};
-	std::u32string out{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_encoder(name::Big5, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_decoder(name::Big5, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	std::string omit = "\xA1\xA5";
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1257, omit));
 }
 
-BOOST_AUTO_TEST_CASE(EUC_JP_coder__1)
+BOOST_AUTO_TEST_CASE(coder_windows_1258_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ /*U"¥‾*/U"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ"/*−*/U"0123456789ぁあぃいぅうぇえぉお" };
-	std::string str{};
-	std::u32string out{};
-
-	EUC_JP_encoder encoder_0{};
-	EUC_JP_decoder decoder_0{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(encoder_0, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(decoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::windows_1258));
 }
 
-BOOST_AUTO_TEST_CASE(EUC_JP_run__1)
+BOOST_AUTO_TEST_CASE(coder_x_mac_cyrillic_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ /*U"¥‾*/U"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ"/*−*/U"0123456789ぁあぃいぅうぇえぉお" };
-	std::string str{};
-	std::u32string out{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_encoder(name::EUC_JP, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_decoder(name::EUC_JP, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(cyclic_test(encoding_name::x_mac_cyrillic));
 }
 
-BOOST_AUTO_TEST_CASE(ISO_2022_JP_coder__1)
+BOOST_AUTO_TEST_CASE(coder_gb18030_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::u32string in{ U"ABCDEｱｲｳｴｵあいうえお" };
-	std::string str{};
-	std::u32string out{};
-
-	ISO_2022_JP_encoder encoder_0{};
-	ISO_2022_JP_decoder decoder_0{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(encoder_0, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(decoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(out == U"ABCDEアイウエオあいうえお");
+	// テストデータ
+	std::u32string sv =
+		U"成我戒戓戔戕或戗战戙戚戛戜戝戞戟abcdefghijklmno㐀㐁㐂㐃㐄㐅㐆㐇㐈㐉㐊㐋㐌㐍㐎㐏€亐亖亗亙亜亝"
+		"亞⺁⺄⺈⺋⺌⺗⺧⺪⺮⺳⺶⺷⺻⻊㖞㘚㘎⺗㥮㤘㧏㧟㩳㧐㭎㱮㳠郎凉秊裏隣兀嗀﨎﨏ⅠⅡⅢⅣⅤⅰⅱⅲⅳⅴ"
+		"ᠠᠡᠢᠣᠤᠥᠦᠧᠨᠩꀇꀈꀉꀊꀋꀌꀍꀎꀏ༐༑༒༓༔༕༖༗༘༙بةتثجحخد狢狣狤狥狦狧狪狫㊣通桐酮瞳同铜彤童﹔﹕﹖﹗";
+	BOOST_CHECK(cyclic_test(encoding_name::gb18030, sv));
 }
 
-BOOST_AUTO_TEST_CASE(ISO_2022_JP_run__1)
+BOOST_AUTO_TEST_CASE(coder_Big5_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::u32string in{ U"ABCDEｱｲｳｴｵあいうえお" };
-	std::string str{};
-	std::u32string out{};
-
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_encoder(name::ISO_2022_JP, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_decoder(name::ISO_2022_JP, stream_str, std::back_inserter(out));
-	BOOST_CHECK(out == U"ABCDEアイウエオあいうえお");
+	// テストデータ
+	std::u32string s =
+		U"·＼ｗ一世共作杓咖昇陂拯耐哦浬虔娼毫莆婷溉詔媳睹辟愿罰劇瑾輥濃錐瞧駿鞭願護讖すЛ乂汌杙坨泒哃柜"
+		"穾唊毨笄酎崰淐耞釫惲湨罦軹媷毹稛觡凘榠禗裰噚澍膞踔噳澢蕀錋檕蕷鞞璸蹛徿譑嚵鏼蠩糴讌纘";
+	BOOST_CHECK(cyclic_test(encoding_name::Big5, s));
 }
 
-BOOST_AUTO_TEST_CASE(Shift_JIS_coder__1)
+BOOST_AUTO_TEST_CASE(coder_EUC_JP_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ U"ABCDEｱｲｳｴｵアイウエオ漾漓滷澆潺纊褜鍈銈蓜" };
-	std::string str{};
-	std::u32string out{};
-
-	Shift_JIS_encoder encoder_0{};
-	Shift_JIS_decoder decoder_0{};
 
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(encoder_0, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(decoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	// テストデータ
+	std::u32string s =
+		U"｡｢｣､･ｦｧｨｩｪｫｬｭｮｯｰｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝﾞﾟ0123456789ぁあぃいぅうぇ"
+		"えぉお";
+	BOOST_CHECK(cyclic_test(encoding_name::EUC_JP, s));
 }
 
-BOOST_AUTO_TEST_CASE(Shift_JIS_run__1)
+BOOST_AUTO_TEST_CASE(coder_ISO_2022_JP_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::u32string in{ U"ABCDEｱｲｳｴｵアイウエオ漾漓滷澆潺纊褜鍈銈蓜" };
-	std::string str{};
-	std::u32string out{};
+	// テストデータ
+	std::u32string s = U"ABCDEｱｲｳｴｵあいうえお漢字";
+	io_queue<char32_t> in_q = to_io_queue_convert(s.begin(), s.end());
+	in_q.push(io_item<char32_t>{ U'\0', true });
 
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_encoder(name::Shift_JIS, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_decoder(name::Shift_JIS, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
-}
-
-BOOST_AUTO_TEST_CASE(EUC_KR_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
+	// エンコード
+	io_queue<char> tmp_q;
+	auto rv1 = encode(in_q, encoding_name::ISO_2022_JP, tmp_q);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv1));
 
-	std::u32string in{ U"!、⇒！ㄱⅰ─㎕ÆæぁァА가괌깹끝뇟덧땀래륫묀벙빨샥숯쐴에웩점징찼치큄퉤퐈혤伽匣瞼棨科區鬼朞納丹棹蘿煉遼立蔑汶發碧孚脾傘胥聖戍嵩沈櫻旅簾烏窈運濡議立障煎靜踪咫鏶責椒贅鐸阪品行形禍爻" };
-	std::string str{};
-	std::u32string out{};
+	// デコード
+	io_queue<char32_t> out_q;
+	auto rv2 = decode(tmp_q, encoding_name::ISO_2022_JP, out_q);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv2));
 
-	EUC_KR_encoder encoder_0{};
-	EUC_KR_decoder decoder_0{};
+	// 比較用に出力を文字列化する
+	std::u32string s1;
+	from_io_queue_convert(out_q, std::back_inserter(s1));
 
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(encoder_0, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(decoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	// 半角カナは全角に変わる。
+	std::u32string s2 = U"ABCDEアイウエオあいうえお漢字";
+	BOOST_CHECK(s1 == s2);
 }
 
-BOOST_AUTO_TEST_CASE(EUC_KR_run__1)
+BOOST_AUTO_TEST_CASE(coder_Shift_JIS_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::u32string in{ U"!、⇒！ㄱⅰ─㎕ÆæぁァА가괌깹끝뇟덧땀래륫묀벙빨샥숯쐴에웩점징찼치큄퉤퐈혤伽匣瞼棨科區鬼朞納丹棹蘿煉遼立蔑汶發碧孚脾傘胥聖戍嵩沈櫻旅簾烏窈運濡議立障煎靜踪咫鏶責椒贅鐸阪品行形禍爻" };
-	std::string str{};
-	std::u32string out{};
 
-	stream<std::u32string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_encoder(name::EUC_KR, stream_in, std::back_inserter(str));
-	stream<std::string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_decoder(name::EUC_KR, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	// テストデータ
+	std::u32string s = U"ABCDEｱｲｳｴｵアイウエオ漾漓滷澆潺纊褜鍈銈蓜";
+	BOOST_CHECK(cyclic_test(encoding_name::Shift_JIS, s));
 }
 
-BOOST_AUTO_TEST_CASE(replacement_coder__1)
+BOOST_AUTO_TEST_CASE(coder_EUC_KR_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
 
-	std::string in{ "ABCDE" };
-	std::u32string out{};
-
-	replacement_decoder decoder_0{};
-
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	result_value ret = run(decoder_0, stream_in, std::back_inserter(out));
-	BOOST_CHECK(ret.index() == 0);
-	BOOST_CHECK(out.size() == 1);
-	BOOST_CHECK(out[0] == 0xFFFDu);
+	// テストデータ
+	std::u32string s =
+		U"!、⇒！ㄱⅰ─㎕ÆæぁァА가괌깹끝뇟덧땀래륫묀벙빨샥숯쐴에웩점징찼치큄퉤퐈혤伽匣瞼棨科區鬼朞納丹棹"
+		"蘿煉遼立蔑汶發碧孚脾傘胥聖戍嵩沈櫻旅簾烏窈運濡議立障煎靜踪咫鏶責椒贅鐸阪品行形禍爻";
+	BOOST_CHECK(cyclic_test(encoding_name::EUC_KR, s));
 }
 
-BOOST_AUTO_TEST_CASE(replacement_run__1)
+BOOST_AUTO_TEST_CASE(coder_replacement_coder_1)
 {
+	// 一度だけエラーを返し、その後は result_finished{} を返し続けるデコーダ
 	using namespace wordring::whatwg::encoding;
 
-	std::string in{ "ABCDE" };
-	std::u32string out{};
+	// テストデータ
+	std::string s = "ABCDE";
+	io_queue<char> in_q = to_io_queue_convert(s.begin(), s.end());
+	in_q.push(io_item<char>{ '\0', true });
 
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	result_value ret = run_decoder(name::replacement, stream_in, std::back_inserter(out));
-	BOOST_CHECK(ret.index() == 0);
-	BOOST_CHECK(out.size() == 1);
-	BOOST_CHECK(out[0] == 0xFFFDu);
+	// デコード
+	io_queue<char32_t> out_q;
+	auto rv = decode(in_q, encoding_name::replacement, out_q);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv));
 }
 
-BOOST_AUTO_TEST_CASE(UTF_16BE_coder__1)
+BOOST_AUTO_TEST_CASE(coder_replacement_coder_2)
 {
+	// 一度だけエラーを返し、その後は result_finished{} を返し続けるデコーダ
 	using namespace wordring::whatwg::encoding;
 
-	std::array<unsigned int, 96> p32{ 0x00u, 0x21u, 0x10u, 0x00u, 0x20u, 0x10u, 0x30u, 0x01u, 0x40u, 0x00u, 0x50u, 0x00u, 0x60u, 0x00u, 0x70u, 0x00u, 0x80u, 0x00u, 0x90u, 0x00u, 0xa0u, 0x00u, 0xb0u, 0x00u, 0xc0u, 0x00u, 0xd0u, 0x00u, 0xd8u, 0x0cu, 0xdcu, 0x00u, 0xd8u, 0x35u, 0xdcu, 0x00u, 0xd8u, 0x3cu, 0xdcu, 0x00u, 0xd8u, 0x40u, 0xdcu, 0x00u, 0xd8u, 0x44u, 0xdcu, 0x00u, 0xd8u, 0x48u, 0xdcu, 0x00u, 0xd8u, 0x4cu, 0xdcu, 0x00u, 0xd8u, 0x50u, 0xdcu, 0x00u, 0xd8u, 0x54u, 0xdcu, 0x00u, 0xd8u, 0x58u, 0xdcu, 0x00u, 0xd8u, 0x5cu, 0xdcu, 0x00u, 0xd8u, 0x60u, 0xdcu, 0x00u, 0xd8u, 0x64u, 0xdcu, 0x00u, 0xd8u, 0x68u, 0xdcu, 0x00u, 0xd8u, 0x6cu, 0xdcu, 0x00u, 0xd8u, 0x70u, 0xdcu, 0x29u, 0xd8u, 0x42u, 0xdfu, 0xb7u };
-	std::array<uint8_t, 96> p8{};
-	for (size_t i = 0; i < 96; i++) p8[i] = static_cast<uint8_t>(p32[i]);
+	// テストデータ
+	io_queue<char> in_q;
+	in_q.push(io_item<char>{ 'A', false });
 
-	std::string in{ p8.begin(), p8.end() };
-	std::u32string out{};
-
-	UTF_16BE_decoder decoder_0{};
-
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_in, std::back_inserter(out));
-#pragma warning(push)
-#pragma warning(disable:4566)
-	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
-#pragma warning(pop)
+	// デコード
+	replacement_decoder c;
+	result_value rv = c.run(in_q, in_q.read().m_value);
+	BOOST_CHECK(std::holds_alternative<result_error>(rv));
 }
 
-BOOST_AUTO_TEST_CASE(UTF_16BE_run__1)
+BOOST_AUTO_TEST_CASE(coder_UTF_16BE_decoder_1)
 {
+	// エンコーダは無い
 	using namespace wordring::whatwg::encoding;
-
-	std::array<unsigned int, 96> p32{ 0x00u, 0x21u, 0x10u, 0x00u, 0x20u, 0x10u, 0x30u, 0x01u, 0x40u, 0x00u, 0x50u, 0x00u, 0x60u, 0x00u, 0x70u, 0x00u, 0x80u, 0x00u, 0x90u, 0x00u, 0xa0u, 0x00u, 0xb0u, 0x00u, 0xc0u, 0x00u, 0xd0u, 0x00u, 0xd8u, 0x0cu, 0xdcu, 0x00u, 0xd8u, 0x35u, 0xdcu, 0x00u, 0xd8u, 0x3cu, 0xdcu, 0x00u, 0xd8u, 0x40u, 0xdcu, 0x00u, 0xd8u, 0x44u, 0xdcu, 0x00u, 0xd8u, 0x48u, 0xdcu, 0x00u, 0xd8u, 0x4cu, 0xdcu, 0x00u, 0xd8u, 0x50u, 0xdcu, 0x00u, 0xd8u, 0x54u, 0xdcu, 0x00u, 0xd8u, 0x58u, 0xdcu, 0x00u, 0xd8u, 0x5cu, 0xdcu, 0x00u, 0xd8u, 0x60u, 0xdcu, 0x00u, 0xd8u, 0x64u, 0xdcu, 0x00u, 0xd8u, 0x68u, 0xdcu, 0x00u, 0xd8u, 0x6cu, 0xdcu, 0x00u, 0xd8u, 0x70u, 0xdcu, 0x29u, 0xd8u, 0x42u, 0xdfu, 0xb7u };
-	std::array<uint8_t, 96> p8{};
-	for (size_t i = 0; i < 96; i++) p8[i] = static_cast<uint8_t>(p32[i]);
 
-	std::string in{ p8.begin(), p8.end() };
-	std::u32string out{};
+	// テストデータ
+	std::string s = {
+		'\x00', '\x21', '\x10', '\x00', '\x20', '\x10', '\x30', '\x01', '\x40', '\x00', '\x50',
+		'\x00', '\x60', '\x00', '\x70', '\x00', '\x80', '\x00', '\x90', '\x00', '\xA0', '\x00',
+		'\xB0', '\x00', '\xC0', '\x00', '\xD0', '\x00', '\xD8', '\x0C', '\xDC', '\x00', '\xD8',
+		'\x35', '\xDC', '\x00', '\xD8', '\x3C', '\xDC', '\x00', '\xD8', '\x40', '\xDC', '\x00',
+		'\xD8', '\x44', '\xDC', '\x00', '\xD8', '\x48', '\xDC', '\x00', '\xD8', '\x4C', '\xDC',
+		'\x00', '\xD8', '\x50', '\xDC', '\x00', '\xD8', '\x54', '\xDC', '\x00', '\xD8', '\x58',
+		'\xDC', '\x00', '\xD8', '\x5C', '\xDC', '\x00', '\xD8', '\x60', '\xDC', '\x00', '\xD8',
+		'\x64', '\xDC', '\x00', '\xD8', '\x68', '\xDC', '\x00', '\xD8', '\x6C', '\xDC', '\x00',
+		'\xD8', '\x70', '\xDC', '\x29', '\xD8', '\x42', '\xDF', '\xB7' };
 
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_decoder(name::UTF_16BE, stream_in, std::back_inserter(out));
-#pragma warning(push)
-#pragma warning(disable:4566)
-	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
-#pragma warning(pop)
-}
-
-BOOST_AUTO_TEST_CASE(UTF_16LE_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
+	io_queue<char> in_q = to_io_queue_convert(s.begin(), s.end());
+	in_q.push(io_item<char>{ '\0', true });
 
-#pragma warning(push)
-#pragma warning(disable:4566)
-	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
-#pragma warning(pop)
-	char8_t const* p8 = reinterpret_cast<char8_t const*>(p16);
+	// デコード
+	io_queue<char32_t> out_q;
+	auto rv2 = decode(in_q, encoding_name::UTF_16BE, out_q);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv2));
 
-	std::string in{};
-	for (size_t i = 0; i < 96; i++) in.push_back(*(p8 + i));
-	std::u32string out{};
+	// 比較用に出力を文字列化する
+	std::u32string s1;
+	from_io_queue_convert(out_q, std::back_inserter(s1));
 
-	UTF_16LE_decoder decoder_0{};
+	std::u32string s2 =
+		U"\U00000021\U00001000\U00002010\U00003001\U00004000\U00005000\U00006000\U00007000\U00008000"
+		"\U00009000\U0000A000\U0000B000\U0000C000\U0000D000\U00013000\U0001D400\U0001F000\U00020000"
+		"\U00021000\U00022000\U00023000\U00024000\U00025000\U00026000\U00027000\U00028000\U00029000"
+		"\U0002A000\U0002B000\U0002C029\U00020BB7";
 
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_in, std::back_inserter(out));
-#pragma warning(push)
-#pragma warning(disable:4566)
-	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
-#pragma warning(pop)
+	BOOST_CHECK(s1 == s2);
 }
 
-BOOST_AUTO_TEST_CASE(UTF_16LE_run__1)
+BOOST_AUTO_TEST_CASE(coder_UTF_16LE_decoder_1)
 {
+	// エンコーダは無い
 	using namespace wordring::whatwg::encoding;
-
 
-#pragma warning(push)
-#pragma warning(disable:4566)
-	char16_t const p16[] = u"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷";
-#pragma warning(pop)
-	char8_t const* p8 = reinterpret_cast<char8_t const*>(p16);
+	// テストデータ
+	std::string s = {
+		'\x21', '\x00', '\x00', '\x10', '\x10', '\x20', '\x01', '\x30', '\x00', '\x40', '\x00',
+		'\x50', '\x00', '\x60', '\x00', '\x70', '\x00', '\x80', '\x00', '\x90', '\x00', '\xA0',
+		'\x00', '\xB0', '\x00', '\xC0', '\x00', '\xD0', '\x0C', '\xD8', '\x00', '\xDC', '\x35',
+		'\xD8', '\x00', '\xDC', '\x3C', '\xD8', '\x00', '\xDC', '\x40', '\xD8', '\x00', '\xDC',
+		'\x44', '\xD8', '\x00', '\xDC', '\x48', '\xD8', '\x00', '\xDC', '\x4C', '\xD8', '\x00',
+		'\xDC', '\x50', '\xD8', '\x00', '\xDC', '\x54', '\xD8', '\x00', '\xDC', '\x58', '\xD8',
+		'\x00', '\xDC', '\x5C', '\xD8', '\x00', '\xDC', '\x60', '\xD8', '\x00', '\xDC', '\x64',
+		'\xD8', '\x00', '\xDC', '\x68', '\xD8', '\x00', '\xDC', '\x6C', '\xD8', '\x00', '\xDC',
+		'\x70', '\xD8', '\x29', '\xDC', '\x42', '\xD8', '\xB7', '\xDF' };
 
-	std::string in{};
-	for (size_t i = 0; i < 96; i++) in.push_back(*(p8 + i));
-	std::u32string out{};
+	io_queue<char> in_q = to_io_queue_convert(s.begin(), s.end());
+	in_q.push(io_item<char>{ '\0', true });
 
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_decoder(name::UTF_16LE, stream_in, std::back_inserter(out));
-#pragma warning(push)
-#pragma warning(disable:4566)
-	BOOST_CHECK(out == U"!က‐、䀀倀怀瀀耀退ꀀ뀀쀀퀀𓀀𝐀🀀𠀀𡀀𢀀𣀀𤀀𥀀𦀀𧀀𨀀𩀀𪀀𫀀𬀩𠮷");
-#pragma warning(pop)
-}
-
-BOOST_AUTO_TEST_CASE(x_user_defined_coder__1)
-{
-	using namespace wordring::whatwg::encoding;
+	// デコード
+	io_queue<char32_t> out_q;
+	auto rv2 = decode(in_q, encoding_name::UTF_16LE, out_q);
+	BOOST_CHECK(std::holds_alternative<result_finished>(rv2));
 
-	std::string in{ "\x00\xFF" };
-	std::u32string str{};
-	std::string out{};
+	// 比較用に出力を文字列化する
+	std::u32string s1;
+	from_io_queue_convert(out_q, std::back_inserter(s1));
 
-	x_user_defined_encoder encoder_0{};
-	x_user_defined_decoder decoder_0{};
+	std::u32string s2 =
+		U"\U00000021\U00001000\U00002010\U00003001\U00004000\U00005000\U00006000\U00007000\U00008000"
+		"\U00009000\U0000A000\U0000B000\U0000C000\U0000D000\U00013000\U0001D400\U0001F000\U00020000"
+		"\U00021000\U00022000\U00023000\U00024000\U00025000\U00026000\U00027000\U00028000\U00029000"
+		"\U0002A000\U0002B000\U0002C029\U00020BB7";
 
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run(decoder_0, stream_in, std::back_inserter(str));
-	stream<std::u32string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run(encoder_0, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	BOOST_CHECK(s1 == s2);
 }
 
-BOOST_AUTO_TEST_CASE(x_user_defined_run__1)
+BOOST_AUTO_TEST_CASE(coder_x_user_defined_coder_1)
 {
 	using namespace wordring::whatwg::encoding;
-
-	std::string in{ "\x00\xFF" };
-	std::u32string str{};
-	std::string out{};
 
-	stream<std::string::const_iterator> stream_in{ in.cbegin(), in.cend() };
-	run_decoder(name::x_user_defined, stream_in, std::back_inserter(str));
-	stream<std::u32string::const_iterator> stream_str{ str.cbegin(), str.cend() };
-	run_encoder(name::x_user_defined, stream_str, std::back_inserter(out));
-	BOOST_CHECK(in == out);
+	// テストデータ
+	std::u32string s = U"\x00\xFF";
+	BOOST_CHECK(cyclic_test(encoding_name::x_user_defined, s));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

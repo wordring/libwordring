@@ -5,7 +5,7 @@
 
 namespace wordring
 {
-	using encoding_name = wordring::whatwg::encoding::name;
+	using encoding_name = wordring::whatwg::encoding::encoding_name;
 
 	using wordring::whatwg::to_string;
 	using wordring::whatwg::encoding_cast;

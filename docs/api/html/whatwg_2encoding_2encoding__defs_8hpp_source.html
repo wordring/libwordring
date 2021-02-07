@@ -81,15 +81,15 @@ $(function() {
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    };</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">using</span> result_value = std::variant&lt;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1result__finished.html">result_finished</a>,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1result__continue.html">result_continue</a>,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        result_code_point,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        result_code_points_2,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        result_byte,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        result_bytes_2,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        result_bytes_3,</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        result_bytes_4,</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1result__error.html">result_error</a></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1result__finished.html">result_finished</a>,      <span class="comment">// 0.</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1result__continue.html">result_continue</a>,      <span class="comment">// 1.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        result_code_point,    <span class="comment">// 2.</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        result_code_points_2, <span class="comment">// 3.</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        result_byte,          <span class="comment">// 4.</span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        result_bytes_2,       <span class="comment">// 5.</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        result_bytes_3,       <span class="comment">// 6.</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        result_bytes_4,       <span class="comment">// 7.</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1result__error.html">result_error</a>          <span class="comment">// 8.</span></div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    &gt;;</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">enum class</span> error_mode_name : uint32_t</div>
@@ -102,7 +102,7 @@ $(function() {
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// 4.2. Names and labels --------------------------------------------------</span></div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">enum class</span> name : uint32_t</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">enum class</span> encoding_name : uint32_t</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {</div>
 <div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        UTF_8 = 1,</div>
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
@@ -161,7 +161,7 @@ $(function() {
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg.html">wordring::whatwg</a></div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;{</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">using</span> encoding_name = encoding::name;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">using</span> encoding_name = encoding::encoding_name;</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;}</div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="anamespacewordring_1_1whatwg_1_1encoding_html"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1encoding.html">wordring::whatwg::encoding</a></div></div>

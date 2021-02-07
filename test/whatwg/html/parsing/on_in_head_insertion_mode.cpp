@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_3)
 	tp.parse(s.begin(), s.end());
 
 	BOOST_CHECK(tp.m_encoding_confidence == encoding_confidence_name::tentative);
-	BOOST_CHECK(tp.m_encoding_name == static_cast<wordring::encoding_name>(0));
+	BOOST_CHECK(tp.m_encoding_name == wordring::encoding_name::UTF_8);
 }
 
 BOOST_AUTO_TEST_CASE(on_in_head_insertion_mode_4)

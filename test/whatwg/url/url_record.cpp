@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_CASE(url_record__construct__1)
 {
 	using namespace wordring::whatwg;
 
-	url_record ur;
+	//url_record ur;
 }
 
 BOOST_AUTO_TEST_CASE(is_forbidden_host_code_point__1)

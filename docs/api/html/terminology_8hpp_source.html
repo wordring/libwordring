@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.8.17"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>libwordring: terminology.hpp ソースファイル</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">libwordring
+   </div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- 構築: Doxygen 1.8.17 -->
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(function() {
+  initMenu('',false,false,'search.php','検索');
+});
+/* @license-end */</script>
+<div id="main-nav"></div>
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_6e53c0f51d9ea84781f9296c7df18ffe.html">wordring</a></li><li class="navelem"><a class="el" href="dir_60775d12a87b61a33d2f427675caa884.html">whatwg</a></li><li class="navelem"><a class="el" href="dir_0f130536eb6cd0e28cbeed583f42296d.html">encoding</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">terminology.hpp</div>  </div>
+</div><!--header-->
+<div class="contents">
+<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &lt;deque&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include &lt;iterator&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// ------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// 3. Terminology</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment">//</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">// https://encoding.spec.whatwg.org/#terminology</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment">// https://triple-underscore.github.io/Encoding-ja.html#terminology</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">// ------------------------------------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html">wordring::whatwg::encoding</a></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;{</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00026"></a><span class="lineno"><a class="line" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">   26</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">io_item</a></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        T m_value = T();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordtype">bool</span> m_eoq = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        T&amp; operator*() { <span class="keywordflow">return</span> m_value; }</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    };</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">   37</a></span>&#160;    <span class="keyword">struct </span><a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result</a></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keyword">using</span> value_type = T;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        value_type m_value;</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">bool</span> m_wait = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        T* operator-&gt;() { <span class="keywordflow">return</span> &amp;m_value; }</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        T&amp; operator*() { <span class="keywordflow">return</span> m_value; }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    };</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html">   55</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html">io_queue</a></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keyword">using</span> <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a> = <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">io_item&lt;T&gt;</a>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keyword">using</span> character_type = T;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html">io_queue</a>() : m_q() {}</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aee81b58ca8185ff43ce05d1698eee2ed">   79</a></span>&#160;        <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result&lt;value_type&gt;</a> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aee81b58ca8185ff43ce05d1698eee2ed">read</a>()</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        {</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;            <span class="keywordflow">if</span> (m_q.empty()) <span class="keywordflow">return</span> <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result&lt;value_type&gt;</a>{ <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a>{}, <span class="keyword">true</span> };</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;            <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a> c = m_q.front();</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;            <span class="keywordflow">if</span> (c.m_eoq) <span class="keywordflow">return</span> <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result&lt;value_type&gt;</a>{ c, <span class="keyword">false</span> };</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;            m_q.pop_front();</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result&lt;value_type&gt;</a>{ c, <span class="keyword">false</span> };</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        }</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a5aa4e2c1ad037947d429f6e7f34d41b7">  106</a></span>&#160;        <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result&lt;std::vector&lt;value_type&gt;</a>&gt; <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a5aa4e2c1ad037947d429f6e7f34d41b7">read</a>(std::uint32_t n)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        {</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;            <span class="comment">// 1.</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            std::vector&lt;value_type&gt; readItems;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="comment">// 規格に追加</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">if</span> (m_q.size() &lt; n) <span class="keywordflow">return</span> { readItems, <span class="keyword">true</span> }; <span class="comment">// 待機を返す</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            <span class="comment">// 2.</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">for</span> (std::uint32_t i = 0; i &lt; n; ++i) readItems.push_back(*<a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aee81b58ca8185ff43ce05d1698eee2ed">read</a>());</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="comment">// 3.</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="keywordflow">if</span> (readItems.back().m_eoq) readItems.pop_back();</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="comment">// 4.</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keywordflow">return</span> { readItems, <span class="keyword">false</span> };</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        }</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a6bca31431095541fd13e308a0ab086a8">  125</a></span>&#160;        <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">io_result&lt;std::vector&lt;value_type&gt;</a>&gt; <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a6bca31431095541fd13e308a0ab086a8">peek</a>(std::uint32_t n)</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        {</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;            assert(1 &lt;= n);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <span class="comment">// 1.</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <span class="keywordflow">if</span> (m_q.size() &lt; n &amp;&amp; !(!m_q.empty() &amp;&amp; m_q.back().m_eoq)) <span class="keywordflow">return</span> { {}, <span class="keyword">true</span> };</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="comment">// 2.</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            std::vector&lt;value_type&gt; prefix;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="comment">// 3.</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">for</span> (<a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a> <span class="keyword">const</span>&amp; p : m_q)</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            {</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                <span class="keywordflow">if</span> (p.m_eoq) <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                prefix.push_back(p);</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;            }</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            <span class="comment">// 4.</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            <span class="keywordflow">return</span> { prefix, <span class="keyword">false</span> };</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">  152</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>(<a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a> item)</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        {</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;            <span class="comment">// 1.</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;            <span class="keywordflow">if</span> (!m_q.empty() &amp;&amp; m_q.back().m_eoq)</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;            {</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                <span class="keywordflow">if</span> (item.m_eoq);</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                <span class="keywordflow">else</span> m_q.insert(--m_q.end(), item);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            }</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;            <span class="comment">// 2.</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <span class="keywordflow">else</span> m_q.push_back(item);</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        }</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>(T ch)</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        {</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;            <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>(value_type{ ch, <span class="keyword">false</span> });</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        }</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        {</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            <span class="keywordflow">while</span> (first != last)</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            {</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>(*first);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                ++first;</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;            }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        }</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a0fad8e3862d4758efd74643e33e06eac">  183</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a0fad8e3862d4758efd74643e33e06eac">prepend</a>(<a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a> item)</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        {</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            <span class="comment">//assert(!item.m_eoq); ISO2022_JP が EOQ を挿入する場合がある。</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;            m_q.push_front(item);</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        }</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
+<div class="line"><a name="l00193"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a5de0ebfccb96b76ebfabe9b2135b5c58">  193</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a5de0ebfccb96b76ebfabe9b2135b5c58">prepend</a>(T ch)</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        {</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;            <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a0fad8e3862d4758efd74643e33e06eac">prepend</a>(<a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a>{ ch, <span class="keyword">false</span> });</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        }</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#acde751ff5c2d19816360a7474381ffa7">  203</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#acde751ff5c2d19816360a7474381ffa7">prepend</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="keyword">auto</span> it = m_q.begin();</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keywordflow">while</span> (first != last) it = ++m_q.insert(it, <a class="code" href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">value_type</a>{ <span class="keyword">static_cast&lt;</span>T<span class="keyword">&gt;</span>(*first++), <span class="keyword">false</span> });</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        }</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        std::deque&lt;value_type&gt; m_q;</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    };</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> OutputIterator&gt;</div>
+<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="namespacewordring_1_1whatwg_1_1encoding.html#a2aa5c26bd761b69186b9bf9dfba69449">  223</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html#a2aa5c26bd761b69186b9bf9dfba69449">from_io_queue_convert</a>(<a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html">io_queue&lt;T&gt;</a> q, OutputIterator out)</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    {</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        {</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            <span class="keyword">auto</span> item = q.<a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aee81b58ca8185ff43ce05d1698eee2ed">read</a>();</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            <span class="keywordflow">if</span> (item.m_wait || item-&gt;m_eoq) <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            *out++ = **item;</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        }</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    }</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> InputIterator&gt;</div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="namespacewordring_1_1whatwg_1_1encoding.html#a5ad49eb039c502346e4d483721684764">  238</a></span>&#160;    <span class="keyword">inline</span> <span class="keyword">auto</span> <a class="code" href="namespacewordring_1_1whatwg_1_1encoding.html#a5ad49eb039c502346e4d483721684764">to_io_queue_convert</a>(InputIterator first, InputIterator last)</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    {</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keyword">using</span> value_type = <span class="keyword">typename</span> std::iterator_traits&lt;InputIterator&gt;::value_type;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html">io_queue&lt;value_type&gt;</a> q;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        q.<a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>(first, last);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        q.<a class="code" href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">push</a>({ 0, <span class="keyword">true</span> });</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordflow">return</span> q;</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    }</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;}</div>
+</div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_a6bca31431095541fd13e308a0ab086a8"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a6bca31431095541fd13e308a0ab086a8">wordring::whatwg::encoding::io_queue::peek</a></div><div class="ttdeci">io_result&lt; std::vector&lt; value_type &gt; &gt; peek(std::uint32_t n)</div><div class="ttdoc">Peek</div><div class="ttdef"><b>Definition:</b> terminology.hpp:125</div></div>
+<div class="ttc" id="anamespacewordring_1_1whatwg_1_1encoding_html"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1encoding.html">wordring::whatwg::encoding</a></div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_a0fad8e3862d4758efd74643e33e06eac"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a0fad8e3862d4758efd74643e33e06eac">wordring::whatwg::encoding::io_queue::prepend</a></div><div class="ttdeci">void prepend(value_type item)</div><div class="ttdoc">Prepend</div><div class="ttdef"><b>Definition:</b> terminology.hpp:183</div></div>
+<div class="ttc" id="astructwordring_1_1whatwg_1_1encoding_1_1io__item_html"><div class="ttname"><a href="structwordring_1_1whatwg_1_1encoding_1_1io__item.html">wordring::whatwg::encoding::io_item</a></div><div class="ttdoc">文字にキュー終端表現を追加するラッパー</div><div class="ttdef"><b>Definition:</b> terminology.hpp:26</div></div>
+<div class="ttc" id="anamespacewordring_1_1whatwg_1_1encoding_html_a2aa5c26bd761b69186b9bf9dfba69449"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1encoding.html#a2aa5c26bd761b69186b9bf9dfba69449">wordring::whatwg::encoding::from_io_queue_convert</a></div><div class="ttdeci">void from_io_queue_convert(io_queue&lt; T &gt; q, OutputIterator out)</div><div class="ttdoc">io_queue を文字列へ変換する</div><div class="ttdef"><b>Definition:</b> terminology.hpp:223</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_a5aa4e2c1ad037947d429f6e7f34d41b7"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a5aa4e2c1ad037947d429f6e7f34d41b7">wordring::whatwg::encoding::io_queue::read</a></div><div class="ttdeci">io_result&lt; std::vector&lt; value_type &gt; &gt; read(std::uint32_t n)</div><div class="ttdoc">値を読み取る</div><div class="ttdef"><b>Definition:</b> terminology.hpp:106</div></div>
+<div class="ttc" id="anamespacewordring_1_1whatwg_1_1encoding_html_a5ad49eb039c502346e4d483721684764"><div class="ttname"><a href="namespacewordring_1_1whatwg_1_1encoding.html#a5ad49eb039c502346e4d483721684764">wordring::whatwg::encoding::to_io_queue_convert</a></div><div class="ttdeci">auto to_io_queue_convert(InputIterator first, InputIterator last)</div><div class="ttdoc">文字列を io_queue へ変換する</div><div class="ttdef"><b>Definition:</b> terminology.hpp:238</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_aa92bb62e4c09bc7e332319633c698579"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aa92bb62e4c09bc7e332319633c698579">wordring::whatwg::encoding::io_queue::push</a></div><div class="ttdeci">void push(value_type item)</div><div class="ttdoc">Push</div><div class="ttdef"><b>Definition:</b> terminology.hpp:152</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_a5de0ebfccb96b76ebfabe9b2135b5c58"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#a5de0ebfccb96b76ebfabe9b2135b5c58">wordring::whatwg::encoding::io_queue::prepend</a></div><div class="ttdeci">void prepend(T ch)</div><div class="ttdoc">Prepend</div><div class="ttdef"><b>Definition:</b> terminology.hpp:193</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html">wordring::whatwg::encoding::io_queue</a></div><div class="ttdoc">入出力ストリーム</div><div class="ttdef"><b>Definition:</b> terminology.hpp:55</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_aee81b58ca8185ff43ce05d1698eee2ed"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#aee81b58ca8185ff43ce05d1698eee2ed">wordring::whatwg::encoding::io_queue::read</a></div><div class="ttdeci">io_result&lt; value_type &gt; read()</div><div class="ttdoc">値を一つ読み取る</div><div class="ttdef"><b>Definition:</b> terminology.hpp:79</div></div>
+<div class="ttc" id="astructwordring_1_1whatwg_1_1encoding_1_1io__result_html"><div class="ttname"><a href="structwordring_1_1whatwg_1_1encoding_1_1io__result.html">wordring::whatwg::encoding::io_result</a></div><div class="ttdoc">待機状態を追加するラッパー</div><div class="ttdef"><b>Definition:</b> terminology.hpp:37</div></div>
+<div class="ttc" id="aclasswordring_1_1whatwg_1_1encoding_1_1io__queue_html_acde751ff5c2d19816360a7474381ffa7"><div class="ttname"><a href="classwordring_1_1whatwg_1_1encoding_1_1io__queue.html#acde751ff5c2d19816360a7474381ffa7">wordring::whatwg::encoding::io_queue::prepend</a></div><div class="ttdeci">void prepend(InputIterator first, InputIterator last)</div><div class="ttdoc">Prepend</div><div class="ttdef"><b>Definition:</b> terminology.hpp:203</div></div>
+<!-- start footer part -->
+<hr class="footer"/><address class="footer"><small>
+構築: &#160;<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/>
+</a> 1.8.17
+</small></address>
+</body>
+</html>

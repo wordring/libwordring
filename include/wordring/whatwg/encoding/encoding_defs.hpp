@@ -33,15 +33,15 @@ namespace wordring::whatwg::encoding
 	};
 
 	using result_value = std::variant<
-		result_finished,
-		result_continue,
-		result_code_point,
-		result_code_points_2,
-		result_byte,
-		result_bytes_2,
-		result_bytes_3,
-		result_bytes_4,
-		result_error
+		result_finished,      // 0.
+		result_continue,      // 1.
+		result_code_point,    // 2.
+		result_code_points_2, // 3.
+		result_byte,          // 4.
+		result_bytes_2,       // 5.
+		result_bytes_3,       // 6.
+		result_bytes_4,       // 7.
+		result_error          // 8.
 	>;
 
 	enum class error_mode_name : uint32_t
@@ -54,7 +54,7 @@ namespace wordring::whatwg::encoding
 
 	// 4.2. Names and labels --------------------------------------------------
 
-	enum class name : uint32_t
+	enum class encoding_name : uint32_t
 	{
 		UTF_8 = 1,
 
@@ -113,5 +113,5 @@ namespace wordring::whatwg::encoding
 
 namespace wordring::whatwg
 {
-	using encoding_name = encoding::name;
+	using encoding_name = encoding::encoding_name;
 }

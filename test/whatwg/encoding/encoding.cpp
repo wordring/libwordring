@@ -7,52 +7,114 @@
 
 #include <wordring/whatwg/encoding/coder.hpp>
 #include <wordring/whatwg/encoding/encoding.hpp>
-#include <wordring/whatwg/encoding/stream.hpp>
-
-// 試験用復号器
-class test_decoder_1 : public wordring::whatwg::encoding::decoder
-{
-public:
-	template <typename Stream, typename Token>
-	wordring::whatwg::encoding::result_value run(Stream& input, Token byte)
-	{
-		switch (byte.value())
-		{
-		case '0': return wordring::whatwg::encoding::result_finished{};
-		case '1': return wordring::whatwg::encoding::result_continue{};
-		case '2': return U'A';
-		case '3': return std::array<uint32_t, 2>{ U'1', U'2' };
-		case '8': return wordring::whatwg::encoding::result_error{};
-		case '9': return wordring::whatwg::encoding::result_error{ U'A' };
-		}
-		return wordring::whatwg::encoding::result_finished{};
-	}
-};
-
-// 試験用符号化器
-class test_encoder_1 : public wordring::whatwg::encoding::encoder
-{
-public:
-	template <typename Stream, typename Token>
-	wordring::whatwg::encoding::result_value run(Stream& input, Token cp)
-	{
-		switch (cp.value())
-		{
-		case '0': return wordring::whatwg::encoding::result_finished{};
-		case '1': return wordring::whatwg::encoding::result_continue{};
-		case '4': return static_cast<uint8_t>('1');
-		case '5': return std::array<uint8_t, 2>{ '1', '2' };
-		case '6': return std::array<uint8_t, 3>{ '1', '2', '3' };
-		case '7': return std::array<uint8_t, 4>{ '1', '2', '3', '4' };
-		case '8': return wordring::whatwg::encoding::result_error{};
-		case '9': return wordring::whatwg::encoding::result_error{ 1234 };
-		}
-		return wordring::whatwg::encoding::result_finished{};
-	}
-};
+#include <wordring/whatwg/encoding/terminology.hpp>
 
 BOOST_AUTO_TEST_SUITE(whatwg_encoding_encoding_test)
 
+BOOST_AUTO_TEST_CASE(encoding_process_utf8_decode_1)
+{
+	using namespace wordring::whatwg::encoding;
+
+	// 1-4バイト迄の文字を一文字ずつ並べた。
+	std::string_view sv = "\x41\xC3\x80\xE3\x81\x82\xF0\x90\x8A\x80";
+	io_queue<char> in;
+	in.push(sv.begin(), sv.end());
+
+	io_queue<char32_t> out;
+	auto r = utf8_decode(in, out);
+	BOOST_CHECK(std::holds_alternative<result_continue>(r));
+	
+	std::u32string s;
+	from_io_queue_convert(out, std::back_inserter(s));
+	BOOST_CHECK(s == U"\U00000041\U000000C0\U00003042\U00010280");
+}
+
+BOOST_AUTO_TEST_CASE(encoding_process_utf8_decode_2)
+{
+	using namespace wordring::whatwg::encoding;
+
+	// 空。
+	std::string_view sv = "";
+	io_queue<char> in = to_io_queue_convert(sv.begin(), sv.end());
+
+	io_queue<char32_t> out;
+	auto r = utf8_decode(in, out);
+	BOOST_CHECK(std::holds_alternative<result_finished>(r));
+
+	std::u32string s;
+	from_io_queue_convert(out, std::back_inserter(s));
+	BOOST_CHECK(s == U"");
+}
+
+BOOST_AUTO_TEST_CASE(encoding_bom_sniff_1)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string_view sv = "\xEF\xBB\xBF";
+	io_queue<char> in = to_io_queue_convert(sv.begin(), sv.end());
+	
+	auto r = bom_sniff(in);
+	BOOST_CHECK(r.m_value == encoding_name::UTF_8);
+}
+
+BOOST_AUTO_TEST_CASE(encoding_bom_sniff_2)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string_view sv = "\xFE\xFF";
+	io_queue<char> in = to_io_queue_convert(sv.begin(), sv.end());
+	
+	auto r = bom_sniff(in);
+	BOOST_CHECK(r.m_value == encoding_name::UTF_16BE);
+}
+
+BOOST_AUTO_TEST_CASE(encoding_bom_sniff_3)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string_view sv = "\xFF\xFE";
+	io_queue<char> in = to_io_queue_convert(sv.begin(), sv.end());
+	
+	auto r = bom_sniff(in);
+	BOOST_CHECK(r.m_value == encoding_name::UTF_16LE);
+}
+
+BOOST_AUTO_TEST_CASE(encoding_bom_sniff_4)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string_view sv = "\xEF\xBB\xBF";
+	io_queue<char> in;
+	in.push(sv.begin(), sv.end());
+	
+	auto r = bom_sniff(in);
+	BOOST_CHECK(r.m_value == encoding_name::UTF_8);
+}
+
+BOOST_AUTO_TEST_CASE(encoding_bom_sniff_5)
+{
+	using namespace wordring::whatwg::encoding;
+
+	std::string_view sv = "\xFE\xFF";
+	io_queue<char> in;
+	in.push(sv.begin(), sv.end());
+	
+	auto r = bom_sniff(in);
+	// EOQ 無しの場合、規格上、待機状態で戻る。
+	BOOST_CHECK(r.m_wait == true);
+}
+
+BOOST_AUTO_TEST_CASE(encoding_bom_sniff_6)
+{
+	using namespace wordring::whatwg::encoding;
+
+	io_queue<char> in;
+	auto r = bom_sniff(in);
+
+	BOOST_CHECK(r.m_wait == true);
+}
+
+/*
 // 復号器が result_finished を返した場合
 BOOST_AUTO_TEST_CASE(process_token_decoder_0)
 {
@@ -430,6 +492,6 @@ BOOST_AUTO_TEST_CASE(utf8_encode_1)
 
 	BOOST_CHECK(out == u8"あいうえお");
 }
-
+*/
 BOOST_AUTO_TEST_SUITE_END()
 

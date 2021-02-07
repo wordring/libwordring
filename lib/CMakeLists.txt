@@ -16,33 +16,18 @@ find_package (
 	Boost 1.67 REQUIRED
 )
 
-#find_library (
-#	Gumbo_static_LIBRARY
-#		NAMES libgumbo.a libgumbo_static.a gumbo.a gumbo_static.a libgumbo.lib libgumbo_static.lib gumbo.lib gumbo_static.lib
-#		HINTS ${CMAKE_FIND_ROOT_PATH}
-#		PATHS ${CMAKE_FIND_ROOT_PATH}
-#		PATH_SUFFIXES "lib" "local/lib"
-#)
+find_package (
+	ICU REQUIRED
+	COMPONENTS
+		uc
+		data
+)
 
-#find_path (
-#	Gumbo_INCLUDE_DIR
-#		NAMES gumbo.h
-#		PATHS ${CMAKE_FIND_ROOT_PATH}
-#)
-
-#find_package (
-#	ICU REQUIRED
-#	COMPONENTS
-#		uc
-#		data
-#)
-
-#find_package(
-#	Sqlite3 REQUIRED
-#)
+find_package(OpenSSL REQUIRED)
 
 include_directories (
 	${Boost_INCLUDE_DIRS}
+	${ICU_INCLUDE_DIRS}
 	${Wordring_INCLUDE_DIR}
 )
 
@@ -57,3 +42,8 @@ add_library (
 		$<TARGET_OBJECTS:wwwc>
 )
 
+target_link_libraries(
+	${PROJECT_NAME} PRIVATE
+		OpenSSL::SSL OpenSSL::Crypto
+		${ICU_LIBRARIES}
+)

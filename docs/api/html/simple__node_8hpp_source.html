@@ -134,7 +134,7 @@ $(function() {
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        }</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <a class="code" href="classwordring_1_1html_1_1simple__attr.html">simple_attr</a>(attribute_name name, string_type <span class="keyword">const</span>&amp; val = string_type())</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            : m_namespace_uri(ns_name::HTML)</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;            : m_namespace_uri(static_cast&lt;ns_name&gt;(0))</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            , m_prefix()</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            , m_local_name(name)</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            , m_value(val)</div>
@@ -142,7 +142,7 @@ $(function() {
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        simple_attr(string_type <span class="keyword">const</span>&amp; name, string_type <span class="keyword">const</span>&amp; val = string_type())</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            : m_namespace_uri(ns_name::HTML)</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            : m_namespace_uri(static_cast&lt;ns_name&gt;(0))</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            , m_prefix()</div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            , m_local_name(name)</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            , m_value(val)</div>
@@ -545,12 +545,12 @@ $(function() {
 <div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160; </div>
 <div class="line"><a name="l00542"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__element.html#a3441188c2bff55514ec82ed2419098db">  542</a></span>&#160;        const_iterator <a class="code" href="classwordring_1_1html_1_1simple__element.html#a3441188c2bff55514ec82ed2419098db">find</a>(string_type <span class="keyword">const</span>&amp; name)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247">find</a>(ns_name::HTML, string_type(), name);</div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247">find</a>(<span class="keyword">static_cast&lt;</span>ns_name<span class="keyword">&gt;</span>(0), string_type(), name);</div>
 <div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;        }</div>
 <div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160; </div>
 <div class="line"><a name="l00549"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__element.html#a3d1f9894e69c5a742dbef34e0de0b887">  549</a></span>&#160;        const_iterator <a class="code" href="classwordring_1_1html_1_1simple__element.html#a3d1f9894e69c5a742dbef34e0de0b887">find</a>(attribute_name name)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247">find</a>(ns_name::HTML, string_type(), name);</div>
+<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1html_1_1simple__element.html#ae1940d7fefa2629b4fa445fecece5247">find</a>(<span class="keyword">static_cast&lt;</span>ns_name<span class="keyword">&gt;</span>(0), string_type(), name);</div>
 <div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;        }</div>
 <div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160; </div>
 <div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;    <span class="keyword">private</span>:</div>
@@ -929,13 +929,13 @@ $(function() {
 <div class="line"><a name="l00985"></a><span class="lineno">  985</span>&#160; </div>
 <div class="line"><a name="l00996"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__node.html#a962c32bd1e971230b45f2b338d518c4f">  996</a></span>&#160;        const_attribute_iterator <a class="code" href="classwordring_1_1html_1_1simple__node.html#a962c32bd1e971230b45f2b338d518c4f">find</a>(string_type <span class="keyword">const</span>&amp; name)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00997"></a><span class="lineno">  997</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1html_1_1simple__node.html#a9dfcf6c581ccd722fa670325420dade3">find</a>(ns_name::HTML, string_type(), name);</div>
+<div class="line"><a name="l00998"></a><span class="lineno">  998</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classwordring_1_1html_1_1simple__node.html#a9dfcf6c581ccd722fa670325420dade3">find</a>(<span class="keyword">static_cast&lt;</span>ns_name<span class="keyword">&gt;</span>(0), string_type(), name);</div>
 <div class="line"><a name="l00999"></a><span class="lineno">  999</span>&#160;        }</div>
 <div class="line"><a name="l01000"></a><span class="lineno"> 1000</span>&#160; </div>
 <div class="line"><a name="l01011"></a><span class="lineno"><a class="line" href="classwordring_1_1html_1_1simple__node.html#ae010f62fce64d1f4b66d854fdf3b8d1e"> 1011</a></span>&#160;        const_attribute_iterator <a class="code" href="classwordring_1_1html_1_1simple__node.html#ae010f62fce64d1f4b66d854fdf3b8d1e">find</a>(attribute_name name)<span class="keyword"> const</span></div>
 <div class="line"><a name="l01012"></a><span class="lineno"> 1012</span>&#160;<span class="keyword">        </span>{</div>
 <div class="line"><a name="l01013"></a><span class="lineno"> 1013</span>&#160;            <span class="keywordflow">return</span> std::find_if(<a class="code" href="classwordring_1_1html_1_1simple__node.html#a6faf9969b786cac156c2fa8422ee6b2c">begin</a>(), <a class="code" href="classwordring_1_1html_1_1simple__node.html#a1973a2349bab924482c54c8376a5e56b">end</a>(), [&amp;](<a class="code" href="classwordring_1_1html_1_1simple__attr.html">attribute_type</a> <span class="keyword">const</span>&amp; a)-&gt;<span class="keywordtype">bool</span> {</div>
-<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;                <span class="keywordflow">return</span> a == <a class="code" href="classwordring_1_1html_1_1simple__attr.html">attribute_type</a>(ns_name::HTML, string_type(), name); });</div>
+<div class="line"><a name="l01014"></a><span class="lineno"> 1014</span>&#160;                <span class="keywordflow">return</span> a == <a class="code" href="classwordring_1_1html_1_1simple__attr.html">attribute_type</a>(<span class="keyword">static_cast&lt;</span>ns_name<span class="keyword">&gt;</span>(0), string_type(), name); });</div>
 <div class="line"><a name="l01015"></a><span class="lineno"> 1015</span>&#160;        }</div>
 <div class="line"><a name="l01016"></a><span class="lineno"> 1016</span>&#160; </div>
 <div class="line"><a name="l01017"></a><span class="lineno"> 1017</span>&#160;        <span class="keywordtype">bool</span> contains(ns_name ns, string_type <span class="keyword">const</span>&amp; prefix, string_type <span class="keyword">const</span>&amp; name)</div>

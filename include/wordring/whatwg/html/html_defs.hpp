@@ -32,6 +32,6 @@ namespace wordring::whatwg::html
 		LimitedQuirks, /*!< 限定互換モード*/
 	};
 
-	using encoding_name = wordring::whatwg::encoding::name;
+	using encoding_name = wordring::whatwg::encoding::encoding_name;
 	using encoding_confidence_name = parsing::encoding_confidence_name;
 }

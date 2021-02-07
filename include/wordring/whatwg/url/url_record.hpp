@@ -8,6 +8,7 @@
 
 namespace wordring::whatwg
 {
+	/*
 	class url_record
 	{
 	public:
@@ -30,5 +31,5 @@ namespace wordring::whatwg
 		bool      cannot_be_base_url_flag = false;
 		blob_type blob_url_entry;
 	};
-
+	*/
 }

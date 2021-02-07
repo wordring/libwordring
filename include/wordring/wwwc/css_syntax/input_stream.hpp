@@ -1,8 +1,10 @@
 ﻿#pragma once
 
-#include <wordring/encoding/encoding.hpp>
-#include <wordring/encoding/encoding_defs.hpp>
+#include <wordring/whatwg/encoding/encoding.hpp>
+#include <wordring/whatwg/encoding/terminology.hpp>
 #include <wordring/whatwg/infra/infra.hpp>
+
+#include <wordring/encoding/encoding_defs.hpp>
 
 #include <algorithm>
 #include <string_view>
@@ -29,8 +31,13 @@ namespace wordring::wwwc
 	{
 		static_assert(sizeof(decltype(*first)) == sizeof(std::uint8_t));
 
+		using namespace wordring;
+
 		fallback = determine_fallback_encoding(first, last, fallback);
-		wordring::whatwg::encoding::decode(first, last, fallback, out);
+		wordring::whatwg::encoding::io_queue<char> in_q = wordring::whatwg::encoding::to_io_queue_convert(first, last);
+		wordring::whatwg::encoding::io_queue<char32_t> out_q;
+		wordring::whatwg::encoding::decode(in_q, fallback, out_q);
+		wordring::whatwg::encoding::from_io_queue_convert(out_q, out);
 	}
 
 	/*! @brief 代替エンコーディングを決定する
