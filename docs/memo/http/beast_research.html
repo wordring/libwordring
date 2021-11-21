@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Beast の調査</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body>
+    <p><a href="../index.html"><img src="../../up.svg" alt=""></a></p>
+    <h1>Beast の調査</h1>
+    <h2>ストリーム</h2>
+    <p>Beast においてデータ送受信の対象はストリームです。　ストリームは入れ子構造になっており、最も基本的な tcp_stream に
+      ssl_stream をかぶせたり、 websocket::stream をかぶせたりして使います。</p>
+    <ul>
+      <li>beast::tcp_stream</li>
+      <li>beast::ssl_stream</li>
+      <li>beast:websocket::stream
+        <p>以下は、よく使うストリームクラスの組み合わせを示すものです。</p>
+      </li>
+    </ul>
+    <table style="width: 100%" border="1">
+      <tbody>
+        <tr>
+          <th><br>
+          </th>
+          <th>HTTP</th>
+          <th>WebSocket</th>
+        </tr>
+        <tr>
+          <td><b>Plain</b></td>
+          <td>tcp_stream<br>
+          </td>
+          <td>websocket::stream&lt;tcp_stream&gt;<br>
+          </td>
+        </tr>
+        <tr>
+          <td><b>SSL</b></td>
+          <td>ssl_stream&lt;tcp_stream&gt;<br>
+          </td>
+          <td>websocket::stream&lt;ssl_stream&lt;tcp_stream&gt;&gt; </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Beast には、 HTTP から HTTPS
+      へのアップグレード方法が用意されていますが、ポート番号が違うため実際に使われることは無いと思われます。</p>
+    <p>ポート番号が同一の HTTP と WS 、あるいは HTTPS と WSS の共用は十分あり得ます。したがって、 HTTP / HTTPS
+      からそれぞれ WS / WSS へのプロトコル・アップグレードを準備する必要が有ります。</p>
+    <h2>リクエストを待ちピアと接続する</h2>
+    boost::asio::ip::tcp::acceptor を使って接続を待ち受ける。
+    <ul>
+      <li>acceptor の前準備。</li>
+      <ul>
+        <li>acceptor.open()</li>
+        <li>acceptor.set_option()</li>
+        <li>acceptor.bind()</li>
+        <li>acceptor.listen()</li>
+      </ul>
+      <li>acceptor.async_accept() によって待ち受けるが、 同時実行しないよう、acceptor
+        に関連付けられたExecutor（※事前にストランドを Executor として関連付けておく）を通して呼び出す。 async_accept()
+        によって返される新しいソケットは、専用のストランドを持つべきです。　async_accept()
+        呼び出し時に、専用のストランドを作成し結びつけます。</li>
+      <ul>
+        <li>acceptor.async_accept()</li>
+      </ul>
+      <li>ここまででリクエストしてくるピアとの接続は終わり、ここからは、 async_accept()
+        によって返された個別のソケットに対する操作です。　</li>
+    </ul>
+    <h2>HTTP リクエストを読み込む</h2>
+    <p>beast::http::async_read()
+      を使ってリクエストを読み込む。　パイプライン化によって一つの接続で複数のリクエストを行う場合がある。　パイプライン化に応じる場合、個々のリクエストに対して新しい
+      パーサを準備して async_read()
+      を行う。　パイプライン化は並列化ではないので、パーサの必要数は一つで済む。　しかし、パイプライン化は期待するような効果を得られないとの事。</p>
+    <blockquote>
+      <pre>beast::tcp_stream             stream;<br>beast::http::request_parser&lt;&gt; parser;</pre>
+    </blockquote>
+    <ul>
+      <li>parser.emplace()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="color: #996633;">// 要求ごとに新たなパーサーを準備</span></li>
+      <li>parser.body_limit()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <span style="color: #996633;">// リクエストボディの容量に制限をかける</span></li>
+      <li>stream.expires_after()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color: #996633;">//
+          タイムアウトを設定する</span></li>
+      <li>beast::http::async_read()<span style="color: #996633;"> // 要求の読み込みを開始</span></li>
+    </ul>
+    <ul>
+    </ul>
+    <h2><span style="color: #505050;"></span>HTTP から WebSocket へのアップグレード</h2>
+    <p>HTTP からスタートする。</p>
+    <ul>
+      <li>パーサー志向のインターフェースを使う。</li>
+      <li>パーサーにリクエストを読み込んだ後、 websocket::is_upgrade() へ渡して WebSocket か判定する。</li>
+    </ul>
+    <p>WebSocket へアップグレードする。</p>
+    <ul>
+      <li>tcp_stream.release_socket() でソケットの所有権を解除し、websocket::stream&lt;&gt;
+        コンストラクタの引数として構築する。</li>
+      <li>http::request_parser&lt;&gt;.release() 呼び出しによってパース済み message
+        の所有権を解除し、そ れを引数に websocket::stream&lt;&gt;.async_accept()
+        を呼び出す（※WebSocketのハンドシェイクを受け入れる）。</li>
+    </ul>
+    <h2>HTTP レスポンスを返す</h2>
+    <ul>
+      <li>beast::http::async_write()</li>
+    </ul>
+    <h2>WebSocket</h2>
+    <p><br>
+    </p>
+    <ul>
+    </ul>
+  </body>
+</html>

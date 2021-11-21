@@ -90,11 +90,12 @@ bool wordring::whatwg::is_valid_ipv4_address_string(std::u32string const& s)
 	std::string tmp;
 	for (std::u32string const& c : v)
 	{
-		if (3 < c.size()) return false;
+		if (!(1 <= c.size() && c.size() <= 4)) return false;
 		tmp.clear();
 		for (char32_t ch : c) tmp.push_back(static_cast<std::uint8_t>(ch));
 		std::uint32_t i;
 		std::from_chars(tmp.data(), tmp.data() + tmp.length(), i);
+
 		if (255 < i) return false;
 	}
 	return true;

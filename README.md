@@ -6,9 +6,10 @@ Linux と Windows でテストされています。
 
 # 主な機能
 
-- WHATWG HTML5 仕様の HTML Parser。
-- WHATWG Encoding 仕様の文字コード変換。
-- CSS Selectors Level 4 仕様の CSS セレクタ。
+- WHATWG HTML5 規格の HTML Parser。
+- WHATWG Encoding 規格の文字コード変換。
+- W3C CSS Selectors Level 4 規格の CSS Selector 。
+- WHATWG URL 規格の URL Parser 。
 - Tree コンテナ、および、Tree 走査用のイテレータ・アダプタ。
 - 動的 TRIE 木。
 
@@ -62,6 +63,7 @@ CMake から要求ライブラリが見える状態が必要です。
 
 - 出来るだけ新しい Boost
 - ICU
+- OpenSSL
 
 ## 要求サブモジュール
 

@@ -16,7 +16,7 @@ std::string const current_binary_path{ TO_STRING(CURRENT_BINARY_PATH) };
 namespace
 {
 #ifdef NDEBUG
-	std::uint32_t constexpr n = 10 * 1024 * 1024;
+	std::uint32_t constexpr n = 1024 * 1024;
 #else
 	std::uint32_t constexpr n = 1024;
 #endif

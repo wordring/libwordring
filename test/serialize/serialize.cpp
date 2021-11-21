@@ -6,9 +6,9 @@
 
 #include <wordring/serialize/serialize.hpp>
 
-BOOST_AUTO_TEST_SUITE(serialize__test)
+BOOST_AUTO_TEST_SUITE(serialize_test)
 
-BOOST_AUTO_TEST_CASE(serialize__1)
+BOOST_AUTO_TEST_CASE(serialize_1)
 {
 	using namespace wordring;
 
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE(serialize__1)
 	BOOST_CHECK((serialize(static_cast<std::int32_t>(0xABBCCDD)) == std::array<std::uint8_t, 4>{ 0xA, 0xBB, 0xCC, 0xDD }));
 }
 
-BOOST_AUTO_TEST_CASE(serialize__2)
+BOOST_AUTO_TEST_CASE(serialize_2)
 {
 	using namespace wordring;
 

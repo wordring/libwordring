@@ -48,7 +48,7 @@ bool wordring::whatwg::cannot_have_username_or_password_or_port(wordring::whatwg
 {
 	return !url.m_host
 		|| url.m_host == std::u32string(U"")
-		|| cannot_have_username_or_password_or_port(url)
+		|| url.m_cannot_be_base_url == true
 		|| url.m_scheme == U"file";
 }
 
@@ -72,7 +72,7 @@ bool wordring::whatwg::is_normalized_windows_drive_letter(std::u32string const& 
 	return s.size() == 2 && is_normalized_windows_drive_letter(s[0], s[1]);
 }
 
-bool wordring::whatwg::starts_with_windows_drive_letter(std::u32string::const_iterator first, std::u32string::const_iterator last)
+bool wordring::whatwg::starts_with_windows_drive_letter(char32_t const* first, char32_t const* last)
 {
 	return 2 <= std::distance(first, last)
 		&& is_windows_drive_letter(*first, *std::next(first))
@@ -102,98 +102,103 @@ bool wordring::whatwg::is_valid_url_string(std::u32string const& s)
 
 bool wordring::whatwg::is_absolute_url_with_fragment_string(std::u32string const& s)
 {
-	auto it = starts_with_absolute_url_string(s.begin(), s.end());
-	if (it == s.begin()) return false;
-
-
-
-
-
-
-
-	return true;
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_absolute_url_string(std::u32string const& s)
 {
-
+	assert(false);
+	return false;
 }
 
 std::u32string::const_iterator wordring::whatwg::starts_with_absolute_url_string(
 	std::u32string::const_iterator first, std::u32string::const_iterator last)
 {
-
+	assert(false);
+	return last;
 }
 
 bool wordring::whatwg::is_url_scheme_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_relative_url_with_fragment_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_relative_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_scheme_relative_special_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_url_port_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_scheme_relative_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_opaque_host_and_port_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_scheme_relative_file_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_path_absolute_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_path_absolute_non_windows_file_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_path_relative_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_path_relative_scheme_less_url_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_url_path_segment_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_single_dot_path_segment(std::u32string const& s)
 {
-	std::u32string_view sv1 = U"%2e";
-
 	return s == U"." || s == U"%2e" || s == U"%2E";
 }
 
@@ -211,12 +216,14 @@ bool wordring::whatwg::is_double_dot_path_segment(std::u32string const& s)
 
 bool wordring::whatwg::is_url_query_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_url_fragment_string(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 bool wordring::whatwg::is_url_code_point(char32_t c)
@@ -252,7 +259,8 @@ bool wordring::whatwg::is_url_code_point(char32_t c)
 
 bool wordring::whatwg::is_url_units(std::u32string const& s)
 {
-	
+	assert(false);
+	return false;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -339,7 +347,7 @@ wordring::whatwg::basic_url_parser::basic_url_parser(
 	// 7.
 	atSignSeen = insideBrackets = passwordTokenSeen = false;
 	// 8.
-	pointer = m_input.begin();
+	pointer = m_input.data();
 }
 
 std::optional<wordring::whatwg::url_record_base> wordring::whatwg::basic_url_parser::run()
@@ -348,7 +356,7 @@ std::optional<wordring::whatwg::url_record_base> wordring::whatwg::basic_url_par
 	while (true)
 	{
 		url_parse_result ret = static_cast<url_parse_result>(0);
-		char32_t c = pointer != m_input.end() ? *pointer : U'\n';
+		char32_t c = (m_input.data() <= pointer && pointer < m_input.data() + m_input.size()) ? *pointer : U'\n';
 		switch (m_state)
 		{
 		case url_parse_state::SchemeStartState:
@@ -426,7 +434,7 @@ std::optional<wordring::whatwg::url_record_base> wordring::whatwg::basic_url_par
 			break;
 		}
 
-		if (pointer == m_input.end()) break;
+		if (!(pointer < m_input.data() + m_input.size())) break;
 		++pointer;
 	}
 
@@ -445,7 +453,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_scheme
 	else if (m_override == static_cast<url_parse_state>(0))
 	{
 		m_state = url_parse_state::NoSchemeState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 	// 3.
@@ -493,7 +500,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_scheme
 		// 2.5.
 		if (m_url->m_scheme == U"file")
 		{
-			if (std::distance(pointer, m_input.end()) < 3 || *(pointer + 1) != U'/' || *(pointer + 2) != U'/')
+			if (std::distance(pointer, m_input.data() + m_input.size()) < 3 || *(pointer + 1) != U'/' || *(pointer + 2) != U'/')
 			{
 				*m_ec = url_error_name::ValidationError;
 			}
@@ -507,7 +514,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_scheme
 		// 2.7.
 		else if (is_special(*m_url)) m_state = url_parse_state::SpecialAuthoritySlashesState;
 		// 2.8.
-		else if (2 < std::distance(pointer, m_input.end()) && *(pointer + 1) == U'/')
+		else if (2 < std::distance(pointer, m_input.data() + m_input.size()) && *(pointer + 1) == U'/')
 		{
 			m_state = url_parse_state::PathOrAuthorityState;
 			++pointer;
@@ -525,7 +532,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_scheme
 	{
 		buffer.clear();
 		m_state = url_parse_state::NoSchemeState;
-		pointer = m_input.begin();
+		pointer = m_input.data() - 1; // この状態を抜けた後incrementされるので、一つ減らしておく必要が有る。
 	}
 	// 4.
 	else
@@ -559,14 +566,12 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_no_sch
 	else if (m_base->m_scheme != U"file")
 	{
 		m_state = url_parse_state::RelativeState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 	// 4.
 	else
 	{
 		m_state = url_parse_state::FileState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -576,10 +581,9 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_no_sch
 wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_special_relative_or_authority_state(char32_t c)
 {
 	// 1.
-	if (c == U'/' && 2 <= std::distance(pointer, m_input.end()) && pointer[1] == U'/')
+	if (c == U'/' && 2 <= std::distance(pointer, m_input.data() + m_input.size()) && *(pointer + 1) == U'/')
 	{
 		m_state = url_parse_state::SpecialAuthorityIgnoreSlashesState;
-		assert(pointer != m_input.end());
 		++pointer;
 	}
 	// 2.
@@ -587,7 +591,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_specia
 	{
 		*m_ec = url_error_name::ValidationError;
 		m_state = url_parse_state::RelativeState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -602,7 +605,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_path_o
 	else
 	{
 		m_state = url_parse_state::PathState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -652,7 +654,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_relati
 			if (!m_url->m_path.empty()) m_url->m_path.erase(--m_url->m_path.end());
 			// 4.4.3.
 			m_state = url_parse_state::PathState;
-			assert(pointer != m_input.begin());
 			--pointer;
 		}
 	}
@@ -680,7 +681,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_relati
 		m_url->m_host = m_base->m_host;
 		m_url->m_port = m_base->m_port;
 		m_state = url_parse_state::PathState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -690,10 +690,9 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_relati
 wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_special_authority_slashes_state(char32_t c)
 {
 	// 1.
-	if (c == U'/' && 2 <= std::distance(pointer, m_input.end()) && pointer[1] == U'/')
+	if (c == U'/' && 2 <= std::distance(pointer, m_input.data() + m_input.size()) && *(pointer + 1) == U'/')
 	{
 		m_state = url_parse_state::SpecialAuthorityIgnoreSlashesState;
-		assert(pointer != m_input.end());
 		++pointer;
 	}
 	// 2.
@@ -701,7 +700,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_specia
 	{
 		*m_ec = url_error_name::ValidationError;
 		m_state = url_parse_state::SpecialAuthorityIgnoreSlashesState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -714,7 +712,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_specia
 	if (!(c == U'/' || c == U'\x5C'))
 	{
 		m_state = url_parse_state::AuthorityState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 	// 2.
@@ -767,7 +764,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_author
 			return url_parse_result::Failure;
 		}
 		// 2.2.
-		assert(buffer.size() < std::distance(m_input.begin(), pointer));
 		pointer -= (buffer.size() + 1);
 		buffer.clear();
 		m_state = url_parse_state::HostState;
@@ -792,7 +788,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_hostna
 	// 1.
 	if (m_override != static_cast<url_parse_state>(0) && m_url->m_scheme == U"file")
 	{
-		assert(pointer != m_input.begin());
 		--pointer;
 		m_state = url_parse_state::FileHostState;
 	}
@@ -808,6 +803,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_hostna
 		// 2.2.
 		std::error_code ec;
 		host_base host = parse_host(buffer, !is_special(*m_url), ec);
+		if (ec) *m_ec = ec;
 		// 2.3.
 		if (host.type() == static_cast<host_type_name>(0)) return url_parse_result::Failure;
 		// 2.4.
@@ -820,6 +816,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_hostna
 	// 3.
 	else if ((c == U'\n' || c == U'/' || c == U'?' || c == U'#') || (is_special(*m_url) && c == U'\x5C'))
 	{
+		--pointer;
 		// 3.1.
 		if (is_special(*m_url) && buffer.empty())
 		{
@@ -835,6 +832,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_hostna
 		// 3.3.
 		std::error_code ec;
 		host_base host = parse_host(buffer, !is_special(*m_url), ec);
+		if (ec) *m_ec = ec;
 		// 3.4.
 		if (host.type() == static_cast<host_type_name>(0)) return url_parse_result::Failure;
 		// 3.5.
@@ -885,7 +883,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_port_s
 		if (m_override != static_cast<url_parse_state>(0)) return url_parse_result::Return;
 		// 2.3.
 		m_state = url_parse_state::PathStartState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 	// 3.
@@ -935,7 +932,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_s
 			// 4.4.1.
 			m_url->m_query.reset();
 			// 4.4.2.
-			if (starts_with_windows_drive_letter(pointer, m_input.end())) shorten_urls_path(*m_url);
+			if (!starts_with_windows_drive_letter(pointer, m_input.data() + m_input.size())) shorten_urls_path(*m_url);
 			// 4.4.3.
 			else
 			{
@@ -944,7 +941,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_s
 			}
 			// 4.4.4.
 			m_state = url_parse_state::PathState;
-			assert(pointer != m_input.begin());
 			--pointer;
 		}
 	}
@@ -952,7 +948,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_s
 	else
 	{
 		m_state = url_parse_state::PathState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -976,7 +971,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_s
 			// 2.1.1.
 			m_url->m_host = m_base->m_host;
 			// 2.1.2.
-			if (!starts_with_windows_drive_letter(pointer, m_input.end())
+			if (!starts_with_windows_drive_letter(pointer, m_input.data() + m_input.size())
 				&& !m_base->m_path.empty() && is_normalized_windows_drive_letter(m_base->m_path.front()))
 			{
 				m_url->m_path.push_back(m_base->m_path.front());
@@ -984,7 +979,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_s
 		}
 		// 2.2.
 		m_state = url_parse_state::PathState;
-		assert(pointer != m_input.begin());
 		--pointer;
 	}
 
@@ -996,7 +990,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_h
 	// 1.
 	if (c == U'\n' || c == U'/' || c == U'\x5C' || c == U'?' || c == U'#')
 	{
-		assert(pointer != m_input.begin());
 		--pointer;
 		// 1.1.
 		if (m_override == static_cast<url_parse_state>(0) && is_windows_drive_letter(buffer))
@@ -1020,6 +1013,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_file_h
 			// 1.3.1.
 			std::error_code ec;
 			host_base host = parse_host(buffer, !is_special(*m_url), ec);
+			if (ec) *m_ec = ec;
 			// 1.3.2.
 			if (host.type() == static_cast<host_type_name>(0)) return url_parse_result::Failure;
 			// 1.3.3.
@@ -1048,7 +1042,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_path_s
 		m_state = url_parse_state::PathState;
 		if (!(c == U'/' || c == U'\x5C'))
 		{
-			assert(pointer != m_input.begin());
 			--pointer;
 		}
 	}
@@ -1070,7 +1063,6 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_path_s
 		m_state = url_parse_state::PathState;
 		if (c != U'/')
 		{
-			assert(pointer != m_input.begin());
 			--pointer;
 		}
 	}
@@ -1129,9 +1121,9 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_path_s
 	else
 	{
 		// 2.1.
-		if (!is_url_code_point(c) && c == U'%') *m_ec = url_error_name::ValidationError;
+		if (!is_url_code_point(c) && c != U'%') *m_ec = url_error_name::ValidationError;
 		// 2.2.
-		if (c == U'%' && (std::distance(pointer, m_input.end()) < 2 || !is_ascii_hex_digit(pointer[1])))
+		if (c == U'%' && (std::distance(pointer, m_input.data() + m_input.size()) < 2 || !is_ascii_hex_digit(*(pointer + 1))))
 		{
 			*m_ec = url_error_name::ValidationError;
 		}
@@ -1162,7 +1154,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_cannot
 		// 3.1.
 		if (c != U'\n' && !is_url_code_point(c) && c != U'%') *m_ec = url_error_name::ValidationError;
 		// 3.2.
-		if (c == U'%' && (std::distance(pointer, m_input.end()) < 3 || !is_ascii_hex_digit(pointer[1]) || !is_ascii_hex_digit(pointer[2])))
+		if (c == U'%' && (std::distance(pointer, m_input.data() + m_input.size()) < 3 || !is_ascii_hex_digit(*(pointer + 1)) || !is_ascii_hex_digit(*(pointer + 2))))
 		{
 			*m_ec = url_error_name::ValidationError;
 		}
@@ -1202,7 +1194,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_query_
 		// 3.1.
 		if (!is_url_code_point(c) && c != U'%') *m_ec = url_error_name::ValidationError;
 		// 3.2.
-		if (c == U'%' && (std::distance(pointer, m_input.end()) < 3 || !is_ascii_hex_digit(pointer[1]) || !is_ascii_hex_digit(pointer[2])))
+		if (c == U'%' && (std::distance(pointer, m_input.data() + m_input.size()) < 3 || !is_ascii_hex_digit(*(pointer + 1)) || !is_ascii_hex_digit(*(pointer + 2))))
 		{
 			*m_ec = url_error_name::ValidationError;
 		}
@@ -1221,7 +1213,7 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_fragme
 		// 1.1.
 		if (!is_url_code_point(c) && c != U'%') *m_ec = url_error_name::ValidationError;
 		// 1.2.
-		if (c == U'%' && (std::distance(pointer, m_input.end()) < 3 || !is_ascii_hex_digit(pointer[1]) || !is_ascii_hex_digit(pointer[2])))
+		if (c == U'%' && (std::distance(pointer, m_input.data() + m_input.size()) < 3 || !is_ascii_hex_digit(*(pointer + 1)) || !is_ascii_hex_digit(*(pointer + 2))))
 		{
 			*m_ec = url_error_name::ValidationError;
 		}
@@ -1230,6 +1222,98 @@ wordring::whatwg::url_parse_result wordring::whatwg::basic_url_parser::on_fragme
 	}
 
 	return url_parse_result::Continue;
+}
+
+void wordring::whatwg::set_username(url_record_base& url, std::u32string const& username)
+{
+	url.m_username = utf8_percent_encode(username, is_userinfo_percent_encode_set);
+}
+
+void wordring::whatwg::set_password(url_record_base& url, std::u32string const& password)
+{
+	url.m_password = utf8_percent_encode(password, is_userinfo_percent_encode_set);
+}
+
+// ------------------------------------------------------------------------------------------------
+// 4.5. URL serializing
+//
+// https://url.spec.whatwg.org/#url-serializing
+// ------------------------------------------------------------------------------------------------
+
+std::u32string wordring::whatwg::serialize_url(url_record_base const& url, bool exclude_fragment)
+{
+	// 1.
+	std::u32string output = url.m_scheme;
+	output.push_back(U':');
+	// 2.
+	if (url.m_host)
+	{
+		// 2.1.
+		output.append(U"//");
+		// 2.2.
+		if (includes_credentials(url))
+		{
+			// 2.2.1.
+			output.append(url.m_username);
+			// 2.2.2.
+			if (!url.m_password.empty())
+			{
+				output.push_back(U':');
+				output.append(url.m_password);
+			}
+			// 2.2.3.
+			output.push_back(U'@');
+		}
+		// 2.3.
+		output.append(serialize_host(*url.m_host));
+		// 2.4.
+		if (url.m_port)
+		{
+			output.push_back(U':');
+			std::u32string tmp;
+			serialize_integer(*url.m_port, std::back_inserter(tmp));
+			output.append(tmp);
+		}
+	}
+	// 3.
+	if (url.m_cannot_be_base_url) output.append(url.m_path.front());
+	// 4.
+	else
+	{
+		// 4.1.
+		if (!url.m_host && 1 < url.m_path.size() && url.m_path.front().empty()) output.append(U"/.");
+		// 4.2.
+		for (std::u32string const& segment : url.m_path)
+		{
+			output.push_back(U'/');
+			output.append(segment);
+		}
+	}
+	// 5.
+	if (url.m_query)
+	{
+		output.push_back(U'?');
+		output.append(*url.m_query);
+	}
+	// 6.
+	if (exclude_fragment == false && url.m_fragment)
+	{
+		output.push_back(U'#');
+		output.append(*url.m_fragment);
+	}
+	// 7.
+	return output;
+}
+
+// --------------------------------------------------------------------------------------------
+// 4.6. URL equivalence
+// 
+// https://url.spec.whatwg.org/#url-equivalence
+// --------------------------------------------------------------------------------------------
+
+bool wordring::whatwg::equals(url_record_base const& lhs, url_record_base const& rhs, bool exclude_fragments)
+{
+	return serialize_url(lhs, exclude_fragments) == serialize_url(rhs, exclude_fragments);
 }
 
 

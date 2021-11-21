@@ -106,7 +106,7 @@ namespace wordring::whatwg
 	*
 	* @sa https://url.spec.whatwg.org/#start-with-a-windows-drive-letter
 	*/
-	bool starts_with_windows_drive_letter(std::u32string::const_iterator first, std::u32string::const_iterator last);
+	bool starts_with_windows_drive_letter(char32_t const* first, char32_t const* last);
 
 	/*! @brief URL の PATH を短くする
 	*
@@ -122,24 +122,32 @@ namespace wordring::whatwg
 
 	/*! @brief valid URL 文字列
 	* 
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#valid-url-string
 	*/
 	bool is_valid_url_string(std::u32string const& s);
 
 	/*! @brief absolute-URL-with-fragment string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#absolute-url-with-fragment-string
 	*/
 	bool is_absolute_url_with_fragment_string(std::u32string const& s);
 
 	/*! @brief absolute-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#absolute-url-string
 	*/
 	bool is_absolute_url_string(std::u32string const& s);
 
 	/*! @brief absolute-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#absolute-url-string
 	*/
 	std::u32string::const_iterator starts_with_absolute_url_string(
@@ -147,78 +155,104 @@ namespace wordring::whatwg
 
 	/*! @brief URL-scheme string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#url-scheme-string
 	*/
 	bool is_url_scheme_string(std::u32string const& s);
 
 	/*! @brief relative-URL-with-fragment string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#relative-url-with-fragment-string
 	*/
 	bool is_relative_url_with_fragment_string(std::u32string const& s);
 
 	/*! @brief relative-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#relative-url-string
 	*/
 	bool is_relative_url_string(std::u32string const& s);
 
 	/*! @brief scheme-relative-special-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#scheme-relative-special-url-string
 	*/
 	bool is_scheme_relative_special_url_string(std::u32string const& s);
 
 	/*! @brief URL-port string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#url-port-string
 	*/
 	bool is_url_port_string(std::u32string const& s);
 
 	/*! @brief scheme-relative-URL string 
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#scheme-relative-file-url-string
 	*/
 	bool is_scheme_relative_url_string(std::u32string const& s);
 
 	/*! @brief opaque-host-and-port string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#opaque-host-and-port-string
 	*/
 	bool is_opaque_host_and_port_string(std::u32string const& s);
 
 	/*! @brief scheme-relative-file-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#scheme-relative-file-url-string
 	*/
 	bool is_scheme_relative_file_url_string(std::u32string const& s);
 
 	/*! @brief path-absolute-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#path-absolute-url-string
 	*/
 	bool is_path_absolute_url_string(std::u32string const& s);
 
-	/*! @brief https://url.spec.whatwg.org/#path-absolute-non-windows-file-url-string
+	/*! @brief path-absolute-non-Windows-file-URL string
 	*
-	* @sa path-absolute-non-Windows-file-URL string
+	* 未実装。
+	* 
+	* @sa https://url.spec.whatwg.org/#path-absolute-non-windows-file-url-string
 	*/
 	bool is_path_absolute_non_windows_file_url_string(std::u32string const& s);
 
 	/*! @brief path-relative-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#path-relative-url-string
 	*/
 	bool is_path_relative_url_string(std::u32string const& s);
 
 	/*! @brief path-relative-scheme-less-URL string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#path-relative-scheme-less-url-string
 	*/
 	bool is_path_relative_scheme_less_url_string(std::u32string const& s);
 
 	/*! @brief URL-path-segment string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#url-path-segment-string
 	*/
 	bool is_url_path_segment_string(std::u32string const& s);
@@ -237,12 +271,16 @@ namespace wordring::whatwg
 
 	/*! @brief URL-query string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#url-query-string
 	*/
 	bool is_url_query_string(std::u32string const& s);
 
 	/*! @brief URL-fragment string
 	*
+	* 未実装。
+	* 
 	* @sa https://url.spec.whatwg.org/#url-fragment-string
 	*/
 	bool is_url_fragment_string(std::u32string const& s);
@@ -254,6 +292,8 @@ namespace wordring::whatwg
 	bool is_url_code_point(char32_t c);
 
 	/*! @brief URL units
+	* 
+	* 未実装。
 	* 
 	* @sa https://url.spec.whatwg.org/#url-units
 	*/
@@ -273,6 +313,7 @@ namespace wordring::whatwg
 		std::u32string const& in,
 		url_record_base const* base = nullptr,
 		encoding_name name = encoding_name::UTF_8);
+
 
 	/*! @brief basic URL parser
 	*
@@ -313,6 +354,7 @@ namespace wordring::whatwg
 	/*! @brief basic URL parser
 	*
 	* 解析前に、入力文字列からタブや改行が取り除かれるため、「\\n」をEOS として使う。
+	* 
 	* @sa https://url.spec.whatwg.org/#concept-basic-url-parser
 	*/
 	class basic_url_parser
@@ -366,19 +408,42 @@ namespace wordring::whatwg
 		bool atSignSeen;
 		bool insideBrackets;
 		bool passwordTokenSeen;
-		std::u32string::iterator pointer;
+		char32_t* pointer;
 	};
+	
+	/*! @brief URL レコードへユーザー名を設定する
+	* 
+	* @sa https://url.spec.whatwg.org/#set-the-username
+	*/
+	void set_username(url_record_base& url, std::u32string const& username);
 
+	/*! @brief URL レコードへパスワードを設定する
+	*
+	* @sa https://url.spec.whatwg.org/#set-the-password
+	*/
+	void set_password(url_record_base& url, std::u32string const& password);
 
+	// --------------------------------------------------------------------------------------------
+	// 4.5. URL serializing
+	//
+	// https://url.spec.whatwg.org/#url-serializing
+	// --------------------------------------------------------------------------------------------
 
+	/*! @brief URL serializer
+	* 
+	* @sa https://url.spec.whatwg.org/#concept-url-serializer
+	*/
+	std::u32string serialize_url(url_record_base const& url, bool exclude_fragment = false);
 
+	// --------------------------------------------------------------------------------------------
+	// 4.6. URL equivalence
+	// 
+	// https://url.spec.whatwg.org/#url-equivalence
+	// --------------------------------------------------------------------------------------------
 
-
-
-
-	template <typename Integer, typename OutputIterator>
-	inline void serialize(Integer i, OutputIterator output)
-	{
-
-	}
+	/*! brief  URL A equals B
+	* 
+	* @sa https://url.spec.whatwg.org/#concept-url-equals
+	*/
+	bool equals(url_record_base const& lhs, url_record_base const& rhs, bool exclude_fragments = false);
 }

@@ -1,11 +1,11 @@
-﻿# test/whatwg/url
+﻿# test/http/
 #
-# このプロジェクトは whatwg/url のテストを作成します。
+# このプロジェクトは http のテストを作成します。
 #
 
 cmake_minimum_required (VERSION 3.12)
 
-project("whatwg-url-test")
+project("http-test")
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -26,12 +26,10 @@ include_directories (
 add_executable(
 	${PROJECT_NAME}
 		"test_module.cpp"
-		"host.cpp"
-		"infra.cpp"
-		"url.cpp"
- "api.cpp")
+		"simple_server.cpp"
+ )
 
-add_definitions(-DCURRENT_SOURCE_PATH=${CMAKE_CURRENT_SOURCE_DIR})
+add_definitions(-DCURRENT_BINARY_DIR=${CMAKE_CURRENT_BINARY_DIR})
 
 target_link_libraries(
 	${PROJECT_NAME}

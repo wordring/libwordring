@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>設計ノート</title>
+    <link type="text/css" rel="stylesheet" href="../../default.css">
+  </head>
+  <body>
+    <p><a href="../index.html"><img src="../../up.svg" alt=""></a></p>
+    <h1>設計ノート</h1>
+    <h2>メモ</h2>
+    <h3>考察</h3>
+    <ul>
+      <li>HTTP と WebSocket は用途が違うため、処理関数も別のモノとなる。</li>
+      <li>Plain と SSL は下位層が違うだけで用途は同じなので、処理関数を同じにしたい。</li>
+      <li>HTTP 、 WebSocket 共に、 URL に応じて適切な処理関数を呼び出す。</li>
+    </ul>
+    <h3>HTTP 処理</h3>
+    <ul>
+      <li>HTTP ヘッダを引数として受け取り、バイト列を返す。</li>
+    </ul>
+    <h3>WebSocket 処理</h3>
+    <ul>
+      <li>キーボードからの入力などによって送信を行う。</li>
+      <li>ピアから受信する。</li>
+      <li>クラス化するのが妥当かも？</li>
+      <li>オブジェクトの寿命は、ソケットが閉じられるまでと思われる。</li>
+    </ul>
+    <h2>リクエストURLと処理のマッチ</h2>
+    <ul>
+      <li>GET 、 POST などの<b>リクエスト・メソッドとリクエストURIの組</b>に対して、処理プログラムをマッチングする。</li>
+      <li>ヘッダを読み込み終えた時点で、WebSocketアップグレード、メソッド、URLなどが判明する。</li>
+    </ul>
+    <p> <img src="url_match.svg" alt=""> </p>
+    <ul>
+      <li>URLと処理のマッチングには、正規表現が使われる。</li>
+      <li>メソッドは、GET、POSTなど。</li>
+    </ul>
+    <p><img src="url_match_processor.svg" alt=""></p>
+    <h2><br>
+    </h2>
+  </body>
+</html>

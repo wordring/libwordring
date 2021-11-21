@@ -32,6 +32,10 @@ namespace wordring::whatwg
 			{
 			case url_error_name::IdnaTranslationFailed:
 				return "idna translation failed";
+			case url_error_name::ParseFailed:
+				return "URL parse failed";
+			case url_error_name::ValidationError:
+				return "URL validation error";
 			default:
 				break;
 			}
