@@ -1,0 +1,18 @@
+﻿{
+  "version": "1",
+  "environments": [
+    // リモート環境の構成方法の詳細については、
+    // https://aka.ms/remotetesting を参照してください。
+    {
+      "name": "WSL Ubuntu",
+      "type": "wsl",
+      "wslDistribution": "Ubuntu"
+    }
+    //,
+    //{
+    //  "name": "Docker dotnet/sdk",
+    //  "type": "docker",
+    //  "dockerImage": "mcr.microsoft.com/dotnet/sdk"
+    //}
+  ]
+}
