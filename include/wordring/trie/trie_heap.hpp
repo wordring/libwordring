@@ -105,7 +105,7 @@ namespace wordring::detail
 		}
 
 	protected:
-		trie_heap_serialize_iterator(container const& c, std::uint32_t n)
+		trie_heap_serialize_iterator(container const& c, std::size_t n)
 			: m_c(std::addressof(c))
 			, m_index(n * 2)
 		{
