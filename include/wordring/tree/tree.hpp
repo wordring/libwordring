@@ -733,7 +733,7 @@ namespace wordring
 
 			if (idx == 0)
 			{
-				idx = m_c.size();
+				idx = static_cast<index_type>(m_c.size());
 				m_c.emplace_back(node_type{ 0, 0, 0, 0, std::move(val) });
 			}
 			else

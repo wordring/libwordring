@@ -62,7 +62,8 @@ BOOST_AUTO_TEST_CASE(trie_node__construct__1)
 {
 	using namespace wordring;
 
-	static_assert(std::is_pod_v<detail::trie_node>);
+	static_assert(std::is_trivially_copyable_v<detail::trie_node>);
+	static_assert(std::is_standard_layout_v<detail::trie_node>);
 }
 
 // ----------------------------------------------------------------------------

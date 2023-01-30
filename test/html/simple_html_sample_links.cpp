@@ -22,7 +22,7 @@ namespace
 		std::u32string out;
 		to_string(sp.get_document(), std::back_inserter(out));
 
-		std::cout << wordring::encoding_cast<std::u8string>(out);
+		// std::cout << wordring::encoding_cast<std::u8string>(out);
 
 		return out;
 	}

@@ -236,7 +236,7 @@ namespace wordring::detail
 				++it;
 			}
 
-			m_c.front().m_base = std::distance(first, last);
+			m_c.front().m_base = static_cast<std::uint32_t>(std::distance(first, last)); // m_base は int32_t なので大きさを合わせる
 		}
 
 		// 要素アクセス --------------------------------------------------------

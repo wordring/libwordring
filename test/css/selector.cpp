@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(selector_query_selector_all_1)
 	namespace css = wordring::css;
 	namespace html = wordring::html;
 
-	std::string_view sv = u8"<p>text1</p><p>text2</p>";
+	std::u8string_view sv = u8"<p>text1</p><p>text2</p>";
 	html::u8simple_tree tree = html::make_document<html::u8simple_tree>(sv.begin(), sv.end());
 
 	std::vector<html::u8simple_tree::const_iterator> v;

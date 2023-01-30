@@ -140,7 +140,7 @@ namespace wordring::detail
 		/*! コンテナの最終状態番号の次を返す
 		- キャストで行が増えるのを抑制するために用意した。
 		*/
-		index_type limit() const { return m_c->size(); }
+		index_type limit() const { return static_cast<index_type>(m_c->size()); }
 
 		/*! 空遷移がある場合trueを返す
 		*/

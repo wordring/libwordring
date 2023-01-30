@@ -333,9 +333,9 @@ BOOST_AUTO_TEST_CASE(simple_html_sample_syntax_9)
 		u8"</td></tr></tbody></table>\n"
 		u8"</body></html>";
 
-	std::cout << out << std::endl;
+	//std::cout << out << std::endl;
 
-	std::cout << wordring::encoding_cast<std::u8string>(s);
+	//std::cout << wordring::encoding_cast<std::u8string>(s);
 
 	BOOST_CHECK(out == s);
 }

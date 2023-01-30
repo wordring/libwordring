@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(simple_html_make_document_2)
 {
 	using namespace wordring::html;
 
-	std::u8string const in = "<meta charset=\"shift-jis\">\x82\xA0\x82\xA2\x82\xA4\x82\xA6\x82\xA8";
+	std::string const in = "<meta charset=\"shift-jis\">\x82\xA0\x82\xA2\x82\xA4\x82\xA6\x82\xA8";
 
 	std::u8string const s = u8R"*(<html><head><meta charset="shift-jis"></head><body>あいうえお</body></html>)*";
 
@@ -60,6 +60,10 @@ BOOST_AUTO_TEST_CASE(simple_html_make_document_2)
 
 	std::u8string out;
 	to_string(doc, std::back_inserter(out));
+
+	std::string out2;
+	for (std::size_t i = 0; i < out.size(); i++) out2 += static_cast<char>(out[i]);
+	std::cout << out2;
 
 	BOOST_CHECK(s == out);
 }

@@ -211,7 +211,7 @@ namespace wordring::whatwg::encoding
 		{
 			Array result;
 			//3.
-			std::uint32_t count = result.size() - 1;
+			std::uint32_t count = static_cast<std::uint32_t>(result.size() - 1);
 			std::uint32_t offset = 0;
 			if      (count == 1) offset = 0xC0u;
 			else if (count == 2) offset = 0xE0u;

@@ -633,9 +633,9 @@ BOOST_AUTO_TEST_CASE(trie_base_insert_10) // ストレステスト
 		std::mt19937 mt(rd());
 		std::shuffle(v.begin(), v.end(), mt);
 
-		for (auto const& s : v) w1.push_back(std::make_pair(s, w1.size()));
+		for (auto const& s : v) w1.push_back(std::make_pair(s, static_cast<std::uint32_t>(w1.size())));
 		w2 = w1;
-		for (auto const& s : v) w2.push_back(std::make_pair(s, w2.size()));
+		for (auto const& s : v) w2.push_back(std::make_pair(s, static_cast<std::uint32_t>(w2.size())));
 	}
 
 	test_trie trie{};

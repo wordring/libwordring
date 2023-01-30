@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(cast_iterator_regex_1)
 	using tree_type = u16simple_tree;
 #endif // __linux__
 
-	std::string_view sv = u8"<span>ABCあ</span><a>い</a><strong>うDEF</strong>";
+	std::u8string_view sv = u8"<span>ABCあ</span><a>い</a><strong>うDEF</strong>";
 	auto doc = make_document<tree_type>(sv.begin(), sv.end());
 
 	using wchar_iterator = tree_type::wchar_iterator;

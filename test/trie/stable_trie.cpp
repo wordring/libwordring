@@ -788,14 +788,14 @@ BOOST_AUTO_TEST_CASE(stable_trie__insert__10)
 
 BOOST_AUTO_TEST_CASE(stable_trie__insert__11)
 {
-	test_trie<char> trie;
+	test_trie<char8_t> trie;
 
-	auto it = trie.insert(std::string(u8""));
+	auto it = trie.insert(std::u8string(u8""));
 
 	BOOST_CHECK(it == trie.end());
 	BOOST_CHECK(trie.size() == 0);
 	BOOST_CHECK(trie.size() == trie.count());
-	BOOST_CHECK(trie.contains(std::string(1, u8'\0')) == false);
+	BOOST_CHECK(trie.contains(std::u8string(1, u8'\0')) == false);
 }
 
 BOOST_AUTO_TEST_CASE(stable_trie__insert__12)
@@ -824,34 +824,34 @@ BOOST_AUTO_TEST_CASE(stable_trie__insert__13)
 
 BOOST_AUTO_TEST_CASE(stable_trie__insert__14)
 {
-	test_trie<char> trie;
+	test_trie<char8_t> trie;
 
-	auto it = trie.insert(std::string(u8"あいうえお"));
+	auto it = trie.insert(std::u8string(u8"あいうえお"));
 
 	BOOST_CHECK(it == true);
 	BOOST_CHECK(trie.size() == 1);
 	BOOST_CHECK(trie.size() == trie.count());
-	BOOST_CHECK(trie.contains(std::string(u8"あいうえお")));
-	BOOST_CHECK(trie.contains(std::string(u8"あいうえ")) == false);
+	BOOST_CHECK(trie.contains(std::u8string(u8"あいうえお")));
+	BOOST_CHECK(trie.contains(std::u8string(u8"あいうえ")) == false);
 }
 
 BOOST_AUTO_TEST_CASE(stable_trie__insert__15)
 {
-	test_trie<char> trie;
+	test_trie<char8_t> trie;
 
-	trie.insert(std::string(u8"あ"));
-	trie.insert(std::string(u8"あう"));
-	trie.insert(std::string(u8"い"));
-	trie.insert(std::string(u8"うあい"));
-	trie.insert(std::string(u8"うえ"));
+	trie.insert(std::u8string(u8"あ"));
+	trie.insert(std::u8string(u8"あう"));
+	trie.insert(std::u8string(u8"い"));
+	trie.insert(std::u8string(u8"うあい"));
+	trie.insert(std::u8string(u8"うえ"));
 
 	BOOST_CHECK(trie.size() == 5);
 	BOOST_CHECK(trie.size() == trie.count());
-	BOOST_CHECK(trie.contains(std::string(u8"あ")));
-	BOOST_CHECK(trie.contains(std::string(u8"あう")));
-	BOOST_CHECK(trie.contains(std::string(u8"い")));
-	BOOST_CHECK(trie.contains(std::string(u8"うあい")));
-	BOOST_CHECK(trie.contains(std::string(u8"うえ")));
+	BOOST_CHECK(trie.contains(std::u8string(u8"あ")));
+	BOOST_CHECK(trie.contains(std::u8string(u8"あう")));
+	BOOST_CHECK(trie.contains(std::u8string(u8"い")));
+	BOOST_CHECK(trie.contains(std::u8string(u8"うあい")));
+	BOOST_CHECK(trie.contains(std::u8string(u8"うえ")));
 }
 
 // void erase(const_iterator pos)

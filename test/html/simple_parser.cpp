@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(simple_parser_construct_1)
 	for (char32_t cp : s) p.push_code_point(cp);
 	p.push_eof();
 
-	BOOST_CHECK(data(*p.get_document().begin()) == " Comment ");
+	BOOST_CHECK(data(*p.get_document().begin()) == u8" Comment ");
 }
 
 BOOST_AUTO_TEST_CASE(simple_parser_contains_1)

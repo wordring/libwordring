@@ -145,7 +145,7 @@ namespace wordring::detail
 
 			m_it = prev();
 
-			if (m_it != base_type()) m_i = node_traits::data(m_it).size() - 1;
+			if (m_it != base_type()) m_i = static_cast<std::uint32_t>(node_traits::data(m_it).size() - 1);
 
 			return *this;
 		}

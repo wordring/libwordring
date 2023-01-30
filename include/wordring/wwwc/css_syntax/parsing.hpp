@@ -1093,7 +1093,7 @@ namespace wordring::wwwc::css
 		std::u32string_view const sv = U"important";
 
 		std::uint32_t st = 0;
-		for (std::uint32_t i = v.size() - 1; 0 <= i; --i)
+		for (std::size_t i = v.size() - 1; 0 <= i; --i)
 		{
 			using wordring::whatwg::is_ascii_case_insensitive_match;
 

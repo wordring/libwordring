@@ -1259,14 +1259,14 @@ namespace wordring::whatwg::html::parsing
 					return is_html_element_of(entry.m_it, tag_name::Template); });
 				auto last_template = (it == m_stack.rend()) ? m_stack.end() : (++it).base();
 
-				it = std::find_if(m_stack.rbegin(), m_stack.rend(), [=](stack_entry const& entry) {
+				it = std::find_if(m_stack.rbegin(), m_stack.rend(), [this](stack_entry const& entry) {
 					return is_html_element_of(entry.m_it, tag_name::Table); });
 				auto last_table = (it == m_stack.rend()) ? m_stack.end() : (++it).base();
 
 				if (last_template != m_stack.end())
 				{
 					std::int32_t distance = 0;
-					if (last_table != m_stack.end()) distance = std::distance(last_table, last_template);
+					if (last_table != m_stack.end()) distance = static_cast<std::int32_t>(std::distance(last_table, last_template));
 
 					if (0 < distance)
 					{

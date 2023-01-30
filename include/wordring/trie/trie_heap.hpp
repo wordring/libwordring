@@ -105,7 +105,7 @@ namespace wordring::detail
 		}
 
 	protected:
-		trie_heap_serialize_iterator(container const& c, std::size_t n)
+		trie_heap_serialize_iterator(container const& c, std::uint32_t n)
 			: m_c(std::addressof(c))
 			, m_index(n * 2)
 		{
@@ -352,7 +352,7 @@ namespace wordring::detail
 		*/
 		serialize_iterator iend() const
 		{
-			return serialize_iterator(m_c, m_c.size());
+			return serialize_iterator(m_c, static_cast<std::uint32_t>(m_c.size()));
 		}
 
 		// 変更 ---------------------------------------------------------------
@@ -392,13 +392,13 @@ namespace wordring::detail
 		{
 		}
 
-		index_type limit() const { return m_c.size(); }
+		index_type limit() const { return static_cast<index_type>(m_c.size()); }
 
 		void reserve(std::size_t n, index_type before = 0)
 		{
 			assert(0 <= before  && before < limit());
 
-			index_type id = m_c.size(); // reserveする先頭の番号
+			index_type id = static_cast<index_type>(m_c.size()); // reserveする先頭の番号
 			m_c.insert(m_c.end(), n, { 0, 0 });
 
 			node_type* d = m_c.data();
@@ -409,7 +409,7 @@ namespace wordring::detail
 				before = i;
 			}
 			// CHECKを更新する
-			for (index_type last = m_c.size(); id != last; before = id++)
+			for (index_type last = static_cast<index_type>(m_c.size()); id != last; before = id++)
 			{
 				assert(before < limit());
 				(d + before)->m_check = -id;

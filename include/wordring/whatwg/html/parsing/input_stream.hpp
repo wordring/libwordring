@@ -228,7 +228,7 @@ namespace wordring::whatwg::html::parsing
 		*/
 		bool fill(std::uint32_t n)
 		{
-			m_fill_length += (n - m_c.size());
+			m_fill_length += (n - static_cast<std::uint32_t>(m_c.size()));
 			return m_eof || m_c.size() == n;
 		}
 
@@ -260,9 +260,9 @@ namespace wordring::whatwg::html::parsing
 		もしも期待する文字列が得られたなら、このメンバを呼び出し消費する。
 
 		*/
-		void consume(std::uint32_t n)
+		void consume(std::size_t n)
 		{
-			for (std::uint32_t i = 0; i < n; ++i) consume();
+			for (std::size_t i = 0; i < n; ++i) consume();
 		}
 
 		/*! @brief 現在の入力文字を再消費する

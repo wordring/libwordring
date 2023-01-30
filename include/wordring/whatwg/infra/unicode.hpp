@@ -37,6 +37,49 @@ namespace wordring::whatwg
 		エラーチェックは行われない。
 	*/
 	template <typename InputIterator,
+		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char>, std::nullptr_t> = nullptr>
+	inline InputIterator to_code_point(InputIterator first, InputIterator last, char32_t& output)
+	{
+		assert(first != last);
+		unsigned char ch1 = static_cast<unsigned char>(*first++);
+		if ((ch1 & 0x80u) == 0u)
+		{
+			output = static_cast<char32_t>(ch1);
+			return first;
+		}
+
+		assert(first != last);
+		unsigned char ch2 = static_cast<unsigned char>(*first++);
+		assert((ch2 & 0xC0u) == 0x80u);
+		if ((ch1 & 0xE0u) == 0xC0u)
+		{
+			output = static_cast<char32_t>(((ch1 & 0x1Fu) << 6) + (ch2 & 0x3Fu));
+			return first;
+		}
+
+		assert(first != last);
+		unsigned char ch3 = static_cast<unsigned char>(*first++);
+		assert((ch3 & 0xC0u) == 0x80u);
+		if ((ch1 & 0xF0u) == 0xE0u)
+		{
+			output = static_cast<char32_t>(((ch1 & 0xFu) << 12) + ((ch2 & 0x3Fu) << 6) + (ch3 & 0x3Fu));
+			return first;
+		}
+
+		assert(first != last);
+		unsigned char ch4 = static_cast<unsigned char>(*first++);
+		assert((ch4 & 0xC0u) == 0x80u);
+		if ((ch1 & 0xF8u) == 0xF0u)
+		{
+			output = static_cast<char32_t>(((ch1 & 0x7u) << 18) + ((ch2 & 0x3Fu) << 12) + ((ch3 & 0x3Fu) << 6) + (ch4 & 0x3Fu));
+			return first;
+		}
+
+		assert(false);
+		return last;
+	}
+
+	template <typename InputIterator,
 		typename std::enable_if_t<std::is_same_v<typename std::iterator_traits<InputIterator>::value_type, char8_t>, std::nullptr_t> = nullptr>
 	inline InputIterator to_code_point(InputIterator first, InputIterator last, char32_t& output)
 	{
@@ -128,6 +171,37 @@ namespace wordring::whatwg
 
 	utf-8文字符号化は、処理系がchar8_tをサポートする場合char8_t、しない場合charで有効化される。
 	*/
+	template <typename OutputIterator,
+		typename std::enable_if_t<
+			std::conjunction_v<
+				std::is_same<typename std::iterator_traits<OutputIterator>::iterator_category, std::output_iterator_tag>,
+				std::disjunction<
+					std::is_same<typename std::iterator_traits<OutputIterator>::value_type, char>,
+					std::is_same<typename OutputIterator::container_type::value_type, char>>>, nullptr_t> = nullptr>
+		inline void to_string(char32_t ch, OutputIterator output)
+	{
+		if ((ch & 0xFFFFFF80u) == 0) *output++ = static_cast<unsigned char>(ch); // 一バイト文字
+		else if ((ch & 0xFFFFF800u) == 0) // 二バイト文字
+		{
+			*output++ = static_cast<unsigned char>(0xC0u + (ch >> 6));
+			*output++ = static_cast<unsigned char>(0x80u + (ch & 0x3Fu));
+		}
+		else if ((ch & 0xFFFF0000u) == 0) // 三バイト文字
+		{
+			*output++ = static_cast<unsigned char>(0xE0u + (ch >> 12));
+			*output++ = static_cast<unsigned char>(0x80u + ((ch & 0xFC0u) >> 6));
+			*output++ = static_cast<unsigned char>(0x80u + (ch & 0x3Fu));
+		}
+		else if ((ch & 0xFFE00000u) == 0) // 四バイト文字
+		{
+			*output++ = static_cast<unsigned char>(0xF0u + (ch >> 18));
+			*output++ = static_cast<unsigned char>(0x80u + ((ch & 0x3F000u) >> 12));
+			*output++ = static_cast<unsigned char>(0x80u + ((ch & 0xFC0u) >> 6));
+			*output++ = static_cast<unsigned char>(0x80u + (ch & 0x3Fu));
+		}
+		else assert(false);
+	}
+
 	template <typename OutputIterator,
 		typename std::enable_if_t<
 			std::conjunction_v<

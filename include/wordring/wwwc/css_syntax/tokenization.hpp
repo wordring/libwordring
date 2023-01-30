@@ -619,7 +619,7 @@ namespace wordring::wwwc::css
 		std::uint32_t f = 0;
 		std::string fractional_part;
 		while (first != last && is_digit(*first)) fractional_part.push_back(static_cast<std::uint8_t>(*first++));
-		d = fractional_part.size();
+		d = static_cast<double>(fractional_part.size());
 		if (!fractional_part.empty())
 		{
 			[[maybe_unused]] std::from_chars_result r2 =

@@ -66,7 +66,8 @@ BOOST_AUTO_TEST_CASE(tree_node_construct_1)
 {
 	using namespace wordring::detail;
 
-	static_assert(std::is_pod_v<tree_node<int>>);
+	static_assert(std::is_trivially_copyable_v<tree_node<int>>);
+	static_assert(std::is_standard_layout_v<tree_node<int>>);
 
 	tree_node<int> n{};
 

@@ -224,7 +224,7 @@ namespace wordring
 
 			if (idx == 0) // 開放済みノードが無い
 			{
-				idx = m_c->size();
+				idx = static_cast<std::uint32_t>(m_c->size());
 				m_c->emplace_back(wrapper{ 0, 0, 0, 0, std::move(val) });
 			}
 			else // 開放済みノードが有る

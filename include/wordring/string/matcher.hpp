@@ -80,7 +80,7 @@ namespace wordring
 		*/
 		match_result push_back(character ch)
 		{
-			std::uint32_t pos = m_s.size();
+			std::uint32_t pos = static_cast<std::uint32_t>(m_s.size());
 			std::uint32_t n = 0;
 
 			m_s.push_back(ch);

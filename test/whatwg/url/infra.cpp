@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_CASE(infra_percent_decode_1)
 {
 	using namespace wordring::whatwg;
 	std::string in{ "%E3%81%82a%E3%81%82" };
-	std::string out{};
+	std::u8string out{};
 	percent_decode(in.begin(), in.end(), std::back_inserter(out));
 	BOOST_CHECK(out == u8"あaあ");
 }
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(infra_string_percent_decode_1)
 {
 	using namespace wordring::whatwg;
 	std::string in{ "%E3%81%82a%E3%81%82" };
-	std::string out{};
+	std::u8string out{};
 	percent_decode(in.begin(), in.end(), std::back_inserter(out));
 	BOOST_CHECK(out == u8"あaあ");
 }

@@ -3,7 +3,7 @@
 # このプロジェクトは libwordring ライブラリ配下のテストをすべて作成します。
 #
 
-cmake_minimum_required (VERSION 3.12)
+cmake_minimum_required (VERSION 3.16)
 
 #[
 add_subdirectory("css")
